@@ -3,12 +3,25 @@
     "dev": "next",
     "build": "next build",
     "start": "next start"
-},
+  },
   "dependencies": {
     "@material-ui/core": "^1.5.0",
     "@material-ui/icons": "^2.0.2",
     "next": "^6.1.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2"
-  }
+  },
+  "name": "yeastman2.0",
+  "description": "The new and improved yeasetman 2.0!",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": "git+https://github.com/xdimitarx/yeastman2.0.git",
+  "keywords": [],
+  "author": "<curd@ucdavis.edu>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xdimitarx/yeastman2.0/issues"
+  },
+  "homepage": "https://github.com/xdimitarx/yeastman2.0#readme"
 }
