@@ -20,6 +20,7 @@ import { SideBarItems } from "./SideBarItems";
 class NavBarUserSearchDrawerLayout extends Component {
   state = {
     openUserBar: false,
+    openUserBarHover: false,
     openSearchBar: false
   };
 
@@ -28,6 +29,14 @@ class NavBarUserSearchDrawerLayout extends Component {
       this.setState({ openUserBar: true });
     } else {
       this.setState({ openUserBar: false });
+    }
+  };
+
+  handleUserBarHover = () => {
+    if (this.state.openUserBarHover == false) {
+      this.setState({ openUserBarHover: true });
+    } else {
+      this.setState({ openUserBarHover: false });
     }
   };
 
@@ -97,10 +106,12 @@ class NavBarUserSearchDrawerLayout extends Component {
 
         <Drawer
           variant="permanent"
+          onMouseEnter={this.handleUserBarHover}
+          onMouseLeave={this.handleUserBarHover}
           classes={{
             paper: classNames(
               classes.drawerPaper,
-              !this.state.openUserBar && classes.drawerPaperClose
+              !this.state.openUserBar && !this.state.openUserBarHover && classes.drawerPaperClose,
             )
           }}
         >
@@ -110,10 +121,15 @@ class NavBarUserSearchDrawerLayout extends Component {
         </Drawer>
 
         <main
-          className={classNames(classes.content, classes[`content-search`], {
+          className={classNames(classes.content, {
             [classes.contentShift]: this.state.openSearchBar,
             [classes[`contentShift-search`]]: this.state.openSearchBar
-          })}
+        },
+        {
+          [classes.contentShift]: this.state.openUserBar,
+          [classes[`contentShift-user`]]: this.state.openUserBar
+        }
+        )}
         >
           <div className={classes.toolbar} />
           {children}
@@ -200,7 +216,6 @@ const styles = theme => ({
     display: "none"
   },
   drawerPaper: {
-    position: "relative",
     whiteSpace: "nowrap",
     width: drawerWidth,
     transition: theme.transitions.create("width", {
@@ -219,12 +234,9 @@ const styles = theme => ({
       width: theme.spacing.unit * 9
     }
   },
-  searchDrawerPaper: {
-    position: "relative",
-    width: drawerWidth
-  },
   content: {
     flexGrow: 1,
+    marginLeft:72,
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
     transition: theme.transitions.create("margin", {
@@ -238,11 +250,11 @@ const styles = theme => ({
       duration: theme.transitions.duration.enteringScreen
     })
   },
-  "content-search": {
-    marginRight: -drawerWidth
-  },
   "contentShift-search": {
-    marginRight: 0
+    marginRight: drawerWidth
+  },
+  "contentShift-user": {
+    marginLeft: drawerWidth
   },
   searchInput: {
     marginLeft: 10
