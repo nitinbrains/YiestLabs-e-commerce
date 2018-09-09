@@ -16,10 +16,10 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { SideBarItems } from "./SideBarItems";
 
-class NavBar extends Component {
+class SearchBar extends Component {
     state = {
         openUserBar: false,
-        openSearchBar: false
+        openSearchBar: true
     };
 
     handleUserBar = () => {
@@ -42,100 +42,35 @@ class NavBar extends Component {
         const { classes, theme } = this.props;
 
         return (
-            <div className={classes.root}>
-                <AppBar
-                    className={classNames(
-                        classes.appBar,
-                        this.state.openSearchBar && classes.appBarShiftSearch
-                    )}
-                    position="absolute"
-                >
-                    <Toolbar>
-                        <IconButton
-                            onClick={this.handleUserBar}
-                            className={classNames(classes.menuButton)}
-                            color="inherit"
-                            aria-label="Menu"
-                        >
-                            <MenuIcon />
-                        </IconButton>
-
-                        <div className={classes.logo}>
-                            <img
-                                src="../../static/images/logoHeader.png"
-                                height="40"
-                            />
-                        </div>
-
-                        <IconButton
-                            onClick={this.handleSearchBarOpen}
-                            className={classNames(
-                                classes.menuButton,
-                                this.state.openSearchBar && classes.hide
-                            )}
-                            color="inherit"
-                            aria-label="Menu"
-                        >
-                            <SearchIcon />
-                        </IconButton>
-
-                        <IconButton
-                            onClick={this.handleSearchBarClose}
-                            className={classNames(
-                                classes.closeSearchButton,
-                                !this.state.openSearchBar && classes.hide
-                            )}
-                            color="inherit"
-                            aria-label="Menu"
-                        >
-                            <ChevronRightIcon />
-                        </IconButton>
-                    </Toolbar>
-                </AppBar>
-
-                <Drawer
-                    variant="permanent"
-                    classes={{
-                        paper: classNames(
-                            classes.drawerPaper,
-                            !this.state.openUserBar && classes.drawerPaperClose
-                        )
-                    }}
-                >
-                    <div className={classes.toolbar} />
-                    <List>{SideBarItems}</List>
-                    <Divider />
-                </Drawer>
-
-                <main className={classes.content}>
-                    <div className={classes.searchToolbar} />
-                    <Typography>{"Welcome to White Labs"}</Typography>
-                </main>
-
-                <Drawer
-                    variant="persistent"
-                    classes={{
-                        paper: classes.drawerPaper
-                    }}
-                    anchor={"right"}
-                    open={this.state.openSearchBar}
-                >
-                    <div className={classes.toolbar}>
-                        <SearchIcon />
-                        <TextField
-                            id="search"
-                            placeholder="Search"
-                            type="search"
-                            InputProps={{
-                                disableUnderline: true
-                            }}
-                            className={classNames(classes.searchInput)}
-                        />
-                    </div>
-                    <Divider />
-                    <List>{SideBarItems}</List>
-                    <Divider />
-                </Drawer>
+            <div>
+            <main className={classes.content}>
+                <div className={classes.searchToolbar} />
+                <Typography>{"Welcome to White Labs"}</Typography>
+            </main>
+            <Drawer
+                variant="persistent"
+                classes={{
+                    paper: classes.drawerPaper
+                }}
+                anchor={"right"}
+                open={this.state.openSearchBar}
+            >
+                <div className={classes.toolbar}>
+                    <SearchIcon />
+                    <TextField
+                        id="search"
+                        placeholder="Search"
+                        type="search"
+                        InputProps={{
+                            disableUnderline: true
+                        }}
+                        className={classNames(classes.searchInput)}
+                    />
+                </div>
+                <Divider />
+                <List>{SideBarItems}</List>
+                <Divider />
+            </Drawer>
             </div>
         );
     }
@@ -232,9 +167,9 @@ const styles = theme => ({
     }
 });
 
-NavBar.propTypes = {
+SearchBar.propTypes = {
     classes: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(NavBar);
+export default withStyles(styles, { withTheme: true })(SearchBar);

@@ -2,39 +2,29 @@ import React from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import StarIcon from '@material-ui/icons/Star';
-import SendIcon from '@material-ui/icons/Send';
-import MailIcon from '@material-ui/icons/Mail';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ReportIcon from '@material-ui/icons/Report';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import ReceiptIcon from '@material-ui/icons/Receipt';
+import FeedbackIcon from '@material-ui/icons/Feedback';
 
 export const SideBarItems = (
   <div>
     <ListItem button>
       <ListItemIcon>
-        <InboxIcon />
+        <AccountBoxIcon />
       </ListItemIcon>
-      <ListItemText primary="Inbox" />
+      <ListItemText primary="My Account" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <StarIcon />
+        <ReceiptIcon />
       </ListItemIcon>
-      <ListItemText primary="Starred" />
+      <ListItemText primary="My Orders" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <SendIcon />
+        <FeedbackIcon />
       </ListItemIcon>
-      <ListItemText primary="Send mail" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <DraftsIcon />
-      </ListItemIcon>
-      <ListItemText primary="Drafts" />
+      <ListItemText primary="Give Feedback" />
     </ListItem>
   </div>
 );
