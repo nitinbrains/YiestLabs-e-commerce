@@ -11,7 +11,7 @@ class NavBarLayout extends Component {
 
         return (
             <div className={classes.root}>
-                <AppBar className={classes.appBar} position="absolute">
+                <AppBar className={classes.appBar}>
                     <Toolbar>
                         <div className={classes.logo}>
                             <img

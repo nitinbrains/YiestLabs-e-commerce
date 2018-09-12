@@ -53,7 +53,6 @@ class NavBarUserSearchDrawerLayout extends Component {
                         classes.appBar,
                         this.state.openSearchBar && classes.appBarShiftSearch
                     )}
-                    position="absolute"
                 >
                     <Toolbar>
                         <IconButton
