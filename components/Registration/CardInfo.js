@@ -5,11 +5,11 @@ import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 
-function Billing() {
+function CardInfo() {
     return (
         <React.Fragment>
             <Typography variant="title" gutterBottom>
-                Payment method
+                Credit Card Information
             </Typography>
             <Grid container spacing={24}>
                 <Grid item xs={12} md={6}>
@@ -23,38 +23,17 @@ function Billing() {
                 <Grid item xs={12} md={6}>
                     <TextField
                         required
+                        id="expDate"
+                        label="Expiration date"
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12} md={12}>
+                    <TextField
+                        required
                         id="cardNumber"
                         label="Card number"
                         fullWidth
-                    />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <TextField
-                        required
-                        id="expDate"
-                        label="Expiry date"
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <TextField
-                        required
-                        id="cvv"
-                        label="CVV"
-                        helperText="Last three digits on signature strip"
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                color="secondary"
-                                name="saveCard"
-                                value="yes"
-                            />
-                        }
-                        label="Remeber credit card details for next time"
                     />
                 </Grid>
             </Grid>
@@ -62,4 +41,4 @@ function Billing() {
     );
 }
 
-export default Billing;
+export default CardInfo;
