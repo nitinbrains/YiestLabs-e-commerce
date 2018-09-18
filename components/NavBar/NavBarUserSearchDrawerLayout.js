@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
+import Link from "next/link";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import SearchIcon from "@material-ui/icons/Search";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -21,7 +23,8 @@ class NavBarUserSearchDrawerLayout extends Component {
     state = {
         openUserBar: false,
         openUserBarHover: false,
-        openSearchBar: false
+        openSearchBar: false,
+        isLoggedIn: false
     };
 
     handleUserBar = () => {
@@ -50,17 +53,31 @@ class NavBarUserSearchDrawerLayout extends Component {
                         classes.appBar,
                         this.state.openSearchBar && classes.appBarShiftSearch
                     )}
-                    position="absolute"
                 >
                     <Toolbar>
                         <IconButton
                             onClick={this.handleUserBar}
-                            className={classNames(classes.menuButton)}
+                            className={classNames(
+                                classes.menuButton,
+                                !this.state.isLoggedIn && classes.hide
+                            )}
                             color="inherit"
                             aria-label="Menu"
                         >
                             <MenuIcon />
                         </IconButton>
+
+                        <div className={this.state.isLoggedIn && classes.hide}>
+                            <Link prefetch href="/login">
+                                <IconButton
+                                    className={classNames(classes.menuButton)}
+                                    color="inherit"
+                                    aria-label="Menu"
+                                >
+                                    <AccountCircleIcon />
+                                </IconButton>
+                            </Link>
+                        </div>
 
                         <div className={classes.logo}>
                             <img
@@ -106,6 +123,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                     classes={{
                         paper: classNames(
                             classes.drawerPaper,
+                            !this.state.isLoggedIn && classes.hide,
                             !this.state.openUserBar &&
                                 !this.state.openUserBarHover &&
                                 classes.drawerPaperClose
@@ -120,6 +138,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                 <main
                     className={classNames(
                         classes.content,
+                        !this.state.isLoggedIn && classes.contentNoUser,
                         {
                             [classes.contentShift]: this.state.openSearchBar,
                             [classes[`contentShift-search`]]: this.state
@@ -248,6 +267,9 @@ const styles = theme => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen
         })
+    },
+    contentNoUser: {
+        marginLeft: 0
     },
     contentShift: {
         transition: theme.transitions.create("margin", {
