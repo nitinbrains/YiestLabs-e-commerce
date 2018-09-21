@@ -11,6 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import SearchIcon from "@material-ui/icons/Search";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
@@ -67,17 +68,18 @@ class NavBarUserSearchDrawerLayout extends Component {
                             <MenuIcon />
                         </IconButton>
 
-                        <div className={this.state.isLoggedIn && classes.hide}>
-                            <Link prefetch href="/login">
-                                <IconButton
-                                    className={classNames(classes.menuButton)}
-                                    color="inherit"
-                                    aria-label="Menu"
-                                >
-                                    <AccountCircleIcon />
-                                </IconButton>
-                            </Link>
-                        </div>
+                        <Link prefetch href="/login">
+                            <IconButton
+                                className={classNames(
+                                    classes.menuButton,
+                                    this.state.isLoggedIn && classes.hide
+                                )}
+                                color="inherit"
+                                aria-label="Login"
+                            >
+                                <AccountCircleIcon />
+                            </IconButton>
+                        </Link>
 
                         <div className={classes.logo}>
                             <img
@@ -89,6 +91,15 @@ class NavBarUserSearchDrawerLayout extends Component {
                         <Button color="secondary">Store</Button>
                         <Button color="secondary">Calculator</Button>
                         <Button color="secondary">About Us</Button>
+
+                        <Link prefetch href="/cart">
+                            <IconButton
+                                color="inherit"
+                                aria-label="Menu"
+                            >
+                                <ShoppingCartIcon />
+                            </IconButton>
+                        </Link>
 
                         <IconButton
                             onClick={this.handleSearchBarOpen}
