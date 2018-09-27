@@ -9,13 +9,16 @@
     "@material-ui/icons": "^2.0.2",
     "next": "^6.1.1",
     "react": "^16.4.2",
-    "react-dom": "^16.4.2"
+    "react-dom": "^16.4.2",
+    "react-jss": "^8.6.1"
   },
   "name": "yeastman2.0",
   "description": "The new and improved yeasetman 2.0!",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-plugin-styled-components": "^1.7.1"
+  },
   "repository": "git+https://github.com/xdimitarx/yeastman2.0.git",
   "keywords": [],
   "author": "<curd@ucdavis.edu>",

@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import JssProvider from 'react-jss/lib/JssProvider';
 
 const MuiTheme = createMuiTheme({
   palette: {
@@ -32,10 +33,12 @@ export default class YeastMan extends App {
 
     return (
       <Container>
+      <JssProvider>
         <MuiThemeProvider theme={MuiTheme}>
           <CssBaseline />
           <Component {...pageProps} />
         </MuiThemeProvider>
+        </JssProvider>
       </Container>
     );
   }
