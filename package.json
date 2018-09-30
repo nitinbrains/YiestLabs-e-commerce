@@ -5,11 +5,11 @@
     "start": "next start"
   },
   "dependencies": {
-    "@material-ui/core": "^1.5.0",
-    "@material-ui/icons": "^2.0.2",
-    "next": "^6.1.1",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
+    "@material-ui/core": "^3.1.1",
+    "@material-ui/icons": "^3.0.1",
+    "next": "^7.0.1",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
     "react-jss": "^8.6.1"
   },
   "name": "yeastman2.0",
@@ -17,7 +17,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "devDependencies": {
-    "babel-plugin-styled-components": "^1.7.1"
+    "babel-plugin-styled-components": "^1.8.0"
   },
   "repository": "git+https://github.com/xdimitarx/yeastman2.0.git",
   "keywords": [],
