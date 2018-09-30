@@ -14,7 +14,7 @@ import CardHeader from "../components/UI/Card/CardHeader.jsx";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 
-function Login(props) {
+function ForgotPassword(props) {
     const { classes } = props;
 
     return (
@@ -32,7 +32,7 @@ function Login(props) {
 
                     <CardBody>
                         <Typography variant="headline" align="center">
-                            Sign in
+                            Forgot Password
                         </Typography>
 
                         <form className={classes.form}>
@@ -47,17 +47,6 @@ function Login(props) {
                                     autoFocus
                                 />
                             </FormControl>
-                            <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="password">
-                                    Password
-                                </InputLabel>
-                                <Input
-                                    name="password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                />
-                            </FormControl>
                             <Button
                                 type="submit"
                                 fullWidth
@@ -65,25 +54,9 @@ function Login(props) {
                                 color="primary"
                                 className={classes.submit}
                             >
-                                Sign in
+                                Reset Password
                             </Button>
                         </form>
-                        <Grid container spacing={24}>
-                            <Grid item xs={12} md={6}>
-                                <Link prefetch href="/registration">
-                                    <Button className={classes.button}>
-                                        Create Account
-                                    </Button>
-                                </Link>
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <Link prefetch href="/forgotpassword">
-                                    <Button className={classes.button}>
-                                        Forgot Password
-                                    </Button>
-                                </Link>
-                            </Grid>
-                        </Grid>
                     </CardBody>
                 </Card>
             </main>
@@ -121,8 +94,8 @@ const styles = theme => ({
     }
 });
 
-Login.propTypes = {
+ForgotPassword.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Login);
+export default withStyles(styles)(ForgotPassword);

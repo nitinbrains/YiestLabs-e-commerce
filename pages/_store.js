@@ -3,9 +3,7 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
-import ItemLg from "../components/Store/ItemLg";
-
-let timer;
+import ItemsLg from "../components/Store/ItemsLg";
 
 class Store extends Component {
     render() {
@@ -13,7 +11,7 @@ class Store extends Component {
 
         return (
             <NavBarUserSearchDrawerLayout>
-                <ItemLg />
+                <ItemsLg />
             </NavBarUserSearchDrawerLayout>
         );
     }

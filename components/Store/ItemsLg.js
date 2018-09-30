@@ -25,7 +25,7 @@ const items = [
 
 let timer;
 
-class ItemLg extends Component {
+class ItemsLg extends Component {
     state = {
         hoverItem: null,
         hideItem: null,
@@ -275,9 +275,9 @@ const styles = theme => ({
     }
 });
 
-ItemLg.propTypes = {
+ItemsLg.propTypes = {
     classes: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(ItemLg);
+export default withStyles(styles, { withTheme: true })(ItemsLg);
