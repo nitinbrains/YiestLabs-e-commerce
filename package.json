@@ -1,24 +1,8 @@
 {
-  "scripts": {
-    "dev": "next",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "@material-ui/core": "^3.1.1",
-    "@material-ui/icons": "^3.0.1",
-    "next": "^7.0.1",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
-    "react-jss": "^8.6.1"
-  },
   "name": "yeastman2.0",
   "description": "The new and improved yeasetman 2.0!",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {
-    "babel-plugin-styled-components": "^1.8.0"
-  },
   "repository": "git+https://github.com/xdimitarx/yeastman2.0.git",
   "keywords": [],
   "author": "<curd@ucdavis.edu>",
@@ -26,5 +10,34 @@
   "bugs": {
     "url": "https://github.com/xdimitarx/yeastman2.0/issues"
   },
-  "homepage": "https://github.com/xdimitarx/yeastman2.0#readme"
+  "homepage": "https://github.com/xdimitarx/yeastman2.0#readme",
+  "dependencies": {
+    "@material-ui/core": "^1.3.1",
+    "@material-ui/icons": "^3.0.1",
+    "jss": "latest",
+    "next": "7.0.1",
+    "prop-types": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-jss": "latest",
+    "styled-components": "^3.3.3",
+    "webpack": "^4.15.1"
+  },
+  "devDependencies": {
+    "babel-plugin-styled-components": "^1.5.1",
+    "@types/eslint": "^4.16.3",
+    "babel-eslint": "^8.2.5",
+    "eslint": "^5.1.0",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.0",
+    "eslint-plugin-react": "^7.10.0",
+    "jest": "^23.3.0",
+    "nodemon": "^1.17.5"
+  },
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  }
 }
