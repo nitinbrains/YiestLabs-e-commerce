@@ -12,7 +12,8 @@
 	},
 	"scripts": {
 		"dev": "node --inspect server.js",
-		"build": "NODE_ENV=production node server.js"
+		"build": "next build",
+		"start": "NODE_ENV=production node server.js"
 	},
 	"homepage": "https://github.com/xdimitarx/yeastman2.0#readme",
 	"dependencies": {
