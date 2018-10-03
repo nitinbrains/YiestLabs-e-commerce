@@ -12,17 +12,6 @@ import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
-const items = [
-    { name: "test 1" },
-    { name: "test 2" },
-    { name: "test 3" },
-    { name: "test 4" },
-    { name: "test 5" },
-    { name: "test 6" },
-    { name: "test 7" },
-    { name: "test 8" }
-];
-
 let timer;
 
 class ItemsLg extends Component {
@@ -33,35 +22,35 @@ class ItemsLg extends Component {
     };
 
     handleItemHover = i => () => {
-        timer = setTimeout(
-            function() {
+        // timer = setTimeout(
+        //     function() {
                 var index1 = i + 1;
                 var index2 = i + 2;
                 var index3 = i - 1;
                 var hideItem;
                 if (i % 4 == 0){
                     hideItem = i + 3;
-                }else if (index1 % 4 == 0) {
+                } else if (index1 % 4 == 0) {
                     hideItem = i - 3;
-                }else if (index2 % 4 == 0) {
+                } else if (index2 % 4 == 0) {
                     hideItem = i - 2;
-                }else if (index3 % 4 == 0) {
+                } else if (index3 % 4 == 0) {
                     hideItem = i + 2;
                 }
 
                 this.setState({ hoverItem: i, hideItem: hideItem });
-            }.bind(this),
-            500
-        );
+        //     }.bind(this),
+        //     500
+        // );
     };
 
     handleItemHoverLeave = () => {
-        clearTimeout(timer);
+    //     clearTimeout(timer);
         this.setState({ hoverItem: null, hideItem: null });
     };
 
     render() {
-        const { classes, theme } = this.props;
+        const { classes, theme, items } = this.props;
 
         return (
             <Grid container spacing={24}>
@@ -87,7 +76,7 @@ class ItemsLg extends Component {
                                     variant="subheading"
                                     color="textPrimary"
                                 >
-                                    {item.name}
+                                    {item.Name}
                                 </Typography>
                             </Grid>
                             <Grid
