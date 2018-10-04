@@ -1,13 +1,15 @@
 import { take, call, put, cancelled, takeEvery, all, fork, select  } from 'redux-saga/effects'
-
+import axios from 'axios';
+import { host } from '../../config.server'
 
 function fetchUserInfo(userId)
 {
-	return fetch(`/get-user-info?userId=${userId}`)
-    .then(response => response.json())
-    .then(UserInfo => UserInfo)
+    return axios.post(`${host}/get-user-info`, {userId})
+    .then(result => {
+        if(result.data.error) throw result.data.error;
+        return {UserInfo: result.data}
+    })
     .catch(error => {
-        console.log('error', error);
         return {error};
     });
 }
@@ -15,39 +17,33 @@ function fetchUserInfo(userId)
 
 function fetchUserID(username, password)
 {
-    return fetch(`/get-user-id?username=${username}&password=${password}`)
-    .then(response => response.json())
+    return axios.post(`${host}/get-user-id`, {username, password})
     .then(result => {
-    	if(result.error) throw result.error;
-    	return fetchUserInfo(result);
+        if(result.data.error) throw result.data.error;
+        console.log('fetch User ID', result);
+        return fetchUserInfo(result.data);
     })
     .then(UserInfo => UserInfo)
     .catch(error => {
-    	console.log('error', error)
+        console.log('error', error)
+        return {error};
     });
 }
-function* authorize(username, password) {
-	try {
-		const UserInfo = yield call(fetchUserID, username, password);
-		yield put({type: "LOGIN_SUCCESS", username, password});
-		yield put({type: "SET_USER_INFO", UserInfo });
 
-	} 
-	catch(error){
-		yield put({type: "THROW_ERROR", error})
-	}
+function* authorize(action) {
+    const {username, password} = action;
+    const {error, UserInfo} = yield call(fetchUserID, username, password);
+
+    if (error) 
+         yield put({type: "THROW_ERROR", error});
+    else {
+
+        yield put({type: "HIDE_ERROR"});
+        yield put({type: "LOGIN_SUCCESS", username, password});
+        yield put({type: "SET_USER_INFO", UserInfo });
+    }
 }
 
 export function* loginWatcher(){
-	while (true) {
-		const {username, password} = yield take("LOGIN_REQUEST")
-		const state = yield select(state => state.user);
-
-		// fork return a Task object
-		const task = yield fork(authorize, username, password)
-		const action = yield take(["LOGOUT", "LOGIN_ERROR"])
-		
-		if (action.type === "LOGOUT")
-			yield cancel(task)
-	} 
+    yield takeEvery("LOGIN_REQUEST", authorize);
 }

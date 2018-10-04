@@ -1,5 +1,7 @@
 import { take, call, put, cancelled, takeEvery, all, fork, select  } from 'redux-saga/effects'
-const fetch = require('isomorphic-unfetch');
+import axios from 'axios';
+import { host } from '../../config.server'
+
 
 import SalesLib from '../../modules/SalesLib';
 
@@ -7,21 +9,17 @@ var mainCategories = [0, 7, 8, 12, 13, 14, 15];
 
 function fetchInventoryAPI(classFilters)
 {
-    return fetch(`/get-inventory?classFilters=${JSON.stringify(classFilters)}`)
-    .then(response => response.json())
+    return axios.get(`${host}/get-inventory?classFilters=${JSON.stringify(classFilters)}`)
     .then(result => {
-        console.log('result', result);
-        return {items: result.items}
+        return {items: result.data.items}
     })
     .catch(error => {
-        console.log('error', error);
         return {error};
     });
 }
 
 function getClassFilters(categoriesLoaded, category, getAll=false)
 {
-
     try
     {
         category = parseInt(category);

@@ -1,4 +1,7 @@
-import React from "react";
+import React, { Component } from "react";
+import { connect } from 'react-redux';
+
+
 import PropTypes from "prop-types";
 import Link from "next/link";
 import Avatar from "@material-ui/core/Avatar";
@@ -14,81 +17,106 @@ import CardHeader from "../components/UI/Card/CardHeader.jsx";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 
-function Login(props) {
-    const { classes } = props;
+class Login extends Component {
+    
+    constructor(props){
+        super(props);
+        this.state = {
+            username: '',
+            password: ''
+        }
+    }
 
-    return (
-        <React.Fragment>
-            <main className={classes.layout}>
-                <Card>
-                    <CardHeader color="primary">
-                        <div className={classes.logo}>
-                            <img
-                                src="../../static/images/logoHeader.png"
-                                width="100%"
-                            />
-                        </div>
-                    </CardHeader>
+    login(){
+        if(this.state.username && this.state.password){
+            this.props.login(this.state.username, this.state.password)
+        }
+    }
 
-                    <CardBody>
-                        <Typography variant="headline" align="center">
-                            Sign in
-                        </Typography>
 
-                        <form className={classes.form}>
-                            <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="email">
-                                    Email Address
-                                </InputLabel>
-                                <Input
-                                    id="email"
-                                    name="email"
-                                    autoComplete="email"
-                                    autoFocus
+    render(){
+
+        const { classes } = this.props;
+
+        return (
+            <React.Fragment>
+                <div>Error: {this.props.message.errorMessage.details}</div>
+                <main className={classes.layout}>
+                    <Card>
+                        <CardHeader color="primary">
+                            <div className={classes.logo}>
+                                <img
+                                    src="../../static/images/logoHeader.png"
+                                    width="100%"
                                 />
-                            </FormControl>
-                            <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="password">
-                                    Password
-                                </InputLabel>
-                                <Input
-                                    name="password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                />
-                            </FormControl>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="raised"
-                                color="primary"
-                                className={classes.submit}
-                            >
+                            </div>
+                        </CardHeader>
+
+                        <CardBody>
+                            <Typography variant="headline" align="center">
                                 Sign in
-                            </Button>
-                        </form>
-                        <Grid container spacing={24}>
-                            <Grid item xs={12} md={6}>
-                                <Link prefetch href="/registration">
-                                    <Button className={classes.button}>
-                                        Create Account
-                                    </Button>
-                                </Link>
+                            </Typography>
+
+                            <div className={classes.form}>
+                                <FormControl margin="normal" required fullWidth>
+                                    <InputLabel htmlFor="email">
+                                        Username / Email Address
+                                    </InputLabel>
+                                    <Input
+                                        id="email"
+                                        name="email"
+                                        autoComplete="email"
+                                        autoFocus
+                                        value={this.state.username}
+                                        onChange={(event) => this.setState({username: event.target.value})}
+                                    />
+                                </FormControl>
+                                <FormControl margin="normal" required fullWidth>
+                                    <InputLabel htmlFor="password">
+                                        Password
+                                    </InputLabel>
+                                    <Input
+                                        name="password"
+                                        type="password"
+                                        id="password"
+                                        autoComplete="current-password"
+                                        value={this.state.password}
+                                        onChange={(event) => this.setState({password: event.target.value})}
+                                    />
+                                </FormControl>
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="raised"
+                                    color="primary"
+                                    className={classes.submit}
+                                    onClick={() => this.login()}
+                                >
+                                    Sign in
+                                </Button>
+                            </div>
+                            <Grid container spacing={24}>
+                                <Grid item xs={12} md={6}>
+                                    <Link prefetch href="/registration">
+                                        <Button className={classes.button}>
+                                            Create Account
+                                        </Button>
+                                    </Link>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Link prefetch href="/forgotpassword">
+                                        <Button className={classes.button}>
+                                            Forgot Password
+                                        </Button>
+                                    </Link>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} md={6}>
-                                <Link prefetch href="/forgotpassword">
-                                    <Button className={classes.button}>
-                                        Forgot Password
-                                    </Button>
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </CardBody>
-                </Card>
-            </main>
-        </React.Fragment>
-    );
+                        </CardBody>
+                    </Card>
+                </main>
+            </React.Fragment>
+        );
+    }
 }
 
 const styles = theme => ({
@@ -125,4 +153,21 @@ Login.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Login);
+
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.user,
+        inventory: state.inventory,
+        cart: state.cart,
+        message: state.message
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        login: (username, password) => dispatch({ type: "LOGIN_REQUEST", username, password}),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Login))

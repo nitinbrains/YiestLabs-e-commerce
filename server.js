@@ -1,14 +1,14 @@
 const express = require('express')
 const nextJS = require('next')
+var bodyParser = require('body-parser')
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = nextJS({ dev })
 const handle = app.getRequestHandler()
 
+
 const fetch = require('isomorphic-unfetch');
 
-// import Utils from './modules/Utils';
-// import SalesLib from './modules/SalesLib';
 const Utils = require('./modules/Utils');
 const SalesLib = require('./modules/SalesLib');
 
@@ -45,7 +45,11 @@ const MaxTries = 3;
 
 app.prepare()
 .then(() => {
-	const server = express()
+	const server = express();
+	server.use( bodyParser.json() );       // to support JSON-encoded bodies
+	server.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+	 	extended: true
+	})); 
 	
 
 	function NSAuth(scriptID, type = 'post')
@@ -114,7 +118,7 @@ app.prepare()
 		{
 			if(response.type == 'error.SuiteScriptError')
 			{
-				res.status(400).send({error: true, message: response.message, code: -1})
+				res.send({error: { message: response.message, code: -1}})
 			}
 			else if(response.error)
 			{
@@ -123,7 +127,7 @@ app.prepare()
 					ErrorMod.log('network', 'requestInventory', response, true);
 				}
 
-				res.status(400).send({error: true, message: response.error.message, code: response.error.code});
+				res.send({error: { message: response.error.message, code: response.error.code}});
 			}
 			else
 			{
@@ -135,7 +139,7 @@ app.prepare()
 				}
 				else
 				{
-					res.status(400).send({error: true, message: "No items in inventory", code: -1});
+					res.send({error: { message: "No items in inventory", code: -1}});
 
 				}
 			}
@@ -149,13 +153,14 @@ app.prepare()
 			}
 			else
 			{
-				return res.status(503).send({message: "service unavailable", code: -1});
+				return res.send({message: "service unavailable", code: -1});
 			}
 		});
 	});
 
-	server.get('/get-user-info', function(req, res, next){
-		var userId = req.query.userId;
+	server.post('/get-user-info', function(req, res, next){
+		
+		var userId = req.body.userId;
 
 		if(userId)
 		{
@@ -175,7 +180,7 @@ app.prepare()
 				
 				if(response.type == 'error.SuiteScriptError')
 				{
-					reject({message: response.message, code: -1});
+					res.send({error: {  message: response.message, code: -1 }});
 				}
 				else if(response.error)
 				{
@@ -186,26 +191,18 @@ app.prepare()
 
 					}
 
-					res.status(400).send({error: true,  message: response.error.message, code: response.error.code });
+					res.send({error: {  message: response.error.message, code: response.error.code }});
 				}
 				else
 				{
 					var message = NSReceiveMessage(response);
 					if(message)
 					{
-						// copy username over to new UserInfo object
-						var UserInfo = State.getState('UserInfo');
-						if(UserInfo && UserInfo.username)
-						{
-							message.username = UserInfo.username;
-						}
-						State.setState({UserInfo: message});
-
 						return res.send(message);
 					}
 					else
 					{
-						res.status(400).send({error: true,  message: 'user info not working', code: -1 });
+						res.send({error: {   message: 'user info not working', code: -1 }});
 					}
 				}
 			})
@@ -218,20 +215,20 @@ app.prepare()
 				}
 				else
 				{
-					res.status(400).send({error: true,  message: 'max retries reached', code: -1 });
+					res.send({error: { message: 'max retries reached', code: -1 }});
 				}
 			});
 		}
 		else
 		{
-			res.status(400).send({error: true,  message: 'User is not logged in, cannot retrieve User Info', code: -1 });
+			res.send({error: { message: 'User is not logged in, cannot retrieve User Info', code: -1 }});
 		}
 	})
 
-	server.get('/get-user-id', function(req, res, next){
+	server.post('/get-user-id', function(req, res, next){
 
-		var username = req.query.username;
-		var password = req.query.password;
+		var username = req.body.username;
+		var password = req.body.password;
 
 		var time = new Date();
 		var data = '<CustomerInformationRequest Operation="Login"><Token>' + system.YeastmanAuthentication.Token + '</Token>'
@@ -257,18 +254,16 @@ app.prepare()
 				{
 					if(result.CustomerInformation.NetSuiteID[0].$.UserType == "Staff" || result.CustomerInformation.NetSuiteID[0]._ == '43148')
 					{
-						State.setState({WLCSR: result.CustomerInformation.NetSuiteID[0]._});
 						return res.send(result.CustomerInformation.NetSuiteID[0]._);
 					}
 					else
 					{
-						State.setState({UserID: result.CustomerInformation.NetSuiteID[0]._});
 						return res.send(result.CustomerInformation.NetSuiteID[0]._);
 					}
 				}
 				else
 				{
-					res.status(400).send({error: true, message: 'Your username or password is invalid', code: 0});
+					res.send({error: { message: 'Your username or password is invalid', code: 0}});
 				}
 			});
 		})

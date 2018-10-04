@@ -1,11 +1,11 @@
 const initialState = {
-	error: {
-		message: null,
+	errorMessage: {
+		details: "Some error",
 		type: null, 
 		code: null
 	},
 	displayMessage: {
-		message: null
+		details: null,
 		title: null,
 	}
 };
@@ -15,8 +15,8 @@ const messageReducer = (state = initialState, action) => {
 		case "DISPLAY_ERROR":
 			return { 
 				...state,
-				error: {
-					message: action.error.message,
+				errorMessage: {
+					details: action.error.message,
 					type: action.error.type,
 					code: action.error.code
 				}
@@ -24,8 +24,8 @@ const messageReducer = (state = initialState, action) => {
 		case "HIDE_ERROR":
 			return { 
 				...state,
-				error: {
-					message: null,
+				errorMessage: {
+					details: null,
 					type: null,
 					code: null
 				}
@@ -34,7 +34,7 @@ const messageReducer = (state = initialState, action) => {
 			return { 
 				...state,
 				displayMessage: {
-					message: action.displayMessage.message,
+					details: action.displayMessage.message,
 					title : action.displayMessage.title
 				}
 			};
@@ -42,7 +42,7 @@ const messageReducer = (state = initialState, action) => {
 			return { 
 				...state,
 				displayMessage: {
-					message: null,
+					details: null,
 					title : null
 				}
 			};
@@ -51,4 +51,4 @@ const messageReducer = (state = initialState, action) => {
 	}
 }
 
-export default userReducer;
+export default messageReducer;
