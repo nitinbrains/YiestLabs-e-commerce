@@ -81,12 +81,14 @@ class ItemsLg extends Component {
                             </Grid>
                             <Grid
                                 item
-                                style={{ marginTop: 5 }}
+                                xs
+                                style={{ marginTop: 5, }}
                                 container
                                 direction={
                                     this.state.hoverItem == i ? "row" : "column"
                                 }
                                 spacing={8}
+                                justify="flex-end"
                             >
                                 <Grid item xs>
                                     <div className={classes.info}>
@@ -238,7 +240,7 @@ const styles = theme => ({
         ...theme.mixins.gutters(),
         paddingTop: theme.spacing.unit * 2,
         paddingBottom: theme.spacing.unit * 2,
-        height: 290,
+        height: "100%",
         transition: theme.transitions.create("width", {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen

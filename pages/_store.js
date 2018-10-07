@@ -20,7 +20,7 @@ class Store extends Component {
 
     render() {
         const { classes, theme } = this.props;
-        /*
+
         if (isWidthUp("sm", this.props.width)) {
             return (
                 <NavBarUserSearchDrawerLayout>
@@ -36,12 +36,12 @@ class Store extends Component {
                 </NavBarUserSearchDrawerLayout>
             );
         }
-        */
-        return (
+
+        /*return (
             <NavBarUserSearchDrawerLayout>
                 <ItemsLg items={this.props.inventory.items.slice(0, 25)} />
             </NavBarUserSearchDrawerLayout>
-        );
+        );*/
     }
 }
 
@@ -75,4 +75,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles, { withTheme: true })(Store));
+)(withWidth()(withStyles(styles, { withTheme: true })(Store)));

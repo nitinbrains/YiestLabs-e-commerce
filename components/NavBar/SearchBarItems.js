@@ -35,7 +35,7 @@ class SearchBarItems extends React.Component {
                         label="Yeast"
                     />
                 </ListItem>
-                <div className={!this.state.checkedMain == 1 && classes.hide}>
+                <div className={this.state.checkedMain == 1 ? null : classes.hide}>
                     <ListItem>
                         <FormControlLabel
                             control={<Checkbox color="primary" />}
@@ -88,10 +88,26 @@ class SearchBarItems extends React.Component {
                 </div>
                 <ListItem>
                     <FormControlLabel
-                        control={<Checkbox color="primary" />}
+                        control={<Checkbox color="primary" onChange={this.handleMainCheck(2)}/>}
                         label="Enzymes & Nutrients"
                     />
                 </ListItem>
+                <div className={this.state.checkedMain == 2 ? null : classes.hide}>
+                    <ListItem>
+                        <FormControlLabel
+                            control={<Checkbox color="primary" />}
+                            style={{ marginLeft: 10 }}
+                            label="Enzymes"
+                        />
+                    </ListItem>
+                    <ListItem>
+                        <FormControlLabel
+                            control={<Checkbox color="primary" />}
+                            style={{ marginLeft: 10 }}
+                            label="Nutrients"
+                        />
+                    </ListItem>
+                </div>
                 <ListItem>
                     <FormControlLabel
                         control={<Checkbox color="primary" />}
