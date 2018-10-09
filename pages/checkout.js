@@ -1,4 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
+import { connect } from 'react-redux';
+
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import NavBarLayout from "../components/NavBar/NavBarLayout";
@@ -32,7 +34,17 @@ function getStepContent(step) {
 	}
 }
 
-class Checkout extends React.Component {
+class Checkout extends Component {
+
+	constructor(props)
+	{
+		super(props);
+	}
+
+	componentWillMount(){
+		this.props.prepareOrder();
+	}
+
 	state = {
 		activeStep: 0
 	};
@@ -159,4 +171,16 @@ Checkout.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Checkout);
+const mapStateToProps = (state) => {
+    return {
+        cart: state.cart
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        prepareOrder: () => dispatch({type: "PREPARE_ORDER"})
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(Checkout));

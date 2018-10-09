@@ -1,4 +1,5 @@
-export { loginWatcher } from './actions/user';
-export { inventoryWatcher } from './actions/inventory';
-export { messageWatcher } from './actions/message';
-export { cartWatcher } from './actions/cart';
+export { userWatcher } from './sagas/user';
+export { storeWatcher } from './sagas/store';
+export { messageWatcher } from './sagas/message';
+export { cartWatcher } from './sagas/cart';
+export { checkoutWatcher } from './sagas/checkout';

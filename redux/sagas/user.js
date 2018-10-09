@@ -1,9 +1,17 @@
 import { take, call, put, cancelled, takeEvery, all, fork, select  } from 'redux-saga/effects'
-import axios from 'axios';
+import axios from 'axios'
+
+// custom
 import { host } from '../../config.server'
 
-function fetchUserInfo(userId)
-{
+function* setUserInfo(action) {
+    const { UserInfo } = action;
+    console.log('UserInfo', UserInfo);
+    yield put({type: "USER_INFO", UserInfo });
+}
+
+
+function fetchUserInfo(userId) {
     return axios.post(`${host}/get-user-info`, {userId})
     .then(result => {
         if(result.data.error) throw result.data.error;
@@ -14,13 +22,10 @@ function fetchUserInfo(userId)
     });
 }
 
-
-function fetchUserID(username, password)
-{
+function fetchUserID(username, password) {
     return axios.post(`${host}/get-user-id`, {username, password})
     .then(result => {
         if(result.data.error) throw result.data.error;
-        console.log('fetch User ID', result);
         return fetchUserInfo(result.data);
     })
     .then(UserInfo => UserInfo)
@@ -33,17 +38,31 @@ function fetchUserID(username, password)
 function* authorize(action) {
     const {username, password} = action;
     const {error, UserInfo} = yield call(fetchUserID, username, password);
+    console.log('UserInfo', UserInfo);
 
     if (error) 
-         yield put({type: "THROW_ERROR", error});
+        yield put({type: "THROW_ERROR", error});
     else {
 
         yield put({type: "HIDE_ERROR"});
         yield put({type: "LOGIN_SUCCESS", username, password});
-        yield put({type: "SET_USER_INFO", UserInfo });
+
+        setUserInfo({UserInfo});
+        
     }
 }
 
-export function* loginWatcher(){
+function* userInfoWatcher(){
+    yield takeEvery("SET_USER_INFO", setUserInfo);
+}
+
+function* loginWatcher(){
     yield takeEvery("LOGIN_REQUEST", authorize);
+}
+
+export function* userWatcher(){
+    yield all([
+        loginWatcher(),
+        userInfoWatcher()
+    ])
 }

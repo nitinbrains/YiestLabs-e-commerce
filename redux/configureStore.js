@@ -11,33 +11,36 @@ import { all } from 'redux-saga/effects'
 
 //actions
 import {
-	loginWatcher,
-	inventoryWatcher, 
+	userWatcher,
+	storeWatcher, 
 	cartWatcher,
+	checkoutWatcher,
 	messageWatcher
 } from './index';
 
 //reducers
 import userReducer from './reducers/user';
-import inventoryReducer from './reducers/inventory';
+import storeReducer from './reducers/store';
 import cartReducer from './reducers/cart';
+import checkoutReducer from './reducers/checkout';
 import messageReducer from './reducers/message';
 
-// notice how we now only export the rootSaga
 // single entry point to start all Sagas at once
 function* rootSaga() {
 	yield all([
-		loginWatcher(),
-		inventoryWatcher(),
+		userWatcher(),
+		storeWatcher(),
 		cartWatcher(),
+		checkoutWatcher(),
 		messageWatcher()
 	])
 }
 
 const globalReducer = combineReducers({
 	user: userReducer,
-	inventory: inventoryReducer,
+	store: storeReducer,
 	cart: cartReducer,
+	checkout: checkoutReducer,
 	message: messageReducer
 });
 

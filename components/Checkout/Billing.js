@@ -1,4 +1,6 @@
 import React from "react";
+import { connect } from 'react-redux';
+
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
@@ -62,4 +64,21 @@ function Billing() {
     );
 }
 
-export default Billing;
+const mapStateToProps = (state) => {
+    return {
+        user: state.user,
+        checkout: state.checkout
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        login: (username, password) => dispatch({ type: "LOGIN_REQUEST", username, password}),
+        getInventory: (category, getAll) => dispatch({ type: "STORE_REQUEST", category, getAll}),
+        addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
+        changeQuantity: (index, quantity) => dispatch({type: "CHANGE_QUANTITY", index, quantity}),
+        deleteFromCart: (index) => dispatch({type: "DELETE_FROM_CART", index})
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Billing);

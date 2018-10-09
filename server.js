@@ -9,8 +9,8 @@ const handle = app.getRequestHandler()
 
 const fetch = require('isomorphic-unfetch');
 
-const Utils = require('./modules/Utils');
-const SalesLib = require('./modules/SalesLib');
+const Utils = require('./lib/Utils');
+const SalesLib = require('./lib/SalesLib');
 
 const system = {
 	NSAuthentication: {
@@ -28,7 +28,7 @@ const system = {
 		iv: 'TaBbaKrkvqLZ1UEy',
 		Token: 'HSeKXJ61VqOwsrtAXPNRTBuFsZIrhTgYN4NXGroiXM2nQgYP76UPUs47No5poG7',
 	},
-	CryptoJS: require('./modules/CryptoJS').CryptoJS,
+	CryptoJS: require('./lib/CryptoJS'),
 	XMLParser: require('xml2js').parseString,
 	firebase: {
 	    apiKey: "AIzaSyC1F-DuIUbHYBcshYq6S4Y7EeOQ3f4iCcM",
@@ -50,6 +50,16 @@ app.prepare()
 	server.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 	 	extended: true
 	})); 
+
+	function delay(duration) {
+		return function(...args){
+			return new Promise(function(resolve, reject){
+				setTimeout(function(){
+					resolve(...args);
+				}, duration)
+			});
+		};
+	}
 	
 
 	function NSAuth(scriptID, type = 'post')
@@ -91,23 +101,17 @@ app.prepare()
 		});
 	}
 
-	function delay(t, v) {
-	   return Promise(function(resolve) {
-		   setTimeout(resolve.bind(null, v), t)
-	   });
-	}
-
 	server.get('/get-inventory', (req, res, next) => {
 
 		var classFilters = JSON.parse(req.query.classFilters)
 
 		var body = NSSendMessage({classFilters: classFilters ? classFilters : null});
 
-		//WLAPP-ITEM
-		fetch("https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=778&deploy=1", {
+		//YMO-ITEM
+		fetch("https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=912&deploy=1", {
 	  		method: 'POST',
 	  		headers: {
-				'Authorization': "NLAuth nlauth_account=4099054_SB1, nlauth_email=mwhite@whitelabs.com, nlauth_signature=Yeastman001, nlauth_role=3",		    		
+				'Authorization': NSAuth(912, "post"),		    		
 				'Accept': 'application/json',
 	    		'Content-Type': 'application/json',
 	  		},
@@ -118,13 +122,13 @@ app.prepare()
 		{
 			if(response.type == 'error.SuiteScriptError')
 			{
-				res.send({error: { message: response.message, code: -1}})
+				res.send({error: {message: response.message, code: -1}})
 			}
 			else if(response.error)
 			{
 				if(!(response.error.code == 'WS_CONCUR_SESSION_DISALLWD' || response.error.code == 'WS_REQUEST_BLOCKED' || response.error.code == -1))
 				{
-					ErrorMod.log('network', 'requestInventory', response, true);
+					console.log('network', 'get-inventory', response, true);
 				}
 
 				res.send({error: { message: response.error.message, code: response.error.code}});
@@ -145,16 +149,7 @@ app.prepare()
 			}
 		})
 		.catch(err => {
-			if(Tries < MaxTries)
-			{
-				//impose random backoff and try again
-				const wait = Utils.getWaitTime(Tries) * 1000;
-				return delay(wait).then(() => requestInventory(Tries+1));
-			}
-			else
-			{
-				return res.send({message: "service unavailable", code: -1});
-			}
+			return res.send({error: {message: "service unavailable", code: -1}});
 		});
 	});
 
@@ -164,11 +159,11 @@ app.prepare()
 
 		if(userId)
 		{
-			//WLAPP-CUST
-			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=889&deploy=1', {
+			//YMO-CUST
+			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=913&deploy=1', {
 		  		method: 'POST',
 		  		headers: {
-					'Authorization': NSAuth(889, 'post'),			    		
+					'Authorization': NSAuth(913, 'post'),			    		
 					'Accept': 'application/json',
 		    		'Content-Type': 'application/json',
 		  		},
@@ -187,7 +182,7 @@ app.prepare()
 					if(!(response.error.code == 'WS_CONCUR_SESSION_DISALLWD' || response.error.code == 'WS_REQUEST_BLOCKED' || response.error.code == -1))
 					{
 						// ErrorMod.log('network', 'requestUserInfo', response, true);
-						console.log('network', 'requestUserInfo', response, true);
+						console.log('network', 'get-user-info', response, true);
 
 					}
 
@@ -202,21 +197,12 @@ app.prepare()
 					}
 					else
 					{
-						res.send({error: {   message: 'user info not working', code: -1 }});
+						res.send({error: { message: 'user info not working', code: -1 }});
 					}
 				}
 			})
-			.catch(err => {
-				if(Tries < MaxTries)
-				{
-					//impose random backoff and try again
-					const wait = Utils.getWaitTime(Tries) * 1000;
-					return delay(wait).then(() => requestUserInfo(Tries+1));
-				}
-				else
-				{
-					res.send({error: { message: 'max retries reached', code: -1 }});
-				}
+			.catch(error => {
+				res.send({error: { message: 'could not get user info', code: -1 }});
 			});
 		}
 		else
@@ -267,13 +253,100 @@ app.prepare()
 				}
 			});
 		})
-		.catch(function(err)
+		.catch(function(error)
 		{
-			console.log('err', err);
-			throw err;
+
+			console.log('err', error);
+			res.send({error: { message: error, code: -1 }});
 		});
  
 	})
+
+	server.post('/prepare-order', function(req, res, next){
+
+		const request = req.body.request;
+			
+		if(request.userId)
+		{
+
+			var message = NSSendMessage(request);
+
+			// YMO-ORDER
+			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=914&deploy=1', {
+			 	method: 'PUT',
+			  	headers: {
+			    	'Authorization' : NSAuth(914, 'put'),
+			    	'Accept': 'application/json',
+			    	'Content-Type': 'application/json',
+			  	},
+			  	body: message
+			})
+			.then((response) => response.json())
+			.then(function(response)
+			{
+				if(response.type == 'error.SuiteScriptError')
+				{
+					return res.send({error: {message: response.message, code: -1}});
+				}
+				else if(response.error)
+				{
+					if(!(response.error.code == 'WS_CONCUR_SESSION_DISALLWD' || response.error.code == 'WS_REQUEST_BLOCKED' || response.error.code == -1))
+					{
+						console.log('network', 'prepare-order', response, true);
+					}
+
+					return res.send({error: { message: response.error.message, code: -1 }});
+				}
+				else
+				{
+					var message = NSReceiveMessage(response);
+					if(message.items && message.items.length > 0 && message.transitTimes)
+					{
+
+						return res.send(message);
+
+						// ConfirmationCart.init(userID, State.getState('UserInfo'), message.items, message.transitTimes, message.itemSubtotal, message.shippingSubtotal, message.orderSubtotal);
+
+						// var warning;
+						// if(message.items.length != WLCart.getLength())
+						// {
+						// 	warning = 'Items were removed due to lack of availability, please check your order carefully'
+						// }
+
+						// if(warning)
+						// {
+						// 	resolve(warning);
+						// }
+						// else
+						// {
+						// 	resolve();
+						// }
+					}
+					else
+					{
+						res.send({error: { message: 'Items have been removed due to unavailability', code: 0 }});
+					}
+				}
+			})
+			.catch(err => {
+				if(Tries < MaxTries)
+				{
+					//impose random backoff and try again
+					const wait = Utils.getWaitTime(Tries) * 1000;
+					setTimeout(wait, prepareOrder(Tries+1));
+				}
+				else
+				{
+					res.send({error: { message: 'max retries reached', code: -1}});
+				}
+			});
+		}
+		else
+		{
+			res.send({error: { message: 'User is not logged in, cannot retrieve ship dates', code: -1 }});
+		}
+		
+	});
 
 	server.get('*', (req, res, next) => {
 		return handle(req, res, next)
