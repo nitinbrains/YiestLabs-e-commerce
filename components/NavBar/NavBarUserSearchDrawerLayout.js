@@ -19,6 +19,7 @@ import TextField from "@material-ui/core/TextField";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { SideBarItems } from "./SideBarItems";
+import SearchBarItems from "./SearchBarItems";
 
 class NavBarUserSearchDrawerLayout extends Component {
     state = {
@@ -187,7 +188,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                         />
                     </div>
                     <Divider />
-                    <List>COMING SOON!</List>
+                    <List><SearchBarItems/></List>
                     <Divider />
                 </Drawer>
             </div>

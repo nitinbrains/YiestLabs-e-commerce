@@ -14,39 +14,24 @@ import Button from "@material-ui/core/Button";
 
 let timer;
 
-class ItemsLg extends Component {
+class ItemsXs extends Component {
     state = {
         hoverItem: null,
-        hideItem: null,
         timer: null
     };
 
     handleItemHover = i => () => {
         // timer = setTimeout(
         //     function() {
-                var index1 = i + 1;
-                var index2 = i + 2;
-                var index3 = i - 1;
-                var hideItem;
-                if (i % 4 == 0){
-                    hideItem = i + 3;
-                } else if (index1 % 4 == 0) {
-                    hideItem = i - 3;
-                } else if (index2 % 4 == 0) {
-                    hideItem = i - 2;
-                } else if (index3 % 4 == 0) {
-                    hideItem = i + 2;
-                }
-
-                this.setState({ hoverItem: i, hideItem: hideItem });
+        this.setState({ hoverItem: i });
         //     }.bind(this),
         //     500
         // );
     };
 
     handleItemHoverLeave = () => {
-    //     clearTimeout(timer);
-        this.setState({ hoverItem: null, hideItem: null });
+        //     clearTimeout(timer);
+        this.setState({ hoverItem: null });
     };
 
     render() {
@@ -57,9 +42,8 @@ class ItemsLg extends Component {
                 {items.map((item, i) => (
                     <Grid
                         item
-                        xs={this.state.hoverItem == i ? 6 : 3}
+                        xs={12}
                         spacing={24}
-                        className={this.state.hideItem == i && classes.hide}
                         onMouseEnter={this.handleItemHover(i)}
                         onMouseLeave={this.handleItemHoverLeave}
                         key={i}
@@ -81,14 +65,10 @@ class ItemsLg extends Component {
                             </Grid>
                             <Grid
                                 item
-                                xs
-                                style={{ marginTop: 5, }}
+                                style={{ marginTop: 5 }}
                                 container
-                                direction={
-                                    this.state.hoverItem == i ? "row" : "column"
-                                }
+                                direction={"column"}
                                 spacing={8}
-                                justify="flex-end"
                             >
                                 <Grid item xs>
                                     <div className={classes.info}>
@@ -118,20 +98,14 @@ class ItemsLg extends Component {
                                         <Typography>Attenuation</Typography>
                                     </div>
                                 </Grid>
-                            </Grid>
-                            <div
-                                className={
-                                    this.state.hoverItem != i && classes.hide
-                                }
-                            >
-                                <Grid
-                                    item
-                                    container
-                                    direction={"column"}
-                                    spacing={8}
-                                    style={{ marginTop: 5 }}
+
+                                <div
+                                    className={
+                                        this.state.hoverItem != i &&
+                                        classes.hide
+                                    }
                                 >
-                                    <Grid item>
+                                    <Grid item xs style={{ marginTop: 5 }}>
                                         <Typography>
                                             Lorem ipsum dolor sit amet,
                                             consectetur adipiscing elit. Sed
@@ -150,83 +124,51 @@ class ItemsLg extends Component {
                                             dolor, nec mollis purus.
                                         </Typography>
                                     </Grid>
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs
-                                    container
-                                    spacing={24}
-                                    style={{ marginTop: 5 }}
-                                    direction={"row"}
-                                >
-                                    <Grid
-                                        item
-                                        xs
-                                        container
-                                        spacing={24}
-                                        direction={"row"}
-                                        justify="flex-start"
-                                    >
-                                        <Grid item>
-                                            <FormControl>
-                                                <InputLabel>
-                                                    Packaging
-                                                </InputLabel>
-                                                <Select
-                                                    value={1}
-                                                    name="packaging"
-                                                >
-                                                    <MenuItem value={1}>
-                                                        Purepitch
-                                                    </MenuItem>
-                                                    <MenuItem value={20}>
-                                                        Twenty
-                                                    </MenuItem>
-                                                    <MenuItem value={30}>
-                                                        Thirty
-                                                    </MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </Grid>
-                                        <Grid item>
-                                            <FormControl>
-                                                <InputLabel>Pack</InputLabel>
-                                                <Select value={1} name="pack">
-                                                    <MenuItem value={1}>
-                                                        Nano
-                                                    </MenuItem>
-                                                    <MenuItem value={20}>
-                                                        1.5L
-                                                    </MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </Grid>
-                                        <Grid item>
-                                            <TextField
-                                                id="quantity"
-                                                label="Quantity"
-                                                className={classes.quantity}
-                                                value={1}
-                                                type="number"
-                                            />
-                                        </Grid>
+                                    <Grid item xs style={{ marginTop: 5 }}>
+                                        <FormControl>
+                                            <InputLabel>Packaging</InputLabel>
+                                            <Select value={1} name="packaging">
+                                                <MenuItem value={1}>
+                                                    Purepitch
+                                                </MenuItem>
+                                                <MenuItem value={20}>
+                                                    Twenty
+                                                </MenuItem>
+                                                <MenuItem value={30}>
+                                                    Thirty
+                                                </MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </Grid>
-                                    <Grid
-                                        item
-                                        xs
-                                        container
-                                        spacing={24}
-                                        direction={"row"}
-                                        justify="flex-end"
-                                    >
-                                        <Grid item>
-                                            <Button variant="contained">
-                                                ADD TO CART
-                                            </Button>
-                                        </Grid>
+                                    <Grid item xs style={{ marginTop: 5 }}>
+                                        <FormControl>
+                                            <InputLabel>Pack</InputLabel>
+                                            <Select value={1} name="pack">
+                                                <MenuItem value={1}>
+                                                    Nano
+                                                </MenuItem>
+                                                <MenuItem value={20}>
+                                                    1.5L
+                                                </MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </Grid>
-                                </Grid>
-                            </div>
+                                    <Grid item xs style={{ marginTop: 5 }}>
+                                        <TextField
+                                            id="quantity"
+                                            label="Quantity"
+                                            className={classes.quantity}
+                                            value={1}
+                                            type="number"
+                                        />
+                                    </Grid>
+                                    <Grid item xs style={{ marginTop: 5 }}>
+                                        <Button variant="contained">
+                                            ADD TO CART
+                                        </Button>
+                                    </Grid>
+                                </div>
+                            </Grid>
                         </Paper>
                     </Grid>
                 ))}
@@ -240,7 +182,6 @@ const styles = theme => ({
         ...theme.mixins.gutters(),
         paddingTop: theme.spacing.unit * 2,
         paddingBottom: theme.spacing.unit * 2,
-        height: "100%",
         transition: theme.transitions.create("width", {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen
@@ -266,9 +207,9 @@ const styles = theme => ({
     }
 });
 
-ItemsLg.propTypes = {
+ItemsXs.propTypes = {
     classes: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(ItemsLg);
+export default withStyles(styles, { withTheme: true })(ItemsXs);
