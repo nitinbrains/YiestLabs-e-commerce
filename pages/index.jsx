@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Store from "./_store.js";
+import Store from "./_store.jsx";
 
 class App extends Component {
     render() {
