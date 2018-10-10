@@ -186,21 +186,6 @@ function(record, log, search, cache, crypto, encode)
         {
             var response = {version: versionUpToDate(), items: []};
             var message = ReceiveMessage(input);
-
-            // var Inventory = cache.getCache({name: 'SaleInventory', scope: cache.Scope.PUBLIC});
-            // try
-            // {
-
-            //     if(Inventory.get({key: 'active'}) && Inventory.get({key: 'InventoryHash'}) && message.InventoryHash && message.InventoryHash == Inventory.get({key: 'InventoryHash'}))
-            //     {
-            //         response.InventoryHash = true;
-            //         return SendMessage(response);
-            //     }
-            // }
-            // catch(err)
-            // {
-            //     //swallow error
-            // }
         
             // Search for items ready to sync.
             var filters = [];
@@ -209,18 +194,8 @@ function(record, log, search, cache, crypto, encode)
             filters.push(search.createFilter({name: 'isinactive', operator: search.Operator.IS, values: false}));
             filters.push(search.createFilter({name: 'pricinggroup', operator: search.Operator.IS, values: 'MSRP'}));
 
-
             if(message.classFilters){
-                var classFilters
-                if(typeof(message.classFilters) == "string") {
-
-                    classFilters = JSON.parse(message.classFilters);
-                }
-                else {
-                    classFilters = message.classFilters;
-                }
-
-                filters.push(search.createFilter({name: 'class', operator: search.Operator.ANYOF, values: classFilters}));
+                filters.push(search.createFilter({name: 'class', operator: search.Operator.ANYOF, values: message.classFilters}));
             }   
 
             var columns = [];
@@ -400,7 +375,7 @@ function(record, log, search, cache, crypto, encode)
                 else
                 {
                     //Item is thrown out if it doesn't pass, may lead to possible missing slants                
-                    //nlapiLogExecution('ERROR', 'Failed to add slant, first item', 'Item: '+ slantRetries[i].getId());
+                    log.debug('ERROR', 'Failed to add slant, first item', 'Item: ' + slantRetries[i].getId());
                 }  
             }
 
@@ -408,13 +383,7 @@ function(record, log, search, cache, crypto, encode)
             {
                 fixNames(response.items, yeastMap, parentIDs); 
             }
-            
-            // var SHA256Hash = crypto.createHash({algorithm: crypto.HashAlg.SHA256});
-            // SHA256Hash.update({input: JSON.stringify(response.items)});
-            // var InventoryHash = SHA256Hash.digest({outputEncoding: encode.Encoding.UTF_8});
-            // Inventory.put({key: 'InventoryHash', value: InventoryHash});
-            // Inventory.put({key: 'active', value: true, ttl: 3600});
-            // response.InventoryHash = InventoryHash;
+
 
             return SendMessage(response);
         }

@@ -7,24 +7,24 @@ import ReceiptIcon from '@material-ui/icons/Receipt';
 import FeedbackIcon from '@material-ui/icons/Feedback';
 
 export const SideBarItems = (
-  <div>
-    <ListItem button>
-      <ListItemIcon>
-        <AccountBoxIcon />
-      </ListItemIcon>
-      <ListItemText primary="My Account" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <ReceiptIcon />
-      </ListItemIcon>
-      <ListItemText primary="My Orders" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <FeedbackIcon />
-      </ListItemIcon>
-      <ListItemText primary="Give Feedback" />
-    </ListItem>
-  </div>
+	<div>
+		<ListItem button>
+			<ListItemIcon>
+				<AccountBoxIcon />
+			</ListItemIcon>
+			<ListItemText primary="My Account" />
+		</ListItem>
+		<ListItem button>
+			<ListItemIcon>
+				<ReceiptIcon />
+			</ListItemIcon>
+			<ListItemText primary="My Orders" />
+		</ListItem>
+		<ListItem button>
+			<ListItemIcon>
+				<FeedbackIcon />
+			</ListItemIcon>
+			<ListItemText primary="Give Feedback" />
+		</ListItem>
+	</div>
 );

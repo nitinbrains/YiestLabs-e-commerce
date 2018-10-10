@@ -94,7 +94,7 @@ function Shipping() {
 				<Grid item xs={12}>
 					<FormControlLabel
 						control={
-							<Checkbox color="secondary" name="saveAddress" value="yes" />
+							<Checkbox color="primary" name="saveAddress" value="yes" />
 						}
 						label="Use this address for payment details"
 					/>
@@ -106,20 +106,20 @@ function Shipping() {
 
 
 const mapStateToProps = (state) => {
-    return {
-        user: state.user,
-        checkout: state.checkout
-    }
+	return {
+		user: state.user,
+		checkout: state.checkout
+	}
 }
 
 const mapDispatchToProps = dispatch => {
-    return {
-        login: (username, password) => dispatch({ type: "LOGIN_REQUEST", username, password}),
-        getInventory: (category, getAll) => dispatch({ type: "STORE_REQUEST", category, getAll}),
-        addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
-        changeQuantity: (index, quantity) => dispatch({type: "CHANGE_QUANTITY", index, quantity}),
-        deleteFromCart: (index) => dispatch({type: "DELETE_FROM_CART", index})
-    };
+	return {
+		login: (username, password) => dispatch({ type: "LOGIN_REQUEST", username, password}),
+		getInventory: (category, getAll) => dispatch({ type: "STORE_REQUEST", category, getAll}),
+		addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
+		changeQuantity: (index, quantity) => dispatch({type: "CHANGE_QUANTITY", index, quantity}),
+		deleteFromCart: (index) => dispatch({type: "DELETE_FROM_CART", index})
+	};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Shipping);

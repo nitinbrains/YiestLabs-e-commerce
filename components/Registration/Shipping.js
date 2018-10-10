@@ -94,7 +94,7 @@ function Shipping() {
                     <FormControlLabel
                         control={
                             <Checkbox
-                                color="secondary"
+                                color="primary"
                                 name="saveAsBilling"
                                 value="yes"
                             />

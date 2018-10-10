@@ -1,19 +1,17 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
+import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
 import ItemsLg from "../components/Store/ItemsLg";
+import ItemsXs from "../components/Store/ItemsXs";
 
 class Store extends Component {
-
-    componentWillMount()
-    {
-        try
-        {
-            this.props.getInventory(0);
+    componentWillMount() {
+        try {
             var UserInfo = {
                 billaddress1: "964 Court Lane",
                 billaddress2: "",
@@ -60,9 +58,10 @@ class Store extends Component {
             };
 
             this.props.setUserInfo(UserInfo);
-        }   
-        catch(err)
-        {
+
+            this.props.getInventory();
+
+        } catch (err) {
             console.log(err);
         }
     }
@@ -70,11 +69,21 @@ class Store extends Component {
     render() {
         const { classes, theme } = this.props;
 
-        return (
-            <NavBarUserSearchDrawerLayout>
-                <ItemsLg items={this.props.store.items.slice(0, 25)}/>
-            </NavBarUserSearchDrawerLayout>
-        );
+        if (isWidthUp("sm", this.props.width)) {
+            return (
+                <NavBarUserSearchDrawerLayout>
+                    <ItemsLg items={this.props.store.itemsToShow.slice(0, 25)} />
+                </NavBarUserSearchDrawerLayout>
+            );
+        }
+
+        if (isWidthUp("xs", this.props.width)) {
+            return (
+                <NavBarUserSearchDrawerLayout>
+                    <ItemsXs items={this.props.store.itemsToShow.slice(0, 25)} />
+                </NavBarUserSearchDrawerLayout>
+            );
+        }
     }
 }
 
@@ -89,8 +98,7 @@ Store.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.user,
         store: state.store
@@ -99,10 +107,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        login: (username, password) => dispatch({ type: "LOGIN_REQUEST", username, password}),
-        getInventory: (index, getAll) => dispatch({ type: "STORE_REQUEST", index, getAll}),
+        getInventory: (search) => dispatch({ type: "STORE_REQUEST", search}),
         setUserInfo: (UserInfo) => dispatch({type: "SET_USER_INFO", UserInfo})
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(Store));
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withWidth()(withStyles(styles, { withTheme: true })(Store)));

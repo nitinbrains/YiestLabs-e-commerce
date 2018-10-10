@@ -481,36 +481,6 @@ var WLHelper = (function ()
         }
     }
 
-    function sortItems(items)
-    {
-        try
-        {
-            return items.sort(function(item1, item2)
-            {
-                if(item1.Name.includes("WLP") && item2.Name.includes("WLP"))
-                {
-                    return item1.Name.slice(3).localeCompare(item2.Name.slice(3));
-                }
-                else if(item1.Name.includes("WLP"))
-                {
-                    return -1;
-                }
-                else if(item2.Name.includes("WLP"))
-                {
-                    return 1;
-                }
-                else
-                {
-                    return item1.Name.localeCompare(item2.Name);
-                }
-            });
-        }
-        catch(err)
-        {
-            throw {message: 'could not sort items', code: -1}
-        }
-    }
-
 	async function registerForPushNotifications() {
 	    const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
 
