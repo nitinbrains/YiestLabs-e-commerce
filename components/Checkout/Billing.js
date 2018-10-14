@@ -18,8 +18,9 @@ class Billing extends React.Component {
     state = {
         terms: "cc",
         openDialogCard: false,
-        openDialogAdress: false,
-        addCard: false
+        openDialogAddress: false,
+        addCard: false,
+        newAddress: false
     };
 
     handleNewCard = () => {
@@ -32,6 +33,18 @@ class Billing extends React.Component {
 
     handleDialogCardClose = () => {
         this.setState({ openDialogCard: false, addCard: false });
+    };
+
+    handleNewAddress = () => {
+        this.setState({ newAddress: true });
+    };
+
+    handleDialogAddressOpen = () => {
+        this.setState({ openDialogAddress: true });
+    };
+
+    handleDialogAddressClose = () => {
+        this.setState({ openDialogAddress: false, newAddress: false });
     };
 
     render() {
@@ -286,6 +299,194 @@ class Billing extends React.Component {
                         </Grid>
                     </Grid>
                 )}
+                <Typography style={{marginTop:15}} variant="title" gutterBottom>
+                    Billing address
+                </Typography>
+                <div>
+                    <Typography>Address Line 1</Typography>
+                    <Typography>Address Line 2</Typography>
+                    <Typography>Address Line 3</Typography>
+                    <Typography>City</Typography>
+                    <Typography>Country, State</Typography>
+                    <Typography>ZIP Code</Typography>
+
+                    <Button
+                        style={{ marginTop: 10 }}
+                        onClick={this.handleDialogAddressOpen}
+                    >
+                        Change Shipping Address
+                    </Button>
+                    <Dialog
+                        open={this.state.openDialogAddress}
+                        onClose={this.handleDialogAddressClose}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="form-dialog-title">
+                            Shipping addresses
+                        </DialogTitle>
+                        <DialogContent>
+                            <Grid container spacing={24}>
+                                <Grid item xs={4}>
+                                    <Paper className={classes.paper}>
+                                        <Typography>Address Line 1</Typography>
+                                        <Typography>Address Line 2</Typography>
+                                        <Typography>Address Line 3</Typography>
+                                        <Typography>City</Typography>
+                                        <Typography>Country, State</Typography>
+                                        <Typography>ZIP Code</Typography>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            className={classes.button}
+                                        >
+                                            Select Address
+                                        </Button>
+                                    </Paper>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Paper className={classes.paper}>
+                                        <Typography>Address Line 1</Typography>
+                                        <Typography>Address Line 2</Typography>
+                                        <Typography>Address Line 3</Typography>
+                                        <Typography>City</Typography>
+                                        <Typography>Country, State</Typography>
+                                        <Typography>ZIP Code</Typography>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            className={classes.button}
+                                        >
+                                            Select Address
+                                        </Button>
+                                    </Paper>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Paper className={classes.paper}>
+                                        <Typography>Address Line 1</Typography>
+                                        <Typography>Address Line 2</Typography>
+                                        <Typography>Address Line 3</Typography>
+                                        <Typography>City</Typography>
+                                        <Typography>Country, State</Typography>
+                                        <Typography>ZIP Code</Typography>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            className={classes.button}
+                                        >
+                                            Select Address
+                                        </Button>
+                                    </Paper>
+                                </Grid>
+                            </Grid>
+
+                            {this.state.newAddress ? (
+                                <Grid container spacing={24}>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            required
+                                            id="attention"
+                                            name="attention"
+                                            label="Attention"
+                                            fullWidth
+                                            autoComplete="attention"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            required
+                                            id="addresse"
+                                            name="addresse"
+                                            label="Addresse"
+                                            fullWidth
+                                            autoComplete="addresse"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            id="address1"
+                                            name="address1"
+                                            label="Address line 1"
+                                            fullWidth
+                                            autoComplete="address-line1"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            id="addiress2"
+                                            name="addiress2"
+                                            label="Address line 2"
+                                            fullWidth
+                                            autoComplete="address-line2"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            id="addiress3"
+                                            name="addiress3"
+                                            label="Address line 3"
+                                            fullWidth
+                                            autoComplete="address-line3"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            required
+                                            id="city"
+                                            name="city"
+                                            label="City"
+                                            fullWidth
+                                            autoComplete="address-level2"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            required
+                                            id="zip"
+                                            name="zip"
+                                            label="Zip / Postal code"
+                                            fullWidth
+                                            autoComplete="postal-code"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            id="country"
+                                            name="country"
+                                            label="Country"
+                                            fullWidth
+                                            autoComplete="country"
+                                        />
+                                    </Grid>
+                                </Grid>
+                            ) : (
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={this.handleNewAddress}
+                                    className={classes.button}
+                                >
+                                    New Address
+                                </Button>
+                            )}
+                        </DialogContent>
+                        <DialogActions>
+                            <Button
+                                onClick={this.handleDialogAddressClose}
+                                color="primary"
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                onClick={this.handleDialogAddressClose}
+                                color="primary"
+                            >
+                                Confirm Changes
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
             </React.Fragment>
         );
     }
