@@ -30,14 +30,16 @@
 		"react-dom": "latest",
 		"react-jss": "latest",
 		"react-redux": "^5.0.7",
-		"redux": "^4.0.1",
-		"redux-saga": "^0.16.2",
+		"redux": "^4.0.0",
+		"redux-form": "^7.4.2",
+		"redux-saga": "^0.16.0",
 		"redux-thunk": "^2.3.0",
 		"styled-components": "^3.4.10",
 		"webpack": "^4.15.1",
 		"xml2js": "^0.4.19"
 	},
 	"devDependencies": {
+		"@babel/plugin-proposal-export-namespace-from": "^7.0.0",
 		"@types/eslint": "^4.16.3",
 		"babel-eslint": "^8.2.5",
 		"babel-plugin-styled-components": "^1.5.1",

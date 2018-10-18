@@ -7,47 +7,49 @@ import {
 } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension'
 import createSagaMiddleware from "redux-saga";
-import { all } from 'redux-saga/effects'
-
-//actions
-import {
-	userWatcher,
-	storeWatcher, 
-	cartWatcher,
-	checkoutWatcher,
-	messageWatcher
-} from './index';
+import { all } from 'redux-saga/effects';
+import thunk from 'redux-thunk';
+//reducers
+import { rootReducer } from './reducers';
+import rootSaga from './sagas';
 
 //reducers
-import userReducer from './reducers/user';
-import storeReducer from './reducers/store';
-import cartReducer from './reducers/cart';
-import checkoutReducer from './reducers/checkout';
-import messageReducer from './reducers/message';
+// import userReducer from './reducers/user';
+// import storeReducer from './reducers/store';
+// import cartReducer from './reducers/cart';
+// import checkoutReducer from './reducers/checkout';
+// import messageReducer from './reducers/message';
 
-// single entry point to start all Sagas at once
-function* rootSaga() {
-	yield all([
-		userWatcher(),
-		storeWatcher(),
-		cartWatcher(),
-		checkoutWatcher(),
-		messageWatcher()
-	])
-}
+// // single entry point to start all Sagas at once
+// function* rootSaga() {
+// 	yield all([
+// 		userWatcher(),
+// 		storeWatcher(),
+// 		cartWatcher(),
+// 		checkoutWatcher(),
+// 		messageWatcher()
+// 	])
+// }
 
-const globalReducer = combineReducers({
-	user: userReducer,
-	store: storeReducer,
-	cart: cartReducer,
-	checkout: checkoutReducer,
-	message: messageReducer
-});
+// const globalReducer = combineReducers({
+// 	user: userReducer,
+// 	store: storeReducer,
+// 	cart: cartReducer,
+// 	checkout: checkoutReducer,
+// 	message: messageReducer
+// });
+
 
 const sagaMiddleware = createSagaMiddleware();
 
 function initializeStore (initialState = initialState) {
-	let store = createStore(globalReducer, initialState, composeWithDevTools(applyMiddleware(sagaMiddleware)));
+	let store = createStore(
+		rootReducer,
+		initialState,
+		composeWithDevTools(
+			applyMiddleware(thunk, sagaMiddleware)
+		)
+	);
 	sagaMiddleware.run(rootSaga);
 	return store; 
 }

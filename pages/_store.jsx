@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
+
+import { userActions } from '../redux/actions/userActions';
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -66,6 +69,7 @@ class Store extends Component {
 
             this.props.getInventory();
 
+            this.props.userLogin({ username: 'above', password: 'test' });
         } catch (err) {
             console.log(err);
         }
@@ -112,8 +116,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getInventory: (search) => dispatch({ type: "STORE_REQUEST", search}),
+        ...bindActionCreators({ ...userActions}, dispatch),
         setUserInfo: (UserInfo) => dispatch({type: "SET_USER_INFO", UserInfo})
+        getInventory: (category, getAll) =>
+            dispatch({ type: "STORE_REQUEST", category, getAll })
     };
 };
 
