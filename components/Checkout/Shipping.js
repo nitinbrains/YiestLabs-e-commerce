@@ -6,6 +6,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
+import MenuItem from '@material-ui/core/MenuItem';
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
@@ -28,7 +29,7 @@ class Shipping extends Component {
     };
 
     handleDialogClose = () => {
-        this.setState({ openDialog: false, newAddress:false });
+        this.setState({ openDialog: false, newAddress: false });
     };
 
     handleNewAddress = () => {
@@ -52,7 +53,10 @@ class Shipping extends Component {
                         <Typography>Country, State</Typography>
                         <Typography>ZIP Code</Typography>
 
-                        <Button style={{marginTop:10}} onClick={this.handleDialogOpen}>
+                        <Button
+                            style={{ marginTop: 10 }}
+                            onClick={this.handleDialogOpen}
+                        >
                             Change Shipping Address
                         </Button>
                         <Dialog
@@ -332,6 +336,24 @@ class Shipping extends Component {
                         </Grid>
                     </Grid>
                 )}
+
+                <Typography variant="title" style={{marginTop:15}} gutterBottom>
+                    Shipping method
+                </Typography>
+                <Grid container spacing={24}>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            id="select-shipping"
+                            select
+                            label="Select"
+                            helperText="Please select your shipping method"
+                            margin="normal"
+                            variant="outlined"
+                        >
+                            <MenuItem value={1}>Shipping Method 1</MenuItem>
+                        </TextField>
+                    </Grid>
+                </Grid>
             </React.Fragment>
         );
     }

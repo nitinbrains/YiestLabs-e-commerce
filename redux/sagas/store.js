@@ -38,7 +38,6 @@ function* getInventory(action) {
     }
 
     const itemsToShow = Store.filterItems(selectedCategory, search, user);
-    console.log('itemsToShow', itemsToShow);
     yield put({ type: "STORE_SUCCESS", itemsToShow})
     
 }
