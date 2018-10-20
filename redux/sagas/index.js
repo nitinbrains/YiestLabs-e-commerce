@@ -3,12 +3,14 @@ import { all, takeLatest, takeEvery } from 'redux-saga/effects';
 
 // User actions
 import { userTypes } from '../actions/userActions';
-// refactor this
-import { getInventory } from '../actions/inventory';
-import { changeQuantity, addCartItem, deleteFromCart } from '../actions/cart';
+// Cart actions
+import { cartTypes } from '../actions/cartActions';
 
+import { getInventory } from '../actions/inventory'; // refactor this
 // User sagas
 import { loginUser } from './users';
+// Cart sagas
+import { updateItem, addCartItem } from './cart';
 
 function * rootSaga () {
     yield all([
@@ -18,9 +20,8 @@ function * rootSaga () {
         // INVENTORY
         takeEvery("STORE_REQUEST", getInventory),
         // CART
-        takeEvery("CHANGE_QUANTITY", changeQuantity),
-        takeEvery("ADD_TO_CART", addCartItem),
-        takeEvery("DELETE_FROM_CART", deleteFromCart)
+        takeEvery(cartTypes.ADD_ITEM_ATTEMPT, addCartItem),
+        takeEvery(cartTypes.UPDATE_ITEM_ATTEMPT, updateItem)
     ]);
 };
 

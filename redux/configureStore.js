@@ -1,14 +1,16 @@
 import React from 'react'
 import {
-	createStore,
-	applyMiddleware,
-	combineReducers,
-	compose
+    createStore,
+    applyMiddleware,
+    combineReducers,
+    compose
 } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension'
 import createSagaMiddleware from "redux-saga";
 import { all } from 'redux-saga/effects';
 import thunk from 'redux-thunk';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';  // will use local storage
 //reducers
 import { rootReducer } from './reducers';
 import rootSaga from './sagas';
@@ -39,65 +41,76 @@ import rootSaga from './sagas';
 // 	message: messageReducer
 // });
 
-
 const sagaMiddleware = createSagaMiddleware();
 
-function initializeStore (initialState = initialState) {
-	let store = createStore(
-		rootReducer,
-		initialState,
-		composeWithDevTools(
-			applyMiddleware(thunk, sagaMiddleware)
-		)
-	);
-	sagaMiddleware.run(rootSaga);
-	return store; 
+const initializeStore = (initialState = initialState, isServer) => {
+
+    const persistConfig = {
+        key: 'root',
+        storage,
+        whitelist: ['user', 'cart']
+    };
+    const persistedReducer = isServer ? rootReducer : persistReducer(persistConfig, rootReducer);
+    let store = createStore(
+        persistedReducer,
+        initialState,
+        composeWithDevTools(
+            applyMiddleware(thunk, sagaMiddleware)
+        )
+    );
+    sagaMiddleware.run(rootSaga);
+    return {
+        store,
+        persistor: isServer ? null : persistStore(store)
+    }
 }
 
 const isServer = typeof window === 'undefined'
 const __NEXT_REDUX_STORE__ = '__NEXT_REDUX_STORE__'
 
 function getOrCreateStore (initialState) {
-	// Always make a new store if server, otherwise state is shared between requests
-	if (isServer) {
-		return initializeStore(initialState)
-	}
+    // Always make a new store if server, otherwise state is shared between requests
+    if (isServer) {
+        return initializeStore(initialState, isServer);
+    }
 
-	// Create store if unavailable on the client and set it on the window object
-	if (!window[__NEXT_REDUX_STORE__]) {
-		window[__NEXT_REDUX_STORE__] = initializeStore(initialState)
-	}
-	return window[__NEXT_REDUX_STORE__]
+    // Create store if unavailable on the client and set it on the window object
+    if (!window[__NEXT_REDUX_STORE__]) {
+        window[__NEXT_REDUX_STORE__] = initializeStore(initialState)
+    }
+    return window[__NEXT_REDUX_STORE__]
 }
 
 export default (App) => {
-	return class AppWithRedux extends React.Component {
-		static async getInitialProps (appContext) {
-			// Get or Create the store with `undefined` as initialState
-			// This allows you to set a custom default initialState
-			const reduxStore = getOrCreateStore()
+    return class AppWithRedux extends React.Component {
+        static async getInitialProps (appContext) {
+            // Get or Create the store with `undefined` as initialState
+            // This allows you to set a custom default initialState
+            const reduxStore = getOrCreateStore()
 
-			// Provide the store to getInitialProps of pages
-			appContext.ctx.reduxStore = reduxStore
+            // Provide the store to getInitialProps of pages
+            appContext.ctx.reduxStore = reduxStore
 
-			let appProps = {}
-			if (typeof App.getInitialProps === 'function') {
-				appProps = await App.getInitialProps(appContext)
-			}
+            let appProps = {}
+            if (typeof App.getInitialProps === 'function') {
+                appProps = await App.getInitialProps(appContext)
+            }
 
-			return {
-				...appProps,
-				initialReduxState: reduxStore.getState()
-			}
-		}
+            return {
+                ...appProps,
+                initialReduxState: reduxStore.getState()
+            }
+        }
 
-		constructor (props) {
-			super(props)
-			this.reduxStore = getOrCreateStore(props.initialReduxState)
-		}
+        constructor (props) {
+            super(props)
+            const { store, persistor } = getOrCreateStore(props.initialReduxState);
+            this.reduxStore = store;
+            this.persistor = persistor;
+        }
 
-		render () {
-			return <App {...this.props} reduxStore={this.reduxStore} />
-		}
-	}
+        render () {
+            return <App {...this.props} reduxStore={this.reduxStore} persistor={this.persistor} />
+        }
+    }
 }

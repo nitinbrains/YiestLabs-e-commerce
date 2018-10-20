@@ -28,29 +28,31 @@ class MyApp extends App {
 	}
 
 	render() {
-		const { Component, pageProps, reduxStore } = this.props;
+		const { Component, pageProps, reduxStore, persistor } = this.props;
 		return (
 			<Container>
 				<Provider store={reduxStore}>
-				{/* Wrap every page in Jss and Theme providers */}
-				<JssProvider
-					registry={this.pageContext.sheetsRegistry}
-					generateClassName={this.pageContext.generateClassName}
-				>
-					{/* MuiThemeProvider makes the theme available down the React
-							tree thanks to React context. */}
-					<MuiThemeProvider
-						theme={this.pageContext.theme}
-						sheetsManager={this.pageContext.sheetsManager}
-					>
-						{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-						<CssBaseline />
-						{/* Pass pageContext to the _document though the renderPage enhancer
-								to render collected styles on server side. */}
-						<Component pageContext={this.pageContext} {...pageProps} />
-					</MuiThemeProvider>
-				</JssProvider>
-			</Provider>
+					<PersistGate loading={null} persistor={persistor}>
+						{/* Wrap every page in Jss and Theme providers */}
+						<JssProvider
+							registry={this.pageContext.sheetsRegistry}
+							generateClassName={this.pageContext.generateClassName}
+						>
+							{/* MuiThemeProvider makes the theme available down the React
+									tree thanks to React context. */}
+							<MuiThemeProvider
+								theme={this.pageContext.theme}
+								sheetsManager={this.pageContext.sheetsManager}
+							>
+								{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+								<CssBaseline />
+								{/* Pass pageContext to the _document though the renderPage enhancer
+										to render collected styles on server side. */}
+								<Component pageContext={this.pageContext} {...pageProps} />
+							</MuiThemeProvider>
+						</JssProvider>
+					</PersistGate>
+				</Provider>
 			</Container>
 		);
 	}
