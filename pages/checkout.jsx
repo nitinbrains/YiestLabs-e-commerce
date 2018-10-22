@@ -42,7 +42,7 @@ class Checkout extends Component {
 	}
 
 	componentWillMount(){
-		this.props.prepareOrder();
+		// this.props.prepareOrder();
 	}
 
 	state = {
@@ -173,6 +173,7 @@ Checkout.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
+    	user: state.user,
         cart: state.cart
     }
 }

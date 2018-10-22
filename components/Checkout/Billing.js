@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { connect } from 'react-redux';
 
 import PropTypes from "prop-types";
@@ -16,14 +16,24 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 
-class Billing extends React.Component {
-    state = {
-        terms: "cc",
-        openDialogCard: false,
-        openDialogAddress: false,
-        addCard: false,
-        newAddress: false
-    };
+import Utils from '../../lib/Utils';
+
+class Billing extends Component {
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            terms: "cc",
+            openDialogCard: false,
+            openDialogAddress: false,
+            addCard: false,
+            newAddress: false
+        };
+    }
+
+    componentWillMount() {
+        this.props.getCreditCardIfExists();
+    }
 
     handleNewCard = () => {
         this.setState({ addCard: !this.state.addCard });
@@ -79,66 +89,31 @@ class Billing extends React.Component {
                                 </DialogTitle>
                                 <DialogContent>
                                     <Grid container spacing={24}>
-                                        <Grid item xs={12} sm={4}>
-                                            <Paper className={classes.paper}>
-                                                <Typography variant="body2">
-                                                    Credit Card
-                                                </Typography>
-                                                <Typography>
-                                                    Your Payment
-                                                </Typography>
-                                                <Typography>
-                                                    Information
-                                                </Typography>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    className={classes.button}
-                                                >
-                                                    Select Card
-                                                </Button>
-                                            </Paper>
-                                        </Grid>
-                                        <Grid item xs={12} sm={4}>
-                                            <Paper className={classes.paper}>
-                                                <Typography variant="body2">
-                                                    Credit Card
-                                                </Typography>
-                                                <Typography>
-                                                    Your Payment
-                                                </Typography>
-                                                <Typography>
-                                                    Information
-                                                </Typography>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    className={classes.button}
-                                                >
-                                                    Select Card
-                                                </Button>
-                                            </Paper>
-                                        </Grid>
-                                        <Grid item xs={12} sm={4}>
-                                            <Paper className={classes.paper}>
-                                                <Typography variant="body2">
-                                                    Credit Card
-                                                </Typography>
-                                                <Typography>
-                                                    Your Payment
-                                                </Typography>
-                                                <Typography>
-                                                    Information
-                                                </Typography>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    className={classes.button}
-                                                >
-                                                    Select Card
-                                                </Button>
-                                            </Paper>
-                                        </Grid>
+                                        {this.props.user.cards.map((card, i) => {
+                                            <Grid item xs={12} sm={4}>
+                                                <Paper className={classes.paper}>
+                                                    <Typography variant="body2">
+                                                        {card.ccnumber}
+                                                    </Typography>
+                                                    <Typography>
+                                                        {card.ccname}
+                                                    </Typography>
+                                                    <Typography>
+                                                        {card.ccexpire}
+                                                    </Typography>
+                                                    <Typography>
+                                                        {card.type}
+                                                    </Typography>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        className={classes.button}
+                                                    >
+                                                        Select Card
+                                                    </Button>
+                                                </Paper>
+                                            </Grid>
+                                        })}
                                     </Grid>
 
                                     {this.state.addCard ? (
@@ -270,7 +245,7 @@ class Billing extends React.Component {
                             <TextField
                                 required
                                 id="cardName"
-                                label="Name on card"
+                                label={this.props.user.selectedCard.ccname}
                                 fullWidth
                             />
                         </Grid>
@@ -278,7 +253,7 @@ class Billing extends React.Component {
                             <TextField
                                 required
                                 id="cardNumber"
-                                label="Card number"
+                                label={this.props.user.selectedCard.ccnumber}
                                 fullWidth
                             />
                         </Grid>
@@ -286,16 +261,7 @@ class Billing extends React.Component {
                             <TextField
                                 required
                                 id="expDate"
-                                label="Expiry date"
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                required
-                                id="cvv"
-                                label="CVV"
-                                helperText="Last three digits on signature strip"
+                                label={this.props.user.selectedCard.ccexpire}
                                 fullWidth
                             />
                         </Grid>
@@ -516,11 +482,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        login: (username, password) => dispatch({ type: "LOGIN_REQUEST", username, password}),
-        getInventory: (category, getAll) => dispatch({ type: "STORE_REQUEST", category, getAll}),
-        addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
-        changeQuantity: (index, quantity) => dispatch({type: "CHANGE_QUANTITY", index, quantity}),
-        deleteFromCart: (index) => dispatch({type: "DELETE_FROM_CART", index})
+        getCreditCardIfExists: () => dispatch({type: "GET_DEFAULT_CREDIT_CARD"})
     };
 };
 

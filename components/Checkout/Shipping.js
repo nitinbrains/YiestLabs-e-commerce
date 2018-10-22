@@ -18,11 +18,19 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper from "@material-ui/core/Paper";
 
 class Shipping extends Component {
-    state = {
-        address: true,
-        newAddress: false,
-        openDialog: false
-    };
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            address: true,
+            newAddress: false,
+            openDialog: false
+        };
+    }
+
+    componentWillMount() {
+        console.log('this.props.user', this.props.user);
+    }
 
     handleDialogOpen = () => {
         this.setState({ openDialog: true });
@@ -37,21 +45,23 @@ class Shipping extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, user } = this.props;
 
         return (
             <React.Fragment>
                 <Typography variant="title" gutterBottom>
                     Shipping address
                 </Typography>
-                {this.state.address ? (
+                {this.props.user.shipping.id ? (
                     <div>
-                        <Typography>Address Line 1</Typography>
-                        <Typography>Address Line 2</Typography>
-                        <Typography>Address Line 3</Typography>
-                        <Typography>City</Typography>
-                        <Typography>Country, State</Typography>
-                        <Typography>ZIP Code</Typography>
+                        <Typography>{user.shipping.attn}</Typography>
+                        <Typography>{user.shipping.addressee}</Typography>
+                        <Typography>{user.shipping.address1}</Typography>
+                        <Typography>{user.shipping.address2}</Typography>
+                        <Typography>{user.shipping.address3}</Typography>
+                        <Typography>{user.shipping.city}</Typography>
+                        <Typography>{user.shipping.countryid}</Typography>
+                        <Typography>{user.shipping.zip}</Typography>
 
                         <Button
                             style={{ marginTop: 10 }}
@@ -69,81 +79,38 @@ class Shipping extends Component {
                             </DialogTitle>
                             <DialogContent>
                                 <Grid container spacing={24}>
-                                    <Grid item xs={4}>
-                                        <Paper className={classes.paper}>
-                                            <Typography>
-                                                Address Line 1
-                                            </Typography>
-                                            <Typography>
-                                                Address Line 2
-                                            </Typography>
-                                            <Typography>
-                                                Address Line 3
-                                            </Typography>
-                                            <Typography>City</Typography>
-                                            <Typography>
-                                                Country, State
-                                            </Typography>
-                                            <Typography>ZIP Code</Typography>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                className={classes.button}
-                                            >
-                                                Select Address
-                                            </Button>
-                                        </Paper>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Paper className={classes.paper}>
-                                            <Typography>
-                                                Address Line 1
-                                            </Typography>
-                                            <Typography>
-                                                Address Line 2
-                                            </Typography>
-                                            <Typography>
-                                                Address Line 3
-                                            </Typography>
-                                            <Typography>City</Typography>
-                                            <Typography>
-                                                Country, State
-                                            </Typography>
-                                            <Typography>ZIP Code</Typography>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                className={classes.button}
-                                            >
-                                                Select Address
-                                            </Button>
-                                        </Paper>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Paper className={classes.paper}>
-                                            <Typography>
-                                                Address Line 1
-                                            </Typography>
-                                            <Typography>
-                                                Address Line 2
-                                            </Typography>
-                                            <Typography>
-                                                Address Line 3
-                                            </Typography>
-                                            <Typography>City</Typography>
-                                            <Typography>
-                                                Country, State
-                                            </Typography>
-                                            <Typography>ZIP Code</Typography>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                className={classes.button}
-                                            >
-                                                Select Address
-                                            </Button>
-                                        </Paper>
-                                    </Grid>
+                                    {user.otherAddresses.map((address, i) => {
+                                        <Grid item xs={4}>
+                                            <Paper className={classes.paper}>
+                                                <Typography>
+                                                    {address.address1}
+                                                </Typography>
+                                                <Typography>
+                                                    {address.address2}
+                                                </Typography>
+                                                <Typography>
+                                                    {address.address3}
+                                                </Typography>
+                                                <Typography>
+                                                    {address.city}
+                                                </Typography>
+                                                <Typography>
+                                                    {address.countryid}
+                                                </Typography>
+                                                <Typography>
+                                                    {address.zip}
+                                                </Typography>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    className={classes.button}
+                                                >
+                                                    Select Address
+                                                </Button>
+                                            </Paper>
+                                        </Grid>
+                                    })}
+                                    
                                 </Grid>
 
                                 {this.state.newAddress ? (
@@ -350,7 +317,12 @@ class Shipping extends Component {
                             margin="normal"
                             variant="outlined"
                         >
-                            <MenuItem value={1}>Shipping Method 1</MenuItem>
+                            {
+                                user.shipMethods.map((method, i) => 
+                                    <MenuItem value={method.NSID}>{method.Name}</MenuItem>
+                                )
+
+                            }
                         </TextField>
                     </Grid>
                 </Grid>

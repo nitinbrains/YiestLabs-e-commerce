@@ -4,6 +4,7 @@ import axios from 'axios'
 // custom
 import { host } from '../../config.server'
 import Checkout from '../../lib/Checkout';
+import User from '../../lib/User';
 
 function fetchPrepareOrderAPI(request)
 {
@@ -22,12 +23,13 @@ function fetchPrepareOrderAPI(request)
 
 function *prepareOrder(){
 
-    const state = yield select();
+    const cart = Cart.getCart();
+    const user = User.getUser();
     var request = {};
     request.calcShip = true;
-    request.userId = state.user.id;
-    request.shipMethod = state.user.shipMethod;
-    request.items = state.cart.items;
+    request.userId = user.id;
+    request.shipMethod = user.shipMethod;
+    request.items = cart.items;
 
     const { order, error } = yield call(fetchPrepareOrderAPI, request);
 

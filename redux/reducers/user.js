@@ -1,46 +1,62 @@
 const initialState = {
 	username: '',
 	password: '',
-	billaddress1: "",
-	billaddress2: "",
-	billaddress3: "",
-	billaddressee: "",
-	billattn: "",
-	billcity: "",
-	billcountryid: "",
-	billid: null,
-	billzip: "",
 	cards: [],
 	cardsToRemove: [],
-	category: "2",
-	companyname: "XAbove It All YM TEST",
+	category: "",
+	companyname: "",
 	connectedaccounts: [],
-	currency: "1",
+	currency: "",
 	email: "",
 	id: null,
 	otherAddresses: [],
 	phone: "",
-	shipaddress1: "",
-	shipaddress2: "",
-	shipaddress3: "",
-	shipaddressee: "",
-	shipattn: "",
-	shipcity: "",
-	shipcountryid: "",
-	shipid: null,
+	shipping: {
+		id: null,
+		address1: "",
+		address2: "",
+		address3: "",
+		addressee: "",
+		attn: "",
+		city: "",
+		countryid: "",
+	},
+	billing: {
+		id: null,
+		address1: "",
+		address2: "",
+		address3: "",
+		addressee: "",
+		attn: "",
+		city: "",
+		countryid: "",
+	},
 	shipmethod: "",
 	shipzip: "",
 	subsidiary: "",
 	terms: "",
 	vat: "",
+	selectedCard: {
+		id: '',
+		ccnumber: '',
+		ccname: '',
+		ccexpire: '',
+		type: '',
+		default: false		
+	},
+	shipMethods: []
 };
 
 const userReducer = (state = initialState, action) => {
+	var newState = state;
 	switch (action.type) {
 		case "LOGIN_SUCCESS":
 			return Object.assign({}, state, action)
 		case "USER_INFO":
 			return Object.assign({}, state, action.UserInfo);
+		case "SET_CREDIT_CARD":
+			newState.selectedCard = action.card;
+			return newState;
 		case "LOGOUT":
 		default:
 			return state;

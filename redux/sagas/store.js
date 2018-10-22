@@ -4,6 +4,7 @@ import axios from 'axios'
 // custom
 import { host } from '../../config.server'
 import Store from '../../lib/Store'
+import User from '../../lib/User';
 
 function fetchInventoryAPI(classFilters) {
     return axios.get(`${host}/get-inventory?classFilters=${JSON.stringify(classFilters)}`)
@@ -21,7 +22,8 @@ function fetchInventoryAPI(classFilters) {
 function* getInventory(action) {
 
     const search = action && action.search;
-    const user = yield select(state => state.user);
+    const user = User.getUser();
+
 
     const selectedCategory = Store.getSelectedCategory();
     const classFilters = Store.getClassFilters(selectedCategory, search);

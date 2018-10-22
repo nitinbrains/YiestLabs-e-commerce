@@ -13,15 +13,17 @@ class Store extends Component {
     componentWillMount() {
         try {
             var UserInfo = {
-                billaddress1: "964 Court Lane",
-                billaddress2: "",
-                billaddress3: "",
-                billaddressee: "Home",
-                billattn: "",
-                billcity: "Concord",
-                billcountryid: "US",
-                billid: 1743060,
-                billzip: "94518",
+                billing: {
+                    address1: "964 Court Lane",
+                    address2: "",
+                    address3: "",
+                    addressee: "Home",
+                    attn: "",
+                    city: "Concord",
+                    countryid: "US",
+                    id: 1743060,
+                    zip: "94518",
+                },
                 cards: [
                     {ccexpire: "2022-12-01T08:00:00.000Z", ccname: "Joe Discovery", ccnumber: "************1117", default: true, id: 38421, type: "3"}
                 ],
@@ -41,16 +43,19 @@ class Store extends Component {
                     {address1: "One way", address2: "", address3: "", addressee: "", attn: "Attn", city: "City", countryid: "US", defaultBill: false, defaultShip: true, id: 1743261, zip: "94518"}
                 ],
                 phone: "7142995620",
-                shipaddress1: "One way",
-                shipaddress2: "",
-                shipaddress3: "",
-                shipaddressee: "",
-                shipattn: "Attn",
-                shipcity: "City",
-                shipcountryid: "US",
-                shipid: 1743261,
+                shipping: {
+                    address1: "One way",
+                    address2: "",
+                    address3: "",
+                    addressee: "",
+                    attn: "Attn",
+                    city: "City",
+                    countryid: "US",
+                    id: 1743261,
+                    zip: "94518"
+                },
                 shipmethod: "2842",
-                shipzip: "94518",
+                
                 subsidiary: "2",
                 terms: "10",
                 vat: "",
