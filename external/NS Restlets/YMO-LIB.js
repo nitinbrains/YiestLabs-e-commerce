@@ -69,13 +69,10 @@ function getCurrencyFromSub(subsidiaryID, cphDomestic)
 {
 	switch(subsidiaryID)
 	{
-        case '2':
 		case 2: //US
 			return 1; //Dollar
-        case '5':
 		case 5: //HK
 			return 5; //HK Dollar
-        case '7':
 		case 7: //CPH
 			if(cphDomestic)
 			{
@@ -92,13 +89,10 @@ function getShipMethodFromSub(subsidiaryID, cphDomestic)
 {
 	switch(subsidiaryID)
 	{
-        case '2':
 		case 2: //US
 			return 2787; //Fedex Priority Overnight
-        case '5':
 		case 5: //HK
 			return 13301; //Will Call
-        case '7':
 		case 7: //CPH
 			if(cphDomestic)
 			{
@@ -115,16 +109,19 @@ function warehouseMap(subsidiaryID)
 {
     switch(subsidiaryID)
     {
-        case 2: //usa
+        // USA
+        case 2:
             return '9'; //SD Shipping
-        //  return 11; //Ash Shipping
-        break;
-        case 5: //hk
+            //  return 11; //Ash Shipping
+            break;
+        // HK
+        case 5:
             return '31'; //HK Shipping
-        break;
-        case 7: //cph
+            break;
+        // CPH
+        case 7:
             return '30'; //CPH Shipping
-        break;
+            break;
         default:
             return '9';
     }
@@ -202,7 +199,7 @@ function checkHoliday(date, subsidiary)
     {
         HOLIDAYS = USHOLIDAYS;
     }
-    
+
     var dateToCheck = new Date(date);
 
     if((dateToCheck.getDay() < 1 || dateToCheck.getDay() > 3 ) && subsidiary != 2)
@@ -278,7 +275,7 @@ function valiDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, 
 
     if(compareDates(today, finalDate) == -1)
     {
-        finalDate = new Date(today);             
+        finalDate = new Date(today);
     }
 
     if(addTravelTime)
@@ -318,7 +315,7 @@ function valiDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, 
     if(finalDate.getDay() == 0)
     {
         finalDate.setDate(finalDate.getDate() + 1);
-    } 
+    }
     else if(finalDate.getDay() == 6)
     {
         finalDate.setDate(finalDate.getDate() + 2);
@@ -339,7 +336,7 @@ function valiDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, 
     if(finalDate.getDay() == 0)
     {
         finalDate.setDate(finalDate.getDate() + 1);
-    } 
+    }
     else if(finalDate.getDay() == 6)
     {
         finalDate.setDate(finalDate.getDate() + 2);
@@ -369,7 +366,7 @@ function valiDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, 
 
 function getLocalTime(subsidiary, isAsheville)
 {
-    var now = new Date(); 
+    var now = new Date();
     var date = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 
     switch(subsidiary)
@@ -383,15 +380,15 @@ function getLocalTime(subsidiary, isAsheville)
             {
                 date.setHours(date.getHours()-7);
             }
-        break;
+            break;
 
         case 5: //HK
             date.setHours(date.getHours()+8);
-        break;
+            break;
 
         case 7: //CPH
             date.setHours(date.getHours()+2);
-        break;
+            break;
     }
 
     return date;
@@ -435,4 +432,29 @@ function compareDates(date1, date2)
     }
 
     return 0;
+}
+
+function searchAvailabilityResults(Availability, location)
+{
+    for(var i = 0, totalLength = Availability.length; i < totalLength; i++)
+    {
+        if(Availability[i].inventoryLocation == String(location) && Availability[i].type == 'Avail Qty')
+        {
+            return Availability[i];
+        }
+    }
+
+    // item not available
+    return [{
+        "type": "Avail Qty",
+        "action": "Add",
+        "qty": "0",
+        "availQty": 0,
+        "availQtyToShip": 0,
+        "dateValue": null,
+        "inventoryLocation": null,
+        "volume": 1,
+        "item": null
+    }]
+
 }

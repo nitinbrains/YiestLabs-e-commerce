@@ -6,11 +6,12 @@ const dev = process.env.NODE_ENV !== 'production'
 const app = nextJS({ dev })
 const handle = app.getRequestHandler()
 
-
 const fetch = require('isomorphic-unfetch');
 
 const Utils = require('./lib/Utils');
 const SalesLib = require('./lib/SalesLib');
+const Cart = require('./lib/Cart');
+const Checkout = require('./lib/Checkout');
 
 const system = {
 	NSAuthentication: {
@@ -49,7 +50,7 @@ app.prepare()
 	server.use( bodyParser.json() );       // to support JSON-encoded bodies
 	server.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 	 	extended: true
-	})); 
+	}));
 
 	function delay(duration) {
 		return function(...args){
@@ -60,7 +61,7 @@ app.prepare()
 			});
 		};
 	}
-	
+
 
 	function NSAuth(scriptID, type = 'post')
   	{
@@ -111,7 +112,7 @@ app.prepare()
 		fetch("https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=912&deploy=1", {
 	  		method: 'POST',
 	  		headers: {
-				'Authorization': NSAuth(912, "post"),		    		
+				'Authorization': NSAuth(912, "post"),
 				'Accept': 'application/json',
 	    		'Content-Type': 'application/json',
 	  		},
@@ -122,7 +123,7 @@ app.prepare()
 		{
 			if(response.type == 'error.SuiteScriptError')
 			{
-				res.send({error: {message: response.message, code: -1}})
+				res.send({error: {message: response.message, code: -1}});
 			}
 			else if(response.error)
 			{
@@ -139,7 +140,7 @@ app.prepare()
 				//CHECK VERSION WARNING HERE
 				if(message.items.length > 0)
 				{
-					return res.send(message);
+					res.send(message);
 				}
 				else
 				{
@@ -149,12 +150,14 @@ app.prepare()
 			}
 		})
 		.catch(err => {
-			return res.send({error: {message: "service unavailable", code: -1}});
+			// TO-DO: Implement retry handler
+			console.log('error', error);
+			res.send({error: { message: error, code: -1 }});
 		});
 	});
 
 	server.post('/get-user-info', function(req, res, next){
-		
+
 		var userId = req.body.userId;
 
 		if(userId)
@@ -163,7 +166,7 @@ app.prepare()
 			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=913&deploy=1', {
 		  		method: 'POST',
 		  		headers: {
-					'Authorization': NSAuth(913, 'post'),			    		
+					'Authorization': NSAuth(913, 'post'),
 					'Accept': 'application/json',
 		    		'Content-Type': 'application/json',
 		  		},
@@ -172,7 +175,7 @@ app.prepare()
 			.then((response) => response.json())
 			.then(function(response)
 			{
-				
+
 				if(response.type == 'error.SuiteScriptError')
 				{
 					res.send({error: {  message: response.message, code: -1 }});
@@ -181,9 +184,7 @@ app.prepare()
 				{
 					if(!(response.error.code == 'WS_CONCUR_SESSION_DISALLWD' || response.error.code == 'WS_REQUEST_BLOCKED' || response.error.code == -1))
 					{
-						// ErrorMod.log('network', 'requestUserInfo', response, true);
 						console.log('network', 'get-user-info', response, true);
-
 					}
 
 					res.send({error: {  message: response.error.message, code: response.error.code }});
@@ -193,7 +194,7 @@ app.prepare()
 					var message = NSReceiveMessage(response);
 					if(message)
 					{
-						return res.send(message);
+						res.send(message);
 					}
 					else
 					{
@@ -202,7 +203,9 @@ app.prepare()
 				}
 			})
 			.catch(error => {
-				res.send({error: { message: 'could not get user info', code: -1 }});
+				// TO-DO: Implement retry handler
+				console.log('error', error);
+				res.send({error: { message: error, code: -1 }});
 			});
 		}
 		else
@@ -240,11 +243,11 @@ app.prepare()
 				{
 					if(result.CustomerInformation.NetSuiteID[0].$.UserType == "Staff" || result.CustomerInformation.NetSuiteID[0]._ == '43148')
 					{
-						return res.send(result.CustomerInformation.NetSuiteID[0]._);
+						res.send(result.CustomerInformation.NetSuiteID[0]._);
 					}
 					else
 					{
-						return res.send(result.CustomerInformation.NetSuiteID[0]._);
+						res.send(result.CustomerInformation.NetSuiteID[0]._);
 					}
 				}
 				else
@@ -255,17 +258,17 @@ app.prepare()
 		})
 		.catch(function(error)
 		{
-
-			console.log('err', error);
+			// TO-DO: Implement retry handler
+			console.log('error', error);
 			res.send({error: { message: error, code: -1 }});
 		});
- 
+
 	})
 
 	server.post('/prepare-order', function(req, res, next){
 
 		const request = req.body.request;
-			
+
 		if(request.userId)
 		{
 
@@ -286,7 +289,7 @@ app.prepare()
 			{
 				if(response.type == 'error.SuiteScriptError')
 				{
-					return res.send({error: {message: response.message, code: -1}});
+					res.send({error: {message: response.message, code: -1}});
 				}
 				else if(response.error)
 				{
@@ -295,32 +298,14 @@ app.prepare()
 						console.log('network', 'prepare-order', response, true);
 					}
 
-					return res.send({error: { message: response.error.message, code: -1 }});
+					res.send({error: { message: response.error.message, code: response.error.code }});
 				}
 				else
 				{
 					var message = NSReceiveMessage(response);
 					if(message.items && message.items.length > 0 && message.transitTimes)
 					{
-
-						return res.send(message);
-
-						// ConfirmationCart.init(userID, State.getState('UserInfo'), message.items, message.transitTimes, message.itemSubtotal, message.shippingSubtotal, message.orderSubtotal);
-
-						// var warning;
-						// if(message.items.length != WLCart.getLength())
-						// {
-						// 	warning = 'Items were removed due to lack of availability, please check your order carefully'
-						// }
-
-						// if(warning)
-						// {
-						// 	resolve(warning);
-						// }
-						// else
-						// {
-						// 	resolve();
-						// }
+						res.send(message);
 					}
 					else
 					{
@@ -329,24 +314,310 @@ app.prepare()
 				}
 			})
 			.catch(err => {
-				if(Tries < MaxTries)
-				{
-					//impose random backoff and try again
-					const wait = Utils.getWaitTime(Tries) * 1000;
-					setTimeout(wait, prepareOrder(Tries+1));
-				}
-				else
-				{
-					res.send({error: { message: 'max retries reached', code: -1}});
-				}
+				// TO-DO: Implement retry handler
+				console.log('error', error);
+				res.send({error: { message: error, code: -1 }});
 			});
 		}
 		else
 		{
 			res.send({error: { message: 'User is not logged in, cannot retrieve ship dates', code: -1 }});
 		}
-		
+
 	});
+
+
+	server.post('/place-order', function(req, res, next) {
+		var userID = State.getState('UserID');
+
+		const request = req.body.request;
+		const
+
+		if(request.userId && Checkout.getLength() > 0)
+		{
+			var finalOrder = Checkout.finalOrder();
+			var message = NSSendMessage(finalOrder);
+
+			//YMO-ORDER
+			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=914&deploy=1', {
+				method: 'POST',
+				headers: {
+					'Authorization' : NSAuth(914, 'post'),
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				},
+				body: message
+			})
+			.then((response) => response.json())
+			.then(function(response)
+			{
+				if(response.type == 'error.SuiteScriptError')
+				{
+					res.send({error: {message: response.message, code: -1}});
+				}
+				else if(response.error)
+				{
+					if(!(response.error.code == 'WS_CONCUR_SESSION_DISALLWD' || response.error.code == 'WS_REQUEST_BLOCKED' || response.error.code == -1))
+					{
+						console.log('network', 'place-order', response, true);
+					}
+					res.send({error: { message: response.error.message, code: response.error.code }});
+				}
+				else
+				{
+					var message = NSReceiveMessage(response);
+
+					if(message.orderNum.length > 0)
+					{
+						Cart.clearCart();
+
+						// requestOrderHistory();
+						// if(State.getState('WLCSR'))
+						// {
+						// 	requestSalesRepOrderHistory();
+						// }
+						res.sendStatus(200);
+					}
+					else
+					{
+						res.send({error: { message: 'Items have been removed due to unavailability', code: 0 }});					}
+				}
+			})
+			.catch(err => {
+				// TO-DO: Implement retry handler
+				console.log('error', error);
+				res.send({error: { message: error, code: -1 }});
+			});
+		}
+		else
+		{
+			res.send({error: { message: 'User is not logged in, cannot place order', code: 0 }});
+		}
+	})
+
+	server.post('/change-cust-info', function(req, res, next) {
+
+		const request = req.body.request;
+		if(request.id)
+		{
+			var message = NSSendMessage(request);
+
+			//YMO-CUST
+			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=913&deploy=1', {
+			  method: 'PUT',
+			  headers: {
+				'Authorization' : NSAuth(913, 'put'),
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+			  },
+			  body: message
+			})
+			.then((response) => response.json())
+			.then(async function(response)
+			{
+				if(response.type == 'error.SuiteScriptError')
+				{
+					res.send({error: {message: response.message, code: -1}});
+				}
+				else if(response.error)
+				{
+					if(!(response.error.code == 'WS_CONCUR_SESSION_DISALLWD' || response.error.code == 'WS_REQUEST_BLOCKED' || response.error.code == -1))
+					{
+						console.log('network', 'change-cust-info', response, true);
+					}
+
+					res.send({error: {message: response.error.message, code: response.error.code}});
+				}
+				else
+				{
+					var message = NSReceiveMessage(response);
+					if(message.phone != 1)
+					{
+						res.send({error: { message: 'Could not update your phone number', code: 0 }});
+					}
+
+					if(message.email != 1)
+					{
+						res.send({error: { message: 'Could not update your email', code: 0 }});
+					}
+
+					if(message.currency != 1)
+					{
+						res.send({error: { message: 'Could not update your currency', code: 0 }});
+					}
+
+					if(message.vat != 1)
+					{
+						res.send({error: { message: 'Could not update your vat number', code: 0 }});
+					}
+
+					if(message.shipmethod != 1)
+					{
+						res.send({error: { message: 'Could not update your shipping method', code: 0 }});
+					}
+
+					if(message.ship != 1)
+					{
+						res.send({error: { message: 'Could not update your shipping address', code: 0 }});
+					}
+
+					if(message.bill != 1)
+					{
+						res.send({error: { message: 'Could not update your billing address', code: 0 }});
+					}
+
+					if(message.card != 1)
+					{
+						res.send({error: { message: 'Could not update your credit card information', code: 0 }});
+
+					}
+
+					// var UserInfo = await requestUserInfo();
+					// State.setState({UserInfo: UserInfo});
+					// resolve(UserInfo);
+				}
+			})
+			.catch(err => {
+				// TO-DO: Implement retry handler
+				console.log('error', error);
+				res.send({error: { message: error, code: -1 }});
+			});
+		}
+		else
+		{
+			res.send({error: { message: "User is not logged in, cannot change User Info", code: -1 }});
+		}
+	})
+
+	server.post('/get-order-history', function(req, res, next) {
+
+		var userId = req.body.userId;
+
+		// if(customerID)
+		// {
+		// 	userID = customerID;
+		// }
+		// else
+		// {
+		// 	userID = State.getState('UserID');
+		// }
+
+		if(userId)
+		{
+			//YMO-ORDER
+			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=914&deploy=1', {
+				method: 'POST',
+				headers: {
+					'Authorization' : NSAuth(914, 'post'),
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				},
+				body: NSSendMessage({id: userID, admin: false, get: true})
+			})
+			.then((response) => response.json())
+			.then(function(response)
+			{
+
+				if(response.type == 'error.SuiteScriptError')
+				{
+					res.send({error: {message: response.message, code: -1}});
+				}
+				else if(response.error)
+				{
+					if(!(response.error.code == 'WS_CONCUR_SESSION_DISALLWD' || response.error.code == 'WS_REQUEST_BLOCKED' || response.error.code == -1))
+					{
+						console.log('network', 'get-order-history', response, true);
+					}
+
+					res.send({error: {message: response.error..message, code: -1}});
+				}
+				else
+				{
+					var message = NSReceiveMessage(response);
+					if(message.orders && message.orders.length > 0)
+					{
+						State.setState({OrderHistory: message.orders});
+						res.send(message.orders);
+					}
+					else
+					{
+						res.send({error: { message: 'No past orders were found', code: 0 }});
+					}
+				}
+			})
+			.catch(err => {
+				// TO-DO: Implement retry handler
+				console.log('error', error);
+				res.send({error: { message: error, code: -1 }});
+			});
+		}
+		else
+		{
+			res.send({error: { message: "User is not logged in, cannot retrieve Order History", code: -1 }});
+		}
+	})
+
+	server.post('/get-order-price', function(res, req, next) {
+		if(State.getState('UserID'))
+		{
+			query.userID = State.getState('UserID');
+			var message = NSSendMessage(query);
+
+			//YMO-ORDER
+			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=914&deploy=1', {
+				method: 'PUT',
+				headers: {
+					'Authorization' : NSAuth(914, 'put'),
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				},
+				body: message
+			})
+			.then((response) => response.json())
+			.then(function(response)
+			{
+
+				if(response.type == 'error.SuiteScriptError')
+				{
+					res.send({error: {message: response.message, code: -1}});
+				}
+				else if(response.error)
+				{
+					if(!(response.error.code == 'WS_CONCUR_SESSION_DISALLWD' || response.error.code == 'WS_REQUEST_BLOCKED' || response.error.code == -1))
+					{
+						console.log('network', 'get-order-price', response, true);
+					}
+
+					res.send({error: {message: response.error..message, code: -1}});
+				}
+				else if(response.message && response.message.toLowerCase().includes('invalid couponcode'))
+				{
+					res.send({error: { message: 'Invalid coupon code', code: 0 }});
+				}
+				else
+				{
+					var message = NSReceiveMessage(response);
+					if(message.orderSubtotal)
+					{
+						res.send(message);
+					}
+					else
+					{
+						res.send({error: { message: 'No subtotal', code: -1 }});
+					}
+				}
+			})
+			.catch(err => {
+				// TO-DO: Implement retry handler
+				console.log('error', error);
+				res.send({error: { message: error, code: -1 }});
+			});
+		}
+		else
+		{
+			res.send({error: { message: 'User is not logged in, cannot retrieve pricing', code: -1 }});
+		}
+	})
 
 	server.get('*', (req, res, next) => {
 		return handle(req, res, next)
