@@ -1,3 +1,5 @@
+const fetch = require('isomorphic-unfetch');
+
 const prepareURL = (targetUrl, query) => {
   if (!query) {
     return targetUrl
