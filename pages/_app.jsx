@@ -4,6 +4,7 @@ import App, { Container } from 'next/app';
 // redux
 import configureStore from '../redux/configureStore'
 import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 
 // material-ui
 import { MuiThemeProvider } from '@material-ui/core/styles';

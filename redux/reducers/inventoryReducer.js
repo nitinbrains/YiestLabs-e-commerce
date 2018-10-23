@@ -9,8 +9,8 @@ const initialState = {
 
 
 export default createReducer(initialState, {
-    [messageTypes.GET_INVENTORY_ATTEMPT]: ({ categoriesLoaded }, { data: { items, loadCategories } }) => ({
-        items,
+    [inventoryTypes.GET_INVENTORY_SUCCESS]: ({ categoriesLoaded }, { data: { items, loadCategories } }) => ({
+        items: [...items],
         categoriesLoaded: [
             ...categoriesLoaded,
             ...loadCategories

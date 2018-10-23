@@ -20,7 +20,7 @@ function * rootSaga () {
         // USERS
         takeLatest(userTypes.USER_LOGIN_ATTEMPT, loginUser),
         // INVENTORY
-        takeEvery(inventoryActions.GET_INVENTORY_ATTEMPT, getInventory),
+        takeEvery(inventoryTypes.GET_INVENTORY_ATTEMPT, getInventory),
         // CART
         takeEvery(cartTypes.ADD_ITEM_ATTEMPT, addCartItem),
         takeEvery(cartTypes.UPDATE_ITEM_ATTEMPT, updateItem)

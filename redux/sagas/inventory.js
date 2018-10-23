@@ -5,7 +5,7 @@ import * as api from '../../services/inventory';
 
 const getClassFilters = (categoriesLoaded, category, getAll=false) => {
     category = parseInt(category);
-    const classFilters = [];
+    let classFilters = [];
     const mainCategories = [0, 7, 8, 12, 13, 14, 15];
     let loadCategories;
 
@@ -34,14 +34,14 @@ const getClassFilters = (categoriesLoaded, category, getAll=false) => {
 }
 
 export function * getInventory (action) {
-    const { responseSuccess, responseFailure, data: { category, getAll } } = action;
+    const { responseSuccess, responseFailure, data: { category = 0, getAll } } = action;
     try {
         const alreadyLoaded = yield select(state => state.inventory.categoriesLoaded);
         const { classFilters, loadCategories } = getClassFilters(alreadyLoaded, category, getAll);
         const { items, error } = yield call(api.getInventory, classFilters);
         yield put(responseSuccess({ items, loadCategories }));
-    } catch (err) {
-        yield put(responseFailure(err));
-        yield put(messageActions.showMessage({ title: 'Error', error: error.message })) 
+    } catch (error) {
+        yield put(responseFailure(error));
+        yield put(messageActions.dispayMessage({ title: 'Error', error: error.message }));
     }
 };

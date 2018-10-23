@@ -51,13 +51,13 @@ export const createActionsStructure = (prefix, protoArray) => {
           type: actionTypesValues[0],
           responseSuccess: (dataSuccess) => ({ type: actionTypesValues[1], data: dataSuccess }),
           responseFailure: (dataFailure) => ({ type: actionTypesValues[2], data: dataFailure }),
-          data
+          data: { ...data }
         })
       }
       : {
         [actionPrimaryName]: (data) => ({
           type: actionTypesValues[0],
-          data
+          data: { ...data }
         })
       };
     return {

@@ -1,10 +1,11 @@
 const fetch = require('isomorphic-unfetch');
+import { host } from '../config.server';
 
 const prepareURL = (targetUrl, query) => {
   if (!query) {
     return targetUrl
   }
-  return `${targetUrl}?${Object.keys(query).map((field) => `${field}=${encodeURIComponent(query[field])}`).join('&')}`
+  return `${host}${targetUrl}?${Object.keys(query).map((field) => `${field}=${encodeURIComponent(query[field])}`).join('&')}`
 }
 
 const getResponseBody = async (response) => {
@@ -27,14 +28,15 @@ const getResponseBody = async (response) => {
 }
 
 export const requestWrapper = async (url, data = {}, token, jsonRequest = true) => {
-  const URL = prepareURL(url, data.query)
-  const response = await fetch(URL, data)
+
+  const URL = prepareURL(url, data.query);
+  const response = await fetch(URL, data);
 
   try {
-    const responseBody = await getResponseBody(response)
+    const responseBody = await getResponseBody(response);
 
-    return response.ok ? { res: responseBody } : { err: responseBody }
+    return response.ok ? { res: responseBody } : { err: responseBody };
   } catch (error) {
-    return response.ok ? { res: { code: response.status } } : { err: {} }
+    return response.ok ? { res: { code: response.status } } : { err: {} };
   }
 }

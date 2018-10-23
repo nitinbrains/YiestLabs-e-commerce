@@ -31,8 +31,8 @@ export default createReducer(initialState, {
     [cartTypes.UPDATE_ITEM_SUCCESS]: ({ items }, { data: { item: updatedItem } }) => ({
         items: addOrUpdate(items, updatedItem, true)
     }),
-    [cartTypes.REMOVE_ITEM]: ({ items }, { data: { removedItem } }) => ({
+    [cartTypes.REMOVE_ITEM_ATTEMPT]: ({ items }, { data: { removedItem } }) => ({
         items: items.filter((item) => item.MerchandiseID === removedItem.MerchandiseID && item.details === removedItem.details)
     }),
-    [cartTypes.CLEAR_CART]: (state, { data }) => null,
+    [cartTypes.CLEAR_CART_ATTEMPT]: (state, { data }) => null,
 })
