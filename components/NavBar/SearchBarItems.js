@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 
 import { withStyles } from "@material-ui/core/styles";
@@ -9,18 +10,16 @@ import ListItemText from "@material-ui/core/ListItemText";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 
-
-//custom
-import Store from '../../lib/Store'
+import { inventoryActions } from '../../redux/actions/inventoryActions';
 
 class SearchBarItems extends Component {
 
     selectMainCategory(mainIndex, category) {
-        this.props.changeMainCategory(mainIndex, category);
+        this.props.changeCategory({ mainIndex, category });
     }
 
     selectSubCategory(mainIndex, subIndex, category) {
-        this.props.changeSubCategory(mainIndex, subIndex, category);
+        this.props.changeCategory({ mainIndex, subIndex, category });
     }
 
     render() {
@@ -88,16 +87,11 @@ const styles = theme => ({
 
 const mapStateToProps = state => {
     return {
-        store: state.store,
+        store: state.inventory,
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        changeMainCategory: (mainIndex, category) => dispatch({type: "MAIN_CATEGORY_CHANGE", mainIndex, category}),
-        changeSubCategory: (mainIndex, subIndex, category) => dispatch({type: "SUB_CATEGORY_CHANGE", mainIndex, subIndex, category}),
-    };
-};
+const mapDispatchToProps = dispatch => bindActionCreators(inventoryActions, dispatch);
 
 export default connect(
     mapStateToProps,

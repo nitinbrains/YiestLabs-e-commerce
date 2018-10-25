@@ -190,7 +190,7 @@ export function * updateItem(action) {
         }
     } catch (error) {
         if (error instanceof CartException) {
-            yield put(messageActions.dispayMessage({ title: 'Error', error: error.message })) 
+            yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));
         }
         yield put(responseFailure(error));
     }
@@ -202,11 +202,11 @@ export function * addCartItem(action) {
         const items = yield select(state => state.cart.items);
         const { message, cartItem } = prepareItem(items, item, volIdIndex, quantity);
         if (message) {
-            yield put(messageActions.dispayMessage({ ...message }));
+            yield put(messageActions.displayMessage({ ...message }));
         }
         yield put(responseSuccess({ item: cartItem }));
     } catch(error) {
-        yield put(messageActions.dispayMessage({ title: 'Error', error: error.message }));
+        yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));
         yield put(responseFailure(err));
     }
 }

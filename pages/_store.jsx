@@ -81,7 +81,7 @@ class Store extends Component {
         if (isWidthUp("sm", this.props.width)) {
             return (
                 <NavBarUserSearchDrawerLayout>
-                    <ItemsLg items={this.props.store.items.slice(0, 25)} />
+                    <ItemsLg items={this.props.store.itemsToShow.slice(0, 25)} />
                 </NavBarUserSearchDrawerLayout>
             );
         }
@@ -89,7 +89,7 @@ class Store extends Component {
         if (isWidthUp("xs", this.props.width)) {
             return (
                 <NavBarUserSearchDrawerLayout>
-                    <ItemsXs items={this.props.store.items.slice(0, 25)} />
+                    <ItemsXs items={this.props.store.itemsToShow.slice(0, 25)} />
                 </NavBarUserSearchDrawerLayout>
             );
         }
