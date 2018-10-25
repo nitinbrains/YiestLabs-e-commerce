@@ -19,7 +19,7 @@ import Button from "@material-ui/core/Button";
 import Utils from '../../lib/Utils';
 
 class Billing extends Component {
-    
+
     constructor(props) {
         super(props);
         this.state = {
@@ -36,7 +36,11 @@ class Billing extends Component {
     }
 
     handleNewCard = () => {
-        this.setState({ addCard: !this.state.addCard });
+        this.setState({ newCard: !this.state.newCard });
+    };
+
+    handleUseCard = () => {
+        this.setState({ useCard: !this.state.useCard });
     };
 
     handleDialogCardOpen = () => {
@@ -44,7 +48,7 @@ class Billing extends Component {
     };
 
     handleDialogCardClose = () => {
-        this.setState({ openDialogCard: false, addCard: false });
+        this.setState({ openDialogCard: false, newCard: false });
     };
 
     handleNewAddress = () => {
@@ -116,7 +120,7 @@ class Billing extends Component {
                                         })}
                                     </Grid>
 
-                                    {this.state.addCard ? (
+                                    {this.state.newCard ? (
                                         <Grid container spacing={24}>
                                             <Grid item xs={12} md={6}>
                                                 <TextField
@@ -170,7 +174,7 @@ class Billing extends Component {
                                     >
                                         Cancel
                                     </Button>
-                                    {this.state.addCard && (
+                                    {this.state.newCard && (
                                         <Button
                                             onClick={this.handleDialogCardClose}
                                             color="primary"
@@ -192,50 +196,183 @@ class Billing extends Component {
                                         control={
                                             <Checkbox
                                                 color="primary"
-                                                name="addCard"
-                                                onChange={this.handleNewCard}
+                                                name="newCard"
+                                                onChange={this.handleUseCard}
                                             />
                                         }
-                                        label="Add a Credit Card"
+                                        label="Use Credit Card"
                                     />
                                 </Grid>
                             </Grid>
-                            {this.state.addCard && (
-                                <Grid container spacing={24}>
-                                    <Grid item xs={12} md={6}>
-                                        <TextField
-                                            required
-                                            id="cardName"
-                                            label="Name on card"
-                                            fullWidth
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <TextField
-                                            required
-                                            id="cardNumber"
-                                            label="Card number"
-                                            fullWidth
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <TextField
-                                            required
-                                            id="expDate"
-                                            label="Expiry date"
-                                            fullWidth
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <TextField
-                                            required
-                                            id="cvv"
-                                            label="CVV"
-                                            helperText="Last three digits on signature strip"
-                                            fullWidth
-                                        />
-                                    </Grid>
-                                </Grid>
+
+                            {this.state.useCard && (
+                                <div>
+                                    <Button
+                                        style={{ marginTop: 10 }}
+                                        onClick={this.handleDialogCardOpen}
+                                    >
+                                        Select Card
+                                    </Button>
+                                    <Dialog
+                                        open={this.state.openDialogCard}
+                                        onClose={this.handleDialogCardClose}
+                                        aria-labelledby="form-dialog-title"
+                                    >
+                                        <DialogTitle id="form-dialog-title">
+                                            Cards
+                                        </DialogTitle>
+                                        <DialogContent>
+                                            <Grid container spacing={24}>
+                                                <Grid item xs={12} sm={4}>
+                                                    <Paper
+                                                        className={
+                                                            classes.paper
+                                                        }
+                                                    >
+                                                        <Typography variant="body2">
+                                                            Credit Card
+                                                        </Typography>
+                                                        <Typography>
+                                                            Your Payment
+                                                        </Typography>
+                                                        <Typography>
+                                                            Information
+                                                        </Typography>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            className={
+                                                                classes.button
+                                                            }
+                                                        >
+                                                            Select Card
+                                                        </Button>
+                                                    </Paper>
+                                                </Grid>
+                                                <Grid item xs={12} sm={4}>
+                                                    <Paper
+                                                        className={
+                                                            classes.paper
+                                                        }
+                                                    >
+                                                        <Typography variant="body2">
+                                                            Credit Card
+                                                        </Typography>
+                                                        <Typography>
+                                                            Your Payment
+                                                        </Typography>
+                                                        <Typography>
+                                                            Information
+                                                        </Typography>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            className={
+                                                                classes.button
+                                                            }
+                                                        >
+                                                            Select Card
+                                                        </Button>
+                                                    </Paper>
+                                                </Grid>
+                                                <Grid item xs={12} sm={4}>
+                                                    <Paper
+                                                        className={
+                                                            classes.paper
+                                                        }
+                                                    >
+                                                        <Typography variant="body2">
+                                                            Credit Card
+                                                        </Typography>
+                                                        <Typography>
+                                                            Your Payment
+                                                        </Typography>
+                                                        <Typography>
+                                                            Information
+                                                        </Typography>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            className={
+                                                                classes.button
+                                                            }
+                                                        >
+                                                            Select Card
+                                                        </Button>
+                                                    </Paper>
+                                                </Grid>
+                                            </Grid>
+
+                                            {this.state.newCard ? (
+                                                <Grid container spacing={24}>
+                                                    <Grid item xs={12} md={6}>
+                                                        <TextField
+                                                            required
+                                                            id="cardName"
+                                                            label="Name on card"
+                                                            fullWidth
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={12} md={6}>
+                                                        <TextField
+                                                            required
+                                                            id="cardNumber"
+                                                            label="Card number"
+                                                            fullWidth
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={12} md={6}>
+                                                        <TextField
+                                                            required
+                                                            id="expDate"
+                                                            label="Expiry date"
+                                                            fullWidth
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={12} md={6}>
+                                                        <TextField
+                                                            required
+                                                            id="cvv"
+                                                            label="CVV"
+                                                            helperText="Last three digits on signature strip"
+                                                            fullWidth
+                                                        />
+                                                    </Grid>
+                                                </Grid>
+                                            ) : (
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={this.handleNewCard}
+                                                    className={classes.button}
+                                                >
+                                                    New Card
+                                                </Button>
+                                            )}
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button
+                                                onClick={
+                                                    this.handleDialogCardClose
+                                                }
+                                                color="primary"
+                                            >
+                                                Cancel
+                                            </Button>
+                                            {this.state.newCard && (
+                                                <Button
+                                                    onClick={
+                                                        this
+                                                            .handleDialogCardClose
+                                                    }
+                                                    color="primary"
+                                                >
+                                                    Confirm Changes
+                                                </Button>
+                                            )}
+                                        </DialogActions>
+                                    </Dialog>
+                                </div>
                             )}
                         </div>
                     )
@@ -267,7 +404,11 @@ class Billing extends Component {
                         </Grid>
                     </Grid>
                 )}
-                <Typography style={{marginTop:15}} variant="title" gutterBottom>
+                <Typography
+                    style={{ marginTop: 15 }}
+                    variant="title"
+                    gutterBottom
+                >
                     Billing address
                 </Typography>
                 <div>
@@ -487,6 +628,3 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Billing));
-
-
-
