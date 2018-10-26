@@ -42,21 +42,44 @@ const initialState = {
 		ccname: '',
 		ccexpire: '',
 		type: '',
-		default: false		
+		default: false
 	},
 	shipMethods: []
 };
 
 const userReducer = (state = initialState, action) => {
-	var newState = state;
 	switch (action.type) {
 		case "LOGIN_SUCCESS":
-			return Object.assign({}, state, action)
+			return {
+				...state,
+				username: action.username,
+				password: action.password,
+			}
 		case "USER_INFO":
-			return Object.assign({}, state, action.UserInfo);
-		case "SET_CREDIT_CARD":
-			newState.selectedCard = action.card;
-			return newState;
+			return {
+				...state,
+				...action.UserInfo
+			}
+		case "CREDIT_CARD":
+			return {
+				...state,
+				selectedCard: action.card
+			}
+		case "SHIP_METHOD":
+			return {
+				...state,
+				shipmethod: action.shipmethod
+			}
+		case "SHIP_ADDRESS":
+			return {
+				...state,
+				shipping: action.address
+			}
+		case "BILL_ADDRESS":
+			return {
+				...state,
+				billing: action.address
+			}
 		case "LOGOUT":
 		default:
 			return state;

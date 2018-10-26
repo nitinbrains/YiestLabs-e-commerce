@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import SalesLib from '../../lib/SalesLib';
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -18,60 +19,66 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper from "@material-ui/core/Paper";
 
 class Shipping extends Component {
-    
+
     constructor(props) {
         super(props);
         this.state = {
             address: true,
             newAddress: false,
-            openDialog: false
+            openDialog: false,
+            shipping: {
+                attn: '',
+                addresee: '',
+                address2: '',
+                address3: '',
+                city: '',
+                countryid: 'US',
+                zip: ''
+            }
         };
     }
 
-    componentWillMount() {
-        console.log('this.props.user', this.props.user);
-    }
-
-    handleDialogOpen = () => {
+    handleDialogOpen() {
         this.setState({ openDialog: true });
     };
 
-    handleDialogClose = () => {
+    handleDialogClose() {
         this.setState({ openDialog: false, newAddress: false });
     };
 
-    handleNewAddress = () => {
-        this.setState({ newAddress: true });
-    };
+    addNewAddress() {
+        console.log('add new address', this.state.shipping)
+    }
 
     render() {
-        const { classes, user } = this.props;
+        var { classes } = this.props;
 
         return (
             <React.Fragment>
                 <Typography variant="title" gutterBottom>
                     Shipping address
                 </Typography>
+
                 {this.props.user.shipping.id ? (
                     <div>
-                        <Typography>{user.shipping.attn}</Typography>
-                        <Typography>{user.shipping.addressee}</Typography>
-                        <Typography>{user.shipping.address1}</Typography>
-                        <Typography>{user.shipping.address2}</Typography>
-                        <Typography>{user.shipping.address3}</Typography>
-                        <Typography>{user.shipping.city}</Typography>
-                        <Typography>{user.shipping.countryid}</Typography>
-                        <Typography>{user.shipping.zip}</Typography>
+                        <Typography>{this.props.user.shipping.attn}</Typography>
+                        <Typography>{this.props.user.shipping.addressee}</Typography>
+                        <Typography>{this.props.user.shipping.address1}</Typography>
+                        <Typography>{this.props.user.shipping.address2}</Typography>
+                        <Typography>{this.props.user.shipping.address3}</Typography>
+                        <Typography>{this.props.user.shipping.city}</Typography>
+                        <Typography>{this.props.user.shipping.countryid}</Typography>
+                        <Typography>{this.props.user.shipping.zip}</Typography>
 
                         <Button
                             style={{ marginTop: 10 }}
-                            onClick={this.handleDialogOpen}
+                            onClick={() => this.handleDialogOpen()}
                         >
                             Change Shipping Address
                         </Button>
                         <Dialog
                             open={this.state.openDialog}
-                            onClose={this.handleDialogClose}
+                            onClose={() => this.handleDialogClose()}
                             aria-labelledby="form-dialog-title"
                         >
                             <DialogTitle id="form-dialog-title">
@@ -79,7 +86,7 @@ class Shipping extends Component {
                             </DialogTitle>
                             <DialogContent>
                                 <Grid container spacing={24}>
-                                    {user.otherAddresses.map((address, i) => {
+                                    {this.props.user.otherAddresses.map((address, i) =>
                                         <Grid item xs={4}>
                                             <Paper className={classes.paper}>
                                                 <Typography>
@@ -104,13 +111,14 @@ class Shipping extends Component {
                                                     variant="contained"
                                                     color="primary"
                                                     className={classes.button}
+                                                    onClick={() => this.props.setShipAddress(i)}
                                                 >
                                                     Select Address
                                                 </Button>
                                             </Paper>
                                         </Grid>
-                                    })}
-                                    
+                                    )}
+
                                 </Grid>
 
                                 {this.state.newAddress ? (
@@ -123,6 +131,13 @@ class Shipping extends Component {
                                                 label="Attention"
                                                 fullWidth
                                                 autoComplete="attention"
+                                                value={this.state.shipping.attn}
+                                                onChange={(event) => this.setState({
+                                                    shipping: {
+                                                        ...this.state.shipping,
+                                                        attn: event.target.value
+                                                    }
+                                                })}
                                             />
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
@@ -133,6 +148,13 @@ class Shipping extends Component {
                                                 label="Addresse"
                                                 fullWidth
                                                 autoComplete="addresse"
+                                                value={this.state.shipping.addressee}
+                                                onChange={(event) => this.setState({
+                                                    shipping: {
+                                                        ...this.state.shipping,
+                                                        addressee: event.target.value
+                                                    }
+                                                })}
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
@@ -143,6 +165,13 @@ class Shipping extends Component {
                                                 label="Address line 1"
                                                 fullWidth
                                                 autoComplete="address-line1"
+                                                value={this.state.shipping.address1}
+                                                onChange={(event) => this.setState({
+                                                    shipping: {
+                                                        ...this.state.shipping,
+                                                        address1: event.target.value
+                                                    }
+                                                })}
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
@@ -152,6 +181,13 @@ class Shipping extends Component {
                                                 label="Address line 2"
                                                 fullWidth
                                                 autoComplete="address-line2"
+                                                value={this.state.shipping.address2}
+                                                onChange={(event) => this.setState({
+                                                    shipping: {
+                                                        ...this.state.shipping,
+                                                        address2: event.target.value
+                                                    }
+                                                })}
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
@@ -161,6 +197,13 @@ class Shipping extends Component {
                                                 label="Address line 3"
                                                 fullWidth
                                                 autoComplete="address-line3"
+                                                value={this.state.shipping.address3}
+                                                onChange={(event) => this.setState({
+                                                    shipping: {
+                                                        ...this.state.shipping,
+                                                        address3: event.target.value
+                                                    }
+                                                })}
                                             />
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
@@ -171,6 +214,13 @@ class Shipping extends Component {
                                                 label="City"
                                                 fullWidth
                                                 autoComplete="address-level2"
+                                                value={this.state.shipping.city}
+                                                onChange={(event) => this.setState({
+                                                    shipping: {
+                                                        ...this.state.shipping,
+                                                        city: event.target.value
+                                                    }
+                                                })}
                                             />
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
@@ -181,44 +231,67 @@ class Shipping extends Component {
                                                 label="Zip / Postal code"
                                                 fullWidth
                                                 autoComplete="postal-code"
+                                                value={this.state.shipping.zip}
+                                                onChange={(event) => this.setState({
+                                                    shipping: {
+                                                        ...this.state.shipping,
+                                                        zip: event.target.value
+                                                    }
+                                                })}
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
                                             <TextField
+                                                select
                                                 required
                                                 id="country"
                                                 name="country"
                                                 label="Country"
                                                 fullWidth
                                                 autoComplete="country"
-                                            />
+                                                value={this.state.shipping.countryid}
+                                                onChange={(event) => this.setState({
+                                                    shipping: {
+                                                        ...this.state.shipping,
+                                                        countryid: event.target.value
+                                                    }
+                                                })}
+                                            >
+                                            {
+                                                SalesLib.COUNTRY_MAP.map((country, i) => {
+                                                    return (
+                                                        <MenuItem key={country.CountryCode} value={country.CountryCode}>{country.CountryName}</MenuItem>
+                                                    )
+                                                })
+                                            }
+                                            </TextField>
                                         </Grid>
+                                        <DialogActions>
+                                            <Button
+                                                onClick={() => this.setState({newAddress: false})}
+                                                color="primary"
+                                            >
+                                                Cancel
+                                            </Button>
+                                            <Button
+                                                onClick={() => this.addNewAddress()}
+                                                color="primary"
+                                            >
+                                                Confirm Changes
+                                            </Button>
+                                        </DialogActions>
                                     </Grid>
                                 ) : (
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        onClick={this.handleNewAddress}
+                                        onClick={() => this.setState({newAddress: true})}
                                         className={classes.button}
                                     >
                                         New Address
                                     </Button>
                                 )}
                             </DialogContent>
-                            <DialogActions>
-                                <Button
-                                    onClick={this.handleDialogClose}
-                                    color="primary"
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    onClick={this.handleDialogClose}
-                                    color="primary"
-                                >
-                                    Confirm Changes
-                                </Button>
-                            </DialogActions>
                         </Dialog>
                     </div>
                 ) : (
@@ -231,16 +304,30 @@ class Shipping extends Component {
                                 label="Attention"
                                 fullWidth
                                 autoComplete="attention"
+                                value={this.state.shipping.attn}
+                                onChange={(event) => this.setState({
+                                    shipping: {
+                                        ...this.state.shipping,
+                                        attn: event.target.value
+                                    }
+                                })}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 required
-                                id="addresse"
-                                name="addresse"
-                                label="Addresse"
+                                id="addressee"
+                                name="addressee"
+                                label="Addressee"
                                 fullWidth
-                                autoComplete="addresse"
+                                autoComplete="addressee"
+                                value={this.state.shipping.addressee}
+                                onChange={(event) => this.setState({
+                                    shipping: {
+                                        ...this.state.shipping,
+                                        addressee: event.target.value
+                                    }
+                                })}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -251,6 +338,13 @@ class Shipping extends Component {
                                 label="Address line 1"
                                 fullWidth
                                 autoComplete="address-line1"
+                                value={this.state.shipping.address1}
+                                onChange={(event) => this.setState({
+                                    shipping: {
+                                        ...this.state.shipping,
+                                        address1: event.target.value
+                                    }
+                                })}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -260,6 +354,13 @@ class Shipping extends Component {
                                 label="Address line 2"
                                 fullWidth
                                 autoComplete="address-line2"
+                                value={this.state.shipping.address2}
+                                onChange={(event) => this.setState({
+                                    shipping: {
+                                        ...this.state.shipping,
+                                        address2: event.target.value
+                                    }
+                                })}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -269,6 +370,13 @@ class Shipping extends Component {
                                 label="Address line 3"
                                 fullWidth
                                 autoComplete="address-line3"
+                                value={this.state.shipping.address3}
+                                onChange={(event) => this.setState({
+                                    shipping: {
+                                        ...this.state.shipping,
+                                        address3: event.target.value
+                                    }
+                                })}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -279,6 +387,13 @@ class Shipping extends Component {
                                 label="City"
                                 fullWidth
                                 autoComplete="address-level2"
+                                value={this.state.shipping.city}
+                                onChange={(event) => this.setState({
+                                    shipping: {
+                                        ...this.state.shipping,
+                                        city: event.target.value
+                                    }
+                                })}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -289,17 +404,40 @@ class Shipping extends Component {
                                 label="Zip / Postal code"
                                 fullWidth
                                 autoComplete="postal-code"
+                                value={this.state.shipping.zip}
+                                onChange={(event) => this.setState({
+                                    shipping: {
+                                        ...this.state.shipping,
+                                        zip: event.target.value
+                                    }
+                                })}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
+                                select
                                 required
                                 id="country"
                                 name="country"
                                 label="Country"
                                 fullWidth
                                 autoComplete="country"
-                            />
+                                value={this.state.shipping.countryid}
+                                onChange={(event) => this.setState({
+                                    shipping: {
+                                        ...this.state.shipping,
+                                        countryid: event.target.value
+                                    }
+                                })}
+                            >
+                                {
+                                    SalesLib.COUNTRY_MAP.map((country, i) => {
+                                        return (
+                                            <MenuItem key={country.CountryCode} value={country.CountryCode}>{country.CountryName}</MenuItem>
+                                        )
+                                    })
+                                }
+                            </TextField>
                         </Grid>
                     </Grid>
                 )}
@@ -316,10 +454,12 @@ class Shipping extends Component {
                             helperText="Please select your shipping method"
                             margin="normal"
                             variant="outlined"
+                            value={this.props.user.shipmethod}
+                            onChange={(event) => this.props.setShipMethod(event.target.value)}
                         >
                             {
-                                user.shipMethods.map((method, i) => 
-                                    <MenuItem value={method.NSID}>{method.Name}</MenuItem>
+                                this.props.user.shipMethods.map(method =>
+                                    <MenuItem key={method.NSID} value={method.NSID}>{method.Name}</MenuItem>
                                 )
 
                             }
@@ -345,7 +485,6 @@ Shipping.propTypes = {
 };
 
 
-
 const mapStateToProps = (state) => {
 	return {
 		user: state.user,
@@ -355,11 +494,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		login: (username, password) => dispatch({ type: "LOGIN_REQUEST", username, password}),
-		getInventory: (category, getAll) => dispatch({ type: "STORE_REQUEST", category, getAll}),
-		addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
-		changeQuantity: (index, quantity) => dispatch({type: "CHANGE_QUANTITY", index, quantity}),
-		deleteFromCart: (index) => dispatch({type: "DELETE_FROM_CART", index})
+        setShipMethod: (shipmethod) => dispatch({type: "SET_SHIP_METHOD", shipmethod}),
+        setShipAddress: (index) => dispatch({type: "SET_SHIP_ADDRESS", index})
 	};
 };
 

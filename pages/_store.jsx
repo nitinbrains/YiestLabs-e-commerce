@@ -40,7 +40,8 @@ class Store extends Component {
                 get: true,
                 id: 43148,
                 otherAddresses: [
-                    {address1: "One way", address2: "", address3: "", addressee: "", attn: "Attn", city: "City", countryid: "US", defaultBill: false, defaultShip: true, id: 1743261, zip: "94518"}
+                    {address1: "One way", address2: "", address3: "", addressee: "", attn: "Attn", city: "City", countryid: "US", defaultBill: false, defaultShip: true, id: 1743261, zip: "94518"},
+                    {address1: "964 Court Lane", address2: "", address3: "", addressee: "", attn: "Attn", city: "SumCity", countryid: "US", defaultBill: false, defaultShip: false, id: 12345, zip: "94518"}
                 ],
                 phone: "7142995620",
                 shipping: {
@@ -54,8 +55,8 @@ class Store extends Component {
                     id: 1743261,
                     zip: "94518"
                 },
-                shipmethod: "2842",
-                
+                shipmethod: "2789",
+
                 subsidiary: "2",
                 terms: "10",
                 vat: "",

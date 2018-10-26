@@ -17,7 +17,7 @@ import Button from "@material-ui/core/Button";
 let timer;
 
 class ItemsLg extends Component {
-    
+
     constructor(props){
         super(props);
         this.state = {
@@ -27,7 +27,7 @@ class ItemsLg extends Component {
         };
     }
 
-    handleItemHover = i => () => {
+    handleItemHover(i) {
         // timer = setTimeout(
         //     function() {
                 var index1 = i + 1;
@@ -50,7 +50,7 @@ class ItemsLg extends Component {
         // );
     };
 
-    handleItemHoverLeave = () => {
+    handleItemHoverLeave() {
     //     clearTimeout(timer);
         this.setState({ hoverItem: null, hideItem: null });
     };
@@ -185,8 +185,8 @@ class ItemsLg extends Component {
                         xs={this.state.hoverItem == i ? 6 : 3}
                         spacing={24}
                         className={this.state.hideItem == i && classes.hide}
-                        onMouseEnter={this.handleItemHover(i)}
-                        onMouseLeave={this.handleItemHoverLeave}
+                        onMouseEnter={() => this.handleItemHover(i)}
+                        onMouseLeave={() => this.handleItemHoverLeave()}
                         key={i}
                     >
                         <Paper

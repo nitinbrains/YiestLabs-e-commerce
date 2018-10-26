@@ -13,12 +13,49 @@ function* setUserInfo(action) {
     yield put({type: "USER_INFO", UserInfo });
 }
 
-
-function* setCreditCard() {
+function* setCreditCard(action) {
     const { card } = action;
-    User.setCreditCard(card);
-    const user = User.getUser();
-    yield put({type: "SET_CREDIT_CARD", card});
+
+    try {
+        User.setCreditCard(card);
+        const user = User.getUser();
+        yield put({type: "CREDIT_CARD", card});
+    } catch(err) {
+        yield put({ type: "THROW_ERROR", err });
+    }
+
+}
+
+function* setShipMethod(action) {
+    try {
+        const { shipmethod } = action;
+        User.setShipMethod(shipmethod);
+        yield put({type: "SHIP_METHOD", shipmethod});
+    } catch(err) {
+        yield put({ type: "THROW_ERROR", err });
+    }
+}
+
+function* setShipAddress(action) {
+    const { index } = action;
+
+    try {
+        var address = User.setShipAddress(index);
+        yield put({type: 'SHIP_ADDRESS', address});
+    } catch(err) {
+        yield put({ type: "THROW_ERROR", err });
+    }
+}
+
+function* setBillAddress(action) {
+    const { index } = action;
+
+    try {
+        var address = User.setBillAddress(index);
+        yield put({type: 'BILL_ADDRESS', address});
+    } catch(err) {
+        yield put({ type: "THROW_ERROR", error });
+    }
 }
 
 function fetchUserInfo(userId) {
@@ -40,7 +77,6 @@ function fetchUserID(username, password) {
     })
     .then(UserInfo => UserInfo)
     .catch(error => {
-        console.log('error', error)
         return {error};
     });
 }
@@ -48,16 +84,15 @@ function fetchUserID(username, password) {
 function* authorize(action) {
     const {username, password} = action;
     const {error, UserInfo} = yield call(fetchUserID, username, password);
-    console.log('UserInfo', UserInfo);
 
-    if (error) 
+    if (error)
         yield put({type: "THROW_ERROR", error});
     else {
 
         yield put({type: "HIDE_ERROR"});
         yield put({type: "LOGIN_SUCCESS", username, password});
         yield call(setUserInfo, UserInfo);
-        
+
     }
 }
 
@@ -69,8 +104,20 @@ function* loginWatcher() {
     yield takeEvery("LOGIN_REQUEST", authorize);
 }
 
-function *creditCardWatcher() {
+function* creditCardWatcher() {
     yield takeEvery("SET_CREDIT_CARD", setCreditCard);
+}
+
+function* shippingMethodWatcher() {
+    yield takeEvery("SET_SHIP_METHOD", setShipMethod);
+}
+
+function* shippingAddressWatcher() {
+    yield takeEvery("SET_SHIP_ADDRESS", setShipAddress);
+}
+
+function* billingAddressWatcher() {
+    yield takeEvery("SET_BILL_ADDRESS", setBillAddress);
 }
 
 export function* userWatcher(){
@@ -78,5 +125,8 @@ export function* userWatcher(){
         loginWatcher(),
         userInfoWatcher(),
         creditCardWatcher(),
+        shippingMethodWatcher(),
+        shippingAddressWatcher(),
+        billingAddressWatcher()
     ])
 }
