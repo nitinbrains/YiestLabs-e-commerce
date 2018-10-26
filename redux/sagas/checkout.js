@@ -34,7 +34,7 @@ function *prepareOrder(){
     const { order, error } = yield call(fetchPrepareOrderAPI, request);
 
     if(error) {
-        yield put({ type: "THROW_ERROR", error });
+        yield put({ type: "SHOW_ERROR", error });
     }
     else {
     	Checkout.initOrder(order, state.user);

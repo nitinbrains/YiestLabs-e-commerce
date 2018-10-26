@@ -20,8 +20,8 @@ function* setCreditCard(action) {
         User.setCreditCard(card);
         const user = User.getUser();
         yield put({type: "CREDIT_CARD", card});
-    } catch(err) {
-        yield put({ type: "THROW_ERROR", err });
+    } catch(error) {
+        yield put({ type: "SHOW_ERROR", error });
     }
 
 }
@@ -31,8 +31,8 @@ function* setShipMethod(action) {
         const { shipmethod } = action;
         User.setShipMethod(shipmethod);
         yield put({type: "SHIP_METHOD", shipmethod});
-    } catch(err) {
-        yield put({ type: "THROW_ERROR", err });
+    } catch(error) {
+        yield put({ type: "SHOW_ERROR", error });
     }
 }
 
@@ -42,8 +42,8 @@ function* setShipAddress(action) {
     try {
         var address = User.setShipAddress(index);
         yield put({type: 'SHIP_ADDRESS', address});
-    } catch(err) {
-        yield put({ type: "THROW_ERROR", err });
+    } catch(error) {
+        yield put({ type: "SHOW_ERROR", error });
     }
 }
 
@@ -53,8 +53,8 @@ function* setBillAddress(action) {
     try {
         var address = User.setBillAddress(index);
         yield put({type: 'BILL_ADDRESS', address});
-    } catch(err) {
-        yield put({ type: "THROW_ERROR", error });
+    } catch(error) {
+        yield put({ type: "SHOW_ERROR", error });
     }
 }
 
@@ -75,7 +75,7 @@ function fetchUserID(username, password) {
         if(result.data.error) throw result.data.error;
         return fetchUserInfo(result.data);
     })
-    .then(UserInfo => UserInfo)
+    .then(UserInfo => ({UserInfo}))
     .catch(error => {
         return {error};
     });
@@ -86,11 +86,10 @@ function* authorize(action) {
     const {error, UserInfo} = yield call(fetchUserID, username, password);
 
     if (error)
-        yield put({type: "THROW_ERROR", error});
+        yield put({type: "SHOW_ERROR", error});
     else {
-
-        yield put({type: "HIDE_ERROR"});
-        yield put({type: "LOGIN_SUCCESS", username, password});
+        var message = {details: "You have successfully logged in!"};
+        yield put({type: "SHOW_SUCCESS", message});
         yield call(setUserInfo, UserInfo);
 
     }

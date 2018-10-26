@@ -29,6 +29,7 @@ class Shipping extends Component {
             shipping: {
                 attn: '',
                 addresee: '',
+                address1: '',
                 address2: '',
                 address3: '',
                 city: '',

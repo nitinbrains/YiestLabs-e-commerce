@@ -17,6 +17,9 @@ import Billing from "../components/Checkout/Billing";
 import Items from "../components/Checkout/Items";
 import Review from "../components/Checkout/Review";
 
+// custom
+import Alert from '../components/UI/Alert';
+
 const steps = ["Shipping", "Billing", "Items", "Review your order"];
 
 function getStepContent(step) {
@@ -75,6 +78,9 @@ class Checkout extends Component {
 
 		return (
 			<NavBarLayout>
+
+				{this.props.message.messages.map((message, i) => <Alert message={message} index={i}/> )}
+
 				<div className={classes.layout}>
 					<Card>
 						<CardHeader color="primary">
@@ -174,13 +180,14 @@ Checkout.propTypes = {
 const mapStateToProps = (state) => {
     return {
     	user: state.user,
-        cart: state.cart
+        cart: state.cart,
+		message: state.message
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        prepareOrder: () => dispatch({type: "PREPARE_ORDER"})
+        prepareOrder: () => dispatch({type: "PREPARE_ORDER"}),
     };
 };
 

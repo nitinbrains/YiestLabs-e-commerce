@@ -14,7 +14,7 @@ const initialState = {
 const checkoutReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case "SET_ORDER":
-			return Object.assign({}, state, action.order);
+			return {...state, order: action.order}
 		default:
 			return state;
 	}
