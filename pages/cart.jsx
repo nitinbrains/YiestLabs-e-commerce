@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux'
+import { connect } from "react-redux";
 
 import Link from "next/link";
 import PropTypes from "prop-types";
@@ -14,28 +14,25 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
-
-import CartItem from '../components/Cart/CartItem';
+import CartItem from "../components/Cart/CartItem";
 
 class Cart extends Component {
-
     render() {
         const { classes, theme, cart } = this.props;
 
         return (
             <NavBarUserSearchDrawerLayout>
                 <Grid container spacing={24}>
-                    <Grid item xs={12}>
-
-                        {this.props.cart.items.map((item, i) => {
-                            return (
-                                <CartItem item={item} index={i}/>
-                            )
-                        })}
-                    </Grid>
+                    {this.props.cart.items.map((item, i) => {
+                        return (
+                            <Grid item xs={12}>
+                                <CartItem item={item} index={i} />
+                            </Grid>
+                        );
+                    })}
                 </Grid>
                 <Link prefetch href="/checkout">
-                    <Button variant="contained">PROCEED TO CHECKOUT</Button>
+                    <Button style={{marginTop:20}} variant="contained">PROCEED TO CHECKOUT</Button>
                 </Link>
             </NavBarUserSearchDrawerLayout>
         );
@@ -67,11 +64,13 @@ Cart.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         cart: state.cart
-    }
-}
+    };
+};
 
-export default connect(mapStateToProps, null)(withStyles(styles, { withTheme: true })(Cart));
+export default connect(
+    mapStateToProps,
+    null
+)(withStyles(styles, { withTheme: true })(Cart));
