@@ -423,7 +423,7 @@ class Billing extends Component {
                         style={{ marginTop: 10 }}
                         onClick={this.handleDialogAddressOpen}
                     >
-                        Change Shipping Address
+                        Change Billing Address
                     </Button>
                     <Dialog
                         open={this.state.openDialogAddress}
