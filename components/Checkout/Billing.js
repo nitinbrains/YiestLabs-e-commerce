@@ -617,7 +617,7 @@ Billing.propTypes = {
 const mapStateToProps = (state) => {
     return {
         user: state.user,
-        checkout: state.checkout
+        checkout: state.order
     }
 }
 

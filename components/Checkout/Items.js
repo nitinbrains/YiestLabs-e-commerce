@@ -76,7 +76,7 @@ Items.propTypes = {
 
 const mapStateToProps = (state) => {
 	return {
-		checkout: state.checkout
+		checkout: state.order
 	}
 }
 
