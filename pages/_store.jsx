@@ -25,7 +25,8 @@ class Store extends Component {
                     zip: "94518",
                 },
                 cards: [
-                    {ccexpire: "2022-12-01T08:00:00.000Z", ccname: "Joe Discovery", ccnumber: "************1117", default: true, id: 38421, type: "3"}
+                    {expireMonth: '11', expireYear: '2022', name: "Joe Discovery", number: "************1117", default: true, id: 38421, type: "3"},
+                    {expireMonth: '9', expireYear: '2020', name: "Dimitar Vasilev", number: "************6470", default: false, id: 6868, type: "3"}
                 ],
                 cardsToRemove: [],
                 category: "2",

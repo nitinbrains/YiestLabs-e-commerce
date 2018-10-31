@@ -7,19 +7,17 @@ import Utils from '../../lib/Utils';
 import User from '../../lib/User';
 
 function* setUserInfo(action) {
-    const { UserInfo } = action;
-    User.setUser(UserInfo);
-    UserInfo.shipMethods = User.getShipMethods();
+    var { UserInfo } = action;
+    UserInfo = User.setUser(UserInfo);
     yield put({type: "USER_INFO", UserInfo });
 }
 
 function* setCreditCard(action) {
-    const { card } = action;
+    const { index } = action;
 
     try {
-        User.setCreditCard(card);
-        const user = User.getUser();
-        yield put({type: "CREDIT_CARD", card});
+        var creditCard = User.setCreditCard(index);
+        yield put({type: "CREDIT_CARD", creditCard});
     } catch(error) {
         yield put({ type: "SHOW_ERROR", error });
     }
@@ -30,7 +28,7 @@ function* setShipMethod(action) {
     try {
         const { shipmethod } = action;
         User.setShipMethod(shipmethod);
-        yield put({type: "SHIP_METHOD", shipmethod});
+        yield put({type: "SHIP_METHOD_SET", shipmethod});
     } catch(error) {
         yield put({ type: "SHOW_ERROR", error });
     }
@@ -41,7 +39,7 @@ function* setShipAddress(action) {
 
     try {
         var address = User.setShipAddress(index);
-        yield put({type: 'SHIP_ADDRESS', address});
+        yield put({type: 'SHIP_ADDRESS_SET', address});
     } catch(error) {
         yield put({ type: "SHOW_ERROR", error });
     }
@@ -52,7 +50,40 @@ function* setBillAddress(action) {
 
     try {
         var address = User.setBillAddress(index);
-        yield put({type: 'BILL_ADDRESS', address});
+        yield put({type: 'BILL_ADDRESS_SET', address});
+    } catch(error) {
+        yield put({ type: "SHOW_ERROR", error });
+    }
+}
+
+function* addShipAddress(action) {
+    const { address } = action;
+
+    try {
+        var { otherAddresses, shipping } = User.addShipAddress(address);
+        yield put({type: "SHIP_ADDRESS_ADD", otherAddresses, shipping});
+    } catch(error) {
+        yield put({ type: "SHOW_ERROR", error });
+    }
+}
+
+function* addBillAddress(action) {
+    const { address } = action;
+
+    try {
+        var { otherAddresses, billing } = User.addBillAddress(address);
+        yield put({type: "BILL_ADDRESS_ADD", otherAddresses, billing});
+    } catch(error) {
+        yield put({ type: "SHOW_ERROR", error });
+    }
+}
+
+function* addCreditCard(action) {
+    const { card } = action;
+
+    try {
+        var { cards, creditCard } = User.addCreditCard(card);
+        yield put({type: "CREDIT_CARD_ADD", cards, creditCard});
     } catch(error) {
         yield put({ type: "SHOW_ERROR", error });
     }
@@ -119,6 +150,18 @@ function* billingAddressWatcher() {
     yield takeEvery("SET_BILL_ADDRESS", setBillAddress);
 }
 
+function* addBillAddressWatcher() {
+    yield takeEvery("ADD_BILL_ADDRESS", addBillAddress);
+}
+
+function* addShipAddressWatcher() {
+    yield takeEvery("ADD_SHIP_ADDRESS", addShipAddress);
+}
+
+function* addCreditCardWatcher() {
+    yield takeEvery("ADD_CREDIT_CARD", addCreditCard);
+}
+
 export function* userWatcher(){
     yield all([
         loginWatcher(),
@@ -126,6 +169,9 @@ export function* userWatcher(){
         creditCardWatcher(),
         shippingMethodWatcher(),
         shippingAddressWatcher(),
-        billingAddressWatcher()
+        billingAddressWatcher(),
+        addBillAddressWatcher(),
+        addShipAddressWatcher(),
+        addCreditCardWatcher()
     ])
 }

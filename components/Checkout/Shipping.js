@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import SalesLib from '../../lib/SalesLib';
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -17,6 +16,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper from "@material-ui/core/Paper";
+
+// custom
+import SalesLib from '../../lib/SalesLib';
 
 class Shipping extends Component {
 
@@ -48,7 +50,8 @@ class Shipping extends Component {
     };
 
     addNewAddress() {
-        console.log('add new address', this.state.shipping)
+        this.props.addShipAddress(this.state.shipping);
+        this.handleDialogClose();
     }
 
     render() {
@@ -440,6 +443,14 @@ class Shipping extends Component {
                                 }
                             </TextField>
                         </Grid>
+                        <Grid item xs={12}>
+                            <Button
+                                onClick={() => this.addNewAddress()}
+                                color="primary"
+                            >
+                                Add New Address
+                            </Button>
+                        </Grid>
                     </Grid>
                 )}
 
@@ -496,7 +507,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
 	return {
         setShipMethod: (shipmethod) => dispatch({type: "SET_SHIP_METHOD", shipmethod}),
-        setShipAddress: (index) => dispatch({type: "SET_SHIP_ADDRESS", index})
+        setShipAddress: (index) => dispatch({type: "SET_SHIP_ADDRESS", index}),
+        addShipAddress: (address) => dispatch({type: "ADD_SHIP_ADDRESS", address})
 	};
 };
 

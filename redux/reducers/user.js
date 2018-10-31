@@ -38,9 +38,10 @@ const initialState = {
 	vat: "",
 	selectedCard: {
 		id: '',
-		ccnumber: '',
-		ccname: '',
-		ccexpire: '',
+		number: '',
+		name: '',
+		expireMonth: '',
+		expireYear: '',
 		type: '',
 		default: false
 	},
@@ -63,22 +64,40 @@ const userReducer = (state = initialState, action) => {
 		case "CREDIT_CARD":
 			return {
 				...state,
-				selectedCard: action.card
+				selectedCard: action.creditCard
 			}
-		case "SHIP_METHOD":
+		case "SHIP_METHOD_SET":
 			return {
 				...state,
 				shipmethod: action.shipmethod
 			}
-		case "SHIP_ADDRESS":
+		case "SHIP_ADDRESS_SET":
 			return {
 				...state,
 				shipping: action.address
 			}
-		case "BILL_ADDRESS":
+		case "BILL_ADDRESS_SET":
 			return {
 				...state,
 				billing: action.address
+			}
+		case "SHIP_ADDRESS_ADD":
+			return {
+				...state,
+				shipping: action.shipping,
+				otherAddresses: action.otherAddresses
+			}
+		case "BILL_ADDRESS_ADD":
+			return {
+				...state,
+				billing: action.billing,
+				otherAddresses: action.otherAddresses
+			}
+		case "CREDIT_CARD_ADD":
+			return {
+				...state,
+				selectedCard: action.creditCard,
+				cards: action.cards
 			}
 		case "LOGOUT":
 		default:

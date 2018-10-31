@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -16,23 +17,39 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 
+import WLHelper from "../../lib/WLHelper";
+import SalesLib from "../../lib/SalesLib";
 import Utils from '../../lib/Utils';
 
 class Billing extends Component {
-
     constructor(props) {
         super(props);
+        this.currentMonth = new Date().getMonth().toString();
+        this.currentYear = new Date().getFullYear().toString();
         this.state = {
-            terms: "cc",
+            terms: "",
             openDialogCard: false,
             openDialogAddress: false,
             addCard: false,
-            newAddress: false
+            newAddress: false,
+            billing: {
+                attn: "",
+                addresee: "",
+                address1: "",
+                address2: "",
+                address3: "",
+                city: "",
+                countryid: "US",
+                zip: ""
+            },
+            card: {
+                name: '',
+                number: '',
+                expireMonth: this.currentMonth,
+                expireYear: this.currentYear,
+            },
+            expirationDates: Utils.getExpirationDates()
         };
-    }
-
-    componentWillMount() {
-        this.props.getCreditCardIfExists();
     }
 
     handleNewCard = () => {
@@ -63,6 +80,27 @@ class Billing extends Component {
         this.setState({ openDialogAddress: false, newAddress: false });
     };
 
+    addNewAddress = () => {
+        this.props.addBillAddress(this.state.billing);
+        this.handleDialogAddressClose();
+    }
+
+    selectBillAddress = (i) => {
+        this.props.setBillAddress(i);
+        this.handleDialogAddressClose();
+
+    }
+
+    addNewCard = () => {
+        this.props.addCreditCard(this.state.card);
+        this.handleDialogCardClose();
+    }
+
+    selectCard = (i) => {
+        this.props.setCreditCard(i);
+        this.handleDialogCardClose();
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -71,53 +109,45 @@ class Billing extends Component {
                 <Typography variant="title" gutterBottom>
                     Payment
                 </Typography>
-                {this.state.terms ? (
-                    this.state.terms == "cc" ? (
+
+                {WLHelper.getPaymentTerm(this.state.terms) == "Credit Card" || WLHelper.getPaymentTerm(this.state.terms) == "None"? (
+                    this.props.user.selectedCard.id ? (
                         <div>
-                            <Typography variant="body2">Credit Card</Typography>
-                            <Typography>Your Payment</Typography>
-                            <Typography>Information</Typography>
+                            <Typography>{this.props.user.selectedCard.name}</Typography>
+                            <Typography>{this.props.user.selectedCard.number}</Typography>
+                            <Typography>{this.props.user.selectedCard.expireMonth} / {this.props.user.selectedCard.expireYear}</Typography>
+                            <Typography>{this.props.user.selectedCard.type}</Typography>
                             <Button
                                 style={{ marginTop: 10 }}
                                 onClick={this.handleDialogCardOpen}
                             >
                                 Change Card
                             </Button>
+
                             <Dialog
                                 open={this.state.openDialogCard}
                                 onClose={this.handleDialogCardClose}
                                 aria-labelledby="form-dialog-title"
                             >
-                                <DialogTitle id="form-dialog-title">
-                                    Cards
-                                </DialogTitle>
+                                <DialogTitle id="form-dialog-title">Cards</DialogTitle>
                                 <DialogContent>
                                     <Grid container spacing={24}>
-                                        {this.props.user.cards.map((card, i) => {
-                                            <Grid item xs={12} sm={4}>
-                                                <Paper className={classes.paper}>
-                                                    <Typography variant="body2">
-                                                        {card.ccnumber}
-                                                    </Typography>
-                                                    <Typography>
-                                                        {card.ccname}
-                                                    </Typography>
-                                                    <Typography>
-                                                        {card.ccexpire}
-                                                    </Typography>
-                                                    <Typography>
-                                                        {card.type}
-                                                    </Typography>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        className={classes.button}
-                                                    >
-                                                        Select Card
-                                                    </Button>
-                                                </Paper>
-                                            </Grid>
-                                        })}
+                                    {this.props.user.cards.map((card, i) => {
+                                        <Grid item xs={12} sm={4}>
+                                            <Paper className={classes.paper}>
+                                                <Typography variant="body2">{card.name}</Typography>
+                                                <Typography>{card.number}</Typography>
+                                                <Typography>{card.expireMonth} / {card.expireYear}</Typography>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    className={classes.button}
+                                                >
+                                                    Select Card
+                                                </Button>
+                                            </Paper>
+                                        </Grid>;
+                                    })}
                                     </Grid>
 
                                     {this.state.newCard ? (
@@ -128,6 +158,15 @@ class Billing extends Component {
                                                     id="cardName"
                                                     label="Name on card"
                                                     fullWidth
+                                                    value={this.state.card.name}
+                                                    onChange={event =>
+                                                        this.setState({
+                                                            card: {
+                                                                ...this.state.card,
+                                                                name: event.target.value
+                                                            }
+                                                        })
+                                                    }
                                                 />
                                             </Grid>
                                             <Grid item xs={12} md={6}>
@@ -136,6 +175,15 @@ class Billing extends Component {
                                                     id="cardNumber"
                                                     label="Card number"
                                                     fullWidth
+                                                    value={this.state.card.number}
+                                                    onChange={event =>
+                                                        this.setState({
+                                                            card: {
+                                                                ...this.state.card,
+                                                                number: event.target.value
+                                                            }
+                                                        })
+                                                    }
                                                 />
                                             </Grid>
                                             <Grid item xs={12} md={6}>
@@ -144,15 +192,15 @@ class Billing extends Component {
                                                     id="expDate"
                                                     label="Expiry date"
                                                     fullWidth
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} md={6}>
-                                                <TextField
-                                                    required
-                                                    id="cvv"
-                                                    label="CVV"
-                                                    helperText="Last three digits on signature strip"
-                                                    fullWidth
+                                                    value={this.state.card.expireMonth}
+                                                    onChange={event =>
+                                                        this.setState({
+                                                            card: {
+                                                                ...this.state.card,
+                                                                expireMonth: event.target.value
+                                                            }
+                                                        })
+                                                    }
                                                 />
                                             </Grid>
                                         </Grid>
@@ -168,15 +216,12 @@ class Billing extends Component {
                                     )}
                                 </DialogContent>
                                 <DialogActions>
-                                    <Button
-                                        onClick={this.handleDialogCardClose}
-                                        color="primary"
-                                    >
+                                    <Button onClick={this.handleDialogCardClose} color="primary">
                                         Cancel
                                     </Button>
                                     {this.state.newCard && (
                                         <Button
-                                            onClick={this.handleDialogCardClose}
+                                            onClick={() => this.addNewCard()}
                                             color="primary"
                                         >
                                             Confirm Changes
@@ -186,416 +231,706 @@ class Billing extends Component {
                             </Dialog>
                         </div>
                     ) : (
-                        <div>
-                            <Typography variant="body2">NET10</Typography>
-                            <Typography>Your Payment</Typography>
-                            <Typography>Information</Typography>
-                            <Grid container spacing={24}>
-                                <Grid item xs={12}>
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                color="primary"
-                                                name="newCard"
-                                                onChange={this.handleUseCard}
-                                            />
-                                        }
-                                        label="Use Credit Card"
-                                    />
-                                </Grid>
+                        <Grid container spacing={24}>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    required
+                                    id="cardName"
+                                    label="Name on card"
+                                    fullWidth
+                                    value={this.state.card.name}
+                                    onChange={event =>
+                                        this.setState({
+                                            card: {
+                                                ...this.state.card,
+                                                name: event.target.value
+                                            }
+                                        })
+                                    }
+                                />
                             </Grid>
-
-                            {this.state.useCard && (
-                                <div>
-                                    <Button
-                                        style={{ marginTop: 10 }}
-                                        onClick={this.handleDialogCardOpen}
-                                    >
-                                        Select Card
-                                    </Button>
-                                    <Dialog
-                                        open={this.state.openDialogCard}
-                                        onClose={this.handleDialogCardClose}
-                                        aria-labelledby="form-dialog-title"
-                                    >
-                                        <DialogTitle id="form-dialog-title">
-                                            Cards
-                                        </DialogTitle>
-                                        <DialogContent>
-                                            <Grid container spacing={24}>
-                                                <Grid item xs={12} sm={4}>
-                                                    <Paper
-                                                        className={
-                                                            classes.paper
-                                                        }
-                                                    >
-                                                        <Typography variant="body2">
-                                                            Credit Card
-                                                        </Typography>
-                                                        <Typography>
-                                                            Your Payment
-                                                        </Typography>
-                                                        <Typography>
-                                                            Information
-                                                        </Typography>
-                                                        <Button
-                                                            variant="contained"
-                                                            color="primary"
-                                                            className={
-                                                                classes.button
-                                                            }
-                                                        >
-                                                            Select Card
-                                                        </Button>
-                                                    </Paper>
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <Paper
-                                                        className={
-                                                            classes.paper
-                                                        }
-                                                    >
-                                                        <Typography variant="body2">
-                                                            Credit Card
-                                                        </Typography>
-                                                        <Typography>
-                                                            Your Payment
-                                                        </Typography>
-                                                        <Typography>
-                                                            Information
-                                                        </Typography>
-                                                        <Button
-                                                            variant="contained"
-                                                            color="primary"
-                                                            className={
-                                                                classes.button
-                                                            }
-                                                        >
-                                                            Select Card
-                                                        </Button>
-                                                    </Paper>
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <Paper
-                                                        className={
-                                                            classes.paper
-                                                        }
-                                                    >
-                                                        <Typography variant="body2">
-                                                            Credit Card
-                                                        </Typography>
-                                                        <Typography>
-                                                            Your Payment
-                                                        </Typography>
-                                                        <Typography>
-                                                            Information
-                                                        </Typography>
-                                                        <Button
-                                                            variant="contained"
-                                                            color="primary"
-                                                            className={
-                                                                classes.button
-                                                            }
-                                                        >
-                                                            Select Card
-                                                        </Button>
-                                                    </Paper>
-                                                </Grid>
-                                            </Grid>
-
-                                            {this.state.newCard ? (
-                                                <Grid container spacing={24}>
-                                                    <Grid item xs={12} md={6}>
-                                                        <TextField
-                                                            required
-                                                            id="cardName"
-                                                            label="Name on card"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={12} md={6}>
-                                                        <TextField
-                                                            required
-                                                            id="cardNumber"
-                                                            label="Card number"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={12} md={6}>
-                                                        <TextField
-                                                            required
-                                                            id="expDate"
-                                                            label="Expiry date"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={12} md={6}>
-                                                        <TextField
-                                                            required
-                                                            id="cvv"
-                                                            label="CVV"
-                                                            helperText="Last three digits on signature strip"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                </Grid>
-                                            ) : (
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    onClick={this.handleNewCard}
-                                                    className={classes.button}
-                                                >
-                                                    New Card
-                                                </Button>
-                                            )}
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button
-                                                onClick={
-                                                    this.handleDialogCardClose
-                                                }
-                                                color="primary"
-                                            >
-                                                Cancel
-                                            </Button>
-                                            {this.state.newCard && (
-                                                <Button
-                                                    onClick={
-                                                        this
-                                                            .handleDialogCardClose
-                                                    }
-                                                    color="primary"
-                                                >
-                                                    Confirm Changes
-                                                </Button>
-                                            )}
-                                        </DialogActions>
-                                    </Dialog>
-                                </div>
-                            )}
-                        </div>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    required
+                                    id="cardNumber"
+                                    label="Card number"
+                                    fullWidth
+                                    value={this.state.card.number}
+                                    onChange={event =>
+                                        this.setState({
+                                            card: {
+                                                ...this.state.card,
+                                                number: event.target.value
+                                            }
+                                        })
+                                    }
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    required
+                                    id="expDate"
+                                    label="Expiry date"
+                                    fullWidth
+                                    value={this.state.card.expireMonth}
+                                    onChange={event =>
+                                        this.setState({
+                                            card: {
+                                                ...this.state.card,
+                                                expireMonth: event.target.value
+                                            }
+                                        })
+                                    }
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button
+                                    onClick={() => this.addNewCard()}
+                                    color="primary"
+                                >
+                                    Add New Card
+                                </Button>
+                            </Grid>
+                        </Grid>
                     )
                 ) : (
-                    <Grid container spacing={24}>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                required
-                                id="cardName"
-                                label={this.props.user.selectedCard.ccname}
-                                fullWidth
-                            />
+                    <div>
+                        <Typography variant="body2">NET10</Typography>
+                        <Typography>Your Payment</Typography>
+                        <Typography>Information</Typography>
+                        <Grid container spacing={24}>
+                            <Grid item xs={12}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                        color="primary"
+                                        name="newCard"
+                                        onChange={this.handleUseCard}
+                                        />
+                                    }
+                                    label="Use Credit Card"
+                                />
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                required
-                                id="cardNumber"
-                                label={this.props.user.selectedCard.ccnumber}
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                required
-                                id="expDate"
-                                label={this.props.user.selectedCard.ccexpire}
-                                fullWidth
-                            />
-                        </Grid>
-                    </Grid>
+
+                    {this.state.useCard &&
+                        (this.props.user.selectedCard.id ? (
+                            <div>
+                                <Button
+                                    style={{ marginTop: 10 }}
+                                    onClick={this.handleDialogCardOpen}
+                                >
+                                    Select Card
+                                </Button>
+                                <Dialog
+                                    open={this.state.openDialogCard}
+                                    onClose={this.handleDialogCardClose}
+                                    aria-labelledby="form-dialog-title"
+                                >
+                                    <DialogTitle id="form-dialog-title">Cards</DialogTitle>
+                                    <DialogContent>
+                                        <Grid container spacing={24}>
+                                        {this.props.user.cards.map((card, i) => {
+                                            <Grid item xs={12} sm={4}>
+                                                <Paper className={classes.paper}>
+                                                    <Typography variant="body2">
+                                                        {card.number}
+                                                    </Typography>
+                                                    <Typography variant="body2">{card.name}</Typography>
+                                                    <Typography>{card.number}</Typography>
+                                                    <Typography>{card.expireMonth} / {card.expireYear}</Typography>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        className={classes.button}
+                                                    >
+                                                        Select Card
+                                                    </Button>
+                                                </Paper>
+                                            </Grid>;
+                                        })}
+                                        </Grid>
+
+                                        {this.state.newCard ? (
+                                            <Grid container spacing={24}>
+                                                <Grid item xs={12} md={6}>
+                                                    <TextField
+                                                        required
+                                                        id="cardName"
+                                                        label="Name on card"
+                                                        fullWidth
+                                                        value={this.state.card.name}
+                                                        onChange={event =>
+                                                            this.setState({
+                                                                card: {
+                                                                    ...this.state.card,
+                                                                    name: event.target.value
+                                                                }
+                                                            })
+                                                        }
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} md={6}>
+                                                    <TextField
+                                                        required
+                                                        id="cardNumber"
+                                                        label="Card number"
+                                                        fullWidth
+                                                        value={this.state.card.number}
+                                                        onChange={event =>
+                                                            this.setState({
+                                                                card: {
+                                                                    ...this.state.card,
+                                                                    number: event.target.value
+                                                                }
+                                                            })
+                                                        }
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} md={6}>
+                                                    <TextField
+                                                        required
+                                                        id="expDate"
+                                                        label="Expiry date"
+                                                        fullWidth
+                                                        value={this.state.card.expireMonth}
+                                                        onChange={event =>
+                                                            this.setState({
+                                                                card: {
+                                                                    ...this.state.card,
+                                                                    expireMonth: event.target.value
+                                                                }
+                                                            })
+                                                        }
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Button
+                                                        onClick={() => this.addNewCard()}
+                                                        color="primary"
+                                                    >
+                                                        Add New Card
+                                                    </Button>
+                                                </Grid>
+                                            </Grid>
+                                        ) : (
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={this.handleNewCard}
+                                                className={classes.button}
+                                            >
+                                                New Card
+                                            </Button>
+                                        )}
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button
+                                            onClick={this.handleDialogCardClose}
+                                            color="primary"
+                                        >
+                                            Cancel
+                                        </Button>
+                                        {this.state.newCard && (
+                                            <Button
+                                                onClick={this.handleDialogCardClose}
+                                                color="primary"
+                                            >
+                                                Confirm Changes
+                                            </Button>
+                                        )}
+                                    </DialogActions>
+                                </Dialog>
+                            </div>
+                        ) : (
+                            // Credit Card NOT available
+                            <Grid container spacing={24}>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        required
+                                        id="cardName"
+                                        label="Name on card"
+                                        fullWidth
+                                        value={this.state.card.name}
+                                        onChange={event =>
+                                            this.setState({
+                                                card: {
+                                                    ...this.state.card,
+                                                    name: event.target.value
+                                                }
+                                            })
+                                        }
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        required
+                                        id="cardNumber"
+                                        label="Card number"
+                                        fullWidth
+                                        value={this.state.card.number}
+                                        onChange={event =>
+                                            this.setState({
+                                                card: {
+                                                    ...this.state.card,
+                                                    number: event.target.value
+                                                }
+                                            })
+                                        }
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        required
+                                        id="expDate"
+                                        label="Expiry date"
+                                        fullWidth
+                                        value={this.state.card.expireMonth}
+                                        onChange={event =>
+                                            this.setState({
+                                                card: {
+                                                    ...this.state.card,
+                                                    expireMonth: event.target.value
+                                                }
+                                            })
+                                        }
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button
+                                        onClick={() => this.addNewCard()}
+                                        color="primary"
+                                    >
+                                        Add New Card
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        ))}
+                    </div>
                 )}
+
                 <Typography
                     style={{ marginTop: 15 }}
                     variant="title"
                     gutterBottom
                 >
-                    Billing address
+                    Billing Address
                 </Typography>
-                <div>
-                    <Typography>Address Line 1</Typography>
-                    <Typography>Address Line 2</Typography>
-                    <Typography>Address Line 3</Typography>
-                    <Typography>City</Typography>
-                    <Typography>Country, State</Typography>
-                    <Typography>ZIP Code</Typography>
+                {this.props.user.billing.id ? (
+                    <div>
+                        <Typography>{this.props.user.billing.attn}</Typography>
+                        <Typography>{this.props.user.billing.addressee}</Typography>
+                        <Typography>{this.props.user.billing.address1}</Typography>
+                        <Typography>{this.props.user.billing.address2}</Typography>
+                        <Typography>{this.props.user.billing.address3}</Typography>
+                        <Typography>{this.props.user.billing.city}</Typography>
+                        <Typography>{this.props.user.billing.countryid}</Typography>
+                        <Typography>{this.props.user.billing.zip}</Typography>
 
-                    <Button
-                        style={{ marginTop: 10 }}
-                        onClick={this.handleDialogAddressOpen}
-                    >
-                        Change Shipping Address
-                    </Button>
-                    <Dialog
-                        open={this.state.openDialogAddress}
-                        onClose={this.handleDialogAddressClose}
-                        aria-labelledby="form-dialog-title"
-                    >
-                        <DialogTitle id="form-dialog-title">
-                            Shipping addresses
-                        </DialogTitle>
-                        <DialogContent>
-                            <Grid container spacing={24}>
-                                <Grid item xs={4}>
-                                    <Paper className={classes.paper}>
-                                        <Typography>Address Line 1</Typography>
-                                        <Typography>Address Line 2</Typography>
-                                        <Typography>Address Line 3</Typography>
-                                        <Typography>City</Typography>
-                                        <Typography>Country, State</Typography>
-                                        <Typography>ZIP Code</Typography>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            className={classes.button}
-                                        >
-                                            Select Address
-                                        </Button>
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Paper className={classes.paper}>
-                                        <Typography>Address Line 1</Typography>
-                                        <Typography>Address Line 2</Typography>
-                                        <Typography>Address Line 3</Typography>
-                                        <Typography>City</Typography>
-                                        <Typography>Country, State</Typography>
-                                        <Typography>ZIP Code</Typography>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            className={classes.button}
-                                        >
-                                            Select Address
-                                        </Button>
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Paper className={classes.paper}>
-                                        <Typography>Address Line 1</Typography>
-                                        <Typography>Address Line 2</Typography>
-                                        <Typography>Address Line 3</Typography>
-                                        <Typography>City</Typography>
-                                        <Typography>Country, State</Typography>
-                                        <Typography>ZIP Code</Typography>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            className={classes.button}
-                                        >
-                                            Select Address
-                                        </Button>
-                                    </Paper>
-                                </Grid>
-                            </Grid>
-
-                            {this.state.newAddress ? (
+                        <Button
+                            style={{ marginTop: 10 }}
+                            onClick={() => this.handleDialogAddressOpen()}
+                        >
+                            Change Billing Address
+                        </Button>
+                        <Dialog
+                            open={this.state.openDialogAddress}
+                            onClose={() => this.handleDialogAddressClose()}
+                            aria-labelledby="form-dialog-title"
+                        >
+                            <DialogTitle id="form-dialog-title">
+                                Billing addresses
+                            </DialogTitle>
+                            <DialogContent>
                                 <Grid container spacing={24}>
-                                    <Grid item xs={12} sm={6}>
-                                        <TextField
-                                            required
-                                            id="attention"
-                                            name="attention"
-                                            label="Attention"
-                                            fullWidth
-                                            autoComplete="attention"
-                                        />
+                                {this.props.user.otherAddresses.map((address, i) => (
+                                    <Grid item xs={4}>
+                                        <Paper className={classes.paper}>
+                                            <Typography>{address.address1}</Typography>
+                                            <Typography>{address.address2}</Typography>
+                                            <Typography>{address.address3}</Typography>
+                                            <Typography>{address.city}</Typography>
+                                            <Typography>{address.countryid}</Typography>
+                                            <Typography>{address.zip}</Typography>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                className={classes.button}
+                                                onClick={() => this.selectBillAddress(i)}
+                                            >
+                                                Select Address
+                                            </Button>
+                                        </Paper>
                                     </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <TextField
-                                            required
-                                            id="addresse"
-                                            name="addresse"
-                                            label="Addresse"
-                                            fullWidth
-                                            autoComplete="addresse"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            required
-                                            id="address1"
-                                            name="address1"
-                                            label="Address line 1"
-                                            fullWidth
-                                            autoComplete="address-line1"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            id="addiress2"
-                                            name="addiress2"
-                                            label="Address line 2"
-                                            fullWidth
-                                            autoComplete="address-line2"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            id="addiress3"
-                                            name="addiress3"
-                                            label="Address line 3"
-                                            fullWidth
-                                            autoComplete="address-line3"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <TextField
-                                            required
-                                            id="city"
-                                            name="city"
-                                            label="City"
-                                            fullWidth
-                                            autoComplete="address-level2"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <TextField
-                                            required
-                                            id="zip"
-                                            name="zip"
-                                            label="Zip / Postal code"
-                                            fullWidth
-                                            autoComplete="postal-code"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            required
-                                            id="country"
-                                            name="country"
-                                            label="Country"
-                                            fullWidth
-                                            autoComplete="country"
-                                        />
-                                    </Grid>
+                                ))}
                                 </Grid>
-                            ) : (
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={this.handleNewAddress}
-                                    className={classes.button}
-                                >
-                                    New Address
-                                </Button>
-                            )}
-                        </DialogContent>
-                        <DialogActions>
+
+                                {this.state.newAddress ? (
+                                    <Grid container spacing={24}>
+                                        <Grid item xs={12} sm={6}>
+                                            <TextField
+                                                required
+                                                id="attention"
+                                                name="attention"
+                                                label="Attention"
+                                                fullWidth
+                                                autoComplete="attention"
+                                                value={this.state.billing.attn}
+                                                onChange={event =>
+                                                    this.setState({
+                                                        billing: {
+                                                            ...this.state.billing,
+                                                            attn: event.target.value
+                                                        }
+                                                    })
+                                                }
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <TextField
+                                                required
+                                                id="addresse"
+                                                name="addresse"
+                                                label="Addresse"
+                                                fullWidth
+                                                autoComplete="addresse"
+                                                value={this.state.billing.addressee}
+                                                onChange={event =>
+                                                    this.setState({
+                                                        billing: {
+                                                            ...this.state.billing,
+                                                            addressee: event.target.value
+                                                        }
+                                                    })
+                                                }
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                required
+                                                id="address1"
+                                                name="address1"
+                                                label="Address line 1"
+                                                fullWidth
+                                                autoComplete="address-line1"
+                                                value={this.state.billing.address1}
+                                                onChange={event =>
+                                                    this.setState({
+                                                        billing: {
+                                                            ...this.state.billing,
+                                                            address1: event.target.value
+                                                        }
+                                                    })
+                                                }
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                id="addiress2"
+                                                name="addiress2"
+                                                label="Address line 2"
+                                                fullWidth
+                                                autoComplete="address-line2"
+                                                value={this.state.billing.address2}
+                                                onChange={event =>
+                                                    this.setState({
+                                                        billing: {
+                                                            ...this.state.billing,
+                                                            address2: event.target.value
+                                                        }
+                                                    })
+                                                }
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                id="addiress3"
+                                                name="addiress3"
+                                                label="Address line 3"
+                                                fullWidth
+                                                autoComplete="address-line3"
+                                                value={this.state.billing.address3}
+                                                onChange={event =>
+                                                    this.setState({
+                                                        billing: {
+                                                            ...this.state.billing,
+                                                            address3: event.target.value
+                                                        }
+                                                    })
+                                                }
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <TextField
+                                                required
+                                                id="city"
+                                                name="city"
+                                                label="City"
+                                                fullWidth
+                                                autoComplete="address-level2"
+                                                value={this.state.billing.city}
+                                                onChange={event =>
+                                                    this.setState({
+                                                        billing: {
+                                                            ...this.state.billing,
+                                                            city: event.target.value
+                                                        }
+                                                    })
+                                                }
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <TextField
+                                                required
+                                                id="zip"
+                                                name="zip"
+                                                label="Zip / Postal code"
+                                                fullWidth
+                                                autoComplete="postal-code"
+                                                value={this.state.billing.zip}
+                                                onChange={event =>
+                                                    this.setState({
+                                                        billing: {
+                                                            ...this.state.billing,
+                                                            zip: event.target.value
+                                                        }
+                                                    })
+                                                }
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                select
+                                                required
+                                                id="country"
+                                                name="country"
+                                                label="Country"
+                                                fullWidth
+                                                autoComplete="country"
+                                                value={this.state.billing.countryid}
+                                                onChange={event =>
+                                                    this.setState({
+                                                        billing: {
+                                                            ...this.state.billing,
+                                                            countryid: event.target.value
+                                                        }
+                                                    })
+                                                }
+                                            >
+                                            {SalesLib.COUNTRY_MAP.map((country, i) => {
+                                                return (
+                                                    <MenuItem
+                                                    key={country.CountryCode}
+                                                    value={country.CountryCode}
+                                                    >
+                                                    {country.CountryName}
+                                                    </MenuItem>
+                                                );
+                                            })}
+                                            </TextField>
+                                        </Grid>
+                                        <DialogActions>
+                                            <Button
+                                                onClick={() => this.setState({ newAddress: false })}
+                                                color="primary"
+                                            >
+                                                Cancel
+                                            </Button>
+                                            <Button
+                                                onClick={() => this.addNewAddress()}
+                                                color="primary"
+                                            >
+                                                Confirm Changes
+                                            </Button>
+                                        </DialogActions>
+                                    </Grid>
+                                ) : (
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => this.setState({ newAddress: true })}
+                                        className={classes.button}
+                                    >
+                                        New Address
+                                    </Button>
+                                )}
+                            </DialogContent>
+                        </Dialog>
+                    </div>
+                ) : (
+                    <Grid container spacing={24}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                required
+                                id="attention"
+                                name="attention"
+                                label="Attention"
+                                fullWidth
+                                autoComplete="attention"
+                                value={this.state.billing.attn}
+                                onChange={event =>
+                                    this.setState({
+                                        billing: {
+                                            ...this.state.billing,
+                                            attn: event.target.value
+                                        }
+                                    })
+                                }
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                required
+                                id="addressee"
+                                name="addressee"
+                                label="Addressee"
+                                fullWidth
+                                autoComplete="addressee"
+                                value={this.state.billing.addressee}
+                                onChange={event =>
+                                    this.setState({
+                                        billing: {
+                                            ...this.state.billing,
+                                            addressee: event.target.value
+                                        }
+                                    })
+                                }
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                id="address1"
+                                name="address1"
+                                label="Address line 1"
+                                fullWidth
+                                autoComplete="address-line1"
+                                value={this.state.billing.address1}
+                                onChange={event =>
+                                    this.setState({
+                                        billing: {
+                                            ...this.state.billing,
+                                            address1: event.target.value
+                                        }
+                                    })
+                                }
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                id="addiress2"
+                                name="addiress2"
+                                label="Address line 2"
+                                fullWidth
+                                autoComplete="address-line2"
+                                value={this.state.billing.address2}
+                                onChange={event =>
+                                    this.setState({
+                                        billing: {
+                                            ...this.state.billing,
+                                            address2: event.target.value
+                                        }
+                                    })
+                                }
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                id="addiress3"
+                                name="addiress3"
+                                label="Address line 3"
+                                fullWidth
+                                autoComplete="address-line3"
+                                value={this.state.billing.address3}
+                                onChange={event =>
+                                    this.setState({
+                                        billing: {
+                                            ...this.state.billing,
+                                            address3: event.target.value
+                                        }
+                                    })
+                                }
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                required
+                                id="city"
+                                name="city"
+                                label="City"
+                                fullWidth
+                                autoComplete="address-level2"
+                                value={this.state.billing.city}
+                                onChange={event =>
+                                    this.setState({
+                                        billing: {
+                                            ...this.state.billing,
+                                            city: event.target.value
+                                        }
+                                    })
+                                }
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                required
+                                id="zip"
+                                name="zip"
+                                label="Zip / Postal code"
+                                fullWidth
+                                autoComplete="postal-code"
+                                value={this.state.billing.zip}
+                                onChange={event =>
+                                    this.setState({
+                                        billing: {
+                                            ...this.state.billing,
+                                            zip: event.target.value
+                                        }
+                                    })
+                                }
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                select
+                                required
+                                id="country"
+                                name="country"
+                                label="Country"
+                                fullWidth
+                                autoComplete="country"
+                                value={this.state.billing.countryid}
+                                onChange={event =>
+                                    this.setState({
+                                        billing: {
+                                            ...this.state.billing,
+                                            countryid: event.target.value
+                                        }
+                                    })
+                                }
+                            >
+                            {SalesLib.COUNTRY_MAP.map((country, i) => {
+                                return (
+                                    <MenuItem
+                                    key={country.CountryCode}
+                                    value={country.CountryCode}
+                                    >
+                                    {country.CountryName}
+                                    </MenuItem>
+                                );
+                            })}
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={12}>
                             <Button
-                                onClick={this.handleDialogAddressClose}
+                                onClick={() => this.addNewAddress()}
                                 color="primary"
                             >
-                                Cancel
+                                Add New Address
                             </Button>
-                            <Button
-                                onClick={this.handleDialogAddressClose}
-                                color="primary"
-                            >
-                                Confirm Changes
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                </div>
+                        </Grid>
+                    </Grid>
+                )}
             </React.Fragment>
         );
     }
@@ -614,17 +949,23 @@ Billing.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.user,
         checkout: state.checkout
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        getCreditCardIfExists: () => dispatch({type: "GET_DEFAULT_CREDIT_CARD"})
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Billing));
+const mapDispatchToProps = dispatch => {
+    return {
+        setBillAddress: index => dispatch({ type: "SET_BILL_ADDRESS", index }),
+        addBillAddress: address => dispatch({ type: "ADD_BILL_ADDRESS", address }),
+        setCreditCard: index => dispatch({type: "SET_CREDIT_CARD", index}),
+        addCreditCard: card => dispatch({type: "ADD_CREDIT_CARD", card})
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles)(Billing));
