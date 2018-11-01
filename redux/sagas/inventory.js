@@ -18,12 +18,12 @@ export function * getInventory (action) {
             if (items) {
                 Store.addCategoriesLoaded();
                 Store.addItems(items);
-            } else {
+                const itemsToShow = Store.filterItems(selectedCategory, search, user);
+                yield put(responseSuccess({ itemsToShow }));
+            } else if (error) {
                 throw error;
             }
         }
-        const itemsToShow = Store.filterItems(selectedCategory, search, user);
-        yield put(responseSuccess({ itemsToShow }));
     } catch (error) {
         yield put(responseFailure(error));
         yield put(messageActions.displayMessage({ title: 'Error', error: error }));

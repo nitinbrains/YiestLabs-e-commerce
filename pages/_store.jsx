@@ -68,7 +68,7 @@ class Store extends Component {
 
         this.props.setUserInfo({ userInfo });
         this.props.getInventory();
-        // this.props.userLogin({ username: 'above', password: 'test' });        
+        // this.props.userLogin({ username: 'above', password: 'test' });
     }
 
     render() {
