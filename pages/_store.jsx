@@ -16,7 +16,7 @@ import ItemsXs from "../components/Store/ItemsXs";
 class Store extends Component {
     componentWillMount() {
         
-        var UserInfo = {
+        const userInfo = {
             billing: {
                 address1: "964 Court Lane",
                 address2: "",
@@ -66,14 +66,9 @@ class Store extends Component {
             version: "2.3.7"
         };
 
-        this.props.setUserInfo(UserInfo);
-
+        this.props.setUserInfo({ userInfo });
         this.props.getInventory();
-
-        this.props.userLogin({ username: 'above', password: 'test' });
-
-
-        
+        // this.props.userLogin({ username: 'above', password: 'test' });        
     }
 
     render() {
@@ -112,12 +107,7 @@ const mapStateToProps = state => ({
     store: state.inventory
 })
 
-const mapDispatchToProps = dispatch => {
-    return {
-        ...bindActionCreators({ ...userActions, ...inventoryActions}, dispatch),
-        setUserInfo: (UserInfo) => dispatch({type: "SET_USER_INFO", UserInfo}),
-    };
-};
+const mapDispatchToProps = dispatch => bindActionCreators({ ...userActions, ...inventoryActions}, dispatch);
 
 export default connect(
     mapStateToProps,

@@ -14,7 +14,7 @@ export function * getInventory (action) {
         const classFilters = Store.getClassFilters(selectedCategory, search);
 
         if (classFilters) {
-            const { items, error } = yield call(api.getInventory, classFilters);
+            const { res: { items }, error } = yield call(api.getInventory, classFilters);
             if (items) {
                 Store.addCategoriesLoaded();
                 Store.addItems(items);

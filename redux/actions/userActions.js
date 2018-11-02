@@ -4,6 +4,8 @@ import { createActionsStructure } from '../../helpers/reduxHelpers';
 
 export const { userTypes, userActions } = createActionsStructure('user', [
   { name: 'USER_LOGIN', async: true },
+  { name: 'SET_CREDIT_CARD', async: true },
+  { name: 'SET_USER_INFO' },
   { name: 'USER_LOGOUT' }
 ]);
 
