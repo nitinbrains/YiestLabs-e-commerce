@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import MenuItem from '@material-ui/core/MenuItem';
+import MenuItem from "@material-ui/core/MenuItem";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
@@ -16,9 +16,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper from "@material-ui/core/Paper";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 class Shipping extends Component {
-    
     constructor(props) {
         super(props);
         this.state = {
@@ -29,7 +30,7 @@ class Shipping extends Component {
     }
 
     componentWillMount() {
-        console.log('this.props.user', this.props.user);
+        console.log("this.props.user", this.props.user);
     }
 
     handleDialogOpen = () => {
@@ -78,6 +79,16 @@ class Shipping extends Component {
                                 Shipping addresses
                             </DialogTitle>
                             <DialogContent>
+                                <div className={classes.close}>
+                                    <IconButton
+                                        color="inherit"
+                                        size="small"
+                                        aria-label="Menu"
+                                        onClick={this.handleDialogClose}
+                                    >
+                                        <CloseIcon />
+                                    </IconButton>
+                                </div>
                                 <Grid container spacing={24}>
                                     {user.otherAddresses.map((address, i) => {
                                         <Grid item xs={4}>
@@ -108,9 +119,8 @@ class Shipping extends Component {
                                                     Select Address
                                                 </Button>
                                             </Paper>
-                                        </Grid>
+                                        </Grid>;
                                     })}
-                                    
                                 </Grid>
 
                                 {this.state.newAddress ? (
@@ -304,7 +314,11 @@ class Shipping extends Component {
                     </Grid>
                 )}
 
-                <Typography variant="title" style={{marginTop:15}} gutterBottom>
+                <Typography
+                    variant="title"
+                    style={{ marginTop: 15 }}
+                    gutterBottom
+                >
                     Shipping method
                 </Typography>
                 <Grid container spacing={24}>
@@ -317,12 +331,11 @@ class Shipping extends Component {
                             margin="normal"
                             variant="outlined"
                         >
-                            {
-                                user.shipMethods.map((method, i) => 
-                                    <MenuItem value={method.NSID}>{method.Name}</MenuItem>
-                                )
-
-                            }
+                            {user.shipMethods.map((method, i) => (
+                                <MenuItem value={method.NSID}>
+                                    {method.Name}
+                                </MenuItem>
+                            ))}
                         </TextField>
                     </Grid>
                 </Grid>
@@ -337,30 +350,36 @@ const styles = theme => ({
     },
     button: {
         marginTop: 10
-    }
+    },
+    close: { position: "absolute", right: 0, top: 0 }
 });
 
 Shipping.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-
-
-const mapStateToProps = (state) => {
-	return {
-		user: state.user,
-		checkout: state.checkout
-	}
-}
-
-const mapDispatchToProps = dispatch => {
-	return {
-		login: (username, password) => dispatch({ type: "LOGIN_REQUEST", username, password}),
-		getInventory: (category, getAll) => dispatch({ type: "STORE_REQUEST", category, getAll}),
-		addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
-		changeQuantity: (index, quantity) => dispatch({type: "CHANGE_QUANTITY", index, quantity}),
-		deleteFromCart: (index) => dispatch({type: "DELETE_FROM_CART", index})
-	};
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+        checkout: state.checkout
+    };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Shipping));
+const mapDispatchToProps = dispatch => {
+    return {
+        login: (username, password) =>
+            dispatch({ type: "LOGIN_REQUEST", username, password }),
+        getInventory: (category, getAll) =>
+            dispatch({ type: "STORE_REQUEST", category, getAll }),
+        addCartItem: (item, volIdIndex, quantity) =>
+            dispatch({ type: "ADD_TO_CART", item, volIdIndex, quantity }),
+        changeQuantity: (index, quantity) =>
+            dispatch({ type: "CHANGE_QUANTITY", index, quantity }),
+        deleteFromCart: index => dispatch({ type: "DELETE_FROM_CART", index })
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles)(Shipping));

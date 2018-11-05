@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -15,11 +15,12 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
-import Utils from '../../lib/Utils';
+import Utils from "../../lib/Utils";
 
 class Billing extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -92,32 +93,50 @@ class Billing extends Component {
                                     Cards
                                 </DialogTitle>
                                 <DialogContent>
+                                    <div className={classes.close}>
+                                        <IconButton
+                                            color="inherit"
+                                            size="small"
+                                            aria-label="Menu"
+                                            onClick={this.handleDialogClose}
+                                        >
+                                            <CloseIcon />
+                                        </IconButton>
+                                    </div>
                                     <Grid container spacing={24}>
-                                        {this.props.user.cards.map((card, i) => {
-                                            <Grid item xs={12} sm={4}>
-                                                <Paper className={classes.paper}>
-                                                    <Typography variant="body2">
-                                                        {card.ccnumber}
-                                                    </Typography>
-                                                    <Typography>
-                                                        {card.ccname}
-                                                    </Typography>
-                                                    <Typography>
-                                                        {card.ccexpire}
-                                                    </Typography>
-                                                    <Typography>
-                                                        {card.type}
-                                                    </Typography>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        className={classes.button}
+                                        {this.props.user.cards.map(
+                                            (card, i) => {
+                                                <Grid item xs={12} sm={4}>
+                                                    <Paper
+                                                        className={
+                                                            classes.paper
+                                                        }
                                                     >
-                                                        Select Card
-                                                    </Button>
-                                                </Paper>
-                                            </Grid>
-                                        })}
+                                                        <Typography variant="body2">
+                                                            {card.ccnumber}
+                                                        </Typography>
+                                                        <Typography>
+                                                            {card.ccname}
+                                                        </Typography>
+                                                        <Typography>
+                                                            {card.ccexpire}
+                                                        </Typography>
+                                                        <Typography>
+                                                            {card.type}
+                                                        </Typography>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            className={
+                                                                classes.button
+                                                            }
+                                                        >
+                                                            Select Card
+                                                        </Button>
+                                                    </Paper>
+                                                </Grid>;
+                                            }
+                                        )}
                                     </Grid>
 
                                     {this.state.newCard ? (
@@ -222,6 +241,18 @@ class Billing extends Component {
                                             Cards
                                         </DialogTitle>
                                         <DialogContent>
+                                            <div className={classes.close}>
+                                                <IconButton
+                                                    color="inherit"
+                                                    size="small"
+                                                    aria-label="Menu"
+                                                    onClick={
+                                                        this.handleDialogClose
+                                                    }
+                                                >
+                                                    <CloseIcon />
+                                                </IconButton>
+                                            </div>
                                             <Grid container spacing={24}>
                                                 <Grid item xs={12} sm={4}>
                                                     <Paper
@@ -434,8 +465,18 @@ class Billing extends Component {
                             Shipping addresses
                         </DialogTitle>
                         <DialogContent>
+                            <div className={classes.close}>
+                                <IconButton
+                                    color="inherit"
+                                    size="small"
+                                    aria-label="Menu"
+                                    onClick={this.handleDialogClose}
+                                >
+                                    <CloseIcon />
+                                </IconButton>
+                            </div>
                             <Grid container spacing={24}>
-                                <Grid item xs={4}>
+                                <Grid item xs={12} sm={4}>
                                     <Paper className={classes.paper}>
                                         <Typography>Address Line 1</Typography>
                                         <Typography>Address Line 2</Typography>
@@ -607,24 +648,29 @@ const styles = theme => ({
     },
     button: {
         marginTop: 10
-    }
+    },
+    close: { position: "absolute", right: 0, top: 0 }
 });
 
 Billing.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.user,
         checkout: state.checkout
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        getCreditCardIfExists: () => dispatch({type: "GET_DEFAULT_CREDIT_CARD"})
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Billing));
+const mapDispatchToProps = dispatch => {
+    return {
+        getCreditCardIfExists: () =>
+            dispatch({ type: "GET_DEFAULT_CREDIT_CARD" })
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles)(Billing));
