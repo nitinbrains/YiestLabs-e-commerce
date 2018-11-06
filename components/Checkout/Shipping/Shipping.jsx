@@ -18,7 +18,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper from "@material-ui/core/Paper";
 
 // custom
-import SalesLib from '../../lib/SalesLib';
+import SalesLib from '../../../lib/SalesLib';
 
 class Shipping extends Component {
 

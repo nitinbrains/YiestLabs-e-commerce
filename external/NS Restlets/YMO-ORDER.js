@@ -34,8 +34,8 @@ function(record, log, search, format, itemAvailability)
                return { error: {message: 'App version is out of date. Please download new version.', code: 0}};
            }
 
-           const userRecord = record.load({type: record.Type.CUSTOMER, id: response.userID});
-           const userLocation = parseInt(userRecord.getValue({fieldId: 'subsidiary'}));
+           const userRecord = record.load({type: record.Type.CUSTOMER, id: response.userId});
+           const userLocation = userRecord.getValue({fieldId: 'subsidiary'});
 
            if(response.calcShip)
            {
@@ -345,11 +345,11 @@ function(record, log, search, format, itemAvailability)
            var done = [false];
 
            var fakeOrder = record.create({type: 'salesorder', isDynamic: true});
-           fakeOrder.setValue('entity', response.userID);
+           fakeOrder.setValue('entity', response.userId);
 
-           if(response.shipMethod && response.shipMethod != -3)
+           if(response.shipmethod && response.shipmethod != 'custom')
            {
-               fakeOrder.setValue({fieldId: 'shipmethod', value: response.shipMethod});
+               fakeOrder.setValue({fieldId: 'shipmethod', value: response.shipmethod});
            }
 
            if(response.couponCode)
@@ -376,7 +376,7 @@ function(record, log, search, format, itemAvailability)
            }
 
            response.itemSubtotal += fakeOrder.getValue({fieldId: 'subtotal'});
-           if(response.shipMethod && response.shipMethod != -3)
+           if(response.shipmethod && response.shipmethod != 'custom')
            {
                response.shippingSubtotal += fakeOrder.getValue({fieldId: 'shippingcost'});
                response.orderSubtotal += fakeOrder.getValue({fieldId: 'total'});
@@ -498,9 +498,7 @@ function(record, log, search, format, itemAvailability)
                            orders[orderID].trackingNumber = (result.getValue({name: 'trackingnumbers'}) ? result.getValue({name: 'trackingnumbers'}) : "N/A");
                            orders[orderID].currency = result.getValue({name: 'currency'});
 
-                           orders[orderID].subsidiary = result.getText({name: 'subsidiary'});
-                           orders[orderID].subsidiary = orders[orderID].subsidiary.substring(orders[orderID].subsidiary.indexOf(':') + 2); //Remove extraneous text
-
+                           orders[orderID].subsidiary = result.getValue({name: 'subsidiary'});
                            orders[orderID].shipmethod = result.getText({name: 'shipmethod'});
                            orders[orderID].shipTotal = result.getValue({name: 'shippingamount'});
                        }
@@ -538,9 +536,7 @@ function(record, log, search, format, itemAvailability)
                    message.orderDate = salesOrderRecord.getValue({fieldId: 'createddate'});
                    message.status = salesOrderRecord.getValue({fieldId: 'status'});
 
-                   message.subsidiary = salesOrderRecord.getText({fieldId: 'subsidiary'});
-                   message.subsidiary = message.subsidiary.substring(message.subsidiary.indexOf(':')+1);
-
+                   message.subsidiary = salesOrderRecord.getValue({fieldId: 'subsidiary'});
                    message.shipmethod = salesOrderRecord.getText({fieldId: 'shipmethod'});
                    message.shipTotal = salesOrderRecord.getValue({fieldId: 'shippingcost'});
 
@@ -587,14 +583,14 @@ function(record, log, search, format, itemAvailability)
                var today = new Date();
 
                var customerRecord = record.load({type: record.Type.CUSTOMER, id: customerid});
-               var userLocation = parseInt(customerRecord.getValue({fieldId: 'subsidiary'}));
+               var userLocation = customerRecord.getValue({fieldId: 'subsidiary'});
 
                var WillCall = null;
-               if([3470, 3472, 13332, 3469, 3511].indexOf(parseInt(message.shipMethod)) >= 0 || (!message.shipMethod && [3470, 3472, 13332, 3469, 3511].indexOf(parseInt(customerRecord.getValue({fieldId: 'shippingitem'}))) >= 0))
+               if([3470, 3472, 13332, 3469, 3511].indexOf(parseInt(message.shipmethod)) >= 0 || (!message.shipmethod && [3470, 3472, 13332, 3469, 3511].indexOf(parseInt(customerRecord.getValue({fieldId: 'shippingitem'}))) >= 0))
                {
-                   if(message.shipMethod)
+                   if(message.shipmethod)
                    {
-                       WillCall = parseInt(message.shipMethod);
+                       WillCall = parseInt(message.shipmethod);
                    }
                    else
                    {
@@ -660,10 +656,10 @@ function(record, log, search, format, itemAvailability)
                            salesOrderRecord.setValue({fieldId: 'otherrefnum', value: message.PONum});
                        }
 
-                       if(message.shipMethod != -3)
+                       if(message.shipmethod != 'custom')
                        {
 
-                           salesOrderRecord.setValue({fieldId: 'shipmethod', value: message.shipMethod});
+                           salesOrderRecord.setValue({fieldId: 'shipmethod', value: message.shipmethod});
 
                        }
 
@@ -833,7 +829,7 @@ function(record, log, search, format, itemAvailability)
        {
            var transitTime = {};
            transitTime.daysInTransit = parseInt(result.getValue('custrecord_days_in_transit'));
-           transitTimes[result.getValue('custrecord_shipping_method')] = transitTime;
+           transitTimes[result.getValue('custrecord_shipping_method').toString()] = transitTime;
            return true;
        });
 
@@ -848,21 +844,21 @@ function(record, log, search, format, itemAvailability)
        return transitTimes;
    }
 
-   function setWillCallAddress(shipMethod, salesOrderRecord, customerName)
+   function setWillCallAddress(shipmethod, salesOrderRecord, customerName)
    {
-       switch(shipMethod)
+       switch(shipmethod)
        {
-           case 3470:  //Boulder
+           case '3470':  //Boulder
                salesOrderRecord.setValue({fieldId: 'shipaddresslist', value: null});
                salesOrderRecord.setValue({fieldId: 'shipaddress', value: 'Attn To: ' + customerName + '\nBoulder Will-Call\n1898 S. Flatiron Ct. Suite 213\nBoulder, CO 80301 US'});
                break;
-           case 3472: //Asheville
-           case 13332: //Go Green
+           case '3472': //Asheville
+           case '13332': //Go Green
                salesOrderRecord.setValue({fieldId: 'shipaddresslist', value: null});
                salesOrderRecord.setValue({fieldId: 'shipaddress', value: 'Attn To: ' + customerName + '\nAsheville Will-Call\n172 South Charlotte Street\nAsheville, NC 28801 US'});
                break;
-           case 3469: //SD
-           case 3511: //Go Green
+           case '3469': //SD
+           case '3511': //Go Green
                salesOrderRecord.setValue({fieldId: 'shipaddresslist', value: null});
                salesOrderRecord.setValue({fieldId: 'shipaddress', value: 'Attn To: ' + customerName + '\nSan Diego Will-Call\n9495 Candida Street\San Diego, CA 92126 US'});
                break;

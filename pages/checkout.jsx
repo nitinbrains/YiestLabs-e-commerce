@@ -12,10 +12,10 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import Shipping from "../components/Checkout/Shipping";
-import Billing from "../components/Checkout/Billing";
-import Items from "../components/Checkout/Items";
-import Review from "../components/Checkout/Review";
+import Shipping from "../components/Checkout/Shipping/Shipping";
+import Billing from "../components/Checkout/Billing/Billing";
+import Items from "../components/Checkout/Items/Items";
+import Review from "../components/Checkout/Review/Review";
 
 // custom
 import Alert from '../components/UI/Alert';
@@ -45,7 +45,7 @@ class Checkout extends Component {
 	}
 
 	componentWillMount(){
-		// this.props.prepareOrder();
+		this.props.prepareOrder();
 	}
 
 	state = {

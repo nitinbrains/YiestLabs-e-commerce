@@ -113,7 +113,7 @@ function(record, log, search, email)
            try
            {
                var orderSubrecord = record.create({type: 'customrecord379', isDynamic: true});
-               orderSubrecord.setValue({fieldId: 'custrecord121', value: message.UserID});
+               orderSubrecord.setValue({fieldId: 'custrecord121', value: message.userId});
                if(message.howSatisfiedWithRecentOrder)
                {
                    orderSubrecord.setValue({fieldId: 'custrecord125', value: message.howSatisfiedWithRecentOrder});
@@ -277,7 +277,7 @@ function(record, log, search, email)
                }
 
                //Connected Subsidiary Accounts
-               var currentSubsidiary = {internalid: message.id, subsidiary: customerRecord.getText({fieldId: 'subsidiary'}), subsidiaryid: message.subsidiary};
+               var currentSubsidiary = {internalid: message.id, subsidiary: customerRecord.getValue({fieldId: 'subsidiary'}), subsidiaryid: message.subsidiary};
                var relatedAccounts = customerRecord.getValue({fieldId: 'custentityrelatedaccounts'})
                if(relatedAccounts)
                {
@@ -302,7 +302,7 @@ function(record, log, search, email)
                {
                    //running a search here probably won't save any time or governance, at most 2 iterations
                    var subsidiaryRecord = record.load({type: record.Type.CUSTOMER, id: message.connectedaccounts[k].internalid});
-                   message.connectedaccounts[k].subsidiary = subsidiaryRecord.getText({fieldId: 'subsidiary'});
+                   message.connectedaccounts[k].subsidiary = subsidiaryRecord.getValue({fieldId: 'subsidiary'});
                    message.connectedaccounts[k].subsidiaryid = subsidiaryRecord.getValue({fieldId: 'subsidiary'});
                }
 
@@ -310,7 +310,7 @@ function(record, log, search, email)
                var thirdParty = customerRecord.getValue({fieldId: 'thirdpartyacct'});
                if(thirdParty)
                {
-                   message.shipmethod = -3;
+                   message.shipmethod = 'none';
                }
                else
                {

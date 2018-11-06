@@ -57,8 +57,7 @@ class Store extends Component {
                     zip: "94518"
                 },
                 shipmethod: "2789",
-
-                subsidiary: "2",
+                subsidiary: 2,
                 terms: "10",
                 vat: "",
                 version: "2.3.7"

@@ -17,9 +17,9 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 
-import WLHelper from "../../lib/WLHelper";
-import SalesLib from "../../lib/SalesLib";
-import Utils from '../../lib/Utils';
+import WLHelper from "../../../lib/WLHelper";
+import SalesLib from "../../../lib/SalesLib";
+import Utils from '../../../lib/Utils';
 
 class Billing extends Component {
     constructor(props) {
@@ -51,6 +51,7 @@ class Billing extends Component {
             expirationDates: Utils.getExpirationDates()
         };
     }
+
 
     handleNewCard = () => {
         this.setState({ newCard: !this.state.newCard });
@@ -110,7 +111,7 @@ class Billing extends Component {
                     Payment
                 </Typography>
 
-                {WLHelper.getPaymentTerm(this.state.terms) == "Credit Card" || WLHelper.getPaymentTerm(this.state.terms) == "None"? (
+                {WLHelper.getPaymentTerm(this.state.terms) == "Credit Card" || WLHelper.getPaymentTerm(this.state.terms) == "None" ? (
                     this.props.user.selectedCard.id ? (
                         <div>
                             <Typography>{this.props.user.selectedCard.name}</Typography>
@@ -132,23 +133,25 @@ class Billing extends Component {
                                 <DialogTitle id="form-dialog-title">Cards</DialogTitle>
                                 <DialogContent>
                                     <Grid container spacing={24}>
-                                    {this.props.user.cards.map((card, i) => {
-                                        <Grid item xs={12} sm={4}>
-                                            <Paper className={classes.paper}>
-                                                <Typography variant="body2">{card.name}</Typography>
-                                                <Typography>{card.number}</Typography>
-                                                <Typography>{card.expireMonth} / {card.expireYear}</Typography>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    className={classes.button}
-                                                >
-                                                    Select Card
-                                                </Button>
-                                            </Paper>
-                                        </Grid>;
-                                    })}
-                                    </Grid>
+
+                                       {this.props.user.cards.map((card, i) => (
+                                           <Grid item xs={12} sm={4}>
+                                               <Paper className={classes.paper}>
+                                                   <Typography variant="body2">{card.name}</Typography>
+                                                   <Typography>{card.number}</Typography>
+                                                   <Typography>{card.expireMonth} / {card.expireYear}</Typography>
+                                                   <Button
+                                                       variant="contained"
+                                                       color="primary"
+                                                       className={classes.button}
+                                                   >
+                                                       Select Card
+                                                   </Button>
+                                               </Paper>
+                                           </Grid>
+                                       ))}
+                                   </Grid>
+
 
                                     {this.state.newCard ? (
                                         <Grid container spacing={24}>
@@ -186,23 +189,69 @@ class Billing extends Component {
                                                     }
                                                 />
                                             </Grid>
-                                            <Grid item xs={12} md={6}>
-                                                <TextField
-                                                    required
-                                                    id="expDate"
-                                                    label="Expiry date"
-                                                    fullWidth
-                                                    value={this.state.card.expireMonth}
-                                                    onChange={event =>
-                                                        this.setState({
-                                                            card: {
-                                                                ...this.state.card,
-                                                                expireMonth: event.target.value
-                                                            }
-                                                        })
-                                                    }
-                                                />
-                                            </Grid>
+
+                                            <TextField
+                                                select
+                                                required
+                                                id="expireMonth"
+                                                name="expireMonth"
+                                                label="Month"
+                                                fullWidth
+                                                autoComplete={this.currentMonth}
+                                                value={this.state.card.expireMonth}
+                                                onChange={event =>
+                                                    this.setState({
+                                                        card: {
+                                                            ...this.state.card,
+                                                            expireMonth: event.target.value
+                                                        }
+                                                    })
+                                                }
+                                            >
+                                                <MenuItem value="0">1</MenuItem>
+                                                <MenuItem value="1">2</MenuItem>
+                                                <MenuItem value="2">3</MenuItem>
+                                                <MenuItem value="3">4</MenuItem>
+                                                <MenuItem value="4">5</MenuItem>
+                                                <MenuItem value="5">6</MenuItem>
+                                                <MenuItem value="6">7</MenuItem>
+                                                <MenuItem value="7">8</MenuItem>
+                                                <MenuItem value="8">9</MenuItem>
+                                                <MenuItem value="9">10</MenuItem>
+                                                <MenuItem value="10">11</MenuItem>
+                                                <MenuItem value="11">12</MenuItem>
+                                            </TextField>
+
+                                            <TextField
+                                                select
+                                                required
+                                                id="expireYear"
+                                                name="expireYear"
+                                                label="Year"
+                                                fullWidth
+                                                autoComplete={this.currentYear}
+                                                value={this.state.card.expireYear}
+                                                onChange={event =>
+                                                    this.setState({
+                                                        card: {
+                                                            ...this.state.card,
+                                                            expireYear: event.target.value
+                                                        }
+                                                    })
+                                                }
+                                            >
+                                            {this.state.expirationDates.map((date, i) => {
+                                                return (
+                                                    <MenuItem
+                                                        key={i}
+                                                        value={date.year}
+                                                    >
+                                                        {date.year}
+                                                    </MenuItem>
+                                                );
+                                            })}
+                                            </TextField>
+
                                         </Grid>
                                     ) : (
                                         <Button
@@ -266,23 +315,67 @@ class Billing extends Component {
                                     }
                                 />
                             </Grid>
-                            <Grid item xs={12} md={6}>
-                                <TextField
-                                    required
-                                    id="expDate"
-                                    label="Expiry date"
-                                    fullWidth
-                                    value={this.state.card.expireMonth}
-                                    onChange={event =>
-                                        this.setState({
-                                            card: {
-                                                ...this.state.card,
-                                                expireMonth: event.target.value
-                                            }
-                                        })
-                                    }
-                                />
-                            </Grid>
+                            <TextField
+                                select
+                                required
+                                id="expireMonth"
+                                name="expireMonth"
+                                label="Month"
+                                fullWidth
+                                autoComplete={this.currentMonth}
+                                value={this.state.card.expireMonth}
+                                onChange={event =>
+                                    this.setState({
+                                        card: {
+                                            ...this.state.card,
+                                            expireMonth: event.target.value
+                                        }
+                                    })
+                                }
+                            >
+                                <MenuItem value="0">1</MenuItem>
+                                <MenuItem value="1">2</MenuItem>
+                                <MenuItem value="2">3</MenuItem>
+                                <MenuItem value="3">4</MenuItem>
+                                <MenuItem value="4">5</MenuItem>
+                                <MenuItem value="5">6</MenuItem>
+                                <MenuItem value="6">7</MenuItem>
+                                <MenuItem value="7">8</MenuItem>
+                                <MenuItem value="8">9</MenuItem>
+                                <MenuItem value="9">10</MenuItem>
+                                <MenuItem value="10">11</MenuItem>
+                                <MenuItem value="11">12</MenuItem>
+                            </TextField>
+
+                            <TextField
+                                select
+                                required
+                                id="expireYear"
+                                name="expireYear"
+                                label="Year"
+                                fullWidth
+                                autoComplete={this.currentYear}
+                                value={this.state.card.expireYear}
+                                onChange={event =>
+                                    this.setState({
+                                        card: {
+                                            ...this.state.card,
+                                            expireYear: event.target.value
+                                        }
+                                    })
+                                }
+                            >
+                            {this.state.expirationDates.map((date, i) => {
+                                return (
+                                    <MenuItem
+                                        key={i}
+                                        value={date.year}
+                                    >
+                                        {date.year}
+                                    </MenuItem>
+                                );
+                            })}
+                            </TextField>
                             <Grid item xs={12}>
                                 <Button
                                     onClick={() => this.addNewCard()}
@@ -303,9 +396,9 @@ class Billing extends Component {
                                 <FormControlLabel
                                     control={
                                         <Checkbox
-                                        color="primary"
-                                        name="newCard"
-                                        onChange={this.handleUseCard}
+                                            color="primary"
+                                            name="newCard"
+                                            onChange={this.handleUseCard}
                                         />
                                     }
                                     label="Use Credit Card"
@@ -387,23 +480,67 @@ class Billing extends Component {
                                                         }
                                                     />
                                                 </Grid>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField
-                                                        required
-                                                        id="expDate"
-                                                        label="Expiry date"
-                                                        fullWidth
-                                                        value={this.state.card.expireMonth}
-                                                        onChange={event =>
-                                                            this.setState({
-                                                                card: {
-                                                                    ...this.state.card,
-                                                                    expireMonth: event.target.value
-                                                                }
-                                                            })
-                                                        }
-                                                    />
-                                                </Grid>
+                                                <TextField
+                                                    select
+                                                    required
+                                                    id="expireMonth"
+                                                    name="expireMonth"
+                                                    label="Month"
+                                                    fullWidth
+                                                    autoComplete={this.currentMonth}
+                                                    value={this.state.card.expireMonth}
+                                                    onChange={event =>
+                                                        this.setState({
+                                                            card: {
+                                                                ...this.state.card,
+                                                                expireMonth: event.target.value
+                                                            }
+                                                        })
+                                                    }
+                                                >
+                                                    <MenuItem value="0">1</MenuItem>
+                                                    <MenuItem value="1">2</MenuItem>
+                                                    <MenuItem value="2">3</MenuItem>
+                                                    <MenuItem value="3">4</MenuItem>
+                                                    <MenuItem value="4">5</MenuItem>
+                                                    <MenuItem value="5">6</MenuItem>
+                                                    <MenuItem value="6">7</MenuItem>
+                                                    <MenuItem value="7">8</MenuItem>
+                                                    <MenuItem value="8">9</MenuItem>
+                                                    <MenuItem value="9">10</MenuItem>
+                                                    <MenuItem value="10">11</MenuItem>
+                                                    <MenuItem value="11">12</MenuItem>
+                                                </TextField>
+
+                                                <TextField
+                                                    select
+                                                    required
+                                                    id="expireYear"
+                                                    name="expireYear"
+                                                    label="Year"
+                                                    fullWidth
+                                                    autoComplete={this.currentYear}
+                                                    value={this.state.card.expireYear}
+                                                    onChange={event =>
+                                                        this.setState({
+                                                            card: {
+                                                                ...this.state.card,
+                                                                expireYear: event.target.value
+                                                            }
+                                                        })
+                                                    }
+                                                >
+                                                {this.state.expirationDates.map((date, i) => {
+                                                    return (
+                                                        <MenuItem
+                                                            key={i}
+                                                            value={date.year}
+                                                        >
+                                                            {date.year}
+                                                        </MenuItem>
+                                                    );
+                                                })}
+                                                </TextField>
                                                 <Grid item xs={12}>
                                                     <Button
                                                         onClick={() => this.addNewCard()}
@@ -443,7 +580,6 @@ class Billing extends Component {
                                 </Dialog>
                             </div>
                         ) : (
-                            // Credit Card NOT available
                             <Grid container spacing={24}>
                                 <Grid item xs={12} md={6}>
                                     <TextField
@@ -479,23 +615,67 @@ class Billing extends Component {
                                         }
                                     />
                                 </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <TextField
-                                        required
-                                        id="expDate"
-                                        label="Expiry date"
-                                        fullWidth
-                                        value={this.state.card.expireMonth}
-                                        onChange={event =>
-                                            this.setState({
-                                                card: {
-                                                    ...this.state.card,
-                                                    expireMonth: event.target.value
-                                                }
-                                            })
-                                        }
-                                    />
-                                </Grid>
+                                <TextField
+                                    select
+                                    required
+                                    id="expireMonth"
+                                    name="expireMonth"
+                                    label="Month"
+                                    fullWidth
+                                    autoComplete={this.currentMonth}
+                                    value={this.state.card.expireMonth}
+                                    onChange={event =>
+                                        this.setState({
+                                            card: {
+                                                ...this.state.card,
+                                                expireMonth: event.target.value
+                                            }
+                                        })
+                                    }
+                                >
+                                    <MenuItem value="0">1</MenuItem>
+                                    <MenuItem value="1">2</MenuItem>
+                                    <MenuItem value="2">3</MenuItem>
+                                    <MenuItem value="3">4</MenuItem>
+                                    <MenuItem value="4">5</MenuItem>
+                                    <MenuItem value="5">6</MenuItem>
+                                    <MenuItem value="6">7</MenuItem>
+                                    <MenuItem value="7">8</MenuItem>
+                                    <MenuItem value="8">9</MenuItem>
+                                    <MenuItem value="9">10</MenuItem>
+                                    <MenuItem value="10">11</MenuItem>
+                                    <MenuItem value="11">12</MenuItem>
+                                </TextField>
+
+                                <TextField
+                                    select
+                                    required
+                                    id="expireYear"
+                                    name="expireYear"
+                                    label="Year"
+                                    fullWidth
+                                    autoComplete={this.currentYear}
+                                    value={this.state.card.expireYear}
+                                    onChange={event =>
+                                        this.setState({
+                                            card: {
+                                                ...this.state.card,
+                                                expireYear: event.target.value
+                                            }
+                                        })
+                                    }
+                                >
+                                {this.state.expirationDates.map((date, i) => {
+                                    return (
+                                        <MenuItem
+                                            key={i}
+                                            value={date.year}
+                                        >
+                                            {date.year}
+                                        </MenuItem>
+                                    );
+                                })}
+                                </TextField>
                                 <Grid item xs={12}>
                                     <Button
                                         onClick={() => this.addNewCard()}
@@ -720,10 +900,10 @@ class Billing extends Component {
                                             {SalesLib.COUNTRY_MAP.map((country, i) => {
                                                 return (
                                                     <MenuItem
-                                                    key={country.CountryCode}
-                                                    value={country.CountryCode}
+                                                        key={country.CountryCode}
+                                                        value={country.CountryCode}
                                                     >
-                                                    {country.CountryName}
+                                                        {country.CountryName}
                                                     </MenuItem>
                                                 );
                                             })}
@@ -912,10 +1092,10 @@ class Billing extends Component {
                             {SalesLib.COUNTRY_MAP.map((country, i) => {
                                 return (
                                     <MenuItem
-                                    key={country.CountryCode}
-                                    value={country.CountryCode}
+                                        key={country.CountryCode}
+                                        value={country.CountryCode}
                                     >
-                                    {country.CountryName}
+                                        {country.CountryName}
                                     </MenuItem>
                                 );
                             })}
