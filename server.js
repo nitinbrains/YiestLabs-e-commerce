@@ -495,8 +495,7 @@ app.prepare()
 
 		if(request.userId)
 		{
-			var finalOrder = Checkout.finalOrder();
-			var message = NSSendMessage(finalOrder);
+			var message = NSSendMessage(request);
 
 			//YMO-ORDER
 			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=914&deploy=1', {

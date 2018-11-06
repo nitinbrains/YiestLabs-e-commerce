@@ -1,4 +1,6 @@
 import React from "react";
+import { connect } from 'react-redux';
+
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -22,11 +24,10 @@ class Alert extends React.Component {
     state = {
         color: null,
         borderColor: null,
-        visible: this.props.visible
     };
 
     componentDidMount() {
-        switch (this.props.type) {
+        switch (this.props.message.type) {
             case "info":
                 this.setState({
                     color: "rgb(185, 210, 235)",
@@ -58,24 +59,21 @@ class Alert extends React.Component {
         return (
             <React.Fragment>
                 <div
-                    className={classNames(
-                        classes.alert,
-                        !this.state.visible && classes.hide
-                    )}
+                    className={classes.alert}
                     style={{
                         backgroundColor: this.state.color,
                         borderColor: this.setState.borderColor
                     }}
                 >
                     <Typography variant="title" gutterBottom>
-                        {children}
+                        {this.props.message.details}
                     </Typography>
                     <div className={classes.close}>
                         <IconButton
                             color="inherit"
                             size="small"
                             aria-label="Menu"
-                            onClick={this.handleClose}
+                            onClick={() => this.props.closeMessage(this.props.index)}
                         >
                             <CloseIcon />
                         </IconButton>
@@ -95,14 +93,17 @@ const styles = theme => ({
         width: "100%",
         position: "relative"
     },
-    close: { position: "absolute", right: 0, top: 0 },
-    hide: {
-        display: "none"
-    }
+    close: { position: "absolute", right: 0, top: 0 }
 });
 
 Alert.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Alert);
+const mapDispatchToProps = dispatch => {
+    return {
+        closeMessage: (index) => dispatch({type: "CLOSE_MESSAGE", index})
+    };
+};
+
+export default connect(null, mapDispatchToProps)(withStyles(styles)(Alert));

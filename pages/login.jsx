@@ -17,8 +17,11 @@ import CardHeader from "../components/UI/Card/CardHeader.jsx";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 
+// custom
+import Alert from '../components/UI/Alert';
+
 class Login extends Component {
-    
+
     constructor(props){
         super(props);
         this.state = {
@@ -33,14 +36,15 @@ class Login extends Component {
         }
     }
 
-
     render(){
 
         const { classes } = this.props;
 
         return (
             <React.Fragment>
-                <div>Error: {this.props.message.errorMessage.details}</div>
+
+                {this.props.message.messages.map((message, i) => <Alert message={message} index={i}/> )}
+
                 <main className={classes.layout}>
                     <Card>
                         <CardHeader color="primary">

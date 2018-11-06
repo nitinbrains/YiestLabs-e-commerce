@@ -25,7 +25,8 @@ class Store extends Component {
                     zip: "94518",
                 },
                 cards: [
-                    {ccexpire: "2022-12-01T08:00:00.000Z", ccname: "Joe Discovery", ccnumber: "************1117", default: true, id: 38421, type: "3"}
+                    {expireMonth: '11', expireYear: '2022', name: "Joe Discovery", number: "************1117", default: true, id: 38421, type: "3"},
+                    {expireMonth: '9', expireYear: '2020', name: "Dimitar Vasilev", number: "************6470", default: false, id: 6868, type: "3"}
                 ],
                 cardsToRemove: [],
                 category: "2",
@@ -40,7 +41,8 @@ class Store extends Component {
                 get: true,
                 id: 43148,
                 otherAddresses: [
-                    {address1: "One way", address2: "", address3: "", addressee: "", attn: "Attn", city: "City", countryid: "US", defaultBill: false, defaultShip: true, id: 1743261, zip: "94518"}
+                    {address1: "One way", address2: "", address3: "", addressee: "", attn: "Attn", city: "City", countryid: "US", defaultBill: false, defaultShip: true, id: 1743261, zip: "94518"},
+                    {address1: "964 Court Lane", address2: "", address3: "", addressee: "", attn: "Attn", city: "SumCity", countryid: "US", defaultBill: false, defaultShip: false, id: 12345, zip: "94518"}
                 ],
                 phone: "7142995620",
                 shipping: {
@@ -54,9 +56,8 @@ class Store extends Component {
                     id: 1743261,
                     zip: "94518"
                 },
-                shipmethod: "2842",
-                
-                subsidiary: "2",
+                shipmethod: "2789",
+                subsidiary: 2,
                 terms: "10",
                 vat: "",
                 version: "2.3.7"

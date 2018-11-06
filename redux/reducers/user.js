@@ -38,25 +38,67 @@ const initialState = {
 	vat: "",
 	selectedCard: {
 		id: '',
-		ccnumber: '',
-		ccname: '',
-		ccexpire: '',
+		number: '',
+		name: '',
+		expireMonth: '',
+		expireYear: '',
 		type: '',
-		default: false		
+		default: false
 	},
 	shipMethods: []
 };
 
 const userReducer = (state = initialState, action) => {
-	var newState = state;
 	switch (action.type) {
 		case "LOGIN_SUCCESS":
-			return Object.assign({}, state, action)
+			return {
+				...state,
+				username: action.username,
+				password: action.password,
+			}
 		case "USER_INFO":
-			return Object.assign({}, state, action.UserInfo);
-		case "SET_CREDIT_CARD":
-			newState.selectedCard = action.card;
-			return newState;
+			return {
+				...state,
+				...action.UserInfo
+			}
+		case "CREDIT_CARD":
+			return {
+				...state,
+				selectedCard: action.creditCard
+			}
+		case "SHIP_METHOD_SET":
+			return {
+				...state,
+				shipmethod: action.shipmethod
+			}
+		case "SHIP_ADDRESS_SET":
+			return {
+				...state,
+				shipping: action.address
+			}
+		case "BILL_ADDRESS_SET":
+			return {
+				...state,
+				billing: action.address
+			}
+		case "SHIP_ADDRESS_ADD":
+			return {
+				...state,
+				shipping: action.shipping,
+				otherAddresses: action.otherAddresses
+			}
+		case "BILL_ADDRESS_ADD":
+			return {
+				...state,
+				billing: action.billing,
+				otherAddresses: action.otherAddresses
+			}
+		case "CREDIT_CARD_ADD":
+			return {
+				...state,
+				selectedCard: action.creditCard,
+				cards: action.cards
+			}
 		case "LOGOUT":
 		default:
 			return state;
