@@ -14,10 +14,13 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import Shipping from "../components/Checkout/Shipping";
-import Billing from "../components/Checkout/Billing";
-import Items from "../components/Checkout/Items";
-import Review from "../components/Checkout/Review";
+import Shipping from "../components/Checkout/Shipping/Shipping";
+import Billing from "../components/Checkout/Billing/Billing";
+import Items from "../components/Checkout/Items/Items";
+import Review from "../components/Checkout/Review/Review";
+
+// custom
+import Alert from '../components/UI/Alert';
 
 const steps = ["Shipping", "Billing", "Items", "Review your order"];
 
@@ -38,13 +41,12 @@ function getStepContent(step) {
 
 class Checkout extends Component {
 
-	constructor(props)
-	{
+	constructor(props) {
 		super(props);
 	}
 
-	componentWillMount(){
-		// this.props.placeOrder();
+	componentWillMount() {
+		this.props.placeOrder();
 	}
 
 	state = {
@@ -77,6 +79,9 @@ class Checkout extends Component {
 
 		return (
 			<NavBarLayout>
+
+				{this.props.message.messages.map((message, i) => <Alert message={message} index={i}/> )}
+
 				<div className={classes.layout}>
 					<Card>
 						<CardHeader color="primary">
@@ -176,7 +181,8 @@ Checkout.propTypes = {
 const mapStateToProps = (state) => {
     return {
     	user: state.user,
-        cart: state.cart
+        cart: state.cart,
+		message: state.message
     }
 }
 

@@ -57,11 +57,14 @@ function getTermsFromSub(subsidiaryID)
 {
 	switch(subsidiaryID)
 	{
-		case 2: //US
-        case 7: //CPH
-			return 10; //Credit Card
-		case 5: //HK
-			return 13; //Bank Transfer
+		// US, CPH
+		case 2:
+        case 7:
+			return 10; // Credit Card
+
+		// HK
+		case 5:
+			return 13; // Bank Transfer
 	}
 }
 
@@ -69,21 +72,23 @@ function getCurrencyFromSub(subsidiaryID, cphDomestic)
 {
 	switch(subsidiaryID)
 	{
-        case '2':
-		case 2: //US
-			return 1; //Dollar
-        case '5':
-		case 5: //HK
-			return 5; //HK Dollar
-        case '7':
-		case 7: //CPH
+		// US
+		case 2:
+			return 1; // Dollar
+
+		// HK
+		case 5:
+			return 5; // HK Dollar
+
+		// CPH
+		case 7:
 			if(cphDomestic)
 			{
-				return 6; //DKK
+				return 6; // DKK
 			}
 			else
 			{
-				return 4; //EUR
+				return 4; // EUR
 			}
 	}
 }
@@ -92,21 +97,23 @@ function getShipMethodFromSub(subsidiaryID, cphDomestic)
 {
 	switch(subsidiaryID)
 	{
-        case '2':
-		case 2: //US
-			return 2787; //Fedex Priority Overnight
-        case '5':
-		case 5: //HK
-			return 13301; //Will Call
-        case '7':
-		case 7: //CPH
+		// US
+		case 2:
+			return '2787'; // Fedex Priority Overnight
+
+		// HK
+		case 5:
+			return '13301'; // Will Call
+
+		//CPH
+		case 7:
 			if(cphDomestic)
 			{
-				return 13299; //CPH Domestic
+				return '13299'; // CPH Domestic
 			}
 			else
 			{
-				return 13300; //CPH Non-Domestic
+				return '13300'; // CPH Non-Domestic
 			}
 	}
 }
@@ -115,16 +122,18 @@ function warehouseMap(subsidiaryID)
 {
     switch(subsidiaryID)
     {
-        case 2: //usa
-            return '9'; //SD Shipping
-        //  return 11; //Ash Shipping
-        break;
-        case 5: //hk
-            return '31'; //HK Shipping
-        break;
-        case 7: //cph
-            return '30'; //CPH Shipping
-        break;
+		// US
+        case 2:
+            return '9'; // San Diego
+
+		// HK
+        case 5:
+            return '31';
+
+		// CPH
+        case 7:
+            return '30';
+
         default:
             return '9';
     }
@@ -202,7 +211,7 @@ function checkHoliday(date, subsidiary)
     {
         HOLIDAYS = USHOLIDAYS;
     }
-    
+
     var dateToCheck = new Date(date);
 
     if((dateToCheck.getDay() < 1 || dateToCheck.getDay() > 3 ) && subsidiary != 2)
@@ -278,7 +287,7 @@ function valiDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, 
 
     if(compareDates(today, finalDate) == -1)
     {
-        finalDate = new Date(today);             
+        finalDate = new Date(today);
     }
 
     if(addTravelTime)
@@ -318,7 +327,7 @@ function valiDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, 
     if(finalDate.getDay() == 0)
     {
         finalDate.setDate(finalDate.getDate() + 1);
-    } 
+    }
     else if(finalDate.getDay() == 6)
     {
         finalDate.setDate(finalDate.getDate() + 2);
@@ -339,7 +348,7 @@ function valiDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, 
     if(finalDate.getDay() == 0)
     {
         finalDate.setDate(finalDate.getDate() + 1);
-    } 
+    }
     else if(finalDate.getDay() == 6)
     {
         finalDate.setDate(finalDate.getDate() + 2);
@@ -369,7 +378,7 @@ function valiDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, 
 
 function getLocalTime(subsidiary, isAsheville)
 {
-    var now = new Date(); 
+    var now = new Date();
     var date = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 
     switch(subsidiary)
@@ -435,4 +444,29 @@ function compareDates(date1, date2)
     }
 
     return 0;
+}
+
+function searchAvailabilityResults(Availability, location)
+{
+    for(var i = 0, totalLength = Availability.length; i < totalLength; i++)
+    {
+        if(Availability[i].inventoryLocation == String(location) && Availability[i].type == 'Avail Qty')
+        {
+            return Availability[i];
+        }
+    }
+
+    // item not available
+    return [{
+        "type": "Avail Qty",
+        "action": "Add",
+        "qty": "0",
+        "availQty": 0,
+        "availQtyToShip": 0,
+        "dateValue": null,
+        "inventoryLocation": null,
+        "volume": 1,
+        "item": null
+    }]
+
 }

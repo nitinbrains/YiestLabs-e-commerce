@@ -15,7 +15,6 @@ import ItemsXs from "../components/Store/ItemsXs";
 
 class Store extends Component {
     componentWillMount() {
-        
         const userInfo = {
             billing: {
                 address1: "964 Court Lane",

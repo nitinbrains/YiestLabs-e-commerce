@@ -36,7 +36,7 @@ function* getInventory(action) {
             Store.addItems(newItems);
         }
         else
-            yield put({ type: "THROW_ERROR", error })
+            yield put({ type: "SHOW_ERROR", error })
     }
 
     const itemsToShow = Store.filterItems(selectedCategory, search, user);
