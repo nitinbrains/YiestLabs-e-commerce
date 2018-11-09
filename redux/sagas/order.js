@@ -22,7 +22,7 @@ export function * prepareOrder(action) {
         if (error) {
             yield put(responseFailure(error));
         } else {
-            Checkout.initOrder(order, state.user);
+            Checkout.initOrder(order, user);
             yield put(responseSuccess(order));
         }    
     } catch (error) {

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { orderActions } from '../../redux/actions/orderActions';
+import { orderActions } from '../redux/actions/orderActions';
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -46,7 +46,7 @@ class Checkout extends Component {
 	}
 
 	componentWillMount() {
-		this.props.placeOrder();
+		this.props.prepareOrder();
 	}
 
 	state = {

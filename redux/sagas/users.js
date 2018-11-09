@@ -20,7 +20,6 @@ export function * loginUser (action) {
 export function * setUserInfo (action) {
     const { data: { userInfo } } = action;
     User.setUser(userInfo);
-    userInfo.shipMethods = User.getShipMethods();
 }
 
 

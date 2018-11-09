@@ -31,7 +31,7 @@ function * rootSaga () {
         takeEvery(cartTypes.ADD_ITEM_ATTEMPT, addCartItem),
         takeEvery(cartTypes.UPDATE_ITEM_ATTEMPT, updateItem),
         // ORDER
-        takeLatest(orderTypes.PLACE_ORDER_ATTEMPT, prepareOrder),
+        takeLatest(orderTypes.PREPARE_ORDER_ATTEMPT, prepareOrder),
     ]);
 };
 
