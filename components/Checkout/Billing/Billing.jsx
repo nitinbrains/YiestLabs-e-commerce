@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import PropTypes from "prop-types";
+import classNames from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -16,6 +17,8 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 import WLHelper from "../../../lib/WLHelper";
 import SalesLib from "../../../lib/SalesLib";
@@ -129,14 +132,26 @@ class Billing extends Component {
                                 open={this.state.openDialogCard}
                                 onClose={this.handleDialogCardClose}
                                 aria-labelledby="form-dialog-title"
+                                fullWidth={true}
+                                maxWidth = {'md'}
                             >
                                 <DialogTitle id="form-dialog-title">Cards</DialogTitle>
                                 <DialogContent>
+                                <div className={classes.close}>
+                                    <IconButton
+                                        color="inherit"
+                                        size="small"
+                                        aria-label="Menu"
+                                        onClick={this.handleDialogCardClose}
+                                    >
+                                        <CloseIcon />
+                                    </IconButton>
+                                </div>
                                     <Grid container spacing={24}>
 
                                        {this.props.user.cards.map((card, i) => (
                                            <Grid item xs={12} sm={4}>
-                                               <Paper className={classes.paper}>
+                                               <Paper className={classNames(classes.paper, this.props.user.selectedCard.number == card.number && classes.selected)}>
                                                    <Typography variant="body2">{card.name}</Typography>
                                                    <Typography>{card.number}</Typography>
                                                    <Typography>{card.expireMonth} / {card.expireYear}</Typography>
@@ -419,13 +434,25 @@ class Billing extends Component {
                                     open={this.state.openDialogCard}
                                     onClose={this.handleDialogCardClose}
                                     aria-labelledby="form-dialog-title"
+                                    fullWidth={true}
+                                    maxWidth = {'md'}
                                 >
                                     <DialogTitle id="form-dialog-title">Cards</DialogTitle>
                                     <DialogContent>
+                                    <div className={classes.close}>
+                                        <IconButton
+                                            color="inherit"
+                                            size="small"
+                                            aria-label="Menu"
+                                            onClick={this.handleDialogCardClose}
+                                        >
+                                            <CloseIcon />
+                                        </IconButton>
+                                    </div>
                                         <Grid container spacing={24}>
                                         {this.props.user.cards.map((card, i) => {
                                             <Grid item xs={12} sm={4}>
-                                                <Paper className={classes.paper}>
+                                                <Paper className={classNames(classes.paper, this.props.user.selectedCard.number == card.number && classes.selected)}>
                                                     <Typography variant="body2">
                                                         {card.number}
                                                     </Typography>
@@ -709,23 +736,35 @@ class Billing extends Component {
 
                         <Button
                             style={{ marginTop: 10 }}
-                            onClick={() => this.handleDialogAddressOpen()}
+                            onClick={this.handleDialogAddressOpen}
                         >
                             Change Billing Address
                         </Button>
                         <Dialog
                             open={this.state.openDialogAddress}
-                            onClose={() => this.handleDialogAddressClose()}
+                            onClose={this.handleDialogAddressClose}
                             aria-labelledby="form-dialog-title"
+                            fullWidth={true}
+                            maxWidth = {'md'}
                         >
                             <DialogTitle id="form-dialog-title">
                                 Billing addresses
                             </DialogTitle>
                             <DialogContent>
+                            <div className={classes.close}>
+                                <IconButton
+                                    color="inherit"
+                                    size="small"
+                                    aria-label="Menu"
+                                    onClick={this.handleDialogAddressClose}
+                                >
+                                    <CloseIcon />
+                                </IconButton>
+                            </div>
                                 <Grid container spacing={24}>
                                 {this.props.user.otherAddresses.map((address, i) => (
-                                    <Grid item xs={4}>
-                                        <Paper className={classes.paper}>
+                                    <Grid item sm={4} xs={12}>
+                                        <Paper className={classNames(classes.paper, this.props.user.billing.address1 == address.address1 && classes.selected)}>
                                             <Typography>{address.address1}</Typography>
                                             <Typography>{address.address2}</Typography>
                                             <Typography>{address.address3}</Typography>
@@ -1122,6 +1161,11 @@ const styles = theme => ({
     },
     button: {
         marginTop: 10
+    },
+    close: { position: "absolute", right: 0, top: 0 },
+    selected: {
+        border: 'solid 2px',
+        borderColor:"#f28411"
     }
 });
 

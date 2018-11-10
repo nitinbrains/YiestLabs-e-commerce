@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
+import classNames from "classnames";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import MenuItem from '@material-ui/core/MenuItem';
+import MenuItem from "@material-ui/core/MenuItem";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
@@ -16,6 +17,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper from "@material-ui/core/Paper";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 // custom
 import SalesLib from '../../../lib/SalesLib';
@@ -84,15 +87,27 @@ class Shipping extends Component {
                             open={this.state.openDialog}
                             onClose={() => this.handleDialogClose()}
                             aria-labelledby="form-dialog-title"
+                            fullWidth={true}
+                            maxWidth = {'md'}
                         >
                             <DialogTitle id="form-dialog-title">
                                 Shipping addresses
                             </DialogTitle>
                             <DialogContent>
+                                <div className={classes.close}>
+                                    <IconButton
+                                        color="inherit"
+                                        size="small"
+                                        aria-label="Menu"
+                                        onClick={() => this.handleDialogClose()}
+                                    >
+                                        <CloseIcon />
+                                    </IconButton>
+                                </div>
                                 <Grid container spacing={24}>
                                     {this.props.user.otherAddresses.map((address, i) =>
-                                        <Grid item xs={4}>
-                                            <Paper className={classes.paper}>
+                                        <Grid item sm={4} xs={12}>
+                                            <Paper className={classNames(classes.paper, this.props.user.shipping.address1 == address.address1 && classes.selected)}>
                                                 <Typography>
                                                     {address.address1}
                                                 </Typography>
@@ -454,7 +469,11 @@ class Shipping extends Component {
                     </Grid>
                 )}
 
-                <Typography variant="title" style={{marginTop:15}} gutterBottom>
+                <Typography
+                    variant="title"
+                    style={{ marginTop: 15 }}
+                    gutterBottom
+                >
                     Shipping method
                 </Typography>
                 <Grid container spacing={24}>
@@ -489,6 +508,11 @@ const styles = theme => ({
     },
     button: {
         marginTop: 10
+    },
+    close: { position: "absolute", right: 0, top: 0 },
+    selected: {
+        border: 'solid 2px',
+        borderColor:"#f28411"
     }
 });
 
@@ -512,4 +536,7 @@ const mapDispatchToProps = dispatch => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Shipping));
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles)(Shipping));
