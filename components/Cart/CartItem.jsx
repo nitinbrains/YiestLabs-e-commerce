@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -12,6 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
+import { cartActions } from '../../redux/actions/cartActions';
 
 class CartItem extends Component {
 
@@ -21,18 +23,6 @@ class CartItem extends Component {
             quantity: this.props.item.dispQuantity
         }
 
-    }
-
-    incrementQuantity(item, index){
-        var quantity = parseInt(item.dispQuantity);
-        var newAmount = quantity + 1;
-        this.props.changeQuantity(index, newAmount);
-    }
-
-    decrementQuantity(item, index){
-        var quantity = parseInt(item.dispQuantity);
-        var newAmount = quantity - 1 > 0 ? quantity - 1 : 1;
-        this.props.changeQuantity(index, newAmount);
     }
 
     render(){
@@ -64,12 +54,12 @@ class CartItem extends Component {
                             className={classes.quantity}
                             value={this.state.quantity}
                             onChange={(event) => {
-                                this.props.changeItemQuantity(this.props.index, event.target.value);
-                                this.setState({quantity: event.target.value});
+                                this.props.updateItem({ index: this.props.index, quantity: event.target.value });
+                                this.setState({ quantity: event.target.value });
                             }}
                             type="number"
                         />
-                        <Button variant="contained" onClick={() => this.props.removeFromCart(this.props.index)}>DELETE</Button>
+                        <Button variant="contained" onClick={() => this.props.removeItem(this.props.index)}>DELETE</Button>
                     </CardContent>
                 </div>
             </Card>
@@ -112,11 +102,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        changeItemQuantity: (index, quantity) => dispatch({type: "CHANGE_QUANTITY", index, quantity}),
-        removeFromCart: (index) => dispatch({type: "REMOVE_FROM_CART", index})
-    };
-};
+const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(CartItem));

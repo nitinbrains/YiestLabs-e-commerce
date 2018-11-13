@@ -25,7 +25,7 @@ export default createReducer(initialState, {
             }
         ]
     }),
-    [messageTypes.HIDE_MESSAGE_ATTEMPT]: ({ messages }, { data: { idx } }) => ({
+    [messageTypes.HIDE_MESSAGE_ATTEMPT]: ({ messages }, { data: idx }) => ({
         messages: messages.filter((message, index) => index !== idx)
     }),
 });

@@ -182,7 +182,7 @@ const mapStateToProps = (state) => {
     return {
     	user: state.user,
         cart: state.cart,
-		message: state.message
+		message: state.messages
     }
 }
 

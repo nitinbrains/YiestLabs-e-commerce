@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -21,6 +22,7 @@ import CloseIcon from "@material-ui/icons/Close";
 
 // custom
 import SalesLib from '../../../lib/SalesLib';
+import { userActions } from '../../../redux/actions/userActions';
 
 class Shipping extends Component {
 
@@ -517,17 +519,11 @@ Shipping.propTypes = {
 const mapStateToProps = (state) => {
 	return {
 		user: state.user,
-		checkout: state.order
+		checkout: state.checkout
     }
 }
 
-const mapDispatchToProps = dispatch => {
-	return {
-        setShipMethod: (shipmethod) => dispatch({type: "SET_SHIP_METHOD", shipmethod}),
-        setShipAddress: (index) => dispatch({type: "SET_SHIP_ADDRESS", index}),
-        addShipAddress: (address) => dispatch({type: "ADD_SHIP_ADDRESS", address})
-	};
-};
+const mapDispatchToProps = dispatch => bindActionCreators(userActions, dispatch);
 
 export default connect(
     mapStateToProps,

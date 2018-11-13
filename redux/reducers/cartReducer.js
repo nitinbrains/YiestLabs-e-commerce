@@ -5,34 +5,15 @@ export const initialState = {
     items: []
 };
 
-const addOrUpdate = (items, newItem, isUpdate = false) => {
-    if (isUpdate) {
-        return items.map((item) => item.MerchandiseID === newItem.MerchandiseID && item.details === newItem.details ? newItem : item);
-    }
-    
-    let isFound = false;
-    const cartItems = items.map((item) => {
-        if (item.MerchandiseID === newItem.MerchandiseID && item.details === newItem.details) {
-            isFound = true;
-            return newItem;
-        }
-        return item;
-    });
-    if (!isFound) {
-        cartItems.push(newItem);
-    }
-    return cartItems;
-}
-
 export default createReducer(initialState, {
-    [cartTypes.ADD_ITEM_SUCCESS]: ({ items }, { data: { item } }) => ({
-        items: addOrUpdate(items, item)
+    [cartTypes.ADD_ITEM_SUCCESS]: ({ items }, { data }) => ({
+        items: data.items
     }),
-    [cartTypes.UPDATE_ITEM_SUCCESS]: ({ items }, { data: { item: updatedItem } }) => ({
-        items: addOrUpdate(items, updatedItem, true)
+    [cartTypes.UPDATE_ITEM_SUCCESS]: ({ items }, { data }) => ({
+        items: data.items
     }),
-    [cartTypes.REMOVE_ITEM_ATTEMPT]: ({ items }, { data: { removedItem } }) => ({
-        items: items.filter((item) => item.MerchandiseID === removedItem.MerchandiseID && item.details === removedItem.details)
+    [cartTypes.REMOVE_ITEM_SUCCESS]: ({ items }, { data }) => ({
+        items: data.items
     }),
     [cartTypes.CLEAR_CART_ATTEMPT]: (state, { data }) => null,
 })

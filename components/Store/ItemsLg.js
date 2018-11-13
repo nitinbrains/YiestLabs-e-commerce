@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -13,6 +14,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+
+import { cartActions } from '../../redux/actions/cartActions';
 
 let timer;
 
@@ -166,7 +169,7 @@ class ItemsLg extends Component {
                 volIdIndex = this.state.selectedType.value;
             }
 
-            this.props.addCartItem(item, volIdIndex, quantity)
+            this.props.addCartItem({ item, volIdIndex, quantity })
         }
         catch(error)
         {
@@ -403,10 +406,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
-    };
-};
+const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(ItemsLg));

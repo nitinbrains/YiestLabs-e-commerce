@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-
+import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
 import Link from "next/link";
@@ -19,6 +19,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 // custom
 import Alert from '../components/UI/Alert';
+import { userActions } from '../redux/actions/userActions';
 
 class Login extends Component {
 
@@ -31,8 +32,8 @@ class Login extends Component {
     }
 
     login(){
-        if(this.state.username && this.state.password){
-            this.props.login(this.state.username, this.state.password)
+        if (this.state.username && this.state.password){
+            this.props.userLogin(this.state);
         }
     }
 
@@ -164,14 +165,10 @@ const mapStateToProps = (state) => {
         user: state.user,
         inventory: state.inventory,
         cart: state.cart,
-        message: state.message
+        message: state.messages
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        login: (username, password) => dispatch({ type: "LOGIN_REQUEST", username, password}),
-    };
-};
+const mapDispatchToProps = dispatch => bindActionCreators(userActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Login))
