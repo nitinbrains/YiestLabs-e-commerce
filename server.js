@@ -296,19 +296,15 @@ app.prepare()
 
 	server.get('/get-inventory', (req, res, next) => {
 
-		var classFilters = JSON.parse(req.query.classFilters)
-
-		var body = NSSendMessage({classFilters: classFilters ? classFilters : null});
-
 		//YMO-ITEM
 		fetch("https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=912&deploy=1", {
-	  		method: 'POST',
+	  		method: 'GET',
 	  		headers: {
-				'Authorization': NSAuth(912, "post"),
+				'Authorization': NSAuth(912, "get"),
 				'Accept': 'application/json',
 	    		'Content-Type': 'application/json',
 	  		},
-	  		body: body
+	  		// body: body
 		})
 		.then((response) => response.json())
 		.then(function(response)

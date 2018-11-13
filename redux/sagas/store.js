@@ -6,11 +6,11 @@ import { host } from '../../config.server'
 import Store from '../../lib/Store'
 import User from '../../lib/User';
 
-function fetchInventoryAPI(classFilters) {
-    return axios.get(`${host}/get-inventory?classFilters=${JSON.stringify(classFilters)}`)
+function fetchInventoryAPI() {
+    return axios.get(`${host}/get-inventory`)
     .then(result => {
         if(result.data.error) throw result.data.error;
-        return {newItems: result.data.items}
+        return {itemsToShow: result.data.items}
     })
     .catch(error => {
         console.log('error', error);
@@ -24,24 +24,35 @@ function* getInventory(action) {
     const search = action && action.search;
     const user = User.getUser();
 
+    // const selectedCategory = Store.getSelectedCategory();
+    // const classFilters = Store.getClassFilters(selectedCategory, search);
 
-    const selectedCategory = Store.getSelectedCategory();
-    const classFilters = Store.getClassFilters(selectedCategory, search);
+    //
+    //
+    // if(classFilters) {
+    //     const { newItems, error } = yield call(fetchInventoryAPI, classFilters);
+    //     if (newItems) {
+    //         Store.addCategoriesLoaded();
+    //         Store.addItems(newItems);
+    //     }
+    //     else
+    //         yield put({ type: "SHOW_ERROR", error })
+    // }
+    //
+    // const itemsToShow = Store.filterItems(selectedCategory, search, user);
 
 
-    if(classFilters) {
-        const { newItems, error } = yield call(fetchInventoryAPI, classFilters);
-        if (newItems) {
-            Store.addCategoriesLoaded();
-            Store.addItems(newItems);
-        }
-        else
-            yield put({ type: "SHOW_ERROR", error })
+    const { itemsToShow, error } = yield call(fetchInventoryAPI);
+    if(itemsToShow) {
+
+        yield put({ type: "STORE_SUCCESS", itemsToShow})
+    } else {
+        yield put({ type: "SHOW_ERROR", error })
     }
 
-    const itemsToShow = Store.filterItems(selectedCategory, search, user);
-    yield put({ type: "STORE_SUCCESS", itemsToShow})
-    
+
+
+
 }
 
 function* changeMainCategory(action) {
@@ -59,7 +70,7 @@ function* changeSubCategory(action) {
     const { mainIndex, subIndex, category } = action;
     const existingCategories = yield select(state => state.store.categories);
     var categories = Store.selectSubCategory(existingCategories, mainIndex, subIndex, category);
-    
+
     if(categories) {
         yield put({type: "SET_CATEGORIES", categories});
         yield call(getInventory);

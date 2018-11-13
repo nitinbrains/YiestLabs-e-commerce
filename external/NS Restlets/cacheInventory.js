@@ -197,7 +197,7 @@ function(record, log, search, email, runtime, task, cache)
             }
 
             var Inventory = cache.getCache({name: 'Inventory', scope: cache.Scope.PUBLIC});
-            Inventory.put({key: 'items', value: response});
+            Inventory.put({key: 'items', value: response.items});
 
             log.debug('cacheInventory completed successfully');
 
