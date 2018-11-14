@@ -42,7 +42,7 @@ export function * addCreditCard(action) {
         const { cards, creditCard } = User.addCreditCard(card);
         yield put(responseSuccess({ cards, creditCard }));
     } catch(error) {
-        yield put(responseFailure(err));
+        yield put(responseFailure(error));
     }
 }
 
@@ -56,21 +56,21 @@ export function * setShipMethod(action) {
 }
 
 export function * setShipAddress(action) {
-    const { responseSuccess, responseFailure, data: { index } } = action;
+    const { responseSuccess, responseFailure, data } = action;
     try {
-        yield put(responseSuccess(User.setShipAddress(index)));
+        yield put(responseSuccess(User.setShipAddress(data)));
     } catch(error) {
         yield put(responseFailure(error));
     }
 }
 
 export function * addShipAddress(action) {
-    const { responseSuccess, responseFailure, data: { address } } = action;
+    const { responseSuccess, responseFailure, data: address } = action;
     try {
         const { otherAddresses, shipping } = User.addShipAddress(address);
         yield put(responseSuccess({ otherAddresses, shipping }));
     } catch(error) {
-        yield put(responseFailure(err));
+        yield put(responseFailure(error));
     }
 }
 
@@ -79,7 +79,7 @@ export function * setBillAddress(action) {
     try {
         yield put(responseSuccess(User.setBillAddress(data)));
     } catch(error) {
-        yield put(responseFailure(err));
+        yield put(responseFailure(error));
     }
 }
 
@@ -89,6 +89,6 @@ export function * addBillAddress(action) {
         const { otherAddresses, billing } = User.addBillAddress(address);
         yield put(responseSuccess({ otherAddresses, billing }));
     } catch(error) {
-        yield put(responseFailure(err));
+        yield put(responseFailure(error));
     }
 }

@@ -169,7 +169,7 @@ class ItemsLg extends Component {
                 volIdIndex = this.state.selectedType.value;
             }
 
-            this.props.addCartItem({ item, volIdIndex, quantity })
+            this.props.addItem({ item, volIdIndex, quantity })
         }
         catch(error)
         {

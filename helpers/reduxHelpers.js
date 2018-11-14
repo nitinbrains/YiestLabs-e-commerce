@@ -1,5 +1,7 @@
 export const RESET_STORE = 'RESET_STORE_ATTEMPT';
 
+const isObject = (o) => o instanceof Object || o == null;
+
 export const createReducer = (initialState, handlers, allowReset = true, finalizer = x => x) =>
   (state = initialState, action) => {
     if (allowReset && action.type === RESET_STORE) return initialState;
@@ -51,7 +53,7 @@ export const createActionsStructure = (prefix, protoArray) => {
           type: actionTypesValues[0],
           responseSuccess: (dataSuccess) => ({ type: actionTypesValues[1], data: dataSuccess }),
           responseFailure: (dataFailure) => ({ type: actionTypesValues[2], data: dataFailure }),
-          data: { ...data }
+          data: isObject(data) ? { ...data } : data
         })
       }
       : {

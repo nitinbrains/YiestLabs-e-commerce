@@ -12,7 +12,6 @@ export function * prepareOrder(action) {
     try {
         const cart = Cart.getCart();
         const user = User.getUser();
-        
         const { res: order, error } = yield call(api.prepareOrder, {
             calcShip: true,
             userId: user.id,

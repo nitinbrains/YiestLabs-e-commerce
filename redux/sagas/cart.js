@@ -13,7 +13,7 @@ export function * addCartItem(action) {
         yield put(responseSuccess({ items }));
     } catch(error) {
         yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));
-        yield put(responseFailure(err));
+        yield put(responseFailure(error));
     }
 }
 
@@ -23,7 +23,7 @@ export function * removeCartItem(action) {
         const items = Cart.removeItem(index);
         yield put(responseSuccess({ items }));
     } catch(error) {
-        yield put(responseFailure(err));
+        yield put(responseFailure(error));
     }
 }
 
@@ -33,7 +33,7 @@ export function * updateCartItem(action) {
         const items = Cart.changeItemQuantity(index, quantity);
         yield put(responseSuccess({ items }));
     } catch (error) {
-        yield put(responseFailure(err));
+        yield put(responseFailure(error));
     }
 }
 
