@@ -13,11 +13,13 @@ import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchD
 import ItemsLg from "../components/Store/ItemsLg";
 import ItemsXs from "../components/Store/ItemsXs";
 
+import User from '../lib/User'
+
 class Store extends Component {
     componentWillMount() {
-        const userInfo = {
+        var userInfo = {
             billing: {
-                address1: "964 Court Lane",
+                address1: "123 My Way",
                 address2: "",
                 address3: "",
                 addressee: "Home",
@@ -58,13 +60,22 @@ class Store extends Component {
                 zip: "94518"
             },
             shipmethod: "2842",
-            
+
             subsidiary: "2",
             terms: "10",
             vat: "",
             version: "2.3.7"
         };
-
+        // userInfo.shipMethods = [];
+        // userInfo.selectedCard = {
+        //     id: '',
+        //     ccnumber: '',
+        //     ccname: '',
+        //     ccexpire: '',
+        //     type: '',
+        //     default: false
+        // };
+        userInfo = User.setUser(userInfo);
         this.props.setUserInfo({ userInfo });
         this.props.getInventory();
         // this.props.userLogin({ username: 'above', password: 'test' });

@@ -12,7 +12,7 @@ export function * prepareOrder(action) {
     try {
         const cart = Cart.getCart();
         const user = User.getUser();
-        const { res: order, error } = yield call(api.prepareOrder, {
+        var { res: order, error } = yield call(api.prepareOrder, {
             calcShip: true,
             userId: user.id,
             shipMethod: user.shipMethod,
@@ -22,9 +22,9 @@ export function * prepareOrder(action) {
         if (error) {
             yield put(responseFailure(error));
         } else {
-            Checkout.initOrder(order, user);
+            order = Checkout.initOrder(order, user);
             yield put(responseSuccess(order));
-        }    
+        }
     } catch (error) {
         yield put(responseFailure(error));
     }
@@ -63,4 +63,3 @@ export function * decrementShipDate(action) {
         yield put(responseFailure(error));
     }
 }
-
