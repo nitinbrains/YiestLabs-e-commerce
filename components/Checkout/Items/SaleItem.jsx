@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
@@ -14,6 +15,8 @@ import Button from "@material-ui/core/Button";
 
 
 import Utils from '../../../lib/Utils';
+import { orderActions } from '../../../redux/actions/orderActions';
+
 
 class SaleItem extends Component {
 
@@ -110,11 +113,6 @@ const mapStateToProps = (state) => {
 	}
 }
 
-const mapDispatchToProps = dispatch => {
-		return {
-			incrementShipDate: (item) => dispatch({type: "INCREMENT_SHIP_DATE", item}),
-            decrementShipDate: (item) => dispatch({type: "DECREMENT_SHIP_DATE", item})
-		};
-};
+const mapDispatchToProps = dispatch => bindActionCreators(orderActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SaleItem));

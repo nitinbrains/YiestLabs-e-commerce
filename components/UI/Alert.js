@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -8,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 
+import { messageActions } from '../../redux/actions/messageActions';
 /* Usage
 
 Types: info (blue), error(red), success(green)
@@ -66,14 +68,14 @@ class Alert extends React.Component {
                     }}
                 >
                     <Typography variant="title" gutterBottom>
-                        {this.props.message.details}
+                        {this.props.message.message}
                     </Typography>
                     <div className={classes.close}>
                         <IconButton
                             color="inherit"
                             size="small"
                             aria-label="Menu"
-                            onClick={() => this.props.closeMessage(this.props.index)}
+                            onClick={() => this.props.hideMessage(this.props.index)}
                         >
                             <CloseIcon />
                         </IconButton>
@@ -100,10 +102,6 @@ Alert.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        closeMessage: (index) => dispatch({type: "CLOSE_MESSAGE", index})
-    };
-};
+const mapDispatchToProps = dispatch => bindActionCreators(messageActions, dispatch);
 
 export default connect(null, mapDispatchToProps)(withStyles(styles)(Alert));

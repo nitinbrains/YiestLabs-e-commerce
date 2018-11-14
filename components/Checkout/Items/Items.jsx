@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
@@ -11,8 +12,9 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from '@material-ui/core/MenuItem';
 
-
 import SaleItem from './SaleItem';
+import { orderActions } from '../../../redux/actions/orderActions';
+
 
 class Items extends Component {
 
@@ -98,15 +100,6 @@ const mapStateToProps = (state) => {
 	}
 }
 
-const mapDispatchToProps = dispatch => {
-		return {
-			setShippingOption: (option) => dispatch({type: "SET_SHIPPING_OPTION", option}),
-			login: (username, password) => dispatch({ type: "LOGIN_REQUEST", username, password}),
-			getInventory: (category, getAll) => dispatch({ type: "STORE_REQUEST", category, getAll}),
-			addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
-			changeQuantity: (index, quantity) => dispatch({type: "CHANGE_QUANTITY", index, quantity}),
-			deleteFromCart: (index) => dispatch({type: "DELETE_FROM_CART", index})
-		};
-};
+const mapDispatchToProps = dispatch => bindActionCreators(orderActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Items));

@@ -304,7 +304,6 @@ app.prepare()
 				'Accept': 'application/json',
 	    		'Content-Type': 'application/json',
 	  		},
-	  		// body: body
 		})
 		.then((response) => response.json())
 		.then(function(response)

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { orderActions } from '../redux/actions/orderActions';
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -39,12 +41,11 @@ function getStepContent(step) {
 
 class Checkout extends Component {
 
-	constructor(props)
-	{
+	constructor(props) {
 		super(props);
 	}
 
-	componentWillMount(){
+	componentWillMount() {
 		this.props.prepareOrder();
 	}
 
@@ -181,14 +182,10 @@ const mapStateToProps = (state) => {
     return {
     	user: state.user,
         cart: state.cart,
-		message: state.message
+		message: state.messages
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        prepareOrder: () => dispatch({type: "PREPARE_ORDER"}),
-    };
-};
+const mapDispatchToProps = dispatch => bindActionCreators(orderActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(Checkout));

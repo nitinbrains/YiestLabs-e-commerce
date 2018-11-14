@@ -38,7 +38,7 @@ class ServicesDialog extends Component {
 
     addToCart = () => {
         // this.props.addCartItem();
-        this.props.handleItemLeave();
+        this.props.closeDialog();
     }
 
     render() {

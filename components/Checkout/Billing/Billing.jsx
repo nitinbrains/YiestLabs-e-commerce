@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -23,6 +24,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import WLHelper from "../../../lib/WLHelper";
 import SalesLib from "../../../lib/SalesLib";
 import Utils from '../../../lib/Utils';
+import { userActions } from '../../../redux/actions/userActions';
 
 class Billing extends Component {
     constructor(props) {
@@ -1180,14 +1182,7 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        setBillAddress: index => dispatch({ type: "SET_BILL_ADDRESS", index }),
-        addBillAddress: address => dispatch({ type: "ADD_BILL_ADDRESS", address }),
-        setCreditCard: index => dispatch({type: "SET_CREDIT_CARD", index}),
-        addCreditCard: card => dispatch({type: "ADD_CREDIT_CARD", card})
-    };
-};
+const mapDispatchToProps = dispatch => bindActionCreators(userActions, dispatch);
 
 export default connect(
     mapStateToProps,

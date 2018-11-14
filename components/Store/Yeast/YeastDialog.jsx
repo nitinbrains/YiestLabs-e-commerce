@@ -128,10 +128,127 @@ class YeastDialog extends Component {
         }
     }
 
-    addToCart = () => {
-        // this.props.addCartItem();
-        this.props.handleItemLeave();
-    }
+
+    addToCart = (item, nonYeast=false) => {
+       try
+       {
+           var volIdIndex;
+           // var quantity = parseFloat(this.state.quantity);
+           var quantity = parseFloat(2);
+
+           if(!nonYeast)
+           {
+               var instance = this;
+
+               if(quantity == 0)
+               {
+                   quantity = 1;
+               }
+
+               if(quantity == '' || isNaN(parseFloat(quantity)))
+               {
+                   console.log('Please enter a valid value for the quantity');
+                   return;
+               }
+
+               var volIdIndex;
+               if(!nonYeast)
+               {
+                   // var packagingType = this.state.packaging.value;
+
+                   // if(packagingType == 'pp')
+                   // {
+                   //     volIdIndex = parseInt(this.state.pack.value);
+                   // }
+                   // else if(packagingType == "3")
+                   // {
+                   //     volIdIndex = 3;
+                   // }
+                   // else
+                   // {
+                   //     volIdIndex = parseInt(packagingType);
+                   // }
+
+                   volIdIndex = 2;
+               }
+               else
+               {
+                   volIdIndex = 0;
+               }
+
+               if(parseInt(quantity) < 0)
+               {
+                   quantity = 1;
+               }
+
+               // Wild Yeast must have mimimum 1L
+               if(item.salesCategory == 4 && quantity < 1.0){
+                   console.log('Notice', 'The minimum quantity sold for Wild Yeast strains is 1L. Please adjust your quantity');
+                   return;
+               }
+
+               // Custom Pour Strains
+               if(volIdIndex == 3)
+               {
+
+                   // Vault strains must have minimum 1.5L Custom Pour
+                   if(item.salesCategory == 32 && quantity < 1.5){
+                       console.log('Notice', 'The minimum quantity sold for Custom Pour Vault strains is 1.5L. Please adjust your quantity');
+                       return;
+                   }
+
+                   // Bacteria sold in 1L increments
+                   if(item.strainCategory == 32 || item.strainCategory == 33)
+                   {
+                       if((parseFloat(quantity)/parseInt(quantity) != 1.0))
+                       {
+                           quantity = Math.round(quantity);
+                           console.log('Notice', 'Quantities for this strain must be in 1L increments, your value has been rounded accordingly. Please review your cart.');
+                       }
+                   }
+
+                   // All other custom pour strains sold in 0.5L increments
+                   else
+                   {
+                       if((parseFloat(quantity)/parseInt(quantity) != 1.0))
+                       {
+                           if(quantity % 0.5 != 0)
+                           {
+                               var decimal = parseFloat(quantity) - parseInt(quantity);
+                               if(decimal >= 0.75)
+                               {
+                                   quantity = Math.ceil(quantity);
+                               }
+                               else if(decimal < 0.25)
+                               {
+                                   quantity = Math.floor(quantity);
+                               }
+                               else
+                               {
+                                   quantity = parseInt(quantity) + 0.5;
+                               }
+
+                               console.log('Notice', 'Quantities for this strain must be in 0.5L increments, your value has been rounded accordingly. Please review your cart.');
+
+                           }
+                       }
+                   }
+               }
+           }
+           else
+           {
+               volIdIndex = this.state.selectedType.value;
+           }
+
+           this.props.addItem({ item, volIdIndex, quantity });
+           this.props.closeDialog();
+       }
+       catch(error)
+       {
+           console.log('Could not add item to cart', error);
+       }
+   }
+
 
     setPack = (event) => {
         this.setState({pack: event.target.value});

@@ -17,13 +17,18 @@ import Button from "@material-ui/core/Button";
 import CartItem from "../components/Cart/CartItem";
 
 class Cart extends Component {
+
+    componentWillMount() {
+        console.log('items', this.props.cart.items);
+    }
+
     render() {
         const { classes, theme, cart } = this.props;
 
         return (
             <NavBarUserSearchDrawerLayout>
                 <Grid container spacing={24}>
-                    {this.props.cart.items.map((item, i) => {
+                    {this.props.cart.items && this.props.cart.items.map((item, i) => {
                         return (
                             <Grid item xs={12}>
                                 <CartItem item={item} index={i} />
