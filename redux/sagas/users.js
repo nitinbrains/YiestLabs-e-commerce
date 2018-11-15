@@ -1,7 +1,7 @@
 import { put, call } from 'redux-saga/effects';
 import User from '../../lib/User';
 
-import { userTypes } from '../actions/userActions';
+import { userActions, userTypes } from '../actions/userActions';
 import { messageActions } from '../actions/messageActions';
 import * as api from '../../services/users';
 
@@ -10,7 +10,7 @@ export function * loginUser (action) {
     try {
         const { res: userId } = yield call(api.login, username, password);
         const { res: userInfo } = yield call(api.getUserInfo, userId);
-        yield put(responseSuccess(User.setUser(userInfo)));
+        yield put(userActions.setUserInfo({ userInfo }));
         yield put(messageActions.displayMessage({
             title: 'Authorization',
             message: 'You have successfully logged in!'
@@ -23,7 +23,11 @@ export function * loginUser (action) {
 
 export function * setUserInfo (action) {
     const { responseSuccess, data: { userInfo } } = action;
-    User.setUser(userInfo);
+    try {
+        yield put(responseSuccess(User.setUser(userInfo)));
+    } catch (err) {
+        yield put(responseFailure(err));
+    }
 }
 
 export function * setCreditCard(action) {
@@ -47,9 +51,10 @@ export function * addCreditCard(action) {
 }
 
 export function * setShipMethod(action) {
-    const { responseSuccess, responseFailure, data: { shipmethod } } = action;
+    const { responseSuccess, responseFailure, data: shipmethod } = action;
     try {
-        yield put(responseSuccess(User.setShipMethod(shipmethod)));
+        User.setShipMethod(shipmethod)
+        yield put(responseSuccess(shipmethod));
     } catch(error) {
         yield put(responseFailure(error));
     }
