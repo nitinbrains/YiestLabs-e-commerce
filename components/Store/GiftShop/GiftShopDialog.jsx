@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect} from 'react-redux';
+import { connect } from "react-redux";
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -19,14 +19,14 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 class GiftShopDialog extends Component {
-
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
         this.state = {
-            quantity: '0',
+            quantity: "0"
         };
 
         this.item = this.props.item;
@@ -35,7 +35,7 @@ class GiftShopDialog extends Component {
     addToCart = () => {
         // this.props.addCartItem();
         this.props.closeDialog();
-    }
+    };
 
     render() {
         const { classes, theme } = this.props;
@@ -46,7 +46,15 @@ class GiftShopDialog extends Component {
                     {this.item.Name}
                 </DialogTitle>
                 <DialogContent>
-
+                    <div className={classes.close}>
+                        <IconButton
+                            color="inherit"
+                            size="small"
+                            aria-label="Menu"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    </div>
                     <Grid
                         item
                         container
@@ -55,9 +63,7 @@ class GiftShopDialog extends Component {
                         style={{ marginTop: 5 }}
                     >
                         <Grid item>
-                            <Typography>
-                                {this.item.Price}
-                            </Typography>
+                            <Typography>{this.item.Price}</Typography>
                         </Grid>
                     </Grid>
                     <Grid
@@ -89,10 +95,7 @@ class GiftShopDialog extends Component {
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button
-                        onClick={this.addToCart}
-                        color="primary"
-                    >
+                    <Button onClick={this.addToCart} color="primary">
                         Add to Cart
                     </Button>
                 </DialogActions>
@@ -129,7 +132,8 @@ const styles = theme => ({
     },
     hide: {
         display: "none"
-    }
+    },
+    close: { position: "absolute", right: 0, top: -5 }
 });
 
 GiftShopDialog.propTypes = {
@@ -137,17 +141,21 @@ GiftShopDialog.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.user,
         inventory: state.inventory
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(GiftShopDialog));
+const mapDispatchToProps = dispatch => {
+    return {
+        addCartItem: (item, volIdIndex, quantity) =>
+            dispatch({ type: "ADD_TO_CART", item, volIdIndex, quantity })
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(GiftShopDialog));

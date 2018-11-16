@@ -36,7 +36,7 @@ class EducationCard extends Component {
     handleItemHoverLeave = () => {
         this.setState({hover: false});
     }
-    
+
     render() {
 
         const { classes, theme, item } = this.props;
@@ -44,6 +44,9 @@ class EducationCard extends Component {
         return (
             <Grid
                 item
+                xs={12}
+                sm={6}
+                md={3}
                 spacing={24}
                 onMouseEnter={this.handleItemHoverEnter}
                 onMouseLeave={this.handleItemHoverLeave}
@@ -104,7 +107,7 @@ const styles = theme => ({
         ...theme.mixins.gutters(),
         paddingTop: theme.spacing.unit * 2,
         paddingBottom: theme.spacing.unit * 2,
-        height: "100%",
+        height: 250,
         transition: theme.transitions.create("width", {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen
