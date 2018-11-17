@@ -18,10 +18,6 @@ import CartItem from "../components/Cart/CartItem";
 
 class Cart extends Component {
 
-    componentWillMount() {
-        console.log('items', this.props.cart.items);
-    }
-
     render() {
         const { classes, theme, cart } = this.props;
 

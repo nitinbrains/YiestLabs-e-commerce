@@ -199,7 +199,7 @@ class Store extends Component {
 
                     <Dialog
                         open={this.state.openDialog}
-                        onClose={this.handleItemLeave}
+                        onClose={this.handleLeaveItem}
                         aria-labelledby="form-dialog-title"
                     >
                         {this.getDialogContent(this.state.item)}
