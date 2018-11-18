@@ -118,7 +118,11 @@ class YeastCard extends Component {
                     className={classes.card}
                     style={
                         !this.state.hover
-                            ? { backgroundImage: this.state.img }
+                            ? {
+                                  backgroundImage: this.state.img,
+                                  backgroundRepeat: "no-repeat",
+                                  backgroundSize: "cover"
+                              }
                             : { backgroundColor: "#fff" }
                     }
                 >
@@ -128,11 +132,14 @@ class YeastCard extends Component {
                             container
                             direction={"column"}
                             xs
-                            justify="center"
-                            alignItems="center"
+                            spacing={8}
                         >
-                            <Grid item xs>
-                                <Typography variant="h3" color="secondary">
+                            <Grid item xs className={classes.info}>
+                                <img
+                                    src="../../static/images/icons/Ale-icon.svg"
+                                    height="40"
+                                />
+                                <Typography variant="h5" color="secondary">
                                     {itemID}
                                 </Typography>
                                 <Typography
@@ -150,10 +157,13 @@ class YeastCard extends Component {
                             container
                             direction={"column"}
                             spacing={8}
-                            justify="flex-end"
                         >
                             <Grid item xs>
-                                <Typography variant="h6" color="primary">
+                                <Typography
+                                    className={classes.info}
+                                    variant="subtitle1"
+                                    color="primary"
+                                >
                                     {itemID}
                                 </Typography>
                             </Grid>
@@ -179,14 +189,13 @@ class YeastCard extends Component {
                                 container
                                 direction={"row"}
                                 spacing={8}
-                                justify="flex-end"
                             >
                                 <Grid item xs={6}>
                                     <div className={classes.info}>
                                         <Typography>
                                             Fermentation Temp
                                         </Typography>
-                                        <Typography>
+                                        <Typography color="primary">
                                             {item.optFermentTempF |
                                                 item.optFermentTempF}
                                         </Typography>
@@ -195,23 +204,23 @@ class YeastCard extends Component {
                                 <Grid item xs={6}>
                                     <div className={classes.info}>
                                         <Typography>Flocculation</Typography>
-                                        <Typography>
+                                        <Typography color="primary">
                                             {item.flocculation}
                                         </Typography>
                                     </div>
                                 </Grid>
-                                <Grid item xs>
+                                <Grid item xs={6}>
                                     <div className={classes.info}>
                                         <Typography>Alcohol Tol.</Typography>
-                                        <Typography>
+                                        <Typography color="primary">
                                             {item.alcoholTol}
                                         </Typography>
                                     </div>
                                 </Grid>
-                                <Grid item xs>
+                                <Grid item xs={6}>
                                     <div className={classes.info}>
                                         <Typography>Attenuation</Typography>
-                                        <Typography>
+                                        <Typography color="primary">
                                             {item.attenuation}
                                         </Typography>
                                     </div>
@@ -228,6 +237,8 @@ class YeastCard extends Component {
 const styles = theme => ({
     card: {
         ...theme.mixins.gutters(),
+        border: "solid 1px",
+        borderColor: "#CCCCCC",
         paddingTop: theme.spacing.unit * 2,
         paddingBottom: theme.spacing.unit * 2,
         height: 250,
