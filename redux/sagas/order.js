@@ -3,12 +3,12 @@ import * as api from '../../services/order';
 import { orderActions } from '../actions/orderActions';
 
 import Checkout from '../../lib/Checkout';
+import Cart from '../../lib/Cart';
 import User from '../../lib/User';
 
 
 export function * prepareOrder(action) {
     const { responseSuccess, responseFailure } = action;
-
     try {
         const cart = Cart.getCart();
         const user = User.getUser();

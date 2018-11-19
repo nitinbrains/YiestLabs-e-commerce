@@ -30,6 +30,13 @@ const getResponseBody = async (response) => {
 export const requestWrapper = async (url, data = {}, token, jsonRequest = true) => {
 
   const URL = prepareURL(url, data.query);
+  const headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  };
+  if (data.headers == null) {
+    data.headers = headers;
+  }
   const response = await fetch(URL, data);
 
   try {

@@ -406,10 +406,8 @@ app.prepare()
 
 	server.post('/prepare-order', function(req, res, next){
 
-		const request = req.body.request;
-
-		if(request.userId)
-		{
+		const request = req.body;
+		if(request.userId) {
 
 			var message = NSSendMessage(request);
 
