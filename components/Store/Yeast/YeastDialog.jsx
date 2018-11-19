@@ -236,7 +236,7 @@ class YeastDialog extends Component {
                     {this.item.Name}
                 </DialogTitle>
                 <DialogContent>
-                    <Grid container wrap="nowrap" spacing={8}>
+                    <Grid container spacing={24}>
                         <Grid item xs={1}>
                             <div className={classes.circle}>
                                 <img

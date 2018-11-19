@@ -24,7 +24,8 @@ class YeastCard extends Component {
         super(props);
         this.state = {
             hover: false,
-            img: null
+            img: null,
+            color: null
         };
     }
 
@@ -33,55 +34,50 @@ class YeastCard extends Component {
             case "3":
                 this.setState({
                     img:
-                        "url('../../../static/images/categories/Category-ale.jpg')"
+                        "url('../../../static/images/categories/Category-ale.jpg')",
+                    color: '#FF9933'
                 });
                 break;
             case "5":
                 this.setState({
                     img:
-                        "url('../../../static/images/categories/Category-lager.jpg')"
+                        "url('../../../static/images/categories/Category-lager.jpg')",
+                        color: '#FFCC33'
                 });
                 break;
             case "6":
                 this.setState({
                     img:
-                        "url('../../../static/images/categories/Category-wine.jpg')"
+                        "url('../../../static/images/categories/Category-wine.jpg')",
+                        color: '#9966CC'
                 });
                 break;
             case "7":
                 this.setState({
                     img:
-                        "url('../../../static/images/categories/Category-Distilling.jpg')"
+                        "url('../../../static/images/categories/Category-Distilling.jpg')",
+                        color: '#6666CC'
                 });
                 break;
             case "8":
                 this.setState({
                     img:
-                        "url('../../../static/images/categories/Category-belgian.jpg')"
+                        "url('../../../static/images/categories/Category-belgian.jpg')",
+                        color: '#66CCCCCC'
                 });
                 break;
             case "4":
                 this.setState({
                     img:
-                        "url('../../../static/images/categories/Category-wild.jpg')"
+                        "url('../../../static/images/categories/Category-wild.jpg')",
+                        color: '#CC9966'
                 });
                 break;
             case "32":
                 this.setState({
                     img:
-                        "url('../../../static/images/categories/Category-vault.jpg')"
-                });
-                break;
-            case "3":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-ale.jpg')"
-                });
-                break;
-            case "50":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-ale.jpg')"
+                        "url('../../../static/images/categories/Category-vault.jpg')",
+                        color: '#B3B3B3'
                 });
                 break;
             default:
@@ -131,7 +127,6 @@ class YeastCard extends Component {
                             item
                             container
                             direction={"column"}
-                            xs
                             spacing={8}
                         >
                             <Grid item xs className={classes.info}>
@@ -153,7 +148,6 @@ class YeastCard extends Component {
                     ) : (
                         <Grid
                             item
-                            xs
                             container
                             direction={"column"}
                             spacing={8}
@@ -162,7 +156,7 @@ class YeastCard extends Component {
                                 <Typography
                                     className={classes.info}
                                     variant="subtitle1"
-                                    color="primary"
+                                    style={{color:this.state.color}}
                                 >
                                     {itemID}
                                 </Typography>
@@ -170,9 +164,9 @@ class YeastCard extends Component {
                             <Grid item xs={12}>
                                 <div
                                     style={{
-                                        backgroundColor: "#f28411",
-                                        padding: 3,
-                                        textAlign: "center"
+                                        backgroundColor: this.state.color,
+                                        padding: 1,
+                                        textAlign: "center",
                                     }}
                                 >
                                     <Typography
@@ -195,7 +189,7 @@ class YeastCard extends Component {
                                         <Typography>
                                             Fermentation Temp
                                         </Typography>
-                                        <Typography color="primary">
+                                        <Typography style={{color:this.state.color}}>
                                             {item.optFermentTempF |
                                                 item.optFermentTempF}
                                         </Typography>
@@ -204,7 +198,7 @@ class YeastCard extends Component {
                                 <Grid item xs={6}>
                                     <div className={classes.info}>
                                         <Typography>Flocculation</Typography>
-                                        <Typography color="primary">
+                                        <Typography style={{color:this.state.color}}>
                                             {item.flocculation}
                                         </Typography>
                                     </div>
@@ -212,7 +206,7 @@ class YeastCard extends Component {
                                 <Grid item xs={6}>
                                     <div className={classes.info}>
                                         <Typography>Alcohol Tol.</Typography>
-                                        <Typography color="primary">
+                                        <Typography style={{color:this.state.color}}>
                                             {item.alcoholTol}
                                         </Typography>
                                     </div>
@@ -220,7 +214,7 @@ class YeastCard extends Component {
                                 <Grid item xs={6}>
                                     <div className={classes.info}>
                                         <Typography>Attenuation</Typography>
-                                        <Typography color="primary">
+                                        <Typography style={{color:this.state.color}}>
                                             {item.attenuation}
                                         </Typography>
                                     </div>
@@ -236,16 +230,11 @@ class YeastCard extends Component {
 
 const styles = theme => ({
     card: {
-        ...theme.mixins.gutters(),
         border: "solid 1px",
         borderColor: "#CCCCCC",
         paddingTop: theme.spacing.unit * 2,
         paddingBottom: theme.spacing.unit * 2,
-        height: 250,
-        transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
-        })
+        height: 200,
     },
     cardHover: {
         transition: theme.transitions.create("width", {
@@ -256,12 +245,6 @@ const styles = theme => ({
     info: {
         textAlign: "center"
     },
-    quantity: {
-        width: 50
-    },
-    hide: {
-        display: "none"
-    }
 });
 
 YeastCard.propTypes = {
