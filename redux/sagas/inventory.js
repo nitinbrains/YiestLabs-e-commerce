@@ -9,7 +9,8 @@ import * as api from '../../services/inventory';
 export function * getInventory (action) {
     const { responseSuccess, responseFailure, data: { search } } = action;
     try {
-        const user = User.getUser();
+
+        const user = yield select(state => state.user);
         // const selectedCategory = Store.getSelectedCategory();
         // const classFilters = Store.getClassFilters(selectedCategory, search);
         //

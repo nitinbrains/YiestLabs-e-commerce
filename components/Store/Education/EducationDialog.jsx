@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -20,21 +21,109 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
+import SalesLib from '../../../lib/SalesLib';
+import { cartActions } from '../../../redux/actions/cartActions';
+
 class EducationDialog extends Component {
 
     constructor(props)
     {
         super(props);
         this.state = {
-            quantity: '0',
+            quantity: '1',
+            types: [],
+            selectedType: '',
         };
 
         this.item = this.props.item;
     }
 
+    componentWillMount() {
+        if(this.item.volID.length > 1) {
+            var types = [], selectedType, possibleTypes = [
+                { label: "In person", value: 0 },
+                { label: "Webinar", value: 1 },
+            ];
+
+            for(var i in this.item.volID){
+                if(this.item.volID[i] != null){
+                    types.push(possibleTypes[i]);
+                }
+            }
+
+            selectedType = types[0].value;
+            this.setState({types, selectedType});
+        }
+
+    }
+
+    checkQuantity = (item) => {
+
+        var quantity = parseFloat(item.OrderDetailQty);
+
+        if(isNaN(quantity) || quantity <= 0 ) {
+            console.log('Please enter a valid value for the quantity');
+            return false;
+        }
+
+        //  Must be in increments of 1
+        else if ((parseFloat(quantity) / parseInt(quantity) != 1.0)) {
+            return false;
+        }
+
+        return true;
+    }
+
     addToCart = () => {
-        // this.props.addCartItem();
-        this.props.closeDialog();
+
+        var quantity = this.state.quantity;
+        var item = this.item;
+
+        // Create cart item
+        var cartItem = {};
+        cartItem.Name = String(item.Name);
+        cartItem.MerchandiseID = item.volID[0];
+        cartItem.salesCategory = parseInt(item.salesCategory);
+        cartItem.type = 4;
+        cartItem.details = "";
+        cartItem.OrderDetailQty = parseFloat(quantity);
+        cartItem.dispQuantity = parseInt(quantity);
+
+
+        if(this.item.volID.length > 1) {
+            switch(this.state.selectedType) {
+                case 0:
+                    cartItem.MerchandiseID = item.volID[0];
+                    cartItem.details = "In person | ";
+                    cartItem.details += "Class Date(s): " + item.TagDate + "\nClass Location: " + item.TagLocation;
+                    break;
+                case 1:
+                    cartItem.MerchandiseID = item.volID[1];
+                    cartItem.details = "Webinar | ";
+                    cartItem.details += "Class Date(s): " + item.TagDate + "\nClass Location: " + item.TagLocation;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if(SalesLib.YeastEssentials.includes(cartItem.MerchandiseID))
+        {
+            console.log('Attending Yeast Essentials?', 'If you are considering or already attending Yeast Essentials 2.0, consider attending the 1 day Lab Practicum course that follows each Yeast Essentials course and allows you to apply the skills that you learn.');
+        }
+
+        if(this.checkQuantity(cartItem)) {
+            this.props.addItem({ cartItem });
+            this.props.closeDialog();
+        }
+    }
+
+    setType = (event) => {
+        this.setState({selectedType: event.target.value});
+    }
+
+    changeQuantity = (event) => {
+        this.setState({quantity: event.target.value})
     }
 
     render() {
@@ -88,24 +177,31 @@ class EducationDialog extends Component {
                         style={{ marginTop: 5 }}
                         direction={"row"}
                     >
-                        <Grid
-                            item
-                            xs
-                            container
-                            spacing={24}
-                            direction={"row"}
-                            justify="flex-start"
-                        >
+                        {this.state.types.length > 0 && (
                             <Grid item>
-                                <TextField
-                                    id="quantity"
-                                    label="Quantity"
-                                    className={classes.quantity}
-                                    value={this.state.quantity}
-                                    type="number"
-                                />
+                                <FormControl>
+                                    <InputLabel>
+                                        Class Type
+                                    </InputLabel>
+                                    <Select value={this.state.selectedType} onChange={this.setType}>
+                                        {this.state.types.map((option, i) => (
+                                            <MenuItem key={i} value={option.value}>{option.label}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </Grid>
+                        )}
+                        <Grid item>
+                            <TextField
+                                id="quantity"
+                                label="Quantity"
+                                className={classes.quantity}
+                                value={this.state.quantity}
+                                onChange={this.changeQuantity}
+                                type="number"
+                            />
                         </Grid>
+
                     </Grid>
                 </DialogContent>
                 <DialogActions>
@@ -164,10 +260,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
-    };
-};
+const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(EducationDialog));

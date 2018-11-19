@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+import { connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -20,11 +21,13 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
+import { cartActions } from '../../../redux/actions/cartActions';
+
 class YeastDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            quantity: "0",
+            quantity: '1',
             packOptions: [
                 { label: "Nano", value: "0" },
                 { label: "1.5L", value: "1" },
@@ -101,45 +104,224 @@ class YeastDialog extends Component {
         }
     }
 
-    addToCart = (item, nonYeast = false) => {
+    checkQuantity = (item) => {
+        try
+        {
+            var quantity = parseFloat(item.OrderDetailQty);
+
+            if(isNaN(quantity) || quantity <= 0 ) {
+
+                // TO-DO: Display message to user
+                console.log('Please enter a valid value for the quantity');
+                return false;
+            }
+
+
+            // Wild Yeast must have mimimum 1L
+            if(item.salesCategory == 4 && quantity < 1.0){
+                console.log('Notice', 'The minimum quantity sold for Wild Yeast strains is 1L. Please adjust your quantity');
+                return false;
+            }
+
+            // Custom Pour Strains
+            if(item.type == 5)
+            {
+
+                // Vault strains must have minimum 1.5L Custom Pour
+                if(item.salesCategory == 32 && quantity < 1.5){
+
+                    // TO-DO: Display message to user
+                    console.log('Notice', 'The minimum quantity sold for Custom Pour Vault strains is 1.5L. Please adjust your quantity');
+                    return false;
+                }
+
+                // Bacteria sold in 1L increments
+                if(item.salesCategory == 32)
+                {
+                    if((parseFloat(quantity)/parseInt(quantity) != 1.0))
+                    {
+                        quantity = Math.round(quantity);
+
+                        // TO-DO: Display message to user
+                        console.log('Notice', 'Quantities for this strain must be in 1L increments, your value has been rounded accordingly. Please review your cart.');
+                    }
+                }
+
+                // All other custom pour strains sold in 0.5L increments
+                else
+                {
+                    if((parseFloat(quantity)/parseInt(quantity) != 1.0))
+                    {
+                        if(quantity % 0.5 != 0)
+                        {
+                            var decimal = parseFloat(quantity) - parseInt(quantity);
+                            if(decimal >= 0.75)
+                            {
+                                quantity = Math.ceil(quantity);
+                            }
+                            else if(decimal < 0.25)
+                            {
+                                quantity = Math.floor(quantity);
+                            }
+                            else
+                            {
+                                quantity = parseInt(quantity) + 0.5;
+                            }
+
+                            // TO-DO: Display message to user
+                            console.log('Notice', 'Quantities for this strain must be in 0.5L increments, your value has been rounded accordingly. Please review your cart.');
+                        }
+                    }
+                }
+
+                item.size = quantity;
+                item.details = quantity + 'L Custom Pour';
+                item.OrderDetailQty = parseFloat(quantity);
+            }
+
+            // Non-custom pour strains must be in increments of 1
+            else if ((parseFloat(quantity) / parseInt(quantity) != 1.0)) {
+                return false;
+            }
+
+            return true;
+
+        }
+        catch(error) {
+            console.log('Could not check quantity', error);
+        }
+    }
+
+
+    addToCart = () => {
         try {
-            var volIdIndex;
-            // var quantity = parseFloat(this.state.quantity);
-            var quantity = parseFloat(2);
 
-            if (!nonYeast) {
-                var instance = this;
+            var packaging = this.state.packaging;
+            var pack = this.state.pack;
+            var quantity = this.state.quantity
+            var item = this.item;
 
-                if (quantity == 0) {
-                    quantity = 1;
+
+            // Create cart item
+            var cartItem = {};
+            cartItem.Name = String(item.Name);
+            cartItem.salesCategory = parseInt(item.salesCategory);
+            cartItem.dispQuantity = parseInt(quantity);
+            cartItem.OrderDetailQty = parseFloat(quantity);
+
+
+            // PurePitch / 1L Nalgene bottle
+            if(packaging == 'pp' || packaging == 'nl') {
+
+                switch(pack) {
+
+                    // Nano
+                    case '0':
+                        cartItem.MerchandiseID = item.volID[0];
+                        cartItem.details = "Nano";
+                        break;
+
+                    // 1.5L
+                    case '1':
+                        cartItem.MerchandiseID = item.volID[1];
+                        cartItem.details = "1.5L";
+                        break;
+
+                    // 2L
+                    case '2':
+                        cartItem.MerchandiseID = item.volID[2];
+                        cartItem.details = "2L"
+                        break;
+                    default:
+                        console.log('cannot add to cart', item, packaging, pack, quantity);
+                        return;
                 }
 
-                if (quantity == "" || isNaN(parseFloat(quantity))) {
-                    console.log("Please enter a valid value for the quantity");
-                    return;
+                if(item.purePitch) {
+                    cartItem.details = "PurePitch® " + cartItem.details;
                 }
 
-                var volIdIndex;
-                if (!nonYeast) {
-                    // var packagingType = this.state.packaging.value;
+                cartItem.type = 1;
 
-                    // if(packagingType == 'pp')
-                    // {
-                    //     volIdIndex = parseInt(this.state.pack.value);
-                    // }
-                    // else if(packagingType == "3")
-                    // {
-                    //     volIdIndex = 3;
-                    // }
-                    // else
-                    // {
-                    //     volIdIndex = parseInt(packagingType);
-                    // }
+            }
+            else
+            {
+                switch(packaging) {
 
-                    volIdIndex = 2;
-                } else {
-                    volIdIndex = 0;
+                    // Yeast
+                    case '0':
+                        cartItem.MerchandiseID = item.volID[0];
+                        cartItem.type = 3;
+                        cartItem.details = "Yeast";
+                        break;
+
+                    // Custom Pour
+                    case '3':
+                        cartItem.MerchandiseID = item.volID[3];
+                        cartItem.type = 5;
+                        cartItem.dispQuantity = 1;
+                        cartItem.size = parseFloat(quantity);
+                        cartItem.details = quantity + 'L Custom Pour';
+                        cartItem.relatives = [];
+                        var multipliers = [0.5, 1.5, 2];
+
+                        for (var i = 0; i < 3; i++)
+                        {
+                            if(item.volID[i])
+                            {
+                                var relative = {};
+                                relative.id = parseInt(item.volID[i]);
+                                if(isNaN(relative.id))
+                                {
+                                    throw { message: 'Invalid VolID Index! in Relatives', code: 0};
+                                }
+                                relative.mult = multipliers[i];
+                                cartItem.relatives.push(relative);
+                            }
+                        }
+                        break;
+
+                    // Homebrew
+                    case '4':
+                        cartItem.MerchandiseID = item.volID[4];
+                        cartItem.type = 2;
+                        cartItem.details = "Homebrew packs";
+                        break;
+
+                    // Slant
+                    case '5':
+                        cartItem.MerchandiseID = item.volID[5];
+                        cartItem.type = 3;
+                        cartItem.details = "Slants";
+                        break;
+
+                    // 1L Nalgene Bottle
+                    case '6':
+                        cartItem.MerchandiseID = item.volID[6];
+                        cartItem.type = 1;
+                        cartItem.details = '1L Nalgene Bottle';
+                        break;
                 }
+            }
+
+
+
+            if(this.checkQuantity(cartItem)) {
+                this.props.addItem({ cartItem })
+                this.props.closeDialog();
+            }
+
+        }
+        catch(error) {
+            console.log('could not add item to cart', error);
+        }
+
+    }
+
+
+    setPack = (event) => {
+        this.setState({pack: event.target.value});
+    }
 
                 if (parseInt(quantity) < 0) {
                     quantity = 1;
@@ -226,6 +408,10 @@ class YeastDialog extends Component {
 
         this.setState({ packaging: event.target.value, pack: pack });
     };
+
+    changeQuantity = (event) => {
+        this.setState({quantity: event.target.value})
+    }
 
     render() {
         const { classes, theme } = this.props;
@@ -344,6 +530,7 @@ class YeastDialog extends Component {
                                     label="Quantity"
                                     className={classes.quantity}
                                     value={this.state.quantity}
+                                    onChange={this.changeQuantity}
                                     type="number"
                                 />
                             </Grid>
@@ -396,12 +583,7 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        addCartItem: (item, volIdIndex, quantity) =>
-            dispatch({ type: "ADD_TO_CART", item, volIdIndex, quantity })
-    };
-};
+const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
 
 export default connect(
     mapStateToProps,

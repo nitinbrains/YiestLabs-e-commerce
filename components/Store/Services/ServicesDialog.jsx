@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -20,25 +21,65 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
+import { cartActions } from '../../../redux/actions/cartActions';
+
 class ServicesDialog extends Component {
 
     constructor(props)
     {
         super(props);
         this.state = {
-            quantity: '0',
+            quantity: '1',
         };
 
         this.item = this.props.item;
     }
 
-    componentWillMount() {
+    checkQuantity = (item) => {
 
+        var quantity = parseFloat(item.OrderDetailQty);
+
+        if(isNaN(quantity) || quantity <= 0 ) {
+            console.log('Please enter a valid value for the quantity');
+            return false;
+        }
+
+        //  Must be in increments of 1
+        else if ((parseFloat(quantity) / parseInt(quantity) != 1.0)) {
+            return false;
+        }
+
+        return true;
     }
 
     addToCart = () => {
-        // this.props.addCartItem();
-        this.props.closeDialog();
+
+        var quantity = this.state.quantity;
+        var item = this.item;
+
+        // Create cart item
+        var cartItem = {};
+        cartItem.Name = String(item.Name);
+        cartItem.MerchandiseID = item.volID[0];
+        cartItem.salesCategory = parseInt(item.salesCategory);
+        cartItem.type = 4;
+        if(cartItem.Name.includes('LSQC')) {
+            cartItem.details = "Save BIG on our most popular analytical tests! Participate in Big QC Day by purchasing your kit by August 6th, sending your samples in by August 20th and we’ll get you results by September 10th.";
+        }
+        else {
+            cartItem.details = "Please send your samples to:\nWhite Labs\nAttn: Analytical Lab\n9450 Candida Street\nSan Diego, CA 92126\nFor information on how much to send please visit:";
+            cartItem.details_link = "https://www.whitelabs.com/other-products/analytical-lab-services)";
+        }
+        cartItem.OrderDetailQty = parseFloat(quantity);
+        cartItem.dispQuantity = parseInt(quantity);
+
+        if(this.checkQuantity(cartItem)) {
+            this.props.addItem({ cartItem });
+            this.props.closeDialog();
+        }
+    }
+    changeQuantity = (event) => {
+        this.setState({quantity: event.target.value})
     }
 
     render() {
@@ -86,6 +127,7 @@ class ServicesDialog extends Component {
                                     label="Quantity"
                                     className={classes.quantity}
                                     value={this.state.quantity}
+                                    onChange={this.changeQuantity}
                                     type="number"
                                 />
                             </Grid>
@@ -96,6 +138,7 @@ class ServicesDialog extends Component {
                     <Button
                         onClick={this.addToCart}
                         color="primary"
+                        onChange={this.changeQuantity}
                     >
                         Add to Cart
                     </Button>
@@ -148,10 +191,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
-    };
-};
+const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(ServicesDialog));

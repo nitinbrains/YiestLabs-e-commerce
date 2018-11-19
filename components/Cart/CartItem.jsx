@@ -25,6 +25,39 @@ class CartItem extends Component {
 
     }
 
+    checkQuantity = (item) => {
+
+        var quantity = parseFloat(item.OrderDetailQty);
+
+        if(isNaN(quantity) || quantity <= 0 ) {
+            console.log('Please enter a valid value for the quantity');
+            return false;
+        }
+
+        //  Must be in increments of 1
+        else if ((parseFloat(quantity) / parseInt(quantity) != 1.0)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    changeQuantity = (event) => {
+        try {
+
+            if(this.checkQuantity(cartItem)) {
+
+                this.props.updateItem({ index: this.props.index, quantity: event.target.value });
+                this.setState({ quantity: event.target.value });
+            }
+
+        }
+        catch(error) {
+            console.log('could not add item to cart', error);
+        }
+
+    }
+
     render(){
 
         const { classes, theme } = this.props;
@@ -46,6 +79,9 @@ class CartItem extends Component {
                         >
                             {this.props.item.Name}
                         </Typography>
+                        <Typography>
+                            {this.props.item.details}
+                        </Typography>
                     </CardContent>
                     <CardContent className={classes.content}>
                         <TextField
@@ -53,10 +89,7 @@ class CartItem extends Component {
                             label="Quantity"
                             className={classes.quantity}
                             value={this.state.quantity}
-                            onChange={(event) => {
-                                this.props.updateItem({ index: this.props.index, quantity: event.target.value });
-                                this.setState({ quantity: event.target.value });
-                            }}
+                            onChange={this.changeQuantity}
                             type="number"
                         />
                         <Button variant="contained" onClick={() => this.props.removeItem(this.props.index)}>DELETE</Button>
