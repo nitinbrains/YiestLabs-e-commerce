@@ -192,7 +192,7 @@ class Store extends Component {
 
         return (
             <NavBarUserSearchDrawerLayout>
-                <Grid container spacing={24}>
+                <Grid className={classes.store} container spacing={24}>
                     {this.props.store.itemsToShow.map((item, i) => {
                         return this.getCard(item, i)
                     })}
@@ -212,8 +212,19 @@ class Store extends Component {
 }
 
 const styles = theme => ({
-    hide: {
-        display: "none"
+    store: {
+        [theme.breakpoints.up("md")]: {
+            paddingLeft: 50,
+            paddingRight: 50,
+        },
+        [theme.breakpoints.up("lg")]: {
+            paddingLeft: 100,
+            paddingRight: 100,
+        },
+        [theme.breakpoints.up("xl")]: {
+            paddingLeft: 150,
+            paddingRight: 150,
+        }
     }
 });
 

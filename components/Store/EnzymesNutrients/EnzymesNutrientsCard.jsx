@@ -39,7 +39,7 @@ class EnzymesNutrientsCard extends Component {
                 spacing={24}
                 onClick={this.props.onClick.bind(this, this.props.item)}
             >
-                <Paper
+                <div
                     className={classes.card}
                 >
                     <Grid
@@ -65,7 +65,7 @@ class EnzymesNutrientsCard extends Component {
                             </Typography>
                         </Grid>
                     </Grid>
-                </Paper>
+                </div>
             </Grid>
         )
     }
@@ -73,14 +73,10 @@ class EnzymesNutrientsCard extends Component {
 
 const styles = theme => ({
     card: {
-        ...theme.mixins.gutters(),
-        paddingTop: theme.spacing.unit * 2,
-        paddingBottom: theme.spacing.unit * 2,
-        height: 250,
-        transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
-        })
+        border: "solid 1px",
+        borderColor: "#CCCCCC",
+        padding: theme.spacing.unit * 2,
+        height: 200,
     },
     cardHover: {
         transition: theme.transitions.create("width", {
