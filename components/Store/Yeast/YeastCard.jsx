@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect} from 'react-redux';
+import { connect } from "react-redux";
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -19,118 +19,222 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-
 class YeastCard extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
             hover: false,
+            img: null,
+            color: null
+        };
+    }
+
+    componentWillMount() {
+        switch (this.props.item.salesCategory) {
+            case "3":
+                this.setState({
+                    img:
+                        "url('../../../static/images/categories/Category-ale.jpg')",
+                    color: '#FF9933'
+                });
+                break;
+            case "5":
+                this.setState({
+                    img:
+                        "url('../../../static/images/categories/Category-lager.jpg')",
+                        color: '#FFCC33'
+                });
+                break;
+            case "6":
+                this.setState({
+                    img:
+                        "url('../../../static/images/categories/Category-wine.jpg')",
+                        color: '#9966CC'
+                });
+                break;
+            case "7":
+                this.setState({
+                    img:
+                        "url('../../../static/images/categories/Category-Distilling.jpg')",
+                        color: '#6666CC'
+                });
+                break;
+            case "8":
+                this.setState({
+                    img:
+                        "url('../../../static/images/categories/Category-belgian.jpg')",
+                        color: '#66CCCCCC'
+                });
+                break;
+            case "4":
+                this.setState({
+                    img:
+                        "url('../../../static/images/categories/Category-wild.jpg')",
+                        color: '#CC9966'
+                });
+                break;
+            case "32":
+                this.setState({
+                    img:
+                        "url('../../../static/images/categories/Category-vault.jpg')",
+                        color: '#B3B3B3'
+                });
+                break;
+            default:
         }
     }
 
     handleItemHoverEnter = () => {
-        this.setState({hover: true});
-    }
+        this.setState({ hover: true });
+    };
 
     handleItemHoverLeave = () => {
-        this.setState({hover: false});
-    }
+        this.setState({ hover: false });
+    };
 
     render() {
-
         const { classes, theme, item } = this.props;
 
-        const spaceIndex = item.Name.indexOf(" ")
+        const spaceIndex = item.Name.indexOf(" ");
         const itemID = item.Name.substr(0, spaceIndex);
-        const itemName = item.Name.substr(spaceIndex + 1)
+        const itemName = item.Name.substr(spaceIndex + 1);
 
         return (
             <Grid
                 item
+                xs={12}
+                sm={6}
+                md={3}
                 spacing={24}
                 onMouseEnter={this.handleItemHoverEnter}
                 onMouseLeave={this.handleItemHoverLeave}
                 onClick={this.props.onClick.bind(this, this.props.item)}
             >
-                <Paper
+                <div
                     className={classes.card}
+                    style={
+                        !this.state.hover
+                            ? {
+                                  backgroundImage: this.state.img,
+                                  backgroundRepeat: "no-repeat",
+                                  backgroundSize: "cover"
+                              }
+                            : { backgroundColor: "#fff" }
+                    }
                 >
-                {!this.state.hover ? (
-                    <Grid
-                        item
-                        container
-                        direction={"column"}
-                        xs
-                        justify="center"
-                        alignItems="center"
-                    >
-                        <Grid item xs>
-                            <Typography
-                                variant="h3"
-                                color="textPrimary"
+                    {!this.state.hover ? (
+                        <Grid
+                            item
+                            container
+                            direction={"column"}
+                            spacing={8}
+                        >
+                            <Grid item xs className={classes.info}>
+                                <img
+                                    src="../../static/images/icons/Ale-icon.svg"
+                                    height="40"
+                                />
+                                <Typography variant="h5" color="secondary">
+                                    {itemID}
+                                </Typography>
+                                <Typography
+                                    variant="subheading"
+                                    color="secondary"
+                                >
+                                    {itemName}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    ) : (
+                        <Grid
+                            item
+                            container
+                            direction={"column"}
+                            spacing={8}
+                        >
+                            <Grid item xs>
+                                <Typography
+                                    className={classes.info}
+                                    variant="subtitle1"
+                                    style={{color:this.state.color}}
+                                >
+                                    {itemID}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <div
+                                    style={{
+                                        backgroundColor: this.state.color,
+                                        padding: 1,
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    <Typography
+                                        variant="subtitle1"
+                                        color="secondary"
+                                    >
+                                        {itemName}
+                                    </Typography>
+                                </div>
+                            </Grid>
+                            <Grid
+                                item
+                                xs
+                                container
+                                direction={"row"}
+                                spacing={8}
                             >
-                                {itemID}
-                            </Typography>
-                            <Typography
-                                variant="subheading"
-                                color="textPrimary"
-                            >
-                                {itemName}
-                            </Typography>
+                                <Grid item xs={6}>
+                                    <div className={classes.info}>
+                                        <Typography>
+                                            Fermentation Temp
+                                        </Typography>
+                                        <Typography style={{color:this.state.color}}>
+                                            {item.optFermentTempF |
+                                                item.optFermentTempF}
+                                        </Typography>
+                                    </div>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <div className={classes.info}>
+                                        <Typography>Flocculation</Typography>
+                                        <Typography style={{color:this.state.color}}>
+                                            {item.flocculation}
+                                        </Typography>
+                                    </div>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <div className={classes.info}>
+                                        <Typography>Alcohol Tol.</Typography>
+                                        <Typography style={{color:this.state.color}}>
+                                            {item.alcoholTol}
+                                        </Typography>
+                                    </div>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <div className={classes.info}>
+                                        <Typography>Attenuation</Typography>
+                                        <Typography style={{color:this.state.color}}>
+                                            {item.attenuation}
+                                        </Typography>
+                                    </div>
+                                </Grid>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                ) : (
-                    <Grid
-                        item
-                        xs
-                        container
-                        direction={"column"}
-                        spacing={8}
-                        justify="flex-end"
-                    >
-                        <Grid item xs>
-                            <div className={classes.info}>
-                                <Typography>Fermentation Temp</Typography>
-                                <Typography>{item.optFermentTempF | item.optFermentTempF}</Typography>
-                            </div>
-                        </Grid>
-                        <Grid item xs>
-                            <div className={classes.info}>
-                                <Typography>Flocculation</Typography>
-                                <Typography>{item.flocculation}</Typography>
-                            </div>
-                        </Grid>
-                        <Grid item xs>
-                            <div className={classes.info}>
-                                <Typography>Alcohol Tol.</Typography>
-                                <Typography>{item.alcoholTol}</Typography>
-                            </div>
-                        </Grid>
-                        <Grid item xs>
-                            <div className={classes.info}>
-                                <Typography>Attenuation</Typography>
-                                <Typography>{item.attenuation}</Typography>
-                            </div>
-                        </Grid>
-                    </Grid>
-                )}
-                </Paper>
+                    )}
+                </div>
             </Grid>
-        )
+        );
     }
 }
 
 const styles = theme => ({
     card: {
-        ...theme.mixins.gutters(),
+        border: "solid 1px",
+        borderColor: "#CCCCCC",
         paddingTop: theme.spacing.unit * 2,
         paddingBottom: theme.spacing.unit * 2,
-        height: "100%",
-        transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
-        })
+        height: 200,
     },
     cardHover: {
         transition: theme.transitions.create("width", {
@@ -139,36 +243,30 @@ const styles = theme => ({
         })
     },
     info: {
-        alignItems: "center",
-        padding: 5,
-        backgroundColor: "#e4e4e4",
         textAlign: "center"
     },
-    quantity: {
-        width: 50
-    },
-    hide: {
-        display: "none"
-    }
 });
-
 
 YeastCard.propTypes = {
     classes: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.user,
         inventory: state.inventory
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(YeastCard));
+const mapDispatchToProps = dispatch => {
+    return {
+        addCartItem: (item, volIdIndex, quantity) =>
+            dispatch({ type: "ADD_TO_CART", item, volIdIndex, quantity })
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(YeastCard));

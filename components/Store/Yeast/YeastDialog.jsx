@@ -24,110 +24,83 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { cartActions } from '../../../redux/actions/cartActions';
 
 class YeastDialog extends Component {
-
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
         this.state = {
             quantity: '1',
             packOptions: [
-                { label: 'Nano', value: '0' },
-                { label: '1.5L', value: '1' },
-                { label: '2L', value: '2' }
+                { label: "Nano", value: "0" },
+                { label: "1.5L", value: "1" },
+                { label: "2L", value: "2" }
             ],
-            pack: '',
+            pack: "",
             packagingOptions: [],
-            packaging: '',
+            packaging: ""
         };
 
         this.item = this.props.item;
     }
 
     componentWillMount() {
-
-        if(this.item.volID[6])
-        {
-            this.setState({packaging: '6', pack: '6'});
-        }
-        else if(this.item.volID[0] && this.item.volID[2])
-        {
-            if(this.item.purePitch)
-            {
-                this.setState({packaging: 'pp', pack: '0'});
+        if (this.item.volID[6]) {
+            this.setState({ packaging: "6", pack: "6" });
+        } else if (this.item.volID[0] && this.item.volID[2]) {
+            if (this.item.purePitch) {
+                this.setState({ packaging: "pp", pack: "0" });
+            } else {
+                this.setState({ packaging: "nl", pack: "0" });
             }
-            else
-            {
-                this.setState({packaging: 'nl', pack: '0'});
-            }
-        }
-        else if(this.item.volID[0])
-        {
-            this.setState({packaging:'0', pack: null});
-        }
-        else
-        {
-            this.setState({packaging: '3', pack: null});
+        } else if (this.item.volID[0]) {
+            this.setState({ packaging: "0", pack: null });
+        } else {
+            this.setState({ packaging: "3", pack: null });
         }
 
         this.filterPackageTypes();
     }
 
-    filterPackageTypes()
-    {
-        try
-        {
+    filterPackageTypes() {
+        try {
             var PackageTypes = [
-                {label: "1L Nalgene Bottle", value: "6"},
-                {label: "PurePitch", value: "pp"},
-                {label: "Nalgene Bottle", value: "nl"},
-                {label: "Custom Pour", value: "3"},
-                {label: "Homebrew", value: "4"},
-                {label: "Slant", value: "5"},
-                {label: "Yeast", value: "0"}
+                { label: "1L Nalgene Bottle", value: "6" },
+                { label: "PurePitch", value: "pp" },
+                { label: "Nalgene Bottle", value: "nl" },
+                { label: "Custom Pour", value: "3" },
+                { label: "Homebrew", value: "4" },
+                { label: "Slant", value: "5" },
+                { label: "Yeast", value: "0" }
             ];
 
-            var subsidiary = 2, FilteredPackageTypes = [];
+            var subsidiary = 2,
+                FilteredPackageTypes = [];
 
-            if(this.item.volID[6])
-            {
+            if (this.item.volID[6]) {
                 FilteredPackageTypes.push(PackageTypes[0]);
-            }
-            else if(this.item.volID[0] && this.item.volID[2])
-            {
-                if(this.item.purePitch)
-                {
+            } else if (this.item.volID[0] && this.item.volID[2]) {
+                if (this.item.purePitch) {
                     FilteredPackageTypes.push(PackageTypes[1]);
-                }
-                else
-                {
+                } else {
                     FilteredPackageTypes.push(PackageTypes[2]);
                 }
-            }
-            else if(this.item.volID[0])
-            {
+            } else if (this.item.volID[0]) {
                 FilteredPackageTypes.push(PackageTypes[6]);
             }
 
-            if(this.item.volID[3])
-            {
+            if (this.item.volID[3]) {
                 FilteredPackageTypes.push(PackageTypes[3]);
             }
 
-            if(this.item.volID[4] && subsidiary == 2)
-            {
+            if (this.item.volID[4] && subsidiary == 2) {
                 FilteredPackageTypes.push(PackageTypes[4]);
             }
 
-            if(this.item.volID[5])
-            {
+            if (this.item.volID[5]) {
                 FilteredPackageTypes.push(PackageTypes[5]);
             }
 
-            this.setState({packagingOptions: FilteredPackageTypes});
-        }
-        catch(err)
-        {
-            console.log('error in filterPackageTypes', err);
+            this.setState({ packagingOptions: FilteredPackageTypes });
+        } catch (err) {
+            console.log("error in filterPackageTypes", err);
         }
     }
 
@@ -350,16 +323,16 @@ class YeastDialog extends Component {
         this.setState({pack: event.target.value});
     }
 
-    setPackaging = (event) => {
+    setPackaging = event => {
         var packaging = event.target.value;
         var pack;
 
-        if(packaging == 'pp' || packaging == 'nl') {
-            pack = '0'
+        if (packaging == "pp" || packaging == "nl") {
+            pack = "0";
         }
 
-        this.setState({packaging: event.target.value, pack: pack});
-    }
+        this.setState({ packaging: event.target.value, pack: pack });
+    };
 
     changeQuantity = (event) => {
         this.setState({quantity: event.target.value})
@@ -374,50 +347,48 @@ class YeastDialog extends Component {
                     {this.item.Name}
                 </DialogTitle>
                 <DialogContent>
-                    <Grid
-                        item
-                        xs
-                        container
-                        direction={"row"}
-                        spacing={8}
-                        justify="flex-end"
-                    >
-                        <Grid item xs>
-                            <div className={classes.info}>
-                                <Typography>Fermentation Temp</Typography>
-                                <Typography>{this.item.optFermentTempF | this.item.optFermentTempF}</Typography>
+                    <Grid container spacing={24}>
+                        <Grid item xs={1}>
+                            <div className={classes.circle}>
+                                <img
+                                    src="../../static/images/icons/Ale-icon.svg"
+                                    height="20"
+                                />
                             </div>
                         </Grid>
-                        <Grid item xs>
-                            <div className={classes.info}>
-                                <Typography>Flocculation</Typography>
-                                <Typography>{this.item.flocculation}</Typography>
-                            </div>
-                        </Grid>
-                        <Grid item xs>
-                            <div className={classes.info}>
-                                <Typography>Alcohol Tol.</Typography>
-                                <Typography>{this.item.alcoholTol}</Typography>
-                            </div>
-                        </Grid>
-                        <Grid item xs>
-                            <div className={classes.info}>
-                                <Typography>Attenuation</Typography>
-                                <Typography>{this.item.attenuation}</Typography>
-                            </div>
+                        <Grid
+                            item
+                            container
+                            xs
+                            direction={"column"}
+                            spacing={4}
+                        >
+                            <Grid item xs justify="center">
+                                <Typography>
+                                        Attenuation: {this.item.attenuation} |
+                                        Flocculation: {this.item.flocculation} |
+                                        Alcohol Tol.: {this.item.alcoholTol} |
+                                </Typography>
+                            </Grid>
+                            <Grid item xs direction={"row"}>
+                                <Typography>
+                                    Fermentation Temp:{" "}
+                                    {this.item.optFermentTempF |
+                                        this.item.optFermentTempF}
+                                </Typography>
+                            </Grid>
                         </Grid>
                     </Grid>
+
                     <Grid
                         item
                         container
                         direction={"column"}
                         spacing={8}
-                        style={{ marginTop: 5 }}
+                        style={{ marginTop: 20 }}
                     >
                         <Grid item>
-                            <Typography>
-                                {this.item.Description}
-                            </Typography>
+                            <Typography>{this.item.Description}</Typography>
                         </Grid>
                     </Grid>
                     <Grid
@@ -438,13 +409,21 @@ class YeastDialog extends Component {
                         >
                             <Grid item>
                                 <FormControl>
-                                    <InputLabel>
-                                        Packaging
-                                    </InputLabel>
-                                    <Select value={this.state.packaging} onChange={this.setPackaging}>
-                                        {this.state.packagingOptions.map((option, i) => (
-                                            <MenuItem key={i} value={option.value}>{option.label}</MenuItem>
-                                        ))}
+                                    <InputLabel>Packaging</InputLabel>
+                                    <Select
+                                        value={this.state.packaging}
+                                        onChange={this.setPackaging}
+                                    >
+                                        {this.state.packagingOptions.map(
+                                            (option, i) => (
+                                                <MenuItem
+                                                    key={i}
+                                                    value={option.value}
+                                                >
+                                                    {option.label}
+                                                </MenuItem>
+                                            )
+                                        )}
                                     </Select>
                                 </FormControl>
                             </Grid>
@@ -452,10 +431,20 @@ class YeastDialog extends Component {
                                 <Grid item>
                                     <FormControl>
                                         <InputLabel>Pack</InputLabel>
-                                        <Select value={this.state.pack} onChange={this.setPack}>
-                                            {this.state.packOptions.map((option, i) => (
-                                                <MenuItem key={i} value={option.value}>{option.label}</MenuItem>
-                                            ))}
+                                        <Select
+                                            value={this.state.pack}
+                                            onChange={this.setPack}
+                                        >
+                                            {this.state.packOptions.map(
+                                                (option, i) => (
+                                                    <MenuItem
+                                                        key={i}
+                                                        value={option.value}
+                                                    >
+                                                        {option.label}
+                                                    </MenuItem>
+                                                )
+                                            )}
                                         </Select>
                                     </FormControl>
                                 </Grid>
@@ -474,10 +463,7 @@ class YeastDialog extends Component {
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button
-                        onClick={this.addToCart}
-                        color="primary"
-                    >
+                    <Button onClick={this.addToCart} color="primary">
                         Add to Cart
                     </Button>
                 </DialogActions>
@@ -487,26 +473,7 @@ class YeastDialog extends Component {
 }
 
 const styles = theme => ({
-    card: {
-        ...theme.mixins.gutters(),
-        paddingTop: theme.spacing.unit * 2,
-        paddingBottom: theme.spacing.unit * 2,
-        height: "100%",
-        transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
-        })
-    },
-    cardHover: {
-        transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen
-        })
-    },
     info: {
-        alignItems: "center",
-        padding: 5,
-        backgroundColor: "#e4e4e4",
         textAlign: "center"
     },
     quantity: {
@@ -514,6 +481,18 @@ const styles = theme => ({
     },
     hide: {
         display: "none"
+    },
+    circle: {
+        textAlign: "center",
+        position: "absolute",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#85FFC7",
+        borderRadius: "50%",
+        padding: 5,
+        width: 37,
+        height: 37
     }
 });
 
@@ -522,13 +501,16 @@ YeastDialog.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.user,
         inventory: state.inventory
-    }
-}
+    };
+};
 
 const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(YeastDialog));
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(YeastDialog));

@@ -20,13 +20,13 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 import { cartActions } from '../../../redux/actions/cartActions';
 
 class GiftShopDialog extends Component {
-
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
         this.state = {
             quantity: '1',
@@ -152,7 +152,15 @@ class GiftShopDialog extends Component {
                     {this.item.Name}
                 </DialogTitle>
                 <DialogContent>
-
+                    <div className={classes.close}>
+                        <IconButton
+                            color="inherit"
+                            size="small"
+                            aria-label="Menu"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    </div>
                     <Grid
                         item
                         container
@@ -161,9 +169,7 @@ class GiftShopDialog extends Component {
                         style={{ marginTop: 5 }}
                     >
                         <Grid item>
-                            <Typography>
-                                {this.item.Price}
-                            </Typography>
+                            <Typography>{this.item.Price}</Typography>
                         </Grid>
                     </Grid>
                     <Grid
@@ -244,7 +250,8 @@ const styles = theme => ({
     },
     hide: {
         display: "none"
-    }
+    },
+    close: { position: "absolute", right: 0, top: -5 }
 });
 
 GiftShopDialog.propTypes = {
@@ -252,13 +259,16 @@ GiftShopDialog.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.user,
         inventory: state.inventory
-    }
-}
+    };
+};
 
 const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(GiftShopDialog));
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(GiftShopDialog));

@@ -50,6 +50,14 @@ class NavBarUserSearchDrawerLayout extends Component {
 
         return (
             <div className={classes.root}>
+                <div
+                    style={{
+                        height: 50,
+                        width: "100%",
+                        backgroundColor: "#fafafa",
+                        position: "fixed"
+                    }}
+                />
                 <AppBar
                     className={classNames(
                         classes.appBar,
@@ -82,22 +90,19 @@ class NavBarUserSearchDrawerLayout extends Component {
                             </IconButton>
                         </Link>
 
-                        <div className={classes.logo}>
+                        <div className={classes.circle}>
                             <img
-                                src="../../static/images/logoHeader.png"
-                                height="40"
+                                src="../../static/images/logo_circle.png"
+                                height="130"
                             />
                         </div>
-
+                        <div style={{ flexGrow: 1 }} />
                         <Button color="secondary">Store</Button>
                         <Button color="secondary">Calculator</Button>
                         <Button color="secondary">About Us</Button>
 
                         <Link prefetch href="/cart">
-                            <IconButton
-                                color="inherit"
-                                aria-label="Menu"
-                            >
+                            <IconButton color="inherit" aria-label="Menu">
                                 <ShoppingCartIcon />
                             </IconButton>
                         </Link>
@@ -188,7 +193,9 @@ class NavBarUserSearchDrawerLayout extends Component {
                         />
                     </div>
                     <Divider />
-                    <List><SearchBarItems/></List>
+                    <List>
+                        <SearchBarItems />
+                    </List>
                     <Divider />
                 </Drawer>
             </div>
@@ -210,6 +217,7 @@ const styles = theme => ({
         flexGrow: 1
     },
     appBar: {
+        marginTop: 50,
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
@@ -231,6 +239,18 @@ const styles = theme => ({
         padding: "0 8px",
         ...theme.mixins.toolbar
     },
+    circle: {
+        position: "absolute",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        left: 70,
+        top: -60,
+        padding: 10,
+        margin: 20,
+        width: 150,
+        height: 150
+    },
     menuButton: {
         color: "white",
         marginLeft: -12,
@@ -248,6 +268,7 @@ const styles = theme => ({
         display: "none"
     },
     drawerPaper: {
+        marginTop: 50,
         whiteSpace: "nowrap",
         width: drawerWidth,
         transition: theme.transitions.create("width", {
@@ -272,7 +293,7 @@ const styles = theme => ({
         [theme.breakpoints.up("sm")]: {
             marginLeft: 72
         },
-        marginTop: 10,
+        marginTop: 80,
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing.unit * 3,
         transition: theme.transitions.create("margin", {
