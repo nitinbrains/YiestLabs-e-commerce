@@ -18,7 +18,7 @@ const initialState = {
 /* ------------- Hookup Reducers To Types ------------- */
 
 export default createReducer(initialState, {
-    [orderTypes.PLACE_ORDER_SUCCESS]: (state, { data }) => ({
+    [orderTypes.PREPARE_ORDER_SUCCESS]: (state, { data }) => ({
         ...data
     }),
     [orderTypes.SET_ITEMS_ATTEMPT]: (state, { data: { items } }) => ({
