@@ -6,14 +6,13 @@ import Utils from '../../lib/Utils';
 
 export function * prepareOrder(action) {
     const { responseSuccess, responseFailure } = action;
-
     try {
         const cart = yield select(state => state.cart);
         const user = yield select(state => state.user);
 
         var { res: order, error } = yield call(api.prepareOrder, {
             calcShip: true,
-            userId: user.id,
+            userID: user.id,
             shipMethod: user.shipmethod,
             items: cart.items
         });
@@ -75,8 +74,8 @@ export function * decrementShipDate(action) {
 function initOrder(order, user) {
 
     // initialize order
-    initDates(order);
-    setShippingOption("Ship All Together");
+    initDates(order, user);
+    changeShippingOption(order, user, "Ship All Together");
 }
 
 /*
@@ -88,7 +87,7 @@ function initOrder(order, user) {
          var item = order.items[i];
 
          var shipDate = new Date(item.shipDate);
-         var deliveryDate = getDeliveryDate(order, shipDate);
+         var deliveryDate = getDeliveryDate(order, user, shipDate);
 
          while(!checkDeliveryDate(user, deliveryDate) || !checkShipDate(user, shipDate))
          {
@@ -162,7 +161,7 @@ function initOrder(order, user) {
      }
      else
      {
-         transitDelay = transitDelay.daysInTransit;
+         transitDelay = parseInt(transitDelay.daysInTransit);
      }
 
      deliveryDate.setDate(deliveryDate.getDate() + transitDelay);
@@ -179,7 +178,7 @@ function initOrder(order, user) {
      var range = 0;
      if(transitTime)
      {
-         var range = transitTime.daysInTransitRange;
+         var range = parseInt(transitTime.daysInTransitRange);
      }
 
      date.setDate(date.getDate() + range);
@@ -230,12 +229,12 @@ function shipAllTogether(order, user) {
     // Find item with farthest ship date
     var index = Utils.findMaxDateIndex(shipDates);
 
-    for(var i = 0; i < items.length; i++)
+    for(var i = 0; i < order.items.length; i++)
     {
         if(i != index)
         {
             order.items[i].shipDate = new Date(order.items[index].shipDate);
-            order.items[i].deliveryDate = getDeliveryDate(order, user, items[i].shipDate)
+            order.items[i].deliveryDate = getDeliveryDate(order, user, order.items[i].shipDate)
         }
     }
 }

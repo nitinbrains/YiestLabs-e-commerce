@@ -1,8 +1,8 @@
 import { take, call, put, cancelled, takeEvery, all, fork, select  } from 'redux-saga/effects'
 
-function fetchUserInfo(userId)
+function fetchUserInfo(userID)
 {
-	return fetch(`/get-user-info?userId=${userId}`)
+	return fetch(`/get-user-info?userID=${userID}`)
     .then(response => response.json())
     .then(UserInfo => UserInfo)
     .catch(error => {

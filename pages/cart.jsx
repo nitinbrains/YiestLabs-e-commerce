@@ -18,6 +18,10 @@ import CartItem from "../components/Cart/CartItem";
 
 class Cart extends Component {
 
+    componentWillMount() {
+        console.log('user', this.props.user);
+    }
+
     render() {
         const { classes, theme, cart } = this.props;
 
@@ -67,7 +71,8 @@ Cart.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        cart: state.cart
+        cart: state.cart,
+        user: state.user
     };
 };
 

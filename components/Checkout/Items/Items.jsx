@@ -18,6 +18,10 @@ import { orderActions } from '../../../redux/actions/orderActions';
 
 class Items extends Component {
 
+	componentWillMount() {
+		console.log('checkout', this.props.checkout)
+	}
+
 	render() {
 		const { classes } = this.props;
 
