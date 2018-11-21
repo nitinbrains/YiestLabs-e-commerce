@@ -19,69 +19,25 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
+const YeastCardBackground = {
+    "3": "url('../../../static/images/categories/Category-ale.jpg')",
+    "4": "url('../../../static/images/categories/Category-wild.jpg')",
+    "5": "url('../../../static/images/categories/Category-lager.jpg')",
+    "6": "url('../../../static/images/categories/Category-wine.jpg')",
+    "7": "url('../../../static/images/categories/Category-Distilling.jpg')",
+    "8": "url('../../../static/images/categories/Category-belgian.jpg')",
+    "32": "url('../../../static/images/categories/Category-vault.jpg')"
+}
+
 class YeastCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             hover: false,
             img: null,
-            color: null
+            color: null,
+            img: YeastCardBackground[this.props.item.salesCategory]
         };
-    }
-
-    componentWillMount() {
-        switch (this.props.item.salesCategory) {
-            case "3":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-ale.jpg')",
-                    color: '#FF9933'
-                });
-                break;
-            case "5":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-lager.jpg')",
-                        color: '#FFCC33'
-                });
-                break;
-            case "6":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-wine.jpg')",
-                        color: '#9966CC'
-                });
-                break;
-            case "7":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-Distilling.jpg')",
-                        color: '#6666CC'
-                });
-                break;
-            case "8":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-belgian.jpg')",
-                        color: '#66CCCCCC'
-                });
-                break;
-            case "4":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-wild.jpg')",
-                        color: '#CC9966'
-                });
-                break;
-            case "32":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-vault.jpg')",
-                        color: '#B3B3B3'
-                });
-                break;
-            default:
-        }
     }
 
     handleItemHoverEnter = () => {
@@ -248,8 +204,8 @@ const styles = theme => ({
 });
 
 YeastCard.propTypes = {
-    classes: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired
+    classes: PropTypes.object.isurld,
+    theme: PropTypes.object.isurld
 };
 
 const mapStateToProps = state => {
