@@ -37,6 +37,7 @@ class YeastCard extends Component {
             img: null,
             color: null,
             img: YeastCardBackground[this.props.item.salesCategory]
+
         };
     }
 
