@@ -34,8 +34,9 @@ function(record, log, search, format, itemAvailability)
                return { error: {message: 'App version is out of date. Please download new version.', code: 0}};
            }
 
-           const userRecord = record.load({type: record.Type.CUSTOMER, id: response.userId});
-           const userLocation = userRecord.getValue({fieldId: 'subsidiary'});
+           const userRecord = record.load({type: record.Type.CUSTOMER, id: response.userID});
+           const userLocation = parseInt(userRecord.getValue({fieldId: 'subsidiary'}));
+           const territory = userRecord.getValue({fieldId: 'territory'});
 
            if(response.calcShip)
            {
@@ -45,14 +46,18 @@ function(record, log, search, format, itemAvailability)
                const hasPlates = orderContainsPlates(response.items);
 
                //Ship Date for hb items
-               const hbDate = hbShipDate();
+               const hbDate = HomebrewShipDate();
 
                //Populate Ship dates
                for (var i = response.items.length - 1; i >= 0; i--)
                {
                    try
                    {
-                       if(response.items[i].type == 4) //service items
+                       var ASHAvailability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ['11'], true);
+                       var SDAvailability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ['9'], true);
+
+                       // Service items
+                       if(response.items[i].type == 4)
                        {
                            var ServiceRecord = loadItem(response.items[i].type, response.items[i].MerchandiseID);
 
@@ -65,7 +70,6 @@ function(record, log, search, format, itemAvailability)
                                    {
                                        //no seats left
                                        response.items.splice(i, 1);
-                                       // log.debug({title: 'remove service item', details: response.items[i]});
                                        continue;
                                    }
                                }
@@ -83,17 +87,18 @@ function(record, log, search, format, itemAvailability)
                            else
                            {
                                response.items.splice(i, 1);
-                               // log.debug({title: 'couldn\'t find warehouse for service item', details: response.items[i]});
                                continue;
                            }
                            response.items[i].shipDate = new Date(hbDate);
                        }
-                       else if(response.items[i].type == 2) //hb
+
+                       // Homebrew
+                       else if(response.items[i].type == 2)
                        {
                            if(userLocation != 2)
                            {
                                response.items.splice(i, 1);
-                               // log.debug({title: 'remove HB item', details: response.items[i]});
+
                                continue;
                            }
                            else
@@ -102,7 +107,9 @@ function(record, log, search, format, itemAvailability)
                                response.items[i].Warehouse = 9;
                            }
                        }
-                       else if(response.items[i].type == 3) //nonyeast
+
+                       // Nonyeast
+                       else if(response.items[i].type == 3)
                        {
                            var itemRecord = loadItem(response.items[i].type, response.items[i].MerchandiseID);
                            var warehouses = itemRecord.getValue({fieldId: 'custitemwarehouse'});
@@ -111,46 +118,38 @@ function(record, log, search, format, itemAvailability)
                            {
                                var shipDate = new Date(SDLocalTime);
                                var leadTime = parseInt(itemRecord.getValue({fieldId: 'custitem_wl_order_lead_time'}));
-                               var Availability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ['9', '11'], true);
 
-                               var ASHAvail = searchAvailabilityResults(Availability, "11");
-                               var SDAvail = searchAvailabilityResults(Availability, "9");
+                               var ASHAvail = searchAvailabilityResults(ASHAvailability, "11");
+                               var SDAvail = searchAvailabilityResults(SDAvailability, "9");
 
-                               // log.debug({title: 'SDAvail', details: SDAvail});
-                               // log.debug({title: 'ASHAvail', details: ASHAvail});
-
-                               log.debug('hasPlates', hasPlates);
-
-                               // always check Asheville for plates orders
+                               // Always check Asheville for plates orders
                                if(hasPlates)
                                {
-
-                                   response.items[i].shipDate = valiDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                   response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
                                    response.items[i].Warehouse = 11;
                                }
                                else
                                {
-                                   if(parseInt(userRecord.getValue({fieldId: 'territory'})) >= 3)
+                                   if(territory >= 3)
                                    {
                                        if(response.items[i].OrderDetailQty <= parseInt(ASHAvail.availQtyToShip))
                                        {
-                                           response.items[i].shipDate = valiDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                           response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
                                            response.items[i].Warehouse = 11;
                                        }
                                        else if(response.items[i].OrderDetailQty <= parseInt(SDAvail.availQtyToShip))
                                        {
-                                           response.items[i].shipDate = valiDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                           response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
                                            response.items[i].Warehouse = 9;
                                        }
-                                       if(leadTime)
+                                       else if(leadTime)
                                        {
-                                           response.items[i].shipDate = valiDate(shipDate.setDate(SDLocalTime.getDate() + leadTime), false, userLocation, userLocation != 2, userLocation == 7, false);
+                                           response.items[i].shipDate = getShipDate(shipDate.setDate(SDLocalTime.getDate() + leadTime), false, userLocation, userLocation != 2, userLocation == 7, false);
                                            response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
                                        }
                                        else
                                        {
                                            response.items.splice(i, 1);
-                                           // log.debug({title: 'remove nonyeast item', details: response.items[i]});
                                            continue;
                                        }
 
@@ -159,23 +158,22 @@ function(record, log, search, format, itemAvailability)
                                    {
                                        if(response.items[i].OrderDetailQty <= parseInt(SDAvail.availQtyToShip))
                                        {
-                                           response.items[i].shipDate = valiDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                           response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
                                            response.items[i].Warehouse = 9;
                                        }
                                        else if(response.items[i].OrderDetailQty <= parseInt(ASHAvail.availQtyToShip))
                                        {
-                                           response.items[i].shipDate = valiDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                           response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
                                            response.items[i].Warehouse = 11;
                                        }
-                                       if(leadTime)
+                                       else if(leadTime)
                                        {
-                                           response.items[i].shipDate = valiDate(shipDate.setDate(SDLocalTime.getDate() + leadTime), false, userLocation, userLocation != 2, userLocation == 7, false);
+                                           response.items[i].shipDate = getShipDate(shipDate.setDate(SDLocalTime.getDate() + leadTime), false, userLocation, userLocation != 2, userLocation == 7, false);
                                            response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
                                        }
                                        else
                                        {
                                            response.items.splice(i, 1);
-                                           // log.debug({title: 'remove nonyeast item', details: response.items[i]});
                                            continue;
                                        }
                                    }
@@ -187,7 +185,9 @@ function(record, log, search, format, itemAvailability)
                                continue;
                            }
                        }
-                       else //purepitch
+
+                       // Purepitch
+                       else
                        {
                            var itemRecord = loadItem(response.items[i].type, response.items[i].MerchandiseID);
                            var warehouses = itemRecord.getValue({fieldId: 'custitemwarehouse'});
@@ -200,12 +200,12 @@ function(record, log, search, format, itemAvailability)
                                {
                                    var shipDate = new Date(SDLocalTime);
                                    leadTime = leadTime ? leadTime : 21;
-                                   response.items[i].shipDate = valiDate(shipDate.setDate(SDLocalTime.getDate() + leadTime), false, userLocation, userLocation != 2, userLocation == 7, false);
+                                   response.items[i].shipDate = getShipDate(shipDate.setDate(SDLocalTime.getDate() + leadTime), false, userLocation, userLocation != 2, userLocation == 7, false);
                                    response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
                                    continue;
                                }
 
-                               var Availability, checkProduction = true, isPurepitch = true;
+                               var checkProduction = true, isPurepitch = true;
                                var packMethods = itemRecord.getText({fieldId: 'custitem_wl_packaging_methods'});
                                if(packMethods == "Custom Pour")
                                {
@@ -214,52 +214,46 @@ function(record, log, search, format, itemAvailability)
 
                                if(userLocation == 7)
                                {
-                                   Availability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ['9', '30'], true);
-                                   var CPHAvail = searchAvailabilityResults(Availability, "30");
-                                   log.debug('CPHAvail', CPHAvail);
+                                   var CPHAvailability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ['30'], true);
+                                   var CPHAvail = searchAvailabilityResults(CPHAvailability, "30");
 
                                    if(parseInt(CPHAvail.availQtyToShip) >= response.items[i].OrderDetailQty)
                                    {
                                        checkProduction = false;
-                                       response.items[i].shipDate = valiDate(new Date(CPHAvail.dateValue), isPurepitch, userLocation, false, true, false);
+                                       response.items[i].shipDate = getShipDate(new Date(CPHAvail.dateValue), isPurepitch, userLocation, false, true, false);
                                        response.items[i].Warehouse = 30;
                                    }
                                }
                                else if(userLocation == 5)
                                {
-                                   Availability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ['9', '31'], true);
-                                   var HKAvail = searchAvailabilityResults(Availability, "31");
-
-                                   log.debug('HKAvail', HKAvail);
+                                   var HKAvailability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ['31'], true);
+                                   var HKAvail = searchAvailabilityResults(HKAvailability, "31");
 
                                    if(parseInt(HKAvail.availQtyToShip) >= response.items[i].OrderDetailQty)
                                    {
                                        checkProduction = false;
-                                       response.items[i].shipDate = valiDate(new Date(HKAvail.dateValue), isPurepitch, userLocation, false, false, false);
+                                       response.items[i].shipDate = getShipDate(new Date(HKAvail.dateValue), isPurepitch, userLocation, false, false, false);
                                        response.items[i].Warehouse = 31;
                                    }
                                }
                                else if(userLocation == 2)
                                {
-                                   Availability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ['9', '11'], true);
-                                   var SDAvail = searchAvailabilityResults(Availability, "9");
-                                   var ASHAvail = searchAvailabilityResults(Availability, "11");
 
-                                   log.debug('ASHAvail', ASHAvail);
-                                   log.debug('SDAvail', SDAvail);
+                                   var SDAvail = searchAvailabilityResults(SDAvailability, "9");
+                                   var ASHAvail = searchAvailabilityResults(ASHAvailability, "11");
 
-                                   if(parseInt(userRecord.getValue({fieldId: 'territory'})) >= 3)
+                                   if(territory >= 3)
                                    {
                                        if(parseInt(ASHAvail.availQtyToShip) >= response.items[i].OrderDetailQty && splitOrder)
                                        {
                                            checkProduction = false;
-                                           response.items[i].shipDate = valiDate(new Date(ASHAvail.dateValue), isPurepitch, userLocation, false, false, true);
+                                           response.items[i].shipDate = getShipDate(new Date(ASHAvail.dateValue), isPurepitch, userLocation, false, false, true);
                                            response.items[i].Warehouse = 11;
                                        }
                                        else if(parseInt(SDAvail.availQtyToShip) >= response.items[i].OrderDetailQty && (!hasPlates || (hasPlates && !splitOrder)))
                                        {
                                            checkProduction = false;
-                                           response.items[i].shipDate = valiDate(new Date(SDAvail.dateValue), isPurepitch, userLocation, false, false, false);
+                                           response.items[i].shipDate = getShipDate(new Date(SDAvail.dateValue), isPurepitch, userLocation, false, false, false);
                                            response.items[i].Warehouse = 9;
                                        }
                                    }
@@ -268,13 +262,13 @@ function(record, log, search, format, itemAvailability)
                                        if(parseInt(SDAvail.availQtyToShip) >= response.items[i].OrderDetailQty && (!hasPlates || (hasPlates && !splitOrder)))
                                        {
                                            checkProduction = false;
-                                           response.items[i].shipDate = valiDate(new Date(SDAvail.dateValue), isPurepitch, userLocation, false, false, false);
+                                           response.items[i].shipDate = getShipDate(new Date(SDAvail.dateValue), isPurepitch, userLocation, false, false, false);
                                            response.items[i].Warehouse = 9;
                                        }
                                        else if(parseInt(ASHAvail.availQtyToShip) >= response.items[i].OrderDetailQty && splitOrder)
                                        {
                                            checkProduction = false;
-                                           response.items[i].shipDate = valiDate(new Date(ASHAvail.dateValue), isPurepitch, userLocation, false, false, true);
+                                           response.items[i].shipDate = getShipDate(new Date(ASHAvail.dateValue), isPurepitch, userLocation, false, false, true);
                                            response.items[i].Warehouse = 11;
                                        }
                                    }
@@ -285,15 +279,31 @@ function(record, log, search, format, itemAvailability)
                                    throw {message: 'Invalid User Location', code: -1};
                                }
 
+                               // Check San Diego / Asheville Production warehouses for Packaging WOs
                                if(checkProduction)
                                {
-                                   for (var j = 0, totalLength = Availability.length; j < totalLength; j++)
+
+                                   var packagingWOs = [];
+
+                                   // If on East coast, check Asheville first
+                                   if(territory > 3)
                                    {
-                                       if(parseInt(Availability[j].inventoryLocation) == 8 && Availability[j].type == "Packaging WO" && (response.items[i].OrderDetailQty <= parseInt(Availability[j].availQtyToShip)))
+                                       putShipDatesIntoOrder(ASHAvailability, '10', packagingWOs);     // Asheville Production warehouse
+                                       putShipDatesIntoOrder(SDAvailability, '8', packagingWOs);       // San Diego Production warehouse
+                                   }
+                                   else
+                                   {
+                                       putShipDatesIntoOrder(SDAvailability, '8', packagingWOs);       // San Diego Production warehouse
+                                       putShipDatesIntoOrder(ASHAvailability, '10', packagingWOs);     // Asheville Production warehouse
+                                   }
+
+                                   for(var j = 0; j < packagingWOs.length; j++) {
+                                       if(response.items[i].OrderDetailQty <= parseInt(packagingWOs[j].availQtyToShip))
                                        {
-                                           response.items[i].shipDate = valiDate(new Date(Availability[j].dateValue), isPurepitch, userLocation, userLocation != 2, userLocation == 7, false);
+                                           response.items[i].shipDate = getShipDate(new Date(packagingWOs[j].dateValue), isPurepitch, userLocation, userLocation != 2, userLocation == 7, false);
                                            response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
-                                           j = totalLength;
+                                           j = packagingWOs.length;
+
                                        }
                                    }
 
@@ -302,13 +312,12 @@ function(record, log, search, format, itemAvailability)
                                        if(leadTime)
                                        {
                                            var shipDate = new Date(SDLocalTime);
-                                           response.items[i].shipDate = valiDate(shipDate.setDate(SDLocalTime.getDate() + leadTime), isPurepitch, userLocation, userLocation != 2, userLocation == 7, false);
+                                           response.items[i].shipDate = getShipDate(shipDate.setDate(SDLocalTime.getDate() + leadTime), isPurepitch, userLocation, userLocation != 2, userLocation == 7, false);
                                            response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
                                        }
                                        else
                                        {
                                            response.items.splice(i, 1);
-                                           // log.debug({title: 'no earliest ship date', details: response.items[i]});
                                        }
                                    }
                                }
@@ -317,7 +326,6 @@ function(record, log, search, format, itemAvailability)
                            {
                                //isn't available to ship from given location
                                response.items.splice(i, 1);
-                               // log.debug({title: 'not available from given location', details: response.items[i]});
                                continue;
                            }
                        }
@@ -345,11 +353,11 @@ function(record, log, search, format, itemAvailability)
            var done = [false];
 
            var fakeOrder = record.create({type: 'salesorder', isDynamic: true});
-           fakeOrder.setValue('entity', response.userId);
+           fakeOrder.setValue('entity', response.userID);
 
-           if(response.shipmethod && response.shipmethod != 'custom')
+           if(response.shipMethod && response.shipMethod != -3)
            {
-               fakeOrder.setValue({fieldId: 'shipmethod', value: response.shipmethod});
+               fakeOrder.setValue({fieldId: 'shipmethod', value: response.shipMethod});
            }
 
            if(response.couponCode)
@@ -376,7 +384,7 @@ function(record, log, search, format, itemAvailability)
            }
 
            response.itemSubtotal += fakeOrder.getValue({fieldId: 'subtotal'});
-           if(response.shipmethod && response.shipmethod != 'custom')
+           if(response.shipMethod && response.shipMethod != -3)
            {
                response.shippingSubtotal += fakeOrder.getValue({fieldId: 'shippingcost'});
                response.orderSubtotal += fakeOrder.getValue({fieldId: 'total'});
@@ -499,6 +507,7 @@ function(record, log, search, format, itemAvailability)
                            orders[orderID].currency = result.getValue({name: 'currency'});
 
                            orders[orderID].subsidiary = result.getValue({name: 'subsidiary'});
+
                            orders[orderID].shipmethod = result.getText({name: 'shipmethod'});
                            orders[orderID].shipTotal = result.getValue({name: 'shippingamount'});
                        }
@@ -536,7 +545,8 @@ function(record, log, search, format, itemAvailability)
                    message.orderDate = salesOrderRecord.getValue({fieldId: 'createddate'});
                    message.status = salesOrderRecord.getValue({fieldId: 'status'});
 
-                   message.subsidiary = salesOrderRecord.getValue({fieldId: 'subsidiary'});
+                   message.subsidiary = parseInt(salesOrderRecord.getValue({fieldId: 'subsidiary'}));
+
                    message.shipmethod = salesOrderRecord.getText({fieldId: 'shipmethod'});
                    message.shipTotal = salesOrderRecord.getValue({fieldId: 'shippingcost'});
 
@@ -583,14 +593,14 @@ function(record, log, search, format, itemAvailability)
                var today = new Date();
 
                var customerRecord = record.load({type: record.Type.CUSTOMER, id: customerid});
-               var userLocation = customerRecord.getValue({fieldId: 'subsidiary'});
+               var userLocation = parseInt(customerRecord.getValue({fieldId: 'subsidiary'}));
 
                var WillCall = null;
-               if([3470, 3472, 13332, 3469, 3511].indexOf(parseInt(message.shipmethod)) >= 0 || (!message.shipmethod && [3470, 3472, 13332, 3469, 3511].indexOf(parseInt(customerRecord.getValue({fieldId: 'shippingitem'}))) >= 0))
+               if([3470, 3472, 13332, 3469, 3511].indexOf(parseInt(message.shipMethod)) >= 0 || (!message.shipMethod && [3470, 3472, 13332, 3469, 3511].indexOf(parseInt(customerRecord.getValue({fieldId: 'shippingitem'}))) >= 0))
                {
-                   if(message.shipmethod)
+                   if(message.shipMethod)
                    {
-                       WillCall = parseInt(message.shipmethod);
+                       WillCall = parseInt(message.shipMethod);
                    }
                    else
                    {
@@ -618,7 +628,7 @@ function(record, log, search, format, itemAvailability)
                        {
                            salesOrderRecord.setValue({fieldId:'customform', value: 101});
                            salesOrderRecord.setValue({fieldId: 'entity', value: customerid});
-                           if(customerRecord.getValue({fieldId: 'subsidiary'}) != 2 && (!customerRecord.getValue({fieldId: 'terms'}) || customerRecord.getValue({fieldId: 'terms'}) == 10))
+                           if(parseInt(customerRecord.getValue({fieldId: 'subsidiary'})) != 2 && (!customerRecord.getValue({fieldId: 'terms'}) || customerRecord.getValue({fieldId: 'terms'}) == 10))
                            {
                                salesOrderRecord.setValue({fieldId:'terms', value: 13}); //Bank transfer required for non US
                            }
@@ -656,24 +666,14 @@ function(record, log, search, format, itemAvailability)
                            salesOrderRecord.setValue({fieldId: 'otherrefnum', value: message.PONum});
                        }
 
-                       if(message.shipmethod != 'custom')
+                       if(message.shipMethod != -3)
                        {
 
-                           salesOrderRecord.setValue({fieldId: 'shipmethod', value: message.shipmethod});
+                           salesOrderRecord.setValue({fieldId: 'shipmethod', value: message.shipMethod});
 
                        }
 
-
-                       var shipDate = new Date(message.SaleItems[i].shipDate);
-                       var newShipDate = pushDateIfNeeded(shipDate);
-
-                       log.debug('shipDate', shipDate);
-                       if(shipDate.getTime() != newShipDate.getTime())
-                       {
-                           log.debug('ship dates are not the same', message);
-                       }
-
-                       salesOrderRecord.setValue({fieldId: 'shipdate', value: newShipDate});
+                       salesOrderRecord.setValue({fieldId: 'shipdate', value: new Date(message.SaleItems[i].shipDate)});
 
                        if(WillCall)
                        {
@@ -735,30 +735,30 @@ function(record, log, search, format, itemAvailability)
    function orderContainsPlates(items)
    {
        var dryMedia = [
-           1538, //TK2200
-           1540, //TK2205
-           1541, //TK2300
-           1542, //TK3010
-           1543,  //TK3100
-           16224, //TK3101
+           // 1538, //TK2200
+           // 1540, //TK2205
+           // 1541, //TK2300
+           // 1542, //TK3010
+           // 1543,  //TK3100
+           // 16224, //TK3101
            3068, //TK3300
-           1059, //TK3305
-           5209, //TK3310
+           // 1059, //TK3305
+           // 5209, //TK3310
            16225, //TK3410
-           16226, //TK3415
+           // 16226, //TK3415
            16227, //TK3420
-           5211, //TK3450
-           5212, //TK3455
-           5214, //TK3495
+           // 5211, //TK3450
+           // 5212, //TK3455
+           // 5214, //TK3495
            16228, //TK3500
            16229, //TK3501
-           5215, //TK3505
-           5216, //TK3507
+           // 5215, //TK3505
+           // 5216, //TK3507
            16230, //TK3600
-           1077, //TK3602
-           3910, //TK3701
-           1053, //TK3710
-           5218 //TK3800
+           // 1077, //TK3602
+           // 3910, //TK3701
+           // 1053, //TK3710
+           // 5218 //TK3800
        ]
        for (var i = items.length - 1; i >= 0; i--)
        {
@@ -770,39 +770,43 @@ function(record, log, search, format, itemAvailability)
        return false;
    }
 
-   function pushDateIfNeeded(date)
-   {
-       date = new Date(date);
 
-       while(date.getDay() == 0 || date.getDay() == 6 || !checkHoliday(date, 2))
+   function putShipDatesIntoOrder(availability, inventoryLocation, packagingWOs) {
+
+       for(var j = 0; j < availability.length; j++)
        {
-           date.setDate(date.getDate()+1);
+           if(
+               availability[j].inventoryLocation == inventoryLocation &&
+               availability[j].type == "Packaging WO"
+           )
+           {
+               var k;
+               for(k = 0; k < packagingWOs.length; k++)
+               {
+                   var date = new Date(packagingWOs[k].dateValue);
+                   var insertDate = new Date(availability[j].dateValue)
+                   if(insertDate < date)
+                       break;
+               }
+
+               packagingWOs.splice(k, 0, availability[j]);
+           }
        }
-
-       log.debug('pushDateIfNeeded', date);
-
-
-       return date;
    }
 
-   function hbShipDate()
+   function HomebrewShipDate()
    {
        var hbDate = getLocalTime(2, false);
 
-       hbDate.setDate(hbDate.getDate()+1);
+       hbDate.setDate(hbDate.getDate() + 1);
 
        // 2pm cutoff for next-day shipping
        if(hbDate.getHours() >= 14)
        {
-           hbDate.setDate(hbDate.getDate()+1);
+           hbDate.setDate(hbDate.getDate() + 1);
        }
 
-       while(hbDate.getDay() == 0 || hbDate.getDay() == 6 || !checkHoliday(hbDate, 2))
-       {
-           hbDate.setDate(hbDate.getDate()+1);
-       }
-
-       return hbDate;
+       return valiDate(hbDate);
    }
 
    function addTransitTimes()
@@ -829,7 +833,7 @@ function(record, log, search, format, itemAvailability)
        {
            var transitTime = {};
            transitTime.daysInTransit = parseInt(result.getValue('custrecord_days_in_transit'));
-           transitTimes[result.getValue('custrecord_shipping_method').toString()] = transitTime;
+           transitTimes[result.getValue('custrecord_shipping_method')] = transitTime;
            return true;
        });
 
@@ -844,21 +848,21 @@ function(record, log, search, format, itemAvailability)
        return transitTimes;
    }
 
-   function setWillCallAddress(shipmethod, salesOrderRecord, customerName)
+   function setWillCallAddress(shipMethod, salesOrderRecord, customerName)
    {
-       switch(shipmethod)
+       switch(shipMethod)
        {
-           case '3470':  //Boulder
+           case 3470:  //Boulder
                salesOrderRecord.setValue({fieldId: 'shipaddresslist', value: null});
                salesOrderRecord.setValue({fieldId: 'shipaddress', value: 'Attn To: ' + customerName + '\nBoulder Will-Call\n1898 S. Flatiron Ct. Suite 213\nBoulder, CO 80301 US'});
                break;
-           case '3472': //Asheville
-           case '13332': //Go Green
+           case 3472: //Asheville
+           case 13332: //Go Green
                salesOrderRecord.setValue({fieldId: 'shipaddresslist', value: null});
                salesOrderRecord.setValue({fieldId: 'shipaddress', value: 'Attn To: ' + customerName + '\nAsheville Will-Call\n172 South Charlotte Street\nAsheville, NC 28801 US'});
                break;
-           case '3469': //SD
-           case '3511': //Go Green
+           case 3469: //SD
+           case 3511: //Go Green
                salesOrderRecord.setValue({fieldId: 'shipaddresslist', value: null});
                salesOrderRecord.setValue({fieldId: 'shipaddress', value: 'Attn To: ' + customerName + '\nSan Diego Will-Call\n9495 Candida Street\San Diego, CA 92126 US'});
                break;

@@ -57,14 +57,12 @@ function getTermsFromSub(subsidiaryID)
 {
 	switch(subsidiaryID)
 	{
-		// US, CPH
-		case 2:
-        case 7:
-			return 10; // Credit Card
+		case 2: //US
+        case 7: //CPH
+			return 10; //Credit Card
 
-		// HK
-		case 5:
-			return 13; // Bank Transfer
+		case 5: //HK
+			return 13; //Bank Transfer
 	}
 }
 
@@ -72,23 +70,20 @@ function getCurrencyFromSub(subsidiaryID, cphDomestic)
 {
 	switch(subsidiaryID)
 	{
-		// US
-		case 2:
-			return 1; // Dollar
+		case 2: //US
+			return 1; //Dollar
 
-		// HK
-		case 5:
-			return 5; // HK Dollar
+		case 5: //HK
+			return 5; //HK Dollar
 
-		// CPH
-		case 7:
+		case 7: //CPH
 			if(cphDomestic)
 			{
-				return 6; // DKK
+				return 6; //DKK
 			}
 			else
 			{
-				return 4; // EUR
+				return 4; //EUR
 			}
 	}
 }
@@ -97,23 +92,20 @@ function getShipMethodFromSub(subsidiaryID, cphDomestic)
 {
 	switch(subsidiaryID)
 	{
-		// US
-		case 2:
-			return '2787'; // Fedex Priority Overnight
+		case 2: //US
+			return 2787; //Fedex Priority Overnight
 
-		// HK
-		case 5:
-			return '13301'; // Will Call
+		case 5: //HK
+			return 13301; //Will Call
 
-		//CPH
-		case 7:
+		case 7: //CPH
 			if(cphDomestic)
 			{
-				return '13299'; // CPH Domestic
+				return 13299; //CPH Domestic
 			}
 			else
 			{
-				return '13300'; // CPH Non-Domestic
+				return 13300; //CPH Non-Domestic
 			}
 	}
 }
@@ -122,18 +114,19 @@ function warehouseMap(subsidiaryID)
 {
     switch(subsidiaryID)
     {
-		// US
+        // USA
         case 2:
-            return '9'; // San Diego
-
-		// HK
+            return '9'; //SD Shipping
+            //  return 11; //Ash Shipping
+            break;
+        // HK
         case 5:
-            return '31';
-
-		// CPH
+            return '31'; //HK Shipping
+            break;
+        // CPH
         case 7:
-            return '30';
-
+            return '30'; //CPH Shipping
+            break;
         default:
             return '9';
     }
@@ -169,16 +162,25 @@ function priceLevelDetermination(category)
 }
 
 const USHOLIDAYS = [{day: 1, month: 1}, //new years day
-				 {day: 25, month: 12}, //christmas
-				 {day: 4, month: 7}, //4th of july
-				 {day: -1, month: 5, week: -1, dayofweek: 1 }, //memorial day
-				 {day: -1, month: 11, week: 4, dayofweek: 4}, //thanksgiving
-				 {day: -1, month: 9, week: 1, dayofweek: 1}]; //labor day
+				 	{day: 25, month: 12}, //christmas
+					{day: 4, month: 7}, //4th of july
+					{day: -1, month: 5, week: -1, dayofweek: 1 }, //memorial day
+					{day: -1, month: 11, week: 4, dayofweek: 4}, //thanksgiving
+					{day: -1, month: 9, week: 1, dayofweek: 1}, //labor day
+
+					//custom
+					{day: 22, month: 11},
+					{day: 25, month: 12}];
+
 
 const HKHOLIDAYS = [{day: 30, month: 3},
 					{day: 31, month: 3},
 					{day: 2, month: 4},
-					{day: 5, month: 4}];
+					{day: 5, month: 4},
+
+					//custom
+					{day: 22, month: 11},
+					{day: 25, month: 12}];
 
 const CPHHOLIDAYS = [{day: 1, month: 1},
 					{day: 29, month: 3},
@@ -189,7 +191,11 @@ const CPHHOLIDAYS = [{day: 1, month: 1},
 					{day: 21, month: 5},
 					{day: 24, month: 12},
 					{day: 25, month: 12},
-					{day: 26, month: 12}];
+					{day: 26, month: 12},
+
+					//custom
+   				 	{day: 22, month: 11},
+   				 	{day: 25, month: 12}];
 
 /*
 * checkHoliday()
@@ -216,7 +222,7 @@ function checkHoliday(date, subsidiary)
 
     if((dateToCheck.getDay() < 1 || dateToCheck.getDay() > 3 ) && subsidiary != 2)
     {
-        return false
+        return true;
     }
     else
     {
@@ -238,7 +244,7 @@ function checkHoliday(date, subsidiary)
                             testDate.setDate(testDate.getDate() - (HOLIDAYS[i].week * 7));
                             if(testDate.getMonth() == nextMonth)
                             {
-                                return false;
+                                return true;
                             }
                         }
                         else
@@ -251,7 +257,7 @@ function checkHoliday(date, subsidiary)
                             testDate2.setDate(testDate2.getDate() - ((HOLIDAYS[i].week-1) * 7));
                             if(testDate.getMonth() == prevMonth && testDate2.getMonth() == prevMonth+1)
                             {
-                                return false;
+                                return true;
                             }
                         }
                     }
@@ -262,20 +268,22 @@ function checkHoliday(date, subsidiary)
                     //using date
                     if(HOLIDAYS[i].day == dateToCheck.getDate())
                     {
-                        return false;
+                        return true;
                     }
                 }
             }
         }
     }
-    return true;
+
+    return false;
 }
 
-function valiDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, isAsheville)
+function getShipDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, isAsheville)
 {
     var finalDate = new Date(date);
     var today = getLocalTime(subsidiary, isAsheville);
 
+	// 2pm shipping cutoff
     if((today.getHours() > 14 && subsidiary == 2) || (today.getHours() > 12 && subsidiary != 2))
     {
         today.setDate(today.getDate() + 2);
@@ -294,11 +302,11 @@ function valiDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, 
     {
         if(travelOnMonday)
         {
-            if(finalDate.getDay() == 1)
+            if(finalDate.getDay() == 1)			// Monday
             {
                 finalDate.setDate(finalDate.getDate() + 7);
             }
-            else if(finalDate.getDay() == 0)
+            else if(finalDate.getDay() == 0)	// Sunday
             {
                 finalDate.setDate(finalDate.getDate() + 8);
             }
@@ -309,11 +317,11 @@ function valiDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, 
         }
         else
         {
-            if(finalDate.getDay() == 5)
+            if(finalDate.getDay() == 5)			// Friday
             {
                 finalDate.setDate(finalDate.getDate() + 7);
             }
-            else if(finalDate.getDay() == 6)
+            else if(finalDate.getDay() == 6)	// Saturday
             {
                 finalDate.setDate(finalDate.getDate() + 13);
             }
@@ -324,56 +332,39 @@ function valiDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, 
         }
     }
 
-    if(finalDate.getDay() == 0)
-    {
-        finalDate.setDate(finalDate.getDate() + 1);
-    }
-    else if(finalDate.getDay() == 6)
-    {
-        finalDate.setDate(finalDate.getDate() + 2);
-    }
+	// HK
+	if(subsidiary == 5)
+	{
+		if(finalDate.getDay() == 5)			// Friday
+		{
+			finalDate.setDate(finalDate.getDate() + 3);
+		}
+		else
+		{
+			finalDate.setDate(finalDate.getDate() + 1);
+		}
+	}
 
-    if(!isPurepitch)
-    {
-        if(checkHoliday(finalDate, subsidiary))
-        {
-            finalDate.setDate(finalDate.getDate()+1);
-        }
-        else
-        {
-            finalDate.setDate(finalDate.getDate()+2);
-        }
-    }
+	return valiDate(finalDate, subsidiary);
 
-    if(finalDate.getDay() == 0)
-    {
-        finalDate.setDate(finalDate.getDate() + 1);
-    }
-    else if(finalDate.getDay() == 6)
-    {
-        finalDate.setDate(finalDate.getDate() + 2);
-    }
+}
 
-    if(checkHoliday(finalDate, subsidiary))
-    {
-        if(subsidiary == 5)
-        {
-            if(finalDate.getDay() == 5)
-            {
-                finalDate.setDate(finalDate.getDate()+3);
-            }
-            else
-            {
-                finalDate.setDate(finalDate.getDate()+1);
-            }
-        }
+function valiDate(date, subsidiary)
+{
+	date = new Date(date);
+	var sunday = date.getDay() == 0;
+	var saturday = date.getDay() == 6;
+	var holiday = checkHoliday(date, subsidiary);
 
-        return new Date(finalDate);
-    }
-    else
-    {
-        return valiDate(finalDate.setDate(finalDate.getDate()+1), isPurepitch, subsidiary, false, false, isAsheville);
-    }
+	if(saturday || sunday || holiday)
+	{
+		return valiDate(date.setDate(date.getDate() + 1), subsidiary);
+	}
+	else
+	{
+		return date;
+	}
+
 }
 
 function getLocalTime(subsidiary, isAsheville)
@@ -386,25 +377,26 @@ function getLocalTime(subsidiary, isAsheville)
         case 2: //US
             if(isAsheville)
             {
-                date.setHours(date.getHours()-4);
+                date.setHours(date.getHours() - 4);
             }
             else
             {
-                date.setHours(date.getHours()-7);
+                date.setHours(date.getHours() - 7);
             }
-        break;
+            break;
 
         case 5: //HK
-            date.setHours(date.getHours()+8);
-        break;
+            date.setHours(date.getHours() + 8);
+            break;
 
         case 7: //CPH
-            date.setHours(date.getHours()+2);
-        break;
+            date.setHours(date.getHours() + 2);
+            break;
     }
 
     return date;
 }
+
 
 function compareDates(date1, date2)
 {

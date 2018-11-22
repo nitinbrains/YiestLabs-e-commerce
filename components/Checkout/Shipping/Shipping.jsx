@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
+import classNames from "classnames";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
@@ -88,6 +89,8 @@ class Shipping extends Component {
                             open={this.state.openDialog}
                             onClose={() => this.handleDialogClose()}
                             aria-labelledby="form-dialog-title"
+                            fullWidth={true}
+                            maxWidth = {'md'}
                         >
                             <DialogTitle id="form-dialog-title">
                                 Shipping addresses
@@ -106,7 +109,7 @@ class Shipping extends Component {
                                 <Grid container spacing={24}>
                                     {this.props.user.otherAddresses.map((address, i) =>
                                         <Grid item sm={4} xs={12}>
-                                            <Paper className={classes.paper}>
+                                            <Paper className={classNames(classes.paper, this.props.user.shipping.address1 == address.address1 && classes.selected)}>
                                                 <Typography>
                                                     {address.address1}
                                                 </Typography>
@@ -508,7 +511,11 @@ const styles = theme => ({
     button: {
         marginTop: 10
     },
-    close: { position: "absolute", right: 0, top: 0 }
+    close: { position: "absolute", right: 0, top: 0 },
+    selected: {
+        border: 'solid 2px',
+        borderColor:"#f28411"
+    }
 });
 
 Shipping.propTypes = {

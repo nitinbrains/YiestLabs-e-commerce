@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
+import classNames from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -133,6 +134,8 @@ class Billing extends Component {
                                 open={this.state.openDialogCard}
                                 onClose={this.handleDialogCardClose}
                                 aria-labelledby="form-dialog-title"
+                                fullWidth={true}
+                                maxWidth = {'md'}
                             >
                                 <DialogTitle id="form-dialog-title">Cards</DialogTitle>
                                 <DialogContent>
@@ -150,7 +153,7 @@ class Billing extends Component {
 
                                        {this.props.user.cards.map((card, i) => (
                                            <Grid item xs={12} sm={4}>
-                                               <Paper className={classes.paper}>
+                                               <Paper className={classNames(classes.paper, this.props.user.selectedCard.number == card.number && classes.selected)}>
                                                    <Typography variant="body2">{card.name}</Typography>
                                                    <Typography>{card.number}</Typography>
                                                    <Typography>{card.expireMonth} / {card.expireYear}</Typography>
@@ -433,6 +436,8 @@ class Billing extends Component {
                                     open={this.state.openDialogCard}
                                     onClose={this.handleDialogCardClose}
                                     aria-labelledby="form-dialog-title"
+                                    fullWidth={true}
+                                    maxWidth = {'md'}
                                 >
                                     <DialogTitle id="form-dialog-title">Cards</DialogTitle>
                                     <DialogContent>
@@ -449,7 +454,7 @@ class Billing extends Component {
                                         <Grid container spacing={24}>
                                         {this.props.user.cards.map((card, i) => {
                                             <Grid item xs={12} sm={4}>
-                                                <Paper className={classes.paper}>
+                                                <Paper className={classNames(classes.paper, this.props.user.selectedCard.number == card.number && classes.selected)}>
                                                     <Typography variant="body2">
                                                         {card.number}
                                                     </Typography>
@@ -741,6 +746,8 @@ class Billing extends Component {
                             open={this.state.openDialogAddress}
                             onClose={this.handleDialogAddressClose}
                             aria-labelledby="form-dialog-title"
+                            fullWidth={true}
+                            maxWidth = {'md'}
                         >
                             <DialogTitle id="form-dialog-title">
                                 Billing addresses
@@ -759,7 +766,7 @@ class Billing extends Component {
                                 <Grid container spacing={24}>
                                 {this.props.user.otherAddresses.map((address, i) => (
                                     <Grid item sm={4} xs={12}>
-                                        <Paper className={classes.paper}>
+                                        <Paper className={classNames(classes.paper, this.props.user.billing.address1 == address.address1 && classes.selected)}>
                                             <Typography>{address.address1}</Typography>
                                             <Typography>{address.address2}</Typography>
                                             <Typography>{address.address3}</Typography>
@@ -1157,7 +1164,11 @@ const styles = theme => ({
     button: {
         marginTop: 10
     },
-    close: { position: "absolute", right: 0, top: 0 }
+    close: { position: "absolute", right: 0, top: 0 },
+    selected: {
+        border: 'solid 2px',
+        borderColor:"#f28411"
+    }
 });
 
 Billing.propTypes = {

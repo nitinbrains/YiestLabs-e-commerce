@@ -296,19 +296,14 @@ app.prepare()
 
 	server.get('/get-inventory', (req, res, next) => {
 
-		var classFilters = JSON.parse(req.query.classFilters)
-
-		var body = NSSendMessage({classFilters: classFilters ? classFilters : null});
-
 		//YMO-ITEM
 		fetch("https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=912&deploy=1", {
-	  		method: 'POST',
+	  		method: 'GET',
 	  		headers: {
-				'Authorization': NSAuth(912, "post"),
+				'Authorization': NSAuth(912, "get"),
 				'Accept': 'application/json',
 	    		'Content-Type': 'application/json',
 	  		},
-	  		body: body
 		})
 		.then((response) => response.json())
 		.then(function(response)
@@ -348,9 +343,9 @@ app.prepare()
 
 	server.post('/get-user-info', function(req, res, next){
 
-		var userId = req.body.userId;
+		var userID = req.body.userID;
 
-		if(userId)
+		if(userID)
 		{
 			//YMO-CUST
 			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=913&deploy=1', {
@@ -360,7 +355,7 @@ app.prepare()
 					'Accept': 'application/json',
 		    		'Content-Type': 'application/json',
 		  		},
-		  		body: NSSendMessage({id: userId, get: true})
+		  		body: NSSendMessage({id: userID, get: true})
 			})
 			.then((response) => response.json())
 			.then(function(response)
@@ -407,7 +402,7 @@ app.prepare()
 	server.post('/prepare-order', function(req, res, next){
 
 		const request = req.body;
-		if(request.userId) {
+		if(request.userID) {
 
 			var message = NSSendMessage(request);
 
@@ -491,7 +486,7 @@ app.prepare()
 	server.post('/place-order', function(req, res, next) {
 		const request = req.body.request;
 
-		if(request.userId)
+		if(request.userID)
 		{
 			var message = NSSendMessage(request);
 
@@ -649,13 +644,13 @@ app.prepare()
 	/**
 	* Get order history for a customer
 	*
-	* @param String userId - User Id of customer requesting order history
+	* @param String userID - User Id of customer requesting order history
 	*
 	* @return [Objectg] - Array of order objects
 	*/
 	server.post('/get-order-history', function(req, res, next) {
 
-		var userId = req.body.userId;
+		var userID = req.body.userID;
 
 		// if(customerID)
 		// {
@@ -666,7 +661,7 @@ app.prepare()
 		// 	userID = State.getState('UserID');
 		// }
 
-		if(userId)
+		if(userID)
 		{
 			//YMO-ORDER
 			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=914&deploy=1', {
@@ -731,7 +726,7 @@ app.prepare()
 	server.post('/get-order-price', function(req, res, next) {
 
 		var request = req.body.request;
-		if(request.userId)
+		if(request.userID)
 		{
 			var message = NSSendMessage(request);
 
@@ -852,12 +847,12 @@ app.prepare()
 	/**
 	* Get order history for a user
 	*
-	* @param {int} userId - ID of user logged in
+	* @param {int} userID - ID of user logged in
 	*
 	* @return [Object] - array of orders
 	*/
 	server.post('/order-history', function(req, res, next) {
-		var userId = req.query.userId;
+		var userID = req.query.userID;
 
 		// if(customerID)
 		// {
@@ -868,7 +863,7 @@ app.prepare()
 		// 	userID = State.getState('UserID');
 		// }
 
-		if(userId)
+		if(userID)
 		{
 			//YMO-ORDER
 			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=914&deploy=1', {
@@ -878,7 +873,7 @@ app.prepare()
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
 				},
-				body: NSSendMessage({id: userId, admin: false, get: true})
+				body: NSSendMessage({id: userID, admin: false, get: true})
 			})
 			.then((response) => response.json())
 			.then(function(response)
@@ -924,7 +919,7 @@ app.prepare()
 	/**
 	* Get similar strains for a particular item
 	*
-	* @param {int} userId - ID of user logged in
+	* @param {int} userID - ID of user logged in
 	* @param {Object} item - the yeast item being exchanged
 	* @param {Object} itemRef - the inventory item reference to the yeast item
 	* @param [string] selectedStyles - List of beer styles that will be used
@@ -935,9 +930,9 @@ app.prepare()
 
 		var request = req.body.request;
 
-		if(request.userId)
+		if(request.userID)
 		{
-			var message = NSSendMessage({id: request.userId, SaleItem: request.item, ItemGroup: request.itemRef.volID.slice(0,3), selectedStyles: request.selectedStyles});
+			var message = NSSendMessage({id: request.userID, SaleItem: request.item, ItemGroup: request.itemRef.volID.slice(0,3), selectedStyles: request.selectedStyles});
 
 			//YMO-ITEM
 			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=912&deploy=1', {
@@ -999,7 +994,7 @@ app.prepare()
 	/**
 	* Get alternate sizes for a particular item
 	*
-	* @param {int} userId - ID of user logged in
+	* @param {int} userID - ID of user logged in
 	* @param {Object} item - the yeast item being exchanged
 	* @param {Object} itemRef - the inventory item reference to the yeast item
 	*
@@ -1009,9 +1004,9 @@ app.prepare()
 
 		var request = req.body.request;
 
-		if(request.userId)
+		if(request.userID)
 		{
-			var message = NSSendMessage({alternateSizes: true, id: request.userId, SaleItem: request.item, ItemGroup: request.itemRef.volID.slice(0,3), subsidiary: parseInt(request.subsidiary)});
+			var message = NSSendMessage({alternateSizes: true, id: request.userID, SaleItem: request.item, ItemGroup: request.itemRef.volID.slice(0,3), subsidiary: parseInt(request.subsidiary)});
 
 			//YMO-ITEM
 			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=912&deploy=1', {

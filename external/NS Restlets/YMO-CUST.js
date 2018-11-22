@@ -59,14 +59,12 @@ function(record, log, search, email)
                countryid
            }
            otherAddresses = {...}
-           cards = [{
+           cards = {
                id
-               name
-               number
-               expireMonth
-               expireYear
+               ccnumber
+               ccexpire
                default
-           }]
+           }
            connectedaccounts[{
                internalid
                name
@@ -113,7 +111,7 @@ function(record, log, search, email)
            try
            {
                var orderSubrecord = record.create({type: 'customrecord379', isDynamic: true});
-               orderSubrecord.setValue({fieldId: 'custrecord121', value: message.userId});
+               orderSubrecord.setValue({fieldId: 'custrecord121', value: message.UserID});
                if(message.howSatisfiedWithRecentOrder)
                {
                    orderSubrecord.setValue({fieldId: 'custrecord125', value: message.howSatisfiedWithRecentOrder});
@@ -183,7 +181,7 @@ function(record, log, search, email)
                message.companyname = customerRecord.getValue({fieldId: 'companyname'});
                message.category = customerRecord.getValue({fieldId: 'category'});
                message.terms = customerRecord.getValue({fieldId: 'terms'});
-               message.subsidiary = customerRecord.getValue({fieldId: 'subsidiary'});
+               message.subsidiary = parseInt(customerRecord.getValue({fieldId: 'subsidiary'}));
                message.vat = customerRecord.getValue({fieldId: 'vatregnumber'});
 
                var shipIndex = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'defaultshipping', value: true});
@@ -249,17 +247,14 @@ function(record, log, search, email)
                {
                    var card = {};
                    card.id = customerRecord.getSublistValue({sublistId: 'creditcards', fieldId: 'internalid', line: j});
-                   card.name = customerRecord.getSublistValue({sublistId: 'creditcards', fieldId: 'ccname', line: j});
-                   card.number = customerRecord.getSublistValue({sublistId: 'creditcards', fieldId: 'ccnumber', line: j});
-                   var expireDate = new Date(customerRecord.getSublistValue({sublistId: 'creditcards', fieldId: 'ccexpiredate', line: j}));
-
-                   card.expireMonth = expireDate.getMonth().toString();
-                   card.expireYear = expireDate.getFullYear().toString();
+                   card.ccname = customerRecord.getSublistValue({sublistId: 'creditcards', fieldId: 'ccname', line: j});
+                   card.ccnumber = customerRecord.getSublistValue({sublistId: 'creditcards', fieldId: 'ccnumber', line: j});
+                   card.ccexpire = customerRecord.getSublistValue({sublistId: 'creditcards', fieldId: 'ccexpiredate', line: j});
 
                    card.type = customerRecord.getSublistValue({sublistId: 'creditcards', fieldId: 'paymentmethod', line: j});
 
                    var today = new Date();
-                   if(compareDates(expireDate, today) == 1)
+                   if(compareDates(card.ccexpire, today) == 1)
                    {
                        message.cardsToRemove.push(card);
                    }
@@ -277,7 +272,7 @@ function(record, log, search, email)
                }
 
                //Connected Subsidiary Accounts
-               var currentSubsidiary = {internalid: message.id, subsidiary: customerRecord.getValue({fieldId: 'subsidiary'}), subsidiaryid: message.subsidiary};
+               var currentSubsidiary = {internalid: message.id, subsidiary: parseInt(customerRecord.getValue({fieldId: 'subsidiary'})), subsidiaryid: message.subsidiary};
                var relatedAccounts = customerRecord.getValue({fieldId: 'custentityrelatedaccounts'})
                if(relatedAccounts)
                {
@@ -302,15 +297,15 @@ function(record, log, search, email)
                {
                    //running a search here probably won't save any time or governance, at most 2 iterations
                    var subsidiaryRecord = record.load({type: record.Type.CUSTOMER, id: message.connectedaccounts[k].internalid});
-                   message.connectedaccounts[k].subsidiary = subsidiaryRecord.getValue({fieldId: 'subsidiary'});
-                   message.connectedaccounts[k].subsidiaryid = subsidiaryRecord.getValue({fieldId: 'subsidiary'});
+                   message.connectedaccounts[k].subsidiary = parseInt(subsidiaryRecord.getValue({fieldId: 'subsidiary'}));
+                   message.connectedaccounts[k].subsidiaryid = parseInt(subsidiaryRecord.getValue({fieldId: 'subsidiary'}));
                }
 
                //Ship Method
                var thirdParty = customerRecord.getValue({fieldId: 'thirdpartyacct'});
                if(thirdParty)
                {
-                   message.shipmethod = 'none';
+                   message.shipmethod = -3;
                }
                else
                {
@@ -517,13 +512,12 @@ function(record, log, search, email)
                        var card = decryptCard(message.creditToken);
                        customerRecord.selectNewLine({sublistId: 'creditcards'});
                        customerRecord.setCurrentSublistValue({sublistId:'creditcards', fieldId:'ccdefault', value: true});
-
-                       var expireDate = new Date();
-                       expireDate.setMonth(card.expireMonth);
-                       expireDate.setFullYear(card.expireYear);
-
+                       var expireDate = new Date(), dateShortHand = card.expire.split('/');
+                       expireDate.setDate(1);
+                       expireDate.setMonth(dateShortHand[0]);
+                       expireDate.setFullYear(dateShortHand[1]);
                        customerRecord.setCurrentSublistValue({sublistId:'creditcards', fieldId:'ccexpiredate', value: expireDate});
-                       customerRecord.setCurrentSublistValue({sublistId:'creditcards', fieldId:'ccnumber', value: card.number});
+                       customerRecord.setCurrentSublistValue({sublistId:'creditcards', fieldId:'ccnumber', value: card.ccnumber});
                        customerRecord.setCurrentSublistValue({sublistId:'creditcards', fieldId:'ccname', value: card.name});
                        customerRecord.setCurrentSublistValue({sublistId:'creditcards', fieldId:'paymentmethod', value: card.type});
                        customerRecord.commitLine({sublistId: 'creditcards'});
@@ -567,7 +561,7 @@ function(record, log, search, email)
                    {
                        var connectCustomerRecord = record.load({type: record.Type.CUSTOMER, id: response.id[k]});
 
-                       if(connectCustomerRecord.getValue({fieldId: 'subsidiary'}) == 2)
+                       if(parseInt(connectCustomerRecord.getValue({fieldId: 'subsidiary'})) == 2)
                        {
                            response.username = parseInt(connectCustomerRecord.getValue({fieldId: 'entityid'}));
                        }
@@ -627,7 +621,7 @@ function(record, log, search, email)
                //Clone Record
                var recordClone = record.copy({type: record.Type.CUSTOMER, id: message.id});
 
-               if(!message.subsidiary || isNaN(parseInt(message.subsidiary)))
+               if(!message.subsidiary || isNaN(message.subsidiary))
                {
                    throw {message: 'Invalid subsidiary selected', code: -1};
                }
@@ -876,32 +870,30 @@ function(record, log, search, email)
                {
                    try
                    {
-                       var card = decryptCard(message.card.token);
-
                        // default credit card
                        if(message.card.setDefault)
                        {
-
                            // remove old default
                            var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId:'ccdefault', value: true});
                            customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccdefault', value: false, line: line});
 
                            // set new default
-                           var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId:'ccnumber', value: card.number});
+                           var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId:'ccnumber', value: message.card.ccnumber});
                            customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccdefault', value: true, line: line});
                        }
 
                        // Add new credit card
                        if(message.card.added)
                        {
-                           var expireDate = new Date();
-                           expireDate.setMonth(card.expireMonth);
-                           expireDate.setFullYear(card.expireYear);
+                           var card = decryptCard(message.card.token);
+                           var expireDate = new Date(), dateShortHand = card.ccexpire.split('/');
+                           expireDate.setMonth(dateShortHand[0]);
+                           expireDate.setFullYear(dateShortHand[1]);
 
                            var line = customerRecord.getLineCount({sublistId: 'creditcards'});
                            customerRecord.insertLine({sublistId: 'creditcards', line: line});
-                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccnumber', value: card.number, line: line});
-                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccname', value: card.name, line: line});
+                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccnumber', value: card.ccnumber, line: line});
+                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccname', value: card.ccname, line: line});
                            customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccexpiredate', value: expireDate, line: line});
                            customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'paymentmethod', value: card.type, line: line});
                        }
@@ -909,20 +901,20 @@ function(record, log, search, email)
                        // Edit existing credit card information (except ccnumber)
                        else if(message.card.edited)
                        {
-                           var expireDate = new Date();
-                           expireDate.setMonth(card.expireMonth);
-                           expireDate.setFullYear(card.expireYear);
+                           var expireDate = new Date(), dateShortHand = message.card.ccexpire.split('/');
+                           expireDate.setMonth(dateShortHand[0]);
+                           expireDate.setFullYear(dateShortHand[1]);
 
-                           var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId: 'ccnumber', value: card.number});
+                           var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId: 'ccnumber', value: message.card.ccnumber});
                            customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccexpiredate', value: expireDate, line: line});
-                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccname', value: card.name, line: line});
-                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'paymentmethod', value: card.type, line: line});
+                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccname', value: message.card.ccname, line: line});
+                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'paymentmethod', value: message.card.type, line: line});
                        }
 
                        // Delete credit card
                        else if(message.card.deleted)
                        {
-                           var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId: 'ccnumber', value: card.number});
+                           var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId: 'ccnumber', value: message.card.ccnumber});
                            customerRecord.removeLine({sublistId: 'creditcards', line: line});
                        }
                    }
@@ -940,7 +932,7 @@ function(record, log, search, email)
                        for(var i = message.cards.length-1; i >= 0; i--)
                        {
 
-                           var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId: 'ccnumber', value: message.cards[i].number});
+                           var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId: 'ccnumber', value: message.cards[i].ccnumber});
                            customerRecord.removeLine({sublistId: 'creditcards', line: line});
                        }
                    }

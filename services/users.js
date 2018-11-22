@@ -1,8 +1,8 @@
 import { requestWrapper } from './base';
 
-export const getUserInfo = (userId) => requestWrapper(`/get-user-info`, {
+export const getUserInfo = (userID) => requestWrapper(`/get-user-info`, {
     query: {
-        userId,
+        userID,
     }
 });
 

@@ -9,20 +9,29 @@ import * as api from '../../services/inventory';
 export function * getInventory (action) {
     const { responseSuccess, responseFailure, data: { search } } = action;
     try {
-        const user = User.getUser();
-        const selectedCategory = Store.getSelectedCategory();
-        const classFilters = Store.getClassFilters(selectedCategory, search);
 
-        if (classFilters) {
-            const { res: { items }, error } = yield call(api.getInventory, classFilters);
-            if (items) {
-                Store.addCategoriesLoaded();
-                Store.addItems(items);
-                const itemsToShow = Store.filterItems(selectedCategory, search, user);
-                yield put(responseSuccess({ itemsToShow }));
-            } else if (error) {
-                throw error;
-            }
+        const user = yield select(state => state.user);
+        // const selectedCategory = Store.getSelectedCategory();
+        // const classFilters = Store.getClassFilters(selectedCategory, search);
+        //
+        // if (classFilters) {
+        //     const { res: { items }, error } = yield call(api.getInventory, classFilters);
+        //     if (items) {
+        //         Store.addCategoriesLoaded();
+        //         Store.addItems(items);
+        //         const itemsToShow = Store.filterItems(selectedCategory, search, user);
+        //         yield put(responseSuccess({ itemsToShow }));
+        //     } else if (error) {
+        //         throw error;
+        //     }
+        // }
+
+        const { res: { items }, error } = yield call(api.getInventory);
+        if(items) {
+            var itemsToShow = items;
+            yield put(responseSuccess({ itemsToShow }));
+        } else if (error) {
+            throw error;
         }
     } catch (error) {
         yield put(responseFailure(error));

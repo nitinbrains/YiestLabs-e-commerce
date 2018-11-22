@@ -8,11 +8,11 @@ require(['N/record', 'N/log', 'N/search', 'N/email', 'N/runtime', 'N/https'],
 function(record, log, search, email, runtime, https)
 {
 
-    function getUserAddressCoordinates(userId)
+    function getUserAddressCoordinates(userID)
     {
         var API_KEY = 'AIzaSyDuejdESSuOcCd0Fo6UX8wS0TLXLwwUCac';
 
-        var userRecord = record.load({type: record.Type.CUSTOMER, id: String(userId)});
+        var userRecord = record.load({type: record.Type.CUSTOMER, id: String(userID)});
         var userAddress = userRecord.getValue({fieldId: 'defaultaddress'});
 
         var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
