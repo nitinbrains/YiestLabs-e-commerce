@@ -23,6 +23,29 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 import { cartActions } from '../../../redux/actions/cartActions';
 
+const YeastDialog = {
+    "2": {img: '../../../static/images/categories/Category-core.jpg', color: '#FFF'},
+    "3": {img: '../../../static/images/categories/Category-ale.jpg', color: "#FF9933"},
+    "4": {img: '../../../static/images/categories/Category-wild.jpg', color: "#CC9966"},
+    "5": {img: '../../../static/images/categories/Category-lager.jpg', color: "#FFCC33"},
+    "6": {img: '../../../static/images/categories/Category-wine.jpg', color: "#9966CC"},
+    "7": {img: '../../../static/images/categories/Category-Distilling.jpg', color: "#6666CC"},
+    "8": {img: '../../../static/images/categories/Category-belgian.jpg', color: "#66CCCC"},
+    "32": {img: '../../../static/images/categories/Category-vault.jpg', color: "#B3B3B3"}
+}
+
+function getImage(salesCategory)
+{
+    try
+    {
+        return YeastDialog[parseInt(salesCategory)].img;
+    }
+    catch(err)
+    {
+        console.log('error', salesCategory, err);
+    }
+}
+
 class YeastDialog extends Component {
     constructor(props) {
         super(props);
@@ -39,6 +62,7 @@ class YeastDialog extends Component {
         };
 
         this.item = this.props.item;
+
     }
 
     componentWillMount() {
@@ -76,13 +100,16 @@ class YeastDialog extends Component {
 
             if (this.item.volID[6]) {
                 FilteredPackageTypes.push(PackageTypes[0]);
-            } else if (this.item.volID[0] && this.item.volID[2]) {
+            }
+            else if (this.item.volID[0] && this.item.volID[2]) {
                 if (this.item.purePitch) {
                     FilteredPackageTypes.push(PackageTypes[1]);
-                } else {
+                }
+                else {
                     FilteredPackageTypes.push(PackageTypes[2]);
                 }
-            } else if (this.item.volID[0]) {
+            }
+            else if (this.item.volID[0]) {
                 FilteredPackageTypes.push(PackageTypes[6]);
             }
 
