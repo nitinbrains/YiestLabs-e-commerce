@@ -15,7 +15,7 @@ export function * getInventory (action) {
         const { res: { items }, error } = yield call(api.getInventory);
 
         if(items) {
-            const itemsToShow = filterItems(items, "2", null, false)
+            const itemsToShow = filterItems(items, 1, null, false)
             yield put(responseSuccess({ items, itemsToShow }));
         } else if (error) {
             throw error;
