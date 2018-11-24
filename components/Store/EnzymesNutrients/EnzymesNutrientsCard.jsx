@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect} from 'react-redux';
+import { connect } from "react-redux";
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -22,52 +22,59 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 class EnzymesNutrientsCard extends Component {
 
-    render() {
+    constructor(props) {
+        super(props);
+    }
 
+    render() {
         const { classes, theme, item } = this.props;
 
-        const spaceIndex = item.Name.indexOf(" ")
+        const spaceIndex = item.Name.indexOf(" ");
         const itemID = item.Name.substr(0, spaceIndex);
-        const itemName = item.Name.substr(spaceIndex + 1)
+        const itemName = item.Name.substr(spaceIndex + 1);
 
         return (
             <Grid
                 item
                 xs={12}
                 sm={6}
-                md={3}
+                md={4}
+                lg={3}
                 spacing={24}
                 onClick={this.props.onClick.bind(this, this.props.item)}
             >
                 <div
                     className={classes.card}
+                    onMouseEnter={this.handleItemHoverEnter}
+                    onMouseLeave={this.handleItemHoverLeave}
+                    style={ {
+                                  backgroundImage: `url('../../../static/images/categories/Category-core.jpg')`,
+                                  backgroundRepeat: "no-repeat",
+                                  backgroundSize: "cover"
+                              }
+                    }
                 >
-                    <Grid
-                        item
-                        container
-                        direction={"column"}
-                        xs
-                        justify="center"
-                        alignItems="center"
-                    >
-                        <Grid item xs>
-                            <Typography
-                                variant="h3"
-                                color="textPrimary"
+                        <Grid item container spacing={8}>
+                            <Grid
+                                item
+                                xs={12}
+                                className={classes.info}
+                                style={{ marginTop: 60 }}
                             >
-                                {itemID}
-                            </Typography>
-                            <Typography
-                                variant="subheading"
-                                color="textPrimary"
-                            >
-                                {itemName}
-                            </Typography>
+                                <Typography variant="h5" color="secondary">
+                                    {itemID}
+                                </Typography>
+                                <Typography
+                                    variant="subheading"
+                                    color="secondary"
+                                >
+                                    {itemName}
+                                </Typography>
+                            </Grid>
                         </Grid>
-                    </Grid>
                 </div>
             </Grid>
-        )
+        );
     }
 }
 
@@ -76,7 +83,7 @@ const styles = theme => ({
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
-        height: 200,
+        height: 230
     },
     cardHover: {
         transition: theme.transitions.create("width", {
@@ -85,36 +92,36 @@ const styles = theme => ({
         })
     },
     info: {
-        alignItems: "center",
-        padding: 5,
-        backgroundColor: "#e4e4e4",
         textAlign: "center"
     },
-    quantity: {
-        width: 50
-    },
-    hide: {
-        display: "none"
+    name: {
+        padding: 3,
+        marginLeft: theme.spacing.unit * -2,
+        marginRight: theme.spacing.unit * -2,
+        textAlign: "center"
     }
 });
 
-
 EnzymesNutrientsCard.propTypes = {
-    classes: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired
+    classes: PropTypes.object.isurld,
+    theme: PropTypes.object.isurld
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.user,
         inventory: state.inventory
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(EnzymesNutrientsCard));
+const mapDispatchToProps = dispatch => {
+    return {
+        addCartItem: (item, volIdIndex, quantity) =>
+            dispatch({ type: "ADD_TO_CART", item, volIdIndex, quantity })
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(EnzymesNutrientsCard));

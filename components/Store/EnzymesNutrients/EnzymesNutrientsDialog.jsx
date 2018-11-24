@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { connect} from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -14,6 +14,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -21,39 +23,39 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-import { cartActions } from '../../../redux/actions/cartActions';
+import { cartActions } from "../../../redux/actions/cartActions";
 
 class EnzymesNutrientsDialog extends Component {
-
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
         this.state = {
-            quantity: '1',
+            quantity: "1"
         };
 
         this.item = this.props.item;
     }
 
-    checkQuantity = (item) => {
-
+    checkQuantity = item => {
         var quantity = parseFloat(item.OrderDetailQty);
 
-        if(isNaN(quantity) || quantity <= 0 ) {
-            console.log('Please enter a valid value for the quantity');
+        if (isNaN(quantity) || quantity <= 0) {
+            console.log("Please enter a valid value for the quantity");
             return false;
         }
 
         //  Must be in increments of 1
-        else if ((parseFloat(quantity) / parseInt(quantity) != 1.0)) {
+        else if (parseFloat(quantity) / parseInt(quantity) != 1.0) {
             return false;
         }
 
         return true;
-    }
+    };
+
+    handleDialogClose() {
+        this.props.closeDialog();
+    };
 
     addToCart = () => {
-
         var quantity = this.state.quantity;
         var item = this.item;
 
@@ -67,25 +69,64 @@ class EnzymesNutrientsDialog extends Component {
         cartItem.OrderDetailQty = parseFloat(quantity);
         cartItem.dispQuantity = parseInt(quantity);
 
-        if(this.checkQuantity(cartItem)) {
+        if (this.checkQuantity(cartItem)) {
             this.props.addItem({ cartItem });
             this.props.closeDialog();
         }
-    }
+    };
 
-    changeQuantity = (event) => {
-        this.setState({quantity: event.target.value})
-    }
+    changeQuantity = event => {
+        this.setState({ quantity: event.target.value });
+    };
 
     render() {
-        const { classes, theme } = this.props;
+        const { classes, theme, item } = this.props;
+
+        const spaceIndex = item.Name.indexOf(" ");
+        const itemID = item.Name.substr(0, spaceIndex);
+        const itemName = item.Name.substr(spaceIndex + 1);
 
         return (
             <React.Fragment>
-                <DialogTitle id="form-dialog-title">
-                    {this.item.Name}
-                </DialogTitle>
                 <DialogContent>
+                <div className={classes.close}>
+                    <IconButton
+                        color="inherit"
+                        size="small"
+                        aria-label="Menu"
+                        onClick={() => this.handleDialogClose()}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </div>
+                    <Grid
+                        item
+                        container
+                        xs
+                        style={{
+                            display: "flex",
+                            marginBottom: 20
+                        }}
+                        direction={"row"}
+                        spacing={4}
+                    >
+                        <Grid item>
+                            <Typography variant="h5">
+                                {itemID} | {itemName}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs>
+                            <div
+                                style={{
+                                    backgroundColor: "#FF9933",
+                                    height: 2,
+                                    marginTop: 15,
+                                    marginLeft: 20,
+                                    width: "100%"
+                                }}
+                            />
+                        </Grid>
+                    </Grid>
 
                     <Grid
                         item
@@ -95,9 +136,7 @@ class EnzymesNutrientsDialog extends Component {
                         style={{ marginTop: 5 }}
                     >
                         <Grid item>
-                            <Typography>
-                                {this.item.Description}
-                            </Typography>
+                            <Typography>{this.item.Description}</Typography>
                         </Grid>
                     </Grid>
                     <Grid
@@ -126,18 +165,30 @@ class EnzymesNutrientsDialog extends Component {
                                     type="number"
                                 />
                             </Grid>
+                            <Grid
+                                item
+                                xs
+                                container
+                                spacing={24}
+                                direction={"row"}
+                                justify="flex-end"
+                            >
+                                <Grid item>
+                                    <div className={classes.buttons}>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={this.addToCart}
+                                            className={classes.button}
+                                        >
+                                            Add to Cart
+                                        </Button>
+                                    </div>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </DialogContent>
-                <DialogActions>
-                    <Button
-                        onClick={this.addToCart}
-                        color="primary"
-                        onChange={this.changeQuantity}
-                    >
-                        Add to Cart
-                    </Button>
-                </DialogActions>
             </React.Fragment>
         );
     }
@@ -171,7 +222,17 @@ const styles = theme => ({
     },
     hide: {
         display: "none"
-    }
+    },
+    buttons: {
+        display: "flex",
+        justifyContent: "flex-end"
+    },
+    button: {
+        marginTop: theme.spacing.unit,
+        marginRight: theme.spacing.unit * -5
+    },
+    close: { position: "absolute", right: 0, top: 0 }
+
 });
 
 EnzymesNutrientsDialog.propTypes = {
@@ -179,13 +240,17 @@ EnzymesNutrientsDialog.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.user,
         inventory: state.inventory
-    }
-}
+    };
+};
 
-const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(cartActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(EnzymesNutrientsDialog));
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(EnzymesNutrientsDialog));

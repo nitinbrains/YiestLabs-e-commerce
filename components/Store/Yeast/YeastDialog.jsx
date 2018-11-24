@@ -14,6 +14,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -353,6 +355,10 @@ class YeastDialog extends Component {
         }
     };
 
+    handleDialogClose() {
+        this.props.closeDialog();
+    };
+
     setPack = event => {
         this.setState({ pack: event.target.value });
     };
@@ -382,13 +388,22 @@ class YeastDialog extends Component {
         return (
             <React.Fragment>
                 <DialogContent>
+                    <div className={classes.close}>
+                        <IconButton
+                            color="inherit"
+                            size="small"
+                            aria-label="Menu"
+                            onClick={() => this.handleDialogClose()}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    </div>
                     <Grid
                         item
                         container
                         xs
                         style={{
                             display: "flex",
-                            marginTop: -10,
                             marginBottom: 20
                         }}
                         direction={"row"}
@@ -406,7 +421,7 @@ class YeastDialog extends Component {
                                         this.props.item.salesCategory
                                     ),
                                     height: 2,
-                                    marginTop:15,
+                                    marginTop: 15,
                                     marginLeft: 20,
                                     width: "100%"
                                 }}
@@ -639,7 +654,8 @@ const styles = theme => ({
     button: {
         marginTop: theme.spacing.unit,
         marginRight: theme.spacing.unit * -5
-    }
+    },
+    close: { position: "absolute", right: 0, top: 0 }
 });
 
 YeastDialog.propTypes = {
