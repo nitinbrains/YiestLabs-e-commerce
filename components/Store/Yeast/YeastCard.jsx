@@ -19,59 +19,71 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-const YeastCardElements = {
-    "2": {img: '../../../static/images/categories/Category-core.jpg', color: '#FFF'},
-    "3": {img: '../../../static/images/categories/Category-ale.jpg', color: "#FF9933"},
-    "4": {img: '../../../static/images/categories/Category-wild.jpg', color: "#CC9966"},
-    "5": {img: '../../../static/images/categories/Category-lager.jpg', color: "#FFCC33"},
-    "6": {img: '../../../static/images/categories/Category-wine.jpg', color: "#9966CC"},
-    "7": {img: '../../../static/images/categories/Category-Distilling.jpg', color: "#6666CC"},
-    "8": {img: '../../../static/images/categories/Category-belgian.jpg', color: "#66CCCC"},
-    "32": {img: '../../../static/images/categories/Category-vault.jpg', color: "#B3B3B3"}
-}
-
-const YeastCardIcons = {
-    "3": {icon: '../../../static/images/icons/Ale-icon.svg', color: "#FF9933"},             // Ale
-    "4": {icon: '../../../static/images/icons/Wildyeast-icon.svg', color: "#CC9966"},       // Wild Yeast
-    "5": {icon: '../../../static/images/icons/Lager-icon.svg', color: "#FFCC33"},            // Lager
-    "6": {icon: '../../../static/images/icons/Wine-icon.svg', color: "#9966CC"},             // Wine
-    "7": {icon: '../../../static/images/icons/Distilling-icon.svg', color: "#6666CC"},       // Distilling
-    "8": {icon: '../../../static/images/icons/Belgian-icon.svg', color: "#66CCCC"},          // Belgian
-    "32": {icon: '../../../static/images/icons/Vault-icon.svg', color: "#B3B3B3"}            // Vault
-}
-
-function getImage(salesCategory)
-{
-    try
-    {
-        return YeastCardElements[parseInt(salesCategory)].img;
+const YeastElements = {
+    "2": {
+        img: '../../../static/images/categories/Category-core.jpg',
+        color: '#FFF'
+    },
+    "3": {  // Ale
+        img: '../../../static/images/categories/Category-ale.jpg',
+        icon: '../../../static/images/icons/Ale-icon.svg',
+        color: "#FF9933"
+    },
+    "4": {  // Wild Yeast
+        img: '../../../static/images/categories/Category-wild.jpg',
+        icon: '../../../static/images/icons/Wildyeast-icon.svg',
+        color: "#CC9966"
+    },
+    "5": {  // Lager
+        img: '../../../static/images/categories/Category-lager.jpg',
+        icon: '../../../static/images/icons/Lager-icon.svg',
+        color: "#FFCC33"
+    },
+    "6": {  // Wine
+        img: '../../../static/images/categories/Category-wine.jpg',
+        icon: '../../../static/images/icons/Wine-icon.svg',
+        color: "#9966CC"
+    },
+    "7": {  // Distilling
+        img: '../../../static/images/categories/Category-Distilling.jpg',
+        icon: '../../../static/images/icons/Distilling-icon.svg',
+        color: "#6666CC"
+    },
+    "8": {  // Belgian
+        img: '../../../static/images/categories/Category-belgian.jpg',
+        icon: '../../../static/images/icons/Belgian-icon.svg',
+        color: "#66CCCC"
+    },
+    "32": { // Vault
+        img: '../../../static/images/categories/Category-vault.jpg',
+        icon: '../../../static/images/icons/Vault-icon.svg',
+        color: "#B3B3B3"
     }
-    catch(err)
-    {
+}
+
+function getImage(salesCategory) {
+    try {
+        return YeastElements[parseInt(salesCategory)].img;
+    }
+    catch(err) {
         console.log('error', salesCategory, err);
     }
 }
 
-function getIcon(salesCategory)
-{
-    try
-    {
-        return YeastCardIcons[parseInt(salesCategory)].icon;
+function getIcon(salesCategory) {
+    try {
+        return YeastElements[parseInt(salesCategory)].icon;
     }
-    catch(err)
-    {
+    catch(err) {
         console.log('error', salesCategory, err);
     }
 }
 
-function getColor(salesCategory)
-{
-    try
-    {
-        return YeastCardElements[parseInt(salesCategory)].color;
+function getColor(salesCategory) {
+    try {
+        return YeastElements[parseInt(salesCategory)].color;
     }
-    catch(err)
-    {
+    catch(err) {
         console.log(err);
         throw err;
     }
