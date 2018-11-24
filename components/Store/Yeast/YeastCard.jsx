@@ -186,6 +186,7 @@ class YeastCard extends Component {
                                 container
                                 direction={"row"}
                                 spacing={8}
+                                justify="center"
                             >
                                 <Grid item xs={6}>
                                     <div className={classes.info}>

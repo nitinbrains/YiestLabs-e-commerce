@@ -24,35 +24,48 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { cartActions } from "../../../redux/actions/cartActions";
 
 const YeastDialogElements = {
-    "3": {icon: '../../../static/images/icons/Ale-icon.svg', color: "#FF9933"},             // Ale
-    "4": {icon: '../../../static/images/icons/Wildyeast-icon.svg', color: "#CC9966"},       // Wild Yeast
-    "5": {icon: '../../../static/images/icons/Lager-icon.svg', color: "#FFCC33"},            // Lager
-    "6": {icon: '../../../static/images/icons/Wine-icon.svg', color: "#9966CC"},             // Wine
-    "7": {icon: '../../../static/images/icons/Distilling-icon.svg', color: "#6666CC"},       // Distilling
-    "8": {icon: '../../../static/images/icons/Belgian-icon.svg', color: "#66CCCC"},          // Belgian
-    "32": {icon: '../../../static/images/icons/Vault-icon.svg', color: "#B3B3B3"}            // Vault
-}
+    "3": {
+        icon: "../../../static/images/icons/Ale-icon.svg",
+        color: "#FF9933"
+    }, // Ale
+    "4": {
+        icon: "../../../static/images/icons/Wildyeast-icon.svg",
+        color: "#CC9966"
+    }, // Wild Yeast
+    "5": {
+        icon: "../../../static/images/icons/Lager-icon.svg",
+        color: "#FFCC33"
+    }, // Lager
+    "6": {
+        icon: "../../../static/images/icons/Wine-icon.svg",
+        color: "#9966CC"
+    }, // Wine
+    "7": {
+        icon: "../../../static/images/icons/Distilling-icon.svg",
+        color: "#6666CC"
+    }, // Distilling
+    "8": {
+        icon: "../../../static/images/icons/Belgian-icon.svg",
+        color: "#66CCCC"
+    }, // Belgian
+    "32": {
+        icon: "../../../static/images/icons/Vault-icon.svg",
+        color: "#B3B3B3"
+    } // Vault
+};
 
-function getIcon(salesCategory)
-{
-    try
-    {
+function getIcon(salesCategory) {
+    try {
         return YeastDialogElements[parseInt(salesCategory)].icon;
-    }
-    catch(err)
-    {
-        console.log('error', salesCategory, err);
+    } catch (err) {
+        console.log("error", salesCategory, err);
     }
 }
 
-function getColor(salesCategory)
-{
-    try
-    {
+function getColor(salesCategory) {
+    try {
         return YeastDialogElements[parseInt(salesCategory)].color;
-    }
-    catch(err)
-    {
+    } catch (err) {
         console.log(err);
         throw err;
     }
@@ -360,17 +373,57 @@ class YeastDialog extends Component {
     };
 
     render() {
-        const { classes, theme } = this.props;
+        const { classes, theme, item } = this.props;
+
+        const spaceIndex = item.Name.indexOf(" ");
+        const itemID = item.Name.substr(0, spaceIndex);
+        const itemName = item.Name.substr(spaceIndex + 1);
 
         return (
             <React.Fragment>
-                <DialogTitle id="form-dialog-title">
-                    {this.item.Name}
-                </DialogTitle>
                 <DialogContent>
+                    <Grid
+                        item
+                        container
+                        xs
+                        style={{
+                            display: "flex",
+                            marginTop: -10,
+                            marginBottom: 20
+                        }}
+                        direction={"row"}
+                        spacing={4}
+                    >
+                        <Grid item>
+                            <Typography variant="h5">
+                                {itemID} | {itemName}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs>
+                            <div
+                                style={{
+                                    backgroundColor: getColor(
+                                        this.props.item.salesCategory
+                                    ),
+                                    height: 2,
+                                    marginTop:15,
+                                    marginLeft: 20,
+                                    width: "100%"
+                                }}
+                            />
+                        </Grid>
+                    </Grid>
+
                     <Grid container spacing={24}>
-                        <Grid item xs={1}>
-                            <div className={classes.circle} style={{backgroundColor: getColor(this.props.item.salesCategory)}}>
+                        <Grid item xs={2} md={1}>
+                            <div
+                                className={classes.circle}
+                                style={{
+                                    backgroundColor: getColor(
+                                        this.props.item.salesCategory
+                                    )
+                                }}
+                            >
                                 <img
                                     src={getIcon(this.props.item.salesCategory)}
                                     height="20"
@@ -380,23 +433,72 @@ class YeastDialog extends Component {
                         <Grid
                             item
                             container
-                            xs
-                            direction={"column"}
+                            xs={10}
+                            md={11}
+                            direction={"row"}
                             spacing={4}
                         >
-                            <Grid item xs justify="center">
-                                <Typography>
-                                    Attenuation: {this.item.attenuation} |
-                                    Flocculation: {this.item.flocculation} |
-                                    Alcohol Tol.: {this.item.alcoholTol} |
-                                </Typography>
+                            <Grid item xs={12} md={6}>
+                                <div style={{ display: "flex" }}>
+                                    <Typography>Attenuation:</Typography>
+                                    &nbsp;
+                                    <Typography
+                                        style={{
+                                            color: getColor(
+                                                this.props.item.salesCategory
+                                            )
+                                        }}
+                                    >
+                                        {this.item.attenuation}
+                                    </Typography>
+                                </div>
                             </Grid>
-                            <Grid item xs direction={"row"}>
-                                <Typography>
-                                    Fermentation Temp:{" "}
-                                    {this.item.optFermentTempF |
-                                        this.item.optFermentTempF}
-                                </Typography>
+
+                            <Grid item xs={12} md={6}>
+                                <div style={{ display: "flex" }}>
+                                    <Typography>Flocculation: </Typography>
+                                    &nbsp;
+                                    <Typography
+                                        style={{
+                                            color: getColor(
+                                                this.props.item.salesCategory
+                                            )
+                                        }}
+                                    >
+                                        {this.item.flocculation}
+                                    </Typography>
+                                </div>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <div style={{ display: "flex" }}>
+                                    <Typography>Alcohol Tol.: </Typography>
+                                    &nbsp;
+                                    <Typography
+                                        style={{
+                                            color: getColor(
+                                                this.props.item.salesCategory
+                                            )
+                                        }}
+                                    >
+                                        {this.item.alcoholTol}
+                                    </Typography>
+                                </div>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <div style={{ display: "flex" }}>
+                                    <Typography>Fermentation Temp: </Typography>
+                                    &nbsp;
+                                    <Typography
+                                        style={{
+                                            color: getColor(
+                                                this.props.item.salesCategory
+                                            )
+                                        }}
+                                    >
+                                        {this.item.optFermentTempF |
+                                            this.item.optFermentTempF}
+                                    </Typography>
+                                </div>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -480,14 +582,30 @@ class YeastDialog extends Component {
                                     type="number"
                                 />
                             </Grid>
+                            <Grid
+                                item
+                                xs
+                                container
+                                spacing={24}
+                                direction={"row"}
+                                justify="flex-end"
+                            >
+                                <Grid item>
+                                    <div className={classes.buttons}>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={this.addToCart}
+                                            className={classes.button}
+                                        >
+                                            Add to Cart
+                                        </Button>
+                                    </div>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.addToCart} color="primary">
-                        Add to Cart
-                    </Button>
-                </DialogActions>
             </React.Fragment>
         );
     }
@@ -513,6 +631,14 @@ const styles = theme => ({
         padding: 5,
         width: 37,
         height: 37
+    },
+    buttons: {
+        display: "flex",
+        justifyContent: "flex-end"
+    },
+    button: {
+        marginTop: theme.spacing.unit,
+        marginRight: theme.spacing.unit * -5
     }
 });
 
