@@ -23,46 +23,38 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 import { cartActions } from "../../../redux/actions/cartActions";
 
-const YeastDialog = {
-    "2": {
-        img: "../../../static/images/categories/Category-core.jpg",
-        color: "#FFF"
-    },
-    "3": {
-        img: "../../../static/images/categories/Category-ale.jpg",
-        color: "#FF9933"
-    },
-    "4": {
-        img: "../../../static/images/categories/Category-wild.jpg",
-        color: "#CC9966"
-    },
-    "5": {
-        img: "../../../static/images/categories/Category-lager.jpg",
-        color: "#FFCC33"
-    },
-    "6": {
-        img: "../../../static/images/categories/Category-wine.jpg",
-        color: "#9966CC"
-    },
-    "7": {
-        img: "../../../static/images/categories/Category-Distilling.jpg",
-        color: "#6666CC"
-    },
-    "8": {
-        img: "../../../static/images/categories/Category-belgian.jpg",
-        color: "#66CCCC"
-    },
-    "32": {
-        img: "../../../static/images/categories/Category-vault.jpg",
-        color: "#B3B3B3"
-    }
-};
+const YeastDialogElements = {
+    "3": {icon: '../../../static/images/icons/Ale-icon.svg', color: "#FF9933"},             // Ale
+    "4": {icon: '../../../static/images/icons/Wildyeast-icon.svg', color: "#CC9966"},       // Wild Yeast
+    "5": {icon: '../../../static/images/icons/Lager-icon.svg', color: "#FFCC33"},            // Lager
+    "6": {icon: '../../../static/images/icons/Wine-icon.svg', color: "#9966CC"},             // Wine
+    "7": {icon: '../../../static/images/icons/Distilling-icon.svg', color: "#6666CC"},       // Distilling
+    "8": {icon: '../../../static/images/icons/Belgian-icon.svg', color: "#66CCCC"},          // Belgian
+    "32": {icon: '../../../static/images/icons/Vault-icon.svg', color: "#B3B3B3"}            // Vault
+}
 
-function getImage(salesCategory) {
-    try {
-        return YeastDialog[parseInt(salesCategory)].img;
-    } catch (err) {
-        console.log("error", salesCategory, err);
+function getIcon(salesCategory)
+{
+    try
+    {
+        return YeastDialogElements[parseInt(salesCategory)].icon;
+    }
+    catch(err)
+    {
+        console.log('error', salesCategory, err);
+    }
+}
+
+function getColor(salesCategory)
+{
+    try
+    {
+        return YeastDialogElements[parseInt(salesCategory)].color;
+    }
+    catch(err)
+    {
+        console.log(err);
+        throw err;
     }
 }
 
@@ -378,9 +370,9 @@ class YeastDialog extends Component {
                 <DialogContent>
                     <Grid container spacing={24}>
                         <Grid item xs={1}>
-                            <div className={classes.circle}>
+                            <div className={classes.circle} style={{backgroundColor: getColor(this.props.item.salesCategory)}}>
                                 <img
-                                    src="../../static/images/icons/Ale-icon.svg"
+                                    src={getIcon(this.props.item.salesCategory)}
                                     height="20"
                                 />
                             </div>
@@ -517,7 +509,6 @@ const styles = theme => ({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#85FFC7",
         borderRadius: "50%",
         padding: 5,
         width: 37,

@@ -86,7 +86,8 @@ class YeastCard extends Component {
                 item
                 xs={12}
                 sm={6}
-                md={3}
+                md={4}
+                lg={3}
                 spacing={24}
                 onClick={this.props.onClick.bind(this, this.props.item)}
             >
@@ -144,6 +145,8 @@ class YeastCard extends Component {
                                         backgroundColor: getColor(this.props.item.salesCategory),
                                         padding: 1,
                                         textAlign: "center",
+                                        marginLeft: theme.spacing.unit * -2,
+                                        marginRight: theme.spacing.unit * -2,
                                     }}
                                 >
                                     <Typography
