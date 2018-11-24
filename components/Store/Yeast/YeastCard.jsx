@@ -30,11 +30,33 @@ const YeastCardElements = {
     "32": {img: '../../../static/images/categories/Category-vault.jpg', color: "#B3B3B3"}
 }
 
+const YeastCardIcons = {
+    "3": {icon: '../../../static/images/icons/Ale-icon.svg', color: "#FF9933"},             // Ale
+    "4": {icon: '../../../static/images/icons/Wildyeast-icon.svg', color: "#CC9966"},       // Wild Yeast
+    "5": {icon: '../../../static/images/icons/Lager-icon.svg', color: "#FFCC33"},            // Lager
+    "6": {icon: '../../../static/images/icons/Wine-icon.svg', color: "#9966CC"},             // Wine
+    "7": {icon: '../../../static/images/icons/Distilling-icon.svg', color: "#6666CC"},       // Distilling
+    "8": {icon: '../../../static/images/icons/Belgian-icon.svg', color: "#66CCCC"},          // Belgian
+    "32": {icon: '../../../static/images/icons/Vault-icon.svg', color: "#B3B3B3"}            // Vault
+}
+
 function getImage(salesCategory)
 {
     try
     {
         return YeastCardElements[parseInt(salesCategory)].img;
+    }
+    catch(err)
+    {
+        console.log('error', salesCategory, err);
+    }
+}
+
+function getIcon(salesCategory)
+{
+    try
+    {
+        return YeastCardIcons[parseInt(salesCategory)].icon;
     }
     catch(err)
     {
@@ -62,6 +84,7 @@ class YeastCard extends Component {
         this.state = {
             hover: false,
             img: null,
+            icon: null,
             color: null,
         };
     }
@@ -114,7 +137,7 @@ class YeastCard extends Component {
                                 style={{ marginTop: 30 }}
                             >
                                 <img
-                                    src="../../static/images/icons/Ale-icon.svg"
+                                    src={getIcon(this.props.item.salesCategory)}
                                     height="40"
                                 />
                                 <Typography variant="h5" color="secondary">
