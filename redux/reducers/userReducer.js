@@ -59,7 +59,7 @@ export default createReducer(initialState, {
     [userTypes.USER_LOGIN_SUCCESS]: (state, { data }) => ({
         ...data
     }),
-    [userTypes.SET_USER_INFO_ATTEMPT]: (state, { data: { userInfo } }) => ({
+    [userTypes.SET_USER_INFO_SUCCESS]: (state, { data: userInfo }) => ({
         ...userInfo
     }),
     [userTypes.SET_CREDIT_CARD_SUCCESS]: (state, {data: card}) => ({

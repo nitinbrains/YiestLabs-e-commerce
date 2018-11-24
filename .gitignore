@@ -1,3 +1,4 @@
 /.next
 /node_modules
 /.vs
+components/Store/Yeast/YeastCard.jsx

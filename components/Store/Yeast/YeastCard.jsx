@@ -19,69 +19,51 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
+const YeastCardElements = {
+    "2": {img: '../../../static/images/categories/Category-core.jpg', color: '#FFF'},
+    "3": {img: '../../../static/images/categories/Category-ale.jpg', color: "#FF9933"},
+    "4": {img: '../../../static/images/categories/Category-wild.jpg', color: "#CC9966"},
+    "5": {img: '../../../static/images/categories/Category-lager.jpg', color: "#FFCC33"},
+    "6": {img: '../../../static/images/categories/Category-wine.jpg', color: "#9966CC"},
+    "7": {img: '../../../static/images/categories/Category-Distilling.jpg', color: "#6666CC"},
+    "8": {img: '../../../static/images/categories/Category-belgian.jpg', color: "#66CCCC"},
+    "32": {img: '../../../static/images/categories/Category-vault.jpg', color: "#B3B3B3"}
+}
+
+function getImage(salesCategory)
+{
+    try
+    {
+        return YeastCardElements[parseInt(salesCategory)].img;
+    }
+    catch(err)
+    {
+        console.log('error', salesCategory, err);
+    }
+}
+
+function getColor(salesCategory)
+{
+    try
+    {
+        return YeastCardElements[parseInt(salesCategory)].color;
+    }
+    catch(err)
+    {
+        console.log(err);
+        throw err;
+    }
+}
+
 class YeastCard extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
             hover: false,
             img: null,
-            color: null
+            color: null,
         };
-    }
-
-    componentWillMount() {
-        switch (this.props.item.salesCategory) {
-            case "3":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-ale.jpg')",
-                    color: "#FF9933"
-                });
-                break;
-            case "5":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-lager.jpg')",
-                    color: "#FFCC33"
-                });
-                break;
-            case "6":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-wine.jpg')",
-                    color: "#9966CC"
-                });
-                break;
-            case "7":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-Distilling.jpg')",
-                    color: "#6666CC"
-                });
-                break;
-            case "8":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-belgian.jpg')",
-                    color: "#66CCCCCC"
-                });
-                break;
-            case "4":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-wild.jpg')",
-                    color: "#CC9966"
-                });
-                break;
-            case "32":
-                this.setState({
-                    img:
-                        "url('../../../static/images/categories/Category-vault.jpg')",
-                    color: "#B3B3B3"
-                });
-                break;
-            default:
-        }
     }
 
     handleItemHoverEnter = () => {
@@ -115,7 +97,7 @@ class YeastCard extends Component {
                     style={
                         !this.state.hover
                             ? {
-                                  backgroundImage: this.state.img,
+                                  backgroundImage: `url(${getImage(this.props.item.salesCategory)})`,
                                   backgroundRepeat: "no-repeat",
                                   backgroundSize: "cover"
                               }
@@ -151,13 +133,19 @@ class YeastCard extends Component {
                                 <Typography
                                     className={classes.info}
                                     variant="subtitle1"
-                                    style={{ color: this.state.color }}
+                                    style={{color: getColor(this.props.item.salesCategory)}}
                                 >
                                     {itemID}
                                 </Typography>
                             </Grid>
                             <Grid item xs={12}>
-                                <div className={classes.name} style={{backgroundColor: this.state.color,}}>
+                                <div
+                                    style={{
+                                        backgroundColor: getColor(this.props.item.salesCategory),
+                                        padding: 1,
+                                        textAlign: "center",
+                                    }}
+                                >
                                     <Typography
                                         variant="subtitle1"
                                         color="secondary"
@@ -178,9 +166,7 @@ class YeastCard extends Component {
                                         <Typography>
                                             Fermentation Temp
                                         </Typography>
-                                        <Typography
-                                            style={{ color: this.state.color }}
-                                        >
+                                        <Typography style={{color:getColor(this.props.item.salesCategory)}}>
                                             {item.optFermentTempF |
                                                 item.optFermentTempF}
                                         </Typography>
@@ -189,9 +175,7 @@ class YeastCard extends Component {
                                 <Grid item xs={6}>
                                     <div className={classes.info}>
                                         <Typography>Flocculation</Typography>
-                                        <Typography
-                                            style={{ color: this.state.color }}
-                                        >
+                                        <Typography style={{color:getColor(this.props.item.salesCategory)}}>
                                             {item.flocculation}
                                         </Typography>
                                     </div>
@@ -199,9 +183,7 @@ class YeastCard extends Component {
                                 <Grid item xs={6}>
                                     <div className={classes.info}>
                                         <Typography>Alcohol Tol.</Typography>
-                                        <Typography
-                                            style={{ color: this.state.color }}
-                                        >
+                                        <Typography style={{color:getColor(this.props.item.salesCategory)}}>
                                             {item.alcoholTol}
                                         </Typography>
                                     </div>
@@ -209,9 +191,7 @@ class YeastCard extends Component {
                                 <Grid item xs={6}>
                                     <div className={classes.info}>
                                         <Typography>Attenuation</Typography>
-                                        <Typography
-                                            style={{ color: this.state.color }}
-                                        >
+                                        <Typography style={{color:getColor(this.props.item.salesCategory)}}>
                                             {item.attenuation}
                                         </Typography>
                                     </div>
@@ -250,8 +230,8 @@ const styles = theme => ({
 });
 
 YeastCard.propTypes = {
-    classes: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired
+    classes: PropTypes.object.isurld,
+    theme: PropTypes.object.isurld
 };
 
 const mapStateToProps = state => {

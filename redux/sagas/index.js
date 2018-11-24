@@ -22,8 +22,10 @@ import {
     addShipAddress,
     addBillAddress
 } from './users';
+
 // Cart sagas
 import { updateCartItem, addCartItem, removeCartItem } from './cart';
+
 // Order sagas
 import {
     prepareOrder,
@@ -32,7 +34,8 @@ import {
     decrementShipDate
 } from './order';
 // Inventory sagas
-import { getInventory } from './inventory';
+
+import { getInventory, changeCategory } from './inventory';
 
 function * rootSaga () {
     yield all([
@@ -48,6 +51,7 @@ function * rootSaga () {
         takeLatest(userTypes.ADD_SHIP_ADDRESS_ATTEMPT, addShipAddress),
         // INVENTORY
         takeEvery(inventoryTypes.GET_INVENTORY_ATTEMPT, getInventory),
+        takeEvery(inventoryTypes.CHANGE_CATEGORY_ATTEMPT, changeCategory),
         // CART
         takeEvery(cartTypes.ADD_ITEM_ATTEMPT, addCartItem),
         takeEvery(cartTypes.REMOVE_ITEM_ATTEMPT, removeCartItem),
