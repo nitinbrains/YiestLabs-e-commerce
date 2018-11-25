@@ -404,6 +404,7 @@ class YeastDialog extends Component {
                         xs
                         style={{
                             display: "flex",
+                            marginTop: -10,
                             marginBottom: 20
                         }}
                         direction={"row"}
