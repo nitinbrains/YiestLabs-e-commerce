@@ -426,6 +426,7 @@ class YeastDialog extends Component {
                         xs
                         style={{
                             display: "flex",
+                            marginTop: -10,
                             marginBottom: 20
                         }}
                         direction={"row"}
@@ -435,19 +436,6 @@ class YeastDialog extends Component {
                             <Typography variant="h5">
                                 {itemID} | {itemName}
                             </Typography>
-                        </Grid>
-                        <Grid item xs>
-                            <div
-                                style={{
-                                    backgroundColor: getColor(
-                                        this.props.item.salesCategory
-                                    ),
-                                    height: 2,
-                                    marginTop: 15,
-                                    marginLeft: 20,
-                                    width: "100%"
-                                }}
-                            />
                         </Grid>
                     </Grid>
 

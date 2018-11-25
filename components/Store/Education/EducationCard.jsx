@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect} from 'react-redux';
+import { connect } from "react-redux";
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -19,99 +19,126 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-
 class EducationCard extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
-            hover: false,
-        }
+            hover: false
+        };
     }
 
     handleItemHoverEnter = () => {
-        this.setState({hover: true});
-    }
+        this.setState({ hover: true });
+    };
 
     handleItemHoverLeave = () => {
-        this.setState({hover: false});
-    }
+        this.setState({ hover: false });
+    };
 
     render() {
-
         const { classes, theme, item } = this.props;
+
 
         return (
             <Grid
                 item
                 xs={12}
                 sm={6}
-                md={3}
+                md={4}
+                lg={3}
                 spacing={24}
-                onMouseEnter={this.handleItemHoverEnter}
-                onMouseLeave={this.handleItemHoverLeave}
                 onClick={this.props.onClick.bind(this, this.props.item)}
             >
-                <Paper
+                <div
                     className={classes.card}
+                    onMouseEnter={this.handleItemHoverEnter}
+                    onMouseLeave={this.handleItemHoverLeave}
+                    style={
+                        !this.state.hover
+                            ? {
+                                  backgroundImage: `url('../../../static/images/categories/Category-core.jpg')`,
+                                  backgroundRepeat: "no-repeat",
+                                  backgroundSize: "cover"
+                              }
+                            : { backgroundColor: "#fff" }
+                    }
                 >
-                {!this.state.hover ? (
-                    <Grid
-                        item
-                        container
-                        direction={"column"}
-                        xs
-                        justify="center"
-                        alignItems="center"
-                    >
-                        <Grid item xs>
-                            <Typography
-                                variant="h3"
-                                color="textPrimary"
+                    {!this.state.hover ? (
+                        <Grid item container spacing={8}>
+                            <Grid
+                                item
+                                xs={12}
+                                className={classes.info}
+                                style={{ marginTop: 45 }}
                             >
-                                {item.Name}
-                            </Typography>
+                                <Typography variant="h5" color="secondary">
+                                    {item.Name}
+                                </Typography>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                ) : (
-                    <Grid
-                        item
-                        xs
-                        container
-                        direction={"column"}
-                        spacing={8}
-                        justify="flex-end"
-                    >
-                        <Grid item xs>
-                            <div className={classes.info}>
-                                <Typography>Class Location</Typography>
-                                <Typography>{item.tagLocation}</Typography>
-                            </div>
+                    ) : (
+                        <Grid item container direction={"column"} spacing={8}>
+                            <Grid item xs={12}>
+                                <div
+                                    style={{
+                                        backgroundColor: "#66CCCC",
+                                        padding: 1,
+                                        textAlign: "center",
+                                        marginLeft: theme.spacing.unit * -2,
+                                        marginRight: theme.spacing.unit * -2
+                                    }}
+                                >
+                                    <Typography
+                                        variant="subtitle1"
+                                        color="secondary"
+                                    >
+                                        {item.Name}
+                                    </Typography>
+                                </div>
+                            </Grid>
+                            <Grid
+                                item
+                                xs
+                                container
+                                direction={"row"}
+                                spacing={8}
+                                justify="center"
+                            >
+                                <Grid item xs={6}>
+                                    <div className={classes.info}>
+                                        <Typography>Class Location</Typography>
+                                        <Typography
+                                            style={{ color: "#66CCCC" }}
+                                        >
+                                            {item.tagLocation}
+                                        </Typography>
+                                    </div>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <div className={classes.info}>
+                                        <Typography>Date</Typography>
+                                        <Typography
+                                            style={{ color: "#66CCCC" }}
+                                        >
+                                            {item.tagDate}
+                                        </Typography>
+                                    </div>
+                                </Grid>
+                            </Grid>
                         </Grid>
-                        <Grid item xs>
-                            <div className={classes.info}>
-                                <Typography>Flocculation</Typography>
-                                <Typography>{item.tagDate}</Typography>
-                            </div>
-                        </Grid>
-                    </Grid>
-                )}
-                </Paper>
+                    )}
+                </div>
             </Grid>
-        )
+        );
     }
 }
 
 const styles = theme => ({
     card: {
-        ...theme.mixins.gutters(),
-        paddingTop: theme.spacing.unit * 2,
-        paddingBottom: theme.spacing.unit * 2,
-        height: 250,
-        transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
-        })
+        border: "solid 1px",
+        borderColor: "#CCCCCC",
+        padding: theme.spacing.unit * 2,
+        height: 230
     },
     cardHover: {
         transition: theme.transitions.create("width", {
@@ -120,36 +147,36 @@ const styles = theme => ({
         })
     },
     info: {
-        alignItems: "center",
-        padding: 5,
-        backgroundColor: "#e4e4e4",
         textAlign: "center"
     },
-    quantity: {
-        width: 50
-    },
-    hide: {
-        display: "none"
+    name: {
+        padding: 3,
+        marginLeft: theme.spacing.unit * -2,
+        marginRight: theme.spacing.unit * -2,
+        textAlign: "center"
     }
 });
-
 
 EducationCard.propTypes = {
     classes: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.user,
         inventory: state.inventory
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(EducationCard));
+const mapDispatchToProps = dispatch => {
+    return {
+        addCartItem: (item, volIdIndex, quantity) =>
+            dispatch({ type: "ADD_TO_CART", item, volIdIndex, quantity })
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(EducationCard));
