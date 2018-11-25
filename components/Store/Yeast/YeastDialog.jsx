@@ -414,19 +414,6 @@ class YeastDialog extends Component {
                                 {itemID} | {itemName}
                             </Typography>
                         </Grid>
-                        <Grid item xs>
-                            <div
-                                style={{
-                                    backgroundColor: getColor(
-                                        this.props.item.salesCategory
-                                    ),
-                                    height: 2,
-                                    marginTop: 15,
-                                    marginLeft: 20,
-                                    width: "100%"
-                                }}
-                            />
-                        </Grid>
                     </Grid>
 
                     <Grid container spacing={24}>
