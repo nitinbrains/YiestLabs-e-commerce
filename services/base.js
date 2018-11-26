@@ -1,5 +1,5 @@
 const fetch = require('isomorphic-unfetch');
-import { host } from '../config.server';
+import { host, retryCount } from '../config.server';
 
 class ResourceError {
   constructor(message, status, serverMsg) {
@@ -67,6 +67,15 @@ const checkResponseStatus = (res) => {
   return res;
 };
 
+const fetchRetry = async (url, options, n) => {
+    try {
+        return await fetch(url, options)
+    } catch(err) {
+        if (n === 1) throw err;
+        return await fetchRetry(url, options, n - 1);
+    }
+};
+
 export const requestWrapper = async (url, data = {}, token, jsonRequest = true) => {
   const URL = prepareURL(url, data.query);
   const headers = {
@@ -76,13 +85,14 @@ export const requestWrapper = async (url, data = {}, token, jsonRequest = true) 
   if (data.headers == null) {
     data.headers = headers;
   }
-  const response = await fetch(URL, data);
 
+  const response = await fetchRetry(URL, data, retryCount);
   try {
     const responseBody = await getResponseBody(response);
     checkResponseStatus(response);
     return response.ok ? { res: responseBody } : { err: responseBody };
   } catch (error) {
-    return response.ok ? { res: { code: response.status } } : { err: {} };
+    console.log('fetch error', error, response);
+    return response && response.ok ? { res: { code: response.status } } : { err: {} };
   }
 }

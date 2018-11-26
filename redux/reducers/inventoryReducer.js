@@ -66,13 +66,21 @@ const initialState = {
         label: "Gift Shop",
         value: 15,
         checked: false
-    }]
+    }],
+    isLoading: false
 };
 
 
 export default createReducer(initialState, {
+    [inventoryTypes.GET_INVENTORY_ATTEMPT]: (state, { data }) => ({
+        isLoading: true,
+    }),
     [inventoryTypes.GET_INVENTORY_SUCCESS]: (state, { data: { itemsToShow } }) => ({
         itemsToShow,
+        isLoading: false
+    }),
+    [inventoryTypes.GET_INVENTORY_FAILURE]: (state, { data }) => ({
+        isLoading: false,
     }),
     [inventoryTypes.SET_CATEGORIES_SUCCESS]: (state, { data: { categories } }) => ({
         categories,
