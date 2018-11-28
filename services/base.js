@@ -10,10 +10,10 @@ class ResourceError {
 }
 
 const prepareURL = (targetUrl, query) => {
-  if (!query) {
-    return targetUrl
-  }
-  return `${host}${targetUrl}?${Object.keys(query).map((field) => `${field}=${encodeURIComponent(query[field])}`).join('&')}`
+    if (!query) {
+        return targetUrl
+    }
+    return `${host}${targetUrl}?${Object.keys(query).map((field) => `${field}=${encodeURIComponent(query[field])}`).join('&')}`
 }
 
 const getResponseBody = async (res) => {
@@ -26,15 +26,13 @@ const getResponseBody = async (res) => {
     result = JSON.parse(text.replace(/:(\d+)([,\}])/g, ':"$1"$2'));
   }
 
-  const homeProps = res.redirected
-    ? {
-      _links: {
-        next: {
-          href: res.url
-        }
+  const homeProps = res.redirected ? {
+    _links: {
+      next: {
+        href: res.url
       }
     }
-    : {};
+  } : {};
 
   return {
     ...result,

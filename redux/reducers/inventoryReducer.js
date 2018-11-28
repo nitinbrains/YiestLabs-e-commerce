@@ -2,6 +2,7 @@ import { createReducer } from '../../helpers/reduxHelpers';
 import { inventoryTypes } from '../actions/inventoryActions';
 
 const initialState = {
+    items: [],
     itemsToShow: [],
     error: null,
     categories: [{
@@ -82,7 +83,7 @@ export default createReducer(initialState, {
     [inventoryTypes.GET_INVENTORY_FAILURE]: (state, { data }) => ({
         isLoading: false,
     }),
-    [inventoryTypes.SET_CATEGORIES_SUCCESS]: (state, { data: { categories } }) => ({
-        categories,
+    [inventoryTypes.SEARCH_STRAIN_SUCCESS]: (state, { data: { itemsToShow } }) => ({
+        itemsToShow,
     })
 });
