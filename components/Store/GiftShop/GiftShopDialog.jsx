@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { connect} from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -23,67 +23,66 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 
-import { cartActions } from '../../../redux/actions/cartActions';
+import { cartActions } from "../../../redux/actions/cartActions";
 
 class GiftShopDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            quantity: '1',
+            quantity: "1",
             sizes: [],
-            size: ''
+            size: ""
         };
 
         this.item = this.props.item;
     }
 
     componentWillMount() {
+        if (this.item.volID.length > 1) {
+            var sizes = [],
+                size,
+                possibleSizes = [
+                    { label: "M", value: 0 },
+                    { label: "XS", value: 1 },
+                    { label: "S", value: 2 },
+                    { label: "L", value: 3 },
+                    { label: "XL", value: 4 },
+                    { label: "XXL", value: 5 },
+                    { label: "XXXL", value: 6 }
+                ];
 
-        if(this.item.volID.length > 1) {
-            var sizes = [], size, possibleSizes = [
-                { label: "M", value: 0 },
-                { label: "XS", value: 1 },
-                { label: "S", value: 2 },
-                { label: "L", value: 3 },
-                { label: "XL", value: 4 },
-                { label: "XXL", value: 5 },
-                { label: "XXXL", value: 6 }
-            ];
-
-            for(var i in this.item.volID){
-                if(this.item.volID[i] != null){
+            for (var i in this.item.volID) {
+                if (this.item.volID[i] != null) {
                     sizes.push(possibleSizes[i]);
                 }
             }
 
             size = sizes[0].value;
-            this.setState({sizes, size});
+            this.setState({ sizes, size });
         }
     }
 
-    setSize = (event) => {
-        this.setState({size: event.target.value});
-    }
+    setSize = event => {
+        this.setState({ size: event.target.value });
+    };
 
-    checkQuantity = (item) => {
-
+    checkQuantity = item => {
         var quantity = parseFloat(item.OrderDetailQty);
 
-        if(isNaN(quantity) || quantity <= 0 ) {
-            console.log('Please enter a valid value for the quantity');
+        if (isNaN(quantity) || quantity <= 0) {
+            console.log("Please enter a valid value for the quantity");
             return false;
         }
 
         //  Must be in increments of 1
-        else if ((parseFloat(quantity) / parseInt(quantity) != 1.0)) {
+        else if (parseFloat(quantity) / parseInt(quantity) != 1.0) {
             return false;
         }
 
         return true;
-    }
+    };
 
     addToCart = () => {
-
         var quantity = this.state.quantity;
         var item = this.item;
 
@@ -97,9 +96,8 @@ class GiftShopDialog extends Component {
         cartItem.OrderDetailQty = parseFloat(quantity);
         cartItem.dispQuantity = parseInt(quantity);
 
-
-        if(this.item.volID.length > 1) {
-            switch(this.state.size) {
+        if (this.item.volID.length > 1) {
+            switch (this.state.size) {
                 case 0:
                     cartItem.MerchandiseID = item.volID[0];
                     cartItem.details = "Size: M";
@@ -133,14 +131,18 @@ class GiftShopDialog extends Component {
             }
         }
 
-        if(this.checkQuantity(cartItem)) {
+        if (this.checkQuantity(cartItem)) {
             this.props.addItem({ cartItem });
             this.props.closeDialog();
         }
-    }
+    };
 
-    changeQuantity = (event) => {
-        this.setState({quantity: event.target.value})
+    changeQuantity = event => {
+        this.setState({ quantity: event.target.value });
+    };
+
+    handleDialogClose() {
+        this.props.closeDialog();
     }
 
     render() {
@@ -148,19 +150,37 @@ class GiftShopDialog extends Component {
 
         return (
             <React.Fragment>
-                <DialogTitle id="form-dialog-title">
-                    {this.item.Name}
-                </DialogTitle>
                 <DialogContent>
                     <div className={classes.close}>
                         <IconButton
                             color="inherit"
                             size="small"
                             aria-label="Menu"
+                            onClick={() => this.handleDialogClose()}
                         >
                             <CloseIcon />
                         </IconButton>
                     </div>
+                    <Grid
+                        item
+                        container
+                        xs
+                        style={{
+                            display: "flex",
+                            marginTop: -10,
+                            marginBottom: 20,
+                            marginRight:30
+                        }}
+                        direction={"row"}
+                        spacing={4}
+                    >
+                        <Grid item>
+                            <Typography variant="h5">
+                                {this.item.Name}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+
                     <Grid
                         item
                         container
@@ -183,12 +203,18 @@ class GiftShopDialog extends Component {
                         {this.state.sizes.length > 0 && (
                             <Grid item>
                                 <FormControl>
-                                    <InputLabel>
-                                        Sizes
-                                    </InputLabel>
-                                    <Select value={this.state.size} onChange={this.setSize}>
+                                    <InputLabel>Sizes</InputLabel>
+                                    <Select
+                                        value={this.state.size}
+                                        onChange={this.setSize}
+                                    >
                                         {this.state.sizes.map((option, i) => (
-                                            <MenuItem key={i} value={option.value}>{option.label}</MenuItem>
+                                            <MenuItem
+                                                key={i}
+                                                value={option.value}
+                                            >
+                                                {option.label}
+                                            </MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
@@ -205,44 +231,36 @@ class GiftShopDialog extends Component {
                                 type="number"
                             />
                         </Grid>
-
+                        <Grid
+                            item
+                            xs
+                            container
+                            spacing={24}
+                            direction={"row"}
+                            justify="flex-end"
+                        >
+                            <Grid item>
+                                <div className={classes.buttons}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={this.addToCart}
+                                        className={classes.button}
+                                    >
+                                        Add to Cart
+                                    </Button>
+                                </div>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </DialogContent>
-                <DialogActions>
-                    <Button
-                        onClick={this.addToCart}
-                        color="primary"
-                        onChange={this.changeQuantity}
-                    >
-                        Add to Cart
-                    </Button>
-                </DialogActions>
             </React.Fragment>
         );
     }
 }
 
 const styles = theme => ({
-    card: {
-        ...theme.mixins.gutters(),
-        paddingTop: theme.spacing.unit * 2,
-        paddingBottom: theme.spacing.unit * 2,
-        height: "100%",
-        transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
-        })
-    },
-    cardHover: {
-        transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen
-        })
-    },
     info: {
-        alignItems: "center",
-        padding: 5,
-        backgroundColor: "#e4e4e4",
         textAlign: "center"
     },
     quantity: {
@@ -251,7 +269,26 @@ const styles = theme => ({
     hide: {
         display: "none"
     },
-    close: { position: "absolute", right: 0, top: -5 }
+    circle: {
+        textAlign: "center",
+        position: "absolute",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: "50%",
+        padding: 5,
+        width: 37,
+        height: 37
+    },
+    buttons: {
+        display: "flex",
+        justifyContent: "flex-end"
+    },
+    button: {
+        marginTop: theme.spacing.unit,
+        marginRight: theme.spacing.unit * -5
+    },
+    close: { position: "absolute", right: 0, top: 0 }
 });
 
 GiftShopDialog.propTypes = {
@@ -266,7 +303,8 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(cartActions, dispatch);
 
 export default connect(
     mapStateToProps,

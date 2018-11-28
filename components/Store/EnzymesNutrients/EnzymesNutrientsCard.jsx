@@ -19,9 +19,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-
 class EnzymesNutrientsCard extends Component {
-
     constructor(props) {
         super(props);
     }
@@ -47,31 +45,27 @@ class EnzymesNutrientsCard extends Component {
                     className={classes.card}
                     onMouseEnter={this.handleItemHoverEnter}
                     onMouseLeave={this.handleItemHoverLeave}
-                    style={ {
-                                  backgroundImage: `url('../../../static/images/categories/Category-core.jpg')`,
-                                  backgroundRepeat: "no-repeat",
-                                  backgroundSize: "cover"
-                              }
-                    }
+                    style={{
+                        backgroundImage: `url('../../../static/images/categories/Category-core.jpg')`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "cover"
+                    }}
                 >
-                        <Grid item container spacing={8}>
-                            <Grid
-                                item
-                                xs={12}
-                                className={classes.info}
-                                style={{ marginTop: 60 }}
-                            >
-                                <Typography variant="h5" color="secondary">
-                                    {itemID}
-                                </Typography>
-                                <Typography
-                                    variant="subheading"
-                                    color="secondary"
-                                >
-                                    {itemName}
-                                </Typography>
-                            </Grid>
+                    <Grid item container spacing={8}>
+                        <Grid
+                            item
+                            xs={12}
+                            className={classes.info}
+                            style={{ marginTop: 60 }}
+                        >
+                            <Typography variant="h5" color="secondary">
+                                {itemID}
+                            </Typography>
+                            <Typography variant="subheading" color="secondary">
+                                {itemName}
+                            </Typography>
                         </Grid>
+                    </Grid>
                 </div>
             </Grid>
         );

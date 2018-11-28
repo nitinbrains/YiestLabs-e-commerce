@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { connect} from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -14,6 +14,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -21,61 +23,58 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-import SalesLib from '../../../lib/SalesLib';
-import { cartActions } from '../../../redux/actions/cartActions';
+import SalesLib from "../../../lib/SalesLib";
+import { cartActions } from "../../../redux/actions/cartActions";
 
 class EducationDialog extends Component {
-
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
         this.state = {
-            quantity: '1',
+            quantity: "1",
             types: [],
-            selectedType: '',
+            selectedType: ""
         };
 
         this.item = this.props.item;
     }
 
     componentWillMount() {
-        if(this.item.volID.length > 1) {
-            var types = [], selectedType, possibleTypes = [
-                { label: "In person", value: 0 },
-                { label: "Webinar", value: 1 },
-            ];
+        if (this.item.volID.length > 1) {
+            var types = [],
+                selectedType,
+                possibleTypes = [
+                    { label: "In person", value: 0 },
+                    { label: "Webinar", value: 1 }
+                ];
 
-            for(var i in this.item.volID){
-                if(this.item.volID[i] != null){
+            for (var i in this.item.volID) {
+                if (this.item.volID[i] != null) {
                     types.push(possibleTypes[i]);
                 }
             }
 
             selectedType = types[0].value;
-            this.setState({types, selectedType});
+            this.setState({ types, selectedType });
         }
-
     }
 
-    checkQuantity = (item) => {
-
+    checkQuantity = item => {
         var quantity = parseFloat(item.OrderDetailQty);
 
-        if(isNaN(quantity) || quantity <= 0 ) {
-            console.log('Please enter a valid value for the quantity');
+        if (isNaN(quantity) || quantity <= 0) {
+            console.log("Please enter a valid value for the quantity");
             return false;
         }
 
         //  Must be in increments of 1
-        else if ((parseFloat(quantity) / parseInt(quantity) != 1.0)) {
+        else if (parseFloat(quantity) / parseInt(quantity) != 1.0) {
             return false;
         }
 
         return true;
-    }
+    };
 
     addToCart = () => {
-
         var quantity = this.state.quantity;
         var item = this.item;
 
@@ -89,73 +88,120 @@ class EducationDialog extends Component {
         cartItem.OrderDetailQty = parseFloat(quantity);
         cartItem.dispQuantity = parseInt(quantity);
 
-
-        if(this.item.volID.length > 1) {
-            switch(this.state.selectedType) {
+        if (this.item.volID.length > 1) {
+            switch (this.state.selectedType) {
                 case 0:
                     cartItem.MerchandiseID = item.volID[0];
                     cartItem.details = "In person | ";
-                    cartItem.details += "Class Date(s): " + item.TagDate + "\nClass Location: " + item.TagLocation;
+                    cartItem.details +=
+                        "Class Date(s): " +
+                        item.TagDate +
+                        "\nClass Location: " +
+                        item.TagLocation;
                     break;
                 case 1:
                     cartItem.MerchandiseID = item.volID[1];
                     cartItem.details = "Webinar | ";
-                    cartItem.details += "Class Date(s): " + item.TagDate + "\nClass Location: " + item.TagLocation;
+                    cartItem.details +=
+                        "Class Date(s): " +
+                        item.TagDate +
+                        "\nClass Location: " +
+                        item.TagLocation;
                     break;
                 default:
                     break;
             }
         }
 
-        if(SalesLib.YeastEssentials.includes(cartItem.MerchandiseID))
-        {
-            console.log('Attending Yeast Essentials?', 'If you are considering or already attending Yeast Essentials 2.0, consider attending the 1 day Lab Practicum course that follows each Yeast Essentials course and allows you to apply the skills that you learn.');
+        if (SalesLib.YeastEssentials.includes(cartItem.MerchandiseID)) {
+            console.log(
+                "Attending Yeast Essentials?",
+                "If you are considering or already attending Yeast Essentials 2.0, consider attending the 1 day Lab Practicum course that follows each Yeast Essentials course and allows you to apply the skills that you learn."
+            );
         }
 
-        if(this.checkQuantity(cartItem)) {
+        if (this.checkQuantity(cartItem)) {
             this.props.addItem({ cartItem });
             this.props.closeDialog();
         }
-    }
+    };
 
-    setType = (event) => {
-        this.setState({selectedType: event.target.value});
-    }
+    setType = event => {
+        this.setState({ selectedType: event.target.value });
+    };
 
-    changeQuantity = (event) => {
-        this.setState({quantity: event.target.value})
+    changeQuantity = event => {
+        this.setState({ quantity: event.target.value });
+    };
+
+    handleDialogClose() {
+        this.props.closeDialog();
     }
 
     render() {
-        const { classes, theme } = this.props;
+        const { classes, theme, item } = this.props;
 
         return (
             <React.Fragment>
-                <DialogTitle id="form-dialog-title">
-                    {this.item.Name}
-                </DialogTitle>
                 <DialogContent>
+                    <div className={classes.close}>
+                        <IconButton
+                            color="inherit"
+                            size="small"
+                            aria-label="Menu"
+                            onClick={() => this.handleDialogClose()}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    </div>
                     <Grid
                         item
-                        xs
                         container
+                        xs
+                        style={{
+                            display: "flex",
+                            marginTop: -10,
+                            marginBottom: 20
+                        }}
                         direction={"row"}
-                        spacing={8}
-                        justify="flex-end"
+                        spacing={4}
                     >
+                        <Grid item>
+                            <Typography variant="h5">
+                                {item.Name}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+
+                    <Grid item container direction={"row"} spacing={4}>
                         <Grid item xs>
-                            <div className={classes.info}>
-                                <Typography>Class Location</Typography>
-                                <Typography>{this.item.TagLocation}</Typography>
+                            <div style={{ display: "flex" }}>
+                                <Typography>Class Location: </Typography>
+                                &nbsp;
+                                <Typography
+                                    style={{
+                                        color: "#66CCCC"
+                                    }}
+                                >
+                                    {this.item.TagLocation}
+                                </Typography>
                             </div>
                         </Grid>
-                        <Grid item xs>
-                            <div className={classes.info}>
-                                <Typography>Flocculation</Typography>
-                                <Typography>{this.item.TagDate}</Typography>
+                        <Grid item xs={12} md={6}>
+                            <div style={{ display: "flex" }}>
+                                <Typography>Date: </Typography>
+                                &nbsp;
+                                <Typography
+                                    style={{
+                                        color: "#66CCCC"
+                                    }}
+                                >
+                                    {this.item.TagDate}
+                                </Typography>
                             </div>
                         </Grid>
                     </Grid>
+
                     <Grid
                         item
                         container
@@ -164,9 +210,7 @@ class EducationDialog extends Component {
                         style={{ marginTop: 5 }}
                     >
                         <Grid item>
-                            <Typography>
-                                {this.item.Description}
-                            </Typography>
+                            <Typography>{this.item.Description}</Typography>
                         </Grid>
                     </Grid>
                     <Grid
@@ -177,67 +221,55 @@ class EducationDialog extends Component {
                         style={{ marginTop: 5 }}
                         direction={"row"}
                     >
-                        {this.state.types.length > 0 && (
+                        <Grid
+                            item
+                            xs
+                            container
+                            spacing={24}
+                            direction={"row"}
+                            justify="flex-start"
+                        >
                             <Grid item>
-                                <FormControl>
-                                    <InputLabel>
-                                        Class Type
-                                    </InputLabel>
-                                    <Select value={this.state.selectedType} onChange={this.setType}>
-                                        {this.state.types.map((option, i) => (
-                                            <MenuItem key={i} value={option.value}>{option.label}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                <TextField
+                                    id="quantity"
+                                    label="Quantity"
+                                    className={classes.quantity}
+                                    value={this.state.quantity}
+                                    onChange={this.changeQuantity}
+                                    type="number"
+                                />
                             </Grid>
-                        )}
-                        <Grid item>
-                            <TextField
-                                id="quantity"
-                                label="Quantity"
-                                className={classes.quantity}
-                                value={this.state.quantity}
-                                onChange={this.changeQuantity}
-                                type="number"
-                            />
+                            <Grid
+                                item
+                                xs
+                                container
+                                spacing={24}
+                                direction={"row"}
+                                justify="flex-end"
+                            >
+                                <Grid item>
+                                    <div className={classes.buttons}>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={this.addToCart}
+                                            className={classes.button}
+                                        >
+                                            Add to Cart
+                                        </Button>
+                                    </div>
+                                </Grid>
+                            </Grid>
                         </Grid>
-
                     </Grid>
                 </DialogContent>
-                <DialogActions>
-                    <Button
-                        onClick={this.addToCart}
-                        color="primary"
-                    >
-                        Add to Cart
-                    </Button>
-                </DialogActions>
             </React.Fragment>
         );
     }
 }
 
 const styles = theme => ({
-    card: {
-        ...theme.mixins.gutters(),
-        paddingTop: theme.spacing.unit * 2,
-        paddingBottom: theme.spacing.unit * 2,
-        height: "100%",
-        transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
-        })
-    },
-    cardHover: {
-        transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen
-        })
-    },
     info: {
-        alignItems: "center",
-        padding: 5,
-        backgroundColor: "#e4e4e4",
         textAlign: "center"
     },
     quantity: {
@@ -245,7 +277,27 @@ const styles = theme => ({
     },
     hide: {
         display: "none"
-    }
+    },
+    circle: {
+        textAlign: "center",
+        position: "absolute",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: "50%",
+        padding: 5,
+        width: 37,
+        height: 37
+    },
+    buttons: {
+        display: "flex",
+        justifyContent: "flex-end"
+    },
+    button: {
+        marginTop: theme.spacing.unit,
+        marginRight: theme.spacing.unit * -5
+    },
+    close: { position: "absolute", right: 0, top: 0 }
 });
 
 EducationDialog.propTypes = {
@@ -253,13 +305,17 @@ EducationDialog.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.user,
         inventory: state.inventory
-    }
-}
+    };
+};
 
-const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(cartActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(EducationDialog));
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(EducationDialog));
