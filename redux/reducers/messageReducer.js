@@ -9,6 +9,7 @@ const getType = (message, error) => {
     if (message !== null) {
         return 'NOTIFICATION';
     } else if (error !== null) {
+        console.log('error message', error);
         return 'ERROR';
     }
     return 'UNDEFINED'

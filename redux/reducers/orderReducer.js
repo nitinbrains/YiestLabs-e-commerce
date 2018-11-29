@@ -12,14 +12,22 @@ const initialState = {
     shippingSub: 0,
     orderSub: 0,
     shippingOptions: ["Ship All Together", "Earliest For Each", "Custom"],
-    selectedShippingOption: 'Ship All Together'
+    selectedShippingOption: 'Ship All Together',
+    isLoading: false
 };
 
 /* ------------- Hookup Reducers To Types ------------- */
 
 export default createReducer(initialState, {
+    [orderTypes.PREPARE_ORDER_ATTEMPT]: (state, { data }) => ({
+        isLoading: true,
+    }),
+    [orderTypes.PREPARE_ORDER_FAILURE]: (state, { data }) => ({
+        isLoading: false
+    }),
     [orderTypes.PREPARE_ORDER_SUCCESS]: (state, { data }) => ({
-        ...data
+        ...data,
+        isLoading: false
     }),
     [orderTypes.SET_ITEMS_ATTEMPT]: (state, { data: { items } }) => ({
         ...state,
