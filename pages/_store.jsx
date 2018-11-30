@@ -27,6 +27,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 import SalesLib from '../lib/SalesLib';
 import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
+import LoadingIndicator from '../components/UI/LoadingIndicator';
 import YeastCard from '../components/Store/Yeast/YeastCard';
 import YeastDialog from '../components/Store/Yeast/YeastDialog';
 import EnzymesNutrientsCard from '../components/Store/EnzymesNutrients/EnzymesNutrientsCard';
@@ -191,6 +192,7 @@ class Store extends Component {
 
         return (
             <NavBarUserSearchDrawerLayout>
+                <LoadingIndicator visible={this.props.store.isLoading} /> 
                 <Grid className={classes.store} container spacing={24}>
                     {this.props.store.itemsToShow.map((item, i) => {
                         return this.getCard(item, i)

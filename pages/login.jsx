@@ -19,6 +19,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 // custom
 import Alert from '../components/UI/Alert';
+import LoadingIndicator from '../components/UI/LoadingIndicator';
 import { userActions } from '../redux/actions/userActions';
 
 class Login extends Component {
@@ -45,6 +46,7 @@ class Login extends Component {
             <React.Fragment>
 
                 {this.props.message.messages.map((message, i) => <Alert message={message} index={i}/> )}
+                <LoadingIndicator visible={this.props.user.isLoading} />
 
                 <main className={classes.layout}>
                     <Card>
