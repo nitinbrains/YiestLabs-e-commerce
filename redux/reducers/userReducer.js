@@ -49,15 +49,20 @@ const initialState = {
         type: '',
         default: false
     },
-    shipMethods: []
+    shipMethods: [],
+    isLoading: false
 }; // empty for now
 
 
 /* ------------- Hookup Reducers To Types ------------- */
 
 export default createReducer(initialState, {
+    [userTypes.USER_LOGIN_ATTEMPT]: (state, { data }) => ({
+        isLoading: true,
+    }),
     [userTypes.USER_LOGIN_SUCCESS]: (state, { data }) => ({
-        ...data
+        ...data,
+        isLoading: false,
     }),
     [userTypes.SET_USER_INFO_SUCCESS]: (state, { data: userInfo }) => ({
         ...userInfo
