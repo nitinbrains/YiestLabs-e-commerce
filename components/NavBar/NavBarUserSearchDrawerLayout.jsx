@@ -26,7 +26,7 @@ class NavBarUserSearchDrawerLayout extends Component {
         openUserBar: false,
         openUserBarHover: false,
         openSearchBar: false,
-        isLoggedIn: false
+        isLoggedIn: true
     };
 
     handleUserBar = () => {
@@ -86,7 +86,10 @@ class NavBarUserSearchDrawerLayout extends Component {
                                 color="inherit"
                                 aria-label="Login"
                             >
-                                <AccountCircleIcon />
+                            <img
+                                src="../../static/images/yeastman.png"
+                                height="30"
+                            />
                             </IconButton>
                         </Link>
 
@@ -97,7 +100,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                             />
                         </div>
                         <div style={{ flexGrow: 1 }} />
-                        <Button color="secondary">Store</Button>
+                        <Button color="secondary">Yeastman Store</Button>
                         <Button color="secondary">Calculator</Button>
                         <Button color="secondary">About Us</Button>
 
