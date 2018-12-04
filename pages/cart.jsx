@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { compose } from "redux";
 import { connect } from "react-redux";
 
 import Link from "next/link";
@@ -15,6 +16,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
 import CartItem from "../components/Cart/CartItem";
+import withInventory from "../hocs/inventory";
 
 class Cart extends Component {
 
@@ -76,7 +78,8 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(
-    mapStateToProps,
-    null
-)(withStyles(styles, { withTheme: true })(Cart));
+export default compose(
+    withStyles(styles, { withTheme: true }),
+    connect(mapStateToProps),
+    withInventory,
+)(Cart);

@@ -1,10 +1,6 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from 'redux';
+import { compose } from "redux";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
-
-import { userActions } from '../redux/actions/userActions';
-import { inventoryActions } from '../redux/actions/inventoryActions';
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -42,6 +38,7 @@ import GiftShopCard from '../components/Store/GiftShop/GiftShopCard';
 import GiftShopDialog from '../components/Store/GiftShop/GiftShopDialog';
 
 import User from '../lib/User'
+import withInventory from "../hocs/inventory";
 
 class Store extends Component {
 
@@ -104,8 +101,6 @@ class Store extends Component {
 
         userInfo = User.setUser(userInfo);
         this.props.setUserInfo({ userInfo });
-        this.props.getInventory();
-        // this.props.userLogin({ username: 'above', password: 'test' });
     }
 
     handleClickItem = (item) => {
@@ -192,7 +187,6 @@ class Store extends Component {
 
         return (
             <NavBarUserSearchDrawerLayout>
-                <LoadingIndicator visible={this.props.store.isLoading} /> 
                 <Grid className={classes.store} container spacing={24}>
                     {this.props.store.itemsToShow.map((item, i) => {
                         return this.getCard(item, i)
@@ -234,14 +228,7 @@ Store.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-    user: state.user,
-    store: state.inventory
-})
-
-const mapDispatchToProps = dispatch => bindActionCreators({ ...userActions, ...inventoryActions}, dispatch);
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withWidth()(withStyles(styles, { withTheme: true })(Store)));
+export default compose(
+    withStyles(styles, { withTheme: true }),
+    withInventory,
+)(Store);
