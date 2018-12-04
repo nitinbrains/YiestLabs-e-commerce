@@ -98,7 +98,11 @@ class NavBarUserSearchDrawerLayout extends Component {
                         </div>
                         <div style={{ flexGrow: 1 }} />
                         <Button color="secondary">Store</Button>
-                        <Button color="secondary">Calculator</Button>
+
+                        <Link prefetch href="/calculator">
+                            <Button color="secondary">Calculator</Button>                            
+                        </Link>                        
+                        
                         <Button color="secondary">About Us</Button>
 
                         <Link prefetch href="/cart">
