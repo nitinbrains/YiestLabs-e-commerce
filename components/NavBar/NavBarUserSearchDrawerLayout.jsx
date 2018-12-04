@@ -150,7 +150,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                         )
                     }}
                 >
-                    <div className={classes.toolbar} />
+                    <div className={classes.toolbar} style={{marginTop:35}} />
                     <List>{SideBarItems}</List>
                     <Divider />
                 </Drawer>
