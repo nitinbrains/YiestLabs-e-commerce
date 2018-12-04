@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect} from 'react-redux';
+import { connect } from "react-redux";
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -19,26 +19,23 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-
 class GiftShopCard extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
-            hover: false,
-        }
+            hover: false
+        };
     }
 
     handleItemHoverEnter = () => {
-        this.setState({hover: true});
-    }
+        this.setState({ hover: true });
+    };
 
     handleItemHoverLeave = () => {
-        this.setState({hover: false});
-    }
+        this.setState({ hover: false });
+    };
 
     render() {
-
         const { classes, theme, item } = this.props;
 
         return (
@@ -50,42 +47,40 @@ class GiftShopCard extends Component {
                 spacing={24}
                 onClick={this.props.onClick.bind(this, this.props.item)}
             >
-                <Paper
+                <div
                     className={classes.card}
+                    onMouseEnter={this.handleItemHoverEnter}
+                    onMouseLeave={this.handleItemHoverLeave}
+                    style={{
+                        backgroundImage: `url('../../../static/images/categories/Category-core.jpg')`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "cover"
+                    }}
                 >
-                    <Grid
-                        item
-                        container
-                        direction={"column"}
-                        xs
-                        justify="center"
-                        alignItems="center"
-                    >
-                        <Grid item xs>
-                            <Typography
-                                variant="h3"
-                                color="textPrimary"
-                            >
+                    <Grid item container spacing={8}>
+                        <Grid
+                            item
+                            xs={12}
+                            className={classes.info}
+                            style={{ marginTop: 50 }}
+                        >
+                            <Typography variant="h5" color="secondary">
                                 {item.Name}
                             </Typography>
                         </Grid>
                     </Grid>
-                </Paper>
+                </div>
             </Grid>
-        )
+        );
     }
 }
 
 const styles = theme => ({
     card: {
-        ...theme.mixins.gutters(),
-        paddingTop: theme.spacing.unit * 2,
-        paddingBottom: theme.spacing.unit * 2,
-        height: 250,
-        transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
-        })
+        border: "solid 1px",
+        borderColor: "#CCCCCC",
+        padding: theme.spacing.unit * 2,
+        height: 230
     },
     cardHover: {
         transition: theme.transitions.create("width", {
@@ -94,36 +89,36 @@ const styles = theme => ({
         })
     },
     info: {
-        alignItems: "center",
-        padding: 5,
-        backgroundColor: "#e4e4e4",
         textAlign: "center"
     },
-    quantity: {
-        width: 50
-    },
-    hide: {
-        display: "none"
+    name: {
+        padding: 3,
+        marginLeft: theme.spacing.unit * -2,
+        marginRight: theme.spacing.unit * -2,
+        textAlign: "center"
     }
 });
-
 
 GiftShopCard.propTypes = {
     classes: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.user,
         inventory: state.inventory
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        addCartItem: (item, volIdIndex, quantity) => dispatch({type: "ADD_TO_CART", item, volIdIndex, quantity}),
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(GiftShopCard));
+const mapDispatchToProps = dispatch => {
+    return {
+        addCartItem: (item, volIdIndex, quantity) =>
+            dispatch({ type: "ADD_TO_CART", item, volIdIndex, quantity })
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(GiftShopCard));

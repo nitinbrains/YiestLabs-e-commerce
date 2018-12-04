@@ -105,6 +105,7 @@ class EnzymesNutrientsDialog extends Component {
                         xs
                         style={{
                             display: "flex",
+                            marginTop: -10,
                             marginBottom: 20
                         }}
                         direction={"row"}
@@ -114,17 +115,6 @@ class EnzymesNutrientsDialog extends Component {
                             <Typography variant="h5">
                                 {itemID} | {itemName}
                             </Typography>
-                        </Grid>
-                        <Grid item xs>
-                            <div
-                                style={{
-                                    backgroundColor: "#FF9933",
-                                    height: 2,
-                                    marginTop: 15,
-                                    marginLeft: 20,
-                                    width: "100%"
-                                }}
-                            />
                         </Grid>
                     </Grid>
 
