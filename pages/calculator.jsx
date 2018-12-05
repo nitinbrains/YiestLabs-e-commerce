@@ -9,37 +9,35 @@ import NavBarLayout from "../components/NavBar/NavBarLayout";
 import Card from "../components/UI/Card/Card.jsx";
 import CardBody from "../components/UI/Card/CardBody.jsx";
 import CardHeader from "../components/UI/Card/CardHeader.jsx";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Shipping from "../components/Checkout/Shipping/Shipping";
 import Billing from "../components/Checkout/Billing/Billing";
 import Items from "../components/Checkout/Items/Items";
 import Review from "../components/Checkout/Review/Review";
-
 import Grid from '@material-ui/core/Grid';
 
 // custom
 import Alert from '../components/UI/Alert';
-import Textbox from '../components/Form/Textbox'
-import Selectbox from '../components/Form/Selectbox'
+import FormTextbox from '../components/Form/FormTextbox'
+import FormSelectbox from '../components/Form/FormSelectbox'
 import FormButton from '../components/Form/FormButton'
+import FormCheckbox from '../components/Form/FormCheckbox'
 
 class Calculator extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-      volume: "",
-      liter: "",
-      gravity: "",
-      plato: "",
-      temperature: "",
-      celsius: "",
-      units: "",
-      labgrown: ""
+			isHomebrew: false,
+      volVal: "",
+      volUnit: "L",
+      gravVal: "",
+      gravUnit: "PLA",
+      tempVal: "",
+      tempUnit: "F",
+      unitVal: "",
+      unitUnit: "Lab-grown"
     }
 	}
 
@@ -47,105 +45,133 @@ class Calculator extends Component {
 	
 	}
 
+	// volume
+	getVolChoices() {
+		let options = [
+			{label:'Liter', value:'L'},
+			{label:'US Gallon', value:'SGAL'},
+			{label:'UK Gallon', value:'KGAL'},
+		]
+		if(!this.state.isHomebrew){
+			options.push( {label:'Barrel', value:'BBL'} )
+			options.push( {label:'Hectoliter', value:'HL'} )
+		}
+		return <FormSelectbox
+			value={this.state.volUnit}
+			options={options}
+			onChange={(e) => {
+				this.setState({volUnit:e.target.value})
+			}}
+		/>
+  }
+
+  // gravity
+	getGravChoices() {
+		let options = [
+			{label:'Plato', value:'PLA'},
+			{label:'Specific Gravity', value:'SPE'}
+		]
+		return <FormSelectbox
+			value={this.state.gravUnit}
+			options={options}
+			onChange={(e) => {
+				this.setState({gravUnit:e.target.value})
+			}}
+		/>
+  }
+
+  // temperature
+	getTempChoices() {
+		let options = [
+			{label:'Fahrenheit', value:'F'},
+			{label:'Celsius', value:'C'}
+		]
+		return <FormSelectbox
+			value={this.state.tempUnit}
+			options={options}
+			onChange={(e) => {
+				this.setState({tempUnit:e.target.value})
+			}}
+		/>
+  }
+
+  // units
+  getUnitChoices() {
+		let options = [
+			{label:'Lab-grown', value:'Lab-grown'},
+			{label:'Custom', value:'Custom'}
+		]
+		return <FormSelectbox
+			value={this.state.unitUnit}
+			options={options}
+			onChange={(e) => {
+				this.setState({unitUnit:e.target.value})
+			}}
+		/>
+  }
+
 	render() {
-
-		// console.log( this.state )
-
-		const { classes } = this.props;
-		const { activeStep } = this.state;
-
 		return (
 			<NavBarLayout>
-
-				{this.props.message.messages.map((message, i) => <Alert message={message} index={i}/> )}
-
-				<div className={classes.layout}>
+				<div id="calculator-box">
 					<Card>
 						<CardHeader color="primary" className="card-header-down">
 							<Typography color="secondary" variant="display1" align="center">
 								CALCULATOR
 							</Typography>
 						</CardHeader>
-
 						<CardBody>
 							<Grid container spacing={24}>
 				        <Grid item xs={3}>
-				          <Textbox 
+				          <FormTextbox 
 				          	label="Volume"
-				          	value={this.state.volume}
-				          	onChange={(e) => {
-				          		// console.log('last val --- ' + e.target.value)
-				          		this.setState({
-				          			volume: e.target.value
-				          		})
-				          	}}
+				          	value={this.state.volVal}
+				          	onChange={(e) => {this.setState({volVal: e.target.value})}}
 				          />
 				        </Grid>
+				        <Grid item xs={3}> {this.getVolChoices()}</Grid>
 				        <Grid item xs={3}>
-				        <Selectbox/>
-				        </Grid>
-				        <Grid item xs={3}>
-				          <Textbox 
+				          <FormTextbox 
 				          	label="Gravity"
-				          	value={this.state.gravity}
-				          	onChange={(e) => {
-				          		this.setState({
-				          			gravity: e.target.value
-				          		})
-				          	}}
+				          	value={this.state.gravVal}
+				          	onChange={(e) => {this.setState({gravVal: e.target.value})}}
 				          />
 				        </Grid>
-				        <Grid item xs={3}>
-				        <Selectbox/>
-				        </Grid>
+				        <Grid item xs={3}>{this.getGravChoices()}</Grid>
 				      </Grid>
 
 				      <Grid container spacing={24}>
 				        <Grid item xs={3}>
-				          <Textbox 
+				          <FormTextbox 
 				          	label="Temperature"
-				          	value={this.state.temperature}
-				          	onChange={(e) => {
-				          		this.setState({
-				          			temperature: e.target.value
-				          		})
-				          	}}
+				          	value={this.state.tempVal}
+				          	onChange={(e) => {this.setState({tempVal: e.target.value})}}
 				          />
 				        </Grid>
+				        <Grid item xs={3}>{this.getTempChoices()}</Grid>
 				        <Grid item xs={3}>
-				 					<Selectbox/>
-				        </Grid>
-				        <Grid item xs={3}>
-				          <Textbox 
+				          <FormTextbox 
 				          	label="Units"
-				          	value={this.state.units}
-				          	onChange={(e) => {
-				          		this.setState({
-				          			units: e.target.value
-				          		})
-				          	}}
+				          	value={this.state.unitVal}
+				          	onChange={(e) => {this.setState({unitVal: e.target.value})}}
 				          />
 				        </Grid>
-				        <Grid item xs={3}>
-				          <Selectbox/>
-				        </Grid>
+				        <Grid item xs={3}>{this.getUnitChoices()}</Grid>
 				      </Grid>
 
-
-				      <Grid container spacing={24}>
-				        <Grid item xs={6}>
-				          
+				      <Grid container spacing={24} className="button-grid">
+				        <Grid item xs={6} >
+									<div className="homebrew-box">
+										<FormCheckbox
+			          			checked={this.state.isHomebrew}
+			          			onChange={(e) => {this.setState({isHomebrew: e.target.checked})}}
+			          		/>
+			          		<span>HOMEBREWER</span>
+			          	</div>
+				        		
 				        </Grid>
-				        <Grid item xs={6}>
-				         <FormButton
-				          	text="CALCULATE"
-				          />
-				        </Grid>
+				        <Grid item xs={6}><FormButton text="CALCULATE"/></Grid>
 				      </Grid>
-
-
-
-							
 						
 						</CardBody>
 					</Card>
@@ -156,45 +182,14 @@ class Calculator extends Component {
 }
 
 const styles = theme => ({
-	layout: {
-		width: "auto",
-		marginLeft: theme.spacing.unit * 2,
-		marginRight: theme.spacing.unit * 2,
-		[theme.breakpoints.up(600 + theme.spacing.unit * 2 * 2)]: {
-			width: "70%",
-			marginLeft: "auto",
-			marginRight: "auto"
-		}
-	},
-	// paper: {
-	// 	padding: theme.spacing.unit * 2,
-	// 	[theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
-	// 		padding: theme.spacing.unit * 3
-	// 	}
-	// },
-	// stepper: {
-	// 	padding: `${theme.spacing.unit * 3}px 0 ${theme.spacing.unit * 5}px`
-	// },
-	// buttons: {
-	// 	display: "flex",
-	// 	justifyContent: "flex-end"
-	// },
-	// button: {
-	// 	marginTop: theme.spacing.unit * 3,
-	// 	marginLeft: theme.spacing.unit
-	// }
 });
 
 Calculator.propTypes = {
-	classes: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {
-    return {
-    	user: state.user,
-        cart: state.cart,
-		message: state.messages
-    }
+  return {
+	}
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators(orderActions, dispatch);

@@ -4,7 +4,7 @@ import classNames from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
 import TextField from '@material-ui/core/TextField';
 
-class Textbox extends React.Component {
+class FormTextbox extends React.Component {
   
   constructor(props) {
     super(props);
@@ -69,8 +69,8 @@ const styles = theme => ({
     }
 });
 
-Textbox.propTypes = {
+FormTextbox.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Textbox);
+export default withStyles(styles)(FormTextbox);

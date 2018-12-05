@@ -1,0 +1,16 @@
+#calculator-box{
+	width: 80%;
+	margin: 0 auto;
+
+	.button-grid{
+		margin-top: 20px;
+	}
+
+	.homebrew-box{
+		border-top: 1px solid $color-second-accent;
+		border-bottom: 1px solid $color-second-accent;
+		width: 100%;
+		padding: 2px;
+		text-align: center;
+	}
+}
