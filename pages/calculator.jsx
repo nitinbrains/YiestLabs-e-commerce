@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { orderActions } from '../redux/actions/orderActions';
 
+import { calculatorActions } from '../redux/actions/calculatorActions'
+
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import NavBarLayout from "../components/NavBar/NavBarLayout";
@@ -43,6 +45,25 @@ class Calculator extends Component {
 
 	componentWillMount() {
 	
+	}
+
+	calculatePacks() {
+		var params = {
+      // type: this.state.type,
+      vol: this.state.volVal,
+      volUnit: this.state.volUnit,
+      temp: this.state.tempVal,
+      tempUnit: this.state.tempUnit,
+      grav: this.state.gravVal,
+      gravUnit: this.state.gravUnit,
+      isHomebrew: this.state.isHomebrew
+  	}
+
+  	console.log('----params')
+  	console.log( params )
+console.log(this.props)
+  	// this.props.startCalculate( params )
+
 	}
 
 	// volume
@@ -170,7 +191,12 @@ class Calculator extends Component {
 			          	</div>
 				        		
 				        </Grid>
-				        <Grid item xs={6}><FormButton text="CALCULATE"/></Grid>
+				        <Grid item xs={6}>
+				        	<FormButton 
+				        		text="CALCULATE"
+				        		onClick={(e) => { this.calculatePacks() }}
+				        	/>
+				        	</Grid>
 				      </Grid>
 						
 						</CardBody>
@@ -192,6 +218,6 @@ const mapStateToProps = (state) => {
 	}
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(orderActions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(calculatorActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(Calculator));
