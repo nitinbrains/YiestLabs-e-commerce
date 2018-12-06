@@ -1,20 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import NavBarLayout from "../NavBar/NavBarLayout";
-import Card from "../UI/Card/Card.jsx";
+import Card from '@material-ui/core/Card';
 import CardBody from "../UI/Card/CardBody.jsx";
-import CardHeader from "../UI/Card/CardHeader.jsx";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
 import Grid from '@material-ui/core/Grid';
 
 // custom
-import Alert from '../UI/Alert';
-import FormTextbox from '../Form/FormTextbox'
-import FormSelectbox from '../Form/FormSelectbox'
 import FormButton from '../Form/FormButton'
-import FormCheckbox from '../Form/FormCheckbox'
 
 class ResultItem extends Component {
 
@@ -26,9 +18,9 @@ class ResultItem extends Component {
 
 	render() {
 		return (
-			<div id="result-item">
-					<NavBarLayout>
-				<Card>
+			
+					
+				<Card className="result-item-card">
 					<CardBody>
 					
 						<Grid container spacing={24}>
@@ -46,14 +38,14 @@ class ResultItem extends Component {
 
 		      	<Grid container spacing={24}>
 		        	<Grid item xs={12} className="item-button">
-		         		<FormButton text="ADD TO CART"/>
+		         		<FormButton text="ADD TO CART" onClick={() => {}}/>
 		        	</Grid>
 		      	</Grid>
 		      	</CardBody>
 						</Card>
-						</NavBarLayout>
+						
 					
-			</div>
+			
 		);
 	}
 }

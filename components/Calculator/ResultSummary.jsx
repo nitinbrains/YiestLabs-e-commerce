@@ -1,20 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import NavBarLayout from "../NavBar/NavBarLayout";
 import Card from "../UI/Card/Card.jsx";
 import CardBody from "../UI/Card/CardBody.jsx";
-import CardHeader from "../UI/Card/CardHeader.jsx";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
 import Grid from '@material-ui/core/Grid';
-
-// custom
-import Alert from '../UI/Alert';
-import FormTextbox from '../Form/FormTextbox'
-import FormSelectbox from '../Form/FormSelectbox'
-import FormButton from '../Form/FormButton'
-import FormCheckbox from '../Form/FormCheckbox'
 
 class ResultSummary extends Component {
 
@@ -26,12 +15,12 @@ class ResultSummary extends Component {
 
 	render() {
 		return (
-			<NavBarLayout>
-				<Card>
+			
+				<Card className="result-summary-card">
 					<CardBody>
 						<Grid container spacing={24}>
 		        	<Grid item xs={12} className="summary-heading">
-		         		Result Summary
+		         		Your Results
 		        	</Grid>
 		      	</Grid>
 		      	<Grid container spacing={24} className="summary-total">
@@ -72,7 +61,7 @@ class ResultSummary extends Component {
 					</CardBody>
 					
 				</Card>
-				</NavBarLayout>
+				
 		);
 	}
 }
