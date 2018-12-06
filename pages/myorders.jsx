@@ -10,8 +10,27 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+
+import OrderDetails from "../components/MyOrders/OrderDetails";
 
 class MyOrders extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            openDialog: false
+        }
+    }
+
+    handleOrderDetails = (item) => {
+        this.setState({ openDialog: true });
+    }
+
+    handleLeaveOrderDetails = () => {
+        this.setState({ openDialog: false });
+    }
+
     render() {
         const { classes, theme } = this.props;
 
@@ -67,6 +86,7 @@ class MyOrders extends Component {
                                                 <Button
                                                     variant="outlined"
                                                     color="primary"
+                                                    onClick={this.handleOrderDetails}
                                                 >
                                                     Order Details
                                                 </Button>
@@ -103,6 +123,14 @@ class MyOrders extends Component {
                         </Grid>
                     </Grid>
                 </div>
+
+                <Dialog
+                    open={this.state.openDialog}
+                    onClose={this.handleLeaveOrderDetails}
+                    maxWidth={'lg'}
+                >
+                    <OrderDetails closeDialog={this.handleLeaveOrderDetails}/>
+                </Dialog>
             </NavBarUserSearchDrawerLayout>
         );
     }
