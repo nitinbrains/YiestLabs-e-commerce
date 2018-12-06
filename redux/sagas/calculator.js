@@ -4,11 +4,7 @@ import { put, select  } from 'redux-saga/effects';
 // import SalesLib from '../../lib/SalesLib';
 
 export function * startCalculation(action) {
-    console.log('saga --- action ')
-    console.log( action )
     const { responseSuccess, responseFailure } = action;
-
-
     yield put(responseSuccess({}));
 
     // var items = yield select(state => state.cart.items);

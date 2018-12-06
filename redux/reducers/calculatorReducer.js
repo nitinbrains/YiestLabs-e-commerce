@@ -5,7 +5,7 @@ const initialState = {
     error: null,
     isLoading: false,
     showResult: false,
-    result: [],
+    result: {},
 };
 
 
@@ -16,10 +16,13 @@ export default createReducer(initialState, {
     [calculatorTypes.START_CALCULATE_SUCCESS]: (state, { data }) => ({
         isLoading: false,
         showResult: true,
-        result: [{}]
+        result: {'summary': {}, 'items':[{},{},{},{},{},{},{}] }
     }),
     [calculatorTypes.START_CALCULATE_FAILURE]: (state, { data }) => ({
         isLoading: false,
         result: []
+    }),
+    [calculatorTypes.CLOSE_DIALOG_ATTEMPT]: (state, { data }) => ({
+        showResult: false,
     }),
 });

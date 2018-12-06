@@ -14,3 +14,39 @@
 		text-align: center;
 	}
 }
+
+#calculator-result-box {
+	.summary-heading {
+		text-align: center;
+		font-weight: bold;
+	}
+	.summary-total {
+		font-weight: 600;
+	}
+	.summary-others {
+		padding-bottom: 0px;
+		border-bottom: 1px solid $color-second-accent;
+	}
+
+	#result-item{
+	 	width: 100%;
+	 	margin: 0 auto;
+	 	margin-bottom: 20px;
+	 	border-bottom: 5px solid $color-main-accent;
+	 	padding-bottom: 10px;
+	}
+	.item-heading {
+		font-weight: bold;
+		border-bottom: 5px solid gray;
+		font-size:18px;
+	}
+	.item-description{
+		margin-top: 20px;
+	}
+	.item-button {
+		margin-top: 10px;
+		button{
+			background-color: $color-font !important;
+		}
+	}
+}

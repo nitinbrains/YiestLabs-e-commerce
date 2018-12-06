@@ -5,9 +5,11 @@ import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import NavBarLayout from "../components/NavBar/NavBarLayout";
 import Grid from '@material-ui/core/Grid';
+import Dialog from "@material-ui/core/Dialog";
 
 // custom
 import CalculatorForm from '../components/Calculator/CalculatorForm';
+import CalculatorResult from '../components/Calculator/CalculatorResult';
 
 import Alert from '../components/UI/Alert';
 import FormTextbox from '../components/Form/FormTextbox'
@@ -22,7 +24,17 @@ class Calculator extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			showResultDialog: true,
+			result: {}
     }
+	}
+
+	static getDerivedStateFromProps(nextProps, prevState){
+	 	return {
+			showResultDialog: nextProps.calculator.showResult,
+			result: nextProps.calculator.result
+	  }
+	  // return null
 	}
 
 	render() {
@@ -32,6 +44,19 @@ class Calculator extends Component {
 					<CalculatorForm
 						onSubmit={this.props.startCalculate}
 					/>
+
+					<Dialog
+              open={this.state.showResultDialog}
+              onClose={()=> { this.props.closeDialog()}}
+              aria-labelledby="form-dialog-title"
+          >
+          <CalculatorResult
+          	summary={this.state.result.summary}
+          	items={this.state.result.items}
+          />
+          </Dialog>
+
+
 				</div>
 			</NavBarLayout>
 		);
