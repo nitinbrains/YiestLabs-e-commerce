@@ -6,6 +6,7 @@ import inventory from './inventoryReducer';
 import cart from './cartReducer';
 import checkout from './orderReducer';
 import messages from './messageReducer';
+import calculator from './calculatorReducer';
 
 
 export const rootReducer = combineReducers({
@@ -14,5 +15,6 @@ export const rootReducer = combineReducers({
     checkout,
     cart,
     messages,
-    form
+    form,
+    calculator
 });

@@ -10,7 +10,7 @@ import { orderTypes } from '../actions/orderActions';
 // Inventory actions
 import { inventoryTypes } from '../actions/inventoryActions';
 // Calculator actions
-import { START_CALCULATE } from '../actions/calculatorActions';
+import { calculatorTypes } from '../actions/calculatorActions';
 
 // User sagas
 import {
@@ -67,7 +67,7 @@ function * rootSaga () {
         takeLatest(orderTypes.INCREMENT_SHIP_DATE_ATTEMPT, incrementShipDate),
         takeLatest(orderTypes.DECREMENT_SHIP_DATE_ATTEMPT, decrementShipDate),
         // CALCULATOR
-        takeLatest('START_CALCULATE', startCalculation )
+        takeLatest(calculatorTypes.START_CALCULATE_ATTEMPT, startCalculation )
     ]);
 };
 

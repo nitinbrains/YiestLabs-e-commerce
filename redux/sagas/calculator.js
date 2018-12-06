@@ -1,12 +1,16 @@
 import { put, select  } from 'redux-saga/effects';
-import { calculatorActions } from '../actions/calculatorActions';
+// import { calculatorActions } from '../actions/calculatorActions';
 
 // import SalesLib from '../../lib/SalesLib';
 
 export function * startCalculation(action) {
     console.log('saga --- action ')
     console.log( action )
-    // const { responseSuccess, responseFailure, data: { cartItem } } = action;
+    const { responseSuccess, responseFailure } = action;
+
+
+    yield put(responseSuccess({}));
+
     // var items = yield select(state => state.cart.items);
     // try {
     //     addToCart(items, cartItem);
