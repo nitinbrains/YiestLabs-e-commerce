@@ -60,7 +60,7 @@ class OrderDetails extends Component {
                             </Typography>
                         </div>
                         <Grid container spacing={24}>
-                            <Grid item container>
+                            <Grid item container spacing={24}>
                                 <Grid item>
                                     <img
                                         className={classes.image}
