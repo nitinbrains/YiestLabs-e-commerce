@@ -15,8 +15,9 @@ export function * getInventory (action) {
         const { res: { items }, error } = yield call(api.getInventory);
 
         if(items) {
-            const itemsToShow = filterItems(items, 1, null, false)
-            yield put(responseSuccess({ items, itemsToShow }));
+            var category = 1;
+            const itemsToShow = filterItems(items, category, null, false)
+            yield put(responseSuccess({ items, itemsToShow, category }));
         } else if (error) {
             throw error;
         }
@@ -32,27 +33,53 @@ export function * changeCategory(action) {
     try {
 
         const inventory = yield select(state => state.inventory);
-        const itemsToShow = filterItems(inventory.items, category, null, false)
-        yield put(responseSuccess({ itemsToShow }));
+        const itemsToShow = filterItems(inventory.items, category, null, false, false);
+        yield put(responseSuccess({ itemsToShow, category }));
     } catch(error) {
         yield put(responseFailure(error));
     }
 }
 
 export function * searchForStrain(action) {
-    const { responseSuccess, responseFailure, data: { searchTerm }} = action;
+    const { responseSuccess, responseFailure, data: { searchTerm } } = action;
     try {
         const inventory = yield select(state => state.inventory);
-        const itemsToShow = filterItems(inventory.items, null, searchTerm, false);
+        const itemsToShow = filterItems(inventory.items, null, searchTerm, false, false);
         yield put(responseSuccess({ itemsToShow }));
     } catch(error) {
         yield put(responseFailure(error));
     }
 }
 
+export function * switchToHomebrew(action) {
+    try {
+        const { responseSuccess, responseFailure } = action;
+        const inventory = yield select(state => state.inventory);
+        const itemsToShow = filterItems(inventory.items, null, null, false, true);
+        yield put(responseSuccess({ itemsToShow }));
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}
+
+export function * switchToProfessional(action) {
+    try {
+
+        const inventory = yield select(state => state.inventory);
+        const category = inventory.category;
+        const itemsToShow = filterItems(inventory.items, category, null, false, true);
+        yield put(inventoryActions.changeCategory({
+            category: category
+        }));
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}
+
+
 /***** Business Logic *****/
 
-function filterItems(items, type=null, search=null, userInfo=null, retail=false) {
+function filterItems(items, type=null, search=null, userInfo=null, retail=false, homebrew=false) {
     try {
         var itemsToShow = [],
             similarItems = [],
@@ -91,7 +118,18 @@ function filterItems(items, type=null, search=null, userInfo=null, retail=false)
             var beerStyles = items[i].beerStylesSearch ? items[i].beerStylesSearch : '';
             const salesCategory = parseInt(items[i].salesCategory);
 
-            if(Utils.warehouseMatch(items[i].warehouse, subsidiary) && (!SalesLib.POSItems.includes(items[i].volID[0]) || (SalesLib.POSItems.includes(items[i].volID[0]) && userIsRetailer)))
+
+            if(homebrew)
+            {
+                if(!items[i].IsPrivate[0] || items[i].IsPrivate.indexOf(UserID) >= 0)
+                {
+                    if(items[i].volID[4] && SalesLib.SALESCATEGORY[16].includes(items[i].salesCategory))
+                    {
+                        itemsToShow.push(Inventory[i]);
+                    }
+                }
+            }
+            else if(Utils.warehouseMatch(items[i].warehouse, subsidiary) && (!SalesLib.POSItems.includes(items[i].volID[0]) || (SalesLib.POSItems.includes(items[i].volID[0]) && userIsRetailer)))
             {
                 if(userID)
                 {

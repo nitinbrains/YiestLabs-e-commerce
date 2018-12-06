@@ -20,6 +20,16 @@ class MyApp extends App {
 
 	pageContext = null;
 
+	static async getInitialProps({ Component, router, ctx }) {
+	    let pageProps = {}
+		
+	    if (Component.getInitialProps) {
+	      	pageProps = await Component.getInitialProps(ctx)
+	    }
+
+	    return { pageProps }
+	  }
+
 	componentDidMount() {
 		// Remove the server-side injected CSS.
 		const jssStyles = document.querySelector('#jss-server-side');
@@ -60,6 +70,3 @@ class MyApp extends App {
 }
 
 export default configureStore(MyApp)
-
-
-

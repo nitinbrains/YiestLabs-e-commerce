@@ -35,7 +35,12 @@ import {
 } from './order';
 // Inventory sagas
 
-import { getInventory, changeCategory } from './inventory';
+import {
+    getInventory,
+    changeCategory,
+    switchToHomebrew,
+    switchToProfessional
+ } from './inventory';
 
 function * rootSaga () {
     yield all([
@@ -52,6 +57,8 @@ function * rootSaga () {
         // INVENTORY
         takeEvery(inventoryTypes.GET_INVENTORY_ATTEMPT, getInventory),
         takeEvery(inventoryTypes.CHANGE_CATEGORY_ATTEMPT, changeCategory),
+        takeEvery(inventoryTypes.SWITCH_TO_HOMEBREW_ATTEMPT, switchToHomebrew),
+        takeEvery(inventoryTypes.SWITCH_TO_PROFESSIONAL_ATTEMPT, switchToProfessional),
         // CART
         takeEvery(cartTypes.ADD_ITEM_ATTEMPT, addCartItem),
         takeEvery(cartTypes.REMOVE_ITEM_ATTEMPT, removeCartItem),
