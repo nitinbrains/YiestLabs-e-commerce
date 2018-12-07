@@ -53,7 +53,7 @@ class NavBarUserSearchDrawerLayout extends Component {
     render() {
         const { children, classes, theme } = this.props;
 
-        return (
+        return ( 
             <div className={classes.root}>
                 <div
                     style={{

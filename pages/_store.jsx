@@ -1,10 +1,6 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from 'redux';
+import { compose } from "redux";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
-
-import { userActions } from '../redux/actions/userActions';
-import { inventoryActions } from '../redux/actions/inventoryActions';
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -28,8 +24,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import SalesLib from '../lib/SalesLib';
 import NavBarUserSearchDrawerLayout from '../components/NavBar/NavBarUserSearchDrawerLayout';
 import LoadingIndicator from '../components/UI/LoadingIndicator';
-
-// Store Items
 import YeastCard from '../components/Store/Yeast/YeastCard';
 import YeastDialog from '../components/Store/Yeast/YeastDialog';
 import EnzymesNutrientsCard from '../components/Store/EnzymesNutrients/EnzymesNutrientsCard';
@@ -47,6 +41,7 @@ import HomebrewCard from '../components/Store/Homebrew/HomebrewCard';
 
 
 import User from '../lib/User'
+import withInventory from "../hocs/inventory";
 
 class Store extends Component {
 
@@ -253,14 +248,7 @@ Store.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-    user: state.user,
-    store: state.inventory
-})
-
-const mapDispatchToProps = dispatch => bindActionCreators({ ...userActions, ...inventoryActions}, dispatch);
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withWidth()(withStyles(styles, { withTheme: true })(Store)));
+export default compose(
+    withStyles(styles, { withTheme: true }),
+    withInventory,
+)(Store);
