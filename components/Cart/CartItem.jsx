@@ -80,6 +80,9 @@ class CartItem extends Component {
                             {this.props.item.Name}
                         </Typography>
                         <Typography>
+                            <span onClick={this.props.openWantSoonerDialog}>Want this Strain sooner?</span>
+                        </Typography>
+                        <Typography>
                             {this.props.item.details}
                         </Typography>
                     </CardContent>

@@ -2,7 +2,8 @@ import { createReducer } from '../../helpers/reduxHelpers';
 import { cartTypes } from '../actions/cartActions';
 
 export const initialState = {
-    items: []
+    items: [],
+    showWantSooner: false
 };
 
 export default createReducer(initialState, {
@@ -16,4 +17,10 @@ export default createReducer(initialState, {
         items: data.items
     }),
     [cartTypes.CLEAR_CART_ATTEMPT]: (state, { data }) => null,
+    [cartTypes.SHOW_WANT_SOONER_ATTEMPT]: ({ items }, { data }) => ({
+        showWantSooner: true
+    }),
+    [cartTypes.HIDE_WANT_SOONER_ATTEMPT]: ({ items }, { data }) => ({
+        showWantSooner: false
+    }),
 })

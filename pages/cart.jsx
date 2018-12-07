@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
 
 import Link from "next/link";
 import PropTypes from "prop-types";
@@ -13,13 +14,33 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
 
 import CartItem from "../components/Cart/CartItem";
+import WantSooner from "../components/Cart/WantSooner/WantSooner";
+
+import { cartActions } from '../redux/actions/cartActions';
 
 class Cart extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            showWantSoonerDialog: false,
+        }
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState){
+        return {
+            showWantSoonerDialog: nextProps.cart.showWantSooner,
+        }
+    }
+
     componentWillMount() {
         console.log('user', this.props.user);
+    }
+
+    openWantSoonerDialog() {
     }
 
     render() {
@@ -31,7 +52,7 @@ class Cart extends Component {
                     {this.props.cart.items && this.props.cart.items.map((item, i) => {
                         return (
                             <Grid item xs={12}>
-                                <CartItem item={item} index={i} />
+                                <CartItem key={i} item={item} index={i} openWantSoonerDialog={() => { this.props.showWantSooner() }} />
                             </Grid>
                         );
                     })}
@@ -39,6 +60,18 @@ class Cart extends Component {
                 <Link prefetch href="/checkout">
                     <Button style={{marginTop:20}} variant="contained">PROCEED TO CHECKOUT</Button>
                 </Link>
+
+                <Dialog
+                    open={this.state.showWantSoonerDialog}
+                    onClose={() => {this.props.hideWantSooner()}}
+                    aria-labelledby="form-dialog-title"
+                    style={{
+                        width: "100%"
+                    }}
+                >
+              <WantSooner/>
+              </Dialog>
+
             </NavBarUserSearchDrawerLayout>
         );
     }
@@ -76,7 +109,9 @@ const mapStateToProps = state => {
     };
 };
 
+const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
+
 export default connect(
     mapStateToProps,
-    null
+    mapDispatchToProps
 )(withStyles(styles, { withTheme: true })(Cart));

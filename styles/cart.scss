@@ -1,0 +1,15 @@
+#want-sooner-box{
+	padding: 20px;
+}
+
+#alternate-sizes{
+	padding: 20px;
+	.option-item-card {
+		font-weight: bold;
+	}
+	.summary-others {
+		font-size: 10px;
+		padding-bottom: 0px;
+		border-bottom: 1px solid $color-second-accent;
+	}
+}
