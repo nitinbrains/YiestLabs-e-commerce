@@ -10,97 +10,175 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+
+import OrderDetails from "../components/MyOrders/OrderDetails";
 
 class MyOrders extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            openDialog: false
+        }
+    }
+
+    handleOrderDetails = (item) => {
+        this.setState({ openDialog: true });
+    }
+
+    handleLeaveOrderDetails = () => {
+        this.setState({ openDialog: false });
+    }
+
     render() {
         const { classes, theme } = this.props;
 
         return (
             <NavBarUserSearchDrawerLayout>
-                <Grid container spacing={24}>
-                    <Grid item xs={12}>
-                        <Card className={classes.card}>
-                            <div
-                                style={{ backgroundColor: "#f28411", width: 7 }}
-                            />
-                            <CardMedia
-                                className={classes.image}
-                                image="/static/images/yeast.jpg"
-                            />
-                            <div className={classes.details}>
-                                <CardContent className={classes.content}>
-                                    <Typography
-                                        variant="display1"
-                                        color="textPrimary"
-                                    >
-                                        2625434
-                                    </Typography>
-                                    <Typography
-                                        variant="overline"
-                                        color="textPrimary"
-                                    >
-                                        Shiip date is 10/01/2018
-                                    </Typography>
-                                </CardContent>
-                                <CardContent style={{ width: "100%" }}>
+                <div className={classes.container}>
+                    <div className={classes.title}>
+                        <Typography variant="h4" color="secondary">
+                            MY ORDERS
+                        </Typography>
+                    </div>
+                    <Grid container spacing={24}>
+                        <Grid item xs={12}>
+                            <div className={classes.card}>
+                            <div style={{position:'absolute', top:-15, left:20, backgroundColor:"#fafafa", paddingLeft:10, paddingRight:10}}>
+                                <Typography
+                                    variant="h6"
+                                    color="textPrimary"
+                                >
+                                    Order # 2625434
+                                </Typography>
+                            </div>
+                                <Grid item container>
+                                    <Grid item>
+                                        <img
+                                            className={classes.image}
+                                            src="/static/images/yeast.png"
+                                        />
+                                    </Grid>
                                     <Grid
+                                        item
+                                        xs={12}
+                                        sm
                                         container
-                                        spacing={24}
-                                        justify="space-between"
+                                        direction="column"
+                                        style={{marginTop:20}}
                                     >
                                         <Grid item xs>
-                                            <Button variant="contained">
-                                                Details
-                                            </Button>
-                                        </Grid>
-                                        <Grid item xs>
-                                            <div
-                                                style={{
-                                                    border: "solid 2px",
-                                                    borderColor: "#f28411",
-                                                    borderRadius: 7,
-                                                    padding: 2,
-                                                    paddingLeft:10,
-                                                    paddingRight:10,
-                                                    textAlign: "center"
-                                                }}
+                                            <Typography
+                                                variant="overline"
+                                                color="textPrimary"
                                             >
-                                                <Typography
-                                                    variant="h6"
+                                                Shiip date is 10/01/2018
+                                            </Typography>
+                                        </Grid>
+                                        <Grid
+                                            container
+                                            item
+                                            spacing={24}
+                                            direction="row"
+                                        >
+                                            <Grid item>
+                                                <Button
+                                                    variant="outlined"
                                                     color="primary"
+                                                    onClick={this.handleOrderDetails}
                                                 >
-                                                    Closed
-                                                </Typography>
-                                            </div>
+                                                    Order Details
+                                                </Button>
+                                            </Grid>
+                                            <Grid
+                                                container
+                                                item
+                                                spacing={24}
+                                                justify="flex-end"
+                                            >
+                                                <Grid item xs={12} md={2}>
+                                                    <div
+                                                        style={{
+                                                            backgroundColor:
+                                                                "#f28411",
+                                                            borderRadius: 7,
+                                                            padding: 2,
+                                                            textAlign: "center"
+                                                        }}
+                                                    >
+                                                        <Typography
+                                                            variant="h6"
+                                                            color="secondary"
+                                                        >
+                                                            Closed
+                                                        </Typography>
+                                                    </div>
+                                                </Grid>
+                                            </Grid>
                                         </Grid>
                                     </Grid>
-                                </CardContent>
+                                </Grid>
                             </div>
-                        </Card>
+                        </Grid>
                     </Grid>
-                </Grid>
+                </div>
+
+                <Dialog
+                    open={this.state.openDialog}
+                    onClose={this.handleLeaveOrderDetails}
+                    maxWidth={'lg'}
+                >
+                    <OrderDetails closeDialog={this.handleLeaveOrderDetails}/>
+                </Dialog>
             </NavBarUserSearchDrawerLayout>
         );
     }
 }
 
 const styles = theme => ({
+    container: {
+        border: "solid 1px",
+        borderColor: "#CCCCCC",
+        padding: theme.spacing.unit * 4,
+        [theme.breakpoints.up("md")]: {
+            marginLeft: 50,
+            marginRight: 50
+        },
+        [theme.breakpoints.up("lg")]: {
+            marginLeft: 100,
+            marginRight: 100
+        },
+        [theme.breakpoints.up("xl")]: {
+            marginLeft: 150,
+            marginRight: 150
+        }
+    },
+    title: {
+        backgroundColor: "#FF9933",
+        padding: 5,
+        marginBottom: theme.spacing.unit * 4,
+        textAlign: "center",
+        marginLeft: theme.spacing.unit * -4,
+        marginRight: theme.spacing.unit * -4
+    },
     hide: {
         display: "none"
     },
     card: {
-        display: "flex"
+        position:'relative',
+        border: "solid 1px",
+        borderColor: "#CCCCCC",
+        padding: theme.spacing.unit * 2
     },
     image: {
-        width: 150
+        width: 170,
+        marginRight: 10,
+        textAlign: "center"
     },
     quantity: {
         width: 50,
         marginRight: 20
-    },
-    details: {
-        display: "flex",
-        flexDirection: "column"
     }
 });
 
