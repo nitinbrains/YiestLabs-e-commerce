@@ -9,6 +9,8 @@ import { cartTypes } from '../actions/cartActions';
 import { orderTypes } from '../actions/orderActions';
 // Inventory actions
 import { inventoryTypes } from '../actions/inventoryActions';
+// Calculator actions
+import { calculatorTypes } from '../actions/calculatorActions';
 
 // User sagas
 import {
@@ -37,6 +39,9 @@ import {
 
 import { getInventory, changeCategory } from './inventory';
 
+// Calculator Sags
+import { startCalculation } from './calculator'
+
 function * rootSaga () {
     yield all([
         // USERS
@@ -60,7 +65,9 @@ function * rootSaga () {
         takeLatest(orderTypes.PREPARE_ORDER_ATTEMPT, prepareOrder),
         takeLatest(orderTypes.SET_SHIPPING_OPTION_ATTEMPT, setShippingOption),
         takeLatest(orderTypes.INCREMENT_SHIP_DATE_ATTEMPT, incrementShipDate),
-        takeLatest(orderTypes.DECREMENT_SHIP_DATE_ATTEMPT, decrementShipDate)
+        takeLatest(orderTypes.DECREMENT_SHIP_DATE_ATTEMPT, decrementShipDate),
+        // CALCULATOR
+        takeLatest(calculatorTypes.START_CALCULATE_ATTEMPT, startCalculation )
     ]);
 };
 
