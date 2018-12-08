@@ -21,6 +21,7 @@ import WantSooner from "../components/Cart/WantSooner/WantSooner";
 
 import { cartActions } from '../redux/actions/cartActions';
 
+
 class Cart extends Component {
 
     constructor(props) {
@@ -51,7 +52,7 @@ class Cart extends Component {
                 <Grid container spacing={24}>
                     {this.props.cart.items && this.props.cart.items.map((item, i) => {
                         return (
-                            <Grid item xs={12}>
+                            <Grid key={i} item xs={12}>
                                 <CartItem key={i} item={item} index={i} openWantSoonerDialog={() => { this.props.showWantSooner() }} />
                             </Grid>
                         );
@@ -65,9 +66,7 @@ class Cart extends Component {
                     open={this.state.showWantSoonerDialog}
                     onClose={() => {this.props.hideWantSooner()}}
                     aria-labelledby="form-dialog-title"
-                    style={{
-                        width: "100%"
-                    }}
+                    classes={{ paper: classes.dialogPaper }}
                 >
               <WantSooner/>
               </Dialog>
@@ -94,7 +93,10 @@ const styles = theme => ({
     details: {
         display: "flex",
         flexDirection: "column"
-    }
+    },
+    dialogPaper: {
+        minWidth: '70%',
+    },
 });
 
 Cart.propTypes = {

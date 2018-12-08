@@ -4,6 +4,8 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Card from '@material-ui/core/Card';
 import CardBody from "../../UI/Card/CardBody.jsx";
 import Grid from '@material-ui/core/Grid';
+import Typography from "@material-ui/core/Typography";
+import FormCheckbox from '../../Form/FormCheckbox';
 
 class OptionItem extends React.Component {
     render() {
@@ -12,13 +14,16 @@ class OptionItem extends React.Component {
 					<CardBody>
 					
 						<Grid container spacing={24}>
-		        	<Grid item xs={12} className="item-heading">
-		         		OPTION 1
+		        	<Grid item xs={6} className="item-heading">
+		         		<Typography className="option-text">OPTION 6</Typography>
+		        	</Grid>
+		        	<Grid item xs={6} className="item-heading select-option">
+		         		<FormCheckbox className="check-item" checked={false} onChange={() => {}}/>
 		        	</Grid>
 		      	</Grid>
 
 		      	<Grid container spacing={24}>
-		        	<Grid item xs={12} className="item-heading">
+		        	<Grid item xs={12} className="item-name">
 		         		WLPLPL001 ALE YEAST
 		        	</Grid>
 		      	</Grid>

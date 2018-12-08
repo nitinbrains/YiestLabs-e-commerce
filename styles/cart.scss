@@ -1,15 +1,80 @@
 #want-sooner-box{
 	padding: 20px;
+	.card-header-down{
+		padding: 2px;
+		font-size: 30px;
+		text-transform: uppercase;
+		margin-top: 1px !important;
+		h1 {
+			font-size: 22px;
+		}
+	}
+
+	.two-options-item-block{
+		border: 1px solid $color-second-accent;
+		margin-top: 30px !important;
+
+		.items-separation{
+			border-left: 1px solid $color-second-accent;;
+			width: 1px;
+			height: 100%;
+			margin:0 auto;
+		}
+
+		.option-item-card{
+			border-radius: 0px !important;
+			box-shadow: none !important;
+			.summary-others:last-child{
+				border-bottom: 0px !important;
+			}
+		}
+	}
+
+	#alternate-sizes{
+		padding: 20px;
+		.content-text {
+			font-size: 12px;
+		}
+		.similar-strain-button {
+			color: $color-main-accent;
+			text-transform: uppercase;
+			border: 2px solid $color-main-accent;
+			padding: 10px;
+			width: 70%;
+			text-align: center;
+		}
+		.option-item-card {
+			font-weight: bold;
+			.item-heading {
+				padding: 0px;
+				.check-item{
+					padding: 0px;
+				}
+				.option-text {
+					margin-top: 15px;
+					margin-left: 12px;
+				}
+			}
+			.select-option{
+				text-align: right;
+			}
+		}
+		.item-name{
+			color: $color-main-accent;
+			font-size: 12px;
+		}
+		.summary-others {
+			font-size: 10px;
+			padding-bottom: 0px;
+			border-bottom: 1px solid $color-second-accent;
+			color: $color-font;
+			margin-top: 10px;
+		}
+	}
+
 }
 
-#alternate-sizes{
-	padding: 20px;
-	.option-item-card {
-		font-weight: bold;
-	}
-	.summary-others {
-		font-size: 10px;
-		padding-bottom: 0px;
-		border-bottom: 1px solid $color-second-accent;
-	}
-}
+
+
+
+

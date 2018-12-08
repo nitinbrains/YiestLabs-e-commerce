@@ -33,14 +33,48 @@ class AlternateSizes extends React.Component {
 	        <Grid item xs={12}>
 	        	<Grid container spacing={24}>
 			        <Grid item xs={6}>
+			        	<Typography className="content-text">
+				          Pick different sizes and get your order sooner.<br/>
+				          All the options below are in stock.
+				         </Typography>
+			        </Grid>
+			        <Grid item xs={6}  dir="rtl">
+			         	<div className="similar-strain-button"  > Check For Similar Strains</div>
+			        </Grid>
+			      </Grid>
+	        </Grid>
+	      </Grid>
+				
+				<Grid container spacing={24}>
+	        <Grid item xs={12} className="two-options-item-block">
+	        	<Grid container spacing={24}>
+			        <Grid item xs={5}>
 			          <OptionItem/>
 			        </Grid>
-			        <Grid item xs={6}>
+			        <Grid item xs={2}>
+			          <div className="items-separation"></div>
+			        </Grid>
+			        <Grid item xs={5}>
 			          <OptionItem/>
 			        </Grid>
 			      </Grid>
+	        </Grid>
+	      </Grid>
 
-	          
+
+	      <Grid container spacing={24}>
+	        <Grid item xs={12} className="two-options-item-block">
+	        	<Grid container spacing={24}>
+			        <Grid item xs={5}>
+			          <OptionItem/>
+			        </Grid>
+			        <Grid item xs={2}>
+			          <div className="items-separation"></div>
+			        </Grid>
+			        <Grid item xs={5}>
+			          <OptionItem/>
+			        </Grid>
+			      </Grid>
 	        </Grid>
 	      </Grid>
 			
