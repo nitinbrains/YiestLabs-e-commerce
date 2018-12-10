@@ -16,26 +16,18 @@ class WantSooner extends React.Component {
     }
 	}
 	render() {
-	    return (
-
-	    		<div id='want-sooner-box'>
-			<div >
-	    <AppBar position="static">
-	      <Tabs >
-	        <Tab onClick={() => { this.setState({activeTab:'AlternateSizes'})}} label="ALTERNATE SIZES" />
-	        <Tab  onClick={() => { this.setState({activeTab:'SimilarStrains'})}} label="SIMILAR STRAINS" />
-	      </Tabs>
-	      
-	    </AppBar>
-	    {this.state.activeTab == 'AlternateSizes' ? <AlternateSizes/> : <SimilarStrains/> }
-	    
-	   
-	  </div>
-	  </div>
-
-
-
-        	
+		return (
+			<div id='want-sooner-box'>
+				<div >
+	    		<AppBar position="static">
+	      		<Tabs value={this.state.activeTab}>
+	        		<Tab value="AlternateSizes" onClick={() => { this.setState({activeTab:'AlternateSizes'})}} label="ALTERNATE SIZES" />
+	        		<Tab value="SimilarStrains"  onClick={() => { this.setState({activeTab:'SimilarStrains'})}} label="SIMILAR STRAINS" />
+	      		</Tabs>
+	      	</AppBar>
+	    		{this.state.activeTab == 'AlternateSizes' ? <AlternateSizes items={this.props.cart.want_sooner_alternateSizes}/> : <SimilarStrains items={this.props.cart.want_sooner_similarStrains}/>}
+	    	</div>
+	  	</div>
   	);
   }
 }

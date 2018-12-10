@@ -14,11 +14,10 @@
 		border: 1px solid $color-second-accent;
 		margin-top: 30px !important;
 
-		.items-separation{
-			border-left: 1px solid $color-second-accent;;
-			width: 1px;
-			height: 100%;
-			margin:0 auto;
+		.option-parent-block:first-child{
+			border-right: 1px solid $color-second-accent;
+			margin-top: 10px;
+			margin-bottom: 10px;
 		}
 
 		.option-item-card{

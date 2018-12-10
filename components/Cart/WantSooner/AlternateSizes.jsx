@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
+import _ from 'lodash';
 
 import NavBarLayout from "../../NavBar/NavBarLayout";
 import Card from "../../UI/Card/Card.jsx";
@@ -20,22 +21,45 @@ class AlternateSizes extends React.Component {
     }
 	}
 
+	_renderItems = ( ) => {
+		let items = this.props.items;
+		let itemChunks = _.chunk( items, 2 );
+		return _.map( itemChunks, ( options, i ) => {
+			return (
+				<Grid key={i} container spacing={24}>
+					<Grid item xs={12} className="two-options-item-block">
+						<Grid container spacing={24}>
+			        {
+			        	_.map( options, ( option, k ) => {
+			        		return (
+			        			<Grid key={k} className="option-parent-block" item xs={6}>
+			          			<OptionItem/>
+			        			</Grid>
+			        		)
+			        	})
+			        }
+			      </Grid>
+					</Grid>
+				</Grid>
+			)
+		})
+	}
+
   render() {
-	return (
-		<Card id="alternate-sizes">
-			<CardHeader color="primary" className="card-header-down">
-				<Typography color="secondary" variant="display1" align="center">
-					Alternate Sizes
-				</Typography>
-			</CardHeader>
-			<CardBody>
+		return (
+			<Card id="alternate-sizes">
+				<CardHeader color="primary" className="card-header-down">
+					<Typography color="secondary" variant="display1" align="center">
+						Alternate Sizes
+					</Typography>
+				</CardHeader>
+			<CardBody>			
 				<Grid container spacing={24}>
 	        <Grid item xs={12}>
 	        	<Grid container spacing={24}>
 			        <Grid item xs={6}>
 			        	<Typography className="content-text">
-				          Pick different sizes and get your order sooner.<br/>
-				          All the options below are in stock.
+				          Pick different sizes and get your order sooner. All the options below are in stock.
 				         </Typography>
 			        </Grid>
 			        <Grid item xs={6}  dir="rtl">
@@ -44,40 +68,7 @@ class AlternateSizes extends React.Component {
 			      </Grid>
 	        </Grid>
 	      </Grid>
-				
-				<Grid container spacing={24}>
-	        <Grid item xs={12} className="two-options-item-block">
-	        	<Grid container spacing={24}>
-			        <Grid item xs={5}>
-			          <OptionItem/>
-			        </Grid>
-			        <Grid item xs={2}>
-			          <div className="items-separation"></div>
-			        </Grid>
-			        <Grid item xs={5}>
-			          <OptionItem/>
-			        </Grid>
-			      </Grid>
-	        </Grid>
-	      </Grid>
-
-
-	      <Grid container spacing={24}>
-	        <Grid item xs={12} className="two-options-item-block">
-	        	<Grid container spacing={24}>
-			        <Grid item xs={5}>
-			          <OptionItem/>
-			        </Grid>
-			        <Grid item xs={2}>
-			          <div className="items-separation"></div>
-			        </Grid>
-			        <Grid item xs={5}>
-			          <OptionItem/>
-			        </Grid>
-			      </Grid>
-	        </Grid>
-	      </Grid>
-			
+				{this._renderItems()}			
 			</CardBody>
 		</Card>
 		);

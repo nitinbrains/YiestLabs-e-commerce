@@ -68,7 +68,7 @@ class Cart extends Component {
                     aria-labelledby="form-dialog-title"
                     classes={{ paper: classes.dialogPaper }}
                 >
-              <WantSooner/>
+                <WantSooner {...this.props}/>
               </Dialog>
 
             </NavBarUserSearchDrawerLayout>

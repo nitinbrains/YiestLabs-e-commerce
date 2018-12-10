@@ -3,7 +3,9 @@ import { cartTypes } from '../actions/cartActions';
 
 export const initialState = {
     items: [],
-    showWantSooner: false
+    showWantSooner: false,
+    want_sooner_alternateSizes: [{},{},{},{},{},{}],
+    want_sooner_similarStrains: [{},{},{}]
 };
 
 export default createReducer(initialState, {
