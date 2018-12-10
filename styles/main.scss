@@ -1,0 +1,12 @@
+// google fonts
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+// fonts variable
+$Montserrat : 'Montserrat', sans-serif;
+
+@import "generic";
+@import "calculator";
+
+body {
+	font-family: $Montserrat;
+}

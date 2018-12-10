@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -20,6 +23,8 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { SideBarItems } from "./SideBarItems";
 import SearchBarItems from "./SearchBarItems";
+
+import { userActions } from '../../redux/actions/userActions';
 
 class NavBarUserSearchDrawerLayout extends Component {
     state = {
@@ -69,7 +74,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                             onClick={this.handleUserBar}
                             className={classNames(
                                 classes.menuButton,
-                                !this.state.isLoggedIn && classes.hide
+                                !this.props.user.id && classes.hide
                             )}
                             color="inherit"
                             aria-label="Menu"
@@ -81,7 +86,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                             <IconButton
                                 className={classNames(
                                     classes.menuButton,
-                                    this.state.isLoggedIn && classes.hide
+                                    this.props.user.id && classes.hide
                                 )}
                                 color="inherit"
                                 aria-label="Login"
@@ -100,8 +105,11 @@ class NavBarUserSearchDrawerLayout extends Component {
                             />
                         </div>
                         <div style={{ flexGrow: 1 }} />
+
                         <Button color="secondary">Yeastman Store</Button>
-                        <Button color="secondary">Calculator</Button>
+                        <Link prefetch href="/calculator">
+                            <Button color="secondary">Calculator</Button>
+                        </Link>
                         <Button color="secondary">About Us</Button>
 
                         <Link prefetch href="/cart">
@@ -143,10 +151,10 @@ class NavBarUserSearchDrawerLayout extends Component {
                     classes={{
                         paper: classNames(
                             classes.drawerPaper,
-                            !this.state.isLoggedIn && classes.hide,
+                            !this.props.user.id && classes.hide,
                             !this.state.openUserBar &&
-                                !this.state.openUserBarHover &&
-                                classes.drawerPaperClose
+                            !this.state.openUserBarHover &&
+                            classes.drawerPaperClose
                         )
                     }}
                 >
@@ -158,16 +166,16 @@ class NavBarUserSearchDrawerLayout extends Component {
                 <main
                     className={classNames(
                         classes.content,
-                        !this.state.isLoggedIn && classes.contentNoUser,
+                        !this.props.user.id && classes.contentNoUser,
                         {
                             [classes.contentShift]: this.state.openSearchBar,
                             [classes[`contentShift-search`]]: this.state
-                                .openSearchBar
+                            .openSearchBar
                         },
                         {
                             [classes.contentShift]: this.state.openUserBar,
                             [classes[`contentShift-user`]]: this.state
-                                .openUserBar
+                            .openUserBar
                         }
                     )}
                 >
@@ -329,6 +337,13 @@ NavBarUserSearchDrawerLayout.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(
-    NavBarUserSearchDrawerLayout
-);
+const mapStateToProps = state => ({
+    user: state.user,
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators({ ...userActions}, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(NavBarUserSearchDrawerLayout));

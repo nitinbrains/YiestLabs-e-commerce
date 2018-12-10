@@ -9,6 +9,8 @@ import { cartTypes } from '../actions/cartActions';
 import { orderTypes } from '../actions/orderActions';
 // Inventory actions
 import { inventoryTypes } from '../actions/inventoryActions';
+// Calculator actions
+import { calculatorTypes } from '../actions/calculatorActions';
 
 // User sagas
 import {
@@ -35,7 +37,15 @@ import {
 } from './order';
 // Inventory sagas
 
-import { getInventory, changeCategory } from './inventory';
+import {
+    getInventory,
+    changeCategory,
+    switchToHomebrew,
+    switchToProfessional
+ } from './inventory';
+
+// Calculator Sags
+import { startCalculation } from './calculator'
 
 function * rootSaga () {
     yield all([
@@ -52,6 +62,8 @@ function * rootSaga () {
         // INVENTORY
         takeEvery(inventoryTypes.GET_INVENTORY_ATTEMPT, getInventory),
         takeEvery(inventoryTypes.CHANGE_CATEGORY_ATTEMPT, changeCategory),
+        takeEvery(inventoryTypes.SWITCH_TO_HOMEBREW_ATTEMPT, switchToHomebrew),
+        takeEvery(inventoryTypes.SWITCH_TO_PROFESSIONAL_ATTEMPT, switchToProfessional),
         // CART
         takeEvery(cartTypes.ADD_ITEM_ATTEMPT, addCartItem),
         takeEvery(cartTypes.REMOVE_ITEM_ATTEMPT, removeCartItem),
@@ -60,7 +72,9 @@ function * rootSaga () {
         takeLatest(orderTypes.PREPARE_ORDER_ATTEMPT, prepareOrder),
         takeLatest(orderTypes.SET_SHIPPING_OPTION_ATTEMPT, setShippingOption),
         takeLatest(orderTypes.INCREMENT_SHIP_DATE_ATTEMPT, incrementShipDate),
-        takeLatest(orderTypes.DECREMENT_SHIP_DATE_ATTEMPT, decrementShipDate)
+        takeLatest(orderTypes.DECREMENT_SHIP_DATE_ATTEMPT, decrementShipDate),
+        // CALCULATOR
+        takeLatest(calculatorTypes.START_CALCULATE_ATTEMPT, startCalculation )
     ]);
 };
 
