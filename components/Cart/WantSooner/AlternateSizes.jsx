@@ -63,7 +63,7 @@ class AlternateSizes extends React.Component {
 				         </Typography>
 			        </Grid>
 			        <Grid item xs={6}  dir="rtl">
-			         	<div className="similar-strain-button"  > Check For Similar Strains</div>
+			         	<div className="similar-strain-button" onClick={() => this.props.changeTab('SimilarStrains')}  > Check For Similar Strains</div>
 			        </Grid>
 			      </Grid>
 	        </Grid>

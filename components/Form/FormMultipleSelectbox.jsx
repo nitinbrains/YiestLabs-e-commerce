@@ -9,46 +9,64 @@ import Input from '@material-ui/core/Input';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListItemText from '@material-ui/core/ListItemText';
 
+const MenuProps = {
+  PaperProps: {
+    style: {
+      border: "1px solid #FF9933"
+    },
+  },
+};
+
 class FormMultipleSelectbox extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       options: this.props.options || [],
-      name: []
     }
   }
-  
+
   render() {
     let options = this.props.options || []
-
-    console.log('^^^^^^^^^')
-    console.log( this.props )
+    let {classes} = this.props
     return (
       <Select
-            multiple
-            value={this.state.name}
-            onChange={() => {}}
-            input={<Input id="select-multiple-checkbox" />}
-            renderValue={selected => selected.join(', ')}
-            // MenuProps={MenuProps}
-          >
-            {this.props.options.map(name => (
-              <MenuItem key={name} value={name}>
-                <Checkbox />
-                <ListItemText primary={name} />
-              </MenuItem>
-            ))}
-          </Select>
+        multiple
+        value={this.props.value}
+        onChange={this.props.onChange}
+        input={<Input id="select-multiple-checkbox" />}
+        renderValue={selected => selected.join(', ')}
+        MenuProps={{ classes: { paper: classes.dropdownStyle } }}
+        className={this.props.className}
+        MenuProps={MenuProps}
+        style={{
+          width: "100%",
+          border: "1px solid #FF9933"
+        }}
+        
+      >
+        {this.props.options.map(option => (
+          <MenuItem key={option.label} value={option.value}>
+            <Checkbox checked={this.props.value.indexOf(option.value) > -1} />
+            <ListItemText primary={option.label} />
+          </MenuItem>
+        ))}
+      </Select>
     );
   }
 }
 
 const styles = theme => ({
+    dropdownStyle: 
+    {
+      border: "1px solid black",
+      marginTop:"20px",
+      width:"100%"
+    },
 });
 
 FormMultipleSelectbox.propTypes = {
-  value: PropTypes.string.isRequired,
+  value: PropTypes.array.isRequired,
   options: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired
 };

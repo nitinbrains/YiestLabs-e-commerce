@@ -22,7 +22,8 @@ class SimilarStrains extends React.Component {
 										{label:'Liter', value:'L'},
 										{label:'US Gallon', value:'SGAL'},
 										{label:'UK Gallon', value:'KGAL'},
-									]
+									],
+			multipleOptionsSelected: []
     }
 	}
 
@@ -50,9 +51,15 @@ class SimilarStrains extends React.Component {
 		})
 	}
 
+	handleChange = event => {
+    this.setState({ multipleOptionsSelected: event.target.value });
+  };
+  
+
   render() {
+
 	return (
-		<Card id="alternate-sizes">
+		<Card id="similar-strains">
 			<CardHeader color="primary" className="card-header-down">
 				<Typography color="secondary" variant="display1" align="center">
 					Similar Strains
@@ -67,9 +74,12 @@ class SimilarStrains extends React.Component {
 				          Select the style of beer that you are trying to make. The more styles you select the more options you will be offered.
 				         </Typography>
 			        </Grid>
-			        <Grid item xs={6}  dir="rtl">
+			        <Grid item xs={6}  >
 			        	<FormMultipleSelectbox
+			        		value={this.state.multipleOptionsSelected}
 			        		options={this.state.options}
+			        		onChange={this.handleChange}
+			        		className="style-of-beer"
 			        	/>
 			        </Grid>
 			      </Grid>

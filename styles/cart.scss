@@ -29,7 +29,7 @@
 		}
 	}
 
-	#alternate-sizes{
+	#alternate-sizes, #similar-strains{
 		padding: 20px;
 		.content-text {
 			font-size: 12px;
@@ -41,6 +41,7 @@
 			padding: 10px;
 			width: 70%;
 			text-align: center;
+			cursor: pointer;
 		}
 		.option-item-card {
 			font-weight: bold;

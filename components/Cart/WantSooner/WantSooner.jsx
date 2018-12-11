@@ -12,7 +12,7 @@ class WantSooner extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			activeTab: 'AlternateSizes'
+			activeTab: 'SimilarStrains'
     }
 	}
 	render() {
@@ -21,11 +21,25 @@ class WantSooner extends React.Component {
 				<div >
 	    		<AppBar position="static">
 	      		<Tabs value={this.state.activeTab}>
-	        		<Tab value="AlternateSizes" onClick={() => { this.setState({activeTab:'AlternateSizes'})}} label="ALTERNATE SIZES" />
-	        		<Tab value="SimilarStrains"  onClick={() => { this.setState({activeTab:'SimilarStrains'})}} label="SIMILAR STRAINS" />
+	        		<Tab 
+	        			value="AlternateSizes" 
+	        			onClick={() => { this.setState({activeTab:'AlternateSizes'})}} 
+	        			label="ALTERNATE SIZES" 
+	        		/>
+	        		<Tab 
+	        			value="SimilarStrains"  
+	        			onClick={() => { this.setState({activeTab:'SimilarStrains'})}} 
+	        			label="SIMILAR STRAINS" 
+	        		/>
 	      		</Tabs>
 	      	</AppBar>
-	    		{this.state.activeTab == 'AlternateSizes' ? <AlternateSizes items={this.props.cart.want_sooner_alternateSizes}/> : <SimilarStrains items={this.props.cart.want_sooner_similarStrains}/>}
+	    		{this.state.activeTab == 'AlternateSizes' ? 
+	    		 	<AlternateSizes 
+	    		 		items={this.props.cart.want_sooner_alternateSizes}
+	    		 		changeTab={(tab) => {
+	    		 			this.setState({activeTab:tab})
+	    		 		}}
+	    		 	/> : <SimilarStrains items={this.props.cart.want_sooner_similarStrains}/>}
 	    	</div>
 	  	</div>
   	);
