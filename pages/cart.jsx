@@ -18,8 +18,10 @@ import Dialog from "@material-ui/core/Dialog";
 
 import CartItem from "../components/Cart/CartItem";
 import WantSooner from "../components/Cart/WantSooner/WantSooner";
+import FormButton from "../components/Form/FormButton";
 
 import { cartActions } from '../redux/actions/cartActions';
+
 
 
 class Cart extends Component {
@@ -28,6 +30,7 @@ class Cart extends Component {
         super(props);
         this.state = {
             showWantSoonerDialog: false,
+            subTotal: '1234'
         }
     }
 
@@ -46,30 +49,38 @@ class Cart extends Component {
 
     render() {
         const { classes, theme, cart } = this.props;
-
         return (
             <NavBarUserSearchDrawerLayout>
-                <Grid container spacing={24}>
-                    {this.props.cart.items && this.props.cart.items.map((item, i) => {
-                        return (
-                            <Grid key={i} item xs={12}>
-                                <CartItem key={i} item={item} index={i} openWantSoonerDialog={() => { this.props.showWantSooner() }} />
-                            </Grid>
-                        );
-                    })}
-                </Grid>
-                <Link prefetch href="/checkout">
-                    <Button style={{marginTop:20}} variant="contained">PROCEED TO CHECKOUT</Button>
-                </Link>
+                <div id="cart-box">
+                    <Grid container spacing={24}>
+                        {this.props.cart.items && this.props.cart.items.map((item, i) => {
+                            return (                                
+                                <CartItem key={i} item={item} index={i} openWantSoonerDialog={() => { this.props.showWantSooner() }} />                                
+                            );
+                        })}
+                    </Grid>
+                    <Grid container spacing={24} dir="rtl">
+                        SUBTOTAL ${this.state.subTotal}
+                    </Grid>
+                    <Grid container spacing={24} dir="rtl" className="block-checkout-button">
+                        <Link prefetch href="/checkout">
+                            <FormButton
+                                className="checkout-button"
+                                text="PROCEED TO CHECKOUT"
+                            />
+                            {/*<Button style={{marginTop:20}} variant="contained">PROCEED TO CHECKOUT</Button>*/}
+                        </Link>
+                    </Grid>
 
-                <Dialog
-                    open={this.state.showWantSoonerDialog}
-                    onClose={() => {this.props.hideWantSooner()}}
-                    aria-labelledby="form-dialog-title"
-                    classes={{ paper: classes.dialogPaper }}
-                >
-                <WantSooner {...this.props}/>
-              </Dialog>
+                    <Dialog
+                        open={this.state.showWantSoonerDialog}
+                        onClose={() => {this.props.hideWantSooner()}}
+                        aria-labelledby="form-dialog-title"
+                        classes={{ paper: classes.dialogPaper }}
+                    >
+                    <WantSooner {...this.props}/>
+                  </Dialog>
+                </div>
 
             </NavBarUserSearchDrawerLayout>
         );

@@ -14,13 +14,22 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
 import { cartActions } from '../../redux/actions/cartActions';
+import FormSelectbox from '../Form/FormSelectbox';
+import FormTextbox from '../Form/FormTextbox';
+import FormButton from '../Form/FormButton';
+
+// import {cartItemImage} from "../../static/images/categories/Category-core.jpg";
 
 class CartItem extends Component {
 
     constructor(props){
         super(props)
         this.state = {
-            quantity: this.props.item.dispQuantity
+            quantity: this.props.item.dispQuantity,
+            options_packing: [{label:'Packing', value: 'packing'}],
+            options_pack: [{label:'Pack', value: 'pack'}],
+            defaulPacking: "packing",
+            defaulPack:"pack"
         }
 
     }
@@ -63,6 +72,74 @@ class CartItem extends Component {
         const { classes, theme } = this.props;
 
         return (
+            <Grid container spacing={24} className="cart-item">
+                
+                    <Grid item xs={2} className="first-block" style={{
+                        backgroundImage: `url('../../../static/images/categories/Category-ale.jpg')`
+                    }}>
+                        <img className="icon" src="../../../static/images/icons/Ale-icon.svg"/>
+                        <div className="code">WLP001</div>
+                        <div className="name">{this.props.item.Name}</div> 
+                    </Grid>
+                    <Grid className="detail" item xs={4}>
+                        {this.props.item.Name}
+                        <br/>
+                        <br/>
+                        <span className="sooner" onClick={this.props.openWantSoonerDialog}>Want this Strain sooner?</span>
+                    </Grid>
+                    <Grid className="detail" item xs={2}>
+                        <span className="heading">Packing</span>
+                        <FormSelectbox
+                            value={this.state.defaulPacking}
+                            options={this.state.options_packing}
+                            onChange={() => {}}
+                        />
+                    </Grid>
+                    <Grid className="detail" item xs={2}>
+                        <span className="heading">Pack</span>
+                        <FormSelectbox
+                            value={this.state.defaulPack}
+                            options={this.state.options_pack}
+                            onChange={() => {}}
+                        />
+                    </Grid>
+                    <Grid className="detail" item xs={1}>
+                        <span className="heading">Quantity</span>
+                        <FormTextbox
+                            label="Quantity"
+                            value={this.props.item.OrderDetailQty}
+                            onChange={() => {}}
+                        />
+
+                        {/*
+                        <TextField
+                            id="quantity"
+                            label="Quantity"
+                            className={classes.quantity}
+                            value={this.state.quantity}
+                            onChange={this.changeQuantity}
+                            type="number"
+                        />
+                    */}
+                    </Grid>
+                    <Grid className="detail" item xs={1}>
+                        <br/>
+                        $255
+                        
+                        <br/>
+                        <FormButton
+                            className="delete-button"
+                            text="DELETE"
+                            onClick={() => this.props.removeItem(this.props.index)}
+                            angleBlockRight={true}
+                        />
+                    </Grid>
+                  
+            
+
+        {/*
+
+            <Grid container spacing={24}>
             <Card className={classes.card}>
                 <div
                     style={{ backgroundColor: "#f28411", width: 7 }}
@@ -95,10 +172,18 @@ class CartItem extends Component {
                             onChange={this.changeQuantity}
                             type="number"
                         />
-                        <Button variant="contained" onClick={() => this.props.removeItem(this.props.index)}>DELETE</Button>
+                        <Button variant="contained" onClick={() => this.props.removeItem(this.props.index)}>DELETE</Button>                        
                     </CardContent>
                 </div>
             </Card>
+            </Grid>
+        */}
+
+
+          </Grid>
+
+
+            
         )
     }
 }

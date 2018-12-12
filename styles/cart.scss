@@ -1,3 +1,47 @@
+#cart-box{
+	width: 80%;
+	margin: 0 auto;
+	.block-checkout-button {
+		margin-top: 30px;
+	}
+	.checkout-button {
+		width: 50%;
+		font-weight: normal;
+	}
+
+	.checkout-button {
+  	padding: 8px 20px 8px 40px;
+  	float: left; 
+  	text-align:center;
+  	text-decoration: none; 
+  	text-shadow:0px 1px 0px $color-main-accent;
+  	color: $color-main-accent;
+  	position: relative; text-shadow:1px 0 0 #000;
+  	background: $color-main-accent;  
+  	min-width:181px; 
+  	width:auto
+	}
+
+	.checkout-button ::after,
+	.checkout-button ::before{
+  	content: "";
+  	position: absolute;
+  	top: 50%;
+  	margin-top: -27px;   
+  	border-top: 27px solid transparent;
+  	border-bottom: 27px solid transparent;
+  	border-left: 1em solid;
+  	right: -1em;
+	}
+	.checkout-button ::after{   
+		z-index: 2;  
+		border-left-color: $color-main-accent;   
+	}
+
+
+
+}
+
 #want-sooner-box{
 	padding: 20px;
 	.card-header-down{
@@ -74,6 +118,45 @@
 
 }
 
+
+.cart-item {
+	margin: 0px !important;
+	margin-bottom: 30px !important;
+	.first-block {
+		text-align: center;
+		color: $color-white;
+		.icon {
+			margin-top: 10px;
+			height: 20px;
+		}
+		.code {
+			margin-top: 5px;
+			font-size: 10px;
+		}
+		.name {
+			margin-top: 5px;
+			font-size: 12px;
+		}
+	}
+	.detail {
+		border-top: 1px solid #66CCCC;
+		border-bottom: 1px solid #66CCCC;
+		.heading {
+			font-size: 12px;
+			color: $color-main-accent;
+			text-transform: uppercase;
+		}
+		.sooner {
+			font-size: 12px;
+			cursor: pointer;
+		}
+		.delete-button {
+			margin-top: 10px;
+			font-size: 12px !important;
+			padding: 0px !important;
+		}
+	}
+}
 
 
 

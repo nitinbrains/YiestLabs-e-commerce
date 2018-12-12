@@ -12,7 +12,7 @@ class WantSooner extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			activeTab: 'SimilarStrains'
+			activeTab: 'AlternateSizes'
     }
 	}
 	render() {
