@@ -19,6 +19,9 @@ import FormCheckbox from '../components/Form/FormCheckbox'
 
 import { calculatorActions } from '../redux/actions/calculatorActions'
 
+import PageContainer from '../components/UI/PageContainer';
+import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
+
 class Calculator extends Component {
 
 	constructor(props) {
@@ -39,26 +42,29 @@ class Calculator extends Component {
 
 	render() {
 		return (
-			<NavBarLayout>
-				<div id="calculator-box">
-					<CalculatorForm
-						onSubmit={this.props.startCalculate}
-					/>
+			<PageContainer heading="CALCULATOR">
+				<NavBarUserSearchDrawerLayout>
+					<div id="calculator-box">
+						<CalculatorForm
+							onSubmit={this.props.startCalculate}
+						/>
 
-					<Dialog
-              open={this.state.showResultDialog}
-              onClose={()=> { this.props.closeDialog()}}
-              aria-labelledby="form-dialog-title"
-          >
-          <CalculatorResult
-          	summary={this.state.result.summary}
-          	items={this.state.result.items}
-          />
-          </Dialog>
+						<Dialog
+	              open={this.state.showResultDialog}
+	              onClose={()=> { this.props.closeDialog()}}
+	              aria-labelledby="form-dialog-title"
+	          >
+	          <CalculatorResult
+	          	summary={this.state.result.summary}
+	          	items={this.state.result.items}
+	          />
+	          </Dialog>
 
 
-				</div>
-			</NavBarLayout>
+					</div>
+				</NavBarUserSearchDrawerLayout>
+			</PageContainer>
+
 		);
 	}
 }

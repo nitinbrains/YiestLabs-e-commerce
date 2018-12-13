@@ -22,6 +22,7 @@ import FormButton from "../components/Form/FormButton";
 
 import { cartActions } from '../redux/actions/cartActions';
 
+import PageContainer from '../components/UI/PageContainer';
 
 
 class Cart extends Component {
@@ -50,8 +51,8 @@ class Cart extends Component {
     render() {
         const { classes, theme, cart } = this.props;
         return (
-            <NavBarUserSearchDrawerLayout>
-                <div id="cart-box">
+            <PageContainer heading="SHOPPING CART">
+                <NavBarUserSearchDrawerLayout>                    
                     <Grid container spacing={24}>
                         {this.props.cart.items && this.props.cart.items.map((item, i) => {
                             return (                                
@@ -78,11 +79,10 @@ class Cart extends Component {
                         aria-labelledby="form-dialog-title"
                         classes={{ paper: classes.dialogPaper }}
                     >
-                    <WantSooner {...this.props}/>
-                  </Dialog>
-                </div>
-
-            </NavBarUserSearchDrawerLayout>
+                        <WantSooner {...this.props}/>
+                    </Dialog>                    
+                </NavBarUserSearchDrawerLayout>
+            </PageContainer>
         );
     }
 }
