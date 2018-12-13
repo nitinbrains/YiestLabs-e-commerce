@@ -51,7 +51,7 @@ class Cart extends Component {
     render() {
         const { classes, theme, cart } = this.props;
         return (
-            <PageContainer heading="SHOPPING CART">
+            <PageContainer heading="SHOPPING CART" id="cart-box">
                 <NavBarUserSearchDrawerLayout>                    
                     <Grid container spacing={24}>
                         {this.props.cart.items && this.props.cart.items.map((item, i) => {
@@ -66,7 +66,7 @@ class Cart extends Component {
                     <Grid container spacing={24} dir="rtl" className="block-checkout-button">
                         <Link prefetch href="/checkout">
                             <FormButton
-                                className="checkout-button"
+                                className="cart-checkout-button"
                                 text="PROCEED TO CHECKOUT"
                             />
                             {/*<Button style={{marginTop:20}} variant="contained">PROCEED TO CHECKOUT</Button>*/}

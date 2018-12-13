@@ -1,44 +1,40 @@
-#cart-box{
-	margin: 0 auto;
-	.block-checkout-button {
+.block-checkout-button {
+	margin-top: 30px;
+	.cart-checkout-button {
 		margin-top: 30px;
-	}
-	.checkout-button {
+		margin-right: 10px;
 		width: 50%;
 		font-weight: normal;
 	}
 
-	.checkout-button {
-  	padding: 8px 20px 8px 40px;
-  	float: left; 
-  	text-align:center;
-  	text-decoration: none; 
-  	text-shadow:0px 1px 0px $color-main-accent;
-  	color: $color-main-accent;
-  	position: relative; text-shadow:1px 0 0 #000;
-  	background: $color-main-accent;  
-  	min-width:181px; 
-  	width:auto
+	.cart-checkout-button {
+		padding: 8px 20px 8px 40px;
+		float: left; 
+		text-align:center;
+		text-decoration: none; 
+		text-shadow:0px 1px 0px $color-main-accent;
+		color: $color-main-accent;
+		position: relative; text-shadow:1px 0 0 #000;
+		background: $color-main-accent;  
+		min-width:181px; 
+		width:auto
 	}
 
-	.checkout-button ::after,
-	.checkout-button ::before{
-  	content: "";
-  	position: absolute;
-  	top: 50%;
-  	margin-top: -27px;   
-  	border-top: 27px solid transparent;
-  	border-bottom: 27px solid transparent;
-  	border-left: 1em solid;
-  	right: -1em;
+	.cart-checkout-button ::after,
+	.cart-checkout-button ::before{
+		content: "";
+		position: absolute;
+		top: 50%;
+		margin-top: -27px;   
+		border-top: 27px solid transparent;
+		border-bottom: 27px solid transparent;
+		border-left: 1em solid;
+		right: -1em;
 	}
-	.checkout-button ::after{   
+	.cart-checkout-button ::after{   
 		z-index: 2;  
 		border-left-color: $color-main-accent;   
 	}
-
-
-
 }
 
 #want-sooner-box{
