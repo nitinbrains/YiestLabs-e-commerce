@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { compose } from "redux";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 
@@ -128,3 +129,4 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(withStyles(styles, { withTheme: true })(Cart));
+
