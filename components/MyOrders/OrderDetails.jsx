@@ -23,6 +23,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
+import FormButton from "../Form/FormButton";
+
 class OrderDetails extends Component {
     handleDialogClose() {
         this.props.closeDialog();
@@ -468,19 +470,21 @@ class OrderDetails extends Component {
                             >
 
                             <Grid item>
-                            <div classNames={classes.buttons}>
-                                <Button variant="outlined" color="primary">
-                                    Resend Invoice
-                                </Button>
+                                <div classNames={classes.buttons}>
+                                    <Button variant="outlined" color="primary">
+                                        Resend Invoice
+                                    </Button>
                                 </div>
+                                <FormButton text="Resend Invoice"/>
                             </Grid>
-                                <Grid item>
+                            <Grid item>
                                 <div classNames={classes.buttons} style={{marginLeft:20}}>
                                     <Button variant="contained" color="primary">
                                         Repeat Order
                                     </Button>
-                                    </div>
-                                </Grid>
+                                </div>
+                                <FormButton text="Repeat Order"/>
+                            </Grid>
 
                             </Grid>
                         </Grid>

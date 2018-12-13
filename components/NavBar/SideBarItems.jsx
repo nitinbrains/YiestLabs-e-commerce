@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from "next/link";
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -18,7 +19,9 @@ export const SideBarItems = (
 			<ListItemIcon>
 				<ReceiptIcon />
 			</ListItemIcon>
-			<ListItemText primary="My Orders" />
+			<Link prefetch href="/myorders">
+				<ListItemText primary="My Orders" />
+			</Link>
 		</ListItem>
 		<ListItem button>
 			<ListItemIcon>
