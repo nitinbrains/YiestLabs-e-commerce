@@ -64,7 +64,6 @@ class Calculator extends Component {
 					</div>
 				</NavBarUserSearchDrawerLayout>
 			</PageContainer>
-
 		);
 	}
 }

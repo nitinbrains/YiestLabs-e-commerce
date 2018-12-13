@@ -1073,8 +1073,10 @@ app.prepare()
 	})
 
 	server.get('*', (req, res, next) => {
+
 		return handle(req, res, next)
 	})
+
 
 	server.listen(3000, (err) => {
 		if (err) throw err
