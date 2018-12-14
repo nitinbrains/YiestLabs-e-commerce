@@ -76,7 +76,7 @@ class OrderDetails extends Component {
                         <Typography variant="subtitle1" color="textPrimary">ITEMS</Typography>
                         <div style={{borderTop: "solid 1.5px",borderColor: "#CCCCCC"}}/>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} style={{marginTop:'10px'}}>
                         <Grid container>
                             <Grid item xs={6} container>
                                 <div className="label">Item</div>
