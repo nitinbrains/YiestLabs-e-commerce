@@ -23,19 +23,135 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
+import _ from 'lodash';
+
 import FormButton from "../Form/FormButton";
 
 class OrderDetails extends Component {
+
     handleDialogClose() {
         this.props.closeDialog();
     }
 
-    render() {
-        const { classes, theme } = this.props;
+    _renderSumamry() {
+        return ( 
+            <Grid container>
+                <Grid container spacing={24}>
+                    <Grid item sm={3} container alignItems="center" >
+                        <img className="image" src="/static/images/yeast.png"/>
+                    </Grid>  
+                    <Grid item sm={9} container alignItems="center">
+                        <Grid item xs={12}>
+                            <Typography variant="subtitle1" color="textPrimary">SUMMARY</Typography>
+                            <div style={{borderTop: "solid 1.5px",borderColor: "#CCCCCC"}}/>
+                        </Grid>
+                        <Grid container spacing={24}>
+                            <Grid item sm={6}>
+                                <div className="block"> <span className="label">Company: </span> Name</div>
+                                <div className="block"> <span className="label">Ordered From: </span>White Labs.</div>
+                                <div className="block"> <span className="label">Order Date: </span>02/01/2018</div>
+                            </Grid>
+                            <Grid item sm={6}>
+                                <div className="block"> <span className="label">Order Total: </span> $0.02</div>
+                                <div className="block"> <span className="label">Order Status: </span> closed</div>
+                                <div className="block"> <span className="label">Tracking: </span> N/A</div>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <div style={{borderTop: "solid 1.5px",borderColor: "#CCCCCC"}}/>
+                        </Grid>
+                    </Grid>          
+                </Grid>
+            </Grid>
+        )
+        
+    }
 
+    _renderItems() {
+        let items = [{},{},{},{}];
+        return ( 
+            <Grid item container spacing={8}>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Typography variant="subtitle1" color="textPrimary">ITEMS</Typography>
+                        <div style={{borderTop: "solid 1.5px",borderColor: "#CCCCCC"}}/>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Grid container>
+                            <Grid item xs={6} container>
+                                <div className="label">Item</div>
+                            </Grid>  
+                            <Grid item xs={3} container >
+                                <div className="label" style={{ margin: "0 auto" }}>Quantity</div>
+                            </Grid>
+                            <Grid item xs={3} container>
+                                <div className="label" style={{ margin: "0 auto" }}>Price</div>
+                            </Grid>          
+                        </Grid>
+                    </Grid>
+                    {
+                        _.map(items, (item, i ) => {
+                            return (
+                                <Grid key={i} item xs={12}className="item-block">
+                                    <Grid container>
+                                        <Grid item xs={6}>
+                                            California Yeast
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <div style={{ textAlign: "center" }}> 2</div>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <div style={{ textAlign: "center" }}> $2.29</div>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            )
+                        })
+                    }
+                </Grid>
+            </Grid>
+        )
+        
+    }
+
+    _renderPaymentShipping() {
+        return ( 
+            <Grid item container spacing={8}>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Typography variant="subtitle1" color="textPrimary">PAYMENT / SHIPPING</Typography>
+                        <div style={{borderTop: "solid 1.5px",borderColor: "#CCCCCC"}}/>
+                    </Grid>
+                    <Grid container spacing={24}>
+                       <Grid item sm={4}>
+                            <div className="label block">Billing Address:</div>
+                            line 1<br/>
+                            line 2<br/>
+                            <div className="block"> <span className="label">Card Holder: </span> Name</div>
+                            <div className="block"> <span className="label">Card Number: </span> ************</div>
+                        </Grid>
+                        <Grid item sm={4}>
+                            <div className="block"> <span className="label">Ship date: </span>1/1/1</div>
+                            <div className="block"> <span className="label">Expected delivery date: </span>1/1/1</div>
+                            <div className="block"> <span className="label">Ship Method: </span>UPS</div>
+                            <div className="block"> <span className="label">Ship Total: </span> $22</div>
+                        </Grid>
+                        <Grid item sm={4}>
+                            <div className="block label"> Ship Address:</div>
+                            line 1<br/>
+                            line 2<br/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        ) 
+    }
+
+    render() {
+        const { classes } = this.props;
         return (
             <React.Fragment>
-                <DialogContent>
+                <DialogContent id="my-order-details">
                     <div className={classes.close}>
                         <IconButton
                             color="inherit"
@@ -46,447 +162,28 @@ class OrderDetails extends Component {
                             <CloseIcon />
                         </IconButton>
                     </div>
-                    <div className={classes.card}>
-                        <div
-                            style={{
-                                position: "absolute",
-                                top: -15,
-                                left: 20,
-                                backgroundColor: "#fff",
-                                paddingLeft: 10,
-                                paddingRight: 10
-                            }}
-                        >
-                            <Typography variant="h6" color="textPrimary">
-                                Order # 2625434
-                            </Typography>
-                        </div>
+                    <div className="main-block">
+                        <div className="order-number">Order # 2625434</div>
                         <Grid container spacing={24}>
                             <Grid item container spacing={24}>
+                                {this._renderSumamry()}
+                                {this._renderItems()}
+                                {this._renderPaymentShipping()}
+                            </Grid>
+                            
+                            <Grid container dir="rtl">
                                 <Grid item>
-                                    <img
-                                        className={classes.image}
-                                        src="/static/images/yeast.png"
-                                    />
+                                    <div>
+                                        <FormButton  className="button-resend-invoice" text="Resend Invoice" onClick={() => {}}/>
+                                    </div>
                                 </Grid>
-                                <Grid
-                                    item
-                                    xs
-                                    container
-                                    direction="row"
-                                    justify="flex-start"
-                                    spacing={8}
-                                >
-                                    <Grid item xs={12}>
-                                        <Typography
-                                            variant="subtitle1"
-                                            color="textPrimary"
-                                        >
-                                            SUMMARY
-                                        </Typography>
-                                        <div
-                                            style={{
-                                                borderTop: "solid 1.5px",
-                                                borderColor: "#CCCCCC"
-                                            }}
-                                        />
-                                    </Grid>
-                                    <Grid
-                                        item
-                                        container
-                                        direction="row"
-                                        justify="space-between"
-                                        xs={12}
-                                    >
-                                        <Grid
-                                            item
-                                            xs={12}
-                                            sm={6}
-                                            container
-                                            direction="column"
-                                        >
-                                            <Grid item xs>
-                                                <div
-                                                    style={{ display: "flex" }}
-                                                >
-                                                    <Typography
-                                                        style={{
-                                                            color: "#FF9933"
-                                                        }}
-                                                    >
-                                                        Company:
-                                                    </Typography>
-                                                    &nbsp;
-                                                    <Typography>
-                                                        This is a test company
-                                                    </Typography>
-                                                </div>
-                                            </Grid>
-                                            <Grid item xs>
-                                                <div
-                                                    style={{ display: "flex" }}
-                                                >
-                                                    <Typography
-                                                        style={{
-                                                            color: "#FF9933"
-                                                        }}
-                                                    >
-                                                        Ordered from:
-                                                    </Typography>
-                                                    &nbsp;
-                                                    <Typography>
-                                                        White Labs Inc
-                                                    </Typography>
-                                                </div>
-                                            </Grid>
-                                            <Grid item xs>
-                                                <div
-                                                    style={{ display: "flex" }}
-                                                >
-                                                    <Typography
-                                                        style={{
-                                                            color: "#FF9933"
-                                                        }}
-                                                    >
-                                                        Order date:
-                                                    </Typography>
-                                                    &nbsp;
-                                                    <Typography>
-                                                        2/2/2018
-                                                    </Typography>
-                                                </div>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid
-                                            item
-                                            xs={12}
-                                            sm={6}
-                                            container
-                                            direction="column"
-                                            alignItems="flex-start"
-                                        >
-                                            <Grid item xs>
-                                                <div
-                                                    style={{ display: "flex" }}
-                                                >
-                                                    <Typography
-                                                        style={{
-                                                            color: "#FF9933"
-                                                        }}
-                                                    >
-                                                        Order total:
-                                                    </Typography>
-                                                    &nbsp;
-                                                    <Typography>
-                                                        $0.00
-                                                    </Typography>
-                                                </div>
-                                            </Grid>
-                                            <Grid item xs>
-                                                <div
-                                                    style={{ display: "flex" }}
-                                                >
-                                                    <Typography
-                                                        style={{
-                                                            color: "#FF9933"
-                                                        }}
-                                                    >
-                                                        Order status:
-                                                    </Typography>
-                                                    &nbsp;
-                                                    <Typography>
-                                                        Shipped
-                                                    </Typography>
-                                                </div>
-                                            </Grid>
-                                            <Grid item xs>
-                                                <div
-                                                    style={{ display: "flex" }}
-                                                >
-                                                    <Typography
-                                                        style={{
-                                                            color: "#FF9933"
-                                                        }}
-                                                    >
-                                                        Tracking #:
-                                                    </Typography>
-                                                    &nbsp;
-                                                    <Typography>0</Typography>
-                                                </div>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-
-                                <Grid item container spacing={8}>
-                                    <Grid item xs={12}>
-                                        <Typography
-                                            variant="subtitle1"
-                                            color="textPrimary"
-                                        >
-                                            ITEMS
-                                        </Typography>
-                                        <div
-                                            style={{
-                                                borderTop: "solid 1.5px",
-                                                borderColor: "#CCCCCC"
-                                            }}
-                                        />
-                                    </Grid>
-                                    <Grid
-                                        item
-                                        xs={6}
-                                        container
-                                        direction="column"
-                                        alignItems="center"
-                                    >
-                                        <Grid item xs>
-                                            <div
-                                                style={{ textAlign: "center" }}
-                                            >
-                                                <Typography
-                                                    style={{ color: "#FF9933" }}
-                                                >
-                                                    Item
-                                                </Typography>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs>
-                                            <div
-                                                style={{ textAlign: "center" }}
-                                            >
-                                                <Typography>
-                                                    California Yeast
-                                                </Typography>
-                                            </div>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid
-                                        item
-                                        xs={3}
-                                        container
-                                        direction="column"
-                                        alignItems="center"
-                                    >
-                                        <Grid item xs>
-                                            <div
-                                                style={{ textAlign: "center" }}
-                                            >
-                                                <Typography
-                                                    style={{ color: "#FF9933" }}
-                                                >
-                                                    Quantity
-                                                </Typography>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs>
-                                            <div
-                                                style={{ textAlign: "center" }}
-                                            >
-                                                <Typography>2</Typography>
-                                            </div>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid
-                                        item
-                                        xs={3}
-                                        container
-                                        direction="column"
-                                        alignItems="center"
-                                    >
-                                        <Grid item xs>
-                                            <div
-                                                style={{ textAlign: "center" }}
-                                            >
-                                                <Typography
-                                                    style={{ color: "#FF9933" }}
-                                                >
-                                                    Price
-                                                </Typography>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs>
-                                            <div
-                                                style={{ textAlign: "center" }}
-                                            >
-                                                <Typography>$2.29</Typography>
-                                            </div>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-
-                                <Grid item container spacing={8}>
-                                    <Grid item xs={12}>
-                                        <Typography
-                                            variant="subtitle1"
-                                            color="textPrimary"
-                                        >
-                                            PAYMENT/SHIPPING
-                                        </Typography>
-                                        <div
-                                            style={{
-                                                borderTop: "solid 1.5px",
-                                                borderColor: "#CCCCCC"
-                                            }}
-                                        />
-                                    </Grid>
-                                    <Grid
-                                        item
-                                        xs={12}
-                                        sm={4}
-                                        container
-                                        direction="column"
-                                        spacing={8}
-                                    >
-                                        <Grid item xs>
-                                            <Typography
-                                                style={{
-                                                    color: "#FF9933"
-                                                }}
-                                            >
-                                                Billing Address:
-                                            </Typography>
-                                            <Typography>Line 1</Typography>
-                                            <Typography>Line 2</Typography>
-                                        </Grid>
-                                        <Grid item xs>
-                                            <div style={{ display: "flex" }}>
-                                                <Typography
-                                                    style={{
-                                                        color: "#FF9933"
-                                                    }}
-                                                >
-                                                    Card holder:
-                                                </Typography>
-                                                &nbsp;
-                                                <Typography>Name</Typography>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs>
-                                            <div style={{ display: "flex" }}>
-                                                <Typography
-                                                    style={{
-                                                        color: "#FF9933"
-                                                    }}
-                                                >
-                                                    Card number:
-                                                </Typography>
-                                                &nbsp;
-                                                <Typography>
-                                                    **** **** **** 0009
-                                                </Typography>
-                                            </div>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid
-                                        item
-                                        xs={12}
-                                        sm={4}
-                                        container
-                                        direction="column"
-                                        spacing={8}
-                                    >
-                                        <Grid item xs>
-                                            <div style={{ display: "flex" }}>
-                                                <Typography
-                                                    style={{
-                                                        color: "#FF9933"
-                                                    }}
-                                                >
-                                                    Ship date:
-                                                </Typography>
-                                                &nbsp;
-                                                <Typography>1/1/1</Typography>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs>
-                                            <div style={{ display: "flex" }}>
-                                                <Typography
-                                                    style={{
-                                                        color: "#FF9933"
-                                                    }}
-                                                >
-                                                    Expected delivery date:
-                                                </Typography>
-                                                &nbsp;
-                                                <Typography>1/1/1</Typography>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs>
-                                            <div style={{ display: "flex" }}>
-                                                <Typography
-                                                    style={{
-                                                        color: "#FF9933"
-                                                    }}
-                                                >
-                                                    Ship method:
-                                                </Typography>
-                                                &nbsp;
-                                                <Typography>UPS</Typography>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs>
-                                            <div style={{ display: "flex" }}>
-                                                <Typography
-                                                    style={{
-                                                        color: "#FF9933"
-                                                    }}
-                                                >
-                                                    Ship total:
-                                                </Typography>
-                                                &nbsp;
-                                                <Typography>$1.23</Typography>
-                                            </div>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid
-                                        item
-                                        xs={12}
-                                        sm={4}
-                                        container
-                                        direction="column"
-                                        spacing={8}
-                                    >
-                                        <Grid item xs>
-                                            <Typography
-                                                style={{
-                                                    color: "#FF9933"
-                                                }}
-                                            >
-                                                Billing Address:
-                                            </Typography>
-                                            <Typography>Line 1</Typography>
-                                            <Typography>Line 2</Typography>
-                                        </Grid>
-                                    </Grid>
+                                <Grid item>
+                                    <div>
+                                        <FormButton className="button-repeat-order" text="Repeat Order" onClick={() => {}}/>
+                                    </div>
                                 </Grid>
                             </Grid>
-                            <Grid
-                                item
-                                container
-                                xs
-                                direction="row"
-                                justify="flex-end"
-                            >
 
-                            <Grid item>
-                                <div classNames={classes.buttons}>
-                                    <Button variant="outlined" color="primary">
-                                        Resend Invoice
-                                    </Button>
-                                </div>
-                                <FormButton text="Resend Invoice"/>
-                            </Grid>
-                            <Grid item>
-                                <div classNames={classes.buttons} style={{marginLeft:20}}>
-                                    <Button variant="contained" color="primary">
-                                        Repeat Order
-                                    </Button>
-                                </div>
-                                <FormButton text="Repeat Order"/>
-                            </Grid>
-
-                            </Grid>
                         </Grid>
                     </div>
                 </DialogContent>
@@ -496,28 +193,11 @@ class OrderDetails extends Component {
 }
 
 const styles = theme => ({
-    card: {
-        position: "relative",
-        border: "solid 1px",
-        borderColor: "#CCCCCC",
-        margin: 10,
-        padding: theme.spacing.unit * 2
-    },
-    image: {
-        width: 150,
-        marginRight: 10,
-        textAlign: "center"
-    },
-    buttons: {
-        display: "flex",
-        justifyContent: "flex-end"
-    },
     close: { position: "absolute", right: 0, top: 0 }
 });
 
 OrderDetails.propTypes = {
     classes: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(OrderDetails);
