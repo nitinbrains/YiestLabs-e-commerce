@@ -65,7 +65,7 @@ app.prepare()
 	function NSAuth(scriptID, type = 'post')
   	{
   		//Fall back authentication
-		return "NLAuth nlauth_account=4099054_SB1, nlauth_email=mwhite@whitelabs.com, nlauth_signature=Yeastman001, nlauth_role=1067";
+		return "NLAuth nlauth_account=4099054_SB1, nlauth_email=mwhite@whitelabs.com, nlauth_signature=YeastBuddy08, nlauth_role=1067";
 
 	}
 
