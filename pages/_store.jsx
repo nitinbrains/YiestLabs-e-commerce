@@ -37,6 +37,7 @@ import EducationDialog from '../components/Store/Education/EducationDialog';
 import GiftShopCard from '../components/Store/GiftShop/GiftShopCard';
 import GiftShopDialog from '../components/Store/GiftShop/GiftShopDialog';
 import HomebrewCard from '../components/Store/Homebrew/HomebrewCard';
+import FormButton from '../components/Form/FormButton';
 
 
 
@@ -198,14 +199,19 @@ class Store extends Component {
 
     render() {
         const { classes, theme } = this.props;
-
+        let isHomebrew = this.props.store.isHomebrew;
         return (
             <NavBarUserSearchDrawerLayout>
 
                 <LoadingIndicator visible={this.props.store.isLoading} label={"Loading Inventory"} />
-
-                <button onClick={() => this.props.switchToProfessional()}>Professional</button>
-                <button onClick={() => this.props.switchToHomebrew()}>Homebrew</button>
+                <Grid container id="professional-homebrew-switch">
+                    <Grid item xs={6} dir="rtl">
+                        <FormButton className={`form-button-small-size ${isHomebrew ?  'form-button-active' : ''}`} text="Professional" onClick={() => this.props.switchToProfessional()}/>
+                    </Grid>
+                    <Grid item xs={6} dir="ltr">
+                        <FormButton className={`form-button-small-size ${isHomebrew ? '' : 'form-button-active'}`} text="Homebrew" onClick={() => this.props.switchToHomebrew()}/>
+                    </Grid>
+                </Grid>
 
                 <Grid className={classes.store} container spacing={24}>
                     {this.props.store.itemsToShow.map((item, i) => {
