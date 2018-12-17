@@ -20,27 +20,30 @@ import withInventory from "../hocs/inventory";
 
 class Cart extends Component {
 
-    componentWillMount() {
-        console.log('user', this.props.user);
-    }
 
     render() {
         const { classes, theme, cart } = this.props;
 
         return (
             <NavBarUserSearchDrawerLayout>
-                <Grid container spacing={24}>
-                    {this.props.cart.items && this.props.cart.items.map((item, i) => {
-                        return (
-                            <Grid item xs={12}>
-                                <CartItem item={item} index={i} />
-                            </Grid>
-                        );
-                    })}
-                </Grid>
-                <Link prefetch href="/checkout">
-                    <Button style={{marginTop:20}} variant="contained">PROCEED TO CHECKOUT</Button>
-                </Link>
+
+                {this.props.cart.items && (
+                    <div>
+                        <Grid container spacing={24}>
+                            {this.props.cart.items.map((item, i) => {
+                                return (
+                                    <Grid item xs={12}>
+                                        <CartItem item={item} index={i} />
+                                    </Grid>
+                                );
+                            })}
+                        </Grid>
+                        <Link prefetch href="/checkout">
+                            <Button style={{marginTop:20}} variant="contained">PROCEED TO CHECKOUT</Button>
+                        </Link>
+                    </div>
+                )}
+
             </NavBarUserSearchDrawerLayout>
         );
     }

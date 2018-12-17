@@ -11,6 +11,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import JssProvider from 'react-jss/lib/JssProvider';
 import getPageContext from '../src/getPageContext';
+import "../styles/main.scss"
 
 class MyApp extends App {
 	constructor(props) {
@@ -19,6 +20,16 @@ class MyApp extends App {
 	}
 
 	pageContext = null;
+
+	static async getInitialProps({ Component, router, ctx }) {
+	    let pageProps = {}
+		
+	    if (Component.getInitialProps) {
+	      	pageProps = await Component.getInitialProps(ctx)
+	    }
+
+	    return { pageProps }
+	  }
 
 	componentDidMount() {
 		// Remove the server-side injected CSS.
@@ -60,6 +71,3 @@ class MyApp extends App {
 }
 
 export default configureStore(MyApp)
-
-
-

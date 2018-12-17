@@ -82,7 +82,7 @@ var Network = (function()
 	function NSAuth(scriptID, type = 'post')
   	{
   		//Fall back authentication
-		return "NLAuth nlauth_account=4099054_SB1, nlauth_email=mwhite@whitelabs.com, nlauth_signature=Yeastman001, nlauth_role=3";
+		return "NLAuth nlauth_account=4099054_SB1, nlauth_email=mwhite@whitelabs.com, nlauth_signature=YeastBuddy08, nlauth_role=3";
 
 		// var time = Math.round(new Date().getTime()/1000);
 		// var nonce = Utils.uuid();
@@ -1969,7 +1969,7 @@ var Network = (function()
 	// 			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=891&deploy=1', {
 	// 				method: 'POST',
 	// 			  	headers: {
-	// 			    	'Authorization' : "NLAuth nlauth_account=4099054_SB1, nlauth_email=mwhite@whitelabs.com, nlauth_signature=Yeastman001, nlauth_role=3",
+	// 			    	'Authorization' : "NLAuth nlauth_account=4099054_SB1, nlauth_email=mwhite@whitelabs.com, nlauth_signature=YeastBuddy08, nlauth_role=3",
 	// 			    	'Accept': 'application/json',
 	// 			    	'Content-Type': 'application/json',
 	// 			  	},

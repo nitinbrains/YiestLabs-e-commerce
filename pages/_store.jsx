@@ -22,7 +22,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 
 import SalesLib from '../lib/SalesLib';
-import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
+import NavBarUserSearchDrawerLayout from '../components/NavBar/NavBarUserSearchDrawerLayout';
 import LoadingIndicator from '../components/UI/LoadingIndicator';
 import YeastCard from '../components/Store/Yeast/YeastCard';
 import YeastDialog from '../components/Store/Yeast/YeastDialog';
@@ -36,6 +36,9 @@ import EducationCard from '../components/Store/Education/EducationCard';
 import EducationDialog from '../components/Store/Education/EducationDialog';
 import GiftShopCard from '../components/Store/GiftShop/GiftShopCard';
 import GiftShopDialog from '../components/Store/GiftShop/GiftShopDialog';
+import HomebrewCard from '../components/Store/Homebrew/HomebrewCard';
+
+
 
 import User from '../lib/User'
 import withInventory from "../hocs/inventory";
@@ -45,7 +48,7 @@ class Store extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            openDialog: false
+            openDialog: false,
         }
     }
 
@@ -101,6 +104,14 @@ class Store extends Component {
 
         userInfo = User.setUser(userInfo);
         this.props.setUserInfo({ userInfo });
+
+        if(!this.props.store.items.length)
+        {
+            this.props.getInventory();
+        }
+
+
+        // this.props.userLogin({ username: 'above', password: 'test' });
     }
 
     handleClickItem = (item) => {
@@ -113,7 +124,10 @@ class Store extends Component {
 
     getCard = (item, i) => {
 
-        if(item) {
+        if(this.props.store.isHomebrew) {
+            return <HomebrewCard key={i} item={item} />
+        }
+        else if(item) {
             // Yeast
             if(SalesLib.SALESCATEGORY[0].includes(parseInt(item.salesCategory))) {
                 return <YeastCard key={i} item={item} onClick={this.handleClickItem} />
@@ -187,6 +201,12 @@ class Store extends Component {
 
         return (
             <NavBarUserSearchDrawerLayout>
+
+                <LoadingIndicator visible={this.props.store.isLoading} label={"Loading Inventory"} />
+
+                <button onClick={() => this.props.switchToProfessional()}>Professional</button>
+                <button onClick={() => this.props.switchToHomebrew()}>Homebrew</button>
+
                 <Grid className={classes.store} container spacing={24}>
                     {this.props.store.itemsToShow.map((item, i) => {
                         return this.getCard(item, i)
