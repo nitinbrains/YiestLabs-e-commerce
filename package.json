@@ -11,6 +11,7 @@
 		"url": "https://github.com/xdimitarx/yeastman2.0/issues"
 	},
 	"scripts": {
+		"test": "NODE_ENV=test jest",
 		"dev": "node --inspect server.js",
 		"build": "next build",
 		"start": "NODE_ENV=production node server.js"
@@ -40,20 +41,27 @@
 		"xml2js": "^0.4.19"
 	},
 	"devDependencies": {
+		"@babel/core": "7.1.2",
 		"@babel/plugin-proposal-export-namespace-from": "^7.0.0",
 		"@types/eslint": "^4.16.3",
+		"babel-core": "^7.0.0-bridge.0",
 		"babel-eslint": "^8.2.5",
+		"babel-jest": "^23.6.0",
 		"babel-plugin-styled-components": "^1.5.1",
 		"babel-polyfill": "^6.26.0",
 		"babel-preset-env": "^1.7.0",
+		"babel-preset-react": "^6.24.1",
 		"babel-register": "^6.26.0",
+		"enzyme": "^3.8.0",
+		"enzyme-adapter-react-16": "^1.7.1",
 		"eslint": "^5.7.0",
 		"eslint-config-airbnb": "^17.0.0",
 		"eslint-plugin-import": "^2.13.0",
 		"eslint-plugin-jsx-a11y": "^6.1.2",
 		"eslint-plugin-react": "^7.10.0",
-		"jest": "^23.3.0",
+		"jest": "^23.6.0",
 		"nodemon": "^1.17.5",
+		"react-addons-test-utils": "^15.6.2",
 		"redux-devtools-extension": "^2.13.5"
 	}
 }
