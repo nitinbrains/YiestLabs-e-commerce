@@ -64,9 +64,19 @@ class Shipping extends Component {
 
         return (
             <React.Fragment>
-                <Typography variant="title" gutterBottom>
-                    Shipping address
-                </Typography>
+                        <Typography
+                            variant="h6"
+                            color="textPrimary"
+                        >
+                            SHIPPING ADDRESS
+                        </Typography>
+                        <div
+                            style={{
+                                borderTop: "solid 1.5px",
+                                borderColor: "#CCCCCC",
+                                marginBottom:10,
+                            }}
+                        />
 
                 {this.props.user.shipping.id ? (
                     <div>
@@ -92,10 +102,32 @@ class Shipping extends Component {
                             fullWidth={true}
                             maxWidth = {'md'}
                         >
-                            <DialogTitle id="form-dialog-title">
-                                Shipping addresses
-                            </DialogTitle>
                             <DialogContent>
+                            <div
+                                style={{
+                                    borderTop: "solid 1px",
+                                    borderColor: "#CCCCCC",
+                                    marginBottom:20,
+                                    marginTop:10
+                                }}
+                            />
+                            <div
+                                style={{
+                                    position: "absolute",
+                                    top: 15,
+                                    left: 0,
+                                    right: 0,
+                                    marginLeft: 'auto',
+                                    marginRight: 'auto',
+                                    backgroundColor: "#fff",
+                                    width: 200,
+                                    textAlign:'center'
+                                }}
+                            >
+                                <Typography variant="h6" color="textPrimary">
+                                    Shipping Addresses
+                                </Typography>
+                            </div>
                                 <div className={classes.close}>
                                     <IconButton
                                         color="inherit"
@@ -472,12 +504,19 @@ class Shipping extends Component {
                 )}
 
                 <Typography
-                    variant="title"
-                    style={{ marginTop: 15 }}
-                    gutterBottom
+                    variant="h6"
+                    style={{ marginTop: 25 }}
+                    color="textPrimary"
                 >
-                    Shipping method
+                    SHIPPING METHOD
                 </Typography>
+                <div
+                    style={{
+                        borderTop: "solid 1.5px",
+                        borderColor: "#CCCCCC",
+                        marginBottom:10,
+                    }}
+                />
                 <Grid container spacing={24}>
                     <Grid item xs={12} sm={6}>
                         <TextField
