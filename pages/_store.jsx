@@ -38,6 +38,7 @@ import GiftShopCard from '../components/Store/GiftShop/GiftShopCard';
 import GiftShopDialog from '../components/Store/GiftShop/GiftShopDialog';
 import HomebrewCard from '../components/Store/Homebrew/HomebrewCard';
 import FormButton from '../components/Form/FormButton';
+import AddHomebrewContainer from '../components/Store/Homebrew/AddHomebrewContainer';
 
 
 
@@ -200,6 +201,7 @@ class Store extends Component {
     render() {
         const { classes, theme } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
+        isHomebrew = true
         return (
             <NavBarUserSearchDrawerLayout>
 
@@ -213,20 +215,25 @@ class Store extends Component {
                     </Grid>
                 </Grid>
 
-                <Grid className={classes.store} container spacing={24}>
-                    {this.props.store.itemsToShow.map((item, i) => {
-                        return this.getCard(item, i)
-                    })}
+                {
+                    isHomebrew ?
+                    <AddHomebrewContainer items={this.props.store.itemsToShow}/>
+                    : 
+                    <Grid className={classes.store} container spacing={24}>
+                        {this.props.store.itemsToShow.map((item, i) => {
+                            return this.getCard(item, i)
+                        })}
 
-                    <Dialog
-                        open={this.state.openDialog}
-                        onClose={this.handleLeaveItem}
-                        aria-labelledby="form-dialog-title"
-                    >
-                        {this.getDialogContent(this.state.item)}
-                    </Dialog>
+                        <Dialog
+                            open={this.state.openDialog}
+                            onClose={this.handleLeaveItem}
+                            aria-labelledby="form-dialog-title"
+                        >
+                            {this.getDialogContent(this.state.item)}
+                        </Dialog>
 
-                </Grid>
+                    </Grid>
+                }
             </NavBarUserSearchDrawerLayout>
         );
     }
