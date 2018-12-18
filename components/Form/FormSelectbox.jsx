@@ -42,7 +42,7 @@ const styles = theme => ({
 
 FormSelectbox.propTypes = {
   value: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
+  options: PropTypes.array.isRequired, // array of oject having label & value property.
   onChange: PropTypes.func.isRequired
 };
 

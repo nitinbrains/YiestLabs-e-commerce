@@ -228,7 +228,7 @@ const styles = theme => ({
         flexGrow: 1
     },
     appBar: {
-        marginTop: 50,
+        // marginTop: 50,
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
@@ -300,11 +300,11 @@ const styles = theme => ({
     },
     content: {
         flexGrow: 1,
-        marginLeft: 56,
+        // marginLeft: 56,
         [theme.breakpoints.up("sm")]: {
-            marginLeft: 72
+            // marginLeft: 72
         },
-        marginTop: 80,
+        // marginTop: 80,
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing.unit * 3,
         transition: theme.transitions.create("margin", {

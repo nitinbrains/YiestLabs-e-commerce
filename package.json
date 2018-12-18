@@ -26,6 +26,7 @@
 		"express": "^4.16.4",
 		"isomorphic-unfetch": "^3.0.0",
 		"jss": "latest",
+		"lodash": "^4.17.11",
 		"next": "7.0.1",
 		"node-sass": "^4.10.0",
 		"prop-types": "latest",

@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 class FormButton extends React.Component {
     render() {
         return (
-            <Button variant="contained" className="form-button" onClick={this.props.onClick}>
+            <Button variant="contained" className={`form-button ${this.props.className || ''}`} onClick={this.props.onClick}>
                 {this.props.text}
             </Button>
         );
