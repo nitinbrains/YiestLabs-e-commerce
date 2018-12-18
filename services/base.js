@@ -1,4 +1,4 @@
-const fetch = require('isomorphic-unfetch');
+// const fetch = require('isomorphic-unfetch');
 import { host, retryCount } from '../config.server';
 
 class ResourceError {
@@ -11,19 +11,18 @@ class ResourceError {
 
 const prepareURL = (targetUrl, query) => {
     if (!query) {
-        return targetUrl
+        return `${host}${targetUrl}`;
     }
     return `${host}${targetUrl}?${Object.keys(query).map((field) => `${field}=${encodeURIComponent(query[field])}`).join('&')}`
 }
 
-const getResponseBody = async (res) => {
+const getResponseBody = async (res, URL) => {
   const contentType = res && res.headers ? res.headers.get('content-type') : {};
   let result;
   if (contentType && ~contentType.indexOf('application/json')) {
     result = await res.json();
   } else {
-    const text = await res.text();
-    result = JSON.parse(text.replace(/:(\d+)([,\}])/g, ':"$1"$2'));
+    return await res.text();
   }
 
   const homeProps = res.redirected ? {
@@ -33,7 +32,6 @@ const getResponseBody = async (res) => {
       }
     }
   } : {};
-
   return {
     ...result,
     ...homeProps
@@ -85,12 +83,12 @@ export const requestWrapper = async (url, data = {}, token, jsonRequest = true) 
   }
 
   const response = await fetchRetry(URL, data, retryCount);
+
   try {
-    const responseBody = await getResponseBody(response);
+    const responseBody = await getResponseBody(response, URL);
     checkResponseStatus(response);
     return response.ok ? { res: responseBody } : { err: responseBody };
   } catch (error) {
-    console.log('fetch error', error, response);
     return response && response.ok ? { res: { code: response.status } } : { err: {} };
   }
 }

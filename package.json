@@ -12,6 +12,7 @@
 	},
 	"scripts": {
 		"test": "NODE_ENV=test jest",
+		"test-watch": "NODE_ENV=test jest --watch",
 		"dev": "node --inspect server.js",
 		"build": "next build",
 		"start": "NODE_ENV=production node server.js"
@@ -62,9 +63,12 @@
 		"eslint-plugin-import": "^2.13.0",
 		"eslint-plugin-jsx-a11y": "^6.1.2",
 		"eslint-plugin-react": "^7.10.0",
+		"fetch-mock": "^7.2.5",
 		"jest": "^23.6.0",
+		"node-fetch": "^2.3.0",
 		"nodemon": "^1.17.5",
 		"react-addons-test-utils": "^15.6.2",
-		"redux-devtools-extension": "^2.13.5"
+		"redux-devtools-extension": "^2.13.5",
+		"redux-saga-test-plan": "^3.7.0"
 	}
 }

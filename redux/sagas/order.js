@@ -4,6 +4,10 @@ import { orderActions } from '../actions/orderActions';
 
 import Utils from '../../lib/Utils';
 
+const replace = (arr, newItem) => arr.map(
+    (item) => item.Name === newItem.Name ? newItem : item
+);
+
 export function * prepareOrder(action) {
     const { responseSuccess, responseFailure } = action;
     try {
@@ -37,7 +41,7 @@ export function * setShippingOption(action) {
 
         changeShippingOption(checkout, user, option);
         yield put(responseSuccess(option));
-        yield put(order.setItems(checkout.items ));
+        yield put(orderActions.setItems({ items: checkout.items }));
     } catch (error) {
         yield put(responseFailure(error));
     }
@@ -46,11 +50,12 @@ export function * setShippingOption(action) {
 export function * incrementShipDate(action) {
     const { responseSuccess, responseFailure, data: item } = action;
     try {
-        var checkout = yield select(state => state.checkout);
+        const checkout = yield select(state => state.checkout);
         const user = yield select(state => state.user);
-
-        incrementItemDate(checkout, user, item);
-        yield put(order.setItems(checkout.items ));
+        yield put(orderActions.setItems({ items: replace(
+            checkout.items,
+            incrementItemDate(checkout, user, item)
+        ) }));
     } catch (error) {
         yield put(responseFailure(error));
     }
@@ -59,11 +64,12 @@ export function * incrementShipDate(action) {
 export function * decrementShipDate(action) {
     const { responseSuccess, responseFailure, data: item } = action;
     try {
-        var checkout = yield select(state => state.checkout);
+        const checkout = yield select(state => state.checkout);
         const user = yield select(state => state.user);
-
-        decrementItemDate(checkout, user, item);
-        yield put(order.setItems(checkout.items ));
+        yield put(orderActions.setItems({ items: replace(
+            checkout.items,
+            decrementItemDate(checkout, user, item)
+        )}));
     } catch (error) {
         yield put(responseFailure(error));
     }
@@ -71,7 +77,7 @@ export function * decrementShipDate(action) {
 
 /****** Business logic ********/
 
-function initOrder(order, user) {
+export function initOrder(order, user) {
 
     // initialize order
     initDates(order, user);
@@ -109,7 +115,6 @@ function initOrder(order, user) {
      var shipDate = new Date(item.shipDate);
      var deliveryDate = getDeliveryDate(order, user, shipDate);
      var foundDate;
-
      while(!foundDate)
      {
          deliveryDate.setDate(deliveryDate.getDate() + 1);
@@ -120,9 +125,11 @@ function initOrder(order, user) {
              foundDate = true;
          }
      }
-
-     item.deliveryDate = deliveryDate;
-     item.shipDate = shipDate;
+     return {
+        ...item,
+        deliveryDate,
+        shipDate
+    }
  }
 
 /*
@@ -145,10 +152,11 @@ function initOrder(order, user) {
              foundDate = true;
          }
      }
-
-     item.deliveryDate = deliveryDate;
-     item.shipDate = shipDate;
-
+    return {
+        ...item,
+        deliveryDate,
+        shipDate
+    }
  }
 
  function getDeliveryDate(order, user, shipDate)

@@ -67,8 +67,8 @@ export default createReducer(initialState, {
     [userTypes.SET_USER_INFO_SUCCESS]: (state, { data: userInfo }) => ({
         ...userInfo
     }),
-    [userTypes.SET_CREDIT_CARD_SUCCESS]: (state, {data: card}) => ({
-        selectedCard: card
+    [userTypes.SET_CREDIT_CARD_SUCCESS]: (state, { data }) => ({
+        ...data
     }),
     [userTypes.ADD_CREDIT_CARD_SUCCESS]: (state, {data: { cards, creditCard} }) => ({
         selectedCard: creditCard,
