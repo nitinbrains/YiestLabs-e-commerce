@@ -201,7 +201,7 @@ class Store extends Component {
     render() {
         const { classes, theme } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
-        isHomebrew = true
+        // isHomebrew = true
         return (
             <NavBarUserSearchDrawerLayout>
 

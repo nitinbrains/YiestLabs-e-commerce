@@ -5,6 +5,8 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from '@material-ui/core/Grid';
 import _ from 'lodash';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 import PageContainer from '../../UI/PageContainer';
 
@@ -15,11 +17,14 @@ import FormTextbox from '../../Form/FormTextbox'
 import FormButton from '../../Form/FormButton'
 // import FormCheckbox from '../Form/FormCheckbox'
 
+import { cartActions } from "../../../redux/actions/cartActions";
+
 class AddHomebrewContainer extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
+      quantity: "1",
       items: [],
       activeItemIndex: 0,
       activeItem: {}
@@ -75,6 +80,44 @@ class AddHomebrewContainer extends Component {
     // })
   }
 
+  changeQuantity = (event) => {
+    this.setState({ quantity: event.target.value });
+  }
+
+  checkQuantity = (cartItem) => {
+    let quantity = parseFloat(cartItem.OrderDetailQty);
+    if(isNaN(quantity) || quantity <= 0 ) {
+      console.log('Please enter a valid value for the quantity');
+      return false;
+    }
+    //  Must be in increments of 1
+    else if ((parseFloat(quantity) / parseInt(quantity) != 1.0)) {
+      return false;
+    }
+    return true;
+  }
+
+  _addToCart() {
+    try {
+      let quantity = this.state.quantity;
+      let item = this.state.activeItem;
+      // Create cart item
+      let cartItem = {};
+      cartItem.Name = String(item.Name);
+      cartItem.MerchandiseID = item.volID[0];
+      cartItem.salesCategory = parseInt(item.salesCategory);
+      cartItem.type = 3;
+      cartItem.details = "";
+      cartItem.OrderDetailQty = parseFloat(quantity);
+      cartItem.dispQuantity = parseInt(quantity);
+      if (this.checkQuantity(cartItem)) {
+        this.props.addItem({ cartItem });
+      }
+    } catch (error) {
+      console.log("could not add item to cart", error);
+    }
+  }
+
 	render() {
 		return (
       <PageContainer heading="ADD HOMEBREW">
@@ -98,7 +141,8 @@ class AddHomebrewContainer extends Component {
                     <div>
                       <FormTextbox
                         className="input-textbox"
-                        onChange={() => {}}
+                        onChange={this.changeQuantity}
+                        value={this.state.quantity}
                       />
                     </div>
                   </Grid>
@@ -106,6 +150,7 @@ class AddHomebrewContainer extends Component {
                     <FormButton 
                       text="ADD TO CART" 
                       className="btn addtocart"
+                      onClick={() => this._addToCart()}
                     />
                   </Grid>
                 </Grid>
@@ -139,4 +184,20 @@ class AddHomebrewContainer extends Component {
 	}
 }
 
-export default AddHomebrewContainer
+const styles = theme => ({
+    
+});
+
+const mapStateToProps = state => ({
+    user: state.user,
+    store: state.inventory
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators({ ...cartActions}, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(AddHomebrewContainer));
+
+// export default AddHomebrewContainer
