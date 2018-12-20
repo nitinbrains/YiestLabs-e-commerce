@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from 'redux';
+import { bindActionCreators } from "redux";
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -22,11 +22,10 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 
 // custom
-import SalesLib from '../../../lib/SalesLib';
-import { userActions } from '../../../redux/actions/userActions';
+import SalesLib from "../../../lib/SalesLib";
+import { userActions } from "../../../redux/actions/userActions";
 
 class Shipping extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -34,25 +33,25 @@ class Shipping extends Component {
             newAddress: false,
             openDialog: false,
             shipping: {
-                attn: '',
-                addresee: '',
-                address1: '',
-                address2: '',
-                address3: '',
-                city: '',
-                countryid: 'US',
-                zip: ''
+                attn: "",
+                addresee: "",
+                address1: "",
+                address2: "",
+                address3: "",
+                city: "",
+                countryid: "US",
+                zip: ""
             }
         };
     }
 
     handleDialogOpen() {
         this.setState({ openDialog: true });
-    };
+    }
 
     handleDialogClose() {
         this.setState({ openDialog: false, newAddress: false });
-    };
+    }
 
     addNewAddress() {
         this.props.addShipAddress(this.state.shipping);
@@ -64,461 +63,619 @@ class Shipping extends Component {
 
         return (
             <React.Fragment>
+                <Grid container spacing={24}>
+                    <Grid item xs={12} md={6}>
+                        <Typography variant="h6" color="textPrimary">
+                            SHIPPING ADDRESS
+                        </Typography>
+                        <div className={classes.sectionTitleDivider} />
+
+                        {this.props.user.shipping.id ? (
+                            <div>
+                                <Typography>
+                                    {this.props.user.shipping.attn}
+                                </Typography>
+                                <Typography>
+                                    {this.props.user.shipping.addressee}
+                                </Typography>
+                                <Typography>
+                                    {this.props.user.shipping.address1}
+                                </Typography>
+                                <Typography>
+                                    {this.props.user.shipping.address2}
+                                </Typography>
+                                <Typography>
+                                    {this.props.user.shipping.address3}
+                                </Typography>
+                                <Typography>
+                                    {this.props.user.shipping.city}
+                                </Typography>
+                                <Typography>
+                                    {this.props.user.shipping.countryid}
+                                </Typography>
+                                <Typography>
+                                    {this.props.user.shipping.zip}
+                                </Typography>
+
+                                <Button
+                                    style={{ marginTop: 10 }}
+                                    onClick={() => this.handleDialogOpen()}
+                                >
+                                    Change Shipping Address
+                                </Button>
+                                <Dialog
+                                    open={this.state.openDialog}
+                                    onClose={() => this.handleDialogClose()}
+                                    aria-labelledby="form-dialog-title"
+                                    fullWidth={true}
+                                    maxWidth={"md"}
+                                >
+                                    <DialogContent>
+                                        <div
+                                            style={{
+                                                borderTop: "solid 1px",
+                                                borderColor: "#CCCCCC",
+                                                marginBottom: 20,
+                                                marginTop: 10
+                                            }}
+                                        />
+                                        <div
+                                            style={{
+                                                position: "absolute",
+                                                top: 15,
+                                                left: 0,
+                                                right: 0,
+                                                marginLeft: "auto",
+                                                marginRight: "auto",
+                                                backgroundColor: "#fff",
+                                                width: 200,
+                                                textAlign: "center"
+                                            }}
+                                        >
+                                            <Typography
+                                                variant="h6"
+                                                color="textPrimary"
+                                            >
+                                                Shipping Addresses
+                                            </Typography>
+                                        </div>
+                                        <div className={classes.close}>
+                                            <IconButton
+                                                color="inherit"
+                                                size="small"
+                                                aria-label="Menu"
+                                                onClick={() =>
+                                                    this.handleDialogClose()
+                                                }
+                                            >
+                                                <CloseIcon />
+                                            </IconButton>
+                                        </div>
+                                        <Grid container spacing={24}>
+                                            {this.props.user.otherAddresses.map(
+                                                (address, i) => (
+                                                    <Grid item sm={4} xs={12}>
+                                                        <Paper
+                                                            className={classNames(
+                                                                classes.paper,
+                                                                this.props.user
+                                                                    .shipping
+                                                                    .address1 ==
+                                                                    address.address1 &&
+                                                                    classes.selected
+                                                            )}
+                                                        >
+                                                            <Typography>
+                                                                {
+                                                                    address.address1
+                                                                }
+                                                            </Typography>
+                                                            <Typography>
+                                                                {
+                                                                    address.address2
+                                                                }
+                                                            </Typography>
+                                                            <Typography>
+                                                                {
+                                                                    address.address3
+                                                                }
+                                                            </Typography>
+                                                            <Typography>
+                                                                {address.city}
+                                                            </Typography>
+                                                            <Typography>
+                                                                {
+                                                                    address.countryid
+                                                                }
+                                                            </Typography>
+                                                            <Typography>
+                                                                {address.zip}
+                                                            </Typography>
+                                                            <Button
+                                                                variant="contained"
+                                                                color="primary"
+                                                                className={
+                                                                    classes.button
+                                                                }
+                                                                onClick={() =>
+                                                                    this.props.setShipAddress(
+                                                                        i
+                                                                    )
+                                                                }
+                                                            >
+                                                                Select Address
+                                                            </Button>
+                                                        </Paper>
+                                                    </Grid>
+                                                )
+                                            )}
+                                        </Grid>
+
+                                        {this.state.newAddress ? (
+                                            <Grid container spacing={24}>
+                                                <Grid item xs={12} sm={6}>
+                                                    <TextField
+                                                        required
+                                                        id="attention"
+                                                        name="attention"
+                                                        label="Attention"
+                                                        fullWidth
+                                                        autoComplete="attention"
+                                                        value={
+                                                            this.state.shipping
+                                                                .attn
+                                                        }
+                                                        onChange={event =>
+                                                            this.setState({
+                                                                shipping: {
+                                                                    ...this
+                                                                        .state
+                                                                        .shipping,
+                                                                    attn:
+                                                                        event
+                                                                            .target
+                                                                            .value
+                                                                }
+                                                            })
+                                                        }
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} sm={6}>
+                                                    <TextField
+                                                        required
+                                                        id="addresse"
+                                                        name="addresse"
+                                                        label="Addresse"
+                                                        fullWidth
+                                                        autoComplete="addresse"
+                                                        value={
+                                                            this.state.shipping
+                                                                .addressee
+                                                        }
+                                                        onChange={event =>
+                                                            this.setState({
+                                                                shipping: {
+                                                                    ...this
+                                                                        .state
+                                                                        .shipping,
+                                                                    addressee:
+                                                                        event
+                                                                            .target
+                                                                            .value
+                                                                }
+                                                            })
+                                                        }
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <TextField
+                                                        required
+                                                        id="address1"
+                                                        name="address1"
+                                                        label="Address line 1"
+                                                        fullWidth
+                                                        autoComplete="address-line1"
+                                                        value={
+                                                            this.state.shipping
+                                                                .address1
+                                                        }
+                                                        onChange={event =>
+                                                            this.setState({
+                                                                shipping: {
+                                                                    ...this
+                                                                        .state
+                                                                        .shipping,
+                                                                    address1:
+                                                                        event
+                                                                            .target
+                                                                            .value
+                                                                }
+                                                            })
+                                                        }
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <TextField
+                                                        id="addiress2"
+                                                        name="addiress2"
+                                                        label="Address line 2"
+                                                        fullWidth
+                                                        autoComplete="address-line2"
+                                                        value={
+                                                            this.state.shipping
+                                                                .address2
+                                                        }
+                                                        onChange={event =>
+                                                            this.setState({
+                                                                shipping: {
+                                                                    ...this
+                                                                        .state
+                                                                        .shipping,
+                                                                    address2:
+                                                                        event
+                                                                            .target
+                                                                            .value
+                                                                }
+                                                            })
+                                                        }
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <TextField
+                                                        id="addiress3"
+                                                        name="addiress3"
+                                                        label="Address line 3"
+                                                        fullWidth
+                                                        autoComplete="address-line3"
+                                                        value={
+                                                            this.state.shipping
+                                                                .address3
+                                                        }
+                                                        onChange={event =>
+                                                            this.setState({
+                                                                shipping: {
+                                                                    ...this
+                                                                        .state
+                                                                        .shipping,
+                                                                    address3:
+                                                                        event
+                                                                            .target
+                                                                            .value
+                                                                }
+                                                            })
+                                                        }
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} sm={6}>
+                                                    <TextField
+                                                        required
+                                                        id="city"
+                                                        name="city"
+                                                        label="City"
+                                                        fullWidth
+                                                        autoComplete="address-level2"
+                                                        value={
+                                                            this.state.shipping
+                                                                .city
+                                                        }
+                                                        onChange={event =>
+                                                            this.setState({
+                                                                shipping: {
+                                                                    ...this
+                                                                        .state
+                                                                        .shipping,
+                                                                    city:
+                                                                        event
+                                                                            .target
+                                                                            .value
+                                                                }
+                                                            })
+                                                        }
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} sm={6}>
+                                                    <TextField
+                                                        required
+                                                        id="zip"
+                                                        name="zip"
+                                                        label="Zip / Postal code"
+                                                        fullWidth
+                                                        autoComplete="postal-code"
+                                                        value={
+                                                            this.state.shipping
+                                                                .zip
+                                                        }
+                                                        onChange={event =>
+                                                            this.setState({
+                                                                shipping: {
+                                                                    ...this
+                                                                        .state
+                                                                        .shipping,
+                                                                    zip:
+                                                                        event
+                                                                            .target
+                                                                            .value
+                                                                }
+                                                            })
+                                                        }
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <TextField
+                                                        select
+                                                        required
+                                                        id="country"
+                                                        name="country"
+                                                        label="Country"
+                                                        fullWidth
+                                                        autoComplete="country"
+                                                        value={
+                                                            this.state.shipping
+                                                                .countryid
+                                                        }
+                                                        onChange={event =>
+                                                            this.setState({
+                                                                shipping: {
+                                                                    ...this
+                                                                        .state
+                                                                        .shipping,
+                                                                    countryid:
+                                                                        event
+                                                                            .target
+                                                                            .value
+                                                                }
+                                                            })
+                                                        }
+                                                    >
+                                                        {SalesLib.COUNTRY_MAP.map(
+                                                            (country, i) => {
+                                                                return (
+                                                                    <MenuItem
+                                                                        key={
+                                                                            country.CountryCode
+                                                                        }
+                                                                        value={
+                                                                            country.CountryCode
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            country.CountryName
+                                                                        }
+                                                                    </MenuItem>
+                                                                );
+                                                            }
+                                                        )}
+                                                    </TextField>
+                                                </Grid>
+                                                <DialogActions>
+                                                    <Button
+                                                        onClick={() =>
+                                                            this.setState({
+                                                                newAddress: false
+                                                            })
+                                                        }
+                                                        color="primary"
+                                                    >
+                                                        Cancel
+                                                    </Button>
+                                                    <Button
+                                                        onClick={() =>
+                                                            this.addNewAddress()
+                                                        }
+                                                        color="primary"
+                                                    >
+                                                        Confirm Changes
+                                                    </Button>
+                                                </DialogActions>
+                                            </Grid>
+                                        ) : (
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={() =>
+                                                    this.setState({
+                                                        newAddress: true
+                                                    })
+                                                }
+                                                className={classes.button}
+                                            >
+                                                New Address
+                                            </Button>
+                                        )}
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
+                        ) : (
+                            <Grid container spacing={24}>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        id="attention"
+                                        name="attention"
+                                        label="Attention"
+                                        fullWidth
+                                        autoComplete="attention"
+                                        value={this.state.shipping.attn}
+                                        onChange={event =>
+                                            this.setState({
+                                                shipping: {
+                                                    ...this.state.shipping,
+                                                    attn: event.target.value
+                                                }
+                                            })
+                                        }
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        id="addressee"
+                                        name="addressee"
+                                        label="Addressee"
+                                        fullWidth
+                                        autoComplete="addressee"
+                                        value={this.state.shipping.addressee}
+                                        onChange={event =>
+                                            this.setState({
+                                                shipping: {
+                                                    ...this.state.shipping,
+                                                    addressee:
+                                                        event.target.value
+                                                }
+                                            })
+                                        }
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        id="address1"
+                                        name="address1"
+                                        label="Address line 1"
+                                        fullWidth
+                                        autoComplete="address-line1"
+                                        value={this.state.shipping.address1}
+                                        onChange={event =>
+                                            this.setState({
+                                                shipping: {
+                                                    ...this.state.shipping,
+                                                    address1: event.target.value
+                                                }
+                                            })
+                                        }
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="addiress2"
+                                        name="addiress2"
+                                        label="Address line 2"
+                                        fullWidth
+                                        autoComplete="address-line2"
+                                        value={this.state.shipping.address2}
+                                        onChange={event =>
+                                            this.setState({
+                                                shipping: {
+                                                    ...this.state.shipping,
+                                                    address2: event.target.value
+                                                }
+                                            })
+                                        }
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="addiress3"
+                                        name="addiress3"
+                                        label="Address line 3"
+                                        fullWidth
+                                        autoComplete="address-line3"
+                                        value={this.state.shipping.address3}
+                                        onChange={event =>
+                                            this.setState({
+                                                shipping: {
+                                                    ...this.state.shipping,
+                                                    address3: event.target.value
+                                                }
+                                            })
+                                        }
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        id="city"
+                                        name="city"
+                                        label="City"
+                                        fullWidth
+                                        autoComplete="address-level2"
+                                        value={this.state.shipping.city}
+                                        onChange={event =>
+                                            this.setState({
+                                                shipping: {
+                                                    ...this.state.shipping,
+                                                    city: event.target.value
+                                                }
+                                            })
+                                        }
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        id="zip"
+                                        name="zip"
+                                        label="Zip / Postal code"
+                                        fullWidth
+                                        autoComplete="postal-code"
+                                        value={this.state.shipping.zip}
+                                        onChange={event =>
+                                            this.setState({
+                                                shipping: {
+                                                    ...this.state.shipping,
+                                                    zip: event.target.value
+                                                }
+                                            })
+                                        }
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        select
+                                        required
+                                        id="country"
+                                        name="country"
+                                        label="Country"
+                                        fullWidth
+                                        autoComplete="country"
+                                        value={this.state.shipping.countryid}
+                                        onChange={event =>
+                                            this.setState({
+                                                shipping: {
+                                                    ...this.state.shipping,
+                                                    countryid:
+                                                        event.target.value
+                                                }
+                                            })
+                                        }
+                                    >
+                                        {SalesLib.COUNTRY_MAP.map(
+                                            (country, i) => {
+                                                return (
+                                                    <MenuItem
+                                                        key={
+                                                            country.CountryCode
+                                                        }
+                                                        value={
+                                                            country.CountryCode
+                                                        }
+                                                    >
+                                                        {country.CountryName}
+                                                    </MenuItem>
+                                                );
+                                            }
+                                        )}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button
+                                        onClick={() => this.addNewAddress()}
+                                        color="primary"
+                                    >
+                                        Add New Address
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        )}
+                    </Grid>
+                    <Grid item xs={12} md={6}>
                         <Typography
                             variant="h6"
                             color="textPrimary"
                         >
-                            SHIPPING ADDRESS
+                            SHIPPING METHOD
                         </Typography>
-                        <div
-                            style={{
-                                borderTop: "solid 1.5px",
-                                borderColor: "#CCCCCC",
-                                marginBottom:10,
-                            }}
-                        />
-
-                {this.props.user.shipping.id ? (
-                    <div>
-                        <Typography>{this.props.user.shipping.attn}</Typography>
-                        <Typography>{this.props.user.shipping.addressee}</Typography>
-                        <Typography>{this.props.user.shipping.address1}</Typography>
-                        <Typography>{this.props.user.shipping.address2}</Typography>
-                        <Typography>{this.props.user.shipping.address3}</Typography>
-                        <Typography>{this.props.user.shipping.city}</Typography>
-                        <Typography>{this.props.user.shipping.countryid}</Typography>
-                        <Typography>{this.props.user.shipping.zip}</Typography>
-
-                        <Button
-                            style={{ marginTop: 10 }}
-                            onClick={() => this.handleDialogOpen()}
-                        >
-                            Change Shipping Address
-                        </Button>
-                        <Dialog
-                            open={this.state.openDialog}
-                            onClose={() => this.handleDialogClose()}
-                            aria-labelledby="form-dialog-title"
-                            fullWidth={true}
-                            maxWidth = {'md'}
-                        >
-                            <DialogContent>
-                            <div
-                                style={{
-                                    borderTop: "solid 1px",
-                                    borderColor: "#CCCCCC",
-                                    marginBottom:20,
-                                    marginTop:10
-                                }}
-                            />
-                            <div
-                                style={{
-                                    position: "absolute",
-                                    top: 15,
-                                    left: 0,
-                                    right: 0,
-                                    marginLeft: 'auto',
-                                    marginRight: 'auto',
-                                    backgroundColor: "#fff",
-                                    width: 200,
-                                    textAlign:'center'
-                                }}
-                            >
-                                <Typography variant="h6" color="textPrimary">
-                                    Shipping Addresses
-                                </Typography>
-                            </div>
-                                <div className={classes.close}>
-                                    <IconButton
-                                        color="inherit"
-                                        size="small"
-                                        aria-label="Menu"
-                                        onClick={() => this.handleDialogClose()}
-                                    >
-                                        <CloseIcon />
-                                    </IconButton>
-                                </div>
-                                <Grid container spacing={24}>
-                                    {this.props.user.otherAddresses.map((address, i) =>
-                                        <Grid item sm={4} xs={12}>
-                                            <Paper className={classNames(classes.paper, this.props.user.shipping.address1 == address.address1 && classes.selected)}>
-                                                <Typography>
-                                                    {address.address1}
-                                                </Typography>
-                                                <Typography>
-                                                    {address.address2}
-                                                </Typography>
-                                                <Typography>
-                                                    {address.address3}
-                                                </Typography>
-                                                <Typography>
-                                                    {address.city}
-                                                </Typography>
-                                                <Typography>
-                                                    {address.countryid}
-                                                </Typography>
-                                                <Typography>
-                                                    {address.zip}
-                                                </Typography>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    className={classes.button}
-                                                    onClick={() => this.props.setShipAddress(i)}
-                                                >
-                                                    Select Address
-                                                </Button>
-                                            </Paper>
-                                        </Grid>
-                                    )}
-
-                                </Grid>
-
-                                {this.state.newAddress ? (
-                                    <Grid container spacing={24}>
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField
-                                                required
-                                                id="attention"
-                                                name="attention"
-                                                label="Attention"
-                                                fullWidth
-                                                autoComplete="attention"
-                                                value={this.state.shipping.attn}
-                                                onChange={(event) => this.setState({
-                                                    shipping: {
-                                                        ...this.state.shipping,
-                                                        attn: event.target.value
-                                                    }
-                                                })}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField
-                                                required
-                                                id="addresse"
-                                                name="addresse"
-                                                label="Addresse"
-                                                fullWidth
-                                                autoComplete="addresse"
-                                                value={this.state.shipping.addressee}
-                                                onChange={(event) => this.setState({
-                                                    shipping: {
-                                                        ...this.state.shipping,
-                                                        addressee: event.target.value
-                                                    }
-                                                })}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <TextField
-                                                required
-                                                id="address1"
-                                                name="address1"
-                                                label="Address line 1"
-                                                fullWidth
-                                                autoComplete="address-line1"
-                                                value={this.state.shipping.address1}
-                                                onChange={(event) => this.setState({
-                                                    shipping: {
-                                                        ...this.state.shipping,
-                                                        address1: event.target.value
-                                                    }
-                                                })}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <TextField
-                                                id="addiress2"
-                                                name="addiress2"
-                                                label="Address line 2"
-                                                fullWidth
-                                                autoComplete="address-line2"
-                                                value={this.state.shipping.address2}
-                                                onChange={(event) => this.setState({
-                                                    shipping: {
-                                                        ...this.state.shipping,
-                                                        address2: event.target.value
-                                                    }
-                                                })}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <TextField
-                                                id="addiress3"
-                                                name="addiress3"
-                                                label="Address line 3"
-                                                fullWidth
-                                                autoComplete="address-line3"
-                                                value={this.state.shipping.address3}
-                                                onChange={(event) => this.setState({
-                                                    shipping: {
-                                                        ...this.state.shipping,
-                                                        address3: event.target.value
-                                                    }
-                                                })}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField
-                                                required
-                                                id="city"
-                                                name="city"
-                                                label="City"
-                                                fullWidth
-                                                autoComplete="address-level2"
-                                                value={this.state.shipping.city}
-                                                onChange={(event) => this.setState({
-                                                    shipping: {
-                                                        ...this.state.shipping,
-                                                        city: event.target.value
-                                                    }
-                                                })}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField
-                                                required
-                                                id="zip"
-                                                name="zip"
-                                                label="Zip / Postal code"
-                                                fullWidth
-                                                autoComplete="postal-code"
-                                                value={this.state.shipping.zip}
-                                                onChange={(event) => this.setState({
-                                                    shipping: {
-                                                        ...this.state.shipping,
-                                                        zip: event.target.value
-                                                    }
-                                                })}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <TextField
-                                                select
-                                                required
-                                                id="country"
-                                                name="country"
-                                                label="Country"
-                                                fullWidth
-                                                autoComplete="country"
-                                                value={this.state.shipping.countryid}
-                                                onChange={(event) => this.setState({
-                                                    shipping: {
-                                                        ...this.state.shipping,
-                                                        countryid: event.target.value
-                                                    }
-                                                })}
-                                            >
-                                            {
-                                                SalesLib.COUNTRY_MAP.map((country, i) => {
-                                                    return (
-                                                        <MenuItem key={country.CountryCode} value={country.CountryCode}>{country.CountryName}</MenuItem>
-                                                    )
-                                                })
-                                            }
-                                            </TextField>
-                                        </Grid>
-                                        <DialogActions>
-                                            <Button
-                                                onClick={() => this.setState({newAddress: false})}
-                                                color="primary"
-                                            >
-                                                Cancel
-                                            </Button>
-                                            <Button
-                                                onClick={() => this.addNewAddress()}
-                                                color="primary"
-                                            >
-                                                Confirm Changes
-                                            </Button>
-                                        </DialogActions>
-                                    </Grid>
-                                ) : (
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() => this.setState({newAddress: true})}
-                                        className={classes.button}
-                                    >
-                                        New Address
-                                    </Button>
-                                )}
-                            </DialogContent>
-                        </Dialog>
-                    </div>
-                ) : (
-                    <Grid container spacing={24}>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                required
-                                id="attention"
-                                name="attention"
-                                label="Attention"
-                                fullWidth
-                                autoComplete="attention"
-                                value={this.state.shipping.attn}
-                                onChange={(event) => this.setState({
-                                    shipping: {
-                                        ...this.state.shipping,
-                                        attn: event.target.value
-                                    }
-                                })}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                required
-                                id="addressee"
-                                name="addressee"
-                                label="Addressee"
-                                fullWidth
-                                autoComplete="addressee"
-                                value={this.state.shipping.addressee}
-                                onChange={(event) => this.setState({
-                                    shipping: {
-                                        ...this.state.shipping,
-                                        addressee: event.target.value
-                                    }
-                                })}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                id="address1"
-                                name="address1"
-                                label="Address line 1"
-                                fullWidth
-                                autoComplete="address-line1"
-                                value={this.state.shipping.address1}
-                                onChange={(event) => this.setState({
-                                    shipping: {
-                                        ...this.state.shipping,
-                                        address1: event.target.value
-                                    }
-                                })}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                id="addiress2"
-                                name="addiress2"
-                                label="Address line 2"
-                                fullWidth
-                                autoComplete="address-line2"
-                                value={this.state.shipping.address2}
-                                onChange={(event) => this.setState({
-                                    shipping: {
-                                        ...this.state.shipping,
-                                        address2: event.target.value
-                                    }
-                                })}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                id="addiress3"
-                                name="addiress3"
-                                label="Address line 3"
-                                fullWidth
-                                autoComplete="address-line3"
-                                value={this.state.shipping.address3}
-                                onChange={(event) => this.setState({
-                                    shipping: {
-                                        ...this.state.shipping,
-                                        address3: event.target.value
-                                    }
-                                })}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                required
-                                id="city"
-                                name="city"
-                                label="City"
-                                fullWidth
-                                autoComplete="address-level2"
-                                value={this.state.shipping.city}
-                                onChange={(event) => this.setState({
-                                    shipping: {
-                                        ...this.state.shipping,
-                                        city: event.target.value
-                                    }
-                                })}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                required
-                                id="zip"
-                                name="zip"
-                                label="Zip / Postal code"
-                                fullWidth
-                                autoComplete="postal-code"
-                                value={this.state.shipping.zip}
-                                onChange={(event) => this.setState({
-                                    shipping: {
-                                        ...this.state.shipping,
-                                        zip: event.target.value
-                                    }
-                                })}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                select
-                                required
-                                id="country"
-                                name="country"
-                                label="Country"
-                                fullWidth
-                                autoComplete="country"
-                                value={this.state.shipping.countryid}
-                                onChange={(event) => this.setState({
-                                    shipping: {
-                                        ...this.state.shipping,
-                                        countryid: event.target.value
-                                    }
-                                })}
-                            >
-                                {
-                                    SalesLib.COUNTRY_MAP.map((country, i) => {
-                                        return (
-                                            <MenuItem key={country.CountryCode} value={country.CountryCode}>{country.CountryName}</MenuItem>
-                                        )
-                                    })
-                                }
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button
-                                onClick={() => this.addNewAddress()}
-                                color="primary"
-                            >
-                                Add New Address
-                            </Button>
-                        </Grid>
-                    </Grid>
-                )}
-
-                <Typography
-                    variant="h6"
-                    style={{ marginTop: 25 }}
-                    color="textPrimary"
-                >
-                    SHIPPING METHOD
-                </Typography>
-                <div
-                    style={{
-                        borderTop: "solid 1.5px",
-                        borderColor: "#CCCCCC",
-                        marginBottom:10,
-                    }}
-                />
-                <Grid container spacing={24}>
-                    <Grid item xs={12} sm={6}>
+                        <div className={classes.sectionTitleDivider} />
                         <TextField
                             id="select-shipping"
                             select
@@ -527,14 +684,15 @@ class Shipping extends Component {
                             margin="normal"
                             variant="outlined"
                             value={this.props.user.shipmethod}
-                            onChange={(event) => this.props.setShipMethod(event.target.value)}
-                        >
-                            {
-                                this.props.user.shipMethods.map(method =>
-                                    <MenuItem key={method.NSID} value={method.NSID}>{method.Name}</MenuItem>
-                                )
-
+                            onChange={event =>
+                                this.props.setShipMethod(event.target.value)
                             }
+                        >
+                            {this.props.user.shipMethods.map(method => (
+                                <MenuItem key={method.NSID} value={method.NSID}>
+                                    {method.Name}
+                                </MenuItem>
+                            ))}
                         </TextField>
                     </Grid>
                 </Grid>
@@ -552,8 +710,13 @@ const styles = theme => ({
     },
     close: { position: "absolute", right: 0, top: 0 },
     selected: {
-        border: 'solid 2px',
-        borderColor:"#f28411"
+        border: "solid 2px",
+        borderColor: "#f28411"
+    },
+    sectionTitleDivider: {
+        borderTop: "solid 1.5px",
+        borderColor: "#CCCCCC",
+        marginBottom: 10
     }
 });
 
@@ -561,15 +724,15 @@ Shipping.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+        checkout: state.checkout
+    };
+};
 
-const mapStateToProps = (state) => {
-	return {
-		user: state.user,
-		checkout: state.checkout
-    }
-}
-
-const mapDispatchToProps = dispatch => bindActionCreators(userActions, dispatch);
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(userActions, dispatch);
 
 export default connect(
     mapStateToProps,
