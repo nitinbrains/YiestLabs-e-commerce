@@ -196,6 +196,7 @@ class Store extends Component {
             }
 
         }
+        return <div></div>
     }
 
     render() {

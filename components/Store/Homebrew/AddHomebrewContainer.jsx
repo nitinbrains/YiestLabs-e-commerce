@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import Link from "next/link";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -9,14 +10,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import PageContainer from '../../UI/PageContainer';
-
-// custom
-// import Alert from '../UI/Alert';
 import FormTextbox from '../../Form/FormTextbox'
-// import FormSelectbox from '../Form/FormSelectbox'
 import FormButton from '../../Form/FormButton'
-// import FormCheckbox from '../Form/FormCheckbox'
-
 import { cartActions } from "../../../redux/actions/cartActions";
 
 class AddHomebrewContainer extends Component {
@@ -27,7 +22,8 @@ class AddHomebrewContainer extends Component {
       quantity: "1",
       items: [],
       activeItemIndex: 0,
-      activeItem: {}
+      activeItem: {},
+      updateCartIndex:0,
     }
 	}
 
@@ -56,28 +52,6 @@ class AddHomebrewContainer extends Component {
         activeItemIndex: new_activeItemIndex
       })  
     }
-  }
-
-  _renderItems () {
-    // return this.props.items.map((item) => {
-    //   return  (<Grid container spacing={24}>
-    //     <Grid container spacing={24}>
-    //       Name
-    //     </Grid>
-    //     <Grid container spacing={24}>
-    //       Description
-    //     </Grid>
-    //     <Grid container spacing={24}>
-    //       <Grid item xs={8}>
-    //         add to cart
-    //       </Grid>
-    //       <Grid item xs={4}>
-    //         prev next
-    //       </Grid>
-    //     </Grid>
-    //   </Grid>
-    //   )
-    // })
   }
 
   changeQuantity = (event) => {
@@ -116,6 +90,93 @@ class AddHomebrewContainer extends Component {
     } catch (error) {
       console.log("could not add item to cart", error);
     }
+  }
+
+  changeCartItemQuantity = (event) => {
+    try {
+      this.props.updateItem({ index: this.state.updateCartIndex, quantity: event.target.value });
+    }
+    catch(error) {
+      console.log('could not add item to cart', error);
+    }
+
+  }
+
+
+  _renderCartItems() {
+    return (
+      <Grid className="cart-section" >
+        <Grid container spacing={24}>
+          <Grid item className="heading">
+            YOUR CART
+          </Grid>
+        </Grid>
+        <Grid className="cart-items-list">
+          {
+            this.props.cart.items.map((item,i) => {
+              return (        
+                <Grid key={i} className="small-cart-item">
+                  <Grid container spacing={24}>
+                    <Grid item>
+                      {item.Name}
+                    </Grid>
+                  </Grid>
+                  <Grid container spacing={24}>
+                    <Grid item xs={6}>
+                      <Grid container spacing={24}>
+                        <Grid item xs={5} className="label-text">
+                          QUANTITY
+                        </Grid>
+                        <Grid item xs={7}>
+                          <FormTextbox
+                            className="quantity-input-textbox"
+                            onChange={this.changeCartItemQuantity}
+                            value={item.OrderDetailQty}
+                            onClick={() => {
+                              this.setState({
+                                updateCartIndex: i
+                              })
+                            }}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={6} dir="rtl">
+                      $255
+                    </Grid>
+                  </Grid>
+                </Grid> 
+              )
+            })
+          }
+        </Grid>
+
+        <Grid container spacing={24} className="total-block" dir="rtl">
+          <Grid item xs={6}>
+            <Grid container spacing={24}>
+              <Grid item xs={7}>
+                $500
+              </Grid>
+              <Grid item xs={5} className="label-text">
+                TOTAL
+              </Grid>
+              
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid container spacing={24} className="checkout-block" dir="rtl">
+          <Grid item >
+            <Link prefetch href="/checkout">
+              <FormButton
+                text="CHECKOUT" 
+                className="btn next-btn"
+                onClick={() => this._cycleItem('next')}
+              />
+            </Link>
+          </Grid>
+        </Grid>
+      </Grid>
+    )
   }
 
 	render() {
@@ -176,7 +237,7 @@ class AddHomebrewContainer extends Component {
             </Grid>
           </Grid>
           <Grid item xs={4}>
-            right
+            {this._renderCartItems()}
           </Grid>
         </Grid>
       </PageContainer>
@@ -189,6 +250,7 @@ const styles = theme => ({
 });
 
 const mapStateToProps = state => ({
+    cart: state.cart,
     user: state.user,
     store: state.inventory
 })

@@ -34,12 +34,13 @@ class FormTextbox extends React.Component {
         value={this.state.value}
         margin="normal"
         variant="outlined"
-        onClick={() => {
+        onClick={(e) => {
           if( this.state.value == this.state.label ){
             this.setState({
               value: ''
             })
           }
+          this.props.onClick(e)
         }}
         onBlur={() => {
           if( this.state.value == "" ){
