@@ -42,13 +42,12 @@ class Calculator extends Component {
 
 	render() {
 		return (
-			<PageContainer heading="CALCULATOR">
-				<NavBarUserSearchDrawerLayout>
+			<NavBarUserSearchDrawerLayout>
+				<PageContainer heading="CALCULATOR">
 					<div id="calculator-box">
 						<CalculatorForm
 							onSubmit={this.props.startCalculate}
 						/>
-
 						<Dialog
 	              open={this.state.showResultDialog}
 	              onClose={()=> { this.props.closeDialog()}}
@@ -59,11 +58,9 @@ class Calculator extends Component {
 	          	items={this.state.result.items}
 	          />
 	          </Dialog>
-
-
 					</div>
-				</NavBarUserSearchDrawerLayout>
-			</PageContainer>
+				</PageContainer>
+			</NavBarUserSearchDrawerLayout>	
 		);
 	}
 }

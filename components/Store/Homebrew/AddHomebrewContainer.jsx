@@ -24,6 +24,7 @@ class AddHomebrewContainer extends Component {
       activeItemIndex: 0,
       activeItem: {},
       updateCartIndex:0,
+      cartItems: []
     }
 	}
 
@@ -31,7 +32,8 @@ class AddHomebrewContainer extends Component {
     if( nextProps.items && nextProps.items.length > 0 ){
       return {
         activeItem: nextProps.items[prevState.activeItemIndex],
-        items: nextProps.items
+        items: nextProps.items,
+        cartItems: nextProps.cart.items || []
       }
     } else {
       return null
@@ -113,7 +115,7 @@ class AddHomebrewContainer extends Component {
         </Grid>
         <Grid className="cart-items-list">
           {
-            this.props.cart.items.map((item,i) => {
+            this.state.cartItems.map((item,i) => {
               return (        
                 <Grid key={i} className="small-cart-item">
                   <Grid container spacing={24}>
@@ -181,9 +183,9 @@ class AddHomebrewContainer extends Component {
 
 	render() {
 		return (
-      <PageContainer heading="ADD HOMEBREW">
+      <PageContainer heading="ADD HOMEBREW" className="add-homebrew-container">
   			<Grid container spacing={24} id="add-homebrew-block">  		  
-          <Grid item xs={8}>
+          <Grid item xs={8} className="item-details-block">
             <Grid container spacing={24}>
               <Grid item className="item-heading">
                 {this.state.activeItem.Name  || ''}

@@ -52,8 +52,8 @@ class Cart extends Component {
     render() {
         const { classes, theme, cart } = this.props;
         return (
-            <PageContainer heading="SHOPPING CART" id="cart-box">
-                <NavBarUserSearchDrawerLayout>                    
+            <NavBarUserSearchDrawerLayout>                    
+                <PageContainer heading="SHOPPING CART" id="cart-box">    
                     <Grid container spacing={24}>
                         {this.props.cart.items && this.props.cart.items.map((item, i) => {
                             return (                                
@@ -62,16 +62,20 @@ class Cart extends Component {
                         })}
                     </Grid>
                     <Grid container spacing={24} dir="rtl">
-                        SUBTOTAL ${this.state.subTotal}
+                        <Grid item >
+                            SUBTOTAL ${this.state.subTotal}
+                        </Grid>
                     </Grid>
                     <Grid container spacing={24} dir="rtl" className="block-checkout-button">
-                        <Link prefetch href="/checkout">
-                            <FormButton
-                                className="cart-checkout-button"
-                                text="PROCEED TO CHECKOUT"
-                            />
-                            {/*<Button style={{marginTop:20}} variant="contained">PROCEED TO CHECKOUT</Button>*/}
-                        </Link>
+                        <Grid item >
+                            <Link prefetch href="/checkout">
+                                <FormButton
+                                    className="cart-checkout-button"
+                                    text="PROCEED TO CHECKOUT"
+                                />
+                                {/*<Button style={{marginTop:20}} variant="contained">PROCEED TO CHECKOUT</Button>*/}
+                            </Link>
+                        </Grid>
                     </Grid>
 
                     <Dialog
@@ -82,8 +86,8 @@ class Cart extends Component {
                     >
                         <WantSooner {...this.props}/>
                     </Dialog>                    
-                </NavBarUserSearchDrawerLayout>
-            </PageContainer>
+                </PageContainer>
+            </NavBarUserSearchDrawerLayout>
         );
     }
 }

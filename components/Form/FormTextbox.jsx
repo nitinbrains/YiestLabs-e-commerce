@@ -40,7 +40,6 @@ class FormTextbox extends React.Component {
               value: ''
             })
           }
-          this.props.onClick(e)
         }}
         onBlur={() => {
           if( this.state.value == "" ){

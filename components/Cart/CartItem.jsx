@@ -72,67 +72,68 @@ class CartItem extends Component {
         const { classes, theme } = this.props;
 
         return (
-            <Grid container spacing={24} className="cart-item">
-                
-                <Grid item xs={2} className="first-block" style={{
-                    backgroundImage: `url('../../../static/images/categories/Category-ale.jpg')`
-                }}>
-                    <img className="icon" src="../../../static/images/icons/Ale-icon.svg"/>
-                    <div className="code">WLP001</div>
-                    <div className="name">{this.props.item.Name}</div> 
-                </Grid>
-                <Grid className="detail" item xs={4}>
-                    {this.props.item.Name}
-                    <br/>
-                    <br/>
-                    <span className="sooner" onClick={this.props.openWantSoonerDialog}>Want this Strain sooner?</span>
-                </Grid>
-                <Grid className="detail" item xs={2}>
-                    <span className="heading">Packing</span>
-                    <FormSelectbox
-                        value={this.state.defaulPacking}
-                        options={this.state.options_packing}
-                        onChange={() => {}}
-                    />
-                </Grid>
-                <Grid className="detail" item xs={2}>
-                    <span className="heading">Pack</span>
-                    <FormSelectbox
-                        value={this.state.defaulPack}
-                        options={this.state.options_pack}
-                        onChange={() => {}}
-                    />
-                </Grid>
-                <Grid className="detail" item xs={1}>
-                    <span className="heading">Quantity</span>
-                    <FormTextbox
-                        label="Quantity"
-                        value={this.props.item.OrderDetailQty}
-                        onChange={() => {}}
-                    />
+            <Grid item className="cart-item">
+                <Grid container spacing={24}>
+                    <Grid item xs={2} className="first-block" style={{
+                        backgroundImage: `url('../../../static/images/categories/Category-ale.jpg')`
+                    }}>
+                        <img className="icon" src="../../../static/images/icons/Ale-icon.svg"/>
+                        <div className="code">WLP001</div>
+                        <div className="name">{this.props.item.Name}</div> 
+                    </Grid>
+                    <Grid className="detail" item xs={4}>
+                        {this.props.item.Name}
+                        <br/>
+                        <br/>
+                        <span className="sooner" onClick={this.props.openWantSoonerDialog}>Want this Strain sooner?</span>
+                    </Grid>
+                    <Grid className="detail" item xs={2}>
+                        <span className="heading">Packing</span>
+                        <FormSelectbox
+                            value={this.state.defaulPacking}
+                            options={this.state.options_packing}
+                            onChange={() => {}}
+                        />
+                    </Grid>
+                    <Grid className="detail" item xs={2}>
+                        <span className="heading">Pack</span>
+                        <FormSelectbox
+                            value={this.state.defaulPack}
+                            options={this.state.options_pack}
+                            onChange={() => {}}
+                        />
+                    </Grid>
+                    <Grid className="detail" item xs={1}>
+                        <span className="heading">Quantity</span>
+                        <FormTextbox
+                            label="Quantity"
+                            value={this.props.item.OrderDetailQty}
+                            onChange={() => {}}
+                        />
 
-                    {/*
-                    <TextField
-                        id="quantity"
-                        label="Quantity"
-                        className={classes.quantity}
-                        value={this.state.quantity}
-                        onChange={this.changeQuantity}
-                        type="number"
-                    />
-                */}
-                </Grid>
-                <Grid className="detail" item xs={1}>
-                    <br/>
-                    $255
-                    
-                    <br/>
-                    <FormButton
-                        className="delete-button"
-                        text="DELETE"
-                        onClick={() => this.props.removeItem(this.props.index)}
-                        angleBlockRight={true}
-                    />
+                        {/*
+                        <TextField
+                            id="quantity"
+                            label="Quantity"
+                            className={classes.quantity}
+                            value={this.state.quantity}
+                            onChange={this.changeQuantity}
+                            type="number"
+                        />
+                    */}
+                    </Grid>
+                    <Grid className="detail" item xs={1}>
+                        <br/>
+                        $255
+                        
+                        <br/>
+                        <FormButton
+                            className="delete-button"
+                            text="DELETE"
+                            onClick={() => this.props.removeItem(this.props.index)}
+                            angleBlockRight={true}
+                        />
+                    </Grid>
                 </Grid>
             </Grid>
         )

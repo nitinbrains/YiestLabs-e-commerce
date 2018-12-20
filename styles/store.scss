@@ -2,6 +2,10 @@
 	padding: 30px;
 }
 
+.add-homebrew-container{
+	margin-top: 0px !important;
+}
+
 #add-homebrew-block{
 	color: $color-font;
 	.item-heading {
@@ -10,6 +14,12 @@
 	.item-description {
 		min-height: 265px;
 	}
+
+	.item-details-block{
+		padding-right: 40px;
+		border-right: 1px solid $color-second-accent;
+	}
+
 	.quantity {
 		.header {
 			color: $color-main-accent;
@@ -89,7 +99,6 @@
 
 
 	.cart-section {
-		border-left: 1px solid $color-second-accent;
 		padding-left: 20px;
 		font-size: 12px;
 		.cart-items-list{

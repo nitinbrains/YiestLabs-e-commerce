@@ -16,25 +16,24 @@ class PageContainer extends Component {
 
     render() {
         const { classes, theme } = this.props;
-        return (
-            <NavBarUserSearchDrawerLayout>
-                <div className={classes.container}>
-                    <div className={classes.title}>
-                        <Typography variant="h4" color="secondary">
-                            {this.props.heading || '---Pass heading in props---'}
-                        </Typography>
-                    </div>
-                    <Grid container spacing={24}>
-                        {this.props.children}
-                    </Grid>
+        return (            
+            <div className={`${classes.container} ${this.props.className || ''}`} >
+                <div className={classes.title}>
+                    <Typography variant="h4" color="secondary">
+                        {this.props.heading || '---Pass heading in props---'}
+                    </Typography>
                 </div>
-            </NavBarUserSearchDrawerLayout>
+                <Grid container spacing={24}>
+                    {this.props.children}
+                </Grid>
+            </div>
         );
     }
 }
 
 const styles = theme => ({
     container: {
+        marginTop: "50px",
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 4,

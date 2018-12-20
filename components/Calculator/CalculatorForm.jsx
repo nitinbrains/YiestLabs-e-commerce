@@ -161,7 +161,8 @@ class CalculatorForm extends Component {
         		
         </Grid>
         <Grid item xs={6}>
-        	<FormButton 
+        	<FormButton
+            className="submit-button"
         		text="CALCULATE"
         		onClick={(e) => { this.calculatePacks() }}
         	/>

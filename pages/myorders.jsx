@@ -36,8 +36,8 @@ class MyOrders extends Component {
         const { classes, theme } = this.props;
 
         return (
-            <PageContainer heading="MY ORDERS" id="cart-box">
-                <NavBarUserSearchDrawerLayout>
+            <NavBarUserSearchDrawerLayout>
+                <PageContainer heading="MY ORDERS" id="cart-box">
                     
                     <Grid container spacing={24}>
                         <Grid item xs={12}>
@@ -127,8 +127,8 @@ class MyOrders extends Component {
                     >
                         <OrderDetails closeDialog={this.handleLeaveOrderDetails}/>
                     </Dialog>
-                </NavBarUserSearchDrawerLayout>
-            </PageContainer>
+                </PageContainer>
+            </NavBarUserSearchDrawerLayout>
         );
     }
 }
