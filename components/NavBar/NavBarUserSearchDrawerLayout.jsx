@@ -230,9 +230,6 @@ const styles = theme => ({
         display: "flex",
         width: "100%"
     },
-    logo: {
-        flexGrow: 1
-    },
     appBar: {
         marginTop: 50,
         zIndex: theme.zIndex.drawer + 1,
