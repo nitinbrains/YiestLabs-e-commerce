@@ -1,79 +1,82 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
-import Grid from "@material-ui/core/Grid";
+import NavBarLayout from "../components/NavBar/NavBarLayout";
+import Grid from '@material-ui/core/Grid';
 import Dialog from "@material-ui/core/Dialog";
 
 // custom
-import CalculatorForm from "../components/Calculator/CalculatorForm";
-import CalculatorResult from "../components/Calculator/CalculatorResult";
+import CalculatorForm from '../components/Calculator/CalculatorForm';
+import CalculatorResult from '../components/Calculator/CalculatorResult';
 
-import Alert from "../components/UI/Alert";
-import FormTextbox from "../components/Form/FormTextbox";
-import FormSelectbox from "../components/Form/FormSelectbox";
-import FormButton from "../components/Form/FormButton";
-import FormCheckbox from "../components/Form/FormCheckbox";
+import Alert from '../components/UI/Alert';
+import FormTextbox from '../components/Form/FormTextbox'
+import FormSelectbox from '../components/Form/FormSelectbox'
+import FormButton from '../components/Form/FormButton'
+import FormCheckbox from '../components/Form/FormCheckbox'
 
-import { calculatorActions } from "../redux/actions/calculatorActions";
+import { calculatorActions } from '../redux/actions/calculatorActions'
+
+import PageContainer from '../components/UI/PageContainer';
+import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
 
 class Calculator extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            showResultDialog: true,
-            result: {}
-        };
-    }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-        return {
-            showResultDialog: nextProps.calculator.showResult,
-            result: nextProps.calculator.result
-        };
-        // return null
+	constructor(props) {
+		super(props);
+		this.state = {
+			showResultDialog: true,
+			result: {}
     }
+	}
 
-    render() {
-        return (
-            <NavBarUserSearchDrawerLayout>
-                <div id="calculator-box">
-                    <CalculatorForm onSubmit={this.props.startCalculate} />
+	static getDerivedStateFromProps(nextProps, prevState){
+	 	return {
+			showResultDialog: nextProps.calculator.showResult,
+			result: nextProps.calculator.result
+	  }
+	  // return null
+	}
 
-                    <Dialog
-                        open={this.state.showResultDialog}
-                        onClose={() => {
-                            this.props.closeDialog();
-                        }}
-                        aria-labelledby="form-dialog-title"
-                    >
-                        <CalculatorResult
-                            summary={this.state.result.summary}
-                            items={this.state.result.items}
-                        />
-                    </Dialog>
-                </div>
-            </NavBarUserSearchDrawerLayout>
-        );
-    }
+	render() {
+		return (
+			<NavBarUserSearchDrawerLayout>
+				<PageContainer heading="CALCULATOR">
+					<div id="calculator-box">
+						<CalculatorForm
+							onSubmit={this.props.startCalculate}
+						/>
+						<Dialog
+	              open={this.state.showResultDialog}
+	              onClose={()=> { this.props.closeDialog()}}
+	              aria-labelledby="form-dialog-title"
+	          >
+	          <CalculatorResult
+	          	summary={this.state.result.summary}
+	          	items={this.state.result.items}
+	          />
+	          </Dialog>
+					</div>
+				</PageContainer>
+			</NavBarUserSearchDrawerLayout>
+		);
+	}
 }
 
-const styles = theme => ({});
+const styles = theme => ({
+});
 
-Calculator.propTypes = {};
-
-const mapStateToProps = state => {
-    return {
-        calculator: state.calculator
-    };
+Calculator.propTypes = {
 };
 
-const mapDispatchToProps = dispatch =>
-    bindActionCreators(calculatorActions, dispatch);
+const mapStateToProps = (state) => {
+  return {
+  	calculator: state.calculator
+	}
+}
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles, { withTheme: true })(Calculator));
+const mapDispatchToProps = dispatch => bindActionCreators(calculatorActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(Calculator));

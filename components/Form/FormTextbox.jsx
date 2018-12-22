@@ -30,12 +30,11 @@ class FormTextbox extends React.Component {
     return (
       <TextField
         id="standard-bare"
-        className={classes.textField}
+        className={`form-textbox ${this.props.className || ''}`}
         value={this.state.value}
         margin="normal"
-        className="form-textbox"
         variant="outlined"
-        onClick={() => {
+        onClick={(e) => {
           if( this.state.value == this.state.label ){
             this.setState({
               value: ''

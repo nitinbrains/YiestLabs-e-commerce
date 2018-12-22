@@ -12,6 +12,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 
+import PageContainer from '../components/UI/PageContainer';
 import OrderDetails from "../components/MyOrders/OrderDetails";
 
 class MyOrders extends Component {
@@ -36,12 +37,8 @@ class MyOrders extends Component {
 
         return (
             <NavBarUserSearchDrawerLayout>
-                <div className={classes.container}>
-                    <div className={classes.title}>
-                        <Typography variant="h4" color="secondary">
-                            MY ORDERS
-                        </Typography>
-                    </div>
+                <PageContainer heading="MY ORDERS" id="cart-box">
+                    
                     <Grid container spacing={24}>
                         <Grid item xs={12}>
                             <div className={classes.card}>
@@ -121,16 +118,16 @@ class MyOrders extends Component {
                                 </Grid>
                             </div>
                         </Grid>
-                    </Grid>
-                </div>
+                    </Grid>                   
 
-                <Dialog
-                    open={this.state.openDialog}
-                    onClose={this.handleLeaveOrderDetails}
-                    maxWidth={'lg'}
-                >
-                    <OrderDetails closeDialog={this.handleLeaveOrderDetails}/>
-                </Dialog>
+                    <Dialog
+                        open={this.state.openDialog}
+                        onClose={this.handleLeaveOrderDetails}
+                        maxWidth={'lg'}
+                    >
+                        <OrderDetails closeDialog={this.handleLeaveOrderDetails}/>
+                    </Dialog>
+                </PageContainer>
             </NavBarUserSearchDrawerLayout>
         );
     }

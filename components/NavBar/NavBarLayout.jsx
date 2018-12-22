@@ -91,7 +91,7 @@ const styles = theme => ({
         [theme.breakpoints.up("sm")]: {
             marginLeft: 72
         },
-        marginTop: 80,
+        marginTop: 20,
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing.unit * 3,
         transition: theme.transitions.create("margin", {

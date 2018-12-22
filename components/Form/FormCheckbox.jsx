@@ -15,10 +15,11 @@ class FormCheckbox extends React.Component {
     const { classes } = this.props;
     return (
       <Checkbox
-          checked={this.props.checked}
+          checked={this.props.checked || false}
           onChange={this.props.onChange}
-          value="checkedA"
+          // value="checkedA"
           color="primary"
+          className={this.props.class}
         />
     );
   }

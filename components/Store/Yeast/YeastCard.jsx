@@ -269,8 +269,8 @@ const styles = theme => ({
 });
 
 YeastCard.propTypes = {
-    classes: PropTypes.object.isurld,
-    theme: PropTypes.object.isurld
+    classes: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => {
