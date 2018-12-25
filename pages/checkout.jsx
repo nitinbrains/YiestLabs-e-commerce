@@ -18,6 +18,7 @@ import Shipping from "../components/Checkout/Shipping/Shipping";
 import Billing from "../components/Checkout/Billing/Billing";
 import Items from "../components/Checkout/Items/Items";
 import Review from "../components/Checkout/Review/Review";
+import PageContainer from "../components/UI/PageContainer";
 
 // custom
 import Alert from "../components/UI/Alert";
@@ -82,12 +83,7 @@ class Checkout extends Component {
                     <Alert message={message} index={i} />
                 ))}
 
-                <div className={classes.container}>
-                    <div className={classes.title}>
-                        <Typography variant="h4" color="secondary">
-                            CHECKOUT
-                        </Typography>
-                    </div>
+                <PageContainer heading="MY ORDERS" id="cart-box">
                     <Stepper
                         activeStep={activeStep}
                         className={classes.stepper}
@@ -137,7 +133,7 @@ class Checkout extends Component {
                             </React.Fragment>
                         )}
                     </React.Fragment>
-                </div>
+                </PageContainer>
             </NavBarLayout>
         );
     }
@@ -177,7 +173,7 @@ const styles = theme => ({
     },
     stepper: {
         padding: `${theme.spacing.unit * 3}px 0 ${theme.spacing.unit * 5}px`,
-		backgroundColor: "#fafafa",
+        backgroundColor: "#fafafa"
     },
     buttons: {
         display: "flex",

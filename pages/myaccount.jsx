@@ -17,6 +17,7 @@ import CardHeader from "../components/UI/Card/CardHeader.jsx";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
+import PageContainer from '../components/UI/PageContainer';
 
 class MyAccount extends Component {
     render() {
@@ -24,12 +25,7 @@ class MyAccount extends Component {
 
         return (
             <NavBarUserSearchDrawerLayout>
-                <div className={classes.container}>
-                    <div className={classes.title}>
-                        <Typography variant="h4" color="secondary">
-                            MY ACCOUNT
-                        </Typography>
-                    </div>
+                <PageContainer heading="MY ACCOUNT" id="cart-box">
                     <Grid container spacing={24}>
                         <Grid
                             item
@@ -309,12 +305,11 @@ class MyAccount extends Component {
                             Confirm Account Changes
                         </Button>
                     </div>
-                </div>
+                </PageContainer>
             </NavBarUserSearchDrawerLayout>
         );
     }
 }
-
 const styles = theme => ({
     container: {
         border: "solid 1px",
