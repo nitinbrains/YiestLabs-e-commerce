@@ -145,6 +145,7 @@ class Checkout extends Component {
 
 const styles = theme => ({
     container: {
+        marginTop: 50,
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 4,
