@@ -7,159 +7,19 @@ import {
     prepareOrder,
     setShippingOption,
     incrementShipDate,
-    decrementShipDate,
-    initOrder
+    decrementShipDate
 } from '../order';
+import {
+    initOrder,
+    shipAllTogether,
+    incrementItemDate
+} from '../orderUtils';
 // import cartSelectors from '../../selectors/cart.js';
 import { orderActions } from '../../actions/orderActions';
-import { order, user } from '../../mocks';
-
-const today = new Date();
-const twoDaysLate = new Date()
-twoDaysLate.setDate(today.getDate() + 2);
-
-const fetchOrderMock = {
-    calcShip: true,
-    userID: 43148,
-    shipMethod: "2789",
-    items: [{
-        "Name":"WLP001 California Ale Yeast",
-        "salesCategory": 3,
-        "dispQuantity": 1,
-        "OrderDetailQty": 1,
-        "MerchandiseID": 2425,
-        "deliveryDate": twoDaysLate,
-        "details": "PurePitch® Nano",
-        "type": 1,
-        "shipDate": today,
-        "Warehouse": 9,
-        "pricePerUnit": 85.17
-    }],
-    transitTimes: {
-        "4": {
-            "daysInTransit": 5,
-            "daysInTransitRange": 0
-        },
-        "2787": {
-            "daysInTransit": 1,
-            "daysInTransitRange": 0
-        },
-        "2788": {
-            "daysInTransit": 1,
-            "daysInTransitRange": 0
-        },
-        "2789": {
-            "daysInTransit": 2,
-            "daysInTransitRange": 0
-        },
-        "2790": {
-            "daysInTransit": 3,
-            "daysInTransitRange": 0
-        },
-        "2791": {
-            "daysInTransit": 5,
-            "daysInTransitRange": 0
-        },
-        "2792": {
-            "daysInTransit": 5,
-            "daysInTransitRange": 0
-        },
-        "2794": {
-            "daysInTransit": 2,
-            "daysInTransitRange": 0
-        },
-        "2841": {
-            "daysInTransit": 5,
-            "daysInTransitRange": 3
-        },
-        "2842": {
-            "daysInTransit": 3,
-            "daysInTransitRange": 3
-        },
-        "2843": {
-            "daysInTransit": 5,
-            "daysInTransitRange": 3
-        },
-        "2844": {
-            "daysInTransit": 3,
-            "daysInTransitRange": 3 
-        },
-        "2845": {
-            "daysInTransit": 5,
-            "daysInTransitRange": 0
-        },
-        "2846": {
-            "daysInTransit": 1,
-            "daysInTransitRange": 0
-        },
-        "2847": {
-            "daysInTransit": 4,
-            "daysInTransitRange": 3
-        },
-        "2848": {
-            "daysInTransit": 5,
-            "daysInTransitRange": 3
-        },
-        "2849": {
-            "daysInTransit": 3,
-            "daysInTransitRange": 3
-        },
-        "2850": {
-            "daysInTransit": 3,
-            "daysInTransitRange": 0
-        },
-        "3469": {
-            "daysInTransit": 1,
-            "daysInTransitRange": 0
-        },
-        "3470": {
-            "daysInTransit": 1,
-            "daysInTransitRange": 0
-        },
-        "3471": {
-            "daysInTransit": 1,
-            "daysInTransitRange": 0
-        },
-        "3472": {
-            "daysInTransit": 2,
-            "daysInTransitRange": 0
-        },
-        "3475": {
-            "daysInTransit": 5,
-            "daysInTransitRange": 3
-        },
-        "3511": {
-            "daysInTransit": 1,
-            "daysInTransitRange": 0
-        },
-        "3609": {
-            "daysInTransit": 0,
-            "daysInTransitRange": 3
-        },
-        "13300": {
-            "daysInTransit": 3,
-            "daysInTransitRange": 3
-        },
-        "13320": {
-            "daysInTransit": 5,
-            "daysInTransitRange": 3
-        },
-        "13332": {
-            "daysInTransit": 2,
-            "daysInTransitRange": 0
-        }
-    },
-    "itemSubtotal": 85.17,
-    "shippingSubtotal": 17,
-    "orderSubtotal": 102.17
-};
+import { order, user, today, twoDaysLate, fetchOrderMock } from '../../mocks';
 
 
-const prepareUserOrder = (order) => {
-    const userOrder = Object.assign({}, order);
-    initOrder(userOrder, user);
-    return userOrder;
-}
+const prepareUserOrder = (order) => initOrder({ ...order }, user);
 
 
 describe('testing of oder sagas',() => {
@@ -191,9 +51,10 @@ describe('testing of oder sagas',() => {
 
     it('set shipping option', () => {
         const userOrder = prepareUserOrder(fetchOrderMock);
+        const items = shipAllTogether(userOrder, user);
         const shippingOption = 'Ship All Together';
         const action = orderActions.setShippingOption(shippingOption);
-        const successResponse = orderActions.setItems({ items: userOrder.items });
+        const successResponse = orderActions.setItems({ items });
         return expectSaga(
             setShippingOption, action
         ).withState({
@@ -206,13 +67,9 @@ describe('testing of oder sagas',() => {
 
     it('increment ship date', () => {
         const userOrder = prepareUserOrder(fetchOrderMock);
-        const item = userOrder.items[0];
+        const item = incrementItemDate(userOrder, user, userOrder.items[0]);
         const action = orderActions.incrementShipDate(userOrder.items[0]);
-        const shipDate = new Date(item.shipDate);
-        const deliveryDate = new Date(item.deliveryDate);
-        shipDate.setDate(shipDate.getDate() + 1);
-        deliveryDate.setDate(deliveryDate.getDate() + 1);
-        const successResponse = orderActions.setItems({ items: [ { ...item, shipDate, deliveryDate } ] });
+        const successResponse = orderActions.setItems({ items: [ item ] });
         return expectSaga(
             incrementShipDate, action
         ).withState({

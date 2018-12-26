@@ -64,6 +64,7 @@ export default createReducer(initialState, {
         ...data,
         isLoading: false,
     }),
+    [userTypes.USER_LOGIN_FAILURE]: () => null, // this will return initial state
     [userTypes.SET_USER_INFO_SUCCESS]: (state, { data: userInfo }) => ({
         ...userInfo
     }),
@@ -91,6 +92,6 @@ export default createReducer(initialState, {
         otherAddresses,
         shipping
     }),
-    [userTypes.USER_LOGIN_FAILURE]: () => null, // this will return initial state
+    
     [userTypes.USER_LOGOUT_ATTEMPT]: () => null,    // this will return initial state
 });

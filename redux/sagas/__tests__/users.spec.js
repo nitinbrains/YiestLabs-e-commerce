@@ -124,14 +124,14 @@ describe('testing of users sagas', () => {
         ).run();
     });
 
-    it('set bill address', () => {
-        const action = userActions.setShipAddress(0);
+    it('set ship address', () => {
+        const action = userActions.setShipAddress(user.otherAddresses[0]);
         return expectSaga(
             setShipAddress, action
         ).withState({
             user
         }).put(
-            action.responseSuccess(0)
+            action.responseSuccess(user.otherAddresses[0])
         ).run();
     });
 
@@ -153,13 +153,13 @@ describe('testing of users sagas', () => {
     });
 
     it('set bill address', () => {
-        const action = userActions.setBillAddress(0);
+        const action = userActions.setBillAddress(user.otherAddresses[0]);
         return expectSaga(
             setBillAddress, action
         ).withState({
             user
         }).put(
-            action.responseSuccess(0)
+            action.responseSuccess(user.otherAddresses[0])
         ).run();
     });
 

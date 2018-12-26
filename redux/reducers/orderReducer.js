@@ -33,7 +33,7 @@ export default createReducer(initialState, {
         ...state,
         items
     }),
-    [orderTypes.SET_SHIPPING_OPTION_ATTEMPT]: (state, { data: option }) => ({
+    [orderTypes.SET_SHIPPING_OPTION_SUCCESS]: (state, { data: option }) => ({
         ...state,
         selectedShippingOption: option
     })
