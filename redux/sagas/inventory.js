@@ -29,9 +29,8 @@ export function * getInventory (action) {
 
 
 export function * changeCategory(action) {
-    const { responseSuccess, responseFailure, data: { category }} = action;
+    const { responseSuccess, responseFailure, data: { category } } = action;
     try {
-
         const inventory = yield select(state => state.inventory);
         const itemsToShow = filterItems(inventory.items, category, null, false, false);
         yield put(responseSuccess({ itemsToShow, category }));
@@ -52,8 +51,8 @@ export function * searchForStrain(action) {
 }
 
 export function * switchToHomebrew(action) {
+    const { responseSuccess, responseFailure } = action;
     try {
-        const { responseSuccess, responseFailure } = action;
         const inventory = yield select(state => state.inventory);
         const itemsToShow = filterItems(inventory.items, null, null, false, true);
         yield put(responseSuccess({ itemsToShow }));
@@ -63,8 +62,8 @@ export function * switchToHomebrew(action) {
 }
 
 export function * switchToProfessional(action) {
+    const { responseSuccess, responseFailure } = action;
     try {
-
         const inventory = yield select(state => state.inventory);
         const category = inventory.category;
         const itemsToShow = filterItems(inventory.items, category, null, false, true);

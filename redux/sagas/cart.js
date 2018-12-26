@@ -1,12 +1,13 @@
 import { put, select  } from 'redux-saga/effects';
 import { messageActions } from '../actions/messageActions';
+import cartSelectors from '../selectors/cart.js';
 
 import SalesLib from '../../lib/SalesLib';
 
 export function * addCartItem(action) {
     const { responseSuccess, responseFailure, data: { cartItem } } = action;
-    var items = yield select(state => state.cart.items);
     try {
+        const items = yield select(cartSelectors.items);
         addToCart(items, cartItem);
         // if (message) {
         //     yield put(messageActions.displayMessage({ ...message }));
@@ -20,8 +21,8 @@ export function * addCartItem(action) {
 
 export function * removeCartItem(action) {
     const { responseSuccess, responseFailure, data: index } = action;
-    var items = yield select(state => state.cart.items);
     try {
+        const items = yield select(state => state.cart.items);
         items.splice(index, 1);
         yield put(responseSuccess({ items }));
     } catch(error) {
@@ -46,15 +47,12 @@ export function * updateCartItem(action) {
 
 function addToCart(items, cartItem) {
     // Check if item already exists in Cart
-    var matchIndex = items.findIndex(item => item.MerchandiseID === cartItem.MerchandiseID && item.details === cartItem.details);
-    if(items[matchIndex])
-    {
+    const matchIndex = items.findIndex(item => item.MerchandiseID === cartItem.MerchandiseID && item.details === cartItem.details);
+    if (items[matchIndex]) {
         items[matchIndex].OrderDetailQty += cartItem.OrderDetailQty;
         items[matchIndex].dispQuantity += cartItem.dispQuantity;
         // manageBlends(itemRef, matchIndex);
-    }
-    else
-    {
+    } else {
         items.push(cartItem);
         // manageBlends(itemRef, Cart.length-1);
     }

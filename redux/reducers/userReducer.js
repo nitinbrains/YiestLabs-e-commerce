@@ -64,11 +64,12 @@ export default createReducer(initialState, {
         ...data,
         isLoading: false,
     }),
+    [userTypes.USER_LOGIN_FAILURE]: () => null, // this will return initial state
     [userTypes.SET_USER_INFO_SUCCESS]: (state, { data: userInfo }) => ({
         ...userInfo
     }),
-    [userTypes.SET_CREDIT_CARD_SUCCESS]: (state, {data: card}) => ({
-        selectedCard: card
+    [userTypes.SET_CREDIT_CARD_SUCCESS]: (state, { data }) => ({
+        ...data
     }),
     [userTypes.ADD_CREDIT_CARD_SUCCESS]: (state, {data: { cards, creditCard} }) => ({
         selectedCard: creditCard,
@@ -91,6 +92,6 @@ export default createReducer(initialState, {
         otherAddresses,
         shipping
     }),
-    [userTypes.USER_LOGIN_FAILURE]: () => null, // this will return initial state
+    
     [userTypes.USER_LOGOUT_ATTEMPT]: () => null,    // this will return initial state
 });

@@ -1,4 +1,4 @@
-import { put, call } from 'redux-saga/effects';
+import { put, call, select } from 'redux-saga/effects';
 
 import { userActions, userTypes } from '../actions/userActions';
 import { messageActions } from '../actions/messageActions';
@@ -11,20 +11,21 @@ export function * loginUser (action) {
     try {
         const { res: userID } = yield call(api.login, username, password);
         const { res: userInfo } = yield call(api.getUserInfo, userID);
-        user.shipMethods = Utils.shipMethodGroup(userInfo);
-        setCreditCard(userInfo);
+        userInfo.shipMethods = Utils.shipMethodGroup(userInfo);
         yield put(responseSuccess(userInfo));
+        if (userInfo.cards.length > 0) {
+            yield put(userActions.setCreditCard(0));
+        }
         yield put(messageActions.displayMessage({
             title: 'Authorization',
             message: 'You have successfully logged in!'
         }));
-
     } catch (err) {
         yield put(responseFailure(err));
     }
 };
 
-export function * setUserInfo (action) {
+export function * setUserInfo(action) {
     const { responseSuccess, data: { userInfo } } = action;
     try {
         yield put(responseSuccess(userInfo));
@@ -36,7 +37,8 @@ export function * setUserInfo (action) {
 export function * setCreditCard(action) {
     const { responseSuccess, responseFailure, data } = action;
     try {
-        yield put(responseSuccess(setCC(data)));
+        const user = yield select(state => state.user);
+        yield put(responseSuccess(setCC(user, data)));
     } catch(error) {
         yield put(responseFailure(error));
     }
@@ -44,9 +46,9 @@ export function * setCreditCard(action) {
 
 export function * addCreditCard(action) {
     const { responseSuccess, responseFailure, data: card } = action;
-
     try {
-        const { cards, creditCard } = addCC(card);
+        const user = yield select(state => state.user);
+        const { cards, creditCard } = addCC(user, card);
         yield put(responseSuccess({ cards, creditCard }));
     } catch(error) {
         yield put(responseFailure(error));
@@ -74,7 +76,7 @@ export function * setShipAddress(action) {
 export function * addShipAddress(action) {
     const { responseSuccess, responseFailure, data: address } = action;
     try {
-        var user = yield select(state => state.user);
+        const user = yield select(state => state.user);
         const { otherAddresses, shipping } = addShip(user, address);
         yield put(responseSuccess({ otherAddresses, shipping }));
     } catch(error) {
@@ -108,26 +110,20 @@ export function * addBillAddress(action) {
 function setCC(user, index) {
 
     // get default or first card in users account if card not specified
-
-    if(index) {
-        user.selectedCard = user.cards[index];
-    }
-    else if(user.cards.length > 0)
-    {
-        var defaultCard = user.cards.find(c => c.default);
-        if(defaultCard)
-        {
-            user.selectedCard = defaultCard;
-        }
-        else
-        {
-            user.selectedCard = user.cards[0];
+    const newUser = {
+        ...user
+    };
+    if (index) {
+        newUser.selectedCard = user.cards[index];
+    } else if (user.cards.length > 0) {
+        const defaultCard = user.cards.find(c => c.default);
+        if (defaultCard) {
+            newUser.selectedCard = defaultCard;
+        } else {
+            newUser.selectedCard = user.cards[0];
         }
     }
-    else {
-        return null
-    }
-
+    return newUser;
 }
 
 function addShip(user, address) {
