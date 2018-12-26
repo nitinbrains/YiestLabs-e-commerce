@@ -191,6 +191,9 @@ class NavBarUserSearchDrawerLayout extends Component {
 
                 <Drawer
                     variant="persistent"
+                    SlideProps={{
+                        unmountOnExit: true
+                    }}
                     classes={{
                         paper: classes.drawerPaper
                     }}
