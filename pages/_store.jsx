@@ -48,7 +48,7 @@ class Store extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            openDialog: false,
+            showDialog: false,
         }
     }
 
@@ -115,11 +115,11 @@ class Store extends Component {
     }
 
     handleClickItem = (item) => {
-        this.setState({ openDialog: true, item: item });
+        this.setState({ showDialog: true, item: item });
     }
 
-    handleLeaveItem = () => {
-        this.setState({ openDialog: false, item: null });
+    closeDialog = () => {
+        this.setState({ showDialog: false, item: null });
     }
 
     getCard = (item, i) => {
@@ -165,32 +165,32 @@ class Store extends Component {
         if(item) {
             // Yeast
             if(SalesLib.SALESCATEGORY[0].includes(parseInt(item.salesCategory))) {
-                return <YeastDialog item={item} closeDialog={this.handleLeaveItem}/>
+                return <YeastDialog item={item} closeDialog={this.closeDialog}/>
             }
 
             // Enzymes & Nutrients
             else if(SalesLib.SALESCATEGORY[8].includes(parseInt(item.salesCategory))) {
-                return <EnzymesNutrientsDialog item={item} closeDialog={this.handleLeaveItem}/>
+                return <EnzymesNutrientsDialog item={item} closeDialog={this.closeDialog}/>
             }
 
             // Services
             else if(SalesLib.SALESCATEGORY[11].includes(parseInt(item.salesCategory))) {
-                return <ServicesDialog item={item} closeDialog={this.handleLeaveItem}/>
+                return <ServicesDialog item={item} closeDialog={this.closeDialog}/>
             }
 
             // Lab Supplies
             else if(SalesLib.SALESCATEGORY[13].includes(parseInt(item.salesCategory))) {
-                return <LabSuppliesDialog item={item} closeDialog={this.handleLeaveItem}/>
+                return <LabSuppliesDialog item={item} closeDialog={this.closeDialog}/>
             }
 
             // Education
             else if(SalesLib.SALESCATEGORY[14].includes(parseInt(item.salesCategory))) {
-                return <EducationDialog item={item} closeDialog={this.handleLeaveItem}/>
+                return <EducationDialog item={item} closeDialog={this.closeDialog}/>
             }
 
             // Gift Shop
             else if(SalesLib.SALESCATEGORY[15].includes(parseInt(item.salesCategory))) {
-                return <GiftShopDialog item={item} closeDialog={this.handleLeaveItem}/>
+                return <GiftShopDialog item={item} closeDialog={this.closeDialog}/>
             }
 
         }
@@ -213,8 +213,8 @@ class Store extends Component {
                     })}
 
                     <Dialog
-                        open={this.state.openDialog}
-                        onClose={this.handleLeaveItem}
+                        open={this.state.showDialog}
+                        onClose={this.closeDialog}
                         aria-labelledby="form-dialog-title"
                     >
                         {this.getDialogContent(this.state.item)}

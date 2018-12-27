@@ -8,9 +8,6 @@ export function * addCartItem(action) {
     var items = yield select(state => state.cart.items);
     try {
         addToCart(items, cartItem);
-        // if (message) {
-        //     yield put(messageActions.displayMessage({ ...message }));
-        // }
         yield put(responseSuccess({ items }));
     } catch(error) {
         yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));

@@ -67,14 +67,6 @@ const YeastElements = {
     }
 }
 
-function getImage(salesCategory) {
-    try {
-        return YeastElements[parseInt(salesCategory)].img;
-    }
-    catch(err) {
-        console.log('error', salesCategory, err);
-    }
-}
 
 function getIcon(salesCategory) {
     try {

@@ -68,7 +68,7 @@ class ServicesDialog extends Component {
             cartItem.details =
                 "Please send your samples to:\nWhite Labs\nAttn: Analytical Lab\n9450 Candida Street\nSan Diego, CA 92126\nFor information on how much to send please visit:";
             cartItem.details_link =
-                "https://www.whitelabs.com/other-products/analytical-lab-services)";
+                "https://www.whitelabs.com/other-products/analytical-lab-services";
         }
         cartItem.OrderDetailQty = parseFloat(quantity);
         cartItem.dispQuantity = parseInt(quantity);

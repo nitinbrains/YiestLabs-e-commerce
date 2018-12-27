@@ -45,7 +45,17 @@ import {
  } from './inventory';
 
 // Calculator Sags
-import { startCalculation } from './calculator'
+import { 
+    calculatePacks,
+    toggleHomebrew,
+    changeType,
+    changeTempValue,
+    changeTempUnit,
+    changeVolValue,
+    changeVolUnit,
+    changeGravValue,
+    changeGravUnit,
+ } from './calculator';
 
 function * rootSaga () {
     yield all([
@@ -74,7 +84,15 @@ function * rootSaga () {
         takeLatest(orderTypes.INCREMENT_SHIP_DATE_ATTEMPT, incrementShipDate),
         takeLatest(orderTypes.DECREMENT_SHIP_DATE_ATTEMPT, decrementShipDate),
         // CALCULATOR
-        takeLatest(calculatorTypes.START_CALCULATE_ATTEMPT, startCalculation )
+        takeLatest(calculatorTypes.CALCULATE_PACKS_ATTEMPT, calculatePacks ),
+        takeLatest(calculatorTypes.TOGGLE_HOMEBREW_ATTEMPT, toggleHomebrew ),
+        takeLatest(calculatorTypes.CHANGE_TYPE_ATTEMPT, changeType),
+        takeLatest(calculatorTypes.CHANGE_TEMP_VALUE_ATTEMPT, changeTempValue),
+        takeLatest(calculatorTypes.CHANGE_TEMP_UNIT_ATTEMPT, changeTempUnit),
+        takeLatest(calculatorTypes.CHANGE_VOL_VALUE_ATTEMPT, changeVolValue),
+        takeLatest(calculatorTypes.CHANGE_VOL_UNIT_ATTEMPT, changeVolUnit),
+        takeLatest(calculatorTypes.CHANGE_GRAV_VALUE_ATTEMPT, changeGravValue),
+        takeLatest(calculatorTypes.CHANGE_GRAV_UNIT_ATTEMPT, changeGravUnit)
     ]);
 };
 

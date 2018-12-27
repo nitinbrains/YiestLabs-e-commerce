@@ -10,8 +10,6 @@ import * as api from '../../services/inventory';
 export function * getInventory (action) {
     const { responseSuccess, responseFailure, data: { search } } = action;
     try {
-
-        const user = yield select(state => state.user);
         const { res: { items }, error } = yield call(api.getInventory);
 
         if(items) {

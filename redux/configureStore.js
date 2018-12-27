@@ -48,7 +48,7 @@ const initializeStore = (initialState = initialState, isServer) => {
     const persistConfig = {
         key: 'root',
         storage,
-        whitelist: ['user', 'cart']
+        whitelist: ['inventory', 'user', 'cart']
     };
     const persistedReducer = isServer ? rootReducer : persistReducer(persistConfig, rootReducer);
     let store = createStore(
