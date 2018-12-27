@@ -19,6 +19,9 @@ import FormCheckbox from "../components/Form/FormCheckbox";
 
 import { calculatorActions } from "../redux/actions/calculatorActions";
 
+import PageContainer from '../components/UI/PageContainer';
+import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
+
 class Calculator extends Component {
     constructor(props) {
         super(props);

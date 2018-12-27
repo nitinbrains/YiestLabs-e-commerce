@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from 'redux';
+import { bindActionCreators } from "redux";
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -24,7 +24,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { SideBarItems } from "./SideBarItems";
 import SearchBarItems from "./SearchBarItems";
 
-import { userActions } from '../../redux/actions/userActions';
+import { userActions } from "../../redux/actions/userActions";
 
 class NavBarUserSearchDrawerLayout extends Component {
     state = {
@@ -53,7 +53,7 @@ class NavBarUserSearchDrawerLayout extends Component {
     render() {
         const { children, classes, theme } = this.props;
 
-        return ( 
+        return (
             <div className={classes.root}>
                 <div
                     style={{
@@ -91,25 +91,28 @@ class NavBarUserSearchDrawerLayout extends Component {
                                 color="inherit"
                                 aria-label="Login"
                             >
-                            <img
-                                src="../../static/images/yeastman.png"
-                                height="30"
-                            />
+                                <img
+                                    src="../../static/images/yeastman.png"
+                                    height="30"
+                                />
                             </IconButton>
                         </Link>
-
-                        <div className={classes.circle}>
-                            <img
-                                src="../../static/images/logo_circle.png"
-                                height="130"
-                            />
-                        </div>
+                        <Link prefetch href="/">
+                            <div className={classes.circle}>
+                                <img
+                                    src="../../static/images/logo_circle.png"
+                                    height="130"
+                                />
+                            </div>
+                        </Link>
                         <div style={{ flexGrow: 1 }} />
-                      
-                        <Button color="secondary">Yeastman Store</Button>
+
+                        <Link prefetch href="/">
+                            <Button color="secondary">Yeastman Store</Button>
+                        </Link>
                         <Link prefetch href="/calculator">
-                            <Button color="secondary">Calculator</Button>                            
-                        </Link> 
+                            <Button color="secondary">Calculator</Button>
+                        </Link>
                         <Button color="secondary">About Us</Button>
 
                         <Link prefetch href="/cart">
@@ -153,12 +156,15 @@ class NavBarUserSearchDrawerLayout extends Component {
                             classes.drawerPaper,
                             !this.props.user.id && classes.hide,
                             !this.state.openUserBar &&
-                            !this.state.openUserBarHover &&
-                            classes.drawerPaperClose
+                                !this.state.openUserBarHover &&
+                                classes.drawerPaperClose
                         )
                     }}
                 >
-                    <div className={classes.toolbar} style={{marginTop:35}} />
+                    <div
+                        className={classes.toolbar}
+                        style={{ marginTop: 35 }}
+                    />
                     <List>{SideBarItems}</List>
                     <Divider />
                 </Drawer>
@@ -170,12 +176,12 @@ class NavBarUserSearchDrawerLayout extends Component {
                         {
                             [classes.contentShift]: this.state.openSearchBar,
                             [classes[`contentShift-search`]]: this.state
-                            .openSearchBar
+                                .openSearchBar
                         },
                         {
                             [classes.contentShift]: this.state.openUserBar,
                             [classes[`contentShift-user`]]: this.state
-                            .openUserBar
+                                .openUserBar
                         }
                     )}
                 >
@@ -185,6 +191,9 @@ class NavBarUserSearchDrawerLayout extends Component {
 
                 <Drawer
                     variant="persistent"
+                    SlideProps={{
+                        unmountOnExit: true
+                    }}
                     classes={{
                         paper: classes.drawerPaper
                     }}
@@ -223,9 +232,6 @@ const styles = theme => ({
         position: "relative",
         display: "flex",
         width: "100%"
-    },
-    logo: {
-        flexGrow: 1
     },
     appBar: {
         marginTop: 50,
@@ -304,7 +310,7 @@ const styles = theme => ({
         [theme.breakpoints.up("sm")]: {
             marginLeft: 72
         },
-        marginTop: 80,
+        marginTop: 20,
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing.unit * 3,
         transition: theme.transitions.create("margin", {
@@ -338,10 +344,11 @@ NavBarUserSearchDrawerLayout.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    user: state.user,
-})
+    user: state.user
+});
 
-const mapDispatchToProps = dispatch => bindActionCreators({ ...userActions}, dispatch);
+const mapDispatchToProps = dispatch =>
+    bindActionCreators({ ...userActions }, dispatch);
 
 export default connect(
     mapStateToProps,

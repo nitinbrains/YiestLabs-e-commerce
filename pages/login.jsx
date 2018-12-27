@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 import PropTypes from "prop-types";
 import Link from "next/link";
@@ -8,6 +8,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
+import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import LockIcon from "@material-ui/icons/LockOutlined";
@@ -18,108 +19,119 @@ import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 // custom
-import Alert from '../components/UI/Alert';
-import LoadingIndicator from '../components/UI/LoadingIndicator';
-import { userActions } from '../redux/actions/userActions';
+import Alert from "../components/UI/Alert";
+import LoadingIndicator from "../components/UI/LoadingIndicator";
+import { userActions } from "../redux/actions/userActions";
 
 class Login extends Component {
-
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: ''
-        }
+            username: "",
+            password: ""
+        };
     }
 
-    login(){
-        if (this.state.username && this.state.password){
+    login() {
+        if (this.state.username && this.state.password) {
             this.props.userLogin(this.state);
         }
     }
 
-    render(){
-
+    render() {
         const { classes } = this.props;
 
         return (
             <React.Fragment>
-
-                {this.props.message.messages.map((message, i) => <Alert message={message} index={i}/> )}
+                {this.props.message.messages.map((message, i) => (
+                    <Alert message={message} index={i} />
+                ))}
                 <LoadingIndicator visible={this.props.user.isLoading} />
 
                 <main className={classes.layout}>
-                    <Card>
-                        <CardHeader color="primary">
-                            <div className={classes.logo}>
-                                <img
-                                    src="../../static/images/logoHeader.png"
-                                    width="100%"
+                    <div className={classes.container}>
+                        <div
+                            style={{
+                                position: "absolute",
+                                left: 0,
+                                right: 0,
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                                width: 130,
+                                top: -60
+                            }}
+                        >
+                            <img
+                                src="../../static/images/logo_circle.png"
+                                height="130"
+                            />
+                        </div>
+
+                        <Typography variant="headline" align="center">
+                            Sign in
+                        </Typography>
+
+                        <div className={classes.form}>
+                            <FormControl margin="normal" required fullWidth>
+                                <TextField
+                                    variant="outlined"
+                                    label="Username / Email Address"
+                                    id="email"
+                                    name="email"
+                                    autoComplete="email"
+                                    autoFocus
+                                    value={this.state.username}
+                                    onChange={event =>
+                                        this.setState({
+                                            username: event.target.value
+                                        })
+                                    }
                                 />
-                            </div>
-                        </CardHeader>
-
-                        <CardBody>
-                            <Typography variant="headline" align="center">
+                            </FormControl>
+                            <FormControl margin="normal" required fullWidth>
+                                <TextField
+                                    label="Password"
+                                    variant="outlined"
+                                    name="password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                    value={this.state.password}
+                                    onChange={event =>
+                                        this.setState({
+                                            password: event.target.value
+                                        })
+                                    }
+                                />
+                            </FormControl>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="raised"
+                                color="primary"
+                                className={classes.submit}
+                                onClick={() => this.login()}
+                            >
                                 Sign in
-                            </Typography>
-
-                            <div className={classes.form}>
-                                <FormControl margin="normal" required fullWidth>
-                                    <InputLabel htmlFor="email">
-                                        Username / Email Address
-                                    </InputLabel>
-                                    <Input
-                                        id="email"
-                                        name="email"
-                                        autoComplete="email"
-                                        autoFocus
-                                        value={this.state.username}
-                                        onChange={(event) => this.setState({username: event.target.value})}
-                                    />
-                                </FormControl>
-                                <FormControl margin="normal" required fullWidth>
-                                    <InputLabel htmlFor="password">
-                                        Password
-                                    </InputLabel>
-                                    <Input
-                                        name="password"
-                                        type="password"
-                                        id="password"
-                                        autoComplete="current-password"
-                                        value={this.state.password}
-                                        onChange={(event) => this.setState({password: event.target.value})}
-                                    />
-                                </FormControl>
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="raised"
-                                    color="primary"
-                                    className={classes.submit}
-                                    onClick={() => this.login()}
-                                >
-                                    Sign in
-                                </Button>
-                            </div>
-                            <Grid container spacing={24}>
-                                <Grid item xs={12} md={6}>
-                                    <Link prefetch href="/registration">
-                                        <Button className={classes.button}>
-                                            Create Account
-                                        </Button>
-                                    </Link>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <Link prefetch href="/forgotpassword">
-                                        <Button className={classes.button}>
-                                            Forgot Password
-                                        </Button>
-                                    </Link>
-                                </Grid>
+                            </Button>
+                        </div>
+                        <Grid container spacing={24}>
+                            <Grid item xs={12} md={6}>
+                                <Link prefetch href="/registration">
+                                    <Button className={classes.button}>
+                                        Create Account
+                                    </Button>
+                                </Link>
                             </Grid>
-                        </CardBody>
-                    </Card>
+                            <Grid item xs={12} md={6}>
+                                <Link prefetch href="/forgotpassword">
+                                    <Button className={classes.button}>
+                                        Forgot Password
+                                    </Button>
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </div>
                 </main>
             </React.Fragment>
         );
@@ -128,9 +140,10 @@ class Login extends Component {
 
 const styles = theme => ({
     layout: {
+        position: "relative",
         width: "auto",
         display: "block",
-        marginTop: theme.spacing.unit * 7,
+        marginTop: theme.spacing.unit * 15,
         marginLeft: theme.spacing.unit * 3,
         marginRight: theme.spacing.unit * 3,
         [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
@@ -138,7 +151,14 @@ const styles = theme => ({
             marginLeft: "auto",
             marginRight: "auto"
         },
-        justifyContent: "center"
+        justifyContent: "center",
+        backgroundColor:"#fafafa"
+    },
+    container: {
+        border: "solid 1px",
+        borderColor: "#CCCCCC",
+        paddingTop: 80,
+        padding: theme.spacing.unit * 4
     },
     logo: {
         alignContent: "center",
@@ -160,17 +180,19 @@ Login.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-
-
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         user: state.user,
         inventory: state.inventory,
         cart: state.cart,
         message: state.messages
-    }
-}
+    };
+};
 
-const mapDispatchToProps = dispatch => bindActionCreators(userActions, dispatch);
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(userActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Login))
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles)(Login));

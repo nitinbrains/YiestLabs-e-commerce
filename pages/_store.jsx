@@ -37,6 +37,8 @@ import EducationDialog from '../components/Store/Education/EducationDialog';
 import GiftShopCard from '../components/Store/GiftShop/GiftShopCard';
 import GiftShopDialog from '../components/Store/GiftShop/GiftShopDialog';
 import HomebrewCard from '../components/Store/Homebrew/HomebrewCard';
+import FormButton from '../components/Form/FormButton';
+import AddHomebrewContainer from '../components/Store/Homebrew/AddHomebrewContainer';
 
 
 
@@ -48,7 +50,7 @@ class Store extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showDialog: false,
+            openDialog: false,
         }
     }
 
@@ -115,11 +117,11 @@ class Store extends Component {
     }
 
     handleClickItem = (item) => {
-        this.setState({ showDialog: true, item: item });
+        this.setState({ openDialog: true, item: item });
     }
 
-    closeDialog = () => {
-        this.setState({ showDialog: false, item: null });
+    handleLeaveItem = () => {
+        this.setState({ openDialog: false, item: null });
     }
 
     getCard = (item, i) => {
@@ -165,62 +167,74 @@ class Store extends Component {
         if(item) {
             // Yeast
             if(SalesLib.SALESCATEGORY[0].includes(parseInt(item.salesCategory))) {
-                return <YeastDialog item={item} closeDialog={this.closeDialog}/>
+                return <YeastDialog item={item} closeDialog={this.handleLeaveItem}/>
             }
 
             // Enzymes & Nutrients
             else if(SalesLib.SALESCATEGORY[8].includes(parseInt(item.salesCategory))) {
-                return <EnzymesNutrientsDialog item={item} closeDialog={this.closeDialog}/>
+                return <EnzymesNutrientsDialog item={item} closeDialog={this.handleLeaveItem}/>
             }
 
             // Services
             else if(SalesLib.SALESCATEGORY[11].includes(parseInt(item.salesCategory))) {
-                return <ServicesDialog item={item} closeDialog={this.closeDialog}/>
+                return <ServicesDialog item={item} closeDialog={this.handleLeaveItem}/>
             }
 
             // Lab Supplies
             else if(SalesLib.SALESCATEGORY[13].includes(parseInt(item.salesCategory))) {
-                return <LabSuppliesDialog item={item} closeDialog={this.closeDialog}/>
+                return <LabSuppliesDialog item={item} closeDialog={this.handleLeaveItem}/>
             }
 
             // Education
             else if(SalesLib.SALESCATEGORY[14].includes(parseInt(item.salesCategory))) {
-                return <EducationDialog item={item} closeDialog={this.closeDialog}/>
+                return <EducationDialog item={item} closeDialog={this.handleLeaveItem}/>
             }
 
             // Gift Shop
             else if(SalesLib.SALESCATEGORY[15].includes(parseInt(item.salesCategory))) {
-                return <GiftShopDialog item={item} closeDialog={this.closeDialog}/>
+                return <GiftShopDialog item={item} closeDialog={this.handleLeaveItem}/>
             }
 
         }
+        return <div></div>
     }
 
     render() {
         const { classes, theme } = this.props;
-
+        let isHomebrew = this.props.store.isHomebrew;
+        // isHomebrew = true
         return (
             <NavBarUserSearchDrawerLayout>
 
                 <LoadingIndicator visible={this.props.store.isLoading} label={"Loading Inventory"} />
-
-                <button onClick={() => this.props.switchToProfessional()}>Professional</button>
-                <button onClick={() => this.props.switchToHomebrew()}>Homebrew</button>
-
-                <Grid className={classes.store} container spacing={24}>
-                    {this.props.store.itemsToShow.map((item, i) => {
-                        return this.getCard(item, i)
-                    })}
-
-                    <Dialog
-                        open={this.state.showDialog}
-                        onClose={this.closeDialog}
-                        aria-labelledby="form-dialog-title"
-                    >
-                        {this.getDialogContent(this.state.item)}
-                    </Dialog>
-
+                <Grid container spacing={8} id="professional-homebrew-switch">
+                    <Grid item xs={6} dir="rtl">
+                        <FormButton className={`form-button-small-size ${isHomebrew ?  'form-button-active' : ''}`} text="Professional" onClick={() => this.props.switchToProfessional()}/>
+                    </Grid>
+                    <Grid item xs={6} dir="ltr">
+                        <FormButton className={`form-button-small-size ${isHomebrew ? '' : 'form-button-active'}`} text="Homebrew" onClick={() => this.props.switchToHomebrew()}/>
+                    </Grid>
                 </Grid>
+
+                {
+                    isHomebrew ?
+                    <AddHomebrewContainer items={this.props.store.itemsToShow}/>
+                    :
+                    <Grid className={classes.store} container spacing={24}>
+                        {this.props.store.itemsToShow.map((item, i) => {
+                            return this.getCard(item, i)
+                        })}
+
+                        <Dialog
+                            open={this.state.openDialog}
+                            onClose={this.handleLeaveItem}
+                            aria-labelledby="form-dialog-title"
+                        >
+                            {this.getDialogContent(this.state.item)}
+                        </Dialog>
+
+                    </Grid>
+                }
             </NavBarUserSearchDrawerLayout>
         );
     }

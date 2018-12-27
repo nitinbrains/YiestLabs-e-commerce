@@ -3,6 +3,7 @@ $color-main-accent: #FF9933;
 $color-second-accent: #CCCCCC;
 $color-third-accent: #66CCCC;
 $color-font: #666666;
+$color-white: #fff;
 
 .card-header-down{
 	margin-top: 50px !important;
@@ -30,10 +31,25 @@ $color-font: #666666;
 }
 
 .form-button{
-	width: 100%;
 	background-color : #FF9933 !important;
 	color : #fff !important;
 	border-radius : 0 !important;
 	font-size: 20px !important;
 	padding: 15px !important;
+	margin: 1px 1px 1px 1px !important;
+}
+
+.form-button-active{
+	background-color : #fff !important;
+	color : #FF9933 !important;
+	border-radius : 0 !important;
+	font-size: 20px !important;
+	padding: 15px !important;
+	margin: 1px 1px 1px 1px !important;
+}
+
+.form-button-small-size {
+	min-height: 25px !important;
+	padding: 5px !important;
+	font-size: 12px !important;
 }

@@ -6,9 +6,9 @@ const initialState = {
 };
 
 const getType = (message, error) => {
-    if (message !== null) {
+    if (message != null) {
         return 'NOTIFICATION';
-    } else if (error !== null) {
+    } else if (error != null) {
         console.log('error message', error);
         return 'ERROR';
     }

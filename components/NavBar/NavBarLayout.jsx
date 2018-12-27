@@ -4,6 +4,7 @@ import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import Link from "next/link";
 
 class NavBarLayout extends Component {
     render() {
@@ -11,16 +12,32 @@ class NavBarLayout extends Component {
 
         return (
             <div className={classes.root}>
-                <AppBar className={classes.appBar}>
+
+                <div
+                    style={{
+                        height: 50,
+                        width: "100%",
+                        backgroundColor: "#fafafa",
+                        position: "fixed"
+                    }}
+                />
+                <AppBar
+                    className={classes.appBar}
+                >
                     <Toolbar>
-                        <div className={classes.logo}>
-                            <img
-                                src="../../static/images/logoHeader.png"
-                                height="40"
-                            />
-                        </div>
+
+                        <Link prefetch href="/">
+                            <div className={classes.circle}>
+                                <img
+                                    src="../../static/images/logo_circle.png"
+                                    height="130"
+                                />
+                            </div>
+                        </Link>
+                        <div style={{ flexGrow: 1 }} />
                     </Toolbar>
                 </AppBar>
+
 
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
@@ -41,10 +58,20 @@ const styles = theme => ({
         display: "flex",
         width: "100%"
     },
-    logo: {
-        flexGrow: 1
+    circle: {
+        position: "absolute",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        left: 70,
+        top: -60,
+        padding: 10,
+        margin: 20,
+        width: 150,
+        height: 150
     },
     appBar: {
+        marginTop: 50,
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
@@ -60,14 +87,18 @@ const styles = theme => ({
     },
     content: {
         flexGrow: 1,
-        marginTop: 10,
+        marginLeft: 56,
+        [theme.breakpoints.up("sm")]: {
+            marginLeft: 72
+        },
+        marginTop: 20,
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing.unit * 3,
         transition: theme.transitions.create("margin", {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen
         })
-    }
+    },
 });
 
 NavBarLayout.propTypes = {
