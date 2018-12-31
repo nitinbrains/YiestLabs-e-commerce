@@ -34,12 +34,12 @@ class OrderDetails extends Component {
     }
 
     _renderSumamry() {
-        return ( 
+        return (
             <Grid container>
                 <Grid container spacing={24}>
                     <Grid item sm={3} container alignItems="center" >
                         <img className="image" src="/static/images/yeast.png"/>
-                    </Grid>  
+                    </Grid>
                     <Grid item sm={9} container alignItems="center">
                         <Grid item xs={12}>
                             <Typography variant="subtitle1" color="textPrimary">SUMMARY</Typography>
@@ -60,16 +60,16 @@ class OrderDetails extends Component {
                         <Grid item xs={12}>
                             <div style={{borderTop: "solid 1.5px",borderColor: "#CCCCCC"}}/>
                         </Grid>
-                    </Grid>          
+                    </Grid>
                 </Grid>
             </Grid>
         )
-        
+
     }
 
     _renderItems() {
         let items = [{},{},{},{}];
-        return ( 
+        return (
             <Grid item container spacing={8}>
                 <Grid container>
                     <Grid item xs={12}>
@@ -80,13 +80,13 @@ class OrderDetails extends Component {
                         <Grid container>
                             <Grid item xs={6} container>
                                 <div className="label">Item</div>
-                            </Grid>  
+                            </Grid>
                             <Grid item xs={3} container >
                                 <div className="label" style={{ margin: "0 auto" }}>Quantity</div>
                             </Grid>
                             <Grid item xs={3} container>
                                 <div className="label" style={{ margin: "0 auto" }}>Price</div>
-                            </Grid>          
+                            </Grid>
                         </Grid>
                     </Grid>
                     {
@@ -111,11 +111,11 @@ class OrderDetails extends Component {
                 </Grid>
             </Grid>
         )
-        
+
     }
 
     _renderPaymentShipping() {
-        return ( 
+        return (
             <Grid item container spacing={8}>
                 <Grid container>
                     <Grid item xs={12}>
@@ -144,7 +144,7 @@ class OrderDetails extends Component {
                     </Grid>
                 </Grid>
             </Grid>
-        ) 
+        )
     }
 
     render() {
@@ -170,8 +170,8 @@ class OrderDetails extends Component {
                                 {this._renderItems()}
                                 {this._renderPaymentShipping()}
                             </Grid>
-                            
-                            <Grid container dir="rtl">
+
+                            <Grid container item spacing={16} dir="rtl">
                                 <Grid item>
                                     <div>
                                         <FormButton  className="button-resend-invoice" text="Resend Invoice" onClick={() => {}}/>

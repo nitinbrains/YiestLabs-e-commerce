@@ -17,9 +17,47 @@ import CardHeader from "../components/UI/Card/CardHeader.jsx";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
-import PageContainer from '../components/UI/PageContainer';
+import PageContainer from "../components/UI/PageContainer";
+import Dialog from "@material-ui/core/Dialog";
+
+import ManageShipping from "../components/MyAccount/ManageShipping";
+import ManageBilling from "../components/MyAccount/ManageBilling";
+import ManageCards from "../components/MyAccount/ManageCards";
 
 class MyAccount extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            manageShipping: false,
+            manageBilling: false,
+            manageCards: false,
+        };
+    }
+
+    manageShipping = () => {
+        this.setState({ manageShipping: true });
+    };
+
+    closeShipping = () => {
+        this.setState({ manageShipping: false });
+    };
+
+    manageBilling = () => {
+        this.setState({ manageShipping: true });
+    };
+
+    closeBilling = () => {
+        this.setState({ manageShipping: false });
+    };
+
+    manageCards = () => {
+        this.setState({ manageCards: true });
+    };
+
+    closeCards = () => {
+        this.setState({ manageCards: false });
+    };
+
     render() {
         const { classes } = this.props;
 
@@ -178,7 +216,10 @@ class MyAccount extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Button style={{ marginTop: 10 }}>
+                                    <Button
+                                        onClick={this.manageShipping}
+                                        style={{ marginTop: 10 }}
+                                    >
                                         Manage Shipping Addresses
                                     </Button>
                                 </Grid>
@@ -283,12 +324,12 @@ class MyAccount extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={7}>
-                                    <Button style={{ marginTop: 10 }}>
+                                    <Button style={{ marginTop: 10 }} onClick={this.manageBilling}>
                                         Manage Billing Addresses
                                     </Button>
                                 </Grid>
                                 <Grid item xs={12} md={5}>
-                                    <Button style={{ marginTop: 10 }}>
+                                    <Button style={{ marginTop: 10 }} onClick={this.manageCards}>
                                         Manage Cards
                                     </Button>
                                 </Grid>
@@ -305,6 +346,18 @@ class MyAccount extends Component {
                             Confirm Account Changes
                         </Button>
                     </div>
+
+                    <Dialog open={this.state.manageShipping} maxWidth={'sm'} fullWidth>
+                        <ManageShipping closeDialog={this.closeShipping} />
+                    </Dialog>
+
+                    <Dialog open={this.state.manageBilling} maxWidth={'sm'} fullWidth>
+                        <ManageBilling closeDialog={this.closeBilling} />
+                    </Dialog>
+
+                    <Dialog open={this.state.manageCards} maxWidth={'sm'} fullWidth>
+                        <ManageCards closeDialog={this.closeCards} />
+                    </Dialog>
                 </PageContainer>
             </NavBarUserSearchDrawerLayout>
         );

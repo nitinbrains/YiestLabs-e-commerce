@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import NavBarLayout from "../components/NavBar/NavBarLayout";
 import Grid from "@material-ui/core/Grid";
 import Dialog from "@material-ui/core/Dialog";
 
@@ -41,7 +40,7 @@ class Calculator extends Component {
 
     render() {
         return (
-            <NavBarLayout>
+            <NavBarUserSearchDrawerLayout>
                 <div id="calculator-box">
                     <CalculatorForm openDialog={this.openDialog} />
 
@@ -55,7 +54,7 @@ class Calculator extends Component {
                         />
                     </Dialog>
                 </div>
-            </NavBarLayout>
+            </NavBarUserSearchDrawerLayout>
         );
     }
 }

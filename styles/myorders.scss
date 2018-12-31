@@ -6,10 +6,11 @@
     text-align: center;
   }
 	.main-block{
-		position: relative;
-    border: 1px solid $color-third-accent;
+	position: relative;
+    border: 1px solid #CCCCCC;
     margin: 10;
     padding: 20px;
+	margin-top: 14px;
 	}
 	.item-block {
 		margin-top: 5px;
@@ -18,9 +19,9 @@
 		position: absolute;
     top: -10px;
     left: 40px;
-    backgroundColor: #fff;
-    paddingLeft: 10;
-    paddingRight: 10;
+    background-color: #fff;
+    padding-left: 10px;
+    padding-right: 10px;
     font-weight: 600;
 	}
 	.block {
@@ -46,4 +47,3 @@
 		padding: 0px 10px 0px 10px !important;
 	}
 }
-

@@ -38,7 +38,7 @@ class MyOrders extends Component {
         return (
             <NavBarUserSearchDrawerLayout>
                 <PageContainer heading="MY ORDERS" id="cart-box">
-                    
+
                     <Grid container spacing={24}>
                         <Grid item xs={12}>
                             <div className={classes.card}>
@@ -99,7 +99,6 @@ class MyOrders extends Component {
                                                         style={{
                                                             backgroundColor:
                                                                 "#f28411",
-                                                            borderRadius: 7,
                                                             padding: 2,
                                                             textAlign: "center"
                                                         }}
@@ -118,7 +117,7 @@ class MyOrders extends Component {
                                 </Grid>
                             </div>
                         </Grid>
-                    </Grid>                   
+                    </Grid>
 
                     <Dialog
                         open={this.state.openDialog}
