@@ -41,7 +41,6 @@ class Calculator extends Component {
     render() {
         return (
             <NavBarUserSearchDrawerLayout>
-
                 <Grid container id="professional-homebrew-switch">
                     <Grid item xs={6} dir="rtl">
                         <FormButton 
@@ -58,7 +57,6 @@ class Calculator extends Component {
                         />
                     </Grid>
                 </Grid>
-
 
                 <div id="calculator-box">
                     <CalculatorForm openDialog={this.openDialog} />
