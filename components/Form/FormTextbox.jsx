@@ -30,6 +30,7 @@ class FormTextbox extends React.Component {
     return (
       <TextField
         id="standard-bare"
+        label={ this.props.showLabel ? this.props.label : '' }
         className={`form-textbox ${this.props.className || ''}`}
         value={this.state.value}
         margin="normal"

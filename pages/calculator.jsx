@@ -41,6 +41,25 @@ class Calculator extends Component {
     render() {
         return (
             <NavBarUserSearchDrawerLayout>
+
+                <Grid container id="professional-homebrew-switch">
+                    <Grid item xs={6} dir="rtl">
+                        <FormButton 
+                            className={`form-button-small-size ${this.props.calculator.type == 'Lab-grown' ?  '' : 'form-button-active'}`} 
+                            text="Lab-Grown" 
+                            onClick={() => this.props.changeType({type: 'Lab-grown'})}
+                        />
+                    </Grid>
+                    <Grid item xs={6} dir="ltr">
+                        <FormButton 
+                            className={`form-button-small-size ${this.props.calculator.type == 'Custom' ? '' : 'form-button-active'}`} 
+                            text="Custom" 
+                            onClick={() => this.props.changeType({type: 'Custom'})}
+                        />
+                    </Grid>
+                </Grid>
+
+
                 <div id="calculator-box">
                     <CalculatorForm openDialog={this.openDialog} />
 
@@ -50,7 +69,8 @@ class Calculator extends Component {
                         aria-labelledby="form-dialog-title"
                     >
                         <CalculatorResult
-                            closeDialog={this.closeDialog}
+                            // closeDialog={this.closeDialog}
+                            closeDialogMain={this.closeDialog}
                         />
                     </Dialog>
                 </div>

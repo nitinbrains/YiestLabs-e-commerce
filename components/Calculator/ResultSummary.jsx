@@ -39,7 +39,7 @@ class ResultSummary extends Component {
                             0.5L (Nano):
                         </Grid>
                         <Grid item xs={6} dir="rtl">
-                            {packs['0.5']}
+                            
                         </Grid>
                     </Grid>
                     <Grid container spacing={24} className="summary-others">
@@ -47,7 +47,7 @@ class ResultSummary extends Component {
                             1.5L:
                         </Grid>
                         <Grid item xs={6} dir="rtl">
-                            {packs['1.5']}
+                            
                         </Grid>
                     </Grid>
                     <Grid container spacing={24} className="summary-others">
@@ -55,7 +55,7 @@ class ResultSummary extends Component {
                             2L:
                         </Grid>
                         <Grid item xs={6} dir="rtl">
-                            {packs['2.0']}
+                            
                         </Grid>
                     </Grid>
                 </CardBody>

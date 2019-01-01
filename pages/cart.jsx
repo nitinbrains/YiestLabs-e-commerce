@@ -61,11 +61,13 @@ class Cart extends Component {
                             );
                         })}
                     </Grid>
+                    {/*
                     <Grid container spacing={24} dir="rtl">
                         <Grid item >
                             SUBTOTAL ${this.state.subTotal}
                         </Grid>
                     </Grid>
+                    */}
                     <Grid container spacing={24} dir="rtl" className="block-checkout-button">
                         <Grid item >
                             <Link prefetch href="/checkout">

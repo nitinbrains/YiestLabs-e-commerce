@@ -2,6 +2,16 @@
 	width: 80%;
 	margin: 0 auto;
 
+	.calculate-button {
+		width: 100%;
+	}
+
+	.fieldset {
+		margin-top: 20px;
+		width: 100%;
+		border: 1px solid $color-second-accent;
+	}
+
 	.button-grid{
 		margin-top: 20px;
 	}

@@ -144,7 +144,9 @@ class AddHomebrewContainer extends Component {
                       </Grid>
                     </Grid>
                     <Grid item xs={6} dir="rtl">
+                    {/*
                       $255
+                    */}
                     </Grid>
                   </Grid>
                 </Grid> 
@@ -157,7 +159,9 @@ class AddHomebrewContainer extends Component {
           <Grid item xs={6}>
             <Grid container spacing={24}>
               <Grid item xs={7}>
+              {/*
                 $500
+              */}
               </Grid>
               <Grid item xs={5} className="label-text">
                 TOTAL

@@ -107,6 +107,48 @@ export function * changeType(action) {
     }
 }
 
+/* ------------- custom fields ------------- */
+export function * changeStartingGravity(action) {
+    const { responseSuccess, responseFailure, data: { startingGravity }} = action;
+    try {
+        yield put(responseSuccess({ startingGravity }));
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}
+export function * changeTargetPitchRate(action) {
+    const { responseSuccess, responseFailure, data: { targetPitchRate }} = action;
+    try {
+        yield put(responseSuccess({ targetPitchRate }));
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}
+export function * changeVolume(action) {
+    const { responseSuccess, responseFailure, data: { volume }} = action;
+    try {
+        yield put(responseSuccess({ volume }));
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}
+export function * changeViability(action) {
+    const { responseSuccess, responseFailure, data: { viability }} = action;
+    try {
+        yield put(responseSuccess({ viability }));
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}
+export function * changeCellCount(action) {
+    const { responseSuccess, responseFailure, data: { cellCount }} = action;
+    try {
+        yield put(responseSuccess({ cellCount }));
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}
+/* ------------- custom fiels  ------------- */
 
 /* ------------- Business Logic ------------- */
 // Converting volume into BBL

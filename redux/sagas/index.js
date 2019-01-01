@@ -55,6 +55,11 @@ import {
     changeVolUnit,
     changeGravValue,
     changeGravUnit,
+    changeStartingGravity,
+    changeTargetPitchRate,
+    changeVolume,
+    changeViability,
+    changeCellCount
  } from './calculator';
 
 function * rootSaga () {
@@ -92,7 +97,13 @@ function * rootSaga () {
         takeLatest(calculatorTypes.CHANGE_VOL_VALUE_ATTEMPT, changeVolValue),
         takeLatest(calculatorTypes.CHANGE_VOL_UNIT_ATTEMPT, changeVolUnit),
         takeLatest(calculatorTypes.CHANGE_GRAV_VALUE_ATTEMPT, changeGravValue),
-        takeLatest(calculatorTypes.CHANGE_GRAV_UNIT_ATTEMPT, changeGravUnit)
+        takeLatest(calculatorTypes.CHANGE_GRAV_UNIT_ATTEMPT, changeGravUnit),
+        
+        takeLatest(calculatorTypes.CHANGE_STARTING_GRAVITY_ATTEMPT, changeStartingGravity),
+        takeLatest(calculatorTypes.CHANGE_TARGET_PITCH_RATE_ATTEMPT, changeTargetPitchRate),
+        takeLatest(calculatorTypes.CHANGE_VOLUME_ATTEMPT, changeVolume),
+        takeLatest(calculatorTypes.CHANGE_VIABILITY_ATTEMPT, changeViability),
+        takeLatest(calculatorTypes.CHANGE_CELL_COUNT_ATTEMPT, changeCellCount)
     ]);
 };
 

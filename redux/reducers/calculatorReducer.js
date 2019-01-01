@@ -14,6 +14,13 @@ const initialState = {
     tempVal: "less than 59",
     tempUnit: "F",
     unitVal: "",
+
+    startingGravity: "", 
+    targetPitchRate: "", 
+    volume: "", 
+    viability: "", 
+    cellCount: "",
+
     type: "Lab-grown",
     packSizeChart: {
 		'less than 59': {
@@ -185,5 +192,20 @@ export default createReducer(initialState, {
     }),
     [calculatorTypes.CHANGE_TYPE_SUCCESS]: (state, { data: { type } }) => ({
         type
+    }),
+    [calculatorTypes.CHANGE_STARTING_GRAVITY_SUCCESS]: (state, { data: { startingGravity } }) => ({
+       startingGravity
+    }),
+    [calculatorTypes.CHANGE_TARGET_PITCH_RATE_SUCCESS]: (state, { data: { targetPitchRate } }) => ({
+       targetPitchRate
+    }),
+    [calculatorTypes.CHANGE_VOLUME_SUCCESS]: (state, { data: { volume } }) => ({
+      volume
+    }),
+    [calculatorTypes.CHANGE_VIABILITY_SUCCESS]: (state, { data: { viability } }) => ({
+      viability
+    }),
+    [calculatorTypes.CHANGE_CELL_COUNT_SUCCESS]: (state, { data: { cellCount } }) => ({
+      cellCount
     }),
 });

@@ -14,23 +14,20 @@ import { calculatorActions } from '../../redux/actions/calculatorActions';
 class CalculatorResult extends Component {
     getResultItems = () => {
 
-        this.props.closeDialog();
-
-		const yeastStrains = this.props.inventory.items.filter(item => {
-			if([2, 3, 5, 6, 7, 8].indexOf(item.salesCategory) > -1 && !item.volID[6] && item.volID[2])
-			{
-				return true;
-			}
-			return false;
-		})
+    const yeastStrains = this.props.inventory.items.filter(item => {
+      if([2, 3, 5, 6, 7, 8].indexOf(item.salesCategory) > -1 && !item.volID[6] && item.volID[2])
+      {
+        return true;
+      }
+      return false;
+    })
 
         return yeastStrains.map((item, i) => {
-            return <ResultItem key={i} item={item} closeDialog={this.props.closeDialog} />;
+            return <ResultItem key={i} item={item} closeDialog={this.props.closeDialogMain} />;
         });
     };
 
     render() {
-
         return (
             <div id="calculator-result-box">
                 <ResultSummary />
@@ -44,8 +41,8 @@ class CalculatorResult extends Component {
 
 const mapStateToProps = (state) => {
     return {
-		calculator: state.calculator,
-		inventory: state.inventory
+    calculator: state.calculator,
+    inventory: state.inventory
     }
 }
 

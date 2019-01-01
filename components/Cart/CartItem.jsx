@@ -81,12 +81,13 @@ class CartItem extends Component {
                         <div className="code">WLP001</div>
                         <div className="name">{this.props.item.Name}</div> 
                     </Grid>
-                    <Grid className="detail" item xs={4}>
+                    <Grid className="detail" item xs={8}>
                         {this.props.item.Name}
                         <br/>
                         <br/>
                         <span className="sooner" onClick={this.props.openWantSoonerDialog}>Want this Strain sooner?</span>
                     </Grid>
+                    {/*
                     <Grid className="detail" item xs={2}>
                         <span className="heading">Packing</span>
                         <FormSelectbox
@@ -103,6 +104,7 @@ class CartItem extends Component {
                             onChange={() => {}}
                         />
                     </Grid>
+                    */}
                     <Grid className="detail" item xs={1}>
                         <span className="heading">Quantity</span>
                         <FormTextbox
@@ -123,9 +125,10 @@ class CartItem extends Component {
                     */}
                     </Grid>
                     <Grid className="detail" item xs={1}>
+                        {/*
                         <br/>
                         $255
-                        
+                        */}
                         <br/>
                         <FormButton
                             className="delete-button"

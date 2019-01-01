@@ -22,8 +22,155 @@ import { calculatorActions } from '../../redux/actions/calculatorActions';
 
 class CalculatorForm extends Component {
 
+
+    _renderLabGrownForm =  () => {
+      const  { 
+            calculator: {
+                volVal, volChoices, volUnit, volUnits, 
+                tempVal, tempChoices, tempUnit, tempUnits,
+                gravVal, gravChoices, gravUnit, gravUnits,
+                isHomebrew, type, typeChoices
+            }
+        } = this.props;
+        return (
+      <div>
+      <fieldset className="fieldset">
+                    <legend>Volume</legend>
+                    <Grid container spacing={24}>
+                      <Grid item xs={6}>
+              <FormSelectbox
+                label="Volume"
+                value={volVal}
+                options={volChoices[volUnit].map(choice => ({label: choice, value: choice}))}
+                                onChange={e => this.props.changeVolValue({volVal: e.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+              <FormSelectbox
+                value={volUnit}
+                options={volUnits.filter(unit => isHomebrew || !unit.forHomebrew)}
+                onChange={e => this.props.changeVolUnit({volUnit: e.target.value})}
+              />
+                        </Grid> 
+                    </Grid>
+                  </fieldset>
+
+                  <fieldset className="fieldset">
+                    <legend>Temperature</legend>
+                    <Grid container spacing={24}>
+                      <Grid item xs={6}>
+                            <FormSelectbox
+                                label="Temperature"
+                value={tempVal}
+                options={tempChoices[tempUnit].map(choice => ({label: choice, value: choice}))}
+                onChange={e => this.props.changeTempValue({tempVal: e.target.value})}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+              <FormSelectbox
+                value={tempUnit}
+                options={tempUnits}
+                onChange={e => this.props.changeTempUnit({tempUnit: e.target.value})}
+              />
+                        </Grid>
+                    </Grid>
+                  </fieldset>
+
+                  <fieldset className="fieldset">
+                    <legend>Gravity</legend>
+                    <Grid container spacing={24}>
+                      <Grid item xs={6}>
+              <FormSelectbox
+                label="Gravity"
+                value={gravVal}
+                options={gravChoices[gravUnit].map(choice => ({label: choice, value: choice}))}
+                onChange={e => this.props.changeGravValue({gravVal: e.target.value })}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+              <FormSelectbox
+                value={gravUnit}
+                options={gravUnits}
+                onChange={e => this.props.changeGravUnit({gravUnit: e.target.value})}
+              />
+                        </Grid>
+                    </Grid>
+                  </fieldset>
+
+                  </div>
+                  )
+    }
+
+     _renderCustomForm =  () => {
+      const  { 
+            calculator: {
+                volVal, volChoices, volUnit, volUnits, 
+                tempVal, tempChoices, tempUnit, tempUnits,
+                gravVal, gravChoices, gravUnit, gravUnits,
+                isHomebrew, type, typeChoices,
+
+                startingGravity, targetPitchRate, volume, viability, cellCount,
+
+            }
+        } = this.props;
+        return (
+      <div>
+      <Grid container spacing={24}>
+                    <Grid item xs={6}>
+                      <FormTextbox 
+                        label="Starting Gravity"
+                        showLabel={true}
+                        value={startingGravity}
+                        onChange={e => this.props.changeStartingGravity({startingGravity: e.target.value})}
+                      />
+                    </Grid>
+
+                    <Grid item xs={6}>
+                      <FormTextbox 
+                        label="Target Pitch Rate"
+                        showLabel={true}
+                        value={targetPitchRate}
+                        onChange={e => this.props.changeTargetPitchRate({targetPitchRate: e.target.value})}
+                      />
+                    </Grid>
+
+                    <Grid item xs={6}>
+                      <FormTextbox 
+                        label="Volume"
+                        showLabel={true}
+                        value={volume}
+                        onChange={e => this.props.changeVolume({volume: e.target.value})}
+                      />
+                    </Grid>
+
+                    <Grid item xs={6}>
+                      <FormTextbox 
+                        label="Viability"
+                        showLabel={true}
+                        value={viability}
+                        onChange={e => this.props.changeViability({viability: e.target.value})}
+                      />
+                    </Grid>
+
+                    <Grid item xs={6}>
+                      <FormTextbox 
+                        label="Target Cell Count"
+                        showLabel={true}
+                        value={cellCount}
+                        onChange={e => this.props.changeCellCount({cellCount: e.target.value})}
+                      />
+                    </Grid>
+
+                    
+                    </Grid>
+
+                  </div>
+                  )
+    }
+
+
     render() {
-		const  { 
+    const  { 
             calculator: {
                 volVal, volChoices, volUnit, volUnits, 
                 tempVal, tempChoices, tempUnit, tempUnits,
@@ -44,84 +191,37 @@ class CalculatorForm extends Component {
                     </Typography>
                 </CardHeader>
                 <CardBody>
-                    <Grid container spacing={24}>
-                        <Grid item xs={3}>
-							<FormSelectbox
-								label="Volume"
-								value={volVal}
-								options={volChoices[volUnit].map(choice => ({label: choice, value: choice}))}
-                                onChange={e => this.props.changeVolValue({volVal: e.target.value})}
-                            />
-                        </Grid>
-                        <Grid item xs={3}>
-							<FormSelectbox
-								value={volUnit}
-								options={volUnits.filter(unit => isHomebrew || !unit.forHomebrew)}
-								onChange={e => this.props.changeVolUnit({volUnit: e.target.value})}
-							/>
-                        </Grid>
-                        <Grid item xs={3}>
-							<FormSelectbox
-								label="Gravity"
-								value={gravVal}
-								options={gravChoices[gravUnit].map(choice => ({label: choice, value: choice}))}
-								onChange={e => this.props.changeGravValue({gravVal: e.target.value })}
-                            />
-                        </Grid>
-                        <Grid item xs={3}>
-							<FormSelectbox
-								value={gravUnit}
-								options={gravUnits}
-								onChange={e => this.props.changeGravUnit({gravUnit: e.target.value})}
-							/>
-                        </Grid>
+                  <Grid container spacing={24} className="button-grid">
+                    <Grid item xs={12}>
+                      <div className="homebrew-box">
+                        <FormCheckbox
+                            checked={isHomebrew}
+                            onChange={e => this.props.toggleHomebrew({isHomebrew: e.target.checked})}
+                        />
+                        <span>HOMEBREWER</span>
+                      </div>
                     </Grid>
+                  </Grid>
 
-                    <Grid container spacing={24}>
-                        <Grid item xs={3}>
-                            <FormSelectbox
-                                label="Temperature"
-								value={tempVal}
-								options={tempChoices[tempUnit].map(choice => ({label: choice, value: choice}))}
-								onChange={e => this.props.changeTempValue({tempVal: e.target.value})}
-                            />
-                        </Grid>
-                        <Grid item xs={3}>
-							<FormSelectbox
-								value={tempUnit}
-								options={tempUnits}
-								onChange={e => this.props.changeTempUnit({tempUnit: e.target.value})}
-							/>
-                        </Grid>
-                        <Grid item xs={3}>
-							<FormSelectbox
-								value={type}
-								options={typeChoices}
-								onChange={e => this.props.changeType({type: e.target.value})}
-							/>
-                        </Grid>
-                    </Grid>
+                  {
+                    type == 'Lab-grown' ? this._renderLabGrownForm() : this._renderCustomForm()
+                  }
 
-                    <Grid container spacing={24} className="button-grid">
-                        <Grid item xs={6}>
-                            <div className="homebrew-box">
-                                <FormCheckbox
-                                    checked={isHomebrew}
-                                    onChange={e => this.props.toggleHomebrew({isHomebrew: e.target.checked})}
-                                />
-                                <span>HOMEBREWER</span>
-                            </div>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <FormButton
-                                text="CALCULATE"
-                                onClick={e => {
-                                    this.props.calculatePacks();
-                                    this.props.openDialog();
-                                }}
-                            />
-                        </Grid>
-                    </Grid>
+                  <Grid container spacing={24} className="button-grid">
+                      <Grid item xs={6}>
+                          
+                      </Grid>
+                      <Grid item xs={6}>
+                          <FormButton
+                              text="CALCULATE"
+                              className="calculate-button"
+                              onClick={e => {
+                                  this.props.calculatePacks();
+                                  this.props.openDialog();
+                              }}
+                          />
+                      </Grid>
+                  </Grid>
                 </CardBody>
             </Card>
         );
