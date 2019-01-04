@@ -128,9 +128,7 @@ class ManageAddresses extends Component {
                                                 variant="contained"
                                                 color="primary"
                                                 onClick={() =>
-                                                    this.selectBillAddress(
-                                                        i
-                                                    )
+                                                    this.props.setBillAddress(i)
                                                 }
                                             >
                                                 Select Address

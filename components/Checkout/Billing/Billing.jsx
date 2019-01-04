@@ -29,6 +29,9 @@ import { userActions } from "../../../redux/actions/userActions";
 import ManageAddresses from "./ManageAddresses";
 import AddAddress from "./AddAddress";
 
+import ManageCards from "./ManageCards";
+import AddCard from "./AddCard";
+
 class Billing extends Component {
     constructor(props) {
         super(props);
@@ -41,6 +44,7 @@ class Billing extends Component {
             addCard: false,
             newAddress: false,
             manageAddresses: false,
+            manageCards: false,
             billing: {
                 attn: "",
                 addresee: "",
@@ -97,25 +101,22 @@ class Billing extends Component {
         this.setState({ openDialogAddress: false, newAddress: false });
     };
 
-    addNewAddress = () => {
-        this.props.addBillAddress(this.state.billing);
-        this.handleDialogAddressClose();
+    closeAddresses = () => {
+        this.setState({ manageAddresses: false });
     };
 
-    selectBillAddress = i => {
-        this.props.setBillAddress(i);
-        this.handleDialogAddressClose();
+    manageCards = () => {
+        this.setState({ manageCards: true });
     };
 
-    addNewCard = () => {
-        this.props.addCreditCard(this.state.card);
-        this.handleDialogCardClose();
+    closeCards = () => {
+        this.setState({ manageCards: false });
     };
 
-    selectCard = i => {
-        this.props.setCreditCard(i);
-        this.handleDialogCardClose();
-    };
+    addNewAddress() {
+        this.props.addShipAddress(this.state.billing);
+        this.handleDialogClose();
+    }
 
     render() {
         const { classes } = this.props;
@@ -131,938 +132,148 @@ class Billing extends Component {
 
                         {WLHelper.getPaymentTerm(this.state.terms) ==
                             "Credit Card" ||
-                        WLHelper.getPaymentTerm(this.state.terms) == "None" ? (
-                            this.props.user.selectedCard.id ? (
-                                <div>
-                                    <Typography>
-                                        {this.props.user.selectedCard.name}
-                                    </Typography>
-                                    <Typography>
-                                        {this.props.user.selectedCard.number}
-                                    </Typography>
-                                    <Typography>
-                                        {
-                                            this.props.user.selectedCard
-                                                .expireMonth
-                                        }{" "}
-                                        /{" "}
-                                        {
-                                            this.props.user.selectedCard
-                                                .expireYear
-                                        }
-                                    </Typography>
-                                    <Typography>
-                                        {this.props.user.selectedCard.type}
-                                    </Typography>
-                                    <Button
-                                        style={{ marginTop: 10 }}
-                                        onClick={this.handleDialogCardOpen}
-                                    >
-                                        Change Card
-                                    </Button>
-
-                                    <Dialog
-                                        open={this.state.openDialogCard}
-                                        onClose={this.handleDialogCardClose}
-                                        aria-labelledby="form-dialog-title"
-                                        fullWidth={true}
-                                        maxWidth={"md"}
-                                    >
-                                        <DialogTitle id="form-dialog-title">
-                                            Cards
-                                        </DialogTitle>
-                                        <DialogContent>
-                                            <div className={classes.close}>
-                                                <IconButton
-                                                    color="inherit"
-                                                    size="small"
-                                                    aria-label="Menu"
-                                                    onClick={
-                                                        this
-                                                            .handleDialogCardClose
-                                                    }
-                                                >
-                                                    <CloseIcon />
-                                                </IconButton>
-                                            </div>
-                                            <Grid container spacing={24}>
-                                                {this.props.user.cards.map(
-                                                    (card, i) => (
-                                                        <Grid
-                                                            item
-                                                            xs={12}
-                                                            sm={4}
-                                                        >
-                                                            <Paper
-                                                                className={classNames(
-                                                                    classes.paper,
-                                                                    this.props
-                                                                        .user
-                                                                        .selectedCard
-                                                                        .number ==
-                                                                        card.number &&
-                                                                        classes.selected
-                                                                )}
-                                                            >
-                                                                <Typography variant="body2">
-                                                                    {card.name}
-                                                                </Typography>
-                                                                <Typography>
-                                                                    {
-                                                                        card.number
-                                                                    }
-                                                                </Typography>
-                                                                <Typography>
-                                                                    {
-                                                                        card.expireMonth
-                                                                    }{" "}
-                                                                    /{" "}
-                                                                    {
-                                                                        card.expireYear
-                                                                    }
-                                                                </Typography>
-                                                                <Button
-                                                                    variant="contained"
-                                                                    color="primary"
-                                                                    className={
-                                                                        classes.button
-                                                                    }
-                                                                >
-                                                                    Select Card
-                                                                </Button>
-                                                            </Paper>
-                                                        </Grid>
-                                                    )
-                                                )}
-                                            </Grid>
-
-                                            {this.state.newCard ? (
-                                                <Grid container spacing={24}>
-                                                    <Grid item xs={12} md={6}>
-                                                        <TextField
-                                                            required
-                                                            id="cardName"
-                                                            label="Name on card"
-                                                            fullWidth
-                                                            value={
-                                                                this.state.card
-                                                                    .name
-                                                            }
-                                                            onChange={event =>
-                                                                this.setState({
-                                                                    card: {
-                                                                        ...this
-                                                                            .state
-                                                                            .card,
-                                                                        name:
-                                                                            event
-                                                                                .target
-                                                                                .value
-                                                                    }
-                                                                })
-                                                            }
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={12} md={6}>
-                                                        <TextField
-                                                            required
-                                                            id="cardNumber"
-                                                            label="Card number"
-                                                            fullWidth
-                                                            value={
-                                                                this.state.card
-                                                                    .number
-                                                            }
-                                                            onChange={event =>
-                                                                this.setState({
-                                                                    card: {
-                                                                        ...this
-                                                                            .state
-                                                                            .card,
-                                                                        number:
-                                                                            event
-                                                                                .target
-                                                                                .value
-                                                                    }
-                                                                })
-                                                            }
-                                                        />
-                                                    </Grid>
-
-                                                    <TextField
-                                                        select
-                                                        required
-                                                        id="expireMonth"
-                                                        name="expireMonth"
-                                                        label="Month"
-                                                        fullWidth
-                                                        autoComplete={
-                                                            this.currentMonth
-                                                        }
-                                                        value={
-                                                            this.state.card
-                                                                .expireMonth
-                                                        }
-                                                        onChange={event =>
-                                                            this.setState({
-                                                                card: {
-                                                                    ...this
-                                                                        .state
-                                                                        .card,
-                                                                    expireMonth:
-                                                                        event
-                                                                            .target
-                                                                            .value
-                                                                }
-                                                            })
-                                                        }
-                                                    >
-                                                        <MenuItem value="0">
-                                                            1
-                                                        </MenuItem>
-                                                        <MenuItem value="1">
-                                                            2
-                                                        </MenuItem>
-                                                        <MenuItem value="2">
-                                                            3
-                                                        </MenuItem>
-                                                        <MenuItem value="3">
-                                                            4
-                                                        </MenuItem>
-                                                        <MenuItem value="4">
-                                                            5
-                                                        </MenuItem>
-                                                        <MenuItem value="5">
-                                                            6
-                                                        </MenuItem>
-                                                        <MenuItem value="6">
-                                                            7
-                                                        </MenuItem>
-                                                        <MenuItem value="7">
-                                                            8
-                                                        </MenuItem>
-                                                        <MenuItem value="8">
-                                                            9
-                                                        </MenuItem>
-                                                        <MenuItem value="9">
-                                                            10
-                                                        </MenuItem>
-                                                        <MenuItem value="10">
-                                                            11
-                                                        </MenuItem>
-                                                        <MenuItem value="11">
-                                                            12
-                                                        </MenuItem>
-                                                    </TextField>
-
-                                                    <TextField
-                                                        select
-                                                        required
-                                                        id="expireYear"
-                                                        name="expireYear"
-                                                        label="Year"
-                                                        fullWidth
-                                                        autoComplete={
-                                                            this.currentYear
-                                                        }
-                                                        value={
-                                                            this.state.card
-                                                                .expireYear
-                                                        }
-                                                        onChange={event =>
-                                                            this.setState({
-                                                                card: {
-                                                                    ...this
-                                                                        .state
-                                                                        .card,
-                                                                    expireYear:
-                                                                        event
-                                                                            .target
-                                                                            .value
-                                                                }
-                                                            })
-                                                        }
-                                                    >
-                                                        {this.state.expirationDates.map(
-                                                            (date, i) => {
-                                                                return (
-                                                                    <MenuItem
-                                                                        key={i}
-                                                                        value={
-                                                                            date.year
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            date.year
-                                                                        }
-                                                                    </MenuItem>
-                                                                );
-                                                            }
-                                                        )}
-                                                    </TextField>
-                                                </Grid>
-                                            ) : (
+                            (WLHelper.getPaymentTerm(this.state.terms) ==
+                            "None" ? (
+                                this.props.user.selectedCard.id ? (
+                                    <div>
+                                        <Typography>
+                                            {this.props.user.selectedCard.name}
+                                        </Typography>
+                                        <Typography>
+                                            {
+                                                this.props.user.selectedCard
+                                                    .number
+                                            }
+                                        </Typography>
+                                        <Typography>
+                                            {
+                                                this.props.user.selectedCard
+                                                    .expireMonth
+                                            }{" "}
+                                            /{" "}
+                                            {
+                                                this.props.user.selectedCard
+                                                    .expireYear
+                                            }
+                                        </Typography>
+                                        <Typography>
+                                            {this.props.user.selectedCard.type}
+                                        </Typography>
+                                        <Button
+                                            style={{ marginTop: 10 }}
+                                            onClick={this.manageCards}
+                                        >
+                                            Change Card
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <Grid item xs={12}>
+                                        <AddCard />
+                                        <Grid
+                                            style={{ marginTop: 10 }}
+                                            container
+                                            justify="flex-end"
+                                        >
+                                            <Grid item>
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
-                                                    onClick={this.handleNewCard}
-                                                    className={classes.button}
+                                                    onClick={this.addNewCard}
                                                 >
-                                                    New Card
-                                                </Button>
-                                            )}
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button
-                                                onClick={
-                                                    this.handleDialogCardClose
-                                                }
-                                                color="primary"
-                                            >
-                                                Cancel
-                                            </Button>
-                                            {this.state.newCard && (
-                                                <Button
-                                                    onClick={() =>
-                                                        this.addNewCard()
-                                                    }
-                                                    color="primary"
-                                                >
-                                                    Confirm Changes
-                                                </Button>
-                                            )}
-                                        </DialogActions>
-                                    </Dialog>
-                                </div>
-                            ) : (
-                                <Grid item container spacing={24}>
-                                    <Grid item xs={12} md={6}>
-                                        <TextField
-                                            required
-                                            id="cardName"
-                                            label="Name on card"
-                                            fullWidth
-                                            value={this.state.card.name}
-                                            onChange={event =>
-                                                this.setState({
-                                                    card: {
-                                                        ...this.state.card,
-                                                        name: event.target.value
-                                                    }
-                                                })
-                                            }
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <TextField
-                                            required
-                                            id="cardNumber"
-                                            label="Card number"
-                                            fullWidth
-                                            value={this.state.card.number}
-                                            onChange={event =>
-                                                this.setState({
-                                                    card: {
-                                                        ...this.state.card,
-                                                        number:
-                                                            event.target.value
-                                                    }
-                                                })
-                                            }
-                                        />
-                                    </Grid>
-                                    <TextField
-                                        select
-                                        required
-                                        id="expireMonth"
-                                        name="expireMonth"
-                                        label="Month"
-                                        fullWidth
-                                        autoComplete={this.currentMonth}
-                                        value={this.state.card.expireMonth}
-                                        onChange={event =>
-                                            this.setState({
-                                                card: {
-                                                    ...this.state.card,
-                                                    expireMonth:
-                                                        event.target.value
-                                                }
-                                            })
-                                        }
-                                    >
-                                        <MenuItem value="0">1</MenuItem>
-                                        <MenuItem value="1">2</MenuItem>
-                                        <MenuItem value="2">3</MenuItem>
-                                        <MenuItem value="3">4</MenuItem>
-                                        <MenuItem value="4">5</MenuItem>
-                                        <MenuItem value="5">6</MenuItem>
-                                        <MenuItem value="6">7</MenuItem>
-                                        <MenuItem value="7">8</MenuItem>
-                                        <MenuItem value="8">9</MenuItem>
-                                        <MenuItem value="9">10</MenuItem>
-                                        <MenuItem value="10">11</MenuItem>
-                                        <MenuItem value="11">12</MenuItem>
-                                    </TextField>
-
-                                    <TextField
-                                        select
-                                        required
-                                        id="expireYear"
-                                        name="expireYear"
-                                        label="Year"
-                                        fullWidth
-                                        autoComplete={this.currentYear}
-                                        value={this.state.card.expireYear}
-                                        onChange={event =>
-                                            this.setState({
-                                                card: {
-                                                    ...this.state.card,
-                                                    expireYear:
-                                                        event.target.value
-                                                }
-                                            })
-                                        }
-                                    >
-                                        {this.state.expirationDates.map(
-                                            (date, i) => {
-                                                return (
-                                                    <MenuItem
-                                                        key={i}
-                                                        value={date.year}
-                                                    >
-                                                        {date.year}
-                                                    </MenuItem>
-                                                );
-                                            }
-                                        )}
-                                    </TextField>
-                                    <Grid item xs={12}>
-                                        <Button
-                                            onClick={() => this.addNewCard()}
-                                            color="primary"
-                                        >
-                                            Add New Card
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            )
-                        ) : (
-                            <div>
-                                <Typography variant="body2">NET10</Typography>
-                                <Typography>Your Payment</Typography>
-                                <Typography>Information</Typography>
-                                <Grid container spacing={24}>
-                                    <Grid item xs={12}>
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    color="primary"
-                                                    name="newCard"
-                                                    onChange={
-                                                        this.handleUseCard
-                                                    }
-                                                />
-                                            }
-                                            label="Use Credit Card"
-                                        />
-                                    </Grid>
-                                </Grid>
-
-                                {this.state.useCard &&
-                                    (this.props.user.selectedCard.id ? (
-                                        <div>
-                                            <Button
-                                                style={{ marginTop: 10 }}
-                                                onClick={
-                                                    this.handleDialogCardOpen
-                                                }
-                                            >
-                                                Select Card
-                                            </Button>
-                                            <Dialog
-                                                open={this.state.openDialogCard}
-                                                onClose={
-                                                    this.handleDialogCardClose
-                                                }
-                                                aria-labelledby="form-dialog-title"
-                                                fullWidth={true}
-                                                maxWidth={"md"}
-                                            >
-                                                <DialogTitle id="form-dialog-title">
-                                                    Cards
-                                                </DialogTitle>
-                                                <DialogContent>
-                                                    <div
-                                                        className={
-                                                            classes.close
-                                                        }
-                                                    >
-                                                        <IconButton
-                                                            color="inherit"
-                                                            size="small"
-                                                            aria-label="Menu"
-                                                            onClick={
-                                                                this
-                                                                    .handleDialogCardClose
-                                                            }
-                                                        >
-                                                            <CloseIcon />
-                                                        </IconButton>
-                                                    </div>
-                                                    <Grid
-                                                        container
-                                                        spacing={24}
-                                                    >
-                                                        {this.props.user.cards.map(
-                                                            (card, i) => {
-                                                                <Grid
-                                                                    item
-                                                                    xs={12}
-                                                                    sm={4}
-                                                                >
-                                                                    <Paper
-                                                                        className={classNames(
-                                                                            classes.paper,
-                                                                            this
-                                                                                .props
-                                                                                .user
-                                                                                .selectedCard
-                                                                                .number ==
-                                                                                card.number &&
-                                                                                classes.selected
-                                                                        )}
-                                                                    >
-                                                                        <Typography variant="body2">
-                                                                            {
-                                                                                card.number
-                                                                            }
-                                                                        </Typography>
-                                                                        <Typography variant="body2">
-                                                                            {
-                                                                                card.name
-                                                                            }
-                                                                        </Typography>
-                                                                        <Typography
-                                                                        >
-                                                                            {
-                                                                                card.number
-                                                                            }
-                                                                        </Typography>
-                                                                        <Typography
-                                                                        >
-                                                                            {
-                                                                                card.expireMonth
-                                                                            }{" "}
-                                                                            /{" "}
-                                                                            {
-                                                                                card.expireYear
-                                                                            }
-                                                                        </Typography>
-                                                                        <Button
-                                                                            variant="contained"
-                                                                            color="primary"
-                                                                            className={
-                                                                                classes.button
-                                                                            }
-                                                                        >
-                                                                            Select
-                                                                            Card
-                                                                        </Button>
-                                                                    </Paper>
-                                                                </Grid>;
-                                                            }
-                                                        )}
-                                                    </Grid>
-
-                                                    {this.state.newCard ? (
-                                                        <Grid
-                                                            container
-                                                            spacing={24}
-                                                        >
-                                                            <Grid
-                                                                item
-                                                                xs={12}
-                                                                md={6}
-                                                            >
-                                                                <TextField
-                                                                    required
-                                                                    id="cardName"
-                                                                    label="Name on card"
-                                                                    fullWidth
-                                                                    value={
-                                                                        this
-                                                                            .state
-                                                                            .card
-                                                                            .name
-                                                                    }
-                                                                    onChange={event =>
-                                                                        this.setState(
-                                                                            {
-                                                                                card: {
-                                                                                    ...this
-                                                                                        .state
-                                                                                        .card,
-                                                                                    name:
-                                                                                        event
-                                                                                            .target
-                                                                                            .value
-                                                                                }
-                                                                            }
-                                                                        )
-                                                                    }
-                                                                />
-                                                            </Grid>
-                                                            <Grid
-                                                                item
-                                                                xs={12}
-                                                                md={6}
-                                                            >
-                                                                <TextField
-                                                                    required
-                                                                    id="cardNumber"
-                                                                    label="Card number"
-                                                                    fullWidth
-                                                                    value={
-                                                                        this
-                                                                            .state
-                                                                            .card
-                                                                            .number
-                                                                    }
-                                                                    onChange={event =>
-                                                                        this.setState(
-                                                                            {
-                                                                                card: {
-                                                                                    ...this
-                                                                                        .state
-                                                                                        .card,
-                                                                                    number:
-                                                                                        event
-                                                                                            .target
-                                                                                            .value
-                                                                                }
-                                                                            }
-                                                                        )
-                                                                    }
-                                                                />
-                                                            </Grid>
-                                                            <TextField
-                                                                select
-                                                                required
-                                                                id="expireMonth"
-                                                                name="expireMonth"
-                                                                label="Month"
-                                                                fullWidth
-                                                                autoComplete={
-                                                                    this
-                                                                        .currentMonth
-                                                                }
-                                                                value={
-                                                                    this.state
-                                                                        .card
-                                                                        .expireMonth
-                                                                }
-                                                                onChange={event =>
-                                                                    this.setState(
-                                                                        {
-                                                                            card: {
-                                                                                ...this
-                                                                                    .state
-                                                                                    .card,
-                                                                                expireMonth:
-                                                                                    event
-                                                                                        .target
-                                                                                        .value
-                                                                            }
-                                                                        }
-                                                                    )
-                                                                }
-                                                            >
-                                                                <MenuItem value="0">
-                                                                    1
-                                                                </MenuItem>
-                                                                <MenuItem value="1">
-                                                                    2
-                                                                </MenuItem>
-                                                                <MenuItem value="2">
-                                                                    3
-                                                                </MenuItem>
-                                                                <MenuItem value="3">
-                                                                    4
-                                                                </MenuItem>
-                                                                <MenuItem value="4">
-                                                                    5
-                                                                </MenuItem>
-                                                                <MenuItem value="5">
-                                                                    6
-                                                                </MenuItem>
-                                                                <MenuItem value="6">
-                                                                    7
-                                                                </MenuItem>
-                                                                <MenuItem value="7">
-                                                                    8
-                                                                </MenuItem>
-                                                                <MenuItem value="8">
-                                                                    9
-                                                                </MenuItem>
-                                                                <MenuItem value="9">
-                                                                    10
-                                                                </MenuItem>
-                                                                <MenuItem value="10">
-                                                                    11
-                                                                </MenuItem>
-                                                                <MenuItem value="11">
-                                                                    12
-                                                                </MenuItem>
-                                                            </TextField>
-
-                                                            <TextField
-                                                                select
-                                                                required
-                                                                id="expireYear"
-                                                                name="expireYear"
-                                                                label="Year"
-                                                                fullWidth
-                                                                autoComplete={
-                                                                    this
-                                                                        .currentYear
-                                                                }
-                                                                value={
-                                                                    this.state
-                                                                        .card
-                                                                        .expireYear
-                                                                }
-                                                                onChange={event =>
-                                                                    this.setState(
-                                                                        {
-                                                                            card: {
-                                                                                ...this
-                                                                                    .state
-                                                                                    .card,
-                                                                                expireYear:
-                                                                                    event
-                                                                                        .target
-                                                                                        .value
-                                                                            }
-                                                                        }
-                                                                    )
-                                                                }
-                                                            >
-                                                                {this.state.expirationDates.map(
-                                                                    (
-                                                                        date,
-                                                                        i
-                                                                    ) => {
-                                                                        return (
-                                                                            <MenuItem
-                                                                                key={
-                                                                                    i
-                                                                                }
-                                                                                value={
-                                                                                    date.year
-                                                                                }
-                                                                            >
-                                                                                {
-                                                                                    date.year
-                                                                                }
-                                                                            </MenuItem>
-                                                                        );
-                                                                    }
-                                                                )}
-                                                            </TextField>
-                                                            <Grid item xs={12}>
-                                                                <Button
-                                                                    onClick={() =>
-                                                                        this.addNewCard()
-                                                                    }
-                                                                    color="primary"
-                                                                >
-                                                                    Add New Card
-                                                                </Button>
-                                                            </Grid>
-                                                        </Grid>
-                                                    ) : (
-                                                        <Button
-                                                            variant="contained"
-                                                            color="primary"
-                                                            onClick={
-                                                                this
-                                                                    .handleNewCard
-                                                            }
-                                                            className={
-                                                                classes.button
-                                                            }
-                                                        >
-                                                            New Card
-                                                        </Button>
-                                                    )}
-                                                </DialogContent>
-                                                <DialogActions>
-                                                    <Button
-                                                        onClick={
-                                                            this
-                                                                .handleDialogCardClose
-                                                        }
-                                                        color="primary"
-                                                    >
-                                                        Cancel
-                                                    </Button>
-                                                    {this.state.newCard && (
-                                                        <Button
-                                                            onClick={
-                                                                this
-                                                                    .handleDialogCardClose
-                                                            }
-                                                            color="primary"
-                                                        >
-                                                            Confirm Changes
-                                                        </Button>
-                                                    )}
-                                                </DialogActions>
-                                            </Dialog>
-                                        </div>
-                                    ) : (
-                                        <Grid container spacing={24}>
-                                            <Grid item xs={12} md={6}>
-                                                <TextField
-                                                    required
-                                                    id="cardName"
-                                                    label="Name on card"
-                                                    fullWidth
-                                                    value={this.state.card.name}
-                                                    onChange={event =>
-                                                        this.setState({
-                                                            card: {
-                                                                ...this.state
-                                                                    .card,
-                                                                name:
-                                                                    event.target
-                                                                        .value
-                                                            }
-                                                        })
-                                                    }
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} md={6}>
-                                                <TextField
-                                                    required
-                                                    id="cardNumber"
-                                                    label="Card number"
-                                                    fullWidth
-                                                    value={
-                                                        this.state.card.number
-                                                    }
-                                                    onChange={event =>
-                                                        this.setState({
-                                                            card: {
-                                                                ...this.state
-                                                                    .card,
-                                                                number:
-                                                                    event.target
-                                                                        .value
-                                                            }
-                                                        })
-                                                    }
-                                                />
-                                            </Grid>
-                                            <TextField
-                                                select
-                                                required
-                                                id="expireMonth"
-                                                name="expireMonth"
-                                                label="Month"
-                                                fullWidth
-                                                autoComplete={this.currentMonth}
-                                                value={
-                                                    this.state.card.expireMonth
-                                                }
-                                                onChange={event =>
-                                                    this.setState({
-                                                        card: {
-                                                            ...this.state.card,
-                                                            expireMonth:
-                                                                event.target
-                                                                    .value
-                                                        }
-                                                    })
-                                                }
-                                            >
-                                                <MenuItem value="0">1</MenuItem>
-                                                <MenuItem value="1">2</MenuItem>
-                                                <MenuItem value="2">3</MenuItem>
-                                                <MenuItem value="3">4</MenuItem>
-                                                <MenuItem value="4">5</MenuItem>
-                                                <MenuItem value="5">6</MenuItem>
-                                                <MenuItem value="6">7</MenuItem>
-                                                <MenuItem value="7">8</MenuItem>
-                                                <MenuItem value="8">9</MenuItem>
-                                                <MenuItem value="9">
-                                                    10
-                                                </MenuItem>
-                                                <MenuItem value="10">
-                                                    11
-                                                </MenuItem>
-                                                <MenuItem value="11">
-                                                    12
-                                                </MenuItem>
-                                            </TextField>
-
-                                            <TextField
-                                                select
-                                                required
-                                                id="expireYear"
-                                                name="expireYear"
-                                                label="Year"
-                                                fullWidth
-                                                autoComplete={this.currentYear}
-                                                value={
-                                                    this.state.card.expireYear
-                                                }
-                                                onChange={event =>
-                                                    this.setState({
-                                                        card: {
-                                                            ...this.state.card,
-                                                            expireYear:
-                                                                event.target
-                                                                    .value
-                                                        }
-                                                    })
-                                                }
-                                            >
-                                                {this.state.expirationDates.map(
-                                                    (date, i) => {
-                                                        return (
-                                                            <MenuItem
-                                                                key={i}
-                                                                value={
-                                                                    date.year
-                                                                }
-                                                            >
-                                                                {date.year}
-                                                            </MenuItem>
-                                                        );
-                                                    }
-                                                )}
-                                            </TextField>
-                                            <Grid item xs={12}>
-                                                <Button
-                                                    onClick={() =>
-                                                        this.addNewCard()
-                                                    }
-                                                    color="primary"
-                                                >
-                                                    Add New Card
+                                                    Add Card
                                                 </Button>
                                             </Grid>
                                         </Grid>
-                                    ))}
-                            </div>
-                        )}
+                                    </Grid>
+                                )
+                            ) : (
+                                <div>
+                                    <Typography variant="body2">
+                                        NET10
+                                    </Typography>
+                                    <Typography>Your Payment</Typography>
+                                    <Typography>Information</Typography>
+                                    <Grid container spacing={24}>
+                                        <Grid item xs={12}>
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        color="primary"
+                                                        name="newCard"
+                                                        onChange={
+                                                            this.handleUseCard
+                                                        }
+                                                    />
+                                                }
+                                                label="Use Credit Card"
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                    {this.props.user.selectedCard.id ? (
+                                        <div>
+                                            <Typography>
+                                                {
+                                                    this.props.user.selectedCard
+                                                        .name
+                                                }
+                                            </Typography>
+                                            <Typography>
+                                                {
+                                                    this.props.user.selectedCard
+                                                        .number
+                                                }
+                                            </Typography>
+                                            <Typography>
+                                                {
+                                                    this.props.user.selectedCard
+                                                        .expireMonth
+                                                }{" "}
+                                                /{" "}
+                                                {
+                                                    this.props.user.selectedCard
+                                                        .expireYear
+                                                }
+                                            </Typography>
+                                            <Typography>
+                                                {
+                                                    this.props.user.selectedCard
+                                                        .type
+                                                }
+                                            </Typography>
+                                            <Button
+                                                style={{ marginTop: 10 }}
+                                                onClick={this.manageCards}
+                                            >
+                                                Change Card
+                                            </Button>
+                                        </div>
+                                    ) : (
+                                        <Grid item xs={12}>
+                                            <AddCard />
+                                            <Grid
+                                                style={{ marginTop: 10 }}
+                                                container
+                                                justify="flex-end"
+                                            >
+                                                <Grid item>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        onClick={
+                                                            this.addNewCard
+                                                        }
+                                                    >
+                                                        Add Card
+                                                    </Button>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                    )}
+                                </div>
+                            ))}
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <Typography
-                            variant="h6"
-                            color="textPrimary"
-                        >
+                        <Typography variant="h6" color="textPrimary">
                             BILLING ADDRESS
                         </Typography>
 
@@ -1100,10 +311,26 @@ class Billing extends Component {
                                 >
                                     Change Billing Address
                                 </Button>
-
                             </div>
                         ) : (
-                            <AddAddress />
+                            <Grid item xs={12}>
+                                <AddAddress />
+                                <Grid
+                                    style={{ marginTop: 10 }}
+                                    container
+                                    justify="flex-end"
+                                >
+                                    <Grid item>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => this.addNewAddress()}
+                                        >
+                                            Add Address
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
                         )}
                     </Grid>
                 </Grid>
@@ -1114,6 +341,10 @@ class Billing extends Component {
                     fullWidth
                 >
                     <ManageAddresses closeDialog={this.closeAddresses} />
+                </Dialog>
+
+                <Dialog open={this.state.manageCards} maxWidth={"sm"} fullWidth>
+                    <ManageCards closeDialog={this.closeCards} />
                 </Dialog>
             </React.Fragment>
         );
