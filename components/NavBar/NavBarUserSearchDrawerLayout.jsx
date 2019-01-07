@@ -21,7 +21,7 @@ import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import { SideBarItems } from "./SideBarItems";
+import SideBarItems from "./SideBarItems";
 import SearchBarItems from "./SearchBarItems";
 
 import { userActions } from "../../redux/actions/userActions";
@@ -165,7 +165,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                         className={classes.toolbar}
                         style={{ marginTop: 35 }}
                     />
-                    <List>{SideBarItems}</List>
+                    <List><SideBarItems/></List>
                     <Divider />
                 </Drawer>
 

@@ -1,4 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
 import Link from "next/link";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -6,9 +8,16 @@ import ListItemText from "@material-ui/core/ListItemText";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import FeedbackIcon from "@material-ui/icons/Feedback";
+import PowerSettingsNew from "@material-ui/icons/PowerSettingsNew";
+import { withStyles } from "@material-ui/core/styles";
 
-export const SideBarItems = (
-    <div>
+import { userActions } from '../../redux/actions/userActions';
+
+
+class SideBarItems extends Component {
+    render() {
+        return(
+            <div>
         <Link prefetch href="/myaccount">
             <ListItem button>
                 <ListItemIcon>
@@ -34,5 +43,26 @@ export const SideBarItems = (
             </ListItemIcon>
             <ListItemText primary="Give Feedback" />
         </ListItem>
+
+        <ListItem button onClick={() => {this.props.userLogout()}}>
+            <ListItemIcon>
+                <PowerSettingsNew />
+            </ListItemIcon>
+            <ListItemText primary="Log Out" />
+        </ListItem>
     </div>
-);
+        )
+    }
+}
+
+const styles = theme => ({})
+
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    }
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators(userActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(SideBarItems));
