@@ -22,7 +22,12 @@ import { calculatorActions } from '../../redux/actions/calculatorActions';
 
 class CalculatorForm extends Component {
 
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      showError: false
+    };
+  }
     _renderLabGrownForm =  () => {
       const  { 
             calculator: {
@@ -117,7 +122,9 @@ class CalculatorForm extends Component {
       <div>
       <Grid container spacing={24}>
                     <Grid item xs={6}>
-                      <FormTextbox 
+                      <FormTextbox
+                        required={ this.props.messages.messages.length > 0 && startingGravity == '' ? true : false }
+                        error={ this.props.messages.messages.length > 0 && startingGravity == '' ? true : false }
                         label="Starting Gravity"
                         showLabel={true}
                         value={startingGravity}
@@ -126,7 +133,9 @@ class CalculatorForm extends Component {
                     </Grid>
 
                     <Grid item xs={6}>
-                      <FormTextbox 
+                      <FormTextbox
+                        required={ this.props.messages.messages.length > 0 && targetPitchRate == '' ? true : false }
+                        error={ this.props.messages.messages.length > 0 && targetPitchRate == '' ? true : false }
                         label="Target Pitch Rate"
                         showLabel={true}
                         value={targetPitchRate}
@@ -136,6 +145,8 @@ class CalculatorForm extends Component {
 
                     <Grid item xs={6}>
                       <FormTextbox 
+                        required={ this.props.messages.messages.length > 0 && volume == '' ? true : false }
+                        error={ this.props.messages.messages.length > 0 && volume == '' ? true : false }
                         label="Volume"
                         showLabel={true}
                         value={volume}
@@ -144,7 +155,9 @@ class CalculatorForm extends Component {
                     </Grid>
 
                     <Grid item xs={6}>
-                      <FormTextbox 
+                      <FormTextbox
+                        required={ this.props.messages.messages.length > 0 && viability == '' ? true : false }
+                        error={ this.props.messages.messages.length > 0 && viability == '' ? true : false } 
                         label="Viability"
                         showLabel={true}
                         value={viability}
@@ -153,7 +166,9 @@ class CalculatorForm extends Component {
                     </Grid>
 
                     <Grid item xs={6}>
-                      <FormTextbox 
+                      <FormTextbox
+                        required={ this.props.messages.messages.length > 0 && cellCount == '' ? true : false }
+                        error={ this.props.messages.messages.length > 0 && cellCount == '' ? true : false } 
                         label="Target Cell Count"
                         showLabel={true}
                         value={cellCount}
@@ -175,7 +190,7 @@ class CalculatorForm extends Component {
                 volVal, volChoices, volUnit, volUnits, 
                 tempVal, tempChoices, tempUnit, tempUnits,
                 gravVal, gravChoices, gravUnit, gravUnits,
-                isHomebrew, type, typeChoices
+                isHomebrew, type, typeChoices, messages
             }
         } = this.props;
 
@@ -190,6 +205,29 @@ class CalculatorForm extends Component {
                         CALCULATOR
                     </Typography>
                 </CardHeader>
+
+                {this.props.messages.messages.map((message, i) => (
+                    <Alert message={message} key={i} index={i} />
+                ))}
+                
+
+                <Grid container id="professional-homebrew-switch">
+                  <Grid item xs={6} dir="rtl">
+                    <FormButton 
+                      className={`form-button-small-size ${this.props.calculator.type == 'Lab-grown' ?  '' : 'form-button-active'}`} 
+                      text="Lab-Grown" 
+                      onClick={() => this.props.changeType({type: 'Lab-grown'})}
+                    />
+                  </Grid>
+                  <Grid item xs={6} dir="ltr">
+                    <FormButton 
+                      className={`form-button-small-size ${this.props.calculator.type == 'Custom' ? '' : 'form-button-active'}`} 
+                      text="Custom" 
+                      onClick={() => this.props.changeType({type: 'Custom'})}
+                    />
+                  </Grid>
+                </Grid>
+                
                 <CardBody>
                   <Grid container spacing={24} className="button-grid">
                     <Grid item xs={12}>
@@ -216,8 +254,8 @@ class CalculatorForm extends Component {
                               text="CALCULATE"
                               className="calculate-button"
                               onClick={e => {
-                                  this.props.calculatePacks();
-                                  this.props.openDialog();
+                                this.props.calculatePacks();
+                                this.props.openDialog();
                               }}
                           />
                       </Grid>
@@ -230,7 +268,8 @@ class CalculatorForm extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        calculator: state.calculator
+        calculator: state.calculator,
+        messages: state.messages
     }
 }
 

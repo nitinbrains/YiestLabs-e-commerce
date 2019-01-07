@@ -109,7 +109,7 @@ class Store extends Component {
 
         if(!this.props.store.items.length)
         {
-            this.props.getInventory();
+            // this.props.getInventory();
         }
 
 

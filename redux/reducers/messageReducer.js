@@ -2,7 +2,8 @@ import { createReducer } from '../../helpers/reduxHelpers';
 import { messageTypes } from '../actions/messageActions';
 
 const initialState = {
-    messages: []
+    messages: [],
+    networkRequestError: false
 };
 
 const getType = (message, error) => {
@@ -28,5 +29,11 @@ export default createReducer(initialState, {
     }),
     [messageTypes.HIDE_MESSAGE_ATTEMPT]: ({ messages }, { data: idx }) => ({
         messages: messages.filter((message, index) => index !== idx)
+    }),
+    [messageTypes.SHOW_NETWORK_ERROR_ATTEMPT]: (state, { data }) => ({
+        networkRequestError: data 
+    }),
+    [messageTypes.HIDE_NETWORK_ERROR_ATTEMPT]: (state ) => ({
+        networkRequestError: false
     }),
 });

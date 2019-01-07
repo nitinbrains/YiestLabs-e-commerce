@@ -25,6 +25,8 @@ import SideBarItems from "./SideBarItems";
 import SearchBarItems from "./SearchBarItems";
 
 import { userActions } from "../../redux/actions/userActions";
+import { messageActions } from "../../redux/actions/messageActions";
+import SimpleSnackbar from "../Form/SimpleSnackbar";
 
 class NavBarUserSearchDrawerLayout extends Component {
     state = {
@@ -50,9 +52,14 @@ class NavBarUserSearchDrawerLayout extends Component {
         this.setState({ openSearchBar: false });
     };
 
+    componentWillUnmount() {
+        if( this.props.messages.networkRequestError != false ){
+            this.props.hideNetworkError()
+        }
+    }
+
     render() {
         const { children, classes, theme } = this.props;
-
         return (
             <div className={classes.root}>
                 <div
@@ -218,6 +225,10 @@ class NavBarUserSearchDrawerLayout extends Component {
                     </List>
                     <Divider />
                 </Drawer>
+                <SimpleSnackbar
+                    show={this.props.messages.networkRequestError == false ? false : true}
+                    message={this.props.messages.networkRequestError && this.props.messages.networkRequestError.message || ''}
+                />
             </div>
         );
     }
@@ -344,11 +355,12 @@ NavBarUserSearchDrawerLayout.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    user: state.user
+    user: state.user,
+    messages: state.messages
 });
 
 const mapDispatchToProps = dispatch =>
-    bindActionCreators({ ...userActions }, dispatch);
+    bindActionCreators({ ...userActions, ...messageActions }, dispatch);
 
 export default connect(
     mapStateToProps,

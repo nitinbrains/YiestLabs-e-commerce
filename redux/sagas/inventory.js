@@ -10,18 +10,23 @@ import * as api from '../../services/inventory';
 export function * getInventory (action) {
     const { responseSuccess, responseFailure, data: { search } } = action;
     try {
-        const { res: { items }, error } = yield call(api.getInventory);
-
-        if(items) {
-            var category = 1;
-            const itemsToShow = filterItems(items, category, null, false)
-            yield put(responseSuccess({ items, itemsToShow, category }));
-        } else if (error) {
-            throw error;
+        yield put(messageActions.hideNetworkError({}))
+        const { res, err } = yield call(api.getInventory);        
+        if( err ) {
+            throw err
+        } else {
+            if( res && res.items ){
+                const items = res.items;
+                var category = 1;
+                const itemsToShow = filterItems(items, category, null, false)
+                yield put(responseSuccess({ items, itemsToShow, category })); 
+                yield put(messageActions.hideNetworkError())   
+            }
         }
     } catch (error) {
         yield put(responseFailure(error));
-        yield put(messageActions.displayMessage({ title: 'Error', error: error }));
+        // yield put(messageActions.displayMessage({ title: 'Error', error: error }));
+        yield put(messageActions.showNetworkError(error))
     }
 };
 

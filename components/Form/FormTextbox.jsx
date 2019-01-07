@@ -29,6 +29,8 @@ class FormTextbox extends React.Component {
     const { classes } = this.props;
     return (
       <TextField
+        required={ this.props.required || false }
+        error={ this.props.error || false }
         id="standard-bare"
         label={ this.props.showLabel ? this.props.label : '' }
         className={`form-textbox ${this.props.className || ''}`}

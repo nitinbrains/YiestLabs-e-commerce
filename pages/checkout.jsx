@@ -18,6 +18,8 @@ import Shipping from "../components/Checkout/Shipping/Shipping";
 import Billing from "../components/Checkout/Billing/Billing";
 import Items from "../components/Checkout/Items/Items";
 import Review from "../components/Checkout/Review/Review";
+import isLoggedUser from "../hocs/isLoggedUser";
+import cartHasItems from '../hocs/cartHasItems';
 
 // custom
 import Alert from "../components/UI/Alert";
@@ -208,4 +210,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles, { withTheme: true })(Checkout));
+)(withStyles(styles, { withTheme: true })( isLoggedUser(cartHasItems(Checkout))));

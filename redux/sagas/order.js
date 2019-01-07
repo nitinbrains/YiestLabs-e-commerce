@@ -1,6 +1,7 @@
 import { take, call, put, cancelled, takeEvery, all, fork, select  } from 'redux-saga/effects';
 import * as api from '../../services/order';
 import { orderActions } from '../actions/orderActions';
+import { messageActions } from '../actions/messageActions';
 
 import {
     changeShippingOption,
@@ -23,20 +24,20 @@ export function * prepareOrder(action) {
         const cart = yield select(state => state.cart);
         const user = yield select(state => state.user);
 
-        var { res: order, error } = yield call(api.prepareOrder, {
+        var { res: order, err } = yield call(api.prepareOrder, {
             calcShip: true,
             userID: user.id,
             shipMethod: user.shipmethod,
             items: cart.items
         });
-
-        if (error) {
-            yield put(responseFailure(error));
+        if (err) {
+            throw err
         } else {
             yield put(responseSuccess(initOrder(order, user)));
         }
     } catch (error) {
         yield put(responseFailure(error));
+        yield put(messageActions.showNetworkError(error))
     }
 };
 

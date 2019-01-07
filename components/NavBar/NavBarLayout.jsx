@@ -1,12 +1,21 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Link from "next/link";
+import { messageActions } from "../../redux/actions/messageActions";
+import SimpleSnackbar from "../Form/SimpleSnackbar";
 
 class NavBarLayout extends Component {
+    componentWillUnmount() {
+        if( this.props.messages.networkRequestError != false ){
+            this.props.hideNetworkError()
+        }
+    }
     render() {
         const { children, classes, theme } = this.props;
 
@@ -43,6 +52,12 @@ class NavBarLayout extends Component {
                     <div className={classes.toolbar} />
                     {children}
                 </main>
+
+                <SimpleSnackbar
+                    show={this.props.messages.networkRequestError == false ? false : true}
+                    message={this.props.messages.networkRequestError && this.props.messages.networkRequestError.message || ''}
+                />
+
             </div>
         );
     }
@@ -106,4 +121,15 @@ NavBarLayout.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(NavBarLayout);
+
+const mapStateToProps = state => ({
+    messages: state.messages
+});
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators({ ...messageActions }, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(NavBarLayout));

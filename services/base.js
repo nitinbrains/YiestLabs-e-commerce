@@ -45,19 +45,24 @@ const checkResponseStatus = (res) => {
     switch (status) {
       case 400:
         // BAD REQUEST
-        throw new ResourceError(errors.AMBIGUOUS_ERROR.text, status, error);
+        // throw new ResourceError(errors.AMBIGUOUS_ERROR.text, status, error);
+        throw new ResourceError( 'network request fails', status, error);
       case 401:
         // UNAUTHORIZED
-        throw new ResourceError(errors.UNAUTHORIZED_ERROR.text, status, error);
+        // throw new ResourceError(errors.UNAUTHORIZED_ERROR.text, status, error);
+        throw new ResourceError('network request fails', status, error);
       case 403:
         // FORBIDDEN
-        throw new ResourceError(errors.UNAUTHORIZED_ERROR.text, status, error);
+        // throw new ResourceError(errors.UNAUTHORIZED_ERROR.text, status, error);
+        throw new ResourceError('network request fails', status, error);
       case 404:
         // NOT FOUND
-        throw new ResourceError(errors.PAGE_DOES_NOT_EXIST.text, status, error);
+        // throw new ResourceError(errors.PAGE_DOES_NOT_EXIST.text, status, error);
+        throw new ResourceError('network request fails', status, error);
       default:
         // Anything else
-        throw new ResourceError(errors.AMBIGUOUS_ERROR.text, status, error);
+        // throw new ResourceError(errors.AMBIGUOUS_ERROR.text, status, error);
+        throw new ResourceError('network request fails', status, error);
     }
   }
   return res;
@@ -89,6 +94,6 @@ export const requestWrapper = async (url, data = {}, token, jsonRequest = true) 
     checkResponseStatus(response);
     return response.ok ? { res: responseBody } : { err: responseBody };
   } catch (error) {
-    return response && response.ok ? { res: { code: response.status } } : { err: {} };
+    return response && response.ok ? { res: { code: response.status } } : { err: error };
   }
 }

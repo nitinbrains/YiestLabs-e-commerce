@@ -3,16 +3,44 @@ import _ from 'lodash';
 
 import { calculatorActions } from '../actions/calculatorActions';
 import { inventoryActions } from '../actions/inventoryActions';
+import { messageActions } from '../actions/messageActions';
 
 export function * calculatePacks(action) {
     const { responseSuccess, responseFailure } = action;
 
     try {
         const calculator = yield select(state => state.calculator);
-        const packs = calculate(calculator);
-        const total = getTotalAmount(packs);
+        let doProcess = true;
 
-        yield put(responseSuccess({ packs, total }));
+        if( calculator.type === 'Custom' ){
+            if( calculator.startingGravity == ""){
+                doProcess = false;
+                yield put(messageActions.displayMessage({ title: 'Error', error: "Starting Gravity is empty!" }));
+            }
+            if( calculator.targetPitchRate  == "" ){
+                doProcess = false;
+                yield put(messageActions.displayMessage({ title: 'Error', error: "Target Pitch Rate is empty!" }));
+            }
+            if( calculator.volume  == "" ){
+                doProcess = false;
+                yield put(messageActions.displayMessage({ title: 'Error', error: "Volume is empty!" }));   
+            }
+            if( calculator.viability  == "" ){
+                doProcess = false;
+                yield put(messageActions.displayMessage({ title: 'Error', error: "Viability is empty!" }));
+            }
+            if( calculator.cellCount  == "" ){
+                doProcess = false;
+                yield put(messageActions.displayMessage({ title: 'Error', error: "Target Cell Count is empty!" }));
+            }
+        }
+
+        if( doProcess ){
+            const packs = calculate(calculator);
+            const total = getTotalAmount(packs);
+
+            yield put(responseSuccess({ packs, total }));
+        }
 
     } catch(error) {
         yield put(responseFailure(error));
