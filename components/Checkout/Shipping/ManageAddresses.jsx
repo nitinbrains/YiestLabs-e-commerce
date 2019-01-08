@@ -85,39 +85,53 @@ class ManageAddresses extends Component {
                                             <Typography>
                                                 {this.props.user.shipping.attn}
                                             </Typography>
+                                        </Grid>
+                                        <Grid item>
                                             <Typography>
                                                 {
                                                     this.props.user.shipping
                                                         .addressee
                                                 }
                                             </Typography>
+                                        </Grid>
+                                        <Grid item>
                                             <Typography>
                                                 {
                                                     this.props.user.shipping
                                                         .address1
                                                 }
                                             </Typography>
+                                        </Grid>
+                                        <Grid item>
                                             <Typography>
                                                 {
                                                     this.props.user.shipping
                                                         .address2
                                                 }
                                             </Typography>
+                                        </Grid>
+                                        <Grid item>
                                             <Typography>
                                                 {
                                                     this.props.user.shipping
                                                         .address3
                                                 }
                                             </Typography>
+                                        </Grid>
+                                        <Grid item>
                                             <Typography>
                                                 {this.props.user.shipping.city}
                                             </Typography>
+                                        </Grid>
+                                        <Grid item>
                                             <Typography>
                                                 {
                                                     this.props.user.shipping
                                                         .countryid
                                                 }
                                             </Typography>
+                                        </Grid>
+                                        <Grid item>
                                             <Typography>
                                                 {this.props.user.shipping.zip}
                                             </Typography>

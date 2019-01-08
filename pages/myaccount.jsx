@@ -19,6 +19,10 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
 import PageContainer from "../components/UI/PageContainer";
 import Dialog from "@material-ui/core/Dialog";
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import ManageShipping from "../components/MyAccount/ManageShipping";
 import ManageBilling from "../components/MyAccount/ManageBilling";
@@ -31,6 +35,8 @@ class MyAccount extends Component {
             manageShipping: false,
             manageBilling: false,
             manageCards: false,
+            shipFrom: 1,
+            confirmDialog: false
         };
     }
 
@@ -56,6 +62,16 @@ class MyAccount extends Component {
 
     closeCards = () => {
         this.setState({ manageCards: false });
+    };
+
+    handleShipFrom = event => {
+        this.setState({ shipFrom: event.target.value });
+        if (event.target.value == 4) {
+            this.setState({ confirmDialog: true });
+        }
+    };
+    closeConfirmDialog = () => {
+        this.setState({ confirmDialog: false });
     };
 
     render() {
@@ -109,9 +125,18 @@ class MyAccount extends Component {
                                     id="select-shipfrom"
                                     select
                                     fullWidth
+                                    onChange={this.handleShipFrom}
+                                    value={this.state.shipFrom}
                                     label="Ship From"
                                 >
-                                    <MenuItem>WhiteLabs USA</MenuItem>
+                                    <MenuItem value={1}>
+                                        WL United States
+                                    </MenuItem>
+                                    <MenuItem value={2}>WL Copenhagen</MenuItem>
+                                    <MenuItem value={3}>WL Hong Kong</MenuItem>
+                                    <MenuItem value={4}>
+                                        Create WL Account
+                                    </MenuItem>
                                 </TextField>
                             </Grid>
                         </Grid>
@@ -324,12 +349,18 @@ class MyAccount extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={7}>
-                                    <Button style={{ marginTop: 10 }} onClick={this.manageBilling}>
+                                    <Button
+                                        style={{ marginTop: 10 }}
+                                        onClick={this.manageBilling}
+                                    >
                                         Manage Billing Addresses
                                     </Button>
                                 </Grid>
                                 <Grid item xs={12} md={5}>
-                                    <Button style={{ marginTop: 10 }} onClick={this.manageCards}>
+                                    <Button
+                                        style={{ marginTop: 10 }}
+                                        onClick={this.manageCards}
+                                    >
                                         Manage Cards
                                     </Button>
                                 </Grid>
@@ -347,16 +378,48 @@ class MyAccount extends Component {
                         </Button>
                     </div>
 
-                    <Dialog open={this.state.manageShipping} maxWidth={'sm'} fullWidth>
+                    <Dialog
+                        open={this.state.manageShipping}
+                        maxWidth={"sm"}
+                        fullWidth
+                    >
                         <ManageShipping closeDialog={this.closeShipping} />
                     </Dialog>
 
-                    <Dialog open={this.state.manageBilling} maxWidth={'sm'} fullWidth>
+                    <Dialog
+                        open={this.state.manageBilling}
+                        maxWidth={"sm"}
+                        fullWidth
+                    >
                         <ManageBilling closeDialog={this.closeBilling} />
                     </Dialog>
 
-                    <Dialog open={this.state.manageCards} maxWidth={'sm'} fullWidth>
+                    <Dialog
+                        open={this.state.manageCards}
+                        maxWidth={"sm"}
+                        fullWidth
+                    >
                         <ManageCards closeDialog={this.closeCards} />
+                    </Dialog>
+                    <Dialog open={this.state.confirmDialog}>
+                        <DialogTitle id="alert-dialog-title">
+                            {"Do you wish to create a new WL Account?"}
+                        </DialogTitle>
+                        <DialogActions>
+                            <Button
+                                onClick={this.closeConfirmDialog}
+                                color="primary"
+                            >
+                                No
+                            </Button>
+                            <Button
+                                onClick={this.closeConfirmDialog}
+                                color="primary"
+                                autoFocus
+                            >
+                                Yes
+                            </Button>
+                        </DialogActions>
                     </Dialog>
                 </PageContainer>
             </NavBarUserSearchDrawerLayout>
