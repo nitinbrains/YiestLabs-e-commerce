@@ -9,6 +9,7 @@ import NavBarLayout from "../components/NavBar/NavBarLayout";
 import Card from "../components/UI/Card/Card.jsx";
 import CardBody from "../components/UI/Card/CardBody.jsx";
 import CardHeader from "../components/UI/Card/CardHeader.jsx";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
@@ -83,7 +84,6 @@ class Checkout extends Component {
                 {this.props.message.messages.map((message, i) => (
                     <Alert message={message} index={i} />
                 ))}
-
                 <div className={classes.container}>
                     <div className={classes.title}>
                         <Typography variant="h4" color="secondary">
@@ -95,8 +95,16 @@ class Checkout extends Component {
                         className={classes.stepper}
                     >
                         {steps.map(label => (
-                            <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
+                            <Step key={label} 
+                            className={ label === 'Items' && classes.step}
+                             >
+                                <StepLabel>
+                                 {label}
+                                 {label === 'Items' && this.props.checkout.isLoading &&
+                                 <CircularProgress size={10} />
+                                 } 
+                                 </StepLabel>
+                                
                             </Step>
                         ))}
                     </Stepper>
@@ -172,6 +180,9 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit * -4,
         marginRight: theme.spacing.unit * -4
     },
+    step:{
+        width:'98px'
+    },
     paper: {
         padding: theme.spacing.unit * 2,
         [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
@@ -200,7 +211,8 @@ const mapStateToProps = state => {
     return {
         user: state.user,
         cart: state.cart,
-        message: state.messages
+        message: state.messages,
+        checkout: state.checkout
     };
 };
 
