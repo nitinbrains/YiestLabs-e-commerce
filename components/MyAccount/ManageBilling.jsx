@@ -17,6 +17,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
+import { userActions } from '../../redux/actions/userActions';
+
 import AddAddress from "./AddAddress";
 
 class ManageBilling extends Component {
@@ -36,7 +38,10 @@ class ManageBilling extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, user } = this.props;
+
+        console.log('user', user);
+        
         return (
             <React.Fragment>
                 <DialogContent id="my-order-details">
@@ -51,73 +56,45 @@ class ManageBilling extends Component {
                         </IconButton>
                     </div>
                     <Grid style={{ padding: 10 }} container spacing={24}>
-                        <Grid item sm={4} xs={12}>
-                            <div className={classes.addressBoxSelected}>
-                                <Grid item container xs spacing={8}>
-                                    <Grid item>
-                                        <Typography>Address Line 1</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>Address Line 2</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>Address Line 3</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>City</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>ZIP Code</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>Country</Typography>
-                                    </Grid>
+                        {user.otherAddresses.map(address => (
+                            <Grid item
+                                key={address.id} 
+                                ksm={4} 
+                                xs={12}
+                            >
+                                <div className={classes.addressBoxSelected}>
+                                    <Grid item container xs spacing={8}>
+                                        <Grid item>
+                                            <Typography>{address.address1}</Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography>{address.address2}</Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography>{address.address3}</Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography>{address.city}</Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography>{address.zip}</Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography>{address.countryid}</Typography>
+                                        </Grid>
 
-                                    <Grid item>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                        >
-                                            Select Address
-                                        </Button>
+                                        <Grid item>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                            >
+                                                Select Address
+                                            </Button>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </div>
-                        </Grid>
-
-                        <Grid item sm={4} xs={12}>
-                            <div className={classes.addressBox}>
-                                <Grid item container xs spacing={8}>
-                                    <Grid item>
-                                        <Typography>Address Line 1</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>Address Line 2</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>Address Line 3</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>City</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>ZIP Code</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>Country</Typography>
-                                    </Grid>
-
-                                    <Grid item>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                        >
-                                            Select Address
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            </div>
-                        </Grid>
+                                </div>
+                            </Grid>
+                        ))}
 
                         {!this.state.newAddress ? (
                             <Grid item xs={12}>
@@ -168,4 +145,16 @@ ManageBilling.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(ManageBilling);
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    };
+};
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(userActions, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(ManageBilling));

@@ -17,7 +17,7 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-import Utils from "../../../lib/Utils";
+import WLHelper from "../../../lib/WLHelper";
 import { orderActions } from "../../../redux/actions/orderActions";
 
 class ItemPanel extends Component {
@@ -82,7 +82,7 @@ class ItemPanel extends Component {
                                     variant="body1"
                                     style={{ display: "inline-block" }}
                                 >
-                                    {Utils.getWarehouse(
+                                    {WLHelper.getWarehouse(
                                         this.props.item.Warehouse
                                     )}
                                 </Typography>

@@ -40,9 +40,6 @@ import HomebrewCard from '../components/Store/Homebrew/HomebrewCard';
 import FormButton from '../components/Form/FormButton';
 import AddHomebrewContainer from '../components/Store/Homebrew/AddHomebrewContainer';
 
-
-
-import User from '../lib/User'
 import withInventory from "../hocs/inventory";
 
 class Store extends Component {
@@ -104,16 +101,7 @@ class Store extends Component {
             version: "2.3.7"
         };
 
-        userInfo = User.setUser(userInfo);
         this.props.setUserInfo({ userInfo });
-
-        if(!this.props.store.items.length)
-        {
-            this.props.getInventory();
-        }
-
-
-        // this.props.userLogin({ username: 'above', password: 'test' });
     }
 
     handleClickItem = (item) => {
