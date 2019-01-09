@@ -68,6 +68,11 @@ export default createReducer(initialState, {
     [userTypes.SET_USER_INFO_SUCCESS]: (state, { data: userInfo }) => ({
         ...userInfo
     }),
+    [userTypes.UPDATE_USER_INFO_SUCCESS]: (state, { data:{ email, phone, subsidiary } }) => ({
+        email: email,
+        phone: phone,
+        subsidiary: subsidiary
+    }),
     [userTypes.SET_CREDIT_CARD_SUCCESS]: (state, { data: { creditCard} }) => ({
         selectedCard: creditCard
     }),

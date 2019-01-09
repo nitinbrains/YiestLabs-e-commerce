@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import update from "immutability-helper";
 
+
 import PropTypes from "prop-types";
 import Link from "next/link";
 import Avatar from "@material-ui/core/Avatar";
@@ -33,6 +34,7 @@ import ManageCards from "../components/MyAccount/ManageCards";
 
 import { userActions } from '../redux/actions/userActions';
 
+
 class MyAccount extends Component {
     constructor(props) {
         super(props);
@@ -47,21 +49,66 @@ class MyAccount extends Component {
         };
     }
 
+    createDialogContent = (shipFrom) => {
+
+        let newAccount;
+        switch(shipFrom){
+            case -2:
+                newAccount = "USA";
+                break;
+            case -5:
+                newAccount = "Hong Kong";
+                break;
+            case -7:
+                newAccout = "Copenhagen";
+                break;
+            default:
+                return;
+        }
+
+        return (
+            <Dialog open={this.state.confirmDialog}>
+                <DialogTitle id="alert-dialog-title">
+                    {`Do you wish to create a new WL ${newAccount} Account?`}
+                </DialogTitle>
+                <DialogActions>
+                    <Button
+                        onClick={this.closeConfirmDialog}
+                        color="primary"
+                    >
+                        No
+                    </Button>
+                    <Button
+                        onClick={this.closeConfirmDialog}
+                        color="primary"
+                        autoFocus
+                    >
+                        Yes
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        )
+    }
+
     componentDidMount() {
-        const { user: { id, email, phone, shipping, billing, selectedCard, subsidiaryOptions }} = this.props;
+        const { user: { id, email, phone, shipping, billing, selectedCard, subsidiary, subsidiaryOptions }} = this.props;
         this.setState({
             id,
-            email,
+            email, 
             phone,
             shipping,
             billing,
             selectedCard,
-            subsidiaryOptions
+            shipFrom: subsidiaryOptions[0].value,
+            subsidiaryOptions,
+            subsidiary
         });
     }
 
-    selectAccount = (value) => {
-        console.log('value', value);
+    selectAccount = (e) => {
+        this.setState({
+            subsidiary : e.target.value
+        })
     }
 
     manageShipping = () => {
@@ -90,18 +137,36 @@ class MyAccount extends Component {
 
     handleShipFrom = event => {
         this.setState({ shipFrom: event.target.value });
-        if (event.target.value == 4) {
+        if (event.target.value > 0) {
             this.setState({ confirmDialog: true });
         }
     };
+
     closeConfirmDialog = () => {
         this.setState({ confirmDialog: false });
     };
 
+    handleSubmit = () => {
+        let billing = this.state.billing;
+        let shipping = this.state.shipping;
+        if(billing.attn != ''){
+            this.props.setBillAddress(billing)
+        }
+        if(shipping.attn != ''){
+            this.props.setShipAddress(shipping)
+        }
+        if(this.props.user.email != this.state.email || this.props.user.phone != this.state.phone || this.props.user.subsidiary != this.state.subsidiary ){
+            let data = {
+                email: this.state.email,
+                phone: this.state.phone,
+                subsidiary: this.state.subsidiary
+            }
+            this.props.updateUserInfo(data);
+        }
+    }
+
     render() {
         const { classes, user } = this.props;
-
-        console.log('user', user);
 
         return (
             <NavBarUserSearchDrawerLayout>
@@ -127,6 +192,7 @@ class MyAccount extends Component {
                             <Grid item xs={3}>
                                 <TextField required
                                     value={this.state.email}
+                                    InputLabelProps={{ shrink: this.state.email != '' }}
                                     onChange={e => this.setState({email: e.target.value})}
                                     variant="outlined"
                                     id="email"
@@ -138,6 +204,8 @@ class MyAccount extends Component {
                             <Grid item xs={3}>
                                 <TextField required
                                     value={this.state.phone}
+                                    InputLabelProps={{ shrink: this.state.phone != '' }}
+                                    onChange={e => this.setState({phone: e.target.value})}
                                     variant="outlined"
                                     id="phone"
                                     name="phone"
@@ -154,16 +222,10 @@ class MyAccount extends Component {
                                     onChange={this.handleShipFrom}
                                     value={this.state.shipFrom}
                                     label="Ship From"
-                                    onChange={this.selectAccount}
                                 >
-                                    <MenuItem value={1}>
-                                        WL United States
-                                    </MenuItem>
-                                    <MenuItem value={2}>WL Copenhagen</MenuItem>
-                                    <MenuItem value={3}>WL Hong Kong</MenuItem>
-                                    <MenuItem value={4}>
-                                        Create WL Account
-                                    </MenuItem>
+                                    {user.subsidiaryOptions.map((option, i) => (
+                                        <MenuItem value={option.value}>{option.label}</MenuItem>
+                                    ))}
                                 </TextField>
                             </Grid>
                         </Grid>
@@ -191,10 +253,11 @@ class MyAccount extends Component {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField required
-                                        onChange={e => {console.log('e', e); update(this.state.shipping, {id: {$set: e.target.value}})}}
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, attn: e.target.value}})}
                                         value={this.state.shipping.attn}
+                                        InputLabelProps={{ shrink: this.state.shipping.attn != '' }}
                                         id="attention"
-                                        name="attention"
+                                        name="attn"
                                         label="Attention"
                                         fullWidth
                                         autoComplete="attention"
@@ -203,6 +266,8 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField required
                                         value={this.state.shipping.addressee}
+                                        InputLabelProps={{ shrink: this.state.shipping.addressee != '' }}
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, addressee: e.target.value}})}
                                         id="addressee"
                                         name="addressee"
                                         label="Addressee"
@@ -213,6 +278,8 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField required
                                         value={this.state.shipping.address1}
+                                        InputLabelProps={{ shrink: this.state.shipping.address1 != '' }}
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, address1: e.target.value}})}
                                         id="address1"
                                         name="address1"
                                         label="Address line 1"
@@ -223,8 +290,10 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField
                                         value={this.state.shipping.address2}
-                                        id="addiress2"
-                                        name="addiress2"
+                                        InputLabelProps={{ shrink: this.state.shipping.address2 != '' }}
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, address2: e.target.value}})}
+                                        id="address2"
+                                        name="address2"
                                         label="Address line 2"
                                         fullWidth
                                         autoComplete="address-line2"
@@ -233,8 +302,10 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField
                                         value={this.state.shipping.address3}
+                                        InputLabelProps={{ shrink: this.state.shipping.address3 != '' }}
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, address3: e.target.value}})}
                                         id="address3"
-                                        name="addiress3"
+                                        name="address3"
                                         label="Address line 3"
                                         fullWidth
                                         autoComplete="address-line3"
@@ -243,6 +314,8 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField required
                                         value={this.state.shipping.city}
+                                        InputLabelProps={{ shrink: this.state.shipping.city != '' }}
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, city: e.target.value}})}
                                         id="city"
                                         name="city"
                                         label="City"
@@ -253,7 +326,10 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField required
                                         value={this.state.shipping.zip}
+                                        InputLabelProps={{ shrink: this.state.shipping.zip != '' }}
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, zip: e.target.value}})}
                                         id="zip"
+                                        type='number'
                                         name="zip"
                                         label="Zip / Postal code"
                                         fullWidth
@@ -263,8 +339,10 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField required
                                         value={this.state.shipping.countryid}
+                                        InputLabelProps={{ shrink: this.state.shipping.countryid != '' }}
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, countryid: e.target.value}})}
                                         id="country"
-                                        name="country"
+                                        name="countryid"
                                         label="Country"
                                         fullWidth
                                         autoComplete="country"
@@ -303,8 +381,10 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField required
                                         value={this.state.billing.attn}
+                                        InputLabelProps={{ shrink: this.state.billing.attn != '' }}
+                                        onChange={e => this.setState({billing: {...this.state.billing, attn: e.target.value}})}
                                         id="attention"
-                                        name="attention"
+                                        name="attn"
                                         label="Attention"
                                         fullWidth
                                         autoComplete="attention"
@@ -313,6 +393,8 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField required
                                         value={this.state.billing.addressee}
+                                        InputLabelProps={{ shrink: this.state.billing.addressee != '' }}
+                                        onChange={e => this.setState({billing: {...this.state.billing, addressee: e.target.value}})}
                                         id="addressee"
                                         name="addressee"
                                         label="Addressee"
@@ -323,6 +405,8 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField required
                                         value={this.state.billing.address1}
+                                        InputLabelProps={{ shrink: this.state.billing.address1 != '' }}
+                                        onChange={e => this.setState({billing: {...this.state.billing, address1: e.target.value}})}
                                         id="address1"
                                         name="address1"
                                         label="Address line 1"
@@ -333,8 +417,10 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField
                                         value={this.state.billing.address2}
-                                        id="addiress2"
-                                        name="addiress2"
+                                        InputLabelProps={{ shrink: this.state.billing.address2 != '' }}
+                                        onChange={e => this.setState({billing: {...this.state.billing, address2: e.target.value}})}
+                                        id="address2"
+                                        name="address2"
                                         label="Address line 2"
                                         fullWidth
                                         autoComplete="address-line2"
@@ -343,8 +429,10 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField
                                         value={this.state.billing.address3}
-                                        id="addiress3"
-                                        name="addiress3"
+                                        InputLabelProps={{ shrink: this.state.billing.address3 != '' }}
+                                        onChange={e => this.setState({billing: {...this.state.billing, address3: e.target.value}})}
+                                        id="address3"
+                                        name="address3"
                                         label="Address line 3"
                                         fullWidth
                                         autoComplete="address-line3"
@@ -353,6 +441,8 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField required
                                         value={this.state.billing.city}
+                                        InputLabelProps={{ shrink: this.state.billing.city != '' }}
+                                        onChange={e => this.setState({billing: {...this.state.billing, city: e.target.value}})}
                                         id="city"
                                         name="city"
                                         label="City"
@@ -363,6 +453,8 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField required
                                         value={this.state.billing.zip}
+                                        InputLabelProps={{ shrink: this.state.billing.zip != '' }}
+                                        onChange={e => this.setState({billing: {...this.state.billing, zip: e.target.value}})}
                                         id="zip"
                                         name="zip"
                                         label="Zip / Postal code"
@@ -373,8 +465,10 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <TextField required
                                         value={this.state.billing.countryid}
+                                        InputLabelProps={{ shrink: this.state.billing.countryid != '' }}
+                                        onChange={e => this.setState({billing: {...this.state.billing, countryid: e.target.value}})}
                                         id="country"
-                                        name="country"
+                                        name="countryid"
                                         label="Country"
                                         fullWidth
                                         autoComplete="country"
@@ -405,6 +499,7 @@ class MyAccount extends Component {
                             variant="contained"
                             color="primary"
                             className={classes.button}
+                            onClick={this.handleSubmit}
                         >
                             Confirm Account Changes
                         </Button>
@@ -433,26 +528,7 @@ class MyAccount extends Component {
                     >
                         <ManageCards closeDialog={this.closeCards} />
                     </Dialog>
-                    <Dialog open={this.state.confirmDialog}>
-                        <DialogTitle id="alert-dialog-title">
-                            {"Do you wish to create a new WL Account?"}
-                        </DialogTitle>
-                        <DialogActions>
-                            <Button
-                                onClick={this.closeConfirmDialog}
-                                color="primary"
-                            >
-                                No
-                            </Button>
-                            <Button
-                                onClick={this.closeConfirmDialog}
-                                color="primary"
-                                autoFocus
-                            >
-                                Yes
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
+                    {this.createDialogContent(this.state.shipFrom)}
                 </PageContainer>
             </NavBarUserSearchDrawerLayout>
         );
