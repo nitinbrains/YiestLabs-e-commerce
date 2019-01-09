@@ -1,20 +1,25 @@
 import { put, call, select } from 'redux-saga/effects';
+import _isNumber from 'lodash/isNumber';
 
 import { userActions, userTypes } from '../actions/userActions';
 import { messageActions } from '../actions/messageActions';
 import * as api from '../../services/users';
 
-import Utils from '../../lib/Utils';
+import WLHelper from '../../lib/WLHelper';
 
 export function * loginUser (action) {
     const { responseSuccess, responseFailure, data: { username, password } } = action;
     try {
         const { res: userID } = yield call(api.login, username, password);
         const { res: userInfo } = yield call(api.getUserInfo, userID);
-        userInfo.shipMethods = Utils.shipMethodGroup(userInfo);
+
+        const { subsidiary, shipmethod, shipping: { countryid } } = userInfo;
+        userInfo.shipMethods = WLHelper.shipMethodGroup(subsidiary, shipmethod, countryid);
+        userInfo.subsidiaryOptions = loadSubsidiaryOptions(userInfo);
+
         yield put(responseSuccess(userInfo));
         if (userInfo.cards.length > 0) {
-            yield put(userActions.setCreditCard(0));
+            yield put(userActions.setCreditCard());
         }
         yield put(messageActions.displayMessage({
             title: 'Authorization',
@@ -26,10 +31,20 @@ export function * loginUser (action) {
 };
 
 export function * setUserInfo(action) {
-    const { responseSuccess, data: { userInfo } } = action;
+    const { responseSuccess, responseFailure, data: { userInfo } } = action;
     try {
+
+        const { subsidiary, shipmethod, shipping: { countryid } } = userInfo;
+        userInfo.shipMethods = WLHelper.shipMethodGroup(subsidiary, shipmethod, countryid);
+        userInfo.subsidiaryOptions = loadSubsidiaryOptions(userInfo);
+
         yield put(responseSuccess(userInfo));
-    } catch (err) {
+
+        if (userInfo.cards.length > 0) {
+            yield put(userActions.setCreditCard(userInfo));
+        }
+
+        } catch (err) {
         yield put(responseFailure(err));
     }
 }
@@ -38,7 +53,9 @@ export function * setCreditCard(action) {
     const { responseSuccess, responseFailure, data } = action;
     try {
         const user = yield select(state => state.user);
-        yield put(responseSuccess(setCC(user, data)));
+        const creditCard = setCC(user, data);
+
+        yield put(responseSuccess({creditCard}));
     } catch(error) {
         yield put(responseFailure(error));
     }
@@ -96,7 +113,7 @@ export function * setBillAddress(action) {
 export function * addBillAddress(action) {
     const { responseSuccess, responseFailure, data: address } = action;
     try {
-        var user = yield select(state => state.user);
+        let user = yield select(state => state.user);
         const { otherAddresses, billing } = addBill(user, address);
         yield put(responseSuccess({ otherAddresses, billing }));
     } catch(error) {
@@ -110,20 +127,18 @@ export function * addBillAddress(action) {
 function setCC(user, index) {
 
     // get default or first card in users account if card not specified
-    const newUser = {
-        ...user
-    };
-    if (index) {
-        newUser.selectedCard = user.cards[index];
+    let creditCard
+    if (_isNumber(index)) {
+        creditCard = user.cards[index];
     } else if (user.cards.length > 0) {
         const defaultCard = user.cards.find(c => c.default);
         if (defaultCard) {
-            newUser.selectedCard = defaultCard;
+            creditCard = defaultCard;
         } else {
-            newUser.selectedCard = user.cards[0];
+            creditCard = user.cards[0];
         }
     }
-    return newUser;
+    return creditCard;
 }
 
 function addShip(user, address) {
@@ -143,8 +158,8 @@ function addBill(user, address) {
 
 function addCC(user, card) {
 
-    var expireDate = new Date(card.expireYear, card.expireMonth, 1, 0, 0, 0, 0);
-    var today = new Date();
+    let expireDate = new Date(card.expireYear, card.expireMonth, 1, 0, 0, 0, 0);
+    let today = new Date();
 
     if(!card.name) {
         throw {message: 'Please enter a name for the credit card', code: 0};
@@ -162,4 +177,41 @@ function addCC(user, card) {
     user.cards.push(card);
     user.selectedCard = card;
     return { creditCard: user.selectedCard, cards: user.cards };
+}
+
+function loadSubsidiaryOptions(user) {
+
+    if(!user) return;
+
+    let subsidiaryOptions = [];
+    let cph = false, hk = false;
+
+    for (let i = 0; i < user.connectedaccounts.length; i++)
+    {
+        let value = parseInt(user.connectedaccounts[i].subsidiaryid);
+
+        if(value == 5)
+        {
+            hk = true;
+        }
+        else if(value == 7)
+        {
+            cph = true;
+        }
+
+        let label = WLHelper.getSubsidiaryLabel(value);
+        subsidiaryOptions.push({label: label, value: value});
+    }
+
+    if(!cph)
+    {
+        subsidiaryOptions.push({label: 'Create WL Copenhagen Account', value: -7});
+    }
+
+    if(!hk)
+    {
+        subsidiaryOptions.push({label: 'Create WL Hong Kong Account', value: -5});
+    }
+
+    return subsidiaryOptions;
 }

@@ -17,9 +17,9 @@ export default (Component) => {
             }
 
             render () {
-                if (this.props.store.isLoading) {
-                    return <LoadingScreen visible={this.props.store.isLoading}/> 
-                }
+                // if (this.props.store.isLoading) {
+                //     return <LoadingIndicator visible={this.props.store.isLoading}/> 
+                // }
                 return <Component {...this.props}/>
             }
         }

@@ -2,7 +2,7 @@ import { take, call, put, cancelled, takeEvery, all, fork, select  } from 'redux
 import { messageActions } from '../actions/messageActions';
 import { inventoryActions } from '../actions/inventoryActions';
 
-import Utils from '../../lib/Utils';
+import WLHelper from '../../lib/WLHelper';
 import SalesLib from '../../lib/SalesLib';
 
 import * as api from '../../services/inventory';
@@ -29,7 +29,6 @@ export function * getInventory (action) {
         yield put(messageActions.showNetworkError(error))
     }
 };
-
 
 export function * changeCategory(action) {
     const { responseSuccess, responseFailure, data: { category } } = action;
@@ -131,7 +130,7 @@ function filterItems(items, type=null, search=null, userInfo=null, retail=false,
                     }
                 }
             }
-            else if(Utils.warehouseMatch(items[i].warehouse, subsidiary) && (!SalesLib.POSItems.includes(items[i].volID[0]) || (SalesLib.POSItems.includes(items[i].volID[0]) && userIsRetailer)))
+            else if(WLHelper.warehouseMatch(items[i].warehouse, subsidiary) && (!SalesLib.POSItems.includes(items[i].volID[0]) || (SalesLib.POSItems.includes(items[i].volID[0]) && userIsRetailer)))
             {
                 if(userID)
                 {

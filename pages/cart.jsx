@@ -42,15 +42,11 @@ class Cart extends Component {
         }
     }
 
-    componentWillMount() {
-        console.log('user', this.props.user);
-    }
-
-    openWantSoonerDialog() {
-    }
-
     render() {
-        const { classes, theme, cart } = this.props;
+        const { classes } = this.props;
+
+        console.log('user', this.props.user);
+
         return (
             <NavBarUserSearchDrawerLayout>                    
                 <PageContainer heading="SHOPPING CART" id="cart-box">    

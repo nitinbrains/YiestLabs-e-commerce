@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import update from "immutability-helper";
 
 import PropTypes from "prop-types";
 import Link from "next/link";
@@ -28,6 +31,8 @@ import ManageShipping from "../components/MyAccount/ManageShipping";
 import ManageBilling from "../components/MyAccount/ManageBilling";
 import ManageCards from "../components/MyAccount/ManageCards";
 
+import { userActions } from '../redux/actions/userActions';
+
 class MyAccount extends Component {
     constructor(props) {
         super(props);
@@ -35,9 +40,26 @@ class MyAccount extends Component {
             manageShipping: false,
             manageBilling: false,
             manageCards: false,
-            shipFrom: 1,
-            confirmDialog: false
+            shipping: {},
+            billing: {}
         };
+    }
+
+    componentDidMount() {
+        const { user: { id, email, phone, shipping, billing, selectedCard, subsidiaryOptions }} = this.props;
+        this.setState({
+            id,
+            email, 
+            phone,
+            shipping,
+            billing,
+            selectedCard,
+            subsidiaryOptions
+        });
+    }
+
+    selectAccount = (value) => {
+        console.log('value', value);
     }
 
     manageShipping = () => {
@@ -49,11 +71,11 @@ class MyAccount extends Component {
     };
 
     manageBilling = () => {
-        this.setState({ manageShipping: true });
+        this.setState({ manageBilling: true });
     };
 
     closeBilling = () => {
-        this.setState({ manageShipping: false });
+        this.setState({ manageBilling: false });
     };
 
     manageCards = () => {
@@ -75,7 +97,9 @@ class MyAccount extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, user } = this.props;
+
+        console.log('user', user);
 
         return (
             <NavBarUserSearchDrawerLayout>
@@ -95,23 +119,23 @@ class MyAccount extends Component {
                                     variant="title"
                                     gutterBottom
                                 >
-                                    Account # 43148
+                                    Account # {this.state.id}
                                 </Typography>
                             </Grid>
                             <Grid item xs={3}>
-                                <TextField
-                                    required
+                                <TextField required
+                                    value={this.state.email}
+                                    onChange={e => this.setState({email: e.target.value})}
                                     variant="outlined"
                                     id="email"
-                                    value={"testemail@mail.com"}
                                     name="email"
                                     label="Email"
                                     autoComplete="email"
                                 />
                             </Grid>
                             <Grid item xs={3}>
-                                <TextField
-                                    required
+                                <TextField required
+                                    value={this.state.phone}
                                     variant="outlined"
                                     id="phone"
                                     name="phone"
@@ -128,15 +152,11 @@ class MyAccount extends Component {
                                     onChange={this.handleShipFrom}
                                     value={this.state.shipFrom}
                                     label="Ship From"
+                                    onChange={this.selectAccount}
                                 >
-                                    <MenuItem value={1}>
-                                        WL United States
-                                    </MenuItem>
-                                    <MenuItem value={2}>WL Copenhagen</MenuItem>
-                                    <MenuItem value={3}>WL Hong Kong</MenuItem>
-                                    <MenuItem value={4}>
-                                        Create WL Account
-                                    </MenuItem>
+                                    <MenuItem>WL USA</MenuItem>
+                                    <MenuItem>WL Copenhagen</MenuItem>
+                                    <MenuItem>WL Hong Kong</MenuItem>
                                 </TextField>
                             </Grid>
                         </Grid>
@@ -163,8 +183,9 @@ class MyAccount extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        required
+                                    <TextField required
+                                        onChange={e => {console.log('e', e); update(this.state.shipping, {id: {$set: e.target.value}})}}
+                                        value={this.state.shipping.attn}
                                         id="attention"
                                         name="attention"
                                         label="Attention"
@@ -173,18 +194,18 @@ class MyAccount extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        id="addresse"
-                                        name="addresse"
-                                        label="Addresse"
+                                    <TextField required
+                                        value={this.state.shipping.addressee}
+                                        id="addressee"
+                                        name="addressee"
+                                        label="Addressee"
                                         fullWidth
-                                        autoComplete="addresse"
+                                        autoComplete="addressee"
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        required
+                                    <TextField required
+                                        value={this.state.shipping.address1}
                                         id="address1"
                                         name="address1"
                                         label="Address line 1"
@@ -194,6 +215,7 @@ class MyAccount extends Component {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
+                                        value={this.state.shipping.address2}
                                         id="addiress2"
                                         name="addiress2"
                                         label="Address line 2"
@@ -203,7 +225,8 @@ class MyAccount extends Component {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
-                                        id="addiress3"
+                                        value={this.state.shipping.address3}
+                                        id="address3"
                                         name="addiress3"
                                         label="Address line 3"
                                         fullWidth
@@ -211,8 +234,8 @@ class MyAccount extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        required
+                                    <TextField required
+                                        value={this.state.shipping.city}
                                         id="city"
                                         name="city"
                                         label="City"
@@ -221,8 +244,8 @@ class MyAccount extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        required
+                                    <TextField required
+                                        value={this.state.shipping.zip}
                                         id="zip"
                                         name="zip"
                                         label="Zip / Postal code"
@@ -231,8 +254,8 @@ class MyAccount extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        required
+                                    <TextField required
+                                        value={this.state.shipping.countryid}
                                         id="country"
                                         name="country"
                                         label="Country"
@@ -271,8 +294,8 @@ class MyAccount extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        required
+                                    <TextField required
+                                        value={this.state.billing.attn}
                                         id="attention"
                                         name="attention"
                                         label="Attention"
@@ -281,18 +304,18 @@ class MyAccount extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        id="addresse"
-                                        name="addresse"
-                                        label="Addresse"
+                                    <TextField required
+                                        value={this.state.billing.addressee}
+                                        id="addressee"
+                                        name="addressee"
+                                        label="Addressee"
                                         fullWidth
-                                        autoComplete="addresse"
+                                        autoComplete="addressee"
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        required
+                                    <TextField required
+                                        value={this.state.billing.address1}
                                         id="address1"
                                         name="address1"
                                         label="Address line 1"
@@ -302,6 +325,7 @@ class MyAccount extends Component {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
+                                        value={this.state.billing.address2}
                                         id="addiress2"
                                         name="addiress2"
                                         label="Address line 2"
@@ -311,6 +335,7 @@ class MyAccount extends Component {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
+                                        value={this.state.billing.address3}
                                         id="addiress3"
                                         name="addiress3"
                                         label="Address line 3"
@@ -319,8 +344,8 @@ class MyAccount extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        required
+                                    <TextField required
+                                        value={this.state.billing.city}
                                         id="city"
                                         name="city"
                                         label="City"
@@ -329,8 +354,8 @@ class MyAccount extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        required
+                                    <TextField required
+                                        value={this.state.billing.zip}
                                         id="zip"
                                         name="zip"
                                         label="Zip / Postal code"
@@ -339,8 +364,8 @@ class MyAccount extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        required
+                                    <TextField required
+                                        value={this.state.billing.countryid}
                                         id="country"
                                         name="country"
                                         label="Country"
@@ -471,4 +496,17 @@ MyAccount.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(MyAccount);
+
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    };
+};
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(userActions, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(MyAccount));

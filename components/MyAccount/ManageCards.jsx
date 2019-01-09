@@ -1,23 +1,19 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-
 import PropTypes from "prop-types";
-import classNames from "classnames";
+import moment from 'moment';
+
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 
 import AddCard from "./AddCard";
+import { userActions } from '../../redux/actions/userActions';
 
 class ManageCards extends Component {
     constructor(props) {
@@ -36,7 +32,8 @@ class ManageCards extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, user } = this.props;
+
         return (
             <React.Fragment>
                 <DialogContent id="my-order-details">
@@ -51,60 +48,36 @@ class ManageCards extends Component {
                         </IconButton>
                     </div>
                     <Grid style={{ padding: 10 }} container spacing={24}>
-                        <Grid item sm={4} xs={12}>
-                            <div className={classes.cardBoxSelected}>
-                                <Grid item container xs spacing={8}>
-                                    <Grid item>
-                                        <Typography>Name on Card</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>
-                                            **** **** **** 0098
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>10/22</Typography>
-                                    </Grid>
+                        {user.cards.map((card, i) => (
+                            <Grid item sm={4} xs={12}>
+                                <div className={classes.cardBoxSelected}>
+                                    <Grid item container xs spacing={8}>
+                                        <Grid item>
+                                            <Typography>{card.ccname}</Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography>
+                                                {card.ccnumber}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography>{moment(card.ccexpire).format("MM-YYYY")}</Typography>
+                                        </Grid>
 
-                                    <Grid item>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                        >
-                                            Select Card
-                                        </Button>
+                                        <Grid item>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={() => this.props.setCreditCard(i)}
+                                            >
+                                                Select Card
+                                            </Button>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </div>
-                        </Grid>
-
-                        <Grid item sm={4} xs={12}>
-                            <div className={classes.cardBox}>
-                                <Grid item container xs spacing={8}>
-                                    <Grid item>
-                                        <Typography>Name on Card</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>
-                                            **** **** **** 0098
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>10/22</Typography>
-                                    </Grid>
-
-                                    <Grid item>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                        >
-                                            Select Card
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            </div>
-                        </Grid>
-
+                                </div>
+                            </Grid>
+                        ))}
+                        
                         {!this.state.newCard ? (
                             <Grid item xs={12}>
                                 <Button
@@ -158,4 +131,17 @@ ManageCards.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(ManageCards);
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    };
+};
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(userActions, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(ManageCards));
+
