@@ -26,6 +26,7 @@
 		"axios": "^0.18.0",
 		"body-parser": "^1.18.3",
 		"express": "^4.16.4",
+		"formik": "^1.4.2",
 		"isomorphic-unfetch": "^3.0.0",
 		"jss": "latest",
 		"lodash": "^4.17.11",
@@ -43,7 +44,8 @@
 		"redux-thunk": "^2.3.0",
 		"styled-components": "^3.4.10",
 		"webpack": "^4.15.1",
-		"xml2js": "^0.4.19"
+		"xml2js": "^0.4.19",
+		"yup": "^0.26.6"
 	},
 	"devDependencies": {
 		"@babel/core": "7.1.2",
