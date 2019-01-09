@@ -90,6 +90,15 @@ export function * setShipAddress(action) {
     }
 }
 
+export function * updateUserInfo(action) {
+    const { responseSuccess, responseFailure, data } = action;
+    try {
+        yield put(responseSuccess(data));
+    } catch(error) {
+        yield put(responseFailure(error))
+    }
+}
+
 export function * addShipAddress(action) {
     const { responseSuccess, responseFailure, data: address } = action;
     try {

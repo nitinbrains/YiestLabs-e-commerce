@@ -20,6 +20,7 @@ import {
     addCreditCard,
     setShipMethod,
     setShipAddress,
+    updateUserInfo,
     setBillAddress,
     addShipAddress,
     addBillAddress
@@ -74,6 +75,7 @@ function * rootSaga () {
         takeLatest(userTypes.SET_SHIP_METHOD_ATTEMPT, setShipMethod),
         takeLatest(userTypes.SET_SHIP_ADDRESS_ATTEMPT, setShipAddress),
         takeLatest(userTypes.ADD_SHIP_ADDRESS_ATTEMPT, addShipAddress),
+        takeLatest(userTypes.UPDATE_USER_INFO_ATTEMPT, updateUserInfo),
         // INVENTORY
         takeEvery(inventoryTypes.GET_INVENTORY_ATTEMPT, getInventory),
         takeEvery(inventoryTypes.CHANGE_CATEGORY_ATTEMPT, changeCategory),
