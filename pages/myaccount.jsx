@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import update from "immutability-helper";
 
+
 import PropTypes from "prop-types";
 import Link from "next/link";
 import Avatar from "@material-ui/core/Avatar";
@@ -98,21 +99,6 @@ class MyAccount extends Component {
     closeCards = () => {
         this.setState({ manageCards: false });
     };
-
-    handleChange = (e, state) => {
-        let shipping = this.state.shipping;
-        let billing = this.state.billing;
-        if(state == 'shipping'){
-            shipping[e.target.name] = e.target.value;
-        } else if( state == 'billing' ){
-            billing[e.target.name] = e.target.value;
-        }
-
-        this.setState({
-            shipping,
-            billing,
-        })
-    }
 
     handleSubmit = () => {
         let billing = this.state.billing;
@@ -222,7 +208,7 @@ class MyAccount extends Component {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField required
-                                        onChange={e => this.handleChange(e,'shipping')}
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, attn: e.target.value}})}
                                         value={this.state.shipping.attn}
                                         InputLabelProps={{ shrink: this.state.shipping.attn != '' }}
                                         id="attention"
@@ -236,7 +222,7 @@ class MyAccount extends Component {
                                     <TextField required
                                         value={this.state.shipping.addressee}
                                         InputLabelProps={{ shrink: this.state.shipping.addressee != '' }}
-                                        onChange={e =>  this.handleChange(e,'shipping') }
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, addressee: e.target.value}})}
                                         id="addressee"
                                         name="addressee"
                                         label="Addressee"
@@ -248,7 +234,7 @@ class MyAccount extends Component {
                                     <TextField required
                                         value={this.state.shipping.address1}
                                         InputLabelProps={{ shrink: this.state.shipping.address1 != '' }}
-                                        onChange={e =>  this.handleChange(e,'shipping') }
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, address1: e.target.value}})}
                                         id="address1"
                                         name="address1"
                                         label="Address line 1"
@@ -260,7 +246,7 @@ class MyAccount extends Component {
                                     <TextField
                                         value={this.state.shipping.address2}
                                         InputLabelProps={{ shrink: this.state.shipping.address2 != '' }}
-                                        onChange={e =>  this.handleChange(e,'shipping') }
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, address2: e.target.value}})}
                                         id="address2"
                                         name="address2"
                                         label="Address line 2"
@@ -272,7 +258,7 @@ class MyAccount extends Component {
                                     <TextField
                                         value={this.state.shipping.address3}
                                         InputLabelProps={{ shrink: this.state.shipping.address3 != '' }}
-                                        onChange={e =>  this.handleChange(e,'shipping') }
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, address3: e.target.value}})}
                                         id="address3"
                                         name="address3"
                                         label="Address line 3"
@@ -284,7 +270,7 @@ class MyAccount extends Component {
                                     <TextField required
                                         value={this.state.shipping.city}
                                         InputLabelProps={{ shrink: this.state.shipping.city != '' }}
-                                        onChange={e =>  this.handleChange(e,'shipping') }
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, city: e.target.value}})}
                                         id="city"
                                         name="city"
                                         label="City"
@@ -296,7 +282,7 @@ class MyAccount extends Component {
                                     <TextField required
                                         value={this.state.shipping.zip}
                                         InputLabelProps={{ shrink: this.state.shipping.zip != '' }}
-                                        onChange={e =>  this.handleChange(e,'shipping') }
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, zip: e.target.value}})}
                                         id="zip"
                                         type='number'
                                         name="zip"
@@ -309,7 +295,7 @@ class MyAccount extends Component {
                                     <TextField required
                                         value={this.state.shipping.countryid}
                                         InputLabelProps={{ shrink: this.state.shipping.countryid != '' }}
-                                        onChange={e =>  this.handleChange(e,'shipping') }
+                                        onChange={e => this.setState({shipping: {...this.state.shipping, countryid: e.target.value}})}
                                         id="country"
                                         name="countryid"
                                         label="Country"
@@ -351,7 +337,7 @@ class MyAccount extends Component {
                                     <TextField required
                                         value={this.state.billing.attn}
                                         InputLabelProps={{ shrink: this.state.billing.attn != '' }}
-                                        onChange={e =>  this.handleChange(e,'billing') }                                        
+                                        onChange={e => this.setState({billing: {...this.state.billing, attn: e.target.value}})}
                                         id="attention"
                                         name="attn"
                                         label="Attention"
@@ -363,7 +349,7 @@ class MyAccount extends Component {
                                     <TextField required
                                         value={this.state.billing.addressee}
                                         InputLabelProps={{ shrink: this.state.billing.addressee != '' }}
-                                        onChange={e =>  this.handleChange(e,'billing') }
+                                        onChange={e => this.setState({billing: {...this.state.billing, addressee: e.target.value}})}
                                         id="addressee"
                                         name="addressee"
                                         label="Addressee"
@@ -375,7 +361,7 @@ class MyAccount extends Component {
                                     <TextField required
                                         value={this.state.billing.address1}
                                         InputLabelProps={{ shrink: this.state.billing.address1 != '' }}
-                                        onChange={e =>  this.handleChange(e,'billing') }
+                                        onChange={e => this.setState({billing: {...this.state.billing, address1: e.target.value}})}
                                         id="address1"
                                         name="address1"
                                         label="Address line 1"
@@ -387,7 +373,7 @@ class MyAccount extends Component {
                                     <TextField
                                         value={this.state.billing.address2}
                                         InputLabelProps={{ shrink: this.state.billing.address2 != '' }}
-                                        onChange={e =>  this.handleChange(e,'billing') }
+                                        onChange={e => this.setState({billing: {...this.state.billing, address2: e.target.value}})}
                                         id="address2"
                                         name="address2"
                                         label="Address line 2"
@@ -399,7 +385,7 @@ class MyAccount extends Component {
                                     <TextField
                                         value={this.state.billing.address3}
                                         InputLabelProps={{ shrink: this.state.billing.address3 != '' }}
-                                        onChange={e =>  this.handleChange(e,'billing') }
+                                        onChange={e => this.setState({billing: {...this.state.billing, address3: e.target.value}})}
                                         id="address3"
                                         name="address3"
                                         label="Address line 3"
@@ -411,7 +397,7 @@ class MyAccount extends Component {
                                     <TextField required
                                         value={this.state.billing.city}
                                         InputLabelProps={{ shrink: this.state.billing.city != '' }}
-                                        onChange={e =>  this.handleChange(e,'billing') }
+                                        onChange={e => this.setState({billing: {...this.state.billing, city: e.target.value}})}
                                         id="city"
                                         name="city"
                                         label="City"
@@ -423,7 +409,7 @@ class MyAccount extends Component {
                                     <TextField required
                                         value={this.state.billing.zip}
                                         InputLabelProps={{ shrink: this.state.billing.zip != '' }}
-                                        onChange={e =>  this.handleChange(e,'billing') }
+                                        onChange={e => this.setState({billing: {...this.state.billing, zip: e.target.value}})}
                                         id="zip"
                                         name="zip"
                                         label="Zip / Postal code"
@@ -435,7 +421,7 @@ class MyAccount extends Component {
                                     <TextField required
                                         value={this.state.billing.countryid}
                                         InputLabelProps={{ shrink: this.state.billing.countryid != '' }}
-                                        onChange={e =>  this.handleChange(e,'billing') }
+                                        onChange={e => this.setState({billing: {...this.state.billing, countryid: e.target.value}})}
                                         id="country"
                                         name="countryid"
                                         label="Country"
