@@ -7,16 +7,23 @@ import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
 import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
+import TextField from "@material-ui/core/TextField";
 import LockIcon from "@material-ui/icons/LockOutlined";
 import Card from "../components/UI/Card/Card.jsx";
 import CardBody from "../components/UI/Card/CardBody.jsx";
 import CardHeader from "../components/UI/Card/CardHeader.jsx";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
 function ForgotPassword(props) {
     const { classes } = props;
-
+    const customFormValidation = Yup.object().shape({
+        resetPassword: Yup.string()
+            .email('Enter Valid Email')
+            .required('Required'),
+      });
     return (
         <React.Fragment>
             <main className={classes.layout}>
@@ -35,8 +42,60 @@ function ForgotPassword(props) {
                             Forgot Password
                         </Typography>
 
+
                         <form className={classes.form}>
-                            <FormControl margin="normal" required fullWidth>
+                        <Formik
+                        initialValues={{
+                            resetPassword:'',
+                        }}
+                        validationSchema={customFormValidation}
+                        
+                        onSubmit={values => {
+                            // same shape as initial values
+                            
+                        }}
+                        >
+                        {({ errors, touched, isValidating }) => {
+                            return(
+                                <Form>
+                                    <Field 
+                                    name="resetPassword" 
+                                    component={(props)=>{
+                                    return(
+                                        <FormControl margin="normal" required fullWidth>
+                                            <TextField
+                                            label="Email Address"
+                                            margin='normal'
+                                            fullWidth
+                                            id="email"
+                                            name="email"
+                                            autoFocus
+                                            value={props.field.value}
+                                            onChange={event =>
+                                                {
+                                                props.form.setFieldValue('resetPassword',event.target.value);
+                                            }
+                                            }
+                                        />  
+                                        </FormControl>
+                                        )
+                                        }}
+                                    />
+                                    {errors.resetPassword && touched.resetPassword && <div style={{color:'red'}} >{errors.resetPassword}</div>}
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="raised"
+                                        color="primary"
+                                        className={classes.submit}
+                                    >
+                                        Reset Password
+                                    </Button>
+                                </Form>
+                            )
+                        }}
+                        </Formik>
+                            {/* <FormControl margin="normal" required fullWidth>
                                 <InputLabel htmlFor="email">
                                     Email Address
                                 </InputLabel>
@@ -55,7 +114,7 @@ function ForgotPassword(props) {
                                 className={classes.submit}
                             >
                                 Reset Password
-                            </Button>
+                            </Button> */}
                         </form>
                     </CardBody>
                 </Card>
