@@ -52,15 +52,15 @@ class ManageCards extends Component {
                             <Grid item sm={4} xs={12}>
                                 <div className={classes.cardBoxSelected}>
                                     <Grid item container xs spacing={8}>
-                                        <Grid item>
+                                        <Grid item xs={12}>
                                             <Typography>{card.ccname}</Typography>
                                         </Grid>
-                                        <Grid item>
+                                        <Grid item xs={12}>
                                             <Typography>
                                                 {card.ccnumber}
                                             </Typography>
                                         </Grid>
-                                        <Grid item>
+                                        <Grid item xs={12}>
                                             <Typography>{moment(card.ccexpire).format("MM-YYYY")}</Typography>
                                         </Grid>
 
@@ -77,7 +77,7 @@ class ManageCards extends Component {
                                 </div>
                             </Grid>
                         ))}
-                        
+
                         {!this.state.newCard ? (
                             <Grid item xs={12}>
                                 <Button
@@ -144,4 +144,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(withStyles(styles, { withTheme: true })(ManageCards));
-

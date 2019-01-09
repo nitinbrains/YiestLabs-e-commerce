@@ -41,7 +41,7 @@ class ManageBilling extends Component {
         const { classes, user } = this.props;
 
         console.log('user', user);
-        
+
         return (
             <React.Fragment>
                 <DialogContent id="my-order-details">
@@ -58,8 +58,8 @@ class ManageBilling extends Component {
                     <Grid style={{ padding: 10 }} container spacing={24}>
                         {user.otherAddresses.map(address => (
                             <Grid item
-                                key={address.id} 
-                                ksm={4} 
+                                key={address.id}
+                                sm={4}
                                 xs={12}
                             >
                                 <div className={classes.addressBoxSelected}>
@@ -73,13 +73,13 @@ class ManageBilling extends Component {
                                         <Grid item>
                                             <Typography>{address.address3}</Typography>
                                         </Grid>
-                                        <Grid item>
+                                        <Grid item xs={12}>
                                             <Typography>{address.city}</Typography>
                                         </Grid>
-                                        <Grid item>
+                                        <Grid item xs={12}>
                                             <Typography>{address.zip}</Typography>
                                         </Grid>
-                                        <Grid item>
+                                        <Grid item xs={12}>
                                             <Typography>{address.countryid}</Typography>
                                         </Grid>
 

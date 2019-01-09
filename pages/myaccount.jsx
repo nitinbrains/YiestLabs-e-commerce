@@ -40,6 +40,8 @@ class MyAccount extends Component {
             manageShipping: false,
             manageBilling: false,
             manageCards: false,
+            shipFrom: 1,
+            confirmDialog: false,
             shipping: {},
             billing: {}
         };
@@ -49,7 +51,7 @@ class MyAccount extends Component {
         const { user: { id, email, phone, shipping, billing, selectedCard, subsidiaryOptions }} = this.props;
         this.setState({
             id,
-            email, 
+            email,
             phone,
             shipping,
             billing,
@@ -154,9 +156,14 @@ class MyAccount extends Component {
                                     label="Ship From"
                                     onChange={this.selectAccount}
                                 >
-                                    <MenuItem>WL USA</MenuItem>
-                                    <MenuItem>WL Copenhagen</MenuItem>
-                                    <MenuItem>WL Hong Kong</MenuItem>
+                                    <MenuItem value={1}>
+                                        WL United States
+                                    </MenuItem>
+                                    <MenuItem value={2}>WL Copenhagen</MenuItem>
+                                    <MenuItem value={3}>WL Hong Kong</MenuItem>
+                                    <MenuItem value={4}>
+                                        Create WL Account
+                                    </MenuItem>
                                 </TextField>
                             </Grid>
                         </Grid>
