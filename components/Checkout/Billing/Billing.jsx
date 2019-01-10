@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import moment from "moment";
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -139,27 +140,16 @@ class Billing extends Component {
                                 this.props.user.selectedCard.id ? (
                                     <div>
                                         <Typography>
-                                            {this.props.user.selectedCard.name}
+                                            {this.props.user.selectedCard.ccname}
                                         </Typography>
                                         <Typography>
                                             {
                                                 this.props.user.selectedCard
-                                                    .number
+                                                    .ccnumber
                                             }
                                         </Typography>
                                         <Typography>
-                                            {
-                                                this.props.user.selectedCard
-                                                    .expireMonth
-                                            }{" "}
-                                            /{" "}
-                                            {
-                                                this.props.user.selectedCard
-                                                    .expireYear
-                                            }
-                                        </Typography>
-                                        <Typography>
-                                            {this.props.user.selectedCard.type}
+                                            {moment(this.props.user.selectedCard.ccexpire).format("MM-YYYY")}
                                         </Typography>
                                         <Button
                                             style={{ marginTop: 10 }}
@@ -213,35 +203,18 @@ class Billing extends Component {
                                     </Grid>
                                     {this.props.user.selectedCard.id ? (
                                         <div>
-                                            <Typography>
-                                                {
-                                                    this.props.user.selectedCard
-                                                        .name
-                                                }
-                                            </Typography>
-                                            <Typography>
-                                                {
-                                                    this.props.user.selectedCard
-                                                        .number
-                                                }
-                                            </Typography>
-                                            <Typography>
-                                                {
-                                                    this.props.user.selectedCard
-                                                        .expireMonth
-                                                }{" "}
-                                                /{" "}
-                                                {
-                                                    this.props.user.selectedCard
-                                                        .expireYear
-                                                }
-                                            </Typography>
-                                            <Typography>
-                                                {
-                                                    this.props.user.selectedCard
-                                                        .type
-                                                }
-                                            </Typography>
+                                        <Typography>
+                                            {this.props.user.selectedCard.ccname}
+                                        </Typography>
+                                        <Typography>
+                                            {
+                                                this.props.user.selectedCard
+                                                    .ccnumber
+                                            }
+                                        </Typography>
+                                        <Typography>
+                                            {moment(this.props.user.selectedCard.ccexpire).format("MM-YYYY")}
+                                        </Typography>
                                             <Button
                                                 style={{ marginTop: 10 }}
                                                 onClick={this.manageCards}
