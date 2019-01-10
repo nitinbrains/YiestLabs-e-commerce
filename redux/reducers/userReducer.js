@@ -4,6 +4,7 @@ import { userTypes } from '../actions/userActions';
 /* ------------- Initial State ------------- */
 
 const initialState = {
+    id: null,
     username: '',
     password: '',
     cards: [],
@@ -13,7 +14,6 @@ const initialState = {
     connectedaccounts: [],
     currency: "",
     email: "",
-    id: null,
     otherAddresses: [],
     phone: "",
     shipping: {

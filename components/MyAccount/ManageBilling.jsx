@@ -40,8 +40,6 @@ class ManageBilling extends Component {
     render() {
         const { classes, user } = this.props;
 
-        console.log('user', user);
-
         return (
             <React.Fragment>
                 <DialogContent id="my-order-details">

@@ -152,7 +152,7 @@ ManageCards.propTypes = {
 const mapStateToProps = state => {
     return {
         user: state.user,
-        checkout: state.checkout
+        order: state.order
     };
 };
 

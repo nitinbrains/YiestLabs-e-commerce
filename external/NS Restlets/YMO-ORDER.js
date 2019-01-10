@@ -34,7 +34,7 @@ function(record, log, search, format, itemAvailability)
                return { error: {message: 'App version is out of date. Please download new version.', code: 0}};
            }
 
-           const userRecord = record.load({type: record.Type.CUSTOMER, id: response.userID});
+           const userRecord = record.load({type: record.Type.CUSTOMER, id: response.user.id});
            const userLocation = parseInt(userRecord.getValue({fieldId: 'subsidiary'}));
            const territory = userRecord.getValue({fieldId: 'territory'});
 
@@ -353,11 +353,11 @@ function(record, log, search, format, itemAvailability)
            var done = [false];
 
            var fakeOrder = record.create({type: 'salesorder', isDynamic: true});
-           fakeOrder.setValue('entity', response.userID);
+           fakeOrder.setValue('entity', response.user.id);
 
-           if(response.shipMethod && response.shipMethod != -3)
+           if(response.user.shipmethod && response.user.shipmethod != -3)
            {
-               fakeOrder.setValue({fieldId: 'shipmethod', value: response.shipMethod});
+               fakeOrder.setValue({fieldId: 'shipmethod', value: response.user.shipmethod});
            }
 
            if(response.couponCode)
@@ -384,7 +384,7 @@ function(record, log, search, format, itemAvailability)
            }
 
            response.itemSubtotal += fakeOrder.getValue({fieldId: 'subtotal'});
-           if(response.shipMethod && response.shipMethod != -3)
+           if(response.user.shipmethod && response.user.shipmethod != -3)
            {
                response.shippingSubtotal += fakeOrder.getValue({fieldId: 'shippingcost'});
                response.orderSubtotal += fakeOrder.getValue({fieldId: 'total'});
@@ -586,21 +586,20 @@ function(record, log, search, format, itemAvailability)
            try
            {
                var response = {orderNum: []};
-               var customerid = parseInt(message.CustomerID);
 
                var billaddressindex;
                var shipaddressindex;
                var today = new Date();
 
-               var customerRecord = record.load({type: record.Type.CUSTOMER, id: customerid});
+               var customerRecord = record.load({type: record.Type.CUSTOMER, id: message.user.id});
                var userLocation = parseInt(customerRecord.getValue({fieldId: 'subsidiary'}));
 
                var WillCall = null;
-               if([3470, 3472, 13332, 3469, 3511].indexOf(parseInt(message.shipMethod)) >= 0 || (!message.shipMethod && [3470, 3472, 13332, 3469, 3511].indexOf(parseInt(customerRecord.getValue({fieldId: 'shippingitem'}))) >= 0))
+               if([3470, 3472, 13332, 3469, 3511].indexOf(parseInt(message.user.shipmethod)) >= 0 || (!message.user.shipmethod && [3470, 3472, 13332, 3469, 3511].indexOf(parseInt(customerRecord.getValue({fieldId: 'shippingitem'}))) >= 0))
                {
-                   if(message.shipMethod)
+                   if(message.user.shipmethod)
                    {
-                       WillCall = parseInt(message.shipMethod);
+                       WillCall = parseInt(message.user.shipmethod);
                    }
                    else
                    {
@@ -608,12 +607,12 @@ function(record, log, search, format, itemAvailability)
                    }
                }
 
-               var shipAddressIndex = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: String(message.shipping.id)});
-               var billAddressIndex = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: String(message.billing.id)});
+               var shipAddressIndex = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: String(message.user.shipping.id)});
+               var billAddressIndex = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: String(message.user.billing.id)});
 
-               for(var i = 0; i < message.SaleItems.length; i++)
+               for(var i = 0; i < message.order.items.length; i++)
                {
-                   if(!message.SaleItems[i].done)
+                   if(!message.order.items[i].done)
                    {
                       // Initialize new sales order object
                        var salesOrderRecord = record.create({type: record.Type.SALES_ORDER, isDynamic: true});
@@ -621,13 +620,13 @@ function(record, log, search, format, itemAvailability)
                        if(message.creditID)
                        {
                            salesOrderRecord.setValue({fieldId:'customform', value: 102});
-                           salesOrderRecord.setValue({fieldId: 'entity', value: customerid});
-                           salesOrderRecord.setValue({fieldId:'creditcard', value: message.creditID});
+                           salesOrderRecord.setValue({fieldId: 'entity', value: message.user.id});
+                           salesOrderRecord.setValue({fieldId:'creditcard', value: message.user.selectedCard.id});
                        }
                        else
                        {
                            salesOrderRecord.setValue({fieldId:'customform', value: 101});
-                           salesOrderRecord.setValue({fieldId: 'entity', value: customerid});
+                           salesOrderRecord.setValue({fieldId: 'entity', value: message.user.id});
                            if(parseInt(customerRecord.getValue({fieldId: 'subsidiary'})) != 2 && (!customerRecord.getValue({fieldId: 'terms'}) || customerRecord.getValue({fieldId: 'terms'}) == 10))
                            {
                                salesOrderRecord.setValue({fieldId:'terms', value: 13}); //Bank transfer required for non US
@@ -638,7 +637,7 @@ function(record, log, search, format, itemAvailability)
 
                        if(shipAddressIndex >= 0)
                        {
-                           salesOrderRecord.setValue({fieldId: 'shipaddresslist', value: String(message.shipping.id)})
+                           salesOrderRecord.setValue({fieldId: 'shipaddresslist', value: String(message.user.shipping.id)})
                        }
                        else
                        {
@@ -647,7 +646,7 @@ function(record, log, search, format, itemAvailability)
 
                        if(billAddressIndex >= 0)
                        {
-                           salesOrderRecord.setValue({fieldId: 'billaddresslist', value: String(message.billing.id)});
+                           salesOrderRecord.setValue({fieldId: 'billaddresslist', value: String(message.user.billing.id)});
                        }
                        else
                        {
@@ -656,50 +655,48 @@ function(record, log, search, format, itemAvailability)
 
                        salesOrderRecord.setValue({fieldId: 'custbody_wl_ymo_synced', value: true});
 
-                       if(message.OrderComment)
+                       if(message.comment)
                        {
-                           salesOrderRecord.setValue({fieldId: 'memo', value: message.OrderComment.substring(0,997)});
+                           salesOrderRecord.setValue({fieldId: 'memo', value: message.comment.substring(0,997)});
                        }
 
-                       if(message.PONum)
+                       if(message.order.PONum)
                        {
-                           salesOrderRecord.setValue({fieldId: 'otherrefnum', value: message.PONum});
+                           salesOrderRecord.setValue({fieldId: 'otherrefnum', value: message.order.PONum});
                        }
 
-                       if(message.shipMethod != -3)
+                       if(message.user.shipmethod != -3)
                        {
-
-                           salesOrderRecord.setValue({fieldId: 'shipmethod', value: message.shipMethod});
-
+                           salesOrderRecord.setValue({fieldId: 'shipmethod', value: message.user.shipmethod});
                        }
 
-                       salesOrderRecord.setValue({fieldId: 'shipdate', value: new Date(message.SaleItems[i].shipDate)});
+                       salesOrderRecord.setValue({fieldId: 'shipdate', value: new Date(message.order.items[i].shipDate)});
 
                        if(WillCall)
                        {
                            setWillCallAddress(WillCall, salesOrderRecord, salesOrderRecord.getText({fieldId: 'entity'}));
                        }
-                       else if(message.shipaddress)
+                       else if(shipaddressindex >= 0)
                        {
                           salesOrderRecord.setValue({fieldId: 'shipaddresslist', value: shipaddressindex});
                        }
 
                        salesOrderRecord.selectNewLine({sublistId: 'item'});
-                       salesOrderRecord.setCurrentSublistValue({sublistId: 'item', fieldId: 'item', value: message.SaleItems[i].MerchandiseID});
-                       salesOrderRecord.setCurrentSublistValue({sublistId: 'item', fieldId: 'quantity', value: message.SaleItems[i].OrderDetailQty});
-                       salesOrderRecord.setCurrentSublistValue({sublistId: 'item', fieldId: 'location', value: message.SaleItems[i].Warehouse});
+                       salesOrderRecord.setCurrentSublistValue({sublistId: 'item', fieldId: 'item', value: message.order.items[i].MerchandiseID});
+                       salesOrderRecord.setCurrentSublistValue({sublistId: 'item', fieldId: 'quantity', value: message.order.items[i].OrderDetailQty});
+                       salesOrderRecord.setCurrentSublistValue({sublistId: 'item', fieldId: 'location', value: message.order.items[i].Warehouse});
                        salesOrderRecord.commitLine({sublistId: 'item'});
 
-                       for(var j = i+1; j < message.SaleItems.length; j++)
+                       for(var j = i+1; j < message.order.items.length; j++)
                        {
-                           if(compareDates(new Date(message.SaleItems[i].shipDate), new Date(message.SaleItems[j].shipDate)) == 0)
+                           if(compareDates(new Date(message.order.items[i].shipDate), new Date(message.order.items[j].shipDate)) == 0)
                            {
                                salesOrderRecord.selectNewLine({sublistId: 'item'});
-                               salesOrderRecord.setCurrentSublistValue({sublistId: 'item', fieldId: 'item', value: message.SaleItems[j].MerchandiseID});
-                               salesOrderRecord.setCurrentSublistValue({sublistId: 'item', fieldId: 'quantity', value: message.SaleItems[j].OrderDetailQty});
-                               salesOrderRecord.setCurrentSublistValue({sublistId: 'item', fieldId: 'location', value: message.SaleItems[j].Warehouse});
+                               salesOrderRecord.setCurrentSublistValue({sublistId: 'item', fieldId: 'item', value: message.order.items[j].MerchandiseID});
+                               salesOrderRecord.setCurrentSublistValue({sublistId: 'item', fieldId: 'quantity', value: message.order.items[j].OrderDetailQty});
+                               salesOrderRecord.setCurrentSublistValue({sublistId: 'item', fieldId: 'location', value: message.order.items[j].Warehouse});
                                salesOrderRecord.commitLine({sublistId: 'item'});
-                               message.SaleItems[j].done = true;
+                               message.order.items[j].done = true;
                            }
                        }
 
@@ -848,9 +845,9 @@ function(record, log, search, format, itemAvailability)
        return transitTimes;
    }
 
-   function setWillCallAddress(shipMethod, salesOrderRecord, customerName)
+   function setWillCallAddress(shipmethod, salesOrderRecord, customerName)
    {
-       switch(shipMethod)
+       switch(shipmethod)
        {
            case 3470:  //Boulder
                salesOrderRecord.setValue({fieldId: 'shipaddresslist', value: null});

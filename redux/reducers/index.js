@@ -4,7 +4,7 @@ import { reducer as form } from 'redux-form';
 import user from './userReducer';
 import inventory from './inventoryReducer';
 import cart from './cartReducer';
-import checkout from './orderReducer';
+import order from './orderReducer';
 import messages from './messageReducer';
 import calculator from './calculatorReducer';
 
@@ -12,7 +12,7 @@ import calculator from './calculatorReducer';
 export const rootReducer = combineReducers({
     user,
     inventory,
-    checkout,
+    order,
     cart,
     messages,
     form,

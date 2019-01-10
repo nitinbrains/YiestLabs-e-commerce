@@ -121,6 +121,8 @@ class Billing extends Component {
     render() {
         const { classes } = this.props;
 
+        console.log('user', this.props.user.selectedCard);
+
         return (
             <React.Fragment>
                 <Grid container spacing={24}>
@@ -377,7 +379,7 @@ Billing.propTypes = {
 const mapStateToProps = state => {
     return {
         user: state.user,
-        checkout: state.checkout
+        order: state.order
     };
 };
 
