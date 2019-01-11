@@ -30,9 +30,11 @@ export default createReducer(initialState, {
     [messageTypes.HIDE_MESSAGE_ATTEMPT]: ({ messages }, { data: idx }) => ({
         messages: messages.filter((message, index) => index !== idx)
     }),
-    [messageTypes.SHOW_NETWORK_ERROR_ATTEMPT]: (state, { data }) => ({
+    [messageTypes.SHOW_NETWORK_ERROR_ATTEMPT]: (state, { data }) =>{ 
+        console.log(data,'error message if any')
+        return({
         networkRequestError: data 
-    }),
+    })},
     [messageTypes.HIDE_NETWORK_ERROR_ATTEMPT]: (state ) => ({
         networkRequestError: false
     }),

@@ -44,8 +44,6 @@ class Cart extends Component {
 
     render() {
         const { classes, cart } = this.props;
-
-        console.log('cart', cart);
         
         return (
             <NavBarUserSearchDrawerLayout>                    

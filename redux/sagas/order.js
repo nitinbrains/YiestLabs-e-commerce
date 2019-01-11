@@ -34,8 +34,14 @@ export function * prepareOrder(action) {
             yield put(responseSuccess(initOrder(order, user)));
         }
     } catch (error) {
+        let message = {
+            message:'Somthing Went Wrong'
+        }
+        if(error.message != undefined){
+            message['message'] = JSON.stringify(error.message);
+        }
         yield put(responseFailure(error));
-        yield put(messageActions.showNetworkError(error))
+        yield put(messageActions.showNetworkError(message))
     }
 };
 

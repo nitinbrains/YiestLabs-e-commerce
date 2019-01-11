@@ -25,7 +25,7 @@ class SimpleSnackbar extends React.Component {
     if (reason === 'clickaway') {
       return;
     }
-
+    this.props.handleClose()
     this.setState({ open: false });
   };
 
@@ -41,6 +41,7 @@ class SimpleSnackbar extends React.Component {
 
   render() {
     const { classes } = this.props;
+    
     return (
       <div>
         <Snackbar
@@ -61,7 +62,7 @@ class SimpleSnackbar extends React.Component {
               aria-label="Close"
               color="inherit"
               className={classes.close}
-              onClick={this.handleClose}
+              onClick={(e)=>this.handleClose()}
             >
               <CloseIcon />
             </IconButton>,
