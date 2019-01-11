@@ -43,10 +43,8 @@ class Cart extends Component {
     }
 
     render() {
-        const { classes } = this.props;
-
-        console.log('user', this.props.user);
-
+        const { classes, cart } = this.props;
+        
         return (
             <NavBarUserSearchDrawerLayout>                    
                 <PageContainer heading="SHOPPING CART" id="cart-box">    
@@ -57,22 +55,14 @@ class Cart extends Component {
                             );
                         })}
                     </Grid>
-                    {/*
-                    <Grid container spacing={24} dir="rtl">
-                        <Grid item >
-                            SUBTOTAL ${this.state.subTotal}
-                        </Grid>
-                    </Grid>
-                    */}
                     <Grid container spacing={24} dir="rtl" className="block-checkout-button">
                         <Grid item xs={12} >
-                            { this.props.cart.items.length > 0 ?
+                            { cart.items.length > 0 ?
                                 <Link prefetch href="/checkout">
                                     <FormButton
                                         className="cart-checkout-button"
                                         text="PROCEED TO CHECKOUT"
                                     />
-                                    {/*<Button style={{marginTop:20}} variant="contained">PROCEED TO CHECKOUT</Button>*/}
                                 </Link>
                                 :
                                 <Typography variant="h5" color="primary" align="center">

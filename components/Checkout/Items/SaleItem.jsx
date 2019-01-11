@@ -32,41 +32,41 @@ class SaleItem extends Component {
     };
 
 	render() {
-        const { classes } = this.props;
+        const { classes, item } = this.props;
 
         return (
             <div>
                 <ListItem button className={classes.listItem} onClick={this.handleExpandClick}>
-                    <ListItemText primary={this.props.item.Name} secondary={this.props.item.desc} />
-                    <Typography variant="body2">{`\$${this.props.item.pricePerUnit}`}</Typography>
+                    <ListItemText primary={item.Name} secondary={this.props.item.desc} />
+                    <Typography variant="body2">{`\$${item.pricePerUnit}`}</Typography>
                 </ListItem>
                 <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
                     <CardContent>
                         <ListItem>
                             <ListItemText primary="Location" />
-                            <Typography component="p">{Utils.getWarehouse(this.props.item.Warehouse)}</Typography>
+                            <Typography component="p">{Utils.getWarehouse(item.Warehouse)}</Typography>
                         </ListItem>
                         <ListItem>
                             <ListItemText primary="Ship Date" />
-                            <Typography component="p">{this.props.item.shipDate.toDateString()}</Typography>
+                            <Typography component="p">{item.shipDate.toDateString()}</Typography>
                         </ListItem>
                         <ListItem>
                             <ListItemText primary="Delivery Date" />
-                            <Typography component="p">{this.props.item.deliveryDate.toDateString()}</Typography>
+                            <Typography component="p">{item.deliveryDate.toDateString()}</Typography>
                         </ListItem>
 
-                        {this.props.checkout.selectedShippingOption == "Custom"  && (
+                        {order.selectedShippingOption == "Custom"  && (
                             <Button
                                 variant="contained"
                                 color="primary"
-                                onClick={() => this.props.decrementShipDate(this.props.item)}
+                                onClick={() => this.props.decrementShipDate(item)}
                                 className={classes.button}
                             >
                                 Sooner
                             </Button>
                         )}
 
-                        {this.props.checkout.selectedShippingOption == "Custom"  && (
+                        {order.selectedShippingOption == "Custom"  && (
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -109,7 +109,7 @@ SaleItem.propTypes = {
 
 const mapStateToProps = (state) => {
 	return {
-		checkout: state.checkout
+		order: state.order
 	}
 }
 

@@ -227,6 +227,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                 </Drawer>
                 <SimpleSnackbar
                     show={this.props.messages.networkRequestError == false ? false : true}
+                    handleClose={() => this.props.hideNetworkError()}
                     message={this.props.messages.networkRequestError && this.props.messages.networkRequestError.message || ''}
                 />
             </div>

@@ -61,12 +61,10 @@ app.prepare()
 		};
 	}
 
-
 	function NSAuth(scriptID, type = 'post')
   	{
   		//Fall back authentication
 		return "NLAuth nlauth_account=4099054_SB1, nlauth_email=mwhite@whitelabs.com, nlauth_signature=YeastBuddy08, nlauth_role=1067";
-
 	}
 
 	function NSReceiveMessage(message)
@@ -402,7 +400,7 @@ app.prepare()
 	server.post('/prepare-order', function(req, res, next){
 
 		const request = req.body;
-		if(request.userID) {
+		if(request.user.id) {
 
 			var message = NSSendMessage(request);
 
@@ -437,25 +435,7 @@ app.prepare()
 					var message = NSReceiveMessage(response);
 					if(message.items && message.items.length > 0 && message.transitTimes)
 					{
-
 						return res.send(message);
-
-						// ConfirmationCart.init(userID, State.getState('UserInfo'), message.items, message.transitTimes, message.itemSubtotal, message.shippingSubtotal, message.orderSubtotal);
-
-						// var warning;
-						// if(message.items.length != WLCart.getLength())
-						// {
-						// 	warning = 'Items were removed due to lack of availability, please check your order carefully'
-						// }
-
-						// if(warning)
-						// {
-						// 	resolve(warning);
-						// }
-						// else
-						// {
-						// 	resolve();
-						// }
 					}
 					else
 					{
@@ -464,16 +444,9 @@ app.prepare()
 				}
 			})
 			.catch(err => {
-				if(Tries < MaxTries)
-				{
-					//impose random backoff and try again
-					const wait = Utils.getWaitTime(Tries) * 1000;
-					setTimeout(wait, prepareOrder(Tries+1));
-				}
-				else
-				{
-					res.send({error: { message: 'max retries reached', code: -1}});
-				}
+				// TO-DO: Implement retry handler
+				console.log('error', error);
+				res.send({error: { message: error, code: -1 }});
 			});
 		}
 		else
@@ -486,7 +459,7 @@ app.prepare()
 	server.post('/place-order', function(req, res, next) {
 		const request = req.body.request;
 
-		if(request.userID)
+		if(request.user.id)
 		{
 			var message = NSSendMessage(request);
 
@@ -521,13 +494,6 @@ app.prepare()
 
 					if(message.orderNum.length > 0)
 					{
-						// Cart.clearCart();
-
-						// requestOrderHistory();
-						// if(State.getState('WLCSR'))
-						// {
-						// 	requestSalesRepOrderHistory();
-						// }
 						res.sendStatus(200);
 					}
 					else
@@ -624,9 +590,6 @@ app.prepare()
 
 					}
 
-					// var UserInfo = await requestUserInfo();
-					// State.setState({UserInfo: UserInfo});
-					// resolve(UserInfo);
 				}
 			})
 			.catch(err => {
@@ -651,15 +614,6 @@ app.prepare()
 	server.post('/get-order-history', function(req, res, next) {
 
 		var userID = req.body.userID;
-
-		// if(customerID)
-		// {
-		// 	userID = customerID;
-		// }
-		// else
-		// {
-		// 	userID = State.getState('UserID');
-		// }
 
 		if(userID)
 		{
@@ -796,10 +750,6 @@ app.prepare()
 	server.post('/create-netsuite-account', function(req, res, next) {
 		var custInfo = req.body.custInfo;
 
-		// custInfo.creditToken = EncryptCC(creditInfo);
-		// var email = String(custInfo.email);
-		// var nonce = Utils.uuid();
-		// custInfo.nonce = nonce;
 		var message = NSSendMessage(custInfo);
 		creditInfo = null;
 
@@ -853,15 +803,6 @@ app.prepare()
 	*/
 	server.post('/order-history', function(req, res, next) {
 		var userID = req.query.userID;
-
-		// if(customerID)
-		// {
-		// 	userID = customerID;
-		// }
-		// else
-		// {
-		// 	userID = State.getState('UserID');
-		// }
 
 		if(userID)
 		{

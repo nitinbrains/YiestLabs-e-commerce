@@ -8,6 +8,8 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Grid from "@material-ui/core/Grid";
+import moment from 'moment';
+import ItemPanel from "../Items/ItemPanel";
 
 const addresses = ["Sudwerk", "Davis", "California", "95616", "USA"];
 const payments = [
@@ -42,6 +44,105 @@ function Review(props) {
                 ORDER SUMMARY
             </Typography>
             <div className={classes.sectionTitleDivider} />
+            <Grid item container direction="column" xs={12} sm={6}>
+                <Grid item xs={12} sm={6}>
+                    <Typography
+                        variant="title"
+                        gutterBottom
+                        className={classes.title}
+                    >
+                        User Detail
+                    </Typography>
+                    <Typography gutterBottom>{ props.user.username? props.user.username :  'Tom Brady'}</Typography>
+                    <Typography gutterBottom>{ props.user.email && props.user.email }</Typography>
+                    <Typography gutterBottom>{ props.user.phone && props.user.phone }</Typography>
+                    <Typography gutterBottom>{ props.user.subsidiary && props.user.subsidiaryOptions.map(data => {
+                        if(data.value == props.user.subsidiary){
+                            return data.label
+                        }
+                    }) }</Typography>
+                </Grid>
+            </Grid>
+            <Grid item container direction="column" xs={12} sm={12}>
+                <Grid
+                    container
+                    spacing={12}
+                >
+                    <Typography
+                        variant="title"
+                        gutterBottom
+                        className={classes.title}
+                    >
+                        Item List
+                    </Typography>
+                    {
+                    !props.order.isLoading &&
+                    
+                    <Grid item xs={12}>
+                        <List>
+                            {props.order.items.map((item, i) => (
+                                <ItemPanel key={i} item={item} index={i} />
+                            ))}
+                        </List>
+                    </Grid>
+                    }
+                </Grid>    
+            </Grid>
+            
+            <Grid item container direction="column" xs={12} sm={6}>
+                    <Typography
+                        variant="title"
+                        gutterBottom
+                        className={classes.title}
+                    >
+                        Payment details
+                    </Typography>
+                    {
+                        props.user.selectedCard &&                     
+                        <Grid container>
+                            <Grid item xs={6}>
+                                <Typography gutterBottom>
+                                    Card Type
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Typography gutterBottom>
+                                    Visa
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Typography gutterBottom>
+                                    Card holder
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Typography gutterBottom>
+                                    {props.user.selectedCard.ccname}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Typography gutterBottom>
+                                    Card number
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Typography gutterBottom>
+                                    {props.user.selectedCard.ccnumber}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Typography gutterBottom>
+                                    Expiry date
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Typography gutterBottom>
+                                    {moment(props.user.selectedCard.ccexpire).format('MM/YYYY')}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    }
+                </Grid>
 
             <Grid container spacing={16}>
                 <Grid item xs={12} sm={6}>
@@ -50,36 +151,120 @@ function Review(props) {
                         gutterBottom
                         className={classes.title}
                     >
-                        Shipping
+                        Shipping Address
                     </Typography>
-                    <Typography gutterBottom>Tom Brady</Typography>
-                    <Typography gutterBottom>{addresses.join(", ")}</Typography>
+                    <Typography gutterBottom>{ props.user.username? props.user.username :  'Tom Brady'}</Typography>
+                    
+                    {props.user.shipping  && (
+                            <div>
+                                <Typography>
+                                    {props.user.shipping.attn}
+                                </Typography>
+                                <Typography>
+                                    {props.user.shipping.addressee}
+                                </Typography>
+                                <Typography>
+                                    {props.user.shipping.address1}
+                                </Typography>
+                                <Typography>
+                                    {props.user.shipping.address2}
+                                </Typography>
+                                <Typography>
+                                    {props.user.shipping.address3}
+                                </Typography>
+                                <Typography>
+                                    {props.user.shipping.city}, {props.user.shipping.countryid}, {props.user.shipping.zip}
+                                </Typography>
+                            </div>
+                        )}
                 </Grid>
-                <Grid item container direction="column" xs={12} sm={6}>
+
+                <Grid item xs={12} md={6}>
+                        <Typography 
+                            variant="title"
+                            gutterBottom
+                            className={classes.title}
+                        >
+                            BILLING ADDRESS
+                        </Typography>
+                        <Typography >{ props.user.username? props.user.username :  'Tom Brady'}</Typography>
+                        {props.user.billing  && (
+                            <div>
+                                <Typography>
+                                    {props.user.billing.attn}
+                                </Typography>
+                                <Typography>
+                                    {props.user.billing.addressee}
+                                </Typography>
+                                <Typography>
+                                    {props.user.billing.address1}
+                                </Typography>
+                                <Typography>
+                                    {props.user.billing.address2}
+                                </Typography>
+                                <Typography>
+                                    {props.user.billing.address3}
+                                </Typography>
+                                <Typography>
+                                    {props.user.billing.city}, {props.user.billing.countryid}, {props.user.billing.zip}
+                                </Typography>
+                            </div>
+                        )}
+                </Grid>
+                
+                <Grid item container direction="column" xs={12} sm={12}>
+                <Grid
+                    container
+                    spacing={12}
+                >
                     <Typography
                         variant="title"
                         gutterBottom
                         className={classes.title}
                     >
-                        Payment details
+                        Order Price
                     </Typography>
-                    <Grid container>
-                        {payments.map(payment => (
-                            <React.Fragment key={payment.name}>
-                                <Grid item xs={6}>
-                                    <Typography gutterBottom>
-                                        {payment.name}
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography gutterBottom>
-                                        {payment.detail}
-                                    </Typography>
-                                </Grid>
-                            </React.Fragment>
-                        ))}
+                    {
+                    !props.order.isLoading &&
+                    
+                    <Grid item xs={12}>
+                        <List>
+                            <ListItem className={classes.listItem}>
+                                <ListItemText primary="Item Subtotal" />
+                                <Typography
+                                    variant="subheading"
+                                    color="primary"
+                                    className={classes.total}
+                                    >
+                                    {props.order.itemSubtotal}
+                                </Typography>
+                            </ListItem>
+                            <ListItem className={classes.listItem}>
+                                <ListItemText primary="Shipping Cost" />
+                                <Typography
+                                    variant="subheading"
+                                    color="primary"
+                                    className={classes.total}
+                                    >
+                                    {props.order.shippingSubtotal}
+                                </Typography>
+                            </ListItem>
+                            <ListItem className={classes.listItem}>
+                                <ListItemText primary="Order Subtotal" />
+                                <Typography
+                                    variant="subheading"
+                                    color="primary"
+                                    className={classes.total}
+                                    >
+                                    {props.order.orderSubtotal}
+                                </Typography>
+                            </ListItem>
+                        </List>
                     </Grid>
-                </Grid>
+                    }
+                </Grid>    
+            </Grid>
+
             </Grid>
         </React.Fragment>
     );
@@ -92,7 +277,7 @@ Review.propTypes = {
 const mapStateToProps = state => {
     return {
         user: state.user,
-        checkout: state.checkout
+        order: state.order
     };
 };
 

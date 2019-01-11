@@ -35,7 +35,7 @@ class ItemPanel extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, order } = this.props;
 
         return (
             <ExpansionPanel
@@ -123,7 +123,7 @@ class ItemPanel extends Component {
                             </Grid>
 
                             <Grid item xs={12}>
-                                {this.props.checkout.selectedShippingOption ==
+                                {order.selectedShippingOption ==
                                     "Custom" && (
                                     <Button
                                         variant="outlined"
@@ -139,7 +139,7 @@ class ItemPanel extends Component {
                                     </Button>
                                 )}
 
-                                {this.props.checkout.selectedShippingOption ==
+                                {order.selectedShippingOption ==
                                     "Custom" && (
                                     <Button
                                         variant="outlined"
@@ -183,7 +183,7 @@ ItemPanel.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        checkout: state.checkout
+        order: state.order
     };
 };
 

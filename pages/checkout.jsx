@@ -76,7 +76,7 @@ class Checkout extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, order } = this.props;
         const { activeStep } = this.state;
 
         return (
@@ -100,7 +100,7 @@ class Checkout extends Component {
                              >
                                 <StepLabel>
                                  {label}
-                                 {label === 'Items' && this.props.checkout.isLoading &&
+                                 {label === 'Items' && order.isLoading &&
                                  <CircularProgress size={10} />
                                  } 
                                  </StepLabel>
@@ -212,7 +212,7 @@ const mapStateToProps = state => {
         user: state.user,
         cart: state.cart,
         message: state.messages,
-        checkout: state.checkout
+        order: state.order
     };
 };
 

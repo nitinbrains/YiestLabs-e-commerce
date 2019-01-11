@@ -21,7 +21,7 @@ class Items extends Component {
         return (
             <React.Fragment>
                 {
-                    this.props.checkout.isLoading ?
+                    this.props.order.isLoading ?
                         <Grid
                         container
                         justify="center"
@@ -54,12 +54,12 @@ class Items extends Component {
                                     variant="outlined"
                                     autoComplete="country"
                                     fullWidth
-                                    value={this.props.checkout.selectedShippingOption}
+                                    value={this.props.order.selectedShippingOption}
                                     onChange={event =>
                                         this.props.setShippingOption(event.target.value)
                                     }
                                     >
-                                    {this.props.checkout.shippingOptions.map(
+                                    {this.props.order.shippingOptions.map(
                                         (option, i) => (
                                             <MenuItem key={i} value={option}>
                                                 {option}
@@ -71,7 +71,7 @@ class Items extends Component {
 
                             <Grid item xs={12}>
                                 <List>
-                                    {this.props.checkout.items.map((item, i) => (
+                                    {this.props.order.items.map((item, i) => (
                                         <ItemPanel key={i} item={item} index={i} />
                                     ))}
 
@@ -82,7 +82,7 @@ class Items extends Component {
                                             color="primary"
                                             className={classes.total}
                                             >
-                                            {this.props.checkout.itemSubtotal}
+                                            {this.props.order.itemSubtotal}
                                         </Typography>
                                     </ListItem>
                                     <ListItem className={classes.listItem}>
@@ -92,7 +92,7 @@ class Items extends Component {
                                             color="primary"
                                             className={classes.total}
                                             >
-                                            {this.props.checkout.shippingSubtotal}
+                                            {this.props.order.shippingSubtotal}
                                         </Typography>
                                     </ListItem>
                                     <ListItem className={classes.listItem}>
@@ -102,7 +102,7 @@ class Items extends Component {
                                             color="primary"
                                             className={classes.total}
                                             >
-                                            {this.props.checkout.orderSubtotal}
+                                            {this.props.order.orderSubtotal}
                                         </Typography>
                                     </ListItem>
                                 </List>
@@ -139,7 +139,7 @@ Items.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        checkout: state.checkout
+        order: state.order
     };
 };
 
