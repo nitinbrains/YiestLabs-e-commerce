@@ -60,7 +60,7 @@ class Cart extends Component {
                             { cart.items.length > 0 ?
                                 <Link prefetch href="/checkout">
                                     <FormButton
-                                        className="cart-checkout-button"
+                                        className="checkout-button"
                                         text="PROCEED TO CHECKOUT"
                                     />
                                 </Link>

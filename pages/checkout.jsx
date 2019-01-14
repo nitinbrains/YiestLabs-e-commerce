@@ -5,11 +5,17 @@ import { orderActions } from "../redux/actions/orderActions";
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Link from "next/link";
 import NavBarLayout from "../components/NavBar/NavBarLayout";
 import Card from "../components/UI/Card/Card.jsx";
 import CardBody from "../components/UI/Card/CardBody.jsx";
 import CardHeader from "../components/UI/Card/CardHeader.jsx";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
@@ -20,7 +26,7 @@ import Billing from "../components/Checkout/Billing/Billing";
 import Items from "../components/Checkout/Items/Items";
 import Review from "../components/Checkout/Review/Review";
 import isLoggedUser from "../hocs/isLoggedUser";
-import cartHasItems from '../hocs/cartHasItems';
+import cartHasItems from "../hocs/cartHasItems";
 
 // custom
 import Alert from "../components/UI/Alert";
@@ -52,7 +58,28 @@ class Checkout extends Component {
     }
 
     state = {
-        activeStep: 0
+        activeStep: 0,
+        terms: false,
+        confirmation: false
+    };
+
+    handleOrder = () => {
+        this.setState({
+            terms: true
+        });
+    };
+
+    handleTerms = () => {
+        this.setState({
+            terms: false
+        });
+    };
+
+    handleAccept = () => {
+        this.setState({
+            terms: false,
+            confirmation: true
+        });
     };
 
     handleNext = () => {
@@ -100,16 +127,17 @@ class Checkout extends Component {
                         className={classes.stepper}
                     >
                         {steps.map(label => (
-                            <Step key={label} 
-                            className={ label === 'Items' && classes.step}
-                             >
+                            <Step
+                                key={label}
+                                className={label === "Items" && classes.step}
+                            >
                                 <StepLabel>
-                                 {label}
-                                 {label === 'Items' && order.isLoading &&
-                                 <CircularProgress size={10} />
-                                 } 
-                                 </StepLabel>
-                                
+                                    {label}
+                                    {label === "Items" &&
+                                        order.isLoading && (
+                                            <CircularProgress size={10} />
+                                        )}
+                                </StepLabel>
                             </Step>
                         ))}
                     </Stepper>
@@ -141,7 +169,12 @@ class Checkout extends Component {
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        onClick={this.handleNext}
+                                        disabled={activeStep == 2 && order.isLoading }
+                                        onClick={
+                                            activeStep === steps.length - 1
+                                                ? this.handleOrder
+                                                : this.handleNext
+                                        }
                                         className={classes.button}
                                     >
                                         {activeStep === steps.length - 1
@@ -153,6 +186,38 @@ class Checkout extends Component {
                         )}
                     </React.Fragment>
                 </div>
+
+                <Dialog open={this.state.terms}>
+                    <DialogTitle id="alert-dialog-title">
+                        {"Do you accept the White Labs Terms & Conditions?"}
+                    </DialogTitle>
+                    <DialogContent />
+                    <DialogActions>
+                        <Button onClick={this.handleCloseTerms} color="primary">
+                            Decline
+                        </Button>
+                        <Button
+                            onClick={this.handleAccept}
+                            color="primary"
+                            autoFocus
+                        >
+                            Accept
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog open={this.state.confirmation}>
+                    <DialogTitle id="alert-dialog-title">
+                        {"Your order has been confirmed"}
+                    </DialogTitle>
+                    <DialogContent />
+                    <DialogActions>
+                        <Link href="/">
+                            <Button color="primary" autoFocus>
+                                Continue
+                            </Button>
+                        </Link>
+                    </DialogActions>
+                </Dialog>
             </NavBarLayout>
         );
     }
@@ -185,8 +250,8 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit * -4,
         marginRight: theme.spacing.unit * -4
     },
-    step:{
-        width:'98px'
+    step: {
+        width: "98px"
     },
     paper: {
         padding: theme.spacing.unit * 2,
@@ -196,7 +261,7 @@ const styles = theme => ({
     },
     stepper: {
         padding: `${theme.spacing.unit * 3}px 0 ${theme.spacing.unit * 5}px`,
-		backgroundColor: "#fafafa",
+        backgroundColor: "#fafafa"
     },
     buttons: {
         display: "flex",
@@ -227,4 +292,8 @@ const mapDispatchToProps = dispatch =>
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles, { withTheme: true })( isLoggedUser(cartHasItems(Checkout))));
+)(
+    withStyles(styles, { withTheme: true })(
+        isLoggedUser(cartHasItems(Checkout))
+    )
+);

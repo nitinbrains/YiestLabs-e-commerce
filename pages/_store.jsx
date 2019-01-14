@@ -15,10 +15,12 @@ import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
+import SearchIcon from "@material-ui/icons/Search";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Divider from '@material-ui/core/Divider';
 
 
 import SalesLib from '../lib/SalesLib';
@@ -39,6 +41,7 @@ import GiftShopDialog from '../components/Store/GiftShop/GiftShopDialog';
 import HomebrewCard from '../components/Store/Homebrew/HomebrewCard';
 import FormButton from '../components/Form/FormButton';
 import AddHomebrewContainer from '../components/Store/Homebrew/AddHomebrewContainer';
+import SearchBarItems from "../components/NavBar/SearchBarItems";
 
 import withInventory from "../hocs/inventory";
 
@@ -193,7 +196,6 @@ class Store extends Component {
         // isHomebrew = true
         return (
             <NavBarUserSearchDrawerLayout>
-
                 <LoadingIndicator visible={this.props.store.isLoading} label={"Loading Inventory"} />
                 <Grid container spacing={8} id="professional-homebrew-switch">
                     <Grid item xs={6} dir="rtl">
@@ -203,7 +205,28 @@ class Store extends Component {
                         <FormButton className={`form-button-small-size ${isHomebrew ? '' : 'form-button-active'}`} text="Homebrew" onClick={() => this.props.switchToHomebrew()}/>
                     </Grid>
                 </Grid>
-
+                { !isHomebrew &&
+                <div>
+                <Divider  variant="inset" className={classes.divider} />
+                <Grid container spacing={24} className={classes.store} >
+                    <Grid item xs={4}  >
+                        <div className={classes.search} >
+                            <SearchIcon />
+                            <TextField
+                                id="search"
+                                placeholder="Search"
+                                type="search"
+                                className={classNames(classes.searchInput)}
+                            />
+                        </div>
+                    </Grid>
+                    <Grid item xs={8}  >
+                        <SearchBarItems />
+                    </Grid>
+                </Grid>
+                <Divider variant="inset" className={classes.divider} />
+                </div>
+                }
                 {
                     isHomebrew ?
                     <AddHomebrewContainer items={this.props.store.itemsToShow}/>
@@ -242,6 +265,16 @@ const styles = theme => ({
             paddingLeft: 150,
             paddingRight: 150,
         }
+    },
+    searchInput: {
+        marginLeft: 10
+    },
+    search:{
+        padding: '5px',
+        marginTop: '1vw',
+    },
+    divider: {
+        margin: '10px auto'
     }
 });
 
