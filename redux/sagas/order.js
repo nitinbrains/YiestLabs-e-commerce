@@ -52,8 +52,8 @@ export function * placeOrder(action) {
         const user = yield select(state => state.user);
 
         var request = validateOrder(order, user);
-        var { res: order, err } = yield call(api.prepareOrder, {
-            ...request
+        var { res: order, err } = yield call(api.placeOrder, {
+            request
         });
 
         if (err) {

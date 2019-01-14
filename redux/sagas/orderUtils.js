@@ -1,5 +1,6 @@
 import Utils from '../../lib/Utils';
-import SaleLib from '../../lib/SalesLib';
+import SalesLib from '../../lib/SalesLib';
+import WLHelper from '../../lib/WLHelper';
 
 /*
  * Utility function to check for valid delivery date
@@ -179,7 +180,7 @@ export const validateOrder = (order, user) => {
         throw {message: 'Your shipping address is from a country we cannot ship to directly. Please contact White Labs customer support to discuss alternatives or try switching your order region.', code: 0};
     }
 
-    if(!user.selectedCard.idc && WLHelper.getPaymentTerm(user.terms) == 'Credit Card')
+    if(!user.selectedCard.id && WLHelper.getPaymentTerm(user.terms) == 'Credit Card')
     {
         throw {message: 'No credit card on file. Please go to My Account > Manage Payment to add one', code: 0};
     }
@@ -197,7 +198,7 @@ export const validateOrder = (order, user) => {
         throw {message: 'Please select a billing address', code: 0};
     }
 
-    var finalOrder;
+    var finalOrder = new Object();
     finalOrder.salesrep = user.admin ? user.id : 43522; // Default sales rep to Yeastman
     finalOrder.comment = '--From the WL APP v2--' + (order.comment ? order.comment : '');
     finalOrder.user = user;

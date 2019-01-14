@@ -607,8 +607,8 @@ function(record, log, search, format, itemAvailability)
                    }
                }
 
-               var shipAddressIndex = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: String(message.user.shipping.id)});
-               var billAddressIndex = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: String(message.user.billing.id)});
+                var shipAddressIndex = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: String(message.user.shipping.id)});
+                var billAddressIndex = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: String(message.user.billing.id)});
 
                for(var i = 0; i < message.order.items.length; i++)
                {
@@ -723,7 +723,7 @@ function(record, log, search, format, itemAvailability)
            }
            catch(err)
            {
-               logError('post cust:' + message.CustomerID, err);
+               logError('post cust:' + message.user.id, err);
                return {error: err};
            }
        }

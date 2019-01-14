@@ -32,12 +32,13 @@ import { updateCartItem, addCartItem, removeCartItem } from './cart';
 // Order sagas
 import {
     prepareOrder,
+    placeOrder,
     setShippingOption,
     incrementShipDate,
-    decrementShipDate
+    decrementShipDate,
 } from './order';
-// Inventory sagas
 
+// Inventory sagas
 import {
     getInventory,
     changeCategory,
@@ -87,6 +88,7 @@ function * rootSaga () {
         takeEvery(cartTypes.UPDATE_ITEM_ATTEMPT, updateCartItem),
         // ORDER
         takeLatest(orderTypes.PREPARE_ORDER_ATTEMPT, prepareOrder),
+        takeLatest(orderTypes.PLACE_ORDER_ATTEMPT, placeOrder),
         takeLatest(orderTypes.SET_SHIPPING_OPTION_ATTEMPT, setShippingOption),
         takeLatest(orderTypes.INCREMENT_SHIP_DATE_ATTEMPT, incrementShipDate),
         takeLatest(orderTypes.DECREMENT_SHIP_DATE_ATTEMPT, decrementShipDate),

@@ -57,9 +57,14 @@ class Checkout extends Component {
 
     handleNext = () => {
         const { activeStep } = this.state;
-        this.setState({
-            activeStep: activeStep + 1
-        });
+
+        if(activeStep == steps.length - 1) {
+            this.props.placeOrder();
+        } else {
+            this.setState({
+                activeStep: activeStep + 1
+            });
+        }
     };
 
     handleBack = () => {

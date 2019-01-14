@@ -4,10 +4,7 @@ import { orderTypes } from '../actions/orderActions';
 const initialState = {
 	items: [],
     transitTimes: [],
-    EarliestDeliveryDates: [],
-    EarliestShipDates: [],
     shipMethod: '',
-    subsidiary: '',
     itemSub: 0,
     shippingSub: 0,
     orderSub: 0,
@@ -28,6 +25,16 @@ export default createReducer(initialState, {
     [orderTypes.PREPARE_ORDER_SUCCESS]: (state, { data }) => ({
         ...data,
         isLoading: false
+    }),
+    [orderTypes.PLACE_ORDER_ATTEMPT]: (state, { data }) => ({
+        isLoading: true,
+    }),
+    [orderTypes.PREPARE_ORDER_FAILURE]: (state, { data }) => ({
+        isLoading: false,
+    }),
+    [orderTypes.PREPARE_ORDER_SUCCESS]: (state, { data }) => ({
+        ...data,
+        isLoading: false,
     }),
     [orderTypes.SET_ITEMS_ATTEMPT]: (state, { data: { items } }) => ({
         ...state,

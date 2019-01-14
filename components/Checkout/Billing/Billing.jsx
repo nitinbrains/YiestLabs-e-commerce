@@ -122,8 +122,6 @@ class Billing extends Component {
     render() {
         const { classes } = this.props;
 
-        console.log('user', this.props.user.selectedCard);
-
         return (
             <React.Fragment>
                 <Grid container spacing={24}>
