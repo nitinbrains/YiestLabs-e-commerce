@@ -164,6 +164,7 @@ class Checkout extends Component {
                                     <Button
                                         variant="contained"
                                         color="primary"
+                                        disabled={activeStep == 2 && order.isLoading }
                                         onClick={
                                             activeStep === steps.length - 1
                                                 ? this.handleOrder

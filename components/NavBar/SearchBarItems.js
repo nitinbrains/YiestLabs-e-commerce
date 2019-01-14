@@ -8,7 +8,13 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 import Checkbox from "@material-ui/core/Checkbox";
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import Grid from "@material-ui/core/Grid";
+
 
 import { inventoryActions } from '../../redux/actions/inventoryActions';
 
@@ -80,7 +86,8 @@ class SearchBarItems extends Component {
                 value: 15,
                 checked: false
             }],
-            selectedCategory: null
+            selectedCategory: 0,
+            selectedSubCategory: 1
         };
 
     }
@@ -90,121 +97,133 @@ class SearchBarItems extends Component {
      *
      * cannot unselect a category - can only switch to a new one
      */
-    selectMainCategory = (mainIndex, category) => {
+    handleCategory = (e) => {
+        this.setState({
+            selectedCategory: e.target.value
+        },()=>{
+        this.changeCategory();
+        })
+    }
 
-        var categories = this.state.categories;
+    changeCategory = () => {
+        let category = this.state.selectedCategory;
+        let subCategories = this.state.selectedSubCategory;
+        let categories = this.state.categories;
 
-        for(var i = 0; i < categories.length; i++) {
-
-            if(i == mainIndex) {
-
-                // main category already chosen, don't switch categories
-                if(categories[mainIndex].checked) {
-                    return;
-                }
-                else {
-                    categories[mainIndex].checked = true;
-                }
-            }
-            else {
-                categories[i].checked = false;
-                if(categories[i].subCategories) {
-                    categories[i].subCategories.forEach((subCategory, j) => {
-                        categories[i].subCategories[j].checked = false;
+        categories.map((data,i)=>{
+            if(data.value == category){
+                data.checked = true;
+            } else {
+                data.checked = false;
+                if(data.subCategories){
+                    data.subCategories.map((value)=>{
+                        return value.checked == false;
                     })
                 }
             }
-        }
-
-        this.setState({categories: categories});
-        this.props.changeCategory({category})
-
+        })
+        this.setState({categories:categories})
+        this.props.changeCategory({category});
     }
-
     /*
      * Change sub category
      *
      * If subcategory is unselected, main category becomes category selected
      */
-    selectSubCategory = (mainIndex, subIndex, category) => {
 
-        var categories = this.state.categories;
-
-        for(var i = 0; i < categories[mainIndex].subCategories.length; i++) {
-
-            if(i == subIndex) {
-                var toggle = true;
-
-                // uncheck subcategory selection, select main category
-                if(categories[mainIndex].subCategories[subIndex].checked) {
-                    toggle = false
-                    category = categories[mainIndex].value;
-                }
-
-                categories[mainIndex].subCategories[subIndex].checked = toggle;
-            }
-            else {
-                categories[mainIndex].subCategories[i].checked = false;
-            }
-        }
-
-        this.setState({categories: categories});
-        this.props.changeCategory({category})
+    handleSubCategory = (e) => {
+        this.setState({
+            selectedSubCategory: e.target.value
+        },()=>{
+            this.changeSubCategory()
+        })
     }
+
+    changeSubCategory = () => {
+        let mainCategory = this.state.selectedCategory;
+        let category = this.state.selectedSubCategory;
+        let categories = this.state.categories;
+
+        categories.map((data,i)=>{
+            if(data.value == mainCategory){
+                if(data.subCategories){
+                    data.subCategories.map((value)=>{
+                        if(value.value === category){
+                            value.checked = true
+                        }
+                    })
+                }
+            } else {
+                data.checked = false;
+                if(data.subCategories){
+                    data.subCategories.map((value)=>{
+                        return value.checked == false;
+                    })
+                }
+            }
+        })
+        this.setState({categories:categories})
+        this.props.changeCategory({category});
+    }
+
 
     render() {
         const { classes } = this.props;
-
         return (
-            <div>
-                {
+            <Grid container spacing={24} >
+            <Grid item xs={6}>
+            <FormControl className={classes.formControl,classes.category} style={{width:'80%'}} >
+                <InputLabel htmlFor="age-simple">Category</InputLabel>
+                <Select
+                    value={ this.state.selectedCategory }
+                    onChange={this.handleCategory}
+                    
+                >
+                    {
                     this.state.categories.map((mainCategory, i) => {
-                        return (
-                            <div key={i}>
-                                <ListItem>
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                color="primary"
-                                                onChange={this.selectMainCategory.bind(this, i, mainCategory.value)}
-                                                checked={mainCategory.checked}
-                                            />
-                                        }
-                                        label={mainCategory.label}
-                                    />
-                                </ListItem>
-                                {mainCategory.subCategories
-                                ?
-                                    <div className={mainCategory.checked ? null : classes.hide}>
-                                    {
-                                        mainCategory.subCategories.map((subCategory, j) => {
-                                            return (
-                                                <ListItem key={j}>
-                                                    <FormControlLabel
-                                                        control={
-                                                            <Checkbox
-                                                                color="primary"
-                                                                onChange={this.selectSubCategory.bind(this, i, j, subCategory.value)}
-                                                                checked={subCategory.checked}
-                                                            />
-                                                        }
-                                                        style={{ marginLeft: 10}}
-                                                        label={subCategory.label}
-
-                                                    />
-                                                </ListItem>
-                                            )
-                                        })
-                                    }
-                                    </div>
-                                :
-                                    null
-                                }
-                            </div>
+                      return(
+                            <MenuItem value={mainCategory.value}>
+                                <em> {mainCategory.label} </em>
+                            </MenuItem>
                         )
                     })
-                }
-            </div>
+                    }
+
+
+                </Select>
+            </FormControl>
+            </Grid>
+            {
+            (this.state.selectedCategory === 0 || this.state.selectedCategory == 8) ? (
+            <Grid item xs={6} >
+            <FormControl className={classes.formControl, classes.category} style={{width:'80%'}} >
+                <InputLabel htmlFor="age-simple"> Sub Category</InputLabel>
+                <Select
+                    value={ this.state.selectedSubCategory }
+                    onChange={this.handleSubCategory}
+                    
+                >
+                    {
+                    this.state.categories.map((mainCategory, i) => {
+                        if(mainCategory.subCategories && mainCategory.value == this.state.selectedCategory ){
+                          return  mainCategory.subCategories.map((subCategory, j) => {
+                            return(
+                                    <MenuItem value={subCategory.value}>
+                                        <em> {subCategory.label} </em>
+                                    </MenuItem>
+                                )
+                            })
+                            }
+                    })
+                    }
+                </Select>
+            </FormControl>
+            </Grid>
+            )
+            :
+            null
+            }
+            </Grid>
         );
     }
 }
@@ -212,7 +231,10 @@ class SearchBarItems extends Component {
 const styles = theme => ({
     hide: {
         display: "none"
-    }
+    },
+    category: {
+        margin: '5px'
+    } 
 });
 
 const mapStateToProps = state => {

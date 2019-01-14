@@ -128,29 +128,6 @@ class NavBarUserSearchDrawerLayout extends Component {
                             </IconButton>
                         </Link>
 
-                        <IconButton
-                            onClick={this.handleSearchBarOpen}
-                            className={classNames(
-                                classes.searchButton,
-                                this.state.openSearchBar && classes.hide
-                            )}
-                            color="inherit"
-                            aria-label="Menu"
-                        >
-                            <SearchIcon />
-                        </IconButton>
-
-                        <IconButton
-                            onClick={this.handleSearchBarClose}
-                            className={classNames(
-                                classes.closeSearchButton,
-                                !this.state.openSearchBar && classes.hide
-                            )}
-                            color="inherit"
-                            aria-label="Menu"
-                        >
-                            <ChevronRightIcon />
-                        </IconButton>
                     </Toolbar>
                 </AppBar>
 
@@ -195,36 +172,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                     <div className={classes.toolbar} />
                     {children}
                 </main>
-
-                <Drawer
-                    variant="persistent"
-                    SlideProps={{
-                        unmountOnExit: true
-                    }}
-                    classes={{
-                        paper: classes.drawerPaper
-                    }}
-                    anchor={"right"}
-                    open={this.state.openSearchBar}
-                >
-                    <div className={classes.toolbar}>
-                        <SearchIcon />
-                        <TextField
-                            id="search"
-                            placeholder="Search"
-                            type="search"
-                            InputProps={{
-                                disableUnderline: true
-                            }}
-                            className={classNames(classes.searchInput)}
-                        />
-                    </div>
-                    <Divider />
-                    <List>
-                        <SearchBarItems />
-                    </List>
-                    <Divider />
-                </Drawer>
+                
                 <SimpleSnackbar
                     show={this.props.messages.networkRequestError == false ? false : true}
                     handleClose={() => this.props.hideNetworkError()}

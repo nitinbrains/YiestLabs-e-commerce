@@ -175,7 +175,7 @@ class AddHomebrewContainer extends Component {
             <Link prefetch href="/checkout">
               <FormButton
                 text="CHECKOUT" 
-                className="btn next-btn"
+                className="btn btn"
                 onClick={() => this._cycleItem('next')}
               />
             </Link>
@@ -227,14 +227,14 @@ class AddHomebrewContainer extends Component {
                   <Grid item xs={6}>
                     <FormButton
                       text="NEXT" 
-                      className="btn next-btn"
+                      className="btn btn"
                       onClick={() => this._cycleItem('next')}
                     />
                   </Grid>
                   <Grid item xs={6}>
                     <FormButton 
                       text="BACK" 
-                      className="btn prev-btn"
+                      className="btn btn"
                       onClick={() => this._cycleItem('prev')}
                     />
                   </Grid>
