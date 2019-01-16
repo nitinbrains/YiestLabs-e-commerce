@@ -4,6 +4,7 @@ import { cartTypes } from '../actions/cartActions';
 export const initialState = {
     items: [],
     showWantSooner: false,
+    activeTab: '',
     want_sooner_alternateSizes: [{},{},{},{},{},{}],
     want_sooner_similarStrains: [{},{},{}]
 };
@@ -20,9 +21,11 @@ export default createReducer(initialState, {
     }),
     [cartTypes.CLEAR_CART_ATTEMPT]: (state, { data }) => null,
     [cartTypes.SHOW_WANT_SOONER_ATTEMPT]: ({ items }, { data }) => ({
-        showWantSooner: true
+        showWantSooner: true,
+        activeTab: data.activeTab
     }),
     [cartTypes.HIDE_WANT_SOONER_ATTEMPT]: ({ items }, { data }) => ({
-        showWantSooner: false
+        showWantSooner: false,
+        activeTab: ''
     }),
 })

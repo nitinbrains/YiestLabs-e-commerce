@@ -15,6 +15,14 @@ class WantSooner extends React.Component {
 			activeTab: 'AlternateSizes'
     }
 	}
+
+	static getDerivedStateFromProps(nextProps, prevState){
+		return {
+				activeTab: nextProps.cart.activeTab,
+		}
+	}
+    
+
 	render() {
 		return (
 			<div id='want-sooner-box'>
@@ -23,12 +31,12 @@ class WantSooner extends React.Component {
 	      		<Tabs value={this.state.activeTab}>
 	        		<Tab 
 	        			value="AlternateSizes" 
-	        			onClick={() => { this.setState({activeTab:'AlternateSizes'})}} 
+	        			onClick={() => { this.props.showWantSooner({activeTab : 'AlternateSizes'}) }} 
 	        			label="ALTERNATE SIZES" 
 	        		/>
 	        		<Tab 
 	        			value="SimilarStrains"  
-	        			onClick={() => { this.setState({activeTab:'SimilarStrains'})}} 
+	        			onClick={() => { this.props.showWantSooner({activeTab : 'SimilarStrains'}) }} 
 	        			label="SIMILAR STRAINS" 
 	        		/>
 	      		</Tabs>

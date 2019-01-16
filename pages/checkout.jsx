@@ -14,6 +14,7 @@ import Link from "next/link";
 import NavBarLayout from "../components/NavBar/NavBarLayout";
 import Card from "../components/UI/Card/Card.jsx";
 import CardBody from "../components/UI/Card/CardBody.jsx";
+import LoadingIndicator from '../components/UI/LoadingIndicator';
 import CardHeader from "../components/UI/Card/CardHeader.jsx";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Stepper from "@material-ui/core/Stepper";
@@ -59,6 +60,7 @@ class Checkout extends Component {
 
     state = {
         activeStep: 0,
+        isLoading: false,
         terms: false,
         confirmation: false
     };
@@ -78,20 +80,22 @@ class Checkout extends Component {
     handleAccept = () => {
         this.setState({
             terms: false,
-            confirmation: true
+            isLoading: true,
+        },()=>{
+            setTimeout(() => {
+                this.setState({
+                    confirmation: true,
+                    isLoading: false
+                })
+            }, 5000);
         });
     };
 
     handleNext = () => {
         const { activeStep } = this.state;
-
-        if(activeStep == steps.length - 1) {
-            this.props.placeOrder();
-        } else {
             this.setState({
                 activeStep: activeStep + 1
             });
-        }
     };
 
     handleBack = () => {
@@ -110,9 +114,9 @@ class Checkout extends Component {
     render() {
         const { classes, order } = this.props;
         const { activeStep } = this.state;
-
         return (
             <NavBarLayout>
+            <LoadingIndicator visible={this.state.isLoading} label={"Placing Order"} />
                 {this.props.message.messages.map((message, i) => (
                     <Alert message={message} index={i} />
                 ))}

@@ -41,6 +41,7 @@ import {
 // Inventory sagas
 import {
     getInventory,
+    searchItem,
     changeCategory,
     switchToHomebrew,
     switchToProfessional
@@ -79,6 +80,7 @@ function * rootSaga () {
         takeLatest(userTypes.UPDATE_USER_INFO_ATTEMPT, updateUserInfo),
         // INVENTORY
         takeEvery(inventoryTypes.GET_INVENTORY_ATTEMPT, getInventory),
+        takeEvery(inventoryTypes.SEARCH_INVENTORY_ATTEMPT, searchItem),
         takeEvery(inventoryTypes.CHANGE_CATEGORY_ATTEMPT, changeCategory),
         takeEvery(inventoryTypes.SWITCH_TO_HOMEBREW_ATTEMPT, switchToHomebrew),
         takeEvery(inventoryTypes.SWITCH_TO_PROFESSIONAL_ATTEMPT, switchToProfessional),

@@ -51,7 +51,7 @@ class Cart extends Component {
                     <Grid container spacing={24}>
                         {this.props.cart.items && this.props.cart.items.map((item, i) => {
                             return (                                
-                                <CartItem key={i} item={item} index={i} openWantSoonerDialog={() => { this.props.showWantSooner() }} />                                
+                                <CartItem key={i} item={item} index={i} openWantSoonerDialog={() => { this.props.showWantSooner({activeTab : 'SimilarStrains'}) }} />                                
                             );
                         })}
                     </Grid>

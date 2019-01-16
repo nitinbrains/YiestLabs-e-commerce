@@ -76,7 +76,16 @@ export function * switchToProfessional(action) {
         yield put(responseFailure(error));
     }
 }
-
+export function * searchItem(action) {
+    const { responseSuccess, responseFailure, data: { category, search } } = action;
+    try {
+        const inventory = yield select(state => state.inventory);
+        const itemsToShow = filterItems(inventory.items, category, search, false, false);
+        yield put(responseSuccess({ itemsToShow, category }));
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}
 
 /***** Business Logic *****/
 

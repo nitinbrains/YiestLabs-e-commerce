@@ -2,10 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
+import classNames from "classnames";
 
 import { withStyles } from "@material-ui/core/styles";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import SearchIcon from "@material-ui/icons/Search";
+import TextField from "@material-ui/core/TextField";
 import ListItemText from "@material-ui/core/ListItemText";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from '@material-ui/core/FormControl';
@@ -87,7 +90,8 @@ class SearchBarItems extends Component {
                 checked: false
             }],
             selectedCategory: 0,
-            selectedSubCategory: 1
+            selectedSubCategory: 1,
+            searchText: ''
         };
 
     }
@@ -167,11 +171,39 @@ class SearchBarItems extends Component {
     }
 
 
+    handleSearch = (e) => {
+        this.setState({
+            searchText: e.target.value
+        },()=>{
+            
+            let search = this.state.searchText;
+            let category = this.state.selectedCategory;
+            if(search != ''){
+                this.props.searchInventory({category, search})
+            } else {
+                this.props.changeCategory({category})
+            }
+        })
+    }
+
     render() {
         const { classes } = this.props;
         return (
             <Grid container spacing={24} >
-            <Grid item xs={6}>
+            <Grid item xs={4}  >
+                <div className={classes.search} >
+                    <SearchIcon />
+                    <TextField
+                        id="search"
+                        placeholder="Search"
+                        type="search"
+                        value={this.state.searchText}
+                        onChange={this.handleSearch}
+                        className={classNames(classes.searchInput)}
+                    />
+                </div>
+            </Grid>
+            <Grid item xs={4}>
             <FormControl className={classes.formControl,classes.category} style={{width:'80%'}} >
                 <InputLabel htmlFor="age-simple">Category</InputLabel>
                 <Select
@@ -195,7 +227,7 @@ class SearchBarItems extends Component {
             </Grid>
             {
             (this.state.selectedCategory === 0 || this.state.selectedCategory == 8) ? (
-            <Grid item xs={6} >
+            <Grid item xs={4} >
             <FormControl className={classes.formControl, classes.category} style={{width:'80%'}} >
                 <InputLabel htmlFor="age-simple"> Sub Category</InputLabel>
                 <Select
@@ -234,7 +266,14 @@ const styles = theme => ({
     },
     category: {
         margin: '5px'
-    } 
+    },
+    searchInput: {
+        marginLeft: 10
+    },
+    search:{
+        padding: '5px',
+        marginTop: '1vw',
+    }, 
 });
 
 const mapStateToProps = state => {

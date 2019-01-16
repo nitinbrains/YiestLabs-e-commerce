@@ -16,18 +16,30 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Dialog from "@material-ui/core/Dialog";
+
 
 import WLHelper from "../../../lib/WLHelper";
+import WantSooner from "../../Cart/WantSooner/WantSooner";
 import { orderActions } from "../../../redux/actions/orderActions";
+import { cartActions } from '../../../redux/actions/cartActions';
+
 
 class ItemPanel extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            expanded: false
+            expanded: false,
+            showWantSoonerDialog: false
         };
     }
 
+    static getDerivedStateFromProps(nextProps, prevState){
+        return {
+            showWantSoonerDialog: nextProps.cart.showWantSooner,
+        }
+    }
+    
     handleExpand = () => {
         this.setState({
             expanded: !this.state.expanded
@@ -36,7 +48,6 @@ class ItemPanel extends Component {
 
     render() {
         const { classes, order } = this.props;
-
         return (
             <ExpansionPanel
                 expanded={this.state.expanded}
@@ -65,7 +76,6 @@ class ItemPanel extends Component {
                             xs={12}
                             sm={9}
                             container
-                            style={{ textAlign: "center" }}
                             alignItems="center"
                         >
                             <Grid item xs={12} sm={4}>
@@ -122,7 +132,84 @@ class ItemPanel extends Component {
                                 </Typography>
                             </Grid>
 
+                            <Grid item xs={12} sm={4}>
+                                <Typography
+                                    color="textPrimary"
+                                    variant="body1"
+                                    style={{ display: "inline-block" }}
+                                >
+                                    Price:
+                                </Typography>
+                                &nbsp;
+                                <Typography
+                                    color="primary"
+                                    variant="body1"
+                                    style={{ display: "inline-block" }}
+                                >
+                                    $ {this.props.item.pricePerUnit}
+                                </Typography>
+                            </Grid>
+
+                            <Grid item xs={12} sm={4}>
+                                <Typography
+                                    color="textPrimary"
+                                    variant="body1"
+                                    style={{ display: "inline-block" }}
+                                >
+                                    Quantity:
+                                </Typography>
+                                &nbsp;
+                                <Typography
+                                    color="primary"
+                                    variant="body1"
+                                    style={{ display: "inline-block" }}
+                                >
+                                    {this.props.item.OrderDetailQty}
+                                </Typography>
+                            </Grid>
+                            
+                            <Grid container spacing={24}>
+                                <Grid item xs={12} >
+                                    <Typography
+                                        color="textPrimary"
+                                        variant="body1"
+                                        style={{ display: "inline-block" }}
+                                    >
+                                        Details:
+                                    </Typography>
+                                    &nbsp;
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <Typography
+                                        color="primary"
+                                        variant="body1"
+                                        style={{ display: "inline-block" }}
+                                    >
+                                        {this.props.item.details}
+                                    </Typography>
+                                </Grid> 
+                            </Grid>                            
+
+
                             <Grid item xs={12}>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={() => { this.props.showWantSooner({activeTab : 'SimilarStrains'}) }}
+                                    style={{marginRight:5, marginLeft:5}}
+                                >
+                                    Similar Strains
+                                </Button>
+
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={() => { this.props.showWantSooner({activeTab : 'AlternateSizes'}) }}
+                                    style={{marginRight:5, marginLeft:5}}
+                                >
+                                    Alternate Sizes
+                                </Button>
+
                                 {order.selectedShippingOption ==
                                     "Custom" && (
                                     <Button
@@ -158,6 +245,15 @@ class ItemPanel extends Component {
                         </Grid>
                     </Grid>
                 </ExpansionPanelDetails>
+
+                <Dialog
+                    open={this.state.showWantSoonerDialog}
+                    onClose={() => {this.props.hideWantSooner()}}
+                    aria-labelledby="form-dialog-title"
+                    classes={{ paper: classes.dialogPaper }}
+                >
+                    <WantSooner {...this.props}/>
+                </Dialog>
             </ExpansionPanel>
         );
     }
@@ -183,12 +279,13 @@ ItemPanel.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        order: state.order
+        order: state.order,
+        cart: state.cart,
     };
 };
 
 const mapDispatchToProps = dispatch =>
-    bindActionCreators(orderActions, dispatch);
+    bindActionCreators({ ...orderActions, ...cartActions}, dispatch);
 
 export default connect(
     mapStateToProps,

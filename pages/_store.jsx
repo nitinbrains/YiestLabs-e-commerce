@@ -209,20 +209,7 @@ class Store extends Component {
                 <div>
                 <Divider  variant="inset" className={classes.divider} />
                 <Grid container spacing={24} className={classes.store} >
-                    <Grid item xs={4}  >
-                        <div className={classes.search} >
-                            <SearchIcon />
-                            <TextField
-                                id="search"
-                                placeholder="Search"
-                                type="search"
-                                className={classNames(classes.searchInput)}
-                            />
-                        </div>
-                    </Grid>
-                    <Grid item xs={8}  >
                         <SearchBarItems />
-                    </Grid>
                 </Grid>
                 <Divider variant="inset" className={classes.divider} />
                 </div>

@@ -6,5 +6,6 @@ export const { inventoryTypes, inventoryActions } = createActionsStructure('inve
   { name: 'GET_INVENTORY', async: true },
   { name: 'CHANGE_CATEGORY', async: true },
   { name: 'SWITCH_TO_HOMEBREW', async: true },
+  { name: 'SEARCH_INVENTORY', async: true },
   { name: 'SWITCH_TO_PROFESSIONAL', async: true },
 ]);

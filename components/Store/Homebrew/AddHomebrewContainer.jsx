@@ -106,6 +106,7 @@ class AddHomebrewContainer extends Component {
 
 
   _renderCartItems() {
+    const { classes } = this.props;
     return (
       <Grid className="cart-section" >
         <Grid container spacing={24}>
@@ -114,7 +115,7 @@ class AddHomebrewContainer extends Component {
           </Grid>
         </Grid>
         <Grid className="cart-items-list">
-          {
+          { this.state.cartItems.length > 0 ?
             this.state.cartItems.map((item,i) => {
               return (        
                 <Grid key={i} className="small-cart-item">
@@ -141,20 +142,35 @@ class AddHomebrewContainer extends Component {
                             }}
                           />
                         </Grid>
+                        
                       </Grid>
                     </Grid>
                     <Grid item xs={6} dir="rtl">
+                    <Grid item xs={5} >
+                        <Button
+                          className={classes.deleteButton}
+                          color="textPrimary"                          
+                          onClick={()=>this.props.removeItem(this.props.index)}
+                        >
+                          DELETE
+                        </Button>
+                    </Grid>
                     {/*
                       $255
                     */}
                     </Grid>
+
                   </Grid>
                 </Grid> 
               )
             })
+            :
+            <Typography variant="h5" color="primary" align="center">
+                Cart is EMPTY
+            </Typography>
           }
         </Grid>
-
+        { this.state.cartItems.length > 0 &&
         <Grid container spacing={24} className="total-block" dir="rtl">
           <Grid item xs={6}>
             <Grid container spacing={24}>
@@ -170,6 +186,8 @@ class AddHomebrewContainer extends Component {
             </Grid>
           </Grid>
         </Grid>
+        }
+        { this.state.cartItems.length >0 &&
         <Grid container spacing={24} className="checkout-block" dir="rtl">
           <Grid item >
             <Link prefetch href="/checkout">
@@ -181,6 +199,7 @@ class AddHomebrewContainer extends Component {
             </Link>
           </Grid>
         </Grid>
+        }
       </Grid>
     )
   }
@@ -252,8 +271,14 @@ class AddHomebrewContainer extends Component {
 }
 
 const styles = theme => ({
-    
+    deleteButton: {
+        fontSize: '12px !important',
+        padding: '5px !important',
+        backgroundColor: '#FF9933',
+        color:'white'
+    }
 });
+
 
 const mapStateToProps = state => ({
     cart: state.cart,
