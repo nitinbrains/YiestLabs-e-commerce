@@ -122,18 +122,22 @@ class ManageAddresses extends Component {
                                                 {this.props.user.billing.zip}
                                             </Typography>
                                         </Grid>
-
-                                        <Grid item>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={() =>
-                                                    this.props.setBillAddress(i)
-                                                }
-                                            >
-                                                Select Address
-                                            </Button>
-                                        </Grid>
+                                        {this.props.user.billing.address1 !=
+                                            address.address1 && (
+                                            <Grid item>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={() =>
+                                                        this.props.setBillAddress(
+                                                            i
+                                                        )
+                                                    }
+                                                >
+                                                    Select Address
+                                                </Button>
+                                            </Grid>
+                                        )}
                                     </Grid>
                                 </div>
                             </Grid>

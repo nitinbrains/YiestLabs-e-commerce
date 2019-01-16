@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import moment from 'moment';
+import moment from "moment";
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -87,15 +87,18 @@ class ManageCards extends Component {
                                             "MM-YYYY"
                                         )}
                                     </Typography>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() =>
-                                            this.props.setCreditCard(i)
-                                        }
-                                    >
-                                        Select Card
-                                    </Button>
+                                    {this.props.user.selectedCard.number !=
+                                        card.number && (
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() =>
+                                                this.props.setCreditCard(i)
+                                            }
+                                        >
+                                            Select Card
+                                        </Button>
+                                    )}
                                 </div>
                             </Grid>
                         ))}

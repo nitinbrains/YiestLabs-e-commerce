@@ -137,17 +137,22 @@ class ManageAddresses extends Component {
                                             </Typography>
                                         </Grid>
 
-                                        <Grid item>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={() =>
-                                                    this.props.setShipAddress(i)
-                                                }
-                                            >
-                                                Select Address
-                                            </Button>
-                                        </Grid>
+                                        {this.props.user.shipping.address1 !=
+                                            address.address1 && (
+                                            <Grid item>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={() =>
+                                                        this.props.setBillAddress(
+                                                            i
+                                                        )
+                                                    }
+                                                >
+                                                    Select Address
+                                                </Button>
+                                            </Grid>
+                                        )}
                                     </Grid>
                                 </div>
                             </Grid>

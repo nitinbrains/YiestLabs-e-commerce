@@ -19,6 +19,7 @@ import CardHeader from "../components/UI/Card/CardHeader.jsx";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
+import StepButton from "@material-ui/core/StepButton";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -62,7 +63,8 @@ class Checkout extends Component {
         activeStep: 0,
         isLoading: false,
         terms: false,
-        confirmation: false
+        confirmation: false,
+        completed: {}
     };
 
     handleOrder = () => {
@@ -91,8 +93,20 @@ class Checkout extends Component {
         });
     };
 
+    handleComplete = () => {
+        const { completed } = this.state;
+        completed[this.state.activeStep] = true;
+        this.setState({
+            completed
+        });
+        this.handleNext();
+    };
+
     handleNext = () => {
         const { activeStep } = this.state;
+        if (activeStep == steps.length - 1) {
+            this.props.placeOrder();
+        } else {
             this.setState({
                 activeStep: activeStep + 1
             });
@@ -108,6 +122,17 @@ class Checkout extends Component {
     handleReset = () => {
         this.setState({
             activeStep: 0
+        });
+    };
+
+    handleStep = step => () => {
+        const { completed } = this.state;
+        completed[this.state.activeStep] = true;
+        this.setState({
+            completed
+        });
+        this.setState({
+            activeStep: step
         });
     };
 
@@ -127,23 +152,36 @@ class Checkout extends Component {
                         </Typography>
                     </div>
                     <Stepper
+                        nonLinear
                         activeStep={activeStep}
                         className={classes.stepper}
                     >
-                        {steps.map(label => (
-                            <Step
-                                key={label}
-                                className={label === "Items" && classes.step}
-                            >
-                                <StepLabel>
-                                    {label}
-                                    {label === "Items" &&
-                                        order.isLoading && (
-                                            <CircularProgress size={10} />
-                                        )}
-                                </StepLabel>
-                            </Step>
-                        ))}
+                        {steps.map((label, index) => {
+                            const props = {};
+                            return (
+                                <Step
+                                    key={label}
+                                    className={
+                                        label === "Items" && classes.step
+                                    }
+                                >
+                                    <StepButton
+                                        onClick={this.handleStep(index)}
+                                        completed={this.state.completed[index]}
+                                    >
+                                        <StepLabel>
+                                            {label}
+                                            {label === "Items" &&
+                                                order.isLoading && (
+                                                    <CircularProgress
+                                                        size={10}
+                                                    />
+                                                )}
+                                        </StepLabel>
+                                    </StepButton>
+                                </Step>
+                            );
+                        })}
                     </Stepper>
                     <React.Fragment>
                         {activeStep === steps.length ? (
@@ -173,11 +211,13 @@ class Checkout extends Component {
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        disabled={activeStep == 2 && order.isLoading }
+                                        disabled={
+                                            activeStep == 2 && order.isLoading
+                                        }
                                         onClick={
                                             activeStep === steps.length - 1
                                                 ? this.handleOrder
-                                                : this.handleNext
+                                                : this.handleComplete
                                         }
                                         className={classes.button}
                                     >
