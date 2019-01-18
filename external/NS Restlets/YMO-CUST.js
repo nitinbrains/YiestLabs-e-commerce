@@ -769,161 +769,161 @@ function(record, log, search, email)
                    }
                }
 
-               if(message.shipChange)
+               if(message.addAddress)
                {
                    try
                    {
-                       var found = false;
-                       var numAddresses = customerRecord.getLineCount({sublistId: 'addressbook'});
-                       for(var i = numAddresses - 1; i >= 0; i--)
-                       {
-                           var addressSubrecord = customerRecord.getSublistSubrecord({sublistId: 'addressbook', fieldId: 'addressbookaddress', line: i});
-                           var addressId = customerRecord.getSublistValue({sublistId: 'addressbook', fieldId: 'id', line: i});
-                           if(message.shipping.id == addressId)
-                           {
-                               found = true;
-                               customerRecord.setSublistValue({sublistId: 'addressbook', fieldId: 'defaultshipping', value: true, line: i});
-                               addressSubrecord.setValue({fieldId:'country', value: message.shipping.countryid});
-                               addressSubrecord.setValue({fieldId:'attention', value: message.shipping.attn});
-                               addressSubrecord.setValue({fieldId:'addressee', value: message.shipping.addressee});
-                               addressSubrecord.setValue({fieldId:'addr1', value: message.shipping.address1});
-                               addressSubrecord.setValue({fieldId:'addr2', value: message.shipping.address2});
-                               addressSubrecord.setValue({fieldId:'add3', value: message.shipping.address3});
-                               addressSubrecord.setValue({fieldId:'city', value: message.shipping.city});
-                               addressSubrecord.setValue({fieldId:'zip', value: message.shipping.zip});
-                               break;
-                           }
-                       }
+                        // add new ship address to bottom of addressbook
+                        customerRecord.insertLine({sublistId: 'addressbook', line: numAddresses});
+                        customerRecord.setSublistValue({sublistId: 'addressbook', fieldId: 'defaultbilling', value: true, line: numAddresses});
+                        var addressSubrecord = customerRecord.getSublistSubrecord({sublistId: 'addressbook', fieldId: 'addressbookaddress', line: numAddresses});
+                        addressSubrecord.setValue({fieldId:'country', value: message.address.countryid});
+                        addressSubrecord.setValue({fieldId:'attention', value: message.address.attn});
+                        addressSubrecord.setValue({fieldId:'addressee', value: message.address.addressee});
+                        addressSubrecord.setValue({fieldId:'addr1', value: message.address.address1});
+                        addressSubrecord.setValue({fieldId:'addr2', value: message.address.address2});
+                        addressSubrecord.setValue({fieldId:'add3', value: message.address.address3});
+                        addressSubrecord.setValue({fieldId:'city', value: message.address.city});
+                        addressSubrecord.setValue({fieldId:'zip', value: message.address.zip});
+                   }
+                   catch(err)
+                   {
+                        response.ship = 0;
+                        logError('put - add ship address, cust: ' + message.id, err);
+                   }
+               }
 
-                       if(!found)
-                       {
-                           customerRecord.insertLine({sublistId: 'addressbook', line: numAddresses});
-                           customerRecord.setSublistValue({sublistId: 'addressbook', fieldId: 'defaultshipping', value: true, line: numAddresses});
-                           var addressSubrecord = customerRecord.getSublistSubrecord({sublistId: 'addressbook', fieldId: 'addressbookaddress', line: numAddresses});
-                           addressSubrecord.setValue({fieldId:'country', value: message.shipping.countryid});
-                           addressSubrecord.setValue({fieldId:'attention', value: message.shipping.attn});
-                           addressSubrecord.setValue({fieldId:'addressee', value: message.shipping.addressee});
-                           addressSubrecord.setValue({fieldId:'addr1', value: message.shipping.address1});
-                           addressSubrecord.setValue({fieldId:'addr2', value: message.shipping.address2});
-                           addressSubrecord.setValue({fieldId:'add3', value: message.shipping.address3});
-                           addressSubrecord.setValue({fieldId:'city', value: message.shipping.city});
-                           addressSubrecord.setValue({fieldId:'zip', value: message.shipping.zip});
-                       }
+               if(message.editAddress)
+               {
+                   try
+                   {
+                        // find index of existing address, and edit address at that location
+                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: message.shipping.id});
+                        if(line >= 0) 
+                        {
+                            customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'attention', value: message.address.attn, line: line});
+                            customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'addressee', value: message.address.addresee, line: line});
+                            customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'addr1', value: message.address.address1, line: line});
+                            customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'addr2', value: message.address.address2, line: line});
+                            customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'addr3', value: message.address.address3, line: line});
+                            customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'city', value: message.address.city, line: line});
+                            customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'zip', value: message.address.zip, line: line});
+                            customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'country', value: message.address.countryid, line: line});
+                        }
+                        else 
+                        {
+                            throw { message: 'Could not find index of shipping address', code: 0};
+                        }
+                        
                    }
                    catch(err)
                    {
                        response.ship = 0;
-                       logError('put - shipaddress, cust: ' + message.id, err);
+                       logError('put - edit ship address, cust: ' + message.id, err);
                    }
-               }
+                }
 
-               if(message.billChange)
-               {
-                   try
-                   {
-                       var found = false;
-                       var numAddresses = customerRecord.getLineCount({sublistId: 'addressbook'});
-                       for(var i = numAddresses - 1; i >= 0; i--)
-                       {
-                           var addressSubrecord = customerRecord.getSublistSubrecord({sublistId: 'addressbook', fieldId: 'addressbookaddress', line: i});
-                           var addressId = customerRecord.getSublistValue({sublistId: 'addressbook', fieldId: 'id', line: i});
+                if(message.deleteAddress)
+                {
+                    try 
+                    {
+                        // find index of existing address, and remove address at that location
+                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: message.address.id});
+                        customerRecord.removeLine({sublistId: 'addressbook', line: line});
+                    }
+                    catch(err) 
+                    {
+                        response.ship = 0;
+                        logError('put - edit ship address, cust: ' + message.id, err);
+                    }
+                }
+                
 
-                           if(message.billing.id == addressId)
-                           {
-                               found = true;
-                               customerRecord.setSublistValue({sublistId: 'addressbook', fieldId: 'defaultbilling', value: true, line: i});
-                               addressSubrecord.setValue({fieldId:'country', value: message.billing.countryid});
-                               addressSubrecord.setValue({fieldId:'attention', value: message.billing.attn});
-                               addressSubrecord.setValue({fieldId:'addressee', value: message.billing.addressee});
-                               addressSubrecord.setValue({fieldId:'addr1', value: message.billing.address1});
-                               addressSubrecord.setValue({fieldId:'addr2', value: message.billing.address2});
-                               addressSubrecord.setValue({fieldId:'add3', value: message.billing.address3});
-                               addressSubrecord.setValue({fieldId:'city', value: message.billing.city});
-                               addressSubrecord.setValue({fieldId:'zip', value: message.billing.zip});
-                               break;
-                           }
-                       }
+               if(message.defaultShipAddress)
+                {
+                    try 
+                    {
+                         // remove old default
+                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'defaultshipping', value: true});
+                        customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'defaultshipping', value: false, line: line});
 
-                       if(!found)
-                       {
-                           customerRecord.insertLine({sublistId: 'addressbook', line: numAddresses});
-                           customerRecord.setSublistValue({sublistId: 'addressbook', fieldId: 'defaultbilling', value: true, line: numAddresses});
-                           var addressSubrecord = customerRecord.getSublistSubrecord({sublistId: 'addressbook', fieldId: 'addressbookaddress', line: numAddresses});
-                           addressSubrecord.setValue({fieldId:'country', value: message.billing.countryid});
-                           addressSubrecord.setValue({fieldId:'attention', value: message.billing.attn});
-                           addressSubrecord.setValue({fieldId:'addressee', value: message.billing.addressee});
-                           addressSubrecord.setValue({fieldId:'addr1', value: message.billing.address1});
-                           addressSubrecord.setValue({fieldId:'addr2', value: message.billing.address2});
-                           addressSubrecord.setValue({fieldId:'add3', value: message.billing.address3});
-                           addressSubrecord.setValue({fieldId:'city', value: message.billing.city});
-                           addressSubrecord.setValue({fieldId:'zip', value: message.billing.zip});
-                       }
-                   }
-                   catch(err)
-                   {
-                       response.bill = 0;
-                       logError('put - billaddress, cust: ' + message.id, err);
-                   }
-               }
+                        // set new default
+                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'id', value: message.address.id});
+                        customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'defaultshipping', value: true, line: line});
+                    }
+                    catch(err) 
+                    {
+                        response.ship = 0;
+                        logError('put - edit ship address, cust: ' + message.id, err);
+                    }
+                }
+                
+                if(message.defaultBillAddress)
+                {
+                    try 
+                    {
+                         // remove old default
+                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'defaultbilling', value: true});
+                        customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'defaultbilling', value: false, line: line});
 
-               if(message.creditChange)
-               {
-                   try
-                   {
-                       // default credit card
-                       if(message.card.setDefault)
-                       {
-                           // remove old default
-                           var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId:'ccdefault', value: true});
-                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccdefault', value: false, line: line});
+                        // set new default
+                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'id', value: message.address.id});
+                        customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'defaultbilling', value: true, line: line});
+                    }
+                    catch(err) 
+                    {
+                        response.ship = 0;
+                        logError('put - edit ship address, cust: ' + message.id, err);
+                    }
+                }
+             
+                // default credit card
+                if(message.defaultCreditCard)
+                {
+                    // remove old default
+                    var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId:'ccdefault', value: true});
+                    customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccdefault', value: false, line: line});
 
-                           // set new default
-                           var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId:'ccnumber', value: message.card.ccnumber});
-                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccdefault', value: true, line: line});
-                       }
+                    // set new default
+                    var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId:'ccnumber', value: message.card.ccnumber});
+                    customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccdefault', value: true, line: line});
+                }
 
-                       // Add new credit card
-                       if(message.card.added)
-                       {
-                           var card = decryptCard(message.card.token);
-                           var expireDate = new Date(), dateShortHand = card.ccexpire.split('/');
-                           expireDate.setMonth(dateShortHand[0]);
-                           expireDate.setFullYear(dateShortHand[1]);
+                // Add new credit card
+                if(message.addCreditCard)
+                {
+                    var card = decryptCard(message.token);
+                    var expireDate = new Date(), dateShortHand = card.ccexpire.split('/');
+                    expireDate.setMonth(dateShortHand[0]);
+                    expireDate.setFullYear(dateShortHand[1]);
 
-                           var line = customerRecord.getLineCount({sublistId: 'creditcards'});
-                           customerRecord.insertLine({sublistId: 'creditcards', line: line});
-                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccnumber', value: card.ccnumber, line: line});
-                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccname', value: card.ccname, line: line});
-                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccexpiredate', value: expireDate, line: line});
-                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'paymentmethod', value: card.type, line: line});
-                       }
+                    var line = customerRecord.getLineCount({sublistId: 'creditcards'});
+                    customerRecord.insertLine({sublistId: 'creditcards', line: line});
+                    customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccnumber', value: card.ccnumber, line: line});
+                    customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccname', value: card.ccname, line: line});
+                    customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccexpiredate', value: expireDate, line: line});
+                    customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'paymentmethod', value: card.type, line: line});
+                }
 
-                       // Edit existing credit card information (except ccnumber)
-                       else if(message.card.edited)
-                       {
-                           var expireDate = new Date(), dateShortHand = message.card.ccexpire.split('/');
-                           expireDate.setMonth(dateShortHand[0]);
-                           expireDate.setFullYear(dateShortHand[1]);
+                // Edit existing credit card information (except ccnumber)
+                else if(message.editCreditCard)
+                {
+                    var expireDate = new Date(), dateShortHand = message.card.ccexpire.split('/');
+                    expireDate.setMonth(dateShortHand[0]);
+                    expireDate.setFullYear(dateShortHand[1]);
 
-                           var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId: 'ccnumber', value: message.card.ccnumber});
-                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccexpiredate', value: expireDate, line: line});
-                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccname', value: message.card.ccname, line: line});
-                           customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'paymentmethod', value: message.card.type, line: line});
-                       }
+                    var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId: 'ccnumber', value: message.card.ccnumber});
+                    customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccexpiredate', value: expireDate, line: line});
+                    customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccname', value: message.card.ccname, line: line});
+                    customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'paymentmethod', value: message.card.type, line: line});
+                }
 
-                       // Delete credit card
-                       else if(message.card.deleted)
-                       {
-                           var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId: 'ccnumber', value: message.card.ccnumber});
-                           customerRecord.removeLine({sublistId: 'creditcards', line: line});
-                       }
-                   }
-                   catch(err)
-                   {
-                       response.card = 0;
-                       logError('put - credit, cust: ' + message.id, err);
-                   }
-               }
+                // Delete credit card
+                else if(message.deleteCreditCard)
+                {
+                    var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId: 'ccnumber', value: message.card.ccnumber});
+                    customerRecord.removeLine({sublistId: 'creditcards', line: line});
+                }
 
                else if(message.deleteExpired)
                {

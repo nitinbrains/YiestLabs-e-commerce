@@ -6,6 +6,11 @@ export const getUserInfo = (userID) => requestWrapper(`/get-user-info`, {
     }
 });
 
+export const updateUserInfo = (userInfo) => requestWrapper('/update-user-info', {
+    method: "POST",
+    body: JSON.stringify(userInfo)
+});
+
 export const login = (username, password) => requestWrapper(`/get-user-id`, {
     query: {
         username,

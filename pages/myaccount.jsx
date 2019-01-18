@@ -33,7 +33,8 @@ import ManageBilling from "../components/MyAccount/ManageBilling";
 import ManageCards from "../components/MyAccount/ManageCards";
 
 import { userActions } from '../redux/actions/userActions';
-
+import { changesWereMade } from '../redux/sagas/UserUtils';
+import WLHelper from '../lib/WLHelper';
 
 class MyAccount extends Component {
     constructor(props) {
@@ -91,7 +92,7 @@ class MyAccount extends Component {
     }
 
     componentDidMount() {
-        const { user: { id, email, phone, shipping, billing, selectedCard, subsidiary, subsidiaryOptions }} = this.props;
+        const { user: { id, email, phone, shipping, billing, selectedCard, subsidiaryOptions, subsidiary, ...rest }} = this.props;
         this.setState({
             id,
             email, 
@@ -101,7 +102,8 @@ class MyAccount extends Component {
             selectedCard,
             shipFrom: subsidiaryOptions[0].value,
             subsidiaryOptions,
-            subsidiary
+            subsidiary,
+            ...rest
         });
     }
 
@@ -147,21 +149,13 @@ class MyAccount extends Component {
     };
 
     handleSubmit = () => {
-        let billing = this.state.billing;
-        let shipping = this.state.shipping;
-        if(billing.attn != ''){
-            this.props.setBillAddress(billing)
+
+        try {
+            var request = changesWereMade(this.state, this.props.user);
+            this.props.updateUserInfo({request});
         }
-        if(shipping.attn != ''){
-            this.props.setShipAddress(shipping)
-        }
-        if(this.props.user.email != this.state.email || this.props.user.phone != this.state.phone || this.props.user.subsidiary != this.state.subsidiary ){
-            let data = {
-                email: this.state.email,
-                phone: this.state.phone,
-                subsidiary: this.state.subsidiary
-            }
-            this.props.updateUserInfo(data);
+        catch(err) {
+            this.props.displayError();
         }
     }
 
@@ -223,9 +217,12 @@ class MyAccount extends Component {
                                     value={this.state.shipFrom}
                                     label="Ship From"
                                 >
-                                    {user.subsidiaryOptions.map((option, i) => (
-                                        <MenuItem value={option.value}>{option.label}</MenuItem>
-                                    ))}
+                                    {user.subsidiaryOptions.map((option, i) => {
+                                        var label = WLHelper.getSubsidiaryLabel(option);
+                                        return (
+                                            <MenuItem value={option}>{label}</MenuItem>
+                                        )
+                                    })}
                                 </TextField>
                             </Grid>
                         </Grid>

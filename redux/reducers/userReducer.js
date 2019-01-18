@@ -80,23 +80,15 @@ export default createReducer(initialState, {
         selectedCard: creditCard,
         cards
     }),
+    [userTypes.SET_SHIP_ADDRESS_SUCCESS]: (state, { data }) => ({
+        shipping: data
+    }),
     [userTypes.SET_BILL_ADDRESS_SUCCESS]: (state, { data }) => ({
         billing: data
-    }),
-    [userTypes.ADD_BILL_ADDRESS_SUCCESS]: (state, { data: { otherAddresses, billing } }) => ({
-        billing,
-        otherAddresses
     }),
     [userTypes.SET_SHIP_METHOD_SUCCESS]: (state, { data }) => ({
         shipmethod: data
     }),
-    [userTypes.SET_SHIP_ADDRESS_SUCCESS]: (state, { data }) => ({
-        shipping: data
-    }),
-    [userTypes.ADD_SHIP_ADDRESS_SUCCESS]: (state, { data: { otherAddresses, shipping } }) => ({
-        otherAddresses,
-        shipping
-    }),
-    
+
     [userTypes.USER_LOGOUT_ATTEMPT]: () => null,    // this will return initial state
 });

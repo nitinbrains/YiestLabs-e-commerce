@@ -15,15 +15,21 @@ import { calculatorTypes } from '../actions/calculatorActions';
 // User sagas
 import {
     loginUser,
+    getUserInfo,
     setUserInfo,
-    setCreditCard,
-    addCreditCard,
-    setShipMethod,
-    setShipAddress,
     updateUserInfo,
+    setShipMethod,
+    addCreditCard,
+    deleteCreditCard,
+    setCreditCard,
+    setDefaultCreditCard,
+    addAddress,
+    editAddress,
+    deleteAddress,
+    setShipAddress,
+    setDefaultShipAddress,
     setBillAddress,
-    addShipAddress,
-    addBillAddress
+    setDefaultBillAddress
 } from './users';
 
 // Cart sagas
@@ -69,15 +75,21 @@ function * rootSaga () {
     yield all([
         // USERS
         takeLatest(userTypes.USER_LOGIN_ATTEMPT, loginUser),
-        takeLatest(userTypes.SET_CREDIT_CARD_ATTEMPT, setCreditCard),
+        takeLatest(userTypes.GET_USER_INFO_ATTEMPT, getUserInfo),
         takeLatest(userTypes.SET_USER_INFO_ATTEMPT, setUserInfo),
-        takeLatest(userTypes.ADD_CREDIT_CARD_ATTEMPT, addCreditCard),
-        takeLatest(userTypes.SET_BILL_ADDRESS_ATTEMPT, setBillAddress),
-        takeLatest(userTypes.ADD_BILL_ADDRESS_ATTEMPT, addBillAddress),
-        takeLatest(userTypes.SET_SHIP_METHOD_ATTEMPT, setShipMethod),
-        takeLatest(userTypes.SET_SHIP_ADDRESS_ATTEMPT, setShipAddress),
-        takeLatest(userTypes.ADD_SHIP_ADDRESS_ATTEMPT, addShipAddress),
         takeLatest(userTypes.UPDATE_USER_INFO_ATTEMPT, updateUserInfo),
+        takeLatest(userTypes.SET_SHIP_METHOD_ATTEMPT, setShipMethod),
+        takeLatest(userTypes.ADD_CREDIT_CARD_ATTEMPT, addCreditCard),
+        takeLatest(userTypes.DELETE_CREDIT_CARD_ATTEMPT, deleteCreditCard),
+        takeLatest(userTypes.SET_CREDIT_CARD_ATTEMPT, setCreditCard),
+        takeLatest(userTypes.SET_DEFAULT_CARD_ATTEMPT, setDefaultCreditCard),
+        takeLatest(userTypes.ADD_ADDRESS_ATTEMPT, addAddress),
+        takeLatest(userTypes.EDIT_ADDRESS_ATTEMPT, editAddress),
+        takeLatest(userTypes.DELETE_ADDRESS_ATTEMPT, deleteAddress),
+        takeLatest(userTypes.SET_SHIP_ADDRESS_ATTEMPT, setShipAddress),
+        takeLatest(userTypes.SET_DEFAULT_SHIP_ADDRESS_ATTEMPT, setDefaultShipAddress),
+        takeLatest(userTypes.SET_BILL_ADDRESS_ATTEMPT, setBillAddress),
+        takeLatest(userTypes.SET_DEFAULT_BILL_ADDRESS_ATTEMPT, setDefaultBillAddress),
         // INVENTORY
         takeEvery(inventoryTypes.GET_INVENTORY_ATTEMPT, getInventory),
         takeEvery(inventoryTypes.SEARCH_INVENTORY_ATTEMPT, searchItem),

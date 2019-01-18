@@ -4,17 +4,24 @@ import { createActionsStructure } from '../../helpers/reduxHelpers';
 
 export const { userTypes, userActions } = createActionsStructure('user', [
   { name: 'USER_LOGIN', async: true },
-  { name: 'SET_CREDIT_CARD', async: true },
-  { name: 'ADD_CREDIT_CARD', async: true },
-  { name: 'SET_BILL_ADDRESS', async: true },
-  { name: 'ADD_BILL_ADDRESS', async: true },
-  { name: 'SET_SHIP_METHOD', async: true },
-  { name: 'SET_SHIP_ADDRESS', async: true },
-  { name: 'ADD_SHIP_ADDRESS', async: true },
+  { name: 'GET_USER_INFO', async: true },
   { name: 'SET_USER_INFO', async: true },
   { name: 'UPDATE_USER_INFO', async: true },
+  { name: 'SET_SHIP_METHOD', async: true },
+  { name: 'ADD_CREDIT_CARD', async: true },
+  { name: 'DELETE_CREDIT_CARD', async: true },
+  { name: 'SET_CREDIT_CARD', async: true },
+  { name: 'SET_DEFAULT_CARD', async: true },
+  { name: 'ADD_ADDRESS', async: true },
+  { name: 'EDIT_ADDRESS', async: true },
+  { name: 'DELETE_ADDRESS', async: true },
+  { name: 'SET_SHIP_ADDRESS', async: true },
+  { name: 'SET_DEFAULT_SHIP_ADDRESS', async: true },
+  { name: 'SET_BILL_ADDRESS', async: true },
+  { name: 'SET_DEFAULT_BILL_ADDRESS', async: true },
   { name: 'USER_LOGOUT' }
 ]);
+
 
 // -- uncomment to display
 // console.log(userTypes, userActions)

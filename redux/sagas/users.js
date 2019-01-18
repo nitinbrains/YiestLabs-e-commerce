@@ -1,9 +1,15 @@
 import { put, call, select } from 'redux-saga/effects';
 import _isNumber from 'lodash/isNumber';
+import _isEmpty from 'lodash/isEmpty';
 
 import { userActions, userTypes } from '../actions/userActions';
 import { messageActions } from '../actions/messageActions';
-import * as api from '../../services/users';
+import * as api from '../../services/';
+import {
+    loadSubsidiaryOptions,
+    getDefaultOrFirstCreditCard,
+
+} from './UserUtils.js';
 
 import WLHelper from '../../lib/WLHelper';
 
@@ -11,24 +17,27 @@ export function * loginUser (action) {
     const { responseSuccess, responseFailure, data: { username, password } } = action;
     try {
         const { res: userID } = yield call(api.login, username, password);
-        const { res: userInfo } = yield call(api.getUserInfo, userID);
-
-        const { subsidiary, shipmethod, shipping: { countryid } } = userInfo;
-        userInfo.shipMethods = WLHelper.shipMethodGroup(subsidiary, shipmethod, countryid);
-        userInfo.subsidiaryOptions = loadSubsidiaryOptions(userInfo);
-
-        yield put(responseSuccess(userInfo));
-        if (userInfo.cards.length > 0) {
-            yield put(userActions.setCreditCard());
-        }
+        yield call(getUserInfo, userID);
+        
         yield put(messageActions.displayMessage({
             title: 'Authorization',
             message: 'You have successfully logged in!'
         }));
+
     } catch (err) {
         yield put(responseFailure(err));
     }
 };
+
+export function * getUserInfo(action) {
+    const { responseSuccess, responseFailure, data: { userID } } = action;
+    try {
+        const { res: userInfo } = yield call(api.getUserInfo, userID);
+        yield put(userActions.setUserInfo({userInfo}));
+    } catch (error) {
+        yield put(responseFailure(error))
+    }
+}
 
 export function * setUserInfo(action) {
     const { responseSuccess, responseFailure, data: { userInfo } } = action;
@@ -41,7 +50,7 @@ export function * setUserInfo(action) {
         yield put(responseSuccess(userInfo));
 
         if (userInfo.cards.length > 0) {
-            yield put(userActions.setCreditCard(userInfo));
+            yield put(userActions.getCreditCard());
         }
 
         } catch (err) {
@@ -49,28 +58,24 @@ export function * setUserInfo(action) {
     }
 }
 
-export function * setCreditCard(action) {
-    const { responseSuccess, responseFailure, data } = action;
+export function * updateUserInfo(action) {
+    const { responseSuccess, responseFailure, data: { request } } = action;
     try {
-        const user = yield select(state => state.user);
-        const creditCard = setCC(user, data);
 
-        yield put(responseSuccess({creditCard}));
+        var { res: status, err } = yield call(api.updateUserInfo, {
+            request
+        });
+
+        if(err) throw err;
+
+        yield call(getUserInfo);
+
+        yield put(responseSuccess(status));
     } catch(error) {
-        yield put(responseFailure(error));
+        yield put(responseFailure(error))
     }
 }
 
-export function * addCreditCard(action) {
-    const { responseSuccess, responseFailure, data: card } = action;
-    try {
-        const user = yield select(state => state.user);
-        const { cards, creditCard } = addCC(user, card);
-        yield put(responseSuccess({ cards, creditCard }));
-    } catch(error) {
-        yield put(responseFailure(error));
-    }
-}
 
 export function * setShipMethod(action) {
     const { responseSuccess, responseFailure, data: shipmethod } = action;
@@ -81,146 +86,216 @@ export function * setShipMethod(action) {
     }
 }
 
-export function * setShipAddress(action) {
-    const { responseSuccess, responseFailure, data } = action;
+/*************************/
+/* Credit Card Functions */
+/*************************/
+
+export function * addCreditCard(action) {
+    const { responseSuccess, responseFailure, data: creditCard } = action;
     try {
-        yield put(responseSuccess(data));
+        const user = yield select(state => state.user);
+
+        if(!user.id) {
+            throw {message: 'No user id. Cannot add credit card', code: 0};
+        }
+        let request = {};
+        request.addCreditCard = true;
+        request.id = user.id
+        request.token = WLHelper.generateCreditToken(card);
+
+        yield call(updateUserInfo, {request});
+    
     } catch(error) {
         yield put(responseFailure(error));
     }
 }
 
-export function * updateUserInfo(action) {
-    const { responseSuccess, responseFailure, data } = action;
+export function * deleteCreditCard(action) {
+    const { responseSuccess, responseFailure, data: creditCard } = action;
     try {
-        yield put(responseSuccess(data));
+        const user = yield select(state => state.user);
+
+        if(!user.id) {
+            throw {message: 'No user id. Cannot delete credit card', code: 0};
+        }
+
+        let request = {};
+        request.deleteCreditCard = true;
+        request.id = user.id
+        request.card = creditCard;
+        
+        yield call(updateUserInfo, {request});
+    
     } catch(error) {
-        yield put(responseFailure(error))
+        yield put(responseFailure(error));
     }
 }
 
-export function * addShipAddress(action) {
+function * getCreditCard(action) {
+    const { responseSuccess, responseFailure } = action;
+    try {
+        const user = yield select(state => state.user);
+        const creditCard = getDefaultOrFirstCreditCard(user);
+        if(creditCard) {
+            yield put(responseSuccess({creditCard}));
+        }
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}
+
+export function * setCreditCard(action) {
+    const { responseSuccess, responseFailure, data: { creditCard }} = action;
+    try {
+        yield put(responseSuccess({ creditCard }));
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}
+
+export function * setDefaultCreditCard(action) {
+    const { responseSuccess, responseFailure, data: { creditCard} } = action;
+    try {
+        // Update default card in NetSuite
+        let request = {};
+        request.defaultCreditCard = true;
+        request.card = creditCard;
+        yield call(updateUserInfo, { request });
+
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}
+
+/*****************************/
+/* General Address Functions */
+/*****************************/
+
+export function * addAddress(action) {
     const { responseSuccess, responseFailure, data: address } = action;
     try {
         const user = yield select(state => state.user);
-        const { otherAddresses, shipping } = addShip(user, address);
-        yield put(responseSuccess({ otherAddresses, shipping }));
+
+        if(!user.id) {
+            throw {message: 'No user id. Cannot add credit card', code: 0};
+        }
+        let request = {};
+        request.addShipAddress = true;
+        request.shipping = user.shipping
+
+        yield call(updateUserInfo, {request});
+    
     } catch(error) {
         yield put(responseFailure(error));
     }
 }
 
-export function * setBillAddress(action) {
-    const { responseSuccess, responseFailure, data } = action;
-    try {
-        yield put(responseSuccess(data));
-    } catch(error) {
-        yield put(responseFailure(error));
-    }
-}
-
-export function * addBillAddress(action) {
+export function * editAddress(action) {
     const { responseSuccess, responseFailure, data: address } = action;
     try {
-        let user = yield select(state => state.user);
-        const { otherAddresses, billing } = addBill(user, address);
-        yield put(responseSuccess({ otherAddresses, billing }));
+        const user = yield select(state => state.user);
+
+        if(!user.id) {
+            throw {message: 'No user id. Cannot add credit card', code: 0};
+        }
+
+        let request = {};
+        request.id = user.id;
+        request.editAddress = true;
+        request.address = address
+
+        yield call(updateUserInfo, {request});
+    
     } catch(error) {
         yield put(responseFailure(error));
     }
 }
 
+export function * deleteAddress(action) {
+    const { responseSuccess, responseFailure, data: address } = action;
+    try {
+        const user = yield select(state => state.user);
 
-/****** Business Logic ******/
-
-function setCC(user, index) {
-
-    // get default or first card in users account if card not specified
-    let creditCard
-    if (_isNumber(index)) {
-        creditCard = user.cards[index];
-    } else if (user.cards.length > 0) {
-        const defaultCard = user.cards.find(c => c.default);
-        if (defaultCard) {
-            creditCard = defaultCard;
-        } else {
-            creditCard = user.cards[0];
-        }
-    }
-    return creditCard;
-}
-
-function addShip(user, address) {
-    user.otherAddresses.push(address);
-    user.shipping = address;
-    user.shipping.id = 1; // TESTING
-    return { shipping: user.shipping, otherAddresses: user.otherAddresses };
-}
-
-function addBill(user, address) {
-    user.otherAddresses.push(address);
-    user.billing = address;
-    user.billing.id = 1;  // TESTING
-    return { billing: user.billing, otherAddresses: user.otherAddresses };
-
-}
-
-function addCC(user, card) {
-
-    let expireDate = new Date(card.expireYear, card.expireMonth, 1, 0, 0, 0, 0);
-    let today = new Date();
-
-    if(!card.name) {
-        throw {message: 'Please enter a name for the credit card', code: 0};
-    } else if (!card.number) {
-        throw {message: 'Please enter a credit card number', code: 0};
-    } else if (!card.expireMonth) {
-        throw {message: 'Please enter an expiration month for the credit card', code: 0};
-    } else if (!card.expireYear) {
-        throw {message: 'Please enter an expiration year for the credit card', code: 0};
-    } else if(expireDate < today){
-        throw {message: 'Your credit card expiration date has already passed', code: 0};
-    }
-
-    card.id = 1 // TESTING
-    user.cards.push(card);
-    user.selectedCard = card;
-    return { creditCard: user.selectedCard, cards: user.cards };
-}
-
-function loadSubsidiaryOptions(user) {
-
-    if(!user) return;
-
-    let subsidiaryOptions = [];
-    let cph = false, hk = false;
-
-    for (let i = 0; i < user.connectedaccounts.length; i++)
-    {
-        let value = parseInt(user.connectedaccounts[i].subsidiaryid);
-
-        if(value == 5)
-        {
-            hk = true;
-        }
-        else if(value == 7)
-        {
-            cph = true;
+        if(!user.id) {
+            throw {message: 'No user id. Cannot add credit card', code: 0};
         }
 
-        let label = WLHelper.getSubsidiaryLabel(value);
-        subsidiaryOptions.push({label: label, value: value});
-    }
+        let request = {};
+        request.id = user.id;
+        request.deleteAddress = true;
+        request.address = address;
 
-    if(!cph)
-    {
-        subsidiaryOptions.push({label: 'Create WL Copenhagen Account', value: -7});
+        yield call(updateUserInfo, {request});
+    
+    } catch(error) {
+        yield put(responseFailure(error));
     }
+}
 
-    if(!hk)
-    {
-        subsidiaryOptions.push({label: 'Create WL Hong Kong Account', value: -5});
+/******************************/
+/* Shipping Address Functions */
+/******************************/
+
+export function * setShipAddress(action) {
+    const { responseSuccess, responseFailure, data: { address }} = action;
+    try {
+        yield put(responseSuccess({address}));
+    } catch(error) {
+        yield put(responseFailure(error));
     }
+}
 
-    return subsidiaryOptions;
+export function * setDefaultShipAddress(action) {
+    const { responseSuccess, responseFailure, data: address } = action;
+    try {
+        const user = yield select(state => state.user);
+
+        if(!user.id) {
+            throw {message: 'No user id. Cannot set default ship address', code: 0};
+        }
+
+        let request = {};
+        request.id = user.id;
+        request.defaultBillAddress = true;
+        request.address = address;
+
+        yield call(updateUserInfo, {request});
+    
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}
+
+/*****************************/
+/* Billing Address Functions */
+/*****************************/
+
+export function * setBillAddress(action) {
+    const { responseSuccess, responseFailure, data: { address }} = action;
+    try {
+        yield put(responseSuccess({address}));
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}
+
+export function * setDefaultBillAddress(action) {
+    const { responseSuccess, responseFailure, data: address } = action;
+    try {
+        const user = yield select(state => state.user);
+
+        if(!user.id) {
+            throw {message: 'No user id. Cannot set default bill address', code: 0};
+        }
+
+        let request = {};
+        request.id = user.id;
+        request.defaultBillAddress = true;
+        request.address = address;
+
+        yield call(updateUserInfo, {request});
+    
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
 }

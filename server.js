@@ -513,7 +513,7 @@ app.prepare()
 		}
 	})
 
-	server.post('/change-cust-info', function(req, res, next) {
+	server.post('/update-user-info', function(req, res, next) {
 
 		const request = req.body.request;
 		if(request.id)

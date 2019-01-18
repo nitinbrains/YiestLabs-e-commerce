@@ -39,7 +39,6 @@ export function * updateCartItem(action) {
 }
 
 
-
 /* ------------- Business Logic ------------- */
 
 function addToCart(items, cartItem) {

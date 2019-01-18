@@ -5,7 +5,7 @@ import { inventoryActions } from '../actions/inventoryActions';
 import WLHelper from '../../lib/WLHelper';
 import SalesLib from '../../lib/SalesLib';
 
-import * as api from '../../services/inventory';
+import * as api from '../../services/';
 
 export function * getInventory (action) {
     const { responseSuccess, responseFailure, data: { search } } = action;
