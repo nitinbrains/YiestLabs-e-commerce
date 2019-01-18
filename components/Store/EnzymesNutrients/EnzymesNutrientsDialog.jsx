@@ -23,13 +23,16 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
+import LoadingIndicator from '../../UI/LoadingIndicator';
 import { cartActions } from "../../../redux/actions/cartActions";
 
 class EnzymesNutrientsDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            quantity: "1"
+            quantity: "1",
+            availability:false,
+            isLoading: false,
         };
 
         this.item = this.props.item;
@@ -75,6 +78,18 @@ class EnzymesNutrientsDialog extends Component {
         }
     };
 
+    checkAvalibality = () => {
+        this.setState({
+            isLoading: true,
+        })
+        setTimeout(() => {
+            this.setState({
+                isLoading: false,
+                availability: true
+            })
+        }, 5000);
+    }
+
     changeQuantity = event => {
         this.setState({ quantity: event.target.value });
     };
@@ -88,6 +103,7 @@ class EnzymesNutrientsDialog extends Component {
 
         return (
             <React.Fragment>
+                <LoadingIndicator visible={this.state.isLoading} label={"Getting Avalibality"} />                
                 <DialogContent>
                 <div className={classes.close}>
                     <IconButton
@@ -129,6 +145,54 @@ class EnzymesNutrientsDialog extends Component {
                             <Typography>{this.item.Description}</Typography>
                         </Grid>
                     </Grid>
+                  
+                    <Grid
+                        item
+                        xs
+                        container
+                        spacing={24}
+                        style={{ marginTop: 5 }}
+                        direction={"row"}
+                    >
+                        <Grid
+                            item
+                            xs
+                            container
+                            spacing={24}
+                            direction={"row"}
+                            justify="flex-start"
+                        >
+                            {this.state.availability ?
+                                <Grid item style={{margin: '12px 0px'}} >
+                                    <Typography> Availability : 25 </Typography>
+                                </Grid> 
+                                :
+                                <Grid item />
+                            }
+                            <Grid
+                                item
+                                xs
+                                container
+                                spacing={24}
+                                direction={"row"}
+                                justify="flex-end"
+                            >
+                                <Grid item>
+                                    <div className={classes.buttons}>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={this.checkAvailability}
+                                            className={classes.button}
+                                        >
+                                            Get Availability
+                                        </Button>
+                                    </div>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
                     <Grid
                         item
                         xs
