@@ -33,6 +33,7 @@ import * as Yup from 'yup';
 import ManageShipping from "../components/MyAccount/ManageShipping";
 import ManageBilling from "../components/MyAccount/ManageBilling";
 import ManageCards from "../components/MyAccount/ManageCards";
+import * as Util from '../lib/Utils';
 
 import { userActions } from '../redux/actions/userActions';
 
@@ -107,6 +108,19 @@ class MyAccount extends Component {
             subsidiary
         });
     }
+
+    
+
+    componentWillUnmount() {
+        const { user: { id, email, phone, shipping, billing, selectedCard, subsidiary, subsidiaryOptions }} = this.props;
+        const isShippingDiff = Util.checkDifference(shipping,this.state.shipping);
+        const isBillingDiff = Util.checkDifference( billing, this.state.billing);
+        if( email != this.state.email || phone != this.state.phone || subsidiary != this.state.shipFrom || isShippingDiff || isBillingDiff ) {
+            alert('not match')
+        }
+    }
+
+
 
     selectAccount = (e) => {
         this.setState({
@@ -267,6 +281,7 @@ class MyAccount extends Component {
                                         return(
                                             <Grid item xs={3}>
                                                 <TextField 
+                                                    className={ user.email != props.field.value && classes.updateField}
                                                     value={props.field.value}
                                                     InputLabelProps={{ shrink: props.field.value != '' }}
                                                     onChange={e => { props.form.setFieldValue('email',e.target.value); this.setState({email: e.target.value})}}
@@ -294,6 +309,7 @@ class MyAccount extends Component {
                                         return(
                                             <Grid item xs={3}>
                                                 <TextField 
+                                                    className={ user.phone != props.field.value && classes.updateField}                                                    
                                                     value={props.field.value}
                                                     InputLabelProps={{ shrink: props.field.value != '' }}
                                                     onChange={e => { props.form.setFieldValue('phone',e.target.value); this.setState({phone: e.target.value})}}
@@ -321,6 +337,7 @@ class MyAccount extends Component {
                                         return(
                                             <Grid item xs={3}>
                                                 <TextField
+                                                    className={ user.subsidiary != props.field.value && classes.updateField}                                                
                                                     variant="outlined"
                                                     id="select-shipfrom"
                                                     select
@@ -374,6 +391,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField 
+                                                className={ user.shipping.attn != props.field.value && classes.updateField}                                            
                                                 onChange={e => { props.form.setFieldValue('shippingAttn',e.target.value); this.setState({shipping: {...this.state.shipping, attn: e.target.value}})}}
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
@@ -401,6 +419,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField 
+                                                className={ user.shipping.addressee != props.field.value && classes.updateField}
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('shippingAddressee',e.target.value); this.setState({shipping: {...this.state.shipping, addressee: e.target.value}})}}
@@ -428,6 +447,7 @@ class MyAccount extends Component {
                                     return(
                                     <Grid item xs={12}>
                                         <TextField 
+                                            className={ user.shipping.address1 != props.field.value && classes.updateField}                                        
                                             value={props.field.value}
                                             InputLabelProps={{ shrink: props.field.value != '' }}
                                             onChange={e => { props.form.setFieldValue('shippingAddress1',e.target.value); this.setState({shipping: {...this.state.shipping, address1: e.target.value}})}}
@@ -455,6 +475,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
+                                                className={ user.shipping.address2 != props.field.value && classes.updateField}                                            
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('shippingAddress2',e.target.value); this.setState({shipping: {...this.state.shipping, address2: e.target.value}})}}
@@ -482,6 +503,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
+                                                className={ user.shipping.address3 != props.field.value && classes.updateField}                                            
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('shippingAddress3',e.target.value); this.setState({shipping: {...this.state.shipping, address3: e.target.value}})}}
@@ -509,6 +531,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField 
+                                                className={ user.shipping.city != props.field.value && classes.updateField}                                            
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('shippingCity',e.target.value); this.setState({shipping: {...this.state.shipping, city: e.target.value}})}}
@@ -536,6 +559,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField 
+                                                className={ user.shipping.zip != props.field.value && classes.updateField}                                            
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('shippingZip',e.target.value); this.setState({shipping: {...this.state.shipping, zip: e.target.value}})}}
@@ -564,6 +588,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField 
+                                                className={ user.shipping.countryid != props.field.value && classes.updateField}                                            
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('shippingCountryid',e.target.value); this.setState({shipping: {...this.state.shipping, countryid: e.target.value}})}}
@@ -621,6 +646,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField 
+                                                className={ user.billing.attn != props.field.value && classes.updateField}                                            
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('billingAttn',e.target.value); this.setState({billing: {...this.state.billing, attn: e.target.value}})}}
@@ -648,6 +674,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField 
+                                                className={ user.billing.addressee != props.field.value && classes.updateField}                                            
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('billingAddressee',e.target.value); this.setState({billing: {...this.state.billing, addressee: e.target.value}})}}
@@ -675,6 +702,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField 
+                                                className={ user.billing.address1 != props.field.value && classes.updateField}                                            
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('billingAddress1',e.target.value); this.setState({billing: {...this.state.billing, address1: e.target.value}})}}
@@ -702,6 +730,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
+                                                className={ user.billing.address2 != props.field.value && classes.updateField}                                            
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('billingAddress2',e.target.value); this.setState({billing: {...this.state.billing, address2: e.target.value}})}}
@@ -729,6 +758,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
+                                                className={ user.billing.address3 != props.field.value && classes.updateField}                                            
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('billingAddress3',e.target.value); this.setState({billing: {...this.state.billing, address3: e.target.value}})}}
@@ -749,13 +779,14 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.billingAddress3 && touched.billingAddress3 && <div style={{color:'red'}} >{errors.billingAddress3}</div>}>
+                                {errors.billingAddress3 && touched.billingAddress3 && <div style={{color:'red'}}>{errors.billingAddress3}</div>}
                                 <Field 
                                     name="billingCity" 
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
                                             <TextField 
+                                                className={ user.billing.city != props.field.value && classes.updateField}                                            
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('volVal',e.target.value); this.setState({billing: {...this.state.billing, city: e.target.value}})}}
@@ -783,6 +814,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField 
+                                                className={ user.billing.zip != props.field.value && classes.updateField}                                            
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: this.state.billing.zip != '' }}
                                                 onChange={e => { props.form.setFieldValue('billingZip',e.target.value); this.setState({billing: {...this.state.billing, zip: e.target.value}})}}
@@ -810,6 +842,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField 
+                                                className={ user.billing.countryid != props.field.value && classes.updateField}                                            
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('billingCountryid',e.target.value); this.setState({billing: {...this.state.billing, countryid: e.target.value}})}}
@@ -931,6 +964,9 @@ const styles = theme => ({
         borderTop: "solid 1.5px",
         borderColor: "#CCCCCC",
         marginBottom: 10
+    },
+    updateField: {
+        backgroundColor:'#FF9933',
     }
 });
 
