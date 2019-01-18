@@ -110,6 +110,7 @@ class Checkout extends Component {
             this.setState({
                 activeStep: activeStep + 1
             });
+        }
     };
 
     handleBack = () => {
