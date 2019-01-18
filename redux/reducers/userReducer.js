@@ -70,6 +70,12 @@ export default createReducer(initialState, {
     [userTypes.SET_USER_INFO_SUCCESS]: (state, { data: userInfo }) => ({
         ...userInfo
     }),
+    [userTypes.UPDATE_USER_INFO_ATTEMPT]: (state, { data }) => ({
+        isLoading: true,
+    }),
+    [userTypes.UPDATE_USER_INFO_FAILURE]: (state, { data }) => ({
+        isLoading: false,
+    }),
     [userTypes.UPDATE_USER_INFO_SUCCESS]: (state, { data:{ email, phone, subsidiary } }) => ({
         email: email,
         phone: phone,

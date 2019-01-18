@@ -33,6 +33,7 @@ import * as Yup from 'yup';
 import ManageShipping from "../components/MyAccount/ManageShipping";
 import ManageBilling from "../components/MyAccount/ManageBilling";
 import ManageCards from "../components/MyAccount/ManageCards";
+import LoadingIndicator from '../components/UI/LoadingIndicator';
 
 import { userActions } from '../redux/actions/userActions';
 import { changesWereMade } from '../redux/sagas/UserUtils';
@@ -103,7 +104,7 @@ class MyAccount extends Component {
             shipping,
             billing,
             selectedCard,
-            shipFrom: subsidiaryOptions[0].value,
+            shipFrom: subsidiaryOptions[0],
             subsidiaryOptions,
             subsidiary,
             ...rest
@@ -155,6 +156,7 @@ class MyAccount extends Component {
 
         try {
             var request = changesWereMade(this.state, this.props.user);
+            console.log(request,'request')
             this.props.updateUserInfo({request});
         }
         catch(err) {
@@ -197,12 +199,13 @@ class MyAccount extends Component {
             email: Yup.string()
             .email('Must Be Email')
             .required('Required'),
-            shipFrom: Yup.string()
-            .required('Required'),
+            // shipFrom: Yup.string()
+            // .required('Required'),
         });
         return (
             <NavBarUserSearchDrawerLayout>
                 <PageContainer heading="MY ACCOUNT" id="cart-box">
+                <LoadingIndicator visible={this.props.user.isLoading} label={"Updating Data"} />                
                 <Formik
                   initialValues={{
                         //shipping
@@ -232,7 +235,7 @@ class MyAccount extends Component {
                     }}
                     validationSchema={customFormValidation}
                     enableReinitialize
-                    onSubmit={ values => { console.log('issb'); this.handleSubmit()}}
+                    onSubmit={ values => { this.handleSubmit()}}
                 >
                 {({ errors, touched, isValidating }) => {
                     return(
@@ -329,9 +332,11 @@ class MyAccount extends Component {
                                                     value={props.field.value}
                                                     label="Ship From"
                                                 >
-                                                    {user.subsidiaryOptions.map((option, i) => (
-                                                        <MenuItem value={option.value}>{option.label}</MenuItem>
-                                                    ))}
+                                                    {user.subsidiaryOptions.map((option, i) =>{
+                                                        var label = WLHelper.getSubsidiaryLabel(option);
+                                                        return (
+                                                        <MenuItem value={option}>{label}</MenuItem>
+                                                    )})}
                                                 </TextField>
                                             </Grid>
                                         )
@@ -743,7 +748,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.billingAddress3 && touched.billingAddress3 && <div style={{color:'red'}} >{errors.billingAddress3}</div>}>
+                                {errors.billingAddress3 && touched.billingAddress3 && <div style={{color:'red'}} >{errors.billingAddress3}</div>}
                                 <Field 
                                     name="billingCity" 
                                     component={(props)=>{

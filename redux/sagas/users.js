@@ -65,13 +65,14 @@ export function * updateUserInfo(action) {
         var { res: status, err } = yield call(api.updateUserInfo, {
             request
         });
-
+        console.log(status, err, 'sasd')
         if(err) throw err;
 
         yield call(getUserInfo);
 
         yield put(responseSuccess(status));
     } catch(error) {
+        console.log(error,'if anyss')
         yield put(responseFailure(error))
     }
 }
