@@ -27,6 +27,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
 import ManageShipping from "../components/MyAccount/ManageShipping";
 import ManageBilling from "../components/MyAccount/ManageBilling";
@@ -46,7 +48,8 @@ class MyAccount extends Component {
             shipFrom: 1,
             confirmDialog: false,
             shipping: {},
-            billing: {}
+            billing: {},
+            focus:'',
         };
     }
 
@@ -161,73 +164,184 @@ class MyAccount extends Component {
 
     render() {
         const { classes, user } = this.props;
+        const { focus } = this.state;
+        const customFormValidation = Yup.object().shape({
+            shippingAttn: Yup.string()
+            .required('Required'),
+            shippingAddressee: Yup.string()
+            .required('Required'),
+            shippingAddress1: Yup.string()
+            .required('Required'),
+            shippingCity: Yup.string()
+            .required('Required'),
+            shippingZip: Yup.number()
+            .required('Required'),
+            shippingCountryid: Yup.string()
+            .required('Required'),
 
+            billingAttn: Yup.string()
+            .required('Required'),
+            billingAddress1: Yup.string()
+            .required('Required'),
+            billingAddressee: Yup.string()
+            .required('Required'),
+            billingCity: Yup.string()
+            .required('Required'),
+            billingZip: Yup.number()
+            .required('Required'),
+            billingCountryid: Yup.string()
+            .required('Required'),
+
+            phone: Yup.number()
+            .required('Required'),
+            email: Yup.string()
+            .email('Must Be Email')
+            .required('Required'),
+            shipFrom: Yup.string()
+            .required('Required'),
+        });
         return (
             <NavBarUserSearchDrawerLayout>
                 <PageContainer heading="MY ACCOUNT" id="cart-box">
-                    <Grid container spacing={24}>
-                        <Grid
-                            item
-                            xs={12}
-                            container
-                            justify="center"
-                            alignItems="center"
-                            style={{ marginBottom: 20 }}
-                        >
-                            <Grid item xs={3}>
-                                <Typography
-                                    style={{ textAlign: "center" }}
-                                    variant="title"
-                                    gutterBottom
-                                >
-                                    Account # {this.state.id}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <TextField required
-                                    value={this.state.email}
-                                    InputLabelProps={{ shrink: this.state.email != '' }}
-                                    onChange={e => this.setState({email: e.target.value})}
-                                    variant="outlined"
-                                    id="email"
-                                    name="email"
-                                    label="Email"
-                                    autoComplete="email"
-                                />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <TextField required
-                                    value={this.state.phone}
-                                    InputLabelProps={{ shrink: this.state.phone != '' }}
-                                    onChange={e => this.setState({phone: e.target.value})}
-                                    variant="outlined"
-                                    id="phone"
-                                    name="phone"
-                                    label="Phone"
-                                    autoComplete="phone"
-                                />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <TextField
-                                    variant="outlined"
-                                    id="select-shipfrom"
-                                    select
-                                    fullWidth
-                                    onChange={this.handleShipFrom}
-                                    value={this.state.shipFrom}
-                                    label="Ship From"
-                                >
-                                    {user.subsidiaryOptions.map((option, i) => {
-                                        var label = WLHelper.getSubsidiaryLabel(option);
-                                        return (
-                                            <MenuItem value={option}>{label}</MenuItem>
-                                        )
-                                    })}
-                                </TextField>
-                            </Grid>
-                        </Grid>
+                <Formik
+                  initialValues={{
+                        //shipping
+                            shippingAddress1: this.state.shipping.address1,
+                            shippingAddress2: this.state.shipping.address2,
+                            shippingAddress3: this.state.shipping.address3,
+                            shippingAddressee: this.state.shipping.addressee,
+                            shippingAttn: this.state.shipping.attn,
+                            shippingCity: this.state.shipping.city,
+                            shippingZip: this.state.shipping.zip,                            
+                            shippingCountryid: this.state.shipping.countryid,
 
+                        // Billing
+                            billingAddress1: this.state.billing.address1,
+                            billingAddress2: this.state.billing.address2,
+                            billingAddress3: this.state.billing.address3,
+                            billingAddressee: this.state.billing.addressee,
+                            billingAttn: this.state.billing.attn,
+                            billingZip: this.state.billing.zip,                            
+                            billingCity: this.state.billing.city,
+                            billingCountryid: this.state.billing.countryid,
+
+                        //user
+                            email:  this.state.email,
+                            phone:  this.state.phone,
+                            shipFrom: this.state.shipFrom,
+                    }}
+                    validationSchema={customFormValidation}
+                    enableReinitialize
+                    onSubmit={ values => { console.log('issb'); this.handleSubmit()}}
+                >
+                {({ errors, touched, isValidating }) => {
+                    return(
+                        <Form>
+                    <Grid container spacing={24}>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    container
+                                    justify="center"
+                                    alignItems="center"
+                                    style={{ marginBottom: 20 }}
+                                >
+                                    <Grid item xs={3}>
+                                        <Typography
+                                            style={{ textAlign: "center" }}
+                                            variant="title"
+                                            gutterBottom
+                                        >
+                                            Account # {this.state.id}
+                                        </Typography>
+                                    </Grid>
+                                    <Field 
+                                        name="email" 
+                                        component={(props)=>{
+                                        return(
+                                            <Grid item xs={3}>
+                                                <TextField 
+                                                    value={props.field.value}
+                                                    InputLabelProps={{ shrink: props.field.value != '' }}
+                                                    onChange={e => { props.form.setFieldValue('email',e.target.value); this.setState({email: e.target.value})}}
+                                                    variant="outlined"
+                                                    onFocus={e => {
+                                                        if (focus !== 'email')
+                                                        this.setState({
+                                                            focus : 'email'
+                                                        })
+                                                    }}
+                                                    autoFocus={ focus == 'email' }                                                    
+                                                    id="email"
+                                                    name="email"
+                                                    label="Email"
+                                                    autoComplete="email"
+                                                />
+                                            </Grid>
+                                        )
+                                        }}
+                                    />
+                                    {errors.email && touched.email && <div style={{color:'red'}} >{errors.email}</div>}
+                                    <Field 
+                                        name="phone" 
+                                        component={(props)=>{
+                                        return(
+                                            <Grid item xs={3}>
+                                                <TextField 
+                                                    value={props.field.value}
+                                                    InputLabelProps={{ shrink: props.field.value != '' }}
+                                                    onChange={e => { props.form.setFieldValue('phone',e.target.value); this.setState({phone: e.target.value})}}
+                                                    variant="outlined"
+                                                    onFocus={e => {
+                                                        if (focus !== 'phone')
+                                                        this.setState({
+                                                            focus : 'phone'
+                                                        })
+                                                    }}
+                                                    autoFocus={ focus == 'phone' }
+                                                    id="phone"
+                                                    name="phone"
+                                                    label="Phone"
+                                                    autoComplete="phone"
+                                                />
+                                            </Grid>
+                                        )
+                                        }}
+                                    />
+                                    {errors.phone && touched.phone && <div style={{color:'red'}} >{errors.phone}</div>}
+                                    <Field 
+                                        name="shipFrom" 
+                                        component={(props)=>{
+                                        return(
+                                            <Grid item xs={3}>
+                                                <TextField
+                                                    variant="outlined"
+                                                    id="select-shipfrom"
+                                                    select
+                                                    onFocus={e => {
+                                                        if (focus !== 'shipFrom')
+                                                        this.setState({
+                                                            focus : 'shipFrom'
+                                                        })
+                                                    }}
+                                                    fullWidth
+                                                    onChange={e => {props.form.setFieldValue('shipFrom',e.target.value); this.handleShipFrom(e)}}
+                                                    value={props.field.value}
+                                                    label="Ship From"
+                                                >
+                                                    {user.subsidiaryOptions.map((option, i) => (
+                                                        <MenuItem value={option.value}>{option.label}</MenuItem>
+                                                    ))}
+                                                </TextField>
+                                            </Grid>
+                                        )
+                                        }}
+                                    />
+                                    {errors.shipFrom && touched.shipFrom && <div style={{color:'red'}} >{errors.shipFrom}</div>}
+                                </Grid>
+                           
                         <Grid item container justify="center">
+
                             <Grid
                                 item
                                 xs={12}
@@ -248,103 +362,223 @@ class MyAccount extends Component {
                                         className={classes.sectionTitleDivider}
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <TextField required
-                                        onChange={e => this.setState({shipping: {...this.state.shipping, attn: e.target.value}})}
-                                        value={this.state.shipping.attn}
-                                        InputLabelProps={{ shrink: this.state.shipping.attn != '' }}
-                                        id="attention"
-                                        name="attn"
-                                        label="Attention"
-                                        fullWidth
-                                        autoComplete="attention"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField required
-                                        value={this.state.shipping.addressee}
-                                        InputLabelProps={{ shrink: this.state.shipping.addressee != '' }}
-                                        onChange={e => this.setState({shipping: {...this.state.shipping, addressee: e.target.value}})}
-                                        id="addressee"
-                                        name="addressee"
-                                        label="Addressee"
-                                        fullWidth
-                                        autoComplete="addressee"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField required
-                                        value={this.state.shipping.address1}
-                                        InputLabelProps={{ shrink: this.state.shipping.address1 != '' }}
-                                        onChange={e => this.setState({shipping: {...this.state.shipping, address1: e.target.value}})}
-                                        id="address1"
-                                        name="address1"
-                                        label="Address line 1"
-                                        fullWidth
-                                        autoComplete="address-line1"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        value={this.state.shipping.address2}
-                                        InputLabelProps={{ shrink: this.state.shipping.address2 != '' }}
-                                        onChange={e => this.setState({shipping: {...this.state.shipping, address2: e.target.value}})}
-                                        id="address2"
-                                        name="address2"
-                                        label="Address line 2"
-                                        fullWidth
-                                        autoComplete="address-line2"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        value={this.state.shipping.address3}
-                                        InputLabelProps={{ shrink: this.state.shipping.address3 != '' }}
-                                        onChange={e => this.setState({shipping: {...this.state.shipping, address3: e.target.value}})}
-                                        id="address3"
-                                        name="address3"
-                                        label="Address line 3"
-                                        fullWidth
-                                        autoComplete="address-line3"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField required
-                                        value={this.state.shipping.city}
-                                        InputLabelProps={{ shrink: this.state.shipping.city != '' }}
-                                        onChange={e => this.setState({shipping: {...this.state.shipping, city: e.target.value}})}
-                                        id="city"
-                                        name="city"
-                                        label="City"
-                                        fullWidth
-                                        autoComplete="address-level2"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField required
-                                        value={this.state.shipping.zip}
-                                        InputLabelProps={{ shrink: this.state.shipping.zip != '' }}
-                                        onChange={e => this.setState({shipping: {...this.state.shipping, zip: e.target.value}})}
-                                        id="zip"
-                                        type='number'
-                                        name="zip"
-                                        label="Zip / Postal code"
-                                        fullWidth
-                                        autoComplete="postal-code"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField required
-                                        value={this.state.shipping.countryid}
-                                        InputLabelProps={{ shrink: this.state.shipping.countryid != '' }}
-                                        onChange={e => this.setState({shipping: {...this.state.shipping, countryid: e.target.value}})}
-                                        id="country"
-                                        name="countryid"
-                                        label="Country"
-                                        fullWidth
-                                        autoComplete="country"
-                                    />
-                                </Grid>
+                                <Field 
+                                    name="shippingAttn" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField 
+                                                onChange={e => { props.form.setFieldValue('shippingAttn',e.target.value); this.setState({shipping: {...this.state.shipping, attn: e.target.value}})}}
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onFocus={e => {
+                                                    if (focus !== 'shippingAttn')
+                                                    this.setState({
+                                                        focus : 'shippingAttn'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'shippingAttn' }
+                                                id="attention"
+                                                name="attn"
+                                                label="Attention"
+                                                fullWidth
+                                                autoComplete="attention"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.shippingAttn && touched.shippingAttn && <div style={{color:'red'}} >{errors.shippingAttn}</div>}
+                                <Field 
+                                    name="shippingAddressee" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField 
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onChange={e => { props.form.setFieldValue('shippingAddressee',e.target.value); this.setState({shipping: {...this.state.shipping, addressee: e.target.value}})}}
+                                                onFocus={e => {
+                                                    if (focus !== 'shippingAddressee')
+                                                    this.setState({
+                                                        focus : 'shippingAddressee'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'shippingAddressee' }
+                                                id="addressee"
+                                                name="addressee"
+                                                label="Addressee"
+                                                fullWidth
+                                                autoComplete="addressee"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.shippingAddressee && touched.shippingAddressee && <div style={{color:'red'}} >{errors.shippingAddressee}</div>}
+                                <Field 
+                                    name="shippingAddress1" 
+                                    component={(props)=>{
+                                    return(
+                                    <Grid item xs={12}>
+                                        <TextField 
+                                            value={props.field.value}
+                                            InputLabelProps={{ shrink: props.field.value != '' }}
+                                            onChange={e => { props.form.setFieldValue('shippingAddress1',e.target.value); this.setState({shipping: {...this.state.shipping, address1: e.target.value}})}}
+                                            onFocus={e => {
+                                                if (focus !== 'shippingAddress1')
+                                                this.setState({
+                                                    focus : 'shippingAddress1'
+                                                })
+                                            }}
+                                            autoFocus={ focus == 'shippingAddress1' }
+                                            id="address1"
+                                            name="address1"
+                                            label="Address line 1"
+                                            fullWidth
+                                            autoComplete="address-line1"
+                                        />
+                                    </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.shippingAddress1 && touched.shippingAddress1 && <div style={{color:'red'}} >{errors.shippingAddress1}</div>}
+                                <Field 
+                                    name="shippingAddress2" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onChange={e => { props.form.setFieldValue('shippingAddress2',e.target.value); this.setState({shipping: {...this.state.shipping, address2: e.target.value}})}}
+                                                onFocus={e => {
+                                                    if (focus !== 'shippingAddress2')
+                                                    this.setState({
+                                                        focus : 'shippingAddress2'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'shippingAddress2' }
+                                                id="address2"
+                                                name="address2"
+                                                label="Address line 2"
+                                                fullWidth
+                                                autoComplete="address-line2"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.shippingAddress2 && touched.shippingAddress2 && <div style={{color:'red'}} >{errors.shippingAddress2}</div>}
+                                <Field 
+                                    name="shippingAddress3" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onChange={e => { props.form.setFieldValue('shippingAddress3',e.target.value); this.setState({shipping: {...this.state.shipping, address3: e.target.value}})}}
+                                                onFocus={e => {
+                                                    if (focus !== 'shippingAddress3')
+                                                    this.setState({
+                                                        focus : 'shippingAddress3'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'shippingAddress3' }
+                                                id="address3"
+                                                name="address3"
+                                                label="Address line 3"
+                                                fullWidth
+                                                autoComplete="address-line3"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.shippingAddress3 && touched.shippingAddress3 && <div style={{color:'red'}} >{errors.shippingAddress3}</div>}
+                                <Field 
+                                    name="shippingCity" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField 
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onChange={e => { props.form.setFieldValue('shippingCity',e.target.value); this.setState({shipping: {...this.state.shipping, city: e.target.value}})}}
+                                                onFocus={e => {
+                                                    if (focus !== 'shippingCity')
+                                                    this.setState({
+                                                        focus : 'shippingCity'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'shippingCity' }
+                                                id="city"
+                                                name="city"
+                                                label="City"
+                                                fullWidth
+                                                autoComplete="address-level2"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.shippingCity && touched.shippingCity && <div style={{color:'red'}} >{errors.shippingCity}</div>}
+                                <Field 
+                                    name="shippingZip" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField 
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onChange={e => { props.form.setFieldValue('shippingZip',e.target.value); this.setState({shipping: {...this.state.shipping, zip: e.target.value}})}}
+                                                onFocus={e => {
+                                                    if (focus !== 'shippingZip')
+                                                    this.setState({
+                                                        focus : 'shippingZip'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'shippingZip' }
+                                                id="zip"
+                                                type='number'
+                                                name="zip"
+                                                label="Zip / Postal code"
+                                                fullWidth
+                                                autoComplete="postal-code"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.shippingZip && touched.shippingZip && <div style={{color:'red'}} >{errors.shippingZip}</div>}
+                                <Field 
+                                    name="shippingCountryid" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField 
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onChange={e => { props.form.setFieldValue('shippingCountryid',e.target.value); this.setState({shipping: {...this.state.shipping, countryid: e.target.value}})}}
+                                                onFocus={e => {
+                                                    if (focus !== 'shippingCountryid')
+                                                    this.setState({
+                                                        focus : 'shippingCountryid'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'shippingCountryid' }
+                                                id="country"
+                                                name="countryid"
+                                                label="Country"
+                                                fullWidth
+                                                autoComplete="country"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.shippingCountryid && touched.shippingCountryid && <div style={{color:'red'}} >{errors.shippingCountryid}</div>}
                                 <Grid item xs={12}>
                                     <Button
                                         onClick={this.manageShipping}
@@ -375,102 +609,222 @@ class MyAccount extends Component {
                                         className={classes.sectionTitleDivider}
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <TextField required
-                                        value={this.state.billing.attn}
-                                        InputLabelProps={{ shrink: this.state.billing.attn != '' }}
-                                        onChange={e => this.setState({billing: {...this.state.billing, attn: e.target.value}})}
-                                        id="attention"
-                                        name="attn"
-                                        label="Attention"
-                                        fullWidth
-                                        autoComplete="attention"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField required
-                                        value={this.state.billing.addressee}
-                                        InputLabelProps={{ shrink: this.state.billing.addressee != '' }}
-                                        onChange={e => this.setState({billing: {...this.state.billing, addressee: e.target.value}})}
-                                        id="addressee"
-                                        name="addressee"
-                                        label="Addressee"
-                                        fullWidth
-                                        autoComplete="addressee"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField required
-                                        value={this.state.billing.address1}
-                                        InputLabelProps={{ shrink: this.state.billing.address1 != '' }}
-                                        onChange={e => this.setState({billing: {...this.state.billing, address1: e.target.value}})}
-                                        id="address1"
-                                        name="address1"
-                                        label="Address line 1"
-                                        fullWidth
-                                        autoComplete="address-line1"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        value={this.state.billing.address2}
-                                        InputLabelProps={{ shrink: this.state.billing.address2 != '' }}
-                                        onChange={e => this.setState({billing: {...this.state.billing, address2: e.target.value}})}
-                                        id="address2"
-                                        name="address2"
-                                        label="Address line 2"
-                                        fullWidth
-                                        autoComplete="address-line2"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        value={this.state.billing.address3}
-                                        InputLabelProps={{ shrink: this.state.billing.address3 != '' }}
-                                        onChange={e => this.setState({billing: {...this.state.billing, address3: e.target.value}})}
-                                        id="address3"
-                                        name="address3"
-                                        label="Address line 3"
-                                        fullWidth
-                                        autoComplete="address-line3"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField required
-                                        value={this.state.billing.city}
-                                        InputLabelProps={{ shrink: this.state.billing.city != '' }}
-                                        onChange={e => this.setState({billing: {...this.state.billing, city: e.target.value}})}
-                                        id="city"
-                                        name="city"
-                                        label="City"
-                                        fullWidth
-                                        autoComplete="address-level2"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField required
-                                        value={this.state.billing.zip}
-                                        InputLabelProps={{ shrink: this.state.billing.zip != '' }}
-                                        onChange={e => this.setState({billing: {...this.state.billing, zip: e.target.value}})}
-                                        id="zip"
-                                        name="zip"
-                                        label="Zip / Postal code"
-                                        fullWidth
-                                        autoComplete="postal-code"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField required
-                                        value={this.state.billing.countryid}
-                                        InputLabelProps={{ shrink: this.state.billing.countryid != '' }}
-                                        onChange={e => this.setState({billing: {...this.state.billing, countryid: e.target.value}})}
-                                        id="country"
-                                        name="countryid"
-                                        label="Country"
-                                        fullWidth
-                                        autoComplete="country"
-                                    />
-                                </Grid>
+                                <Field 
+                                    name="billingAttn" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField 
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onChange={e => { props.form.setFieldValue('billingAttn',e.target.value); this.setState({billing: {...this.state.billing, attn: e.target.value}})}}
+                                                onFocus={e => {
+                                                    if (focus !== 'billingAttn')
+                                                    this.setState({
+                                                        focus : 'billingAttn'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'billingAttn' }
+                                                id="attention"
+                                                name="attn"
+                                                label="Attention"
+                                                fullWidth
+                                                autoComplete="attention"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.billingAttn && touched.billingAttn && <div style={{color:'red'}} >{errors.billingAttn}</div>}
+                                <Field 
+                                    name="billingAddressee" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField 
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onChange={e => { props.form.setFieldValue('billingAddressee',e.target.value); this.setState({billing: {...this.state.billing, addressee: e.target.value}})}}
+                                                onFocus={e => {
+                                                    if (focus !== 'billingAddressee')
+                                                    this.setState({
+                                                        focus : 'billingAddressee'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'billingAddressee' }
+                                                id="addressee"
+                                                name="addressee"
+                                                label="Addressee"
+                                                fullWidth
+                                                autoComplete="addressee"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.billingAddressee && touched.billingAddressee && <div style={{color:'red'}} >{errors.billingAddressee}</div>}
+                                <Field 
+                                    name="billingAddress1" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField 
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onChange={e => { props.form.setFieldValue('billingAddress1',e.target.value); this.setState({billing: {...this.state.billing, address1: e.target.value}})}}
+                                                onFocus={e => {
+                                                    if (focus !== 'billingAddress1')
+                                                    this.setState({
+                                                        focus : 'billingAddress1'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'billingAddress1' }
+                                                id="address1"
+                                                name="address1"
+                                                label="Address line 1"
+                                                fullWidth
+                                                autoComplete="address-line1"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.billingAddress1 && touched.billingAddress1 && <div style={{color:'red'}} >{errors.billingAddress1}</div>}
+                                <Field 
+                                    name="billingAddress2" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onChange={e => { props.form.setFieldValue('billingAddress2',e.target.value); this.setState({billing: {...this.state.billing, address2: e.target.value}})}}
+                                                onFocus={e => {
+                                                    if (focus !== 'billingAddress2')
+                                                    this.setState({
+                                                        focus : 'billingAddress2'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'billingAddress2' }
+                                                id="address2"
+                                                name="address2"
+                                                label="Address line 2"
+                                                fullWidth
+                                                autoComplete="address-line2"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.billingAddress2 && touched.billingAddress2 && <div style={{color:'red'}} >{errors.billingAddress2}</div>}
+                                <Field 
+                                    name="billingAddress3" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onChange={e => { props.form.setFieldValue('billingAddress3',e.target.value); this.setState({billing: {...this.state.billing, address3: e.target.value}})}}
+                                                onFocus={e => {
+                                                    if (focus !== 'billingAddress3')
+                                                    this.setState({
+                                                        focus : 'billingAddress3'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'billingAddress3' }
+                                                id="address3"
+                                                name="address3"
+                                                label="Address line 3"
+                                                fullWidth
+                                                autoComplete="address-line3"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.billingAddress3 && touched.billingAddress3 && <div style={{color:'red'}} >{errors.billingAddress3}</div>}>
+                                <Field 
+                                    name="billingCity" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField 
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onChange={e => { props.form.setFieldValue('volVal',e.target.value); this.setState({billing: {...this.state.billing, city: e.target.value}})}}
+                                                onFocus={e => {
+                                                    if (focus !== 'billingCity')
+                                                    this.setState({
+                                                        focus : 'billingCity'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'billingCity' }
+                                                id="city"
+                                                name="city"
+                                                label="City"
+                                                fullWidth
+                                                autoComplete="address-level2"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.billingCity && touched.billingCity && <div style={{color:'red'}} >{errors.billingCity}</div>}
+                                <Field 
+                                    name="billingZip" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField 
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: this.state.billing.zip != '' }}
+                                                onChange={e => { props.form.setFieldValue('billingZip',e.target.value); this.setState({billing: {...this.state.billing, zip: e.target.value}})}}
+                                                onFocus={e => {
+                                                    if (focus !== 'billingZip')
+                                                    this.setState({
+                                                        focus : 'billingZip'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'billingZip' }
+                                                id="zip"
+                                                name="zip"
+                                                label="Zip / Postal code"
+                                                fullWidth
+                                                autoComplete="postal-code"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.billingZip && touched.billingZip && <div style={{color:'red'}} >{errors.billingZip}</div>}
+                                <Field 
+                                    name="billingCountryid" 
+                                    component={(props)=>{
+                                    return(
+                                        <Grid item xs={12}>
+                                            <TextField 
+                                                value={props.field.value}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onChange={e => { props.form.setFieldValue('billingCountryid',e.target.value); this.setState({billing: {...this.state.billing, countryid: e.target.value}})}}
+                                                onFocus={e => {
+                                                    if (focus !== 'billingCountryid')
+                                                    this.setState({
+                                                        focus : 'billingCountryid'
+                                                    })
+                                                }}
+                                                autoFocus={ focus == 'billingCountryid' }
+                                                id="country"
+                                                name="countryid"
+                                                label="Country"
+                                                fullWidth
+                                                autoComplete="country"
+                                            />
+                                        </Grid>
+                                    )
+                                    }}
+                                />
+                                {errors.billingCountryid && touched.billingCountryid && <div style={{color:'red'}} >{errors.billingCountryid}</div>}
                                 <Grid item xs={12} md={7}>
                                     <Button
                                         style={{ marginTop: 10 }}
@@ -490,17 +844,20 @@ class MyAccount extends Component {
                             </Grid>
                         </Grid>
                     </Grid>
-
                     <div className={classes.buttonContainer}>
                         <Button
                             variant="contained"
                             color="primary"
+                            type="submit"
                             className={classes.button}
-                            onClick={this.handleSubmit}
+                            // onClick={this.handleSubmit}
                         >
                             Confirm Account Changes
                         </Button>
                     </div>
+                        </Form>
+                        )}}
+                    </Formik>
 
                     <Dialog
                         open={this.state.manageShipping}
@@ -559,7 +916,6 @@ const styles = theme => ({
     },
     buttonContainer: {
         display: "flex",
-        justifyContent: "flex-end"
     },
     button: {
         marginTop: theme.spacing.unit * 3,

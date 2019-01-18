@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import { compose, bindActionCreators } from "redux";
 import { orderActions } from "../redux/actions/orderActions";
 
 import PropTypes from "prop-types";
@@ -29,6 +29,7 @@ import Items from "../components/Checkout/Items/Items";
 import Review from "../components/Checkout/Review/Review";
 import isLoggedUser from "../hocs/isLoggedUser";
 import cartHasItems from "../hocs/cartHasItems";
+import withOrder from "../hocs/order";
 
 // custom
 import Alert from "../components/UI/Alert";
@@ -53,10 +54,6 @@ function getStepContent(step) {
 class Checkout extends Component {
     constructor(props) {
         super(props);
-    }
-
-    componentWillMount() {
-        this.props.prepareOrder();
     }
 
     state = {
@@ -322,23 +319,8 @@ Checkout.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => {
-    return {
-        user: state.user,
-        cart: state.cart,
-        message: state.messages,
-        order: state.order
-    };
-};
-
-const mapDispatchToProps = dispatch =>
-    bindActionCreators(orderActions, dispatch);
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(
+export default compose(
     withStyles(styles, { withTheme: true })(
-        isLoggedUser(cartHasItems(Checkout))
+        isLoggedUser(cartHasItems(withOrder(Checkout)))
     )
 );
