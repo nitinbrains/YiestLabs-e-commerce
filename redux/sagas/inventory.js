@@ -25,8 +25,12 @@ export function * getInventory (action) {
         }
     } catch (error) {
         yield put(responseFailure(error));
-        // yield put(messageActions.displayMessage({ title: 'Error', error: error }));
-        yield put(messageActions.showNetworkError(error))
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
     }
 };
 
@@ -37,6 +41,12 @@ export function * changeCategory(action) {
         const itemsToShow = filterItems(inventory.items, category, null, false, false);
         yield put(responseSuccess({ itemsToShow, category }));
     } catch(error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }
@@ -48,6 +58,12 @@ export function * searchForStrain(action) {
         const itemsToShow = filterItems(inventory.items, null, searchTerm, false, false);
         yield put(responseSuccess({ itemsToShow }));
     } catch(error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }
@@ -59,6 +75,12 @@ export function * switchToHomebrew(action) {
         const itemsToShow = filterItems(inventory.items, null, null, false, true);
         yield put(responseSuccess({ itemsToShow }));
     } catch(error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }
@@ -73,6 +95,12 @@ export function * switchToProfessional(action) {
             category: category
         }));
     } catch(error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }
@@ -83,6 +111,12 @@ export function * searchItem(action) {
         const itemsToShow = filterItems(inventory.items, category, search, false, false);
         yield put(responseSuccess({ itemsToShow, category }));
     } catch(error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }

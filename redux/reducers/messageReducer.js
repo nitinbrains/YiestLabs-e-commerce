@@ -17,7 +17,9 @@ const getType = (message, error) => {
 };
 
 export default createReducer(initialState, {
-    [messageTypes.DISPLAY_MESSAGE_ATTEMPT]: ({ messages }, { data: { title, message, error } }) => ({
+    [messageTypes.DISPLAY_MESSAGE_ATTEMPT]: ({ messages }, { data: { title, message, error } }) =>{
+        console.log(error,'to display error message message')
+        return ({
         messages: [
             ...messages,
             {
@@ -26,14 +28,18 @@ export default createReducer(initialState, {
                 message: message || error
             }
         ]
-    }),
+    })},
     [messageTypes.HIDE_MESSAGE_ATTEMPT]: ({ messages }, { data: idx }) => ({
         messages: messages.filter((message, index) => index !== idx)
     }),
-    [messageTypes.SHOW_NETWORK_ERROR_ATTEMPT]: (state, { data }) =>{ 
-        console.log(data,'error message if any')
+    [messageTypes.SHOW_NETWORK_ERROR_ATTEMPT]: (state, { data:{ title, message, error } }) =>{ 
+        console.log(title,message,error,'error message if any')
         return({
-        networkRequestError: data 
+        networkRequestError: [{
+            type : getType(message,error),
+            title : title,
+            message: message || error
+        }] 
     })},
     [messageTypes.HIDE_NETWORK_ERROR_ATTEMPT]: (state ) => ({
         networkRequestError: false

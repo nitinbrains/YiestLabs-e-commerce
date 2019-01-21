@@ -141,7 +141,7 @@ class Checkout extends Component {
             <NavBarLayout>
             <LoadingIndicator visible={this.state.isLoading} label={"Placing Order"} />
                 {this.props.message.messages.map((message, i) => (
-                    <Alert message={message} index={i} />
+                    <Alert key={i}  message={message} index={i} />
                 ))}
                 <div className={classes.container}>
                     <div className={classes.title}>

@@ -18,7 +18,7 @@ class NavBarLayout extends Component {
     }
     render() {
         const { children, classes, theme } = this.props;
-
+        
         return (
             <div className={classes.root}>
 
@@ -56,7 +56,7 @@ class NavBarLayout extends Component {
                 <SimpleSnackbar
                     show={this.props.messages.networkRequestError == false ? false : true}
                     handleClose={() => this.props.hideNetworkError()}
-                    message={this.props.messages.networkRequestError && this.props.messages.networkRequestError.message || ''}
+                    message={this.props.messages.networkRequestError && this.props.messages.networkRequestError[0].message || ''}
                 />
 
             </div>
