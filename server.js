@@ -589,6 +589,7 @@ app.prepare()
 						res.send({error: { message: 'Could not update your credit card information', code: 0 }});
 
 					}
+					res.sendStatus(200)
 
 				}
 			})

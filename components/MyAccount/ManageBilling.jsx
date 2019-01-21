@@ -37,6 +37,10 @@ class ManageBilling extends Component {
         this.setState({ newAddress: true });
     };
 
+    closeForm = () => {
+        this.setState({ newAddress: false})
+    }
+
     render() {
         const { classes, user } = this.props;
 
@@ -54,7 +58,7 @@ class ManageBilling extends Component {
                         </IconButton>
                     </div>
                     <Grid style={{ padding: 10 }} container spacing={24}>
-                        {user.otherAddresses.map(address => (
+                        {user.billing.map(address => (
                             <Grid item
                                 key={address.id}
                                 sm={4}
@@ -80,7 +84,8 @@ class ManageBilling extends Component {
                                         <Grid item xs={12}>
                                             <Typography>{address.countryid}</Typography>
                                         </Grid>
-
+                                    {this.props.user.selectedShipping.address1 !=
+                                        address.address1 && (
                                         <Grid item>
                                             <Button
                                                 variant="contained"
@@ -89,6 +94,7 @@ class ManageBilling extends Component {
                                                 Select Address
                                             </Button>
                                         </Grid>
+                                    )}
                                     </Grid>
                                 </div>
                             </Grid>
@@ -105,17 +111,7 @@ class ManageBilling extends Component {
                             </Grid>
                         ) : (
                             <Grid item xs={12}>
-                                <AddAddress />
-                                <Grid style={{marginTop:10}} container justify="flex-end">
-                                    <Grid item>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                        >
-                                            Add Address
-                                        </Button>
-                                    </Grid>
-                                </Grid>
+                                <AddAddress type={'billing'} {...this.props} close={this.closeForm} />
                             </Grid>
                         )}
                     </Grid>

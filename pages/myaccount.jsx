@@ -48,8 +48,10 @@ class MyAccount extends Component {
             manageCards: false,
             shipFrom: 1,
             confirmDialog: false,
-            shipping: {},
-            billing: {},
+            shipping: [],
+            selectedShipping:{},
+            billing: [],
+            selectedBilling: {},
             focus:'',
         };
     }
@@ -96,13 +98,15 @@ class MyAccount extends Component {
     }
 
     componentDidMount() {
-        const { user: { id, email, phone, shipping, billing, selectedCard, subsidiaryOptions, subsidiary, ...rest }} = this.props;
+        const { user: { id, email, phone, shipping, selectedShipping, billing, selectedBilling, selectedCard, subsidiaryOptions, subsidiary, ...rest }} = this.props;
         this.setState({
             id,
             email, 
             phone,
             shipping,
+            selectedShipping,
             billing,
+            selectedBilling,
             selectedCard,
             shipFrom: subsidiaryOptions[0],
             subsidiaryOptions,
@@ -156,11 +160,11 @@ class MyAccount extends Component {
 
         try {
             var request = changesWereMade(this.state, this.props.user);
-            console.log(request,'request')
             this.props.updateUserInfo({request});
         }
         catch(err) {
-            this.props.displayError();
+            console.log(err)
+            // this.props.displayError();
         }
     }
 
@@ -205,28 +209,28 @@ class MyAccount extends Component {
         return (
             <NavBarUserSearchDrawerLayout>
                 <PageContainer heading="MY ACCOUNT" id="cart-box">
-                <LoadingIndicator visible={this.props.user.isLoading} label={"Updating Data"} />                
+                <LoadingIndicator visible={this.props.user.isUpdating} label={"Updating Data"} />                
                 <Formik
                   initialValues={{
                         //shipping
-                            shippingAddress1: this.state.shipping.address1,
-                            shippingAddress2: this.state.shipping.address2,
-                            shippingAddress3: this.state.shipping.address3,
-                            shippingAddressee: this.state.shipping.addressee,
-                            shippingAttn: this.state.shipping.attn,
-                            shippingCity: this.state.shipping.city,
-                            shippingZip: this.state.shipping.zip,                            
-                            shippingCountryid: this.state.shipping.countryid,
+                            shippingAddress1: this.state.selectedShipping.address1,
+                            shippingAddress2: this.state.selectedShipping.address2,
+                            shippingAddress3: this.state.selectedShipping.address3,
+                            shippingAddressee: this.state.selectedShipping.addressee,
+                            shippingAttn: this.state.selectedShipping.attn,
+                            shippingCity: this.state.selectedShipping.city,
+                            shippingZip: this.state.selectedShipping.zip,                            
+                            shippingCountryid: this.state.selectedShipping.countryid,
 
                         // Billing
-                            billingAddress1: this.state.billing.address1,
-                            billingAddress2: this.state.billing.address2,
-                            billingAddress3: this.state.billing.address3,
-                            billingAddressee: this.state.billing.addressee,
-                            billingAttn: this.state.billing.attn,
-                            billingZip: this.state.billing.zip,                            
-                            billingCity: this.state.billing.city,
-                            billingCountryid: this.state.billing.countryid,
+                            billingAddress1: this.state.selectedBilling.address1,
+                            billingAddress2: this.state.selectedBilling.address2,
+                            billingAddress3: this.state.selectedBilling.address3,
+                            billingAddressee: this.state.selectedBilling.addressee,
+                            billingAttn: this.state.selectedBilling.attn,
+                            billingZip: this.state.selectedBilling.zip,                            
+                            billingCity: this.state.selectedBilling.city,
+                            billingCountryid: this.state.selectedBilling.countryid,
 
                         //user
                             email:  this.state.email,
@@ -373,7 +377,7 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField 
-                                                onChange={e => { props.form.setFieldValue('shippingAttn',e.target.value); this.setState({shipping: {...this.state.shipping, attn: e.target.value}})}}
+                                                onChange={e => { props.form.setFieldValue('shippingAttn',e.target.value); this.setState({selectedShipping: {...this.state.selectedShipping, attn: e.target.value}})}}
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onFocus={e => {
@@ -402,7 +406,7 @@ class MyAccount extends Component {
                                             <TextField 
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
-                                                onChange={e => { props.form.setFieldValue('shippingAddressee',e.target.value); this.setState({shipping: {...this.state.shipping, addressee: e.target.value}})}}
+                                                onChange={e => { props.form.setFieldValue('shippingAddressee',e.target.value); this.setState({selectedShipping: {...this.state.selectedShipping, addressee: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'shippingAddressee')
                                                     this.setState({
@@ -429,7 +433,7 @@ class MyAccount extends Component {
                                         <TextField 
                                             value={props.field.value}
                                             InputLabelProps={{ shrink: props.field.value != '' }}
-                                            onChange={e => { props.form.setFieldValue('shippingAddress1',e.target.value); this.setState({shipping: {...this.state.shipping, address1: e.target.value}})}}
+                                            onChange={e => { props.form.setFieldValue('shippingAddress1',e.target.value); this.setState({selectedShipping: {...this.state.selectedShipping, address1: e.target.value}})}}
                                             onFocus={e => {
                                                 if (focus !== 'shippingAddress1')
                                                 this.setState({
@@ -456,7 +460,7 @@ class MyAccount extends Component {
                                             <TextField
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
-                                                onChange={e => { props.form.setFieldValue('shippingAddress2',e.target.value); this.setState({shipping: {...this.state.shipping, address2: e.target.value}})}}
+                                                onChange={e => { props.form.setFieldValue('shippingAddress2',e.target.value); this.setState({selectedShipping: {...this.state.selectedShipping, address2: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'shippingAddress2')
                                                     this.setState({
@@ -483,7 +487,7 @@ class MyAccount extends Component {
                                             <TextField
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
-                                                onChange={e => { props.form.setFieldValue('shippingAddress3',e.target.value); this.setState({shipping: {...this.state.shipping, address3: e.target.value}})}}
+                                                onChange={e => { props.form.setFieldValue('shippingAddress3',e.target.value); this.setState({selectedShipping: {...this.state.selectedShipping, address3: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'shippingAddress3')
                                                     this.setState({
@@ -510,7 +514,7 @@ class MyAccount extends Component {
                                             <TextField 
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
-                                                onChange={e => { props.form.setFieldValue('shippingCity',e.target.value); this.setState({shipping: {...this.state.shipping, city: e.target.value}})}}
+                                                onChange={e => { props.form.setFieldValue('shippingCity',e.target.value); this.setState({selectedShipping: {...this.state.selectedShipping, city: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'shippingCity')
                                                     this.setState({
@@ -537,7 +541,7 @@ class MyAccount extends Component {
                                             <TextField 
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
-                                                onChange={e => { props.form.setFieldValue('shippingZip',e.target.value); this.setState({shipping: {...this.state.shipping, zip: e.target.value}})}}
+                                                onChange={e => { props.form.setFieldValue('shippingZip',e.target.value); this.setState({selectedShipping: {...this.state.selectedShipping, zip: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'shippingZip')
                                                     this.setState({
@@ -565,7 +569,7 @@ class MyAccount extends Component {
                                             <TextField 
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
-                                                onChange={e => { props.form.setFieldValue('shippingCountryid',e.target.value); this.setState({shipping: {...this.state.shipping, countryid: e.target.value}})}}
+                                                onChange={e => { props.form.setFieldValue('shippingCountryid',e.target.value); this.setState({selectedShipping: {...this.state.selectedShipping, countryid: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'shippingCountryid')
                                                     this.setState({
@@ -622,7 +626,7 @@ class MyAccount extends Component {
                                             <TextField 
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
-                                                onChange={e => { props.form.setFieldValue('billingAttn',e.target.value); this.setState({billing: {...this.state.billing, attn: e.target.value}})}}
+                                                onChange={e => { props.form.setFieldValue('billingAttn',e.target.value); this.setState({selectedBilling: {...this.state.selectedBilling, attn: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingAttn')
                                                     this.setState({
@@ -649,7 +653,7 @@ class MyAccount extends Component {
                                             <TextField 
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
-                                                onChange={e => { props.form.setFieldValue('billingAddressee',e.target.value); this.setState({billing: {...this.state.billing, addressee: e.target.value}})}}
+                                                onChange={e => { props.form.setFieldValue('billingAddressee',e.target.value); this.setState({selectedBilling: {...this.state.selectedBilling, addressee: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingAddressee')
                                                     this.setState({
@@ -676,7 +680,7 @@ class MyAccount extends Component {
                                             <TextField 
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
-                                                onChange={e => { props.form.setFieldValue('billingAddress1',e.target.value); this.setState({billing: {...this.state.billing, address1: e.target.value}})}}
+                                                onChange={e => { props.form.setFieldValue('billingAddress1',e.target.value); this.setState({selectedBilling: {...this.state.selectedBilling, address1: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingAddress1')
                                                     this.setState({
@@ -703,7 +707,7 @@ class MyAccount extends Component {
                                             <TextField
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
-                                                onChange={e => { props.form.setFieldValue('billingAddress2',e.target.value); this.setState({billing: {...this.state.billing, address2: e.target.value}})}}
+                                                onChange={e => { props.form.setFieldValue('billingAddress2',e.target.value); this.setState({selectedBilling: {...this.state.selectedBilling, address2: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingAddress2')
                                                     this.setState({
@@ -730,7 +734,7 @@ class MyAccount extends Component {
                                             <TextField
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
-                                                onChange={e => { props.form.setFieldValue('billingAddress3',e.target.value); this.setState({billing: {...this.state.billing, address3: e.target.value}})}}
+                                                onChange={e => { props.form.setFieldValue('billingAddress3',e.target.value); this.setState({selectedBilling: {...this.state.selectedBilling, address3: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingAddress3')
                                                     this.setState({
@@ -757,7 +761,7 @@ class MyAccount extends Component {
                                             <TextField 
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
-                                                onChange={e => { props.form.setFieldValue('volVal',e.target.value); this.setState({billing: {...this.state.billing, city: e.target.value}})}}
+                                                onChange={e => { props.form.setFieldValue('volVal',e.target.value); this.setState({selectedBilling: {...this.state.selectedBilling, city: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingCity')
                                                     this.setState({
@@ -783,8 +787,8 @@ class MyAccount extends Component {
                                         <Grid item xs={12}>
                                             <TextField 
                                                 value={props.field.value}
-                                                InputLabelProps={{ shrink: this.state.billing.zip != '' }}
-                                                onChange={e => { props.form.setFieldValue('billingZip',e.target.value); this.setState({billing: {...this.state.billing, zip: e.target.value}})}}
+                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                onChange={e => { props.form.setFieldValue('billingZip',e.target.value); this.setState({selectedBilling: {...this.state.selectedBilling, zip: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingZip')
                                                     this.setState({
@@ -811,7 +815,7 @@ class MyAccount extends Component {
                                             <TextField 
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
-                                                onChange={e => { props.form.setFieldValue('billingCountryid',e.target.value); this.setState({billing: {...this.state.billing, countryid: e.target.value}})}}
+                                                onChange={e => { props.form.setFieldValue('billingCountryid',e.target.value); this.setState({selectedBilling: {...this.state.selectedBilling, countryid: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingCountryid')
                                                     this.setState({

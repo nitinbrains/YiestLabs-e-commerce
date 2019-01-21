@@ -149,25 +149,25 @@ function Review(props) {
                     </Typography>
                     <Typography gutterBottom>{ props.user.username? props.user.username :  'Tom Brady'}</Typography>
                     
-                    {props.user.shipping  && (
+                    {props.user.selectedShipping  && (
                             <div>
                                 <Typography>
-                                    {props.user.shipping.attn}
+                                    {props.user.selectedShipping.attn}
                                 </Typography>
                                 <Typography>
-                                    {props.user.shipping.addressee}
+                                    {props.user.selectedShipping.addressee}
                                 </Typography>
                                 <Typography>
-                                    {props.user.shipping.address1}
+                                    {props.user.selectedShipping.address1}
                                 </Typography>
                                 <Typography>
-                                    {props.user.shipping.address2}
+                                    {props.user.selectedShipping.address2}
                                 </Typography>
                                 <Typography>
-                                    {props.user.shipping.address3}
+                                    {props.user.selectedShipping.address3}
                                 </Typography>
                                 <Typography>
-                                    {props.user.shipping.city}, {props.user.shipping.countryid}, {props.user.shipping.zip}
+                                    {props.user.selectedShipping.city}, {props.user.selectedShipping.countryid}, {props.user.selectedShipping.zip}
                                 </Typography>
                             </div>
                         )}
@@ -182,25 +182,25 @@ function Review(props) {
                             BILLING ADDRESS
                         </Typography>
                         <Typography >{ props.user.username? props.user.username :  'Tom Brady'}</Typography>
-                        {props.user.billing  && (
+                        {props.user.selectedBilling  && (
                             <div>
                                 <Typography>
-                                    {props.user.billing.attn}
+                                    {props.user.selectedBilling.attn}
                                 </Typography>
                                 <Typography>
-                                    {props.user.billing.addressee}
+                                    {props.user.selectedBilling.addressee}
                                 </Typography>
                                 <Typography>
-                                    {props.user.billing.address1}
+                                    {props.user.selectedBilling.address1}
                                 </Typography>
                                 <Typography>
-                                    {props.user.billing.address2}
+                                    {props.user.selectedBilling.address2}
                                 </Typography>
                                 <Typography>
-                                    {props.user.billing.address3}
+                                    {props.user.selectedBilling.address3}
                                 </Typography>
                                 <Typography>
-                                    {props.user.billing.city}, {props.user.billing.countryid}, {props.user.billing.zip}
+                                    {props.user.selectedBilling.city}, {props.user.selectedBilling.countryid}, {props.user.selectedBilling.zip}
                                 </Typography>
                             </div>
                         )}

@@ -197,6 +197,21 @@ class AddAddress extends Component {
                             })}
                         </TextField>
                     </Grid>
+                     <Grid
+                        style={{ marginTop: 10 }}
+                        container
+                        justify="flex-end"
+                    >
+                        <Grid item>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={this.props.addAddress}
+                            >
+                                Add Address
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </React.Fragment>
         );

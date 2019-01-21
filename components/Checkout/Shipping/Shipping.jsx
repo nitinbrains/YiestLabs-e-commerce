@@ -57,31 +57,31 @@ class Shipping extends Component {
                         </Typography>
                         <div className={classes.sectionTitleDivider} />
 
-                        {this.props.user.shipping.id ? (
+                        {this.props.user.selectedShipping.id ? (
                             <div>
                                 <Typography>
-                                    {this.props.user.shipping.attn}
+                                    {this.props.user.selectedShipping.attn}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.shipping.addressee}
+                                    {this.props.user.selectedShipping.addressee}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.shipping.address1}
+                                    {this.props.user.selectedShipping.address1}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.shipping.address2}
+                                    {this.props.user.selectedShipping.address2}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.shipping.address3}
+                                    {this.props.user.selectedShipping.address3}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.shipping.city}
+                                    {this.props.user.selectedShipping.city}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.shipping.countryid}
+                                    {this.props.user.selectedShipping.countryid}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.shipping.zip}
+                                    {this.props.user.selectedShipping.zip}
                                 </Typography>
 
                                 <Button

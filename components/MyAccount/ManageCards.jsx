@@ -31,9 +31,12 @@ class ManageCards extends Component {
         this.setState({ newCard: true });
     };
 
+    closeNewCard = () => {
+        this.setState({ newCard: false });
+    };
+
     render() {
         const { classes, user } = this.props;
-
         return (
             <React.Fragment>
                 <DialogContent id="my-order-details">
@@ -89,21 +92,7 @@ class ManageCards extends Component {
                             </Grid>
                         ) : (
                             <Grid item xs={12}>
-                                <AddCard />
-                                <Grid
-                                    style={{ marginTop: 10 }}
-                                    container
-                                    justify="flex-end"
-                                >
-                                    <Grid item>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                        >
-                                            Add Card
-                                        </Button>
-                                    </Grid>
-                                </Grid>
+                                <AddCard {...this.props} closeNewCard={this.closeNewCard} />
                             </Grid>
                         )}
                     </Grid>

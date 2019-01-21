@@ -32,7 +32,8 @@ export function * loginUser (action) {
 export function * getUserInfo(action) {
     const { responseSuccess, responseFailure, data: { userID } } = action;
     try {
-        const { res: userInfo } = yield call(api.getUserInfo, userID);
+        const { res: userInfo, err } = yield call(api.getUserInfo, userID);
+        if (err) throw err;
         yield put(userActions.setUserInfo({userInfo}));
     } catch (error) {
         yield put(responseFailure(error))
@@ -61,18 +62,16 @@ export function * setUserInfo(action) {
 export function * updateUserInfo(action) {
     const { responseSuccess, responseFailure, data: { request } } = action;
     try {
-
-        var { res: status, err } = yield call(api.updateUserInfo, {
-            request
-        });
-        console.log(status, err, 'sasd')
+        var { res: status, err } = yield call(api.updateUserInfo, { request });
         if(err) throw err;
-
-        yield call(getUserInfo);
-
+        let message = {
+            message:'Your account was updated successfully'
+        }
+        yield put(messageActions.showNetworkError(message))
+        
         yield put(responseSuccess(status));
+        yield call(getUserInfo, {'data': { 'userID' : request.id}});
     } catch(error) {
-        console.log(error,'if anyss')
         yield put(responseFailure(error))
     }
 }
@@ -173,7 +172,7 @@ export function * setDefaultCreditCard(action) {
 /*****************************/
 
 export function * addAddress(action) {
-    const { responseSuccess, responseFailure, data: address } = action;
+    const { responseSuccess, responseFailure, data: address, type } = action;
     try {
         const user = yield select(state => state.user);
 
@@ -181,8 +180,13 @@ export function * addAddress(action) {
             throw {message: 'No user id. Cannot add credit card', code: 0};
         }
         let request = {};
-        request.addShipAddress = true;
-        request.shipping = user.shipping
+        if(type == 'shipping'){
+            request.addShipAddress = true;
+            request.shipping = user.shipping
+        } else if ( type == 'billing'){
+            request.addBillingAddress = true;
+            request.billing = user.billing
+        }
 
         yield call(updateUserInfo, {request});
     

@@ -56,7 +56,7 @@ class Store extends Component {
 
     componentWillMount() {
         var userInfo = {
-            billing: {
+            billing: [{
                 address1: "123 My Way",
                 address2: "",
                 address3: "",
@@ -64,7 +64,18 @@ class Store extends Component {
                 attn: "",
                 city: "Concord",
                 countryid: "US",
-                id: 1746864,
+                id: 1743060,
+                zip: "94518",
+            }],
+            selectedBilling: {
+                address1: "123 My Way",
+                address2: "",
+                address3: "",
+                addressee: "Home",
+                attn: "",
+                city: "Concord",
+                countryid: "US",
+                id: 1743060,
                 zip: "94518",
             },
             cards: [
@@ -86,7 +97,7 @@ class Store extends Component {
                 {address1: "One way", address2: "", address3: "", addressee: "", attn: "Attn", city: "City", countryid: "US", defaultBill: false, defaultShip: true, id: 1743261, zip: "94518"}
             ],
             phone: "7142995620",
-            shipping: {
+            shipping: [{
                 address1: "One way",
                 address2: "",
                 address3: "",
@@ -94,8 +105,27 @@ class Store extends Component {
                 attn: "Attn",
                 city: "City",
                 countryid: "US",
-                id: 1746865,
+                id: 1743261,
                 zip: "94518"
+            }],
+            selectedShipping: {
+                address1: "One way",
+                address2: "",
+                address3: "",
+                addressee: "",
+                attn: "Attn",
+                city: "City",
+                countryid: "US",
+                id: 1743261,
+                zip: "94518"
+            },
+            selectedCard: {
+                ccexpire: "2022-12-01T08:00:00.000Z", 
+                ccname: "Joe Discovery", 
+                ccnumber: "************1117", 
+                default: true, 
+                id: 38421,
+                type: "3"
             },
             shipmethod: "2789",
             subsidiary: 2,

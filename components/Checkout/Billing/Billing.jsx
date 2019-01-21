@@ -251,31 +251,31 @@ class Billing extends Component {
                         </Typography>
 
                         <div className={classes.sectionTitleDivider} />
-                        {this.props.user.billing.id ? (
+                        {this.props.user.selectedBilling.id ? (
                             <div>
                                 <Typography>
-                                    {this.props.user.billing.attn}
+                                    {this.props.user.selectedBilling.attn}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.billing.addressee}
+                                    {this.props.user.selectedBilling.addressee}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.billing.address1}
+                                    {this.props.user.selectedBilling.address1}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.billing.address2}
+                                    {this.props.user.selectedBilling.address2}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.billing.address3}
+                                    {this.props.user.selectedBilling.address3}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.billing.city}
+                                    {this.props.user.selectedBilling.city}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.billing.countryid}
+                                    {this.props.user.selectedBilling.countryid}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.billing.zip}
+                                    {this.props.user.selectedBilling.zip}
                                 </Typography>
 
                                 <Button
@@ -287,22 +287,8 @@ class Billing extends Component {
                             </div>
                         ) : (
                             <Grid item xs={12}>
-                                <AddAddress />
-                                <Grid
-                                    style={{ marginTop: 10 }}
-                                    container
-                                    justify="flex-end"
-                                >
-                                    <Grid item>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={() => this.addNewAddress()}
-                                        >
-                                            Add Address
-                                        </Button>
-                                    </Grid>
-                                </Grid>
+                                <AddAddress addAddress={this.addNewAddress} />
+                                
                             </Grid>
                         )}
                     </Grid>

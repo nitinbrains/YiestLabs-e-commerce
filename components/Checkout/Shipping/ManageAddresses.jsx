@@ -70,11 +70,11 @@ class ManageAddresses extends Component {
                         </IconButton>
                     </div>
                     <Grid style={{ padding: 10 }} container spacing={24}>
-                        {this.props.user.otherAddresses.map((address, i) => (
+                        {this.props.user.shipping.map((address, i) => (
                             <Grid item sm={4} xs={12}>
                                 <div
                                     className={
-                                        this.props.user.shipping.address1 ==
+                                        this.props.user.selectedShipping.address1 ==
                                         address.address1
                                             ? classes.addressBoxSelected
                                             : classes.addressBox
@@ -83,52 +83,37 @@ class ManageAddresses extends Component {
                                     <Grid item container xs spacing={8}>
                                         <Grid item>
                                             <Typography>
-                                                {this.props.user.shipping.attn}
+                                                {address.attn}
                                             </Typography>
                                         </Grid>
                                         <Grid item>
                                             <Typography>
-                                                {
-                                                    this.props.user.shipping
-                                                        .addressee
-                                                }
+                                                {address.addressee}
                                             </Typography>
                                         </Grid>
                                         <Grid item>
                                             <Typography>
-                                                {
-                                                    this.props.user.shipping
-                                                        .address1
-                                                }
+                                                {address.address1}
                                             </Typography>
                                         </Grid>
                                         <Grid item>
                                             <Typography>
-                                                {
-                                                    this.props.user.shipping
-                                                        .address2
-                                                }
+                                                {address.address2}
                                             </Typography>
                                         </Grid>
                                         <Grid item>
                                             <Typography>
-                                                {
-                                                    this.props.user.shipping
-                                                        .address3
-                                                }
+                                                {address.address3}
                                             </Typography>
                                         </Grid>
                                         <Grid item>
                                             <Typography>
-                                                {this.props.user.shipping.city}
+                                                {address.city}
                                             </Typography>
                                         </Grid>
                                         <Grid item>
                                             <Typography>
-                                                {
-                                                    this.props.user.shipping
-                                                        .countryid
-                                                }
+                                                {address.countryid}
                                             </Typography>
                                         </Grid>
                                         <Grid item>
@@ -137,7 +122,7 @@ class ManageAddresses extends Component {
                                             </Typography>
                                         </Grid>
 
-                                        {this.props.user.shipping.address1 !=
+                                        {this.props.user.selectedShipping.address1 !=
                                             address.address1 && (
                                             <Grid item>
                                                 <Button
@@ -169,22 +154,8 @@ class ManageAddresses extends Component {
                             </Grid>
                         ) : (
                             <Grid item xs={12}>
-                                <AddAddress />
-                                <Grid
-                                    style={{ marginTop: 10 }}
-                                    container
-                                    justify="flex-end"
-                                >
-                                    <Grid item>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={() => this.addNewAddress()}
-                                        >
-                                            Add Address
-                                        </Button>
-                                    </Grid>
-                                </Grid>
+                                <AddAddress addAddress={this.addNewAddress} />
+                               
                             </Grid>
                         )}
                     </Grid>

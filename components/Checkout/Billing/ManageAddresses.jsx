@@ -70,11 +70,11 @@ class ManageAddresses extends Component {
                         </IconButton>
                     </div>
                     <Grid style={{ padding: 10 }} container spacing={24}>
-                        {this.props.user.otherAddresses.map((address, i) => (
+                        {this.props.user.billing.map((address, i) => (
                             <Grid item sm={4} xs={12}>
                                 <div
                                     className={
-                                        this.props.user.billing.address1 ==
+                                        this.props.user.selectedBilling.address1 ==
                                         address.address1
                                             ? classes.addressBoxSelected
                                             : classes.addressBox
@@ -83,46 +83,41 @@ class ManageAddresses extends Component {
                                     <Grid item container xs spacing={8}>
                                         <Grid item>
                                             <Typography>
-                                                {this.props.user.billing.attn}
+                                                {address.attn}
                                             </Typography>
                                             <Typography>
                                                 {
-                                                    this.props.user.billing
-                                                        .addressee
+                                                    address.addressee
                                                 }
                                             </Typography>
                                             <Typography>
                                                 {
-                                                    this.props.user.billing
-                                                        .address1
+                                                    address.address1
                                                 }
                                             </Typography>
                                             <Typography>
                                                 {
-                                                    this.props.user.billing
-                                                        .address2
+                                                    address.address2
                                                 }
                                             </Typography>
                                             <Typography>
                                                 {
-                                                    this.props.user.billing
-                                                        .address3
+                                                    address.address3
                                                 }
                                             </Typography>
                                             <Typography>
-                                                {this.props.user.billing.city}
+                                                {address.city}
                                             </Typography>
                                             <Typography>
                                                 {
-                                                    this.props.user.billing
-                                                        .countryid
+                                                    address.countryid
                                                 }
                                             </Typography>
                                             <Typography>
-                                                {this.props.user.billing.zip}
+                                                {address.zip}
                                             </Typography>
                                         </Grid>
-                                        {this.props.user.billing.address1 !=
+                                        {this.props.user.selectedBilling.address1 !=
                                             address.address1 && (
                                             <Grid item>
                                                 <Button

@@ -16,27 +16,27 @@ const initialState = {
     email: "",
     otherAddresses: [],
     phone: "",
-    shipping: {
-        id: null,
+    shipping: [],
+    selectedShipping: {
         address1: "",
         address2: "",
         address3: "",
         addressee: "",
         attn: "",
-        zip: "",
         city: "",
         countryid: "",
+        zip: ""
     },
-    billing: {
-        id: null,
+    billing: [],
+    selectedBilling: {
         address1: "",
         address2: "",
         address3: "",
         addressee: "",
         attn: "",
-        zip: "",
         city: "",
         countryid: "",
+        zip: "",
     },
     shipmethod: "",
     shipzip: "",
@@ -52,7 +52,8 @@ const initialState = {
         default: false
     },
     shipMethods: [],
-    isLoading: false
+    isLoading: false,
+    isUpdating: false,
 }; // empty for now
 
 
@@ -71,15 +72,13 @@ export default createReducer(initialState, {
         ...userInfo
     }),
     [userTypes.UPDATE_USER_INFO_ATTEMPT]: (state, { data }) => ({
-        isLoading: true,
+        isUpdating: true,
     }),
     [userTypes.UPDATE_USER_INFO_FAILURE]: (state, { data }) => ({
-        isLoading: false,
+        isUpdating: false,
     }),
     [userTypes.UPDATE_USER_INFO_SUCCESS]: (state, { data:{ email, phone, subsidiary } }) => ({
-        email: email,
-        phone: phone,
-        subsidiary: subsidiary
+        isUpdating: false,
     }),
     [userTypes.SET_CREDIT_CARD_SUCCESS]: (state, { data: { creditCard} }) => ({
         selectedCard: creditCard

@@ -72,7 +72,6 @@ const fetchRetry = async (url, options, n) => {
     try {
         return await fetch(url, options)
     } catch(err) {
-        console.log(err,'here retry', (n - 1))
         if (n === 1) throw err;
         return await fetchRetry(url, options, n - 1);
     }
@@ -87,7 +86,6 @@ export const requestWrapper = async (url, data = {}, token, jsonRequest = true) 
   if (data.headers == null) {
     data.headers = headers;
   }
-  console.log(retryCount,'before')
   const response = await fetchRetry(URL, data, retryCount);
 
   try {
