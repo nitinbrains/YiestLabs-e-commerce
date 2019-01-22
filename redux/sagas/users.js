@@ -183,7 +183,6 @@ export function * addAddress(action) {
         let request = {};
         request.addAddress = true;
         request.address = address
-        console.log('iscall',request)
         yield put(userActions.updateUserInfo({request}))
     
     } catch(error) {

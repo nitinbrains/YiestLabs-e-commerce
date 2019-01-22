@@ -172,7 +172,11 @@ class MyAccount extends Component {
         const { classes, user } = this.props;
         const { focus } = this.state;
         const customFormValidation = Yup.object().shape({
+            shippingAttn: Yup.string()
+            .required('Required'),
             shippingAddress1: Yup.string()
+            .required('Required'),
+            shippingAddressee: Yup.string()
             .required('Required'),
             shippingCity: Yup.string()
             .required('Required'),
@@ -193,6 +197,7 @@ class MyAccount extends Component {
             .required('Required'),
             billingCountryid: Yup.string()
             .required('Required'),
+            
             phone: Yup.number()
             .required('Required'),
             email: Yup.string()
@@ -231,9 +236,24 @@ class MyAccount extends Component {
                             phone:  this.state.phone,
                             shipFrom: this.state.shipFrom,
                     }}
-                    // validationSchema={customFormValidation}
+                    validationSchema={customFormValidation}
+                    validate={( values, props) => {
+                        // add more validation which will execute before submit
+                        let errors={};
+                        let billZipValidate = WLHelper.validateZipCode(values.billingZip,values.billingCountryid)
+                        let shipZipValidate = WLHelper.validateZipCode(values.shippingZip,values.shippingCountryid)                        
+                        // if(!billZipValidate){
+                        //     errors.billingZip = 'MUST BE VALID ZIP CODE'
+                        // }
+                        // if(!shipZipValidate){
+                        //     errors.shippingZip = "MUST BE VALID ZIP CODE"
+                        // }
+                        return errors
+                    } }
                     enableReinitialize
-                    onSubmit={ values => { this.handleSubmit()}}
+                    onSubmit={ values => { 
+                            this.handleSubmit()
+                        }}
                 >
                 {({ errors, touched, isValidating }) => {
                     return(
