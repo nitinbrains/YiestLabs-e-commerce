@@ -9,14 +9,6 @@ import WLHelper from '../../lib/WLHelper';
 export const changesWereMade = (currentState, reduxState) => {
 
     var request = new Object();
-    request.shipping = {};
-    request.billing = {};
-
-    if(!currentState.id) {
-        throw { message: 'User does not have an id', code: 0};
-    }
-
-    request.id = currentState.id;
 
     if (currentState.email !== reduxState.email) {
         if(!currentState.email) {
@@ -60,67 +52,47 @@ export const changesWereMade = (currentState, reduxState) => {
     }
 
     if(!_isEqual(currentState.shipping, reduxState.shipping)) {
+        request.shipping = {};
         request.shipChange = true;
-        request.shipping.id = currentState.shipping.id;
-        request.shipping.attn = currentState.shipping.attn;
-
-    
-        request.shipping.addressee = currentState.shipping.addressee;
-
+ 
         if(!currentState.shipping.address1)
         {
-            throw {message: 'Please enter a shipping address on line 1', code: 0};
+            throw {message: 'Please enter a shipping address', code: 0};
         }
-        request.shipping.address1 = currentState.shipping.address1;
-        request.shipping.address2 = currentState.shipping.address2;
-        request.shipping.address3 = currentState.shipping.address3;
 
         if(!currentState.shipping.city)
         {
             throw {message: 'Please enter a city for your shipping address', code: 0};
         }
-        request.shipping.city = currentState.shipping.city;
-        request.shipping.zip = currentState.shipping.zip;
-        request.shipping.countryid = currentState.shipping.countryid;
 
-        if(!WLHelper.validateZipCode(request.shipping.countryid, request.shipping.zip))
+        if(!WLHelper.validateZipCode(currentState.shipping.countryid, currentState.shipping.zip))
         {
             throw {message: "Cannot update, shipping zipcode invalid for selected country", code: 0};
         }
+
+        request.shipping = Object.assign({}, currentState.shipping);
     }
 
     if(!_isEqual(currentState.billing, reduxState.billing)) {
-        request.billChange = true;
-        request.billing.id = currentState.billing.id;
-        request.billing.attn = currentState.billing.attn;
-
-        if(!currentState.billing.addressee)
-        {
-            throw {message: 'Please enter a billing addressee', code: 0};
-
-        }
-        request.billing.addressee = currentState.billing.addressee;
-
+        request.billing = {};
+        request.shipChange = true;
+ 
         if(!currentState.billing.address1)
         {
-            throw {message: 'Please enter a value for your billing address', code: 0};
+            throw {message: 'Please enter a billing address', code: 0};
         }
-        request.billing.address1 = currentState.billing.address1;
-        request.billing.address2 = currentState.billing.address2;
-        request.billing.address3 = currentState.billing.address3;
 
         if(!currentState.billing.city)
         {
             throw {message: 'Please enter a city for your billing address', code: 0};
         }
-        request.billing.city = currentState.billing.city;
-        request.billing.zip = currentState.billing.zip;
-        request.billing.countryid = currentState.billing.countryid;
 
-        if(!WLHelper.validateZipCode(request.billing.countryid, request.billing.zip))
+        if(!WLHelper.validateZipCode(currentState.billing.countryid, currentState.billing.zip))
         {
             throw {message: "Cannot update, billing zipcode invalid for selected country", code: 0};
         }
+
+        request.billing = Object.assign({}, currentState.billing);
     }
 
     return request;

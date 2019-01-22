@@ -76,11 +76,18 @@ export default createReducer(initialState, {
     [userTypes.UPDATE_USER_INFO_FAILURE]: (state, { data }) => ({
         isLoading: false,
     }),
-    [userTypes.UPDATE_USER_INFO_SUCCESS]: (state, { data:{ email, phone, subsidiary } }) => ({
-        email: email,
-        phone: phone,
-        subsidiary: subsidiary
+    [userTypes.UPDATE_USER_INFO_SUCCESS]: (state) => ({
+        isLoading: false,
     }),
+    [userTypes.GET_USER_INFO_ATTEMPT]: (state, { data }) => ({
+        isLoading: true,
+    }),
+    [userTypes.GET_USER_INFO_FAILURE]: (state, { data }) => ({
+        isLoading: false,
+    }),
+    [userTypes.GET_USER_INFO_SUCCESS]: (state, { data }) => ({
+        isLoading: false,
+    }),    
     [userTypes.SET_CREDIT_CARD_SUCCESS]: (state, { data: { creditCard} }) => ({
         selectedCard: creditCard
     }),

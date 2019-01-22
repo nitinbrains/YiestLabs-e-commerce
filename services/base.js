@@ -87,7 +87,6 @@ export const requestWrapper = async (url, data = {}, token, jsonRequest = true) 
   if (data.headers == null) {
     data.headers = headers;
   }
-  console.log(retryCount,'before')
   const response = await fetchRetry(URL, data, retryCount);
 
   try {
