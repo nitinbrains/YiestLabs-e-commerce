@@ -250,6 +250,7 @@ class MyAccount extends Component {
                                     container
                                     justify="center"
                                     alignItems="center"
+                                    spacing={24}
                                     style={{ marginBottom: 20 }}
                                 >
                                     <Grid item xs={3}>
@@ -344,6 +345,27 @@ class MyAccount extends Component {
                                         }}
                                     />
                                     {errors.shipFrom && touched.shipFrom && <div style={{color:'red'}} >{errors.shipFrom}</div>}
+                                    <Grid item xs={3}>
+                                        <TextField
+                                            variant="outlined"
+                                            id="select-currency"
+                                            select
+                                            style={{width:'71%'}}
+                                            label="Currency"
+                                            >
+                                                <MenuItem>Dollar</MenuItem>
+                                                <MenuItem>Euros</MenuItem>
+                                        </TextField>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <TextField
+                                            variant="outlined"
+                                            id="vat"
+                                            name="vat"
+                                            label="VAT"
+                                            autoComplete="vat"
+                                        />
+                                    </Grid>
                                 </Grid>
 
                         <Grid item container justify="center">
