@@ -60,7 +60,7 @@ export const changesWereMade = (currentState, reduxState) => {
             throw {message: 'Please enter a shipping address', code: 0};
         }
 
-        if(!currentState.selectedShipping.city)
+        if(!currentState.shipping.city)
         {
             throw {message: 'Please enter a city for your shipping address', code: 0};
         }
@@ -82,7 +82,7 @@ export const changesWereMade = (currentState, reduxState) => {
             throw {message: 'Please enter a billing address', code: 0};
         }
 
-        if(!currentState.selectedBilling.city)
+        if(!currentState.billing.city)
         {
             throw {message: 'Please enter a city for your billing address', code: 0};
         }

@@ -58,7 +58,7 @@ class ManageBilling extends Component {
                         </IconButton>
                     </div>
                     <Grid style={{ padding: 10 }} container spacing={24}>
-                        {user.billing.map(address => (
+                        {user.otherAddresses.map(address => (
                             <Grid item
                                 key={address.id}
                                 sm={4}
@@ -84,7 +84,7 @@ class ManageBilling extends Component {
                                         <Grid item xs={12}>
                                             <Typography>{address.countryid}</Typography>
                                         </Grid>
-                                    {this.props.user.selectedShipping.address1 !=
+                                    {this.props.user.billing.address1 !=
                                         address.address1 && (
                                         <Grid item>
                                             <Button

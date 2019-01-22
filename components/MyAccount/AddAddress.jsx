@@ -29,13 +29,8 @@ class AddAddress extends Component {
     handleAddress = () => {
         const { user, type } = this.props;
         const { address } = this.state;
-        if(type == 'shipping'){
-            user.shipping.push(address);
+            user.otherAddresses.push(address);
             this.props.addAddress(address,type)
-        } else if(type == 'billing'){
-            user.billing.push(address);
-            this.props.addAddress(address,type)            
-        }
         this.props.close()
 
     }

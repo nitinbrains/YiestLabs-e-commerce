@@ -78,7 +78,7 @@ export default createReducer(initialState, {
         isUpdating: false,
     }),
     [userTypes.UPDATE_USER_INFO_SUCCESS]: (state) => ({
-        isLoading: false,
+        isUpdating: false,
     }),
     [userTypes.GET_USER_INFO_ATTEMPT]: (state, { data }) => ({
         isLoading: true,

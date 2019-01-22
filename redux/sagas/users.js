@@ -33,7 +33,6 @@ export function * loginUser (action) {
 };
 
 export function * getUserInfo(action) {
-    console.log('action', action);
     const { responseSuccess, responseFailure,  data: { userID }} = action;
     try {
         const { res: userInfo } = yield call(api.getUserInfo, { userID });
@@ -67,7 +66,9 @@ export function * setUserInfo(action) {
 }
 
 export function * updateUserInfo(action) {
+    console.log(action)
     const { responseSuccess, responseFailure, data: { request } } = action;
+    console.log('isupdate')
     try {
         const user = yield select(state => state.user);
         request.id = user.id;
@@ -75,13 +76,14 @@ export function * updateUserInfo(action) {
         var { res, err } = yield call(api.updateUserInfo, {
             request
         });
+        console.log(res,err,'aa')
         if(err) throw err;
+        yield put(responseSuccess());
 
         yield put(userActions.getUserInfo({
             userID: user.id
         }))
 
-        yield put(responseSuccess());
     } catch(error) {
         console.log('error', error);
         yield put(responseFailure(error))
@@ -176,20 +178,16 @@ export function * addAddress(action) {
         const user = yield select(state => state.user);
 
         if(!user.id) {
-            throw {message: 'No user id. Cannot add credit card', code: 0};
+            throw {message: 'No user id. Cannot add Address', code: 0};
         }
         let request = {};
-        if(type == 'shipping'){
-            request.addShipAddress = true;
-            request.shipping = user.shipping
-        } else if ( type == 'billing'){
-            request.addBillingAddress = true;
-            request.billing = user.billing
-        }
-
-        yield call(updateUserInfo, {request});
+        request.addAddress = true;
+        request.address = address
+        console.log('iscall',request)
+        yield put(userActions.updateUserInfo({request}))
     
     } catch(error) {
+        console.log('asd',error)
         yield put(responseFailure(error));
     }
 }
@@ -260,7 +258,7 @@ export function * setDefaultShipAddress(action) {
 
         let request = {};
         request.id = user.id;
-        request.defaultBillAddress = true;
+        request.defaultShipAddress = true;
         request.address = address;
 
         yield call(updateUserInfo, {request});

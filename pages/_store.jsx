@@ -56,18 +56,7 @@ class Store extends Component {
 
     componentWillMount() {
         var userInfo = {
-            billing: [{
-                address1: "123 My Way",
-                address2: "",
-                address3: "",
-                addressee: "Home",
-                attn: "",
-                city: "Concord",
-                countryid: "US",
-                id: 1743060,
-                zip: "94518",
-            }],
-            selectedBilling: {
+            billing: {
                 address1: "123 My Way",
                 address2: "",
                 address3: "",
@@ -97,18 +86,7 @@ class Store extends Component {
                 {address1: "One way", address2: "", address3: "", addressee: "", attn: "Attn", city: "City", countryid: "US", defaultBill: false, defaultShip: true, id: 1743261, zip: "94518"}
             ],
             phone: "7142995620",
-            shipping: [{
-                address1: "One way",
-                address2: "",
-                address3: "",
-                addressee: "",
-                attn: "Attn",
-                city: "City",
-                countryid: "US",
-                id: 1743261,
-                zip: "94518"
-            }],
-            selectedShipping: {
+            shipping: {
                 address1: "One way",
                 address2: "",
                 address3: "",
