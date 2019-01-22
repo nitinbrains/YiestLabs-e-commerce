@@ -17,25 +17,30 @@ export function * loginUser (action) {
     const { responseSuccess, responseFailure, data: { username, password } } = action;
     try {
         const { res: userID } = yield call(api.login, username, password);
-        yield call(getUserInfo, userID);
-        
+        yield put(userActions.getUserInfo({
+            userID: user.id
+        }));
+
         yield put(messageActions.displayMessage({
             title: 'Authorization',
             message: 'You have successfully logged in!'
         }));
 
+        yield put(responseSuccess());
     } catch (err) {
         yield put(responseFailure(err));
     }
 };
 
 export function * getUserInfo(action) {
-    const { responseSuccess, responseFailure, data: { userID } } = action;
+    console.log('action', action);
+    const { responseSuccess, responseFailure,  data: { userID }} = action;
     try {
-        const { res: userInfo, err } = yield call(api.getUserInfo, userID);
-        if (err) throw err;
-        yield put(userActions.setUserInfo({userInfo}));
+        const { res: userInfo } = yield call(api.getUserInfo, { userID });
+        yield put(userActions.setUserInfo({ userInfo}));
+        yield put(responseSuccess());
     } catch (error) {
+        console.log('error', error);
         yield put(responseFailure(error))
     }
 }
@@ -47,14 +52,16 @@ export function * setUserInfo(action) {
         const { subsidiary, shipmethod, shipping: { countryid } } = userInfo;
         userInfo.shipMethods = WLHelper.shipMethodGroup(subsidiary, shipmethod, countryid);
         userInfo.subsidiaryOptions = loadSubsidiaryOptions(userInfo);
+        const creditCard = getDefaultOrFirstCreditCard(userInfo);
+        if(creditCard) {
+            userInfo.selectedCard = creditCard;
+        }
 
         yield put(responseSuccess(userInfo));
 
-        if (userInfo.cards.length > 0) {
-            yield put(userActions.getCreditCard());
-        }
-
-        } catch (err) {
+    } 
+    catch (err) {
+        console.log('error', err);
         yield put(responseFailure(err));
     }
 }
@@ -62,16 +69,21 @@ export function * setUserInfo(action) {
 export function * updateUserInfo(action) {
     const { responseSuccess, responseFailure, data: { request } } = action;
     try {
-        var { res: status, err } = yield call(api.updateUserInfo, { request });
+        const user = yield select(state => state.user);
+        request.id = user.id;
+
+        var { res, err } = yield call(api.updateUserInfo, {
+            request
+        });
         if(err) throw err;
-        let message = {
-            message:'Your account was updated successfully'
-        }
-        yield put(messageActions.showNetworkError(message))
-        
-        yield put(responseSuccess(status));
-        yield call(getUserInfo, {'data': { 'userID' : request.id}});
+
+        yield put(userActions.getUserInfo({
+            userID: user.id
+        }))
+
+        yield put(responseSuccess());
     } catch(error) {
+        console.log('error', error);
         yield put(responseFailure(error))
     }
 }
@@ -103,7 +115,7 @@ export function * addCreditCard(action) {
         request.id = user.id
         request.token = WLHelper.generateCreditToken(card);
 
-        yield call(updateUserInfo, {request});
+        yield put(userActions.updateUserInfo({request}));
     
     } catch(error) {
         yield put(responseFailure(error));
@@ -124,21 +136,8 @@ export function * deleteCreditCard(action) {
         request.id = user.id
         request.card = creditCard;
         
-        yield call(updateUserInfo, {request});
+        yield put(userActions.updateUserInfo({request}));
     
-    } catch(error) {
-        yield put(responseFailure(error));
-    }
-}
-
-function * getCreditCard(action) {
-    const { responseSuccess, responseFailure } = action;
-    try {
-        const user = yield select(state => state.user);
-        const creditCard = getDefaultOrFirstCreditCard(user);
-        if(creditCard) {
-            yield put(responseSuccess({creditCard}));
-        }
     } catch(error) {
         yield put(responseFailure(error));
     }
@@ -160,7 +159,7 @@ export function * setDefaultCreditCard(action) {
         let request = {};
         request.defaultCreditCard = true;
         request.card = creditCard;
-        yield call(updateUserInfo, { request });
+        yield put(userActions.updateUserInfo({request}));
 
     } catch(error) {
         yield put(responseFailure(error));

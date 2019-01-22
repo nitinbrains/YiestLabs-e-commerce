@@ -591,6 +591,8 @@ app.prepare()
 					}
 					res.sendStatus(200)
 
+					res.sendStatus(200);
+
 				}
 			})
 			.catch(err => {

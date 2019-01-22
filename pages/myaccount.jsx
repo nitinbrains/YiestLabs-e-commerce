@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import update from "immutability-helper";
-
+import _isEmpty from 'lodash/isEmpty';
 
 import PropTypes from "prop-types";
 import Link from "next/link";
@@ -160,10 +159,15 @@ class MyAccount extends Component {
 
         try {
             var request = changesWereMade(this.state, this.props.user);
-            this.props.updateUserInfo({request});
+            if(!_isEmpty(request)) {
+                this.props.updateUserInfo({request});
+            }
+            else {
+                throw { message: 'Empty request. Cannot update user information', code: 0 };
+            }
         }
         catch(err) {
-            console.log(err)
+            console.log('err', err);
             // this.props.displayError();
         }
     }
@@ -172,10 +176,6 @@ class MyAccount extends Component {
         const { classes, user } = this.props;
         const { focus } = this.state;
         const customFormValidation = Yup.object().shape({
-            shippingAttn: Yup.string()
-            .required('Required'),
-            shippingAddressee: Yup.string()
-            .required('Required'),
             shippingAddress1: Yup.string()
             .required('Required'),
             shippingCity: Yup.string()
@@ -197,14 +197,11 @@ class MyAccount extends Component {
             .required('Required'),
             billingCountryid: Yup.string()
             .required('Required'),
-
             phone: Yup.number()
             .required('Required'),
             email: Yup.string()
             .email('Must Be Email')
             .required('Required'),
-            // shipFrom: Yup.string()
-            // .required('Required'),
         });
         return (
             <NavBarUserSearchDrawerLayout>
@@ -237,7 +234,7 @@ class MyAccount extends Component {
                             phone:  this.state.phone,
                             shipFrom: this.state.shipFrom,
                     }}
-                    validationSchema={customFormValidation}
+                    // validationSchema={customFormValidation}
                     enableReinitialize
                     onSubmit={ values => { this.handleSubmit()}}
                 >

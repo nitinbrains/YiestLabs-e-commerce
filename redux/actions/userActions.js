@@ -19,7 +19,7 @@ export const { userTypes, userActions } = createActionsStructure('user', [
   { name: 'SET_DEFAULT_SHIP_ADDRESS', async: true },
   { name: 'SET_BILL_ADDRESS', async: true },
   { name: 'SET_DEFAULT_BILL_ADDRESS', async: true },
-  { name: 'USER_LOGOUT' }
+  { name: 'USER_LOGOUT' },
 ]);
 
 
