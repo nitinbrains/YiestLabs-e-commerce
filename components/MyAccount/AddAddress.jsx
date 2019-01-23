@@ -58,9 +58,9 @@ class AddAddress extends Component {
             <React.Fragment>
             <Formik
                 initialValues={{
-                    address1: address.addiress1,
-                    address2: address.addiress2,
-                    address3: address.addiress3,
+                    address1: address.address1,
+                    address2: address.address2,
+                    address3: address.address3,
                     addressee: address.addressee,
                     attn: address.attn,
                     city: address.city,

@@ -41,9 +41,13 @@ class ManageShipping extends Component {
         this.setState({ newAddress: false})
     }
 
+    selectDefaultAddress = (address) => {
+        this.props.setDefaultShipAddress({address})
+    }
+
     render() {
         const { classes, user } = this.props;
-        console.log('user', user,this.props);
+        console.log('user',this.props);
         return (
             <React.Fragment>
                 <DialogContent id="my-order-details">
@@ -90,6 +94,7 @@ class ManageShipping extends Component {
                                             <Button
                                                 variant="contained"
                                                 color="primary"
+                                                onClick={(e)=> { this.selectDefaultAddress(address) }}
                                             >
                                                 Select Address
                                             </Button>

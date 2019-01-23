@@ -66,9 +66,7 @@ export function * setUserInfo(action) {
 }
 
 export function * updateUserInfo(action) {
-    console.log(action)
     const { responseSuccess, responseFailure, data: { request } } = action;
-    console.log('isupdate')
     try {
         const user = yield select(state => state.user);
         request.id = user.id;
@@ -76,7 +74,6 @@ export function * updateUserInfo(action) {
         var { res, err } = yield call(api.updateUserInfo, {
             request
         });
-        console.log(res,err,'aa')
         if(err) throw err;
         yield put(responseSuccess());
 
@@ -248,6 +245,7 @@ export function * setShipAddress(action) {
 
 export function * setDefaultShipAddress(action) {
     const { responseSuccess, responseFailure, data: address } = action;
+    console.log(action,'asd')
     try {
         const user = yield select(state => state.user);
 
@@ -260,7 +258,7 @@ export function * setDefaultShipAddress(action) {
         request.defaultShipAddress = true;
         request.address = address;
 
-        yield call(updateUserInfo, {request});
+        yield put(userActions.updateUserInfo({request}))
     
     } catch(error) {
         yield put(responseFailure(error));
@@ -294,7 +292,7 @@ export function * setDefaultBillAddress(action) {
         request.defaultBillAddress = true;
         request.address = address;
 
-        yield call(updateUserInfo, {request});
+        yield put(userActions.updateUserInfo({request}))        
     
     } catch(error) {
         yield put(responseFailure(error));

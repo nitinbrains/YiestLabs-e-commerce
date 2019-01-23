@@ -41,6 +41,10 @@ class ManageBilling extends Component {
         this.setState({ newAddress: false})
     }
 
+    selectDefaultAddress = (address) => {
+        this.props.setDefaultBillAddress({address})
+    }
+
     render() {
         const { classes, user } = this.props;
 
@@ -90,6 +94,7 @@ class ManageBilling extends Component {
                                             <Button
                                                 variant="contained"
                                                 color="primary"
+                                                onClick={(e)=> { this.selectDefaultAddress(address) }}                                                
                                             >
                                                 Select Address
                                             </Button>

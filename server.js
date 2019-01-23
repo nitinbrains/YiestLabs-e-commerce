@@ -597,8 +597,8 @@ app.prepare()
 			})
 			.catch(err => {
 				// TO-DO: Implement retry handler
-				console.log('error', error);
-				res.send({error: { message: error, code: -1 }});
+				console.log('error', err);
+				res.send({error: { message: err, code: -1 }});
 			});
 		}
 		else
