@@ -162,6 +162,7 @@ class ManageAddresses extends Component {
                             <Grid item xs={12}>
                                 <Button
                                     onClick={this.newAddress}
+                                    variant="outlined"
                                     color="primary"
                                 >
                                     Add New Address

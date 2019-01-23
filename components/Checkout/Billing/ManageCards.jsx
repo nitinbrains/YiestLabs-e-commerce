@@ -105,7 +105,7 @@ class ManageCards extends Component {
 
                         {!this.state.newCard ? (
                             <Grid item xs={12}>
-                                <Button onClick={this.newCard} color="primary">
+                                <Button onClick={this.newCard} color="primary" variant="outlined">
                                     Add New Card
                                 </Button>
                             </Grid>

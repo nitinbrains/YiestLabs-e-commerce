@@ -148,6 +148,7 @@ class ManageAddresses extends Component {
                                 <Button
                                     onClick={this.newAddress}
                                     color="primary"
+                                    variant="outlined"
                                 >
                                     Add New Address
                                 </Button>

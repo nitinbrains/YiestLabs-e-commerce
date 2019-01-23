@@ -34,14 +34,13 @@ export function * prepareOrder(action) {
             yield put(responseSuccess(initOrder(order, user)));
         }
     } catch (error) {
-        let message = {
-            message:'Somthing Went Wrong'
-        }
-        if(error.message != undefined){
-            message['message'] = JSON.stringify(error.message);
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));
-        yield put(messageActions.showNetworkError(message))
     }
 };
 
@@ -62,6 +61,12 @@ export function * placeOrder(action) {
             yield put(responseSuccess(initOrder(order, user)));
         }
     } catch (error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }
@@ -76,6 +81,12 @@ export function * setShippingOption(action) {
         yield put(responseSuccess(option));
         yield put(orderActions.setItems({ items }));
     } catch (error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }
@@ -90,6 +101,12 @@ export function * incrementShipDate(action) {
             incrementItemDate(order, user, item)
         )}));
     } catch (error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }
@@ -104,6 +121,12 @@ export function * decrementShipDate(action) {
             decrementItemDate(order, user, item)
         )}));
     } catch (error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }

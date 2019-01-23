@@ -26,6 +26,12 @@ export function * loginUser (action) {
             message: 'You have successfully logged in!'
         }));
     } catch (err) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(err));
     }
 };
@@ -45,6 +51,12 @@ export function * setUserInfo(action) {
         }
 
         } catch (err) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(err));
     }
 }
@@ -57,6 +69,12 @@ export function * setCreditCard(action) {
 
         yield put(responseSuccess({creditCard}));
     } catch(error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }
@@ -68,6 +86,12 @@ export function * addCreditCard(action) {
         const { cards, creditCard } = addCC(user, card);
         yield put(responseSuccess({ cards, creditCard }));
     } catch(error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }
@@ -106,6 +130,12 @@ export function * addShipAddress(action) {
         const { otherAddresses, shipping } = addShip(user, address);
         yield put(responseSuccess({ otherAddresses, shipping }));
     } catch(error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }
@@ -126,6 +156,12 @@ export function * addBillAddress(action) {
         const { otherAddresses, billing } = addBill(user, address);
         yield put(responseSuccess({ otherAddresses, billing }));
     } catch(error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }

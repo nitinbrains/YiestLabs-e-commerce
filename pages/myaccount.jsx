@@ -98,7 +98,7 @@ class MyAccount extends Component {
         const { user: { id, email, phone, shipping, billing, selectedCard, subsidiary, subsidiaryOptions }} = this.props;
         this.setState({
             id,
-            email, 
+            email,
             phone,
             shipping,
             billing,
@@ -232,7 +232,7 @@ class MyAccount extends Component {
                             shippingAddressee: this.state.shipping.addressee,
                             shippingAttn: this.state.shipping.attn,
                             shippingCity: this.state.shipping.city,
-                            shippingZip: this.state.shipping.zip,                            
+                            shippingZip: this.state.shipping.zip,
                             shippingCountryid: this.state.shipping.countryid,
 
                         // Billing
@@ -241,7 +241,7 @@ class MyAccount extends Component {
                             billingAddress3: this.state.billing.address3,
                             billingAddressee: this.state.billing.addressee,
                             billingAttn: this.state.billing.attn,
-                            billingZip: this.state.billing.zip,                            
+                            billingZip: this.state.billing.zip,
                             billingCity: this.state.billing.city,
                             billingCountryid: this.state.billing.countryid,
 
@@ -264,6 +264,7 @@ class MyAccount extends Component {
                                     container
                                     justify="center"
                                     alignItems="center"
+                                    spacing={24}
                                     style={{ marginBottom: 20 }}
                                 >
                                     <Grid item xs={3}>
@@ -275,8 +276,8 @@ class MyAccount extends Component {
                                             Account # {this.state.id}
                                         </Typography>
                                     </Grid>
-                                    <Field 
-                                        name="email" 
+                                    <Field
+                                        name="email"
                                         component={(props)=>{
                                         return(
                                             <Grid item xs={3}>
@@ -292,7 +293,7 @@ class MyAccount extends Component {
                                                             focus : 'email'
                                                         })
                                                     }}
-                                                    autoFocus={ focus == 'email' }                                                    
+                                                    autoFocus={ focus == 'email' }
                                                     id="email"
                                                     name="email"
                                                     label="Email"
@@ -303,8 +304,8 @@ class MyAccount extends Component {
                                         }}
                                     />
                                     {errors.email && touched.email && <div style={{color:'red'}} >{errors.email}</div>}
-                                    <Field 
-                                        name="phone" 
+                                    <Field
+                                        name="phone"
                                         component={(props)=>{
                                         return(
                                             <Grid item xs={3}>
@@ -331,8 +332,8 @@ class MyAccount extends Component {
                                         }}
                                     />
                                     {errors.phone && touched.phone && <div style={{color:'red'}} >{errors.phone}</div>}
-                                    <Field 
-                                        name="shipFrom" 
+                                    <Field
+                                        name="shipFrom"
                                         component={(props)=>{
                                         return(
                                             <Grid item xs={3}>
@@ -361,8 +362,29 @@ class MyAccount extends Component {
                                         }}
                                     />
                                     {errors.shipFrom && touched.shipFrom && <div style={{color:'red'}} >{errors.shipFrom}</div>}
+                                    <Grid item xs={3}>
+                                        <TextField
+                                            variant="outlined"
+                                            id="select-currency"
+                                            select
+                                            style={{width:'71%'}}
+                                            label="Currency"
+                                            >
+                                                <MenuItem>Dollar</MenuItem>
+                                                <MenuItem>Euros</MenuItem>
+                                        </TextField>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <TextField
+                                            variant="outlined"
+                                            id="vat"
+                                            name="vat"
+                                            label="VAT"
+                                            autoComplete="vat"
+                                        />
+                                    </Grid>
                                 </Grid>
-                           
+
                         <Grid item container justify="center">
 
                             <Grid
@@ -385,8 +407,8 @@ class MyAccount extends Component {
                                         className={classes.sectionTitleDivider}
                                     />
                                 </Grid>
-                                <Field 
-                                    name="shippingAttn" 
+                                <Field
+                                    name="shippingAttn"
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
@@ -413,8 +435,8 @@ class MyAccount extends Component {
                                     }}
                                 />
                                 {errors.shippingAttn && touched.shippingAttn && <div style={{color:'red'}} >{errors.shippingAttn}</div>}
-                                <Field 
-                                    name="shippingAddressee" 
+                                <Field
+                                    name="shippingAddressee"
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
@@ -441,8 +463,8 @@ class MyAccount extends Component {
                                     }}
                                 />
                                 {errors.shippingAddressee && touched.shippingAddressee && <div style={{color:'red'}} >{errors.shippingAddressee}</div>}
-                                <Field 
-                                    name="shippingAddress1" 
+                                <Field
+                                    name="shippingAddress1"
                                     component={(props)=>{
                                     return(
                                     <Grid item xs={12}>
@@ -469,8 +491,8 @@ class MyAccount extends Component {
                                     }}
                                 />
                                 {errors.shippingAddress1 && touched.shippingAddress1 && <div style={{color:'red'}} >{errors.shippingAddress1}</div>}
-                                <Field 
-                                    name="shippingAddress2" 
+                                <Field
+                                    name="shippingAddress2"
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
@@ -497,8 +519,8 @@ class MyAccount extends Component {
                                     }}
                                 />
                                 {errors.shippingAddress2 && touched.shippingAddress2 && <div style={{color:'red'}} >{errors.shippingAddress2}</div>}
-                                <Field 
-                                    name="shippingAddress3" 
+                                <Field
+                                    name="shippingAddress3"
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
@@ -525,8 +547,8 @@ class MyAccount extends Component {
                                     }}
                                 />
                                 {errors.shippingAddress3 && touched.shippingAddress3 && <div style={{color:'red'}} >{errors.shippingAddress3}</div>}
-                                <Field 
-                                    name="shippingCity" 
+                                <Field
+                                    name="shippingCity"
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
@@ -553,8 +575,8 @@ class MyAccount extends Component {
                                     }}
                                 />
                                 {errors.shippingCity && touched.shippingCity && <div style={{color:'red'}} >{errors.shippingCity}</div>}
-                                <Field 
-                                    name="shippingZip" 
+                                <Field
+                                    name="shippingZip"
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
@@ -582,8 +604,8 @@ class MyAccount extends Component {
                                     }}
                                 />
                                 {errors.shippingZip && touched.shippingZip && <div style={{color:'red'}} >{errors.shippingZip}</div>}
-                                <Field 
-                                    name="shippingCountryid" 
+                                <Field
+                                    name="shippingCountryid"
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
@@ -613,6 +635,7 @@ class MyAccount extends Component {
                                 <Grid item xs={12}>
                                     <Button
                                         onClick={this.manageShipping}
+                                        variant="outlined" color="primary"
                                         style={{ marginTop: 10 }}
                                     >
                                         Manage Shipping Addresses
@@ -640,8 +663,8 @@ class MyAccount extends Component {
                                         className={classes.sectionTitleDivider}
                                     />
                                 </Grid>
-                                <Field 
-                                    name="billingAttn" 
+                                <Field
+                                    name="billingAttn"
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
@@ -668,8 +691,8 @@ class MyAccount extends Component {
                                     }}
                                 />
                                 {errors.billingAttn && touched.billingAttn && <div style={{color:'red'}} >{errors.billingAttn}</div>}
-                                <Field 
-                                    name="billingAddressee" 
+                                <Field
+                                    name="billingAddressee"
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
@@ -696,8 +719,8 @@ class MyAccount extends Component {
                                     }}
                                 />
                                 {errors.billingAddressee && touched.billingAddressee && <div style={{color:'red'}} >{errors.billingAddressee}</div>}
-                                <Field 
-                                    name="billingAddress1" 
+                                <Field
+                                    name="billingAddress1"
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
@@ -724,8 +747,8 @@ class MyAccount extends Component {
                                     }}
                                 />
                                 {errors.billingAddress1 && touched.billingAddress1 && <div style={{color:'red'}} >{errors.billingAddress1}</div>}
-                                <Field 
-                                    name="billingAddress2" 
+                                <Field
+                                    name="billingAddress2"
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
@@ -752,8 +775,8 @@ class MyAccount extends Component {
                                     }}
                                 />
                                 {errors.billingAddress2 && touched.billingAddress2 && <div style={{color:'red'}} >{errors.billingAddress2}</div>}
-                                <Field 
-                                    name="billingAddress3" 
+                                <Field
+                                    name="billingAddress3"
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
@@ -808,8 +831,8 @@ class MyAccount extends Component {
                                     }}
                                 />
                                 {errors.billingCity && touched.billingCity && <div style={{color:'red'}} >{errors.billingCity}</div>}
-                                <Field 
-                                    name="billingZip" 
+                                <Field
+                                    name="billingZip"
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
@@ -836,8 +859,8 @@ class MyAccount extends Component {
                                     }}
                                 />
                                 {errors.billingZip && touched.billingZip && <div style={{color:'red'}} >{errors.billingZip}</div>}
-                                <Field 
-                                    name="billingCountryid" 
+                                <Field
+                                    name="billingCountryid"
                                     component={(props)=>{
                                     return(
                                         <Grid item xs={12}>
@@ -867,6 +890,7 @@ class MyAccount extends Component {
                                 <Grid item xs={12} md={7}>
                                     <Button
                                         style={{ marginTop: 10 }}
+                                        variant="outlined" color="primary"
                                         onClick={this.manageBilling}
                                     >
                                         Manage Billing Addresses
@@ -875,6 +899,7 @@ class MyAccount extends Component {
                                 <Grid item xs={12} md={5}>
                                     <Button
                                         style={{ marginTop: 10 }}
+                                        variant="outlined" color="primary"
                                         onClick={this.manageCards}
                                     >
                                         Manage Cards

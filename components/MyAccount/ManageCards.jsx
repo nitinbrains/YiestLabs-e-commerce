@@ -99,6 +99,7 @@ class ManageCards extends Component {
                                         <Button
                                             variant="contained"
                                             color="primary"
+                                            variant="outlined"
                                         >
                                             Add Card
                                         </Button>
