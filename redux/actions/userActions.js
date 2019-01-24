@@ -13,6 +13,8 @@ export const { userTypes, userActions } = createActionsStructure('user', [
   { name: 'ADD_SHIP_ADDRESS', async: true },
   { name: 'SET_USER_INFO', async: true },
   { name: 'UPDATE_USER_INFO', async: true },
+  { name: 'UNSAVED_USER_INFO', async: true },
+  { name: 'UNSAVED_USER_CLOSE', async: true },
   { name: 'USER_LOGOUT' }
 ]);
 

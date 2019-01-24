@@ -116,7 +116,7 @@ class MyAccount extends Component {
         const isShippingDiff = Util.checkDifference(shipping,this.state.shipping);
         const isBillingDiff = Util.checkDifference( billing, this.state.billing);
         if( email != this.state.email || phone != this.state.phone || subsidiary != this.state.shipFrom || isShippingDiff || isBillingDiff ) {
-            alert('not match')
+            this.props.unsavedUserInfo()
         }
     }
 

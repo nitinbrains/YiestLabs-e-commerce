@@ -23,6 +23,8 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import SideBarItems from "./SideBarItems";
 import SearchBarItems from "./SearchBarItems";
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
 
 import { userActions } from "../../redux/actions/userActions";
 import { messageActions } from "../../redux/actions/messageActions";
@@ -50,6 +52,9 @@ class NavBarUserSearchDrawerLayout extends Component {
 
     handleSearchBarClose = () => {
         this.setState({ openSearchBar: false });
+    };
+    handleClose = () => {
+        this.props.unsavedUserClose()
     };
 
     componentWillUnmount() {
@@ -173,6 +178,32 @@ class NavBarUserSearchDrawerLayout extends Component {
                     {children}
                 </main>
                 
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    open={true}
+                    open={this.props.user.isUnsaved}
+                    autoHideDuration={2000}
+                    onClose={this.handleClose}
+                    ContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">{'Deleting Unsaved Changes from my account page'}</span>}
+                    action={[
+                        <IconButton
+                        key="close"
+                        aria-label="Close"
+                        color="inherit"
+                        className={classes.close}
+                        onClick={(e)=>this.handleClose()}
+                        >
+                        <CloseIcon />
+                        </IconButton>,
+                    ]}
+                />
+
                 <SimpleSnackbar
                     show={this.props.messages.networkRequestError == false ? false : true}
                     handleClose={() => this.props.hideNetworkError()}
@@ -295,7 +326,10 @@ const styles = theme => ({
     },
     searchInput: {
         marginLeft: 10
-    }
+    },
+    close: {
+        padding: theme.spacing.unit / 2,
+    },
 });
 
 NavBarUserSearchDrawerLayout.propTypes = {
