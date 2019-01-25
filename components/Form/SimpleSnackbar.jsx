@@ -5,12 +5,39 @@ import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import { SnackbarProvider, withSnackbar } from 'notistack';
 
 const styles = theme => ({
   close: {
     padding: theme.spacing.unit / 2,
   },
 });
+
+class App extends React.Component {
+  handleNotification = () => {
+    const { messages } = this.props;
+    if(messages.networkRequestError.length > 0) {
+      return messages.networkRequestError.map((data)=>{
+        this.props.enqueueSnackbar( data.message, { variant: data.variant} );
+      })
+    }
+  }
+
+  render() {
+    return(
+      <div>
+        {this.handleNotification()}
+      </div>
+    );
+  }
+}
+
+App.propTypes = {
+  enqueueSnackbar: PropTypes.func.isRequired,
+};
+
+const Notification = withSnackbar(App);
+
 
 class SimpleSnackbar extends React.Component {
   state = {
@@ -21,53 +48,39 @@ class SimpleSnackbar extends React.Component {
     this.setState({ open: true });
   };
 
-  handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+  handleClose = (event) => {
     this.props.handleClose()
-    this.setState({ open: false });
   };
 
-  static getDerivedStateFromProps(nextProps, prevState){
-    if( nextProps.show != prevState.open ){
-      return {
-        open: nextProps.show
-      }
-    } else {
-      return null
-    }
-  }
+  
 
   render() {
     const { classes } = this.props;
     
     return (
       <div>
-        <Snackbar
+        <SnackbarProvider 
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'right',
           }}
-          open={this.state.open}
-          autoHideDuration={2000}
+          maxSnack={5}
           onClose={this.handleClose}
-          ContentProps={{
-            'aria-describedby': 'message-id',
-          }}
-          message={<span id="message-id">{this.props.message.toUpperCase()}</span>}
+          autoHideDuration={5000}
           action={[
             <IconButton
               key="close"
               aria-label="Close"
               color="inherit"
               className={classes.close}
-              onClick={(e)=>this.handleClose()}
+              onClick={(e)=>{this.handleClose()}}
             >
               <CloseIcon />
-            </IconButton>,
+            </IconButton>
           ]}
-        />
+        >
+          <Notification messages={this.props.messageList} />
+        </SnackbarProvider>
       </div>
     );
   }

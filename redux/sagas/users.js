@@ -23,13 +23,14 @@ export function * loginUser (action) {
         }
         yield put(messageActions.displayMessage({
             title: 'Authorization',
-            message: 'You have successfully logged in!'
+            message: 'You have successfully logged in!',
+            variant:'success'
         }));
     } catch (err) {
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(err));
@@ -52,9 +53,9 @@ export function * setUserInfo(action) {
 
         } catch (err) {
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(err));
@@ -70,9 +71,9 @@ export function * setCreditCard(action) {
         yield put(responseSuccess({creditCard}));
     } catch(error) {
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));
@@ -87,9 +88,9 @@ export function * addCreditCard(action) {
         yield put(responseSuccess({ cards, creditCard }));
     } catch(error) {
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));
@@ -131,9 +132,9 @@ export function * addShipAddress(action) {
         yield put(responseSuccess({ otherAddresses, shipping }));
     } catch(error) {
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));
@@ -157,9 +158,9 @@ export function * addBillAddress(action) {
         yield put(responseSuccess({ otherAddresses, billing }));
     } catch(error) {
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));

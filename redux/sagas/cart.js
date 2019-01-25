@@ -24,9 +24,9 @@ export function * removeCartItem(action) {
         yield put(responseSuccess({ items }));
     } catch(error) {
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));
@@ -41,9 +41,9 @@ export function * updateCartItem(action) {
         yield put(responseSuccess({ items }));
     } catch (error) {
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));
