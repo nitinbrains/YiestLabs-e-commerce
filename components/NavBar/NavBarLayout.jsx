@@ -18,18 +18,19 @@ class NavBarLayout extends Component {
     }
     render() {
         const { children, classes, theme } = this.props;
-        
+
         return (
             <div className={classes.root}>
 
-                <div
-                    style={{
-                        height: 50,
-                        width: "100%",
-                        backgroundColor: "#fafafa",
-                        position: "fixed"
-                    }}
-                />
+            <div
+                style={{
+                    height: 50,
+                    width: "100%",
+                    backgroundColor: "#fafafa",
+                    position: "fixed",
+                    zIndex: 1000
+                }}
+            />
                 <AppBar
                     className={classes.appBar}
                 >
