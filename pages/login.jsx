@@ -68,7 +68,7 @@ class Login extends Component {
                 {this.props.message.messages.map((message, i) => (
                     <Alert message={message} index={i} />
                 ))}
-                <LoadingIndicator visible={this.props.user.isLoading} />
+                <LoadingIndicator visible={this.props.loading.isLoading && this.props.loading.type == 'userLogin' } />
 
                 <main className={classes.layout}>
                     <div className={classes.container}>
@@ -263,7 +263,8 @@ const mapStateToProps = state => {
         user: state.user,
         inventory: state.inventory,
         cart: state.cart,
-        message: state.messages
+        message: state.messages,
+        loading: state.loading
     };
 };
 

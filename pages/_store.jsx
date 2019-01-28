@@ -196,7 +196,7 @@ class Store extends Component {
         // isHomebrew = true
         return (
             <NavBarUserSearchDrawerLayout>
-                <LoadingIndicator visible={this.props.store.isLoading} label={"Loading Inventory"} />
+                <LoadingIndicator visible={(this.props.loading.isLoading && this.props.loading.type == "loadingInventory")} label={"Loading Inventory"} />
                 <Grid container spacing={8} id="professional-homebrew-switch">
                     <Grid item xs={6} dir="rtl">
                         <FormButton className={`form-button-small-size ${isHomebrew ?  'form-button-active' : ''}`} text="Professional" onClick={() => this.props.switchToProfessional()}/>

@@ -17,7 +17,7 @@ export default (Component) => {
             }
 
             render () {
-                if (this.props.store.isLoading) {
+                if (this.props.loading.isLoading && this.props.loading.type == "loadingInventory") {
                     return <LoadingScreen />
                 }
                 return <Component {...this.props}/>
@@ -26,7 +26,7 @@ export default (Component) => {
     )
 
     return connect(
-        state => ({ store: state.inventory, user: state.user }),
+        state => ({ store: state.inventory, user: state.user, loading: state.loading }),
         dispatch => bindActionCreators({ ...inventoryActions, ...userActions}, dispatch)
     )(Wrapper());
 }
