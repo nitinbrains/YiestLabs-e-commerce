@@ -86,6 +86,7 @@ class Shipping extends Component {
 
                                 <Button
                                     style={{ marginTop: 10 }}
+                                    variant="outlined" color="primary"
                                     onClick={this.manageAddresses}
                                 >
                                     Change Shipping Address

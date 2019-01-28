@@ -15,18 +15,32 @@ import WLHelper from '../../lib/WLHelper';
 export function * loginUser (action) {
     const { responseSuccess, responseFailure, data: { username, password } } = action;
     try {
-        const { res: userID } = yield call(api.login, username, password);
-        console.log('userID', userID);
-        yield put(userActions.getUserInfo({userID}));
+        const { res: userID, err } = yield call(api.login, username, password);
+        if(err) throw err;
+
+        const { res: userInfo, error } = yield call(api.getUserInfo, userID);
+        if(error) throw error;
 
         yield put(messageActions.displayMessage({
             title: 'Authorization',
-            message: 'You have successfully logged in!'
+            message: 'You have successfully logged in!',
+            variant:'success'
         }));
 
         yield put(responseSuccess());
-    } catch (error) {
-        yield put(responseFailure(error));
+
+    } catch (err) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+        } else {
+            if(err.code == 0 ){
+                yield put(messageActions.showNetworkError({ title: 'Yeastman', error: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));                
+            }
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
+        yield put(responseFailure(err));
     }
 };
 
@@ -58,10 +72,18 @@ export function * setUserInfo(action) {
 
         yield put(responseSuccess(userInfo));
 
-    } 
-    catch (error) {
-        console.log('error', error);
-        yield put(responseFailure(error));
+        if (userInfo.cards.length > 0) {
+            yield put(userActions.setCreditCard(userInfo));
+        }
+
+        } catch (err) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
+        yield put(responseFailure(err));
     }
 }
 
@@ -82,8 +104,13 @@ export function * updateUserInfo(action) {
         }))
 
     } catch(error) {
-        console.log('error', error);
-        yield put(responseFailure(error))
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
+        yield put(responseFailure(error));
     }
 }
 
@@ -103,6 +130,12 @@ export function * getOrderHistory(action) {
 
         yield put(responseSuccess({ orderHistory }));
     } catch(error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }
@@ -167,6 +200,12 @@ export function * setCreditCard(action) {
     try {
         yield put(responseSuccess({ creditCard }));
     } catch(error) {
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }
@@ -203,7 +242,12 @@ export function * addAddress(action) {
         yield put(userActions.updateUserInfo({request}))
     
     } catch(error) {
-        console.log('asd',error)
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error));
     }
 }

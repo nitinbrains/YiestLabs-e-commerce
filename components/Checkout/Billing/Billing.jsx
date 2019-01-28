@@ -151,6 +151,7 @@ class Billing extends Component {
                                         </Typography>
                                         <Button
                                             style={{ marginTop: 10 }}
+                                            variant="outlined" color="primary"
                                             onClick={this.manageCards}
                                         >
                                             Change Card
@@ -215,6 +216,7 @@ class Billing extends Component {
                                         </Typography>
                                             <Button
                                                 style={{ marginTop: 10 }}
+                                                variant="outlined" color="primary"
                                                 onClick={this.manageCards}
                                             >
                                                 Change Card
@@ -280,6 +282,7 @@ class Billing extends Component {
 
                                 <Button
                                     style={{ marginTop: 10 }}
+                                    variant="outlined" color="primary"
                                     onClick={this.manageAddresses}
                                 >
                                     Change Billing Address

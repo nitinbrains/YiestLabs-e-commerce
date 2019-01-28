@@ -3,7 +3,7 @@ import { messageTypes } from '../actions/messageActions';
 
 const initialState = {
     messages: [],
-    networkRequestError: false
+    networkRequestError: []
 };
 
 const getType = (message, error) => {
@@ -17,25 +17,39 @@ const getType = (message, error) => {
 };
 
 export default createReducer(initialState, {
-    [messageTypes.DISPLAY_MESSAGE_ATTEMPT]: ({ messages }, { data: { title, message, error } }) => ({
+    [messageTypes.DISPLAY_MESSAGE_ATTEMPT]: ({ messages }, { data: { title, message, error, variant } }) =>{
+        console.log(error,message,variant,title,'to display error message message')
+        return ({
         messages: [
             ...messages,
             {
                 type: getType(message, error),
                 title,
-                message: message || error
+                message: message || error,
+                variant: variant
             }
         ]
-    }),
+    })},
     [messageTypes.HIDE_MESSAGE_ATTEMPT]: ({ messages }, { data: idx }) => ({
         messages: messages.filter((message, index) => index !== idx)
     }),
-    [messageTypes.SHOW_NETWORK_ERROR_ATTEMPT]: (state, { data }) =>{ 
-        console.log(data,'error message if any')
+    [messageTypes.SHOW_NETWORK_ERROR_ATTEMPT]: (state, { data:{ title, message, error, variant } }) =>{ 
+        console.log(title,message,error,'error message if any')
         return({
-        networkRequestError: data 
+        networkRequestError: [
+            ...state.networkRequestError,
+            {
+                type : getType(message,error),
+                title : title,
+                message: message || error,
+                variant: variant            
+            }
+        ] 
     })},
-    [messageTypes.HIDE_NETWORK_ERROR_ATTEMPT]: (state ) => ({
-        networkRequestError: false
-    }),
+    [messageTypes.HIDE_NETWORK_ERROR_ATTEMPT]: (state, data ) =>{
+        let message = state.networkRequestError;
+        message.pop();
+        return ({
+            networkRequestError: message
+    })},
 });

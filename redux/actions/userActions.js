@@ -21,6 +21,9 @@ export const { userTypes, userActions } = createActionsStructure('user', [
   { name: 'SET_DEFAULT_BILL_ADDRESS', async: true },
   { name: 'GET_ORDER_HISTORY', async: true},
   { name: 'USER_LOGOUT' },
+  { name: 'UNSAVED_USER_INFO', async: true },
+  { name: 'UNSAVED_USER_CLOSE', async: true },
+  { name: 'USER_LOGOUT' }
 ]);
 
 

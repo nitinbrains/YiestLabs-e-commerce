@@ -53,19 +53,16 @@ const initialState = {
     },
     shipMethods: [],
     isLoading: false,
-    orderHistory: []
+    orderHistory: [],
+    isUnsaved: false,
 }; // empty for now
 
 
 /* ------------- Hookup Reducers To Types ------------- */
 
 export default createReducer(initialState, {
-    [userTypes.USER_LOGIN_ATTEMPT]: (state, { data }) => ({
-        isLoading: true,
-    }),
     [userTypes.USER_LOGIN_SUCCESS]: (state, { data }) => ({
         ...data,
-        isLoading: false,
     }),
     [userTypes.USER_LOGIN_FAILURE]: () => null, // this will return initial state
     [userTypes.SET_USER_INFO_SUCCESS]: (state, { data: userInfo }) => ({
@@ -86,9 +83,12 @@ export default createReducer(initialState, {
     [userTypes.GET_USER_INFO_FAILURE]: (state, { data }) => ({
         isLoading: false,
     }),
-    [userTypes.GET_USER_INFO_SUCCESS]: (state, { data }) => ({
-        isLoading: false,
-    }),    
+    [userTypes.UNSAVED_USER_INFO_ATTEMPT]: (state, { data }) => ({
+        isUnsaved: true
+    }),
+    [userTypes.UNSAVED_USER_CLOSE_ATTEMPT]: (state, { data }) => ({
+        isUnsaved: false
+    }),
     [userTypes.SET_CREDIT_CARD_SUCCESS]: (state, { data: { creditCard} }) => ({
         selectedCard: creditCard
     }),

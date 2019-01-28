@@ -22,14 +22,15 @@ class NavBarLayout extends Component {
         return (
             <div className={classes.root}>
 
-                <div
-                    style={{
-                        height: 50,
-                        width: "100%",
-                        backgroundColor: "#fafafa",
-                        position: "fixed"
-                    }}
-                />
+            <div
+                style={{
+                    height: 50,
+                    width: "100%",
+                    backgroundColor: "#fafafa",
+                    position: "fixed",
+                    zIndex: 1000
+                }}
+            />
                 <AppBar
                     className={classes.appBar}
                 >
@@ -54,9 +55,8 @@ class NavBarLayout extends Component {
                 </main>
 
                 <SimpleSnackbar
-                    show={this.props.messages.networkRequestError == false ? false : true}
+                    messageList={this.props.messages}
                     handleClose={() => this.props.hideNetworkError()}
-                    message={this.props.messages.networkRequestError && this.props.messages.networkRequestError.message || ''}
                 />
 
             </div>
