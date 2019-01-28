@@ -6,28 +6,19 @@ const initialState = {
     itemsToShow: [],
     category: 1,
     error: null,
-    isLoading: false,
     isHomebrew: false
 };
 
 
 export default createReducer(initialState, {
-    [inventoryTypes.GET_INVENTORY_ATTEMPT]: (state, { data }) => ({
-        isLoading: true,
-    }),
     [inventoryTypes.GET_INVENTORY_SUCCESS]: (state, { data: { itemsToShow, items, category } }) => ({
         itemsToShow,
         items,
         category,
-        isLoading: false
-    }),
-    [inventoryTypes.GET_INVENTORY_FAILURE]: (state, { data }) => ({
-        isLoading: false,
     }),
     [inventoryTypes.SEARCH_INVENTORY_SUCCESS]: (state, { data: { itemsToShow,  category } }) => ({
         itemsToShow,
         category,
-        isLoading: false
     }),
     [inventoryTypes.CHANGE_CATEGORY_SUCCESS]: (state, { data: { itemsToShow, category } }) => ({
         itemsToShow,

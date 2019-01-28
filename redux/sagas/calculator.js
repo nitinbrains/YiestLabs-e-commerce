@@ -15,23 +15,23 @@ export function * calculatePacks(action) {
         if( calculator.type === 'Custom' ){
             if( calculator.startingGravity == ""){
                 doProcess = false;
-                yield put(messageActions.displayMessage({ title: 'Error', error: "Starting Gravity is empty!" }));
+                yield put(messageActions.displayMessage({ title: 'Error', error: "Starting Gravity is empty!", variant:'error' }));
             }
             if( calculator.targetPitchRate  == "" ){
                 doProcess = false;
-                yield put(messageActions.displayMessage({ title: 'Error', error: "Target Pitch Rate is empty!" }));
+                yield put(messageActions.displayMessage({ title: 'Error', error: "Target Pitch Rate is empty!", variant:'error' }));
             }
             if( calculator.volume  == "" ){
                 doProcess = false;
-                yield put(messageActions.displayMessage({ title: 'Error', error: "Volume is empty!" }));   
+                yield put(messageActions.displayMessage({ title: 'Error', error: "Volume is empty!", variant:'error' }));   
             }
             if( calculator.viability  == "" ){
                 doProcess = false;
-                yield put(messageActions.displayMessage({ title: 'Error', error: "Viability is empty!" }));
+                yield put(messageActions.displayMessage({ title: 'Error', error: "Viability is empty!", variant:'error' }));
             }
             if( calculator.cellCount  == "" ){
                 doProcess = false;
-                yield put(messageActions.displayMessage({ title: 'Error', error: "Target Cell Count is empty!" }));
+                yield put(messageActions.displayMessage({ title: 'Error', error: "Target Cell Count is empty!", variant:'error' }));
             }
         }
 
@@ -43,13 +43,12 @@ export function * calculatePacks(action) {
         }
 
     } catch(error) {
-        let message = {
-            message:'Somthing Went Wrong'
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
-        if(error.message != undefined){
-            message['message'] = JSON.stringify(error.message);
-        }
-        yield put(messageActions.showNetworkError(message)) 
         yield put(responseFailure(error));
     }
 }

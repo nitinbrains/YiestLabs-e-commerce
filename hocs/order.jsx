@@ -24,7 +24,8 @@ export default (Component) => {
             user: state.user,
             cart: state.cart,
             message: state.messages,
-            order: state.order
+            order: state.order,
+            loading: state.loading
          }),
         dispatch => bindActionCreators({ ...orderActions}, dispatch)
     )(Wrapper());

@@ -60,12 +60,8 @@ const initialState = {
 /* ------------- Hookup Reducers To Types ------------- */
 
 export default createReducer(initialState, {
-    [userTypes.USER_LOGIN_ATTEMPT]: (state, { data }) => ({
-        isLoading: true,
-    }),
     [userTypes.USER_LOGIN_SUCCESS]: (state, { data }) => ({
         ...data,
-        isLoading: false,
     }),
     [userTypes.USER_LOGIN_FAILURE]: () => null, // this will return initial state
     [userTypes.SET_USER_INFO_SUCCESS]: (state, { data: userInfo }) => ({

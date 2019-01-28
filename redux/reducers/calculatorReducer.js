@@ -3,7 +3,6 @@ import { calculatorTypes } from '../actions/calculatorActions';
 
 const initialState = {
     error: null,
-    isLoading: false,
     showResult: false,
     result: {},
     isHomebrew: false,

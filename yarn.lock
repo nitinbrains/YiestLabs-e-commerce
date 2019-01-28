@@ -6127,6 +6127,10 @@ normalize-scroll-left@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/normalize-scroll-left/-/normalize-scroll-left-0.1.2.tgz#6b79691ba79eb5fb107fa5edfbdc06b55caee2aa"
 
+notistack@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/notistack/-/notistack-0.4.1.tgz#1f1367a0f4d9542641aed300dd332985a1d0047a"
+
 now@^13.0.3:
   version "13.1.2"
   resolved "https://registry.yarnpkg.com/now/-/now-13.1.2.tgz#dda24eb622edeedc43e694d31d9c81f2154896c4"
