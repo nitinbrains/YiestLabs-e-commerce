@@ -35,9 +35,9 @@ export function * prepareOrder(action) {
         }
     } catch (error) {
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));
@@ -62,9 +62,9 @@ export function * placeOrder(action) {
         }
     } catch (error) {
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));
@@ -82,9 +82,9 @@ export function * setShippingOption(action) {
         yield put(orderActions.setItems({ items }));
     } catch (error) {
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));
@@ -102,9 +102,9 @@ export function * incrementShipDate(action) {
         )}));
     } catch (error) {
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));
@@ -122,9 +122,9 @@ export function * decrementShipDate(action) {
         )}));
     } catch (error) {
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));
