@@ -135,7 +135,7 @@ class Checkout extends Component {
     };
 
     render() {
-        const { classes, order } = this.props;
+        const { classes, order, loading } = this.props;
         const { activeStep } = this.state;
         return (
             <NavBarLayout>
@@ -170,7 +170,7 @@ class Checkout extends Component {
                                         <StepLabel>
                                             {label}
                                             {label === "Items" &&
-                                                order.isLoading && (
+                                                loading.isLoading && loading.type == 'prepareOrder' && (
                                                     <CircularProgress
                                                         size={10}
                                                     />
@@ -210,7 +210,7 @@ class Checkout extends Component {
                                         variant="contained"
                                         color="primary"
                                         disabled={
-                                            activeStep == 2 && order.isLoading
+                                            activeStep == 2 && loading.isLoading && loading.type == 'prepareOrder'
                                         }
                                         onClick={
                                             activeStep === steps.length - 1
