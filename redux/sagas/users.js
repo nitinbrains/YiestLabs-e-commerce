@@ -10,8 +10,11 @@ import WLHelper from '../../lib/WLHelper';
 export function * loginUser (action) {
     const { responseSuccess, responseFailure, data: { username, password } } = action;
     try {
-        const { res: userID } = yield call(api.login, username, password);
-        const { res: userInfo } = yield call(api.getUserInfo, userID);
+        const { res: userID, err } = yield call(api.login, username, password);
+        if(err) throw err;
+
+        const { res: userInfo, error } = yield call(api.getUserInfo, userID);
+        if(error) throw error;
 
         const { subsidiary, shipmethod, shipping: { countryid } } = userInfo;
         userInfo.shipMethods = WLHelper.shipMethodGroup(subsidiary, shipmethod, countryid);
@@ -29,7 +32,11 @@ export function * loginUser (action) {
         if(error.status){
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                yield put(messageActions.showNetworkError({ title: 'Yeastman', error: error.message }));        
+            } else if(err.code == -1){
+                yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));                
+            }
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(err));
@@ -54,8 +61,8 @@ export function * setUserInfo(action) {
         if(error.status){
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(err));
     }
@@ -72,8 +79,8 @@ export function * setCreditCard(action) {
         if(error.status){
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));
     }
@@ -89,8 +96,8 @@ export function * addCreditCard(action) {
         if(error.status){
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));
     }
