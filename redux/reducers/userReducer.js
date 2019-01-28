@@ -52,7 +52,8 @@ const initialState = {
         default: false
     },
     shipMethods: [],
-    isLoading: false
+    isLoading: false,
+    isUnsaved: false,
 }; // empty for now
 
 
@@ -70,6 +71,12 @@ export default createReducer(initialState, {
         email: email,
         phone: phone,
         subsidiary: subsidiary
+    }),
+    [userTypes.UNSAVED_USER_INFO_ATTEMPT]: (state, { data }) => ({
+        isUnsaved: true
+    }),
+    [userTypes.UNSAVED_USER_CLOSE_ATTEMPT]: (state, { data }) => ({
+        isUnsaved: false
     }),
     [userTypes.SET_CREDIT_CARD_SUCCESS]: (state, { data: { creditCard} }) => ({
         selectedCard: creditCard
