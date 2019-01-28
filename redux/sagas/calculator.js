@@ -286,9 +286,9 @@ function custom(params)
 
         return (startingGravity * targetPitchRate) * volume / (viability * cellCount);
     }
-    catch(err)
+    catch(error)
     {
-        throw err;
+        throw error;
     }
 }
 
@@ -298,9 +298,9 @@ function getPacks(totalVol)
     {
         return getOptimalAmount([0.5, 1.5, 2], totalVol, {});
     }
-    catch(err)
+    catch(error)
     {
-        throw err;
+        throw error;
     }
 
 }

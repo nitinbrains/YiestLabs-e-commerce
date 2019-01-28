@@ -69,8 +69,8 @@ function getImage(salesCategory) {
     try {
         return YeastElements[parseInt(salesCategory)].img;
     }
-    catch(err) {
-        console.log('error', salesCategory, err);
+    catch(error) {
+        console.log('error', salesCategory, error);
     }
 }
 
@@ -78,8 +78,8 @@ function getIcon(salesCategory) {
     try {
         return YeastElements[parseInt(salesCategory)].icon;
     }
-    catch(err) {
-        console.log('error', salesCategory, err);
+    catch(error) {
+        console.log('error', salesCategory, error);
     }
 }
 
@@ -87,9 +87,9 @@ function getColor(salesCategory) {
     try {
         return YeastElements[parseInt(salesCategory)].color;
     }
-    catch(err) {
-        console.log(err);
-        throw err;
+    catch(error) {
+        console.log(error);
+        throw error;
     }
 }
 

@@ -15,7 +15,7 @@ class AddAddress extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            address : {
+            address: {
                 address1: "",
                 address2: "",
                 address3: "",
@@ -29,14 +29,10 @@ class AddAddress extends Component {
         };
     }
 
-    handleAddress = () => {
-        const { user, type } = this.props;
-        const { address } = this.state;
-            user.otherAddresses.push(address);
-            this.props.addAddress(address,type)
-            this.props.close()
-
+    addAddress = () => {
+        this.props.addAddress({address: this.state.address});
     }
+
     render() {
         const { classes } = this.props;
         const { address, focus } = this.state;
@@ -69,9 +65,7 @@ class AddAddress extends Component {
                 }}
                 validationSchema={customFormValidation}
                 enableReinitialize
-                onSubmit={ values => { 
-                    this.handleAddress()
-                }}            
+                onSubmit={ values => this.addAddress()}            
             >
             {({ errors, touched, isValidating }) => {
             return(
@@ -291,6 +285,7 @@ class AddAddress extends Component {
                                 variant="contained"
                                 color="primary"
                                 type="submit"
+                                onClick={this.addAddress}
                             >
                                 Add Address
                             </Button>

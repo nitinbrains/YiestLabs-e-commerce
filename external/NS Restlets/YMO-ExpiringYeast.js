@@ -23,13 +23,13 @@ function(record, log, search, itemAvailability)
 
             return SendMessage(response);
         }
-        catch(err)
+        catch(error)
         {
             log.error({
                 title: 'Expiring Yeast - Error', 
-                details: err
+                details: error
             });
-            return {error: err};
+            return {error: error};
         }
     }
 

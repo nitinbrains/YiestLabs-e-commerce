@@ -29,7 +29,7 @@ import Items from "../components/Checkout/Items/Items";
 import Review from "../components/Checkout/Review/Review";
 import isLoggedUser from "../hocs/isLoggedUser";
 import cartHasItems from "../hocs/cartHasItems";
-import withOrder from "../hocs/order";
+import prepareOrder from "../hocs/prepareOrder";
 
 // custom
 import Alert from "../components/UI/Alert";
@@ -321,6 +321,6 @@ Checkout.propTypes = {
 
 export default compose(
     withStyles(styles, { withTheme: true })(
-        isLoggedUser(cartHasItems(withOrder(Checkout)))
+        isLoggedUser(cartHasItems(prepareOrder(Checkout)))
     )
 );

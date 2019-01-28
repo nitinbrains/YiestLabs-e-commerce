@@ -162,8 +162,8 @@ class MyAccount extends Component {
                 throw { message: 'Empty request. Cannot update user information', code: 0 };
             }
         }
-        catch(err) {
-            console.log('err', err);
+        catch(error) {
+            console.log('error', error);
             // this.props.displayError();
         }
     }
@@ -251,9 +251,7 @@ class MyAccount extends Component {
                         return errors
                     } }
                     enableReinitialize
-                    onSubmit={ values => { 
-                            this.handleSubmit()
-                        }}
+                    onSubmit={ values => this.handleSubmit()}
                 >
                 {({ errors, touched, isValidating }) => {
                     return(

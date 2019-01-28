@@ -4,11 +4,10 @@ import _isEmpty from 'lodash/isEmpty';
 
 import { userActions, userTypes } from '../actions/userActions';
 import { messageActions } from '../actions/messageActions';
-import * as api from '../../services/';
+import * as api from '../../services/users.js';
 import {
     loadSubsidiaryOptions,
     getDefaultOrFirstCreditCard,
-
 } from './UserUtils.js';
 
 import WLHelper from '../../lib/WLHelper';
@@ -17,9 +16,8 @@ export function * loginUser (action) {
     const { responseSuccess, responseFailure, data: { username, password } } = action;
     try {
         const { res: userID } = yield call(api.login, username, password);
-        yield put(userActions.getUserInfo({
-            userID: user.id
-        }));
+        console.log('userID', userID);
+        yield put(userActions.getUserInfo({userID}));
 
         yield put(messageActions.displayMessage({
             title: 'Authorization',
@@ -27,15 +25,17 @@ export function * loginUser (action) {
         }));
 
         yield put(responseSuccess());
-    } catch (err) {
-        yield put(responseFailure(err));
+    } catch (error) {
+        yield put(responseFailure(error));
     }
 };
 
 export function * getUserInfo(action) {
     const { responseSuccess, responseFailure,  data: { userID }} = action;
     try {
+        console.log('userID', userID);
         const { res: userInfo } = yield call(api.getUserInfo, { userID });
+        console.log('userInfo', userInfo);
         yield put(userActions.setUserInfo({ userInfo}));
         yield put(responseSuccess());
     } catch (error) {
@@ -59,9 +59,9 @@ export function * setUserInfo(action) {
         yield put(responseSuccess(userInfo));
 
     } 
-    catch (err) {
-        console.log('error', err);
-        yield put(responseFailure(err));
+    catch (error) {
+        console.log('error', error);
+        yield put(responseFailure(error));
     }
 }
 
@@ -71,11 +71,11 @@ export function * updateUserInfo(action) {
         const user = yield select(state => state.user);
         request.id = user.id;
 
-        var { res, err } = yield call(api.updateUserInfo, {
+        var { res, error } = yield call(api.updateUserInfo, {
             request
         });
-        if(err) throw err;
-        yield put(responseSuccess());
+
+        if(error) throw error;
 
         yield put(userActions.getUserInfo({
             userID: user.id
@@ -84,6 +84,26 @@ export function * updateUserInfo(action) {
     } catch(error) {
         console.log('error', error);
         yield put(responseFailure(error))
+    }
+}
+
+export function * getOrderHistory(action) {
+    const { responseSuccess, responseFailure } = action;
+    try {
+
+        var user = yield select(state => state.user);
+
+        var request = {};
+        request.id = user.id;
+
+        var { res: { orderHistory }, error } = yield call(api.getOrderHistory, {
+            request
+        });
+        if(error) throw error;
+
+        yield put(responseSuccess({ orderHistory }));
+    } catch(error) {
+        yield put(responseFailure(error));
     }
 }
 
@@ -170,7 +190,7 @@ export function * setDefaultCreditCard(action) {
 /*****************************/
 
 export function * addAddress(action) {
-    const { responseSuccess, responseFailure, data: address, type } = action;
+    const { responseSuccess, responseFailure, data: { address }} = action;
     try {
         const user = yield select(state => state.user);
 
@@ -189,7 +209,7 @@ export function * addAddress(action) {
 }
 
 export function * editAddress(action) {
-    const { responseSuccess, responseFailure, data: address } = action;
+    const { responseSuccess, responseFailure, data: { address }} = action;
     try {
         const user = yield select(state => state.user);
 

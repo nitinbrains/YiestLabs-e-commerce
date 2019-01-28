@@ -202,11 +202,11 @@ function(record, log, search, email, runtime, task, cache)
             log.debug('cacheInventory completed successfully');
 
         }
-        catch(err)
+        catch(error)
         {
             log.error({
                 title: 'error',
-                details: err
+                details: error
             });
         }
     }

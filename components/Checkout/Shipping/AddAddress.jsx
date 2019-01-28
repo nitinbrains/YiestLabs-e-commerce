@@ -30,6 +30,10 @@ class AddAddress extends Component {
         };
     }
 
+    addNewAddress = () => {
+        this.props.addAddress(this.state.shipping);
+    }
+
     render() {
         const { classes } = this.props;
         return (
@@ -206,7 +210,7 @@ class AddAddress extends Component {
                             <Button
                                 variant="contained"
                                 color="primary"
-                                onClick={this.props.addAddress}
+                                onClick={() => this.addNewAddress()}
                             >
                                 Add Address
                             </Button>
@@ -233,7 +237,6 @@ AddAddress.propTypes = {
 const mapStateToProps = state => {
     return {
         user: state.user,
-        order: state.order
     };
 };
 

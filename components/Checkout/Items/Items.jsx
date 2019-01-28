@@ -23,10 +23,10 @@ class Items extends Component {
                 {
                     this.props.order.isLoading ?
                         <Grid
-                        container
-                        justify="center"
-                        alignItems="center"
-                        spacing={24}
+                            container
+                            justify="center"
+                            alignItems="center"
+                            spacing={24}
                         >
                             <CircularProgress size={50} />
                         </Grid>

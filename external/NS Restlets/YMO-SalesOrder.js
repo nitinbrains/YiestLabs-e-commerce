@@ -287,9 +287,9 @@ var Events = {
                 }
             }
         }
-        catch(err)
+        catch(error)
         {
-            nlapiLogExecution('ERROR', 'Cust '+ record.CustomerID.toString(), JSON.stringify(err.toString()));
+            nlapiLogExecution('ERROR', 'Cust '+ record.CustomerID.toString(), JSON.stringify(error.toString()));
             response.errorCode = -1;
         }
         return SendMessage(response);           	

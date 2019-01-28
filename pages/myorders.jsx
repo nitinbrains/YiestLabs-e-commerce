@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -11,9 +14,12 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import PageContainer from '../components/UI/PageContainer';
 import OrderDetails from "../components/MyOrders/OrderDetails";
+
+import { userActions } from '../redux/actions/userActions';
 
 class MyOrders extends Component {
 
@@ -22,6 +28,10 @@ class MyOrders extends Component {
         this.state = {
             openDialog: false
         }
+    }
+
+    componentWillMount() {
+        this.props.getOrderHistory();
     }
 
     handleOrderDetails = (item) => {
@@ -33,90 +43,107 @@ class MyOrders extends Component {
     }
 
     render() {
-        const { classes, theme } = this.props;
+        const { classes, theme, user } = this.props;
 
         return (
             <NavBarUserSearchDrawerLayout>
                 <PageContainer heading="MY ORDERS" id="cart-box">
 
                     <Grid container spacing={24}>
-                        <Grid item xs={12}>
-                            <div className={classes.card}>
-                            <div style={{position:'absolute', top:-15, left:20, backgroundColor:"#fafafa", paddingLeft:10, paddingRight:10}}>
-                                <Typography
-                                    variant="h6"
-                                    color="textPrimary"
-                                >
-                                    Order # 2625434
-                                </Typography>
-                            </div>
-                                <Grid item container>
-                                    <Grid item>
-                                        <img
-                                            className={classes.image}
-                                            src="/static/images/yeast.png"
-                                        />
-                                    </Grid>
-                                    <Grid
-                                        item
-                                        xs={12}
-                                        sm
-                                        container
-                                        direction="column"
-                                        style={{marginTop:20}}
-                                    >
-                                        <Grid item xs>
-                                            <Typography
-                                                variant="overline"
-                                                color="textPrimary"
-                                            >
-                                                Shiip date is 10/01/2018
-                                            </Typography>
+
+                    {this.props.user.isLoading 
+                    ?
+                        <Grid
+                            container
+                            justify="center"
+                            alignItems="center"
+                            spacing={24}
+                        >
+                            <CircularProgress size={50} />
+                        </Grid>
+                    :
+                        <React.Fragment>
+                            {this.props.user.orderHistory.map((pastOrder, i) => (
+                                <Grid item xs={12}>
+                                    <div className={classes.card}>
+                                    <div style={{position:'absolute', top:-15, left:20, backgroundColor:"#fafafa", paddingLeft:10, paddingRight:10}}>
+                                        <Typography
+                                            variant="h6"
+                                            color="textPrimary"
+                                        >
+                                            Order # {pastOrder.id}
+                                        </Typography>
+                                    </div>
+                                    <Grid item container>
+                                        <Grid item>
+                                            <img
+                                                className={classes.image}
+                                                src="/static/images/yeast.png"
+                                            />
                                         </Grid>
                                         <Grid
-                                            container
                                             item
-                                            spacing={24}
-                                            direction="row"
+                                            xs={12}
+                                            sm
+                                            container
+                                            direction="column"
+                                            style={{marginTop:20}}
                                         >
-                                            <Grid item>
-                                                <Button
-                                                    variant="outlined"
-                                                    color="primary"
-                                                    onClick={this.handleOrderDetails}
+                                            <Grid item xs>
+                                                <Typography
+                                                    variant="overline"
+                                                    color="textPrimary"
                                                 >
-                                                    Order Details
-                                                </Button>
+                                                    Ship date: {pastOrder.shipdate}
+                                                </Typography>
                                             </Grid>
                                             <Grid
                                                 container
                                                 item
                                                 spacing={24}
-                                                justify="flex-end"
+                                                direction="row"
                                             >
-                                                <Grid item xs={12} md={2}>
-                                                    <div
-                                                        style={{
-                                                            backgroundColor:
-                                                                "#f28411",
-                                                            padding: 2,
-                                                            textAlign: "center"
-                                                        }}
+                                                <Grid item>
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="primary"
+                                                        onClick={this.handleOrderDetails}
                                                     >
-                                                        <Typography
-                                                            variant="h6"
-                                                            color="secondary"
+                                                        Order Details
+                                                    </Button>
+                                                </Grid>
+                                                <Grid
+                                                    container
+                                                    item
+                                                    spacing={24}
+                                                    justify="flex-end"
+                                                >
+                                                    <Grid item xs={12} md={2}>
+                                                        <div
+                                                            style={{
+                                                                backgroundColor:
+                                                                    "#f28411",
+                                                                padding: 2,
+                                                                textAlign: "center"
+                                                            }}
                                                         >
-                                                            Closed
-                                                        </Typography>
-                                                    </div>
+                                                            <Typography
+                                                                variant="h6"
+                                                                color="secondary"
+                                                            >
+                                                                {pastOrder.status}
+                                                            </Typography>
+                                                        </div>
+                                                    </Grid>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                    </Grid>
+                                    </Grid> 
+                                    </div>
                                 </Grid>
-                            </div>
-                        </Grid>
+                            ))}
+                        </React.Fragment>
+                    }
                     </Grid>
 
                     <Dialog
@@ -183,4 +210,17 @@ MyOrders.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(MyOrders);
+
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    };
+};
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(userActions, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(MyOrders));

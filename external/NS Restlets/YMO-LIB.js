@@ -47,7 +47,7 @@ function decryptCard(cardToken)
 	{
 		return JSON.parse(CryptoJS.AES.decrypt(cardToken, 'AWJeBmcD9uEy27L2Zla0ZKTKUbgjRJKwxr6CaKBqKDNbHSKsISC6BH2EhUvNm9s', { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: "A216T8JtJANg7F7C" }).toString(CryptoJS.enc.Utf8));
 	}
-	catch(err)
+	catch(error)
 	{
 		throw {message: 'couldn\'t decrypt card', code: -1};
 	}

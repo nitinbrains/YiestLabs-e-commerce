@@ -117,11 +117,11 @@ function(record, log, search, email, runtime, https)
                         }
                         
                     }
-                    catch(err)
+                    catch(error)
                     {
                        log.error({
                             title: 'Invalid Request: ',
-                            details: err.toString()
+                            details: error.toString()
                         });
                     }
 

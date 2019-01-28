@@ -11,9 +11,9 @@ export function * getInventory (action) {
     const { responseSuccess, responseFailure, data: { search } } = action;
     try {
         yield put(messageActions.hideNetworkError({}))
-        const { res, err } = yield call(api.getInventory);        
-        if( err ) {
-            throw err
+        const { res, error } = yield call(api.getInventory);        
+        if( error ) {
+            throw error
         } else {
             if( res && res.items ){
                 const items = res.items;
@@ -280,7 +280,7 @@ function sortItems(items)
             }
         });
     }
-    catch(err)
+    catch(error)
     {
         console.log('error', error);
     }

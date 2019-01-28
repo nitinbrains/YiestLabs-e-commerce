@@ -23,13 +23,13 @@ export function * prepareOrder(action) {
         const cart = yield select(state => state.cart);
         const user = yield select(state => state.user);
 
-        var { res: order, err } = yield call(api.prepareOrder, {
+        var { res: order, error } = yield call(api.prepareOrder, {
             calcShip: true,
             user: user,
             items: cart.items
         });
-        if (err) {
-            throw err
+        if (error) {
+            throw error
         } else {
             yield put(responseSuccess(initOrder(order, user)));
         }
@@ -52,12 +52,12 @@ export function * placeOrder(action) {
         const user = yield select(state => state.user);
 
         var request = validateOrder(order, user);
-        var { res: order, err } = yield call(api.placeOrder, {
+        var { res: order, error } = yield call(api.placeOrder, {
             request
         });
 
-        if (err) {
-            throw err
+        if (error) {
+            throw error
         } else {
             yield put(responseSuccess(initOrder(order, user)));
         }

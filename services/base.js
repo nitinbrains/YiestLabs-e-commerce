@@ -71,8 +71,8 @@ const checkResponseStatus = (res) => {
 const fetchRetry = async (url, options, n) => {
     try {
         return await fetch(url, options)
-    } catch(err) {
-        if (n === 1) throw err;
+    } catch(error) {
+        if (n === 1) throw error;
         return await fetchRetry(url, options, n - 1);
     }
 };
@@ -91,8 +91,9 @@ export const requestWrapper = async (url, data = {}, token, jsonRequest = true) 
   try {
     const responseBody = await getResponseBody(response, URL);
     checkResponseStatus(response);
-    return response.ok ? { res: responseBody } : { err: responseBody };
+    return response.ok ? { res: responseBody } : { error: responseBody };
   } catch (error) {
-    return response && response.ok ? { res: { code: response.status } } : { err: error };
+    console.log('error', error);
+    return response && response.ok ? { res: { code: response.status } } : { error: error };
   }
 }

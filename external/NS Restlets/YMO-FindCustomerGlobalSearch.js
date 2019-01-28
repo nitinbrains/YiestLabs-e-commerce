@@ -43,10 +43,10 @@ var Events = {
 
             return SendMessage(customerResults);
         }
-        catch(err)
+        catch(error)
         {
-            nlapiLogExecution('ERROR', "Error in POST", err.toString());
-            return {error: err};
+            nlapiLogExecution('ERROR', "Error in POST", error.toString());
+            return {error: error};
         }
     },
 
@@ -128,10 +128,10 @@ var Events = {
 
             return SendMessage(response);
         }
-        catch(err)
+        catch(error)
         {
-            nlapiLogExecution('ERROR', "Error in PUT", err.toString());
-            return {error: err};
+            nlapiLogExecution('ERROR', "Error in PUT", error.toString());
+            return {error: error};
         }
     },
 

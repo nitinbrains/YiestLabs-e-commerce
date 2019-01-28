@@ -53,7 +53,7 @@ const initialState = {
     },
     shipMethods: [],
     isLoading: false,
-    isUpdating: false,
+    orderHistory: []
 }; // empty for now
 
 
@@ -72,13 +72,13 @@ export default createReducer(initialState, {
         ...userInfo
     }),
     [userTypes.UPDATE_USER_INFO_ATTEMPT]: (state, { data }) => ({
-        isUpdating: true,
+        isLoading: true,
     }),
     [userTypes.UPDATE_USER_INFO_FAILURE]: (state, { data }) => ({
-        isUpdating: false,
+        isLoading: false,
     }),
     [userTypes.UPDATE_USER_INFO_SUCCESS]: (state) => ({
-        isUpdating: false,
+        isLoading: false,
     }),
     [userTypes.GET_USER_INFO_ATTEMPT]: (state, { data }) => ({
         isLoading: true,
@@ -92,7 +92,7 @@ export default createReducer(initialState, {
     [userTypes.SET_CREDIT_CARD_SUCCESS]: (state, { data: { creditCard} }) => ({
         selectedCard: creditCard
     }),
-    [userTypes.ADD_CREDIT_CARD_SUCCESS]: (state, {data: { cards, creditCard} }) => ({
+    [userTypes.ADD_CREDIT_CARD_SUCCESS]: (state, { data: { cards, creditCard} }) => ({
         selectedCard: creditCard,
         cards
     }),
@@ -105,6 +105,15 @@ export default createReducer(initialState, {
     [userTypes.SET_SHIP_METHOD_SUCCESS]: (state, { data }) => ({
         shipmethod: data
     }),
-
+    [userTypes.GET_ORDER_HISTORY_ATTEMPT]: (state, { data }) => ({
+        isLoading: true,
+    }),
+    [userTypes.GET_ORDER_HISTORY_FAILURE]: (state, { data }) => ({
+        isLoading: false,
+    }),
+    [userTypes.GET_ORDER_HISTORY_SUCCESS]: (state, { data: { orderHistory }}) => ({
+        isLoading: false,
+        orderHistory
+    }),
     [userTypes.USER_LOGOUT_ATTEMPT]: () => null,    // this will return initial state
 });

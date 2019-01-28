@@ -86,11 +86,11 @@ app.prepare()
 
 	function XMLtoJSON(xml, cb)
 	{
-		system.XMLParser(xml, function(err, result)
+		system.XMLParser(xml, function(error, result)
 		{
-			if(err)
+			if(error)
 			{
-				throw err;
+				throw error;
 			}
 			else
 			{
@@ -123,9 +123,9 @@ app.prepare()
  		  	},
  		  	body: data
  		})
- 		.then((response) => response.text())
- 		.then(function(response)
- 		{
+ 		.then(response => response.text())
+ 		.then(response => {
+
  			var data = system.CryptoJS.AES.decrypt(response, system.YeastmanAuthentication.Auth, { mode: system.CryptoJS.mode.CBC, padding: system.CryptoJS.pad.Pkcs7, iv: system.YeastmanAuthentication.iv }).toString(system.CryptoJS.enc.Utf8);
  			XMLtoJSON(data, (result) => {
  				if(result.CustomerInformation.Result[0].$.Status == "OK")
@@ -148,7 +148,7 @@ app.prepare()
  		.catch(function(error)
  		{
 
- 			console.log('err', error);
+ 			console.log('error', error);
  			res.send({error: { message: error, code: -1 }});
  		});
 
@@ -179,9 +179,8 @@ app.prepare()
 		  },
 		  body: data
 		})
-		.then((response) => response.text())
-		.then(function(response)
-		{
+		.then(response => response.text())
+		.then(response => {
 			var data = system.CryptoJS.AES.decrypt(response, system.YeastmanAuthentication.Auth, { mode: system.CryptoJS.mode.CBC, padding: system.CryptoJS.pad.Pkcs7, iv: system.YeastmanAuthentication.iv }).toString(system.CryptoJS.enc.Utf8);
 			XMLtoJSON(data, async (result) => {
 				if(result.CustomerInformation.Result[0].$.Status == "OK")
@@ -269,9 +268,8 @@ app.prepare()
 		  },
 		  body: data
 		})
-		.then((response) => response.text())
-		.then(function(response)
-		{
+		.then(response => response.text())
+		.then(response => {
 			var data = system.CryptoJS.AES.decrypt(response, system.YeastmanAuthentication.Auth, { mode: system.CryptoJS.mode.CBC, padding: system.CryptoJS.pad.Pkcs7, iv: system.YeastmanAuthentication.iv }).toString(system.CryptoJS.enc.Utf8);
 			XMLtoJSON(data, (result) => {
 				if(result.CustomerInformation.Result[0].$.Status == "OK")
@@ -304,8 +302,7 @@ app.prepare()
 	  		},
 		})
 		.then((response) => response.json())
-		.then(function(response)
-		{
+		.then(response => {
 			if(response.type == 'error.SuiteScriptError')
 			{
 				res.send({error: {message: response.message, code: -1}})
@@ -334,7 +331,7 @@ app.prepare()
 				}
 			}
 		})
-		.catch(err => {
+		.catch(error => {
 			return res.send({error: {message: "service unavailable", code: -1}});
 		});
 	});
@@ -355,9 +352,8 @@ app.prepare()
 		  		},
 		  		body: NSSendMessage({id: userID, get: true})
 			})
-			.then((response) => response.json())
-			.then(function(response)
-			{
+			.then(response => response.json())
+			.then(response => {
 
 				if(response.type == 'error.SuiteScriptError')
 				{
@@ -414,9 +410,9 @@ app.prepare()
 			  	},
 			  	body: message
 			})
-			.then((response) => response.json())
-			.then(function(response)
-			{
+			.then(response => response.json())
+			.then(response => {
+
 				if(response.type == 'error.SuiteScriptError')
 				{
 					return res.send({error: {message: response.message, code: -1}});
@@ -443,7 +439,7 @@ app.prepare()
 					}
 				}
 			})
-			.catch(err => {
+			.catch(error => {
 				// TO-DO: Implement retry handler
 				console.log('error', error);
 				res.send({error: { message: error, code: -1 }});
@@ -473,9 +469,9 @@ app.prepare()
 				},
 				body: message
 			})
-			.then((response) => response.json())
-			.then(function(response)
-			{
+			.then(response=> response.json())
+			.then(response => {
+
 				if(response.type == 'error.SuiteScriptError')
 				{
 					res.send({error: {message: response.message, code: -1}});
@@ -501,7 +497,7 @@ app.prepare()
 						res.send({error: { message: 'Items have been removed due to unavailability', code: 0 }});					}
 				}
 			})
-			.catch(err => {
+			.catch(error => {
 				// TO-DO: Implement retry handler
 				console.log('error', error);
 				res.send({error: { message: error, code: -1 }});
@@ -530,9 +526,9 @@ app.prepare()
 			  },
 			  body: message
 			})
-			.then((response) => response.json())
-			.then(async function(response)
-			{
+			.then(response => response.json())
+			.then(response => {
+
 				if(response.type == 'error.SuiteScriptError')
 				{
 					res.send({error: {message: response.message, code: -1}});
@@ -544,58 +540,16 @@ app.prepare()
 						console.log('server', 'change-cust-info', response, true);
 					}
 
-					res.send({error: {message: response.error.message, code: response.error.code}});
+					res.status(500).send({error: {message: response.error.message, code: response.error.code}});
 				}
 				else
 				{
 					var message = NSReceiveMessage(response);
-					if(message.phone != 1)
-					{
-						res.send({error: { message: 'Could not update your phone number', code: 0 }});
-					}
-
-					if(message.email != 1)
-					{
-						res.send({error: { message: 'Could not update your email', code: 0 }});
-					}
-
-					if(message.currency != 1)
-					{
-						res.send({error: { message: 'Could not update your currency', code: 0 }});
-					}
-
-					if(message.vat != 1)
-					{
-						res.send({error: { message: 'Could not update your vat number', code: 0 }});
-					}
-
-					if(message.shipmethod != 1)
-					{
-						res.send({error: { message: 'Could not update your shipping method', code: 0 }});
-					}
-
-					if(message.ship != 1)
-					{
-						res.send({error: { message: 'Could not update your shipping address', code: 0 }});
-					}
-
-					if(message.bill != 1)
-					{
-						res.send({error: { message: 'Could not update your billing address', code: 0 }});
-					}
-
-					if(message.card != 1)
-					{
-						res.send({error: { message: 'Could not update your credit card information', code: 0 }});
-
-					}
 					res.sendStatus(200)
-
-					res.sendStatus(200);
 
 				}
 			})
-			.catch(err => {
+			.catch(error => {
 				// TO-DO: Implement retry handler
 				console.log('error', err);
 				res.send({error: { message: err, code: -1 }});
@@ -612,14 +566,17 @@ app.prepare()
 	*
 	* @param String userID - User Id of customer requesting order history
 	*
-	* @return [Objectg] - Array of order objects
+	* @return [Object] - Array of order objects
 	*/
 	server.post('/get-order-history', function(req, res, next) {
 
-		var userID = req.body.userID;
+		var request = req.body.request;
 
-		if(userID)
+		if(request.id)
 		{
+
+			const body = NSSendMessage({id: request.id, admin: false, get: true});
+
 			//YMO-ORDER
 			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=914&deploy=1', {
 				method: 'POST',
@@ -628,11 +585,10 @@ app.prepare()
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
 				},
-				body: NSSendMessage({id: userID, admin: false, get: true})
+				body
 			})
-			.then((response) => response.json())
-			.then(function(response)
-			{
+			.then(response => response.json())
+			.then(response => {
 
 				if(response.type == 'error.SuiteScriptError')
 				{
@@ -650,10 +606,9 @@ app.prepare()
 				else
 				{
 					var message = NSReceiveMessage(response);
-					if(message.orders && message.orders.length > 0)
+					if(message.orderHistory && message.orderHistory.length > 0)
 					{
-						State.setState({OrderHistory: message.orders});
-						res.send(message.orders);
+						res.send(message);
 					}
 					else
 					{
@@ -661,7 +616,7 @@ app.prepare()
 					}
 				}
 			})
-			.catch(err => {
+			.catch(error => {
 				// TO-DO: Implement retry handler
 				console.log('error', error);
 				res.send({error: { message: error, code: -1 }});
@@ -697,9 +652,8 @@ app.prepare()
 				},
 				body: message
 			})
-			.then((response) => response.json())
-			.then(function(response)
-			{
+			.then(response => response.json())
+			.then(response => {
 
 				if(response.type == 'error.SuiteScriptError')
 				{
@@ -731,7 +685,7 @@ app.prepare()
 					}
 				}
 			})
-			.catch(err => {
+			.catch(error => {
 				// TO-DO: Implement retry handler
 				console.log('error', error);
 				res.send({error: { message: error, code: -1 }});
@@ -766,9 +720,8 @@ app.prepare()
 			},
 			body: message
 		})
-		.then((response) => response.json())
-		.then(function(response)
-		{
+		.then(response => response.json())
+		.then(response => {
 			if(response.type == 'error.SuiteScriptError')
 			{
 				res.send({error: { message: response.message, code: -1 }});
@@ -789,7 +742,7 @@ app.prepare()
 				res.send(message);
 			}
 		})
-		.catch(err => {
+		.catch(error => {
 			// TO-DO: Implement retry handler
 			console.log('error', error);
 			res.send({error: { message: error, code: -1 }});
@@ -819,9 +772,8 @@ app.prepare()
 				},
 				body: NSSendMessage({id: userID, admin: false, get: true})
 			})
-			.then((response) => response.json())
-			.then(function(response)
-			{
+			.then(response => response.json())
+			.then(response => {
 
 				if(response.type == 'error.SuiteScriptError')
 				{
@@ -849,7 +801,7 @@ app.prepare()
 					}
 				}
 			})
-			.catch(err => {
+			.catch(error => {
 				// TO-DO: Implement retry handler
 				console.log('error', error);
 				res.send({error: { message: error, code: -1 }});
@@ -888,9 +840,8 @@ app.prepare()
 				},
 				body: message
 			})
-			.then((response) => response.json())
-			.then(function(response)
-			{
+			.then(response => response.json())
+			.then(response => {
 
 				if(response.type == 'error.SuiteScriptError')
 				{
@@ -923,7 +874,7 @@ app.prepare()
 					}
 				}
 			})
-			.catch(err => {
+			.catch(error => {
 				// TO-DO: Implement retry handler
 				console.log('error', error);
 				res.send({error: { message: error, code: -1 }});
@@ -962,9 +913,8 @@ app.prepare()
 				},
 				body: message
 			})
-			.then((response) => response.json())
-			.then(function(response)
-			{
+			.then(response => response.json())
+			.then(response => {
 
 				if(response.type == 'error.SuiteScriptError')
 				{
@@ -1004,7 +954,7 @@ app.prepare()
 					}
 				}
 			})
-			.catch(err => {
+			.catch(error => {
 				// TO-DO: Implement retry handler
 				console.log('error', error);
 				res.send({error: { message: error, code: -1 }});
@@ -1022,8 +972,8 @@ app.prepare()
 	})
 
 
-	server.listen(3000, (err) => {
-		if (err) throw err
+	server.listen(3000, (error) => {
+		if (error) throw error
 		console.log('> Ready on http://localhost:3000')
 	})
 })

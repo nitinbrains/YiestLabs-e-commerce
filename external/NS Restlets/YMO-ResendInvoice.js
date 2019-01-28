@@ -46,10 +46,10 @@ var Events = {
                 throw {message: 'No files found', code: -1};
             }
         }
-        catch(err)
+        catch(error)
         {
-            nlapiLogExecution('ERROR', 'Resend Invoice - error', err.toString());
-            return {error: err};
+            nlapiLogExecution('ERROR', 'Resend Invoice - error', error.toString());
+            return {error: error};
         }
     },
 

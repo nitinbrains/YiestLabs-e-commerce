@@ -173,10 +173,10 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
 
            return SendMessage(response);
        }
-       catch(err)
+       catch(error)
        {
-           logError('get cust:' + response.id, err);
-           return {error: err};
+           logError('get cust:' + response.id, error);
+           return {error: error};
        }
    }
 
@@ -202,16 +202,16 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
            //         return SendMessage(response);
            //     }
            // }
-           // catch(err)
+           // catch(error)
            // {
            //     //swallow error
            // }
 
        }
-       catch(err)
+       catch(error)
        {
-           logError('get', err);
-           return {error: err};
+           logError('get', error);
+           return {error: error};
        }
    }
 
@@ -353,7 +353,7 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
        {
            return record.load({type: record.Type.ASSEMBLY_ITEM, id: itemID});
        }
-       catch(err)
+       catch(error)
        {
            return record.load({type: record.Type.INVENTORY_ITEM, id: itemID});
        }
@@ -776,9 +776,9 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
        }
    }
 
-   function logError(func, err)
+   function logError(func, error)
    {
-       var errorText = err.code ? JSON.stringify(err.code) : err.toString();
+       var errorText = error.code ? JSON.stringify(error.code) : error.toString();
        log.error({
            title: 'ITEM - ' + func,
            details: errorText

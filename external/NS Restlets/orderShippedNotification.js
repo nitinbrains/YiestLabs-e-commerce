@@ -41,11 +41,11 @@ function(record, http, log) {
             log.debug({title: 'response', details: response})
 
         }
-        catch(err)
+        catch(error)
         {
             log.error({
                 title: 'Error',
-                details: JSON.stringify(err)
+                details: JSON.stringify(error)
             });
         }          
       
