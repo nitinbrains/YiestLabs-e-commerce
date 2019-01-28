@@ -54,6 +54,12 @@ export function * getUserInfo(action) {
         yield put(responseSuccess());
     } catch (error) {
         console.log('error', error);
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+        }
         yield put(responseFailure(error))
     }
 }
