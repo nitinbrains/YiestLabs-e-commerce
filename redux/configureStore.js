@@ -34,7 +34,7 @@ import rootSaga from './sagas';
 // }
 
 // const globalReducer = combineReducers({
-// 	user: userReducer,
+//	user: userReducer,
 // 	store: storeReducer,
 // 	cart: cartReducer,
 // 	checkout: checkoutReducer,
@@ -48,7 +48,7 @@ const initializeStore = (initialState = initialState, isServer) => {
     const persistConfig = {
         key: 'root',
         storage,
-        whitelist: ['user', 'cart']
+        whitelist: ['cart']
     };
     const persistedReducer = isServer ? rootReducer : persistReducer(persistConfig, rootReducer);
     let store = createStore(

@@ -8,10 +8,19 @@ import Checkbox from "@material-ui/core/Checkbox";
 function CardInfo() {
     return (
         <React.Fragment>
-            <Typography variant="title" gutterBottom>
-                Credit Card Information
-            </Typography>
             <Grid container spacing={24}>
+                <Grid item xs={12}>
+                    <Typography variant="h6" color="textPrimary">
+                        CREDIT CARD INFORMATION
+                    </Typography>
+                    <div
+                        style={{
+                            borderTop: "solid 1.5px",
+                            borderColor: "#CCCCCC",
+                            marginBottom: 10
+                        }}
+                    />
+                </Grid>
                 <Grid item xs={12} md={6}>
                     <TextField
                         required

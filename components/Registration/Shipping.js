@@ -8,10 +8,19 @@ import Checkbox from "@material-ui/core/Checkbox";
 function Shipping() {
     return (
         <React.Fragment>
-            <Typography variant="title" gutterBottom>
-                Shipping Address
-            </Typography>
             <Grid container spacing={24}>
+                <Grid item xs={12}>
+                    <Typography variant="h6" color="textPrimary">
+                        SHIPPING ADDRESS
+                    </Typography>
+                    <div
+                        style={{
+                            borderTop: "solid 1.5px",
+                            borderColor: "#CCCCCC",
+                            marginBottom: 10
+                        }}
+                    />
+                </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
                         required

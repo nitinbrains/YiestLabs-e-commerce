@@ -75,20 +75,14 @@ class Registration extends React.Component {
 
         return (
             <NavBarLayout>
-                <div className={classes.layout}>
-                    <Card>
-                        <CardHeader color="primary">
-                            <Typography
-                                color="secondary"
-                                variant="display1"
-                                align="center"
-                            >
-                                Registration
-                            </Typography>
-                        </CardHeader>
-
-                        <CardBody>
+            <div className={classes.container}>
+                <div className={classes.title}>
+                    <Typography variant="h4" color="secondary">
+                        REGISTRATION
+                    </Typography>
+                </div>
                             <Stepper
+                                nonLinear
                                 activeStep={activeStep}
                                 className={classes.stepper}
                             >
@@ -99,6 +93,7 @@ class Registration extends React.Component {
                                         <Step key={label} {...props}>
                                             <StepButton
                                                 onClick={this.handleStep(index)}
+                                                className={classes.stepper}
                                                 {...buttonProps}
                                             >
                                                 {label}
@@ -114,13 +109,10 @@ class Registration extends React.Component {
                                             variant="headline"
                                             gutterBottom
                                         >
-                                            Thank you for your order.
+                                            You are now registered.
                                         </Typography>
                                         <Typography variant="subheading">
-                                            Your order number is #2001539. We
-                                            have emailed your oder confirmation,
-                                            and will send you an update when
-                                            your order has shipped.
+                                            Thank you for registering. You will receive an email shortly with your user information.
                                         </Typography>
                                     </React.Fragment>
                                 ) : (
@@ -149,8 +141,6 @@ class Registration extends React.Component {
                                     </React.Fragment>
                                 )}
                             </React.Fragment>
-                        </CardBody>
-                    </Card>
                 </div>
             </NavBarLayout>
         );
@@ -158,24 +148,11 @@ class Registration extends React.Component {
 }
 
 const styles = theme => ({
-    layout: {
-        width: "auto",
-        marginLeft: theme.spacing.unit * 2,
-        marginRight: theme.spacing.unit * 2,
-        [theme.breakpoints.up(600 + theme.spacing.unit * 2 * 2)]: {
-            width: 600,
-            marginLeft: "auto",
-            marginRight: "auto"
-        }
-    },
     paper: {
         padding: theme.spacing.unit * 2,
         [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
             padding: theme.spacing.unit * 3
         }
-    },
-    stepper: {
-        padding: `${theme.spacing.unit * 3}px 0 ${theme.spacing.unit * 5}px`
     },
     buttons: {
         display: "flex",
@@ -184,7 +161,38 @@ const styles = theme => ({
     button: {
         marginTop: theme.spacing.unit * 3,
         marginLeft: theme.spacing.unit
-    }
+    },
+    stepper: {
+        padding: `${theme.spacing.unit * 3}px 0 ${theme.spacing.unit * 5}px`,
+        backgroundColor: "#fafafa",
+        width: '100%'
+    },
+    container: {
+        marginTop: 50,
+        border: "solid 1px",
+        borderColor: "#CCCCCC",
+        padding: theme.spacing.unit * 4,
+        [theme.breakpoints.up("md")]: {
+            marginLeft: 50,
+            marginRight: 50
+        },
+        [theme.breakpoints.up("lg")]: {
+            marginLeft: 150,
+            marginRight: 150
+        },
+        [theme.breakpoints.up("xl")]: {
+            marginLeft: 250,
+            marginRight: 250
+        }
+    },
+    title: {
+        backgroundColor: "#FF9933",
+        padding: 5,
+        marginBottom: theme.spacing.unit * 4,
+        textAlign: "center",
+        marginLeft: theme.spacing.unit * -4,
+        marginRight: theme.spacing.unit * -4
+    },
 });
 
 Registration.propTypes = {

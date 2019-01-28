@@ -43,13 +43,12 @@ export function * calculatePacks(action) {
         }
 
     } catch(error) {
-        let message = {
-            message:'Somthing Went Wrong'
+        if(error.status){
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+        } else {
+            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
-        if(error.message != undefined){
-            message['message'] = JSON.stringify(error.message);
-        }
-        yield put(messageActions.showNetworkError(message)) 
         yield put(responseFailure(error));
     }
 }

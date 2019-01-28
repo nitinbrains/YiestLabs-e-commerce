@@ -7,6 +7,7 @@ import cart from './cartReducer';
 import order from './orderReducer';
 import messages from './messageReducer';
 import calculator from './calculatorReducer';
+import loading from './loaderReducer';
 
 
 export const rootReducer = combineReducers({
@@ -16,5 +17,6 @@ export const rootReducer = combineReducers({
     cart,
     messages,
     form,
-    calculator
+    calculator,
+    loading
 });

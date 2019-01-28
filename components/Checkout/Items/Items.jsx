@@ -21,7 +21,7 @@ class Items extends Component {
         return (
             <React.Fragment>
                 {
-                    this.props.order.isLoading ?
+                    this.props.loading.isLoading && this.props.loading.type == 'prepareOrder' ?
                         <Grid
                         container
                         justify="center"
@@ -139,7 +139,8 @@ Items.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        order: state.order
+        order: state.order,
+        loading: state.loading
     };
 };
 

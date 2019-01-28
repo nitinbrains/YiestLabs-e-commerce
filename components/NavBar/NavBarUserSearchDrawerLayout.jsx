@@ -67,7 +67,8 @@ class NavBarUserSearchDrawerLayout extends Component {
                         height: 50,
                         width: "100%",
                         backgroundColor: "#fafafa",
-                        position: "fixed"
+                        position: "fixed",
+                        zIndex: 1000
                     }}
                 />
                 <AppBar
@@ -173,10 +174,10 @@ class NavBarUserSearchDrawerLayout extends Component {
                     {children}
                 </main>
                 
-                {/* <SimpleSnackbar
+                <SimpleSnackbar
                     messageList={this.props.messages}
                     handleClose={() => this.props.hideNetworkError()}
-                /> */}
+                />
             </div>
         );
     }
