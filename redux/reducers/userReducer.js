@@ -83,6 +83,9 @@ export default createReducer(initialState, {
     [userTypes.GET_USER_INFO_FAILURE]: (state, { data }) => ({
         isLoading: false,
     }),
+    [userTypes.GET_USER_INFO_SUCCESS]: (state, { data }) => ({
+        isLoading: false,
+    }),
     [userTypes.UNSAVED_USER_INFO_ATTEMPT]: (state, { data }) => ({
         isUnsaved: true
     }),
