@@ -18,8 +18,7 @@ export function * loginUser (action) {
         const { res: userID, err } = yield call(api.login, username, password);
         if(err) throw err;
 
-        const { res: userInfo, error } = yield call(api.getUserInfo, userID);
-        if(error) throw error;
+        yield put(userActions.getUserInfo({userID}));
 
         yield put(messageActions.displayMessage({
             title: 'Authorization',
@@ -38,7 +37,6 @@ export function * loginUser (action) {
             } else if(err.code == -1){
                 yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));                
             }
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(err));
     }
@@ -48,8 +46,9 @@ export function * getUserInfo(action) {
     const { responseSuccess, responseFailure,  data: { userID }} = action;
     try {
         console.log('userID', userID);
-        const { res: userInfo } = yield call(api.getUserInfo, { userID });
-        console.log('userInfo', userInfo);
+        const { res: userInfo, error } = yield call(api.getUserInfo, { userID });
+        if(error) throw error;
+        console.log('error', error);
         yield put(userActions.setUserInfo({ userInfo}));
         yield put(responseSuccess());
     } catch (error) {
@@ -161,7 +160,7 @@ export function * setShipMethod(action) {
 /*************************/
 
 export function * addCreditCard(action) {
-    const { responseSuccess, responseFailure, data: creditCard } = action;
+    const { responseSuccess, responseFailure, data: { creditCard }} = action;
     try {
         const user = yield select(state => state.user);
 
@@ -171,7 +170,7 @@ export function * addCreditCard(action) {
         let request = {};
         request.addCreditCard = true;
         request.id = user.id
-        request.token = WLHelper.generateCreditToken(card);
+        request.token = WLHelper.generateCreditToken(creditCard);
 
         yield put(userActions.updateUserInfo({request}));
     

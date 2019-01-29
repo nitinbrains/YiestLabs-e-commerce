@@ -30,7 +30,8 @@ class AddAddress extends Component {
     }
 
     addAddress = () => {
-        this.props.addAddress({address: this.state.address});
+        const { address } = this.state;
+        this.props.addAddress({address});
     }
 
     render() {

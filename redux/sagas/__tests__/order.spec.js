@@ -13,7 +13,7 @@ import {
     initOrder,
     shipAllTogether,
     incrementItemDate
-} from '../orderUtils';
+} from '../OrderUtils';
 // import cartSelectors from '../../selectors/cart.js';
 import { orderActions } from '../../actions/orderActions';
 import { order, user, today, twoDaysLate, fetchOrderMock } from '../../mocks';

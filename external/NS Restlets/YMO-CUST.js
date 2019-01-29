@@ -765,7 +765,7 @@ function(record, log, search, email)
                     try
                     {
                         // add new ship address to bottom of addressbook
-                        // var numAddresses = customerRecord.getLineCount('addressbook');
+                        var numAddresses = customerRecord.getLineCount('addressbook');
                         customerRecord.insertLine({sublistId: 'addressbook', line: numAddresses});
                         var addressSubrecord = customerRecord.getSublistSubrecord({sublistId: 'addressbook', fieldId: 'addressbookaddress', line: numAddresses});
                         addressSubrecord.setValue({fieldId:'country', value: message.address.countryid});
