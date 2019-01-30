@@ -8,6 +8,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import * as Utils from '../../lib/Utils';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
@@ -60,6 +61,13 @@ class AddCard extends Component {
                 }}
                 validationSchema={customFormValidation}
                 enableReinitialize
+                validate={ values => {
+                    // console.log(values,'asas',Utils)
+                    // let error ={};
+                    // // check getcard type
+                    // let cardNumberValidate = Utils.getCardType(values.ccnumber);
+                    // console.log(cardNumberValidate,'card type')
+                } }
                 onSubmit={ values => { 
                     this.addCard()
                 }}            
