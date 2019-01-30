@@ -23,6 +23,10 @@ class ManageCards extends Component {
         };
     }
 
+    componentWillMount(){
+        console.log('user', this.props.user);
+    }
+
     handleDialogClose() {
         this.props.closeDialog();
     }
@@ -53,7 +57,14 @@ class ManageCards extends Component {
                     <Grid style={{ padding: 10 }} container spacing={24}>
                         {user.cards.map((card, i) => (
                             <Grid item sm={4} xs={12}>
-                                <div className={classes.cardBoxSelected}>
+                                <div
+                                    className={
+                                        this.props.user.selectedCard.ccnumber ==
+                                        card.ccnumber
+                                            ? classes.cardBoxSelected
+                                            : classes.cardBox
+                                    }
+                                >
                                     <Grid item container xs spacing={8}>
                                         <Grid item xs={12}>
                                             <Typography>{card.ccname}</Typography>

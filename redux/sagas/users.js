@@ -45,14 +45,11 @@ export function * loginUser (action) {
 export function * getUserInfo(action) {
     const { responseSuccess, responseFailure,  data: { userID }} = action;
     try {
-        console.log('userID', userID);
         const { res: userInfo, error } = yield call(api.getUserInfo, { userID });
         if(error) throw error;
-        console.log('error', error);
         yield put(userActions.setUserInfo({ userInfo}));
         yield put(responseSuccess());
     } catch (error) {
-        console.log('error', error);
         if(error.status){
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
@@ -76,10 +73,6 @@ export function * setUserInfo(action) {
         }
 
         yield put(responseSuccess(userInfo));
-
-        if (userInfo.cards.length > 0) {
-            yield put(userActions.setCreditCard(userInfo));
-        }
 
         } catch (err) {
         if(error.status){
@@ -169,7 +162,6 @@ export function * addCreditCard(action) {
         }
         let request = {};
         request.addCreditCard = true;
-        request.id = user.id
         request.token = WLHelper.generateCreditToken(creditCard);
 
         yield put(userActions.updateUserInfo({request}));
@@ -190,7 +182,6 @@ export function * deleteCreditCard(action) {
 
         let request = {};
         request.deleteCreditCard = true;
-        request.id = user.id
         request.card = creditCard;
         
         yield put(userActions.updateUserInfo({request}));
