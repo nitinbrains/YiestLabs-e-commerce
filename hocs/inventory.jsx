@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import { inventoryActions } from '../redux/actions/inventoryActions';
 import { userActions } from '../redux/actions/userActions';
+import { messageActions } from '../redux/actions/messageActions';
 import LoadingScreen from '../components/UI/LoadingScreen';
 
 
@@ -26,7 +27,7 @@ export default (Component) => {
     )
 
     return connect(
-        state => ({ store: state.inventory, user: state.user, loading: state.loading }),
-        dispatch => bindActionCreators({ ...inventoryActions, ...userActions}, dispatch)
+        state => ({ store: state.inventory, user: state.user, loading: state.loading, message: state.messages }),
+        dispatch => bindActionCreators({ ...inventoryActions, ...userActions, ...messageActions}, dispatch)
     )(Wrapper());
 }

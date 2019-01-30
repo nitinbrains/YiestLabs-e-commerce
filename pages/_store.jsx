@@ -41,6 +41,7 @@ import HomebrewCard from "../components/Store/Homebrew/HomebrewCard";
 import FormButton from "../components/Form/FormButton";
 import AddHomebrewContainer from "../components/Store/Homebrew/AddHomebrewContainer";
 import SearchBarItems from "../components/NavBar/SearchBarItems";
+import SimpleSnackbar from "../components/Form/SimpleSnackbar";
 
 import withInventory from "../hocs/inventory";
 
@@ -191,7 +192,7 @@ class Store extends Component {
     };
 
     render() {
-        const { classes, theme } = this.props;
+        const { classes, theme, message } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
         // isHomebrew = true
         return (
@@ -227,6 +228,10 @@ class Store extends Component {
                         </Dialog>
                     </Grid>
                 )}
+                <SimpleSnackbar
+                    messageList={message}
+                    handleClose={() => this.props.hideNetworkError()}
+                />
             </NavBarUserSearchDrawerLayout>
         );
     }

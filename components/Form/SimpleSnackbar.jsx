@@ -18,7 +18,10 @@ class App extends React.Component {
     const { messages } = this.props;
     if(messages.networkRequestError.length > 0) {
       return messages.networkRequestError.map((data)=>{
-        this.props.enqueueSnackbar( data.message, { variant: data.variant} );
+        this.props.enqueueSnackbar( data.message, {
+          variant: data.variant, 
+          anchorOrigin: data.anchorOrigin ? data.anchorOrigin :{vertical: 'bottom',horizontal: 'right'}
+        });
       })
     }
   }
@@ -56,14 +59,10 @@ class SimpleSnackbar extends React.Component {
 
   render() {
     const { classes } = this.props;
-    
+
     return (
       <div>
         <SnackbarProvider 
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
           maxSnack={5}
           onClose={this.handleClose}
           autoHideDuration={5000}

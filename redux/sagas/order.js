@@ -9,7 +9,7 @@ import {
     decrementItemDate,
     initOrder,
     validateOrder
-} from './OrderUtils';
+} from './orderUtils';
 
 const replace = (arr, newItem) => arr.map(
     (item) => item.Name === newItem.Name ? newItem : item

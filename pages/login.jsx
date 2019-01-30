@@ -123,14 +123,14 @@ class Login extends Component {
                                             fullWidth
                                             id="email"
                                             onFocus={e => {
-                                                if (focus !== 'email')
-                                                this.setState({
-                                                    focus : 'email'
-                                                })
+                                                // if (focus !== 'email')
+                                                //     this.setState({
+                                                //         focus : 'email'
+                                                //     })
                                             }}
                                             name="email"
                                             autoComplete="email"
-                                            autoFocus={ focus == 'email' }
+                                            autoFocus={ focus === 'email' }
                                             value={props.field.value}
                                             onChange={event =>
                                                 {
@@ -157,14 +157,14 @@ class Login extends Component {
                                                 type="password"
                                                 margin='normal'
                                                 onFocus={e => {
-                                                    if (focus !== 'password')
-                                                    this.setState({
-                                                        focus : 'password'
-                                                    })
+                                                    // if (focus !== 'password')
+                                                    //     this.setState({
+                                                    //         focus : 'password'
+                                                    //     })
                                                 }}
                                                 id="password"
                                                 autoComplete="current-password"
-                                                autoFocus={focus == 'password'}
+                                                autoFocus={focus === 'password'}
                                                 value={props.field.value}
                                                 onChange={event =>{
                                                     props.form.setFieldValue('password',event.target.value);
