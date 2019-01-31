@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 
 import PropTypes from "prop-types";
 import Link from "next/link";
+import Router from 'next/router';
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
@@ -36,9 +37,10 @@ class Login extends Component {
         };
     }
 
-    login() {
+    async login() {
         if (this.state.username && this.state.password) {
-            this.props.userLogin(this.state);
+            await this.props.userLogin(this.state);
+            Router.push('/')
         }
     }
 
@@ -103,7 +105,8 @@ class Login extends Component {
                         onSubmit={values => {
                             // same shape as initial values
                             if (this.state.username && this.state.password) {
-                                this.props.userLogin(this.state);
+                                // this.props.userLogin(this.state);
+                                this.login()
                             }
                         }}
                         >

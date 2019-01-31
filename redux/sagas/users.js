@@ -20,7 +20,6 @@ export function * loginUser (action) {
 
         yield put(userActions.getUserInfo({userID}));
 
-        console.log('ssssssssssssssssssss');
         yield put(messageActions.showNetworkError({
             title: 'Authorization',
             message: 'You have successfully logged in!',
