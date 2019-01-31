@@ -56,8 +56,34 @@ class Alert extends React.Component {
     };
 
     render() {
-        const { classes, children } = this.props;
-
+        const { classes, children, error } = this.props;
+        if(error){
+            return (
+                <React.Fragment>
+                    <div
+                        className={classes.error}
+                        style={{
+                            backgroundColor: this.state.color,
+                            borderColor: this.setState.borderColor
+                        }}
+                    >
+                        <Typography variant="title" gutterBottom>
+                            {this.props.message.message}
+                        </Typography>
+                        <div className={classes.close}>
+                            <IconButton
+                                color="inherit"
+                                size="small"
+                                aria-label="Menu"
+                                onClick={() => this.props.hideMessage(this.props.index)}
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                        </div>
+                    </div>
+                </React.Fragment>
+            );
+        }
         return (
             <React.Fragment>
                 <div
@@ -95,7 +121,15 @@ const styles = theme => ({
         width: "100%",
         position: "relative"
     },
-    close: { position: "absolute", right: 0, top: 0 }
+    close: { position: "absolute", right: 0, top: 0 },
+    error: {
+        marginBottom: 15,
+        padding: 10,
+        borderWidth: 5,
+        borderRadius: 3,
+        width: "100%",
+        position: "relative"
+    }
 });
 
 Alert.propTypes = {

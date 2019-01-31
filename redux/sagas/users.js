@@ -15,18 +15,25 @@ import WLHelper from '../../lib/WLHelper';
 export function * loginUser (action) {
     const { responseSuccess, responseFailure, data: { username, password } } = action;
     try {
-        const { res: userID, err } = yield call(api.login, username, password);
+        const { res, err } = yield call(api.login, username, password);
         if(err) throw err;
 
-        yield put(userActions.getUserInfo({userID}));
-
-        yield put(messageActions.showNetworkError({
-            title: 'Authorization',
-            message: 'You have successfully logged in!',
-            variant:'success',
-            anchorOrigin:{vertical: 'top', horizontal: 'center'}
-        }));
-        
+        if(res.error && res.error.code === 0 ){
+            yield put(messageActions.showNetworkError({ 
+                title: 'Yeastman', 
+                message: res.error.message, variant:'error', 
+                anchorOrigin:{vertical: 'top', horizontal: 'center'}, 
+                disableAutoHide: true 
+            }));        
+        } else if (res.userID){
+            yield put(userActions.getUserInfo({userID}));
+            yield put(messageActions.showNetworkError({
+                title: 'Authorization',
+                message: 'You have successfully logged in!',
+                variant:'success',
+                anchorOrigin:{vertical: 'top', horizontal: 'center'}
+            }));
+        }
         yield put(responseSuccess());
 
     } catch (err) {
