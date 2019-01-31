@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {isEqual} from "lodash";
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -14,13 +15,23 @@ const styles = theme => ({
 });
 
 class App extends React.Component {
+  state = {
+    showError:false
+}
+componentWillReceiveProps(props){
+    if(!isEqual(props.messages, this.props.messages)){
+        this.setState({showError:true})
+    } else {
+        this.setState({showError:false})
+    }
+}
   handleNotification = () => {
     const { messages } = this.props;
     if(messages.networkRequestError.length > 0) {
       return messages.networkRequestError.map((data)=>{
         this.props.enqueueSnackbar( data.message, {
           variant: data.variant, 
-          anchorOrigin: data.anchorOrigin ? data.anchorOrigin :{vertical: 'bottom',horizontal: 'right'}
+          anchorOrigin: data.anchorOrigin ? data.anchorOrigin :{vertical: 'top',horizontal: 'center'}
         });
       })
     }
@@ -29,7 +40,7 @@ class App extends React.Component {
   render() {
     return(
       <div>
-        {this.handleNotification()}
+        {this.state.showError && this.handleNotification()}
       </div>
     );
   }

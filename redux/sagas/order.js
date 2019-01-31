@@ -35,10 +35,16 @@ export function * prepareOrder(action) {
         }
     } catch (error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
@@ -62,10 +68,16 @@ export function * placeOrder(action) {
         }
     } catch (error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
@@ -82,10 +94,16 @@ export function * setShippingOption(action) {
         yield put(orderActions.setItems({ items }));
     } catch (error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
@@ -102,10 +120,16 @@ export function * incrementShipDate(action) {
         )}));
     } catch (error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
@@ -122,10 +146,16 @@ export function * decrementShipDate(action) {
         )}));
     } catch (error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
