@@ -63,4 +63,29 @@ export default createReducer(initialState, {
         isLoading: false,
         type: ''
     }),
+    [userTypes.GET_USER_INFO_ATTEMPT]: (state, { data }) => ({
+        isLoading: true,
+        type: 'getUserInfo'
+    }),
+    [userTypes.GET_USER_INFO_SUCCESS]: (state, { data }) => ({
+        isLoading: false,
+        type: ''
+    }),
+    [userTypes.GET_USER_INFO_FAILURE]: (state, { data }) => ({
+        isLoading: false,
+        type: ''
+    }),
+    [userTypes.SET_USER_INFO_ATTEMPT]: (state, { data }) => ({
+        isLoading: true,
+        type: 'setUserInfo'
+    }),
+    [userTypes.SET_USER_INFO_SUCCESS]: (state, { data }) => ({
+        isLoading: false,
+        type: ''
+    }),
+    [userTypes.SET_USER_INFO_FAILURE]: (state, { data }) => ({
+        isLoading: false,
+        type: ''
+    }),
+    
 });

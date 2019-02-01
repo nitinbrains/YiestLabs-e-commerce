@@ -62,9 +62,12 @@ const initialState = {
 /* ------------- Hookup Reducers To Types ------------- */
 
 export default createReducer(initialState, {
-    [userTypes.USER_LOGIN_SUCCESS]: (state, { data }) => ({
-        ...data,
-    }),
+    [userTypes.USER_LOGIN_SUCCESS]: (state, { data }) => {
+        // console.log('data', data, state, actions);
+        return {
+            ...data,
+        }
+        },
     [userTypes.USER_LOGIN_FAILURE]: () => null, // this will return initial state
     [userTypes.SET_USER_INFO_SUCCESS]: (state, { data: userInfo }) => ({
         ...userInfo
@@ -119,5 +122,8 @@ export default createReducer(initialState, {
         isLoading: false,
         orderHistory
     }),
-    [userTypes.USER_LOGOUT_ATTEMPT]: () => null,    // this will return initial state
+    [userTypes.USER_LOGOUT_ATTEMPT]: () => {
+        sessionStorage.clear();
+        return null
+    },    // this will return initial state
 });

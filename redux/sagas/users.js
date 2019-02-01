@@ -17,15 +17,21 @@ export function * loginUser (action) {
     try {
         const { res, err } = yield call(api.login, username, password);
         if(err) throw err;
-
+        console.log('resresresres', res, res.error && res.error.code === 0, res.userID );
+        let {userID} = res;
+        yield put(responseSuccess());
+        console.log('1111111111111', userID);
         if(res.error && res.error.code === 0 ){
+            
             yield put(messageActions.showNetworkError({ 
                 title: 'Yeastman', 
                 message: res.error.message, variant:'error', 
                 anchorOrigin:{vertical: 'top', horizontal: 'center'}, 
                 disableAutoHide: true 
             }));        
-        } else if (res.userID){
+        } else if (!_isEmpty(res.userID)){
+            console.log('userID',userID, userActions);
+            
             yield put(userActions.getUserInfo({userID}));
             yield put(messageActions.showNetworkError({
                 title: 'Authorization',
@@ -33,10 +39,15 @@ export function * loginUser (action) {
                 variant:'success',
                 anchorOrigin:{vertical: 'top', horizontal: 'center'}
             }));
+        }else{
+            console.log('==================');
+            
         }
-        yield put(responseSuccess());
+        
 
     } catch (err) {
+        console.log('ssssssssssswwwwwwwwwww', err);
+        
         if(error.status){
             // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
@@ -54,10 +65,14 @@ export function * loginUser (action) {
 };
 
 export function * getUserInfo(action) {
+    console.log('getUserInfo',action);
+    
     const { responseSuccess, responseFailure,  data: { userID }} = action;
     try {
         const { res: userInfo, error } = yield call(api.getUserInfo, { userID });
         if(error) throw error;
+        sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
+        sessionStorage.setItem('isLoggedin', true)
         yield put(userActions.setUserInfo({ userInfo}));
         yield put(responseSuccess());
     } catch (error) {
@@ -80,7 +95,8 @@ export function * getUserInfo(action) {
 export function * setUserInfo(action) {
     const { responseSuccess, responseFailure, data: { userInfo } } = action;
     try {
-
+        console.log('setUserInfo', action);
+        
         const { subsidiary, shipmethod, shipping: { countryid } } = userInfo;
         userInfo.shipMethods = WLHelper.shipMethodGroup(subsidiary, shipmethod, countryid);
         userInfo.subsidiaryOptions = loadSubsidiaryOptions(userInfo);

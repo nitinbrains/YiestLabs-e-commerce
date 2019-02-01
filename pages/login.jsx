@@ -44,30 +44,35 @@ class Login extends Component {
         username: '',
         password: '',
     }
+    componentWillMount(){
+        let isUserLoggedIn = sessionStorage.getItem('isLoggedin')
+        const { user } = this.props;
+        if(isUserLoggedIn || (user && user.id && user.id !== null)){
+            Router.push('/')
+        }
+    }
     componentWillReceiveProps(props){
         if(props.user.id && props.user.id !== null){
             Router.push('/')
         }
     }
-    async login(values) {
+    login(values) {
         if (values.username && values.password) {
-            await this.props.userLogin(values);
+            this.props.userLogin(values);            
         }
     }
 
     render() {
-        const { classes, messages } = this.props;
-console.log('this.props.messages', this.props.messages, );
-
+        const { classes, messages, loading:{isLoading, type} } = this.props;
         return (
             <React.Fragment>
                 {messages.messages.map((message, i) => (
                     <Alert message={message} index={i} />
                 ))}
-                {messages.networkRequestError.length && 
-                <Alert message={messages.networkRequestError[0]} error/>
+                {messages.networkRequestError.length ? 
+                <Alert message={messages.networkRequestError[0]} error/>: null
                 }
-                <LoadingIndicator visible={this.props.loading.isLoading && this.props.loading.type == 'userLogin' } />
+                <LoadingIndicator visible={isLoading && (type === 'userLogin' || type === 'getUserInfo' || type === 'setUserInfo') } />
                 <main className={classes.layout}>
                     <div className={classes.container}>
                         <div
@@ -158,10 +163,6 @@ console.log('this.props.messages', this.props.messages, );
                         </Grid>
                     </div>
                 </main>
-                {/* <SimpleSnackbar
-                    messageList={this.props.messages}
-                    handleClose={() => this.props.hideNetworkError()}
-                /> */}
             </React.Fragment>
         );
     }
