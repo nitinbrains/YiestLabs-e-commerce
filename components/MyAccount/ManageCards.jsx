@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import classNames from "classnames";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 import moment from 'moment';
@@ -10,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import CancelIcon from "@material-ui/icons/Cancel";
 import DialogContent from "@material-ui/core/DialogContent";
 
 import AddCard from "./AddCard";
@@ -19,7 +21,8 @@ class ManageCards extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            newCard: false
+            newCard: false,
+            cardHover: false
         };
     }
 
@@ -37,6 +40,10 @@ class ManageCards extends Component {
 
     closeNewCard = () => {
         this.setState({ newCard: false });
+    };
+
+    handleCardHover = () => {
+        this.setState({ cardHover: !this.state.cardHover });
     };
 
     render() {
@@ -64,8 +71,22 @@ class ManageCards extends Component {
                                             ? classes.cardBoxSelected
                                             : classes.cardBox
                                     }
+                                    onMouseEnter={this.handleCardHover}
+                                    onMouseLeave={this.handleCardHover}
                                 >
-                                    <Grid item container xs spacing={8}>
+                                <div className={classNames(
+                                    classes.deleteIcon,
+                                    !this.state.cardHover && classes.hide
+                                )}>
+                                <IconButton
+                                    color="inherit"
+                                    size="small"
+                                    aria-label="Menu"
+                                >
+                                    <CancelIcon />
+                                </IconButton>
+                                </div>
+                                    <Grid item container xs spacing={8} justify="center" alignItems="center">
                                         <Grid item xs={12}>
                                             <Typography>{card.ccname}</Typography>
                                         </Grid>
@@ -82,9 +103,12 @@ class ManageCards extends Component {
                                             <Button
                                                 variant="contained"
                                                 color="primary"
+                                                className={classNames(
+                                                    !this.state.cardHover && classes.hide
+                                                )}
                                                 onClick={() => this.props.setCreditCard(i)}
                                             >
-                                                Select Card
+                                                Make Default
                                             </Button>
                                         </Grid>
                                     </Grid>
@@ -115,16 +139,24 @@ class ManageCards extends Component {
 
 const styles = theme => ({
     cardBox: {
+        position: "relative",
         border: "solid 1px",
         borderColor: "#CCCCCC",
-        padding: theme.spacing.unit * 2
+        padding: theme.spacing.unit * 2,
+        textAlign:'center'
     },
     cardBoxSelected: {
+        position: "relative",
         border: "solid 2px",
         borderColor: "#f28411",
-        padding: theme.spacing.unit * 2
+        padding: theme.spacing.unit * 2,
+        textAlign:'center'
     },
-    close: { position: "absolute", right: 0, top: 0 }
+    close: { position: "absolute", right: 0, top: 0 },
+    deleteIcon: { position: "absolute", right: -25, top: -25},
+    hide: {
+        display: "none"
+    },
 });
 
 ManageCards.propTypes = {
