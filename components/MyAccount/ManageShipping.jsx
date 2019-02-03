@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -25,7 +26,8 @@ class ManageShipping extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            newAddress: false
+            newAddress: false,
+            boxHover: false
         };
     }
 
@@ -44,6 +46,10 @@ class ManageShipping extends Component {
     selectDefaultAddress = (address) => {
         this.props.setDefaultShipAddress({address})
     }
+
+    handleBoxHover = () => {
+        this.setState({ boxHover: !this.state.boxHover });
+    };
 
     render() {
         const { classes, user } = this.props;
@@ -68,8 +74,29 @@ class ManageShipping extends Component {
                                 sm={4}
                                 xs={12}
                             >
-                                <div className={classes.addressBoxSelected}>
-                                    <Grid item container xs spacing={8}>
+                            <div
+                                className={
+                                    this.props.user.shipping.address1 ==
+                                    address.address1
+                                        ? classes.addressBoxSelected
+                                        : classes.addressBox
+                                }
+                                onMouseEnter={this.handleBoxHover}
+                                onMouseLeave={this.handleBoxHover}
+                            >
+                            <div className={classNames(
+                                classes.deleteIcon,
+                                !this.state.boxHover && classes.hide
+                            )}>
+                            <IconButton
+                                color="inherit"
+                                size="small"
+                                aria-label="Menu"
+                            >
+                                <CancelIcon />
+                            </IconButton>
+                            </div>
+                                    <Grid item container xs spacing={8} justify="center" alignItems="center">
                                         <Grid item>
                                             <Typography>{address.address1}</Typography>
                                         </Grid>
@@ -88,15 +115,32 @@ class ManageShipping extends Component {
                                         <Grid item xs={12}>
                                             <Typography>{address.countryid}</Typography>
                                         </Grid>
+                                        {}
                                     {this.props.user.shipping.address1 !=
-                                            address.address1 && (
+                                            address.address1 && !this.props.checkout && (
                                         <Grid item>
                                             <Button
                                                 variant="contained"
                                                 color="primary"
                                                 onClick={(e)=> { this.selectDefaultAddress(address) }}
                                             >
-                                                Select Address
+                                                Set as Default
+                                            </Button>
+                                        </Grid>
+                                    )}
+
+                                    {this.props.checkout && (
+                                        <Grid item>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={() =>
+                                                    this.props.setBillAddress(
+                                                        i
+                                                    )
+                                                }
+                                            >
+                                                Select
                                             </Button>
                                         </Grid>
                                     )}
@@ -129,16 +173,24 @@ class ManageShipping extends Component {
 
 const styles = theme => ({
     addressBox: {
+        position: "relative",
         border: "solid 1px",
         borderColor: "#CCCCCC",
-        padding: theme.spacing.unit * 2
+        padding: theme.spacing.unit * 2,
+        textAlign:'center'
     },
     addressBoxSelected: {
+        position: "relative",
         border: "solid 2px",
         borderColor: "#f28411",
-        padding: theme.spacing.unit * 2
+        padding: theme.spacing.unit * 2,
+        textAlign:'center'
     },
-    close: { position: "absolute", right: 0, top: 0 }
+    close: { position: "absolute", right: 0, top: 0 },
+    deleteIcon: { position: "absolute", right: -25, top: -25},
+    hide: {
+        display: "none"
+    },
 });
 
 ManageShipping.propTypes = {

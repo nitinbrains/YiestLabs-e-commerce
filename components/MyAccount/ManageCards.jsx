@@ -99,6 +99,8 @@ class ManageCards extends Component {
                                             <Typography>{moment(card.ccexpire).format("MM-YYYY")}</Typography>
                                         </Grid>
 
+                                        {this.props.user.selectedCard.ccnumber !=
+                                                card.ccnumber && !this.props.checkout && (
                                         <Grid item>
                                             <Button
                                                 variant="contained"
@@ -111,6 +113,21 @@ class ManageCards extends Component {
                                                 Make Default
                                             </Button>
                                         </Grid>
+                                        )}
+
+                                        {this.props.checkout && (
+                                            <Grid item>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={() =>
+                                                        this.props.setCreditCard(i)
+                                                    }
+                                                >
+                                                    Select
+                                                </Button>
+                                            </Grid>
+                                        )}
                                     </Grid>
                                 </div>
                             </Grid>

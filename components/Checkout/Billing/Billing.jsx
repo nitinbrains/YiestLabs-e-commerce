@@ -27,10 +27,10 @@ import SalesLib from "../../../lib/SalesLib";
 import Utils from "../../../lib/Utils";
 import { userActions } from "../../../redux/actions/userActions";
 
-import ManageAddresses from "./ManageAddresses";
+import ManageBilling from "../../MyAccount/ManageBilling";
 import AddAddress from "./AddAddress";
 
-import ManageCards from "./ManageCards";
+import ManageCards from "../../MyAccount/ManageCards";
 import AddCard from "./AddCard";
 
 class Billing extends Component {
@@ -253,31 +253,31 @@ class Billing extends Component {
                         </Typography>
 
                         <div className={classes.sectionTitleDivider} />
-                        {this.props.user.selectedBilling.id ? (
+                        {this.props.user.billing.id ? (
                             <div>
                                 <Typography>
-                                    {this.props.user.selectedBilling.attn}
+                                    {this.props.user.billing.attn}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.selectedBilling.addressee}
+                                    {this.props.user.billing.addressee}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.selectedBilling.address1}
+                                    {this.props.user.billing.address1}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.selectedBilling.address2}
+                                    {this.props.user.billing.address2}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.selectedBilling.address3}
+                                    {this.props.user.billing.address3}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.selectedBilling.city}
+                                    {this.props.user.billing.city}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.selectedBilling.countryid}
+                                    {this.props.user.billing.countryid}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.selectedBilling.zip}
+                                    {this.props.user.billing.zip}
                                 </Typography>
 
                                 <Button
@@ -291,7 +291,7 @@ class Billing extends Component {
                         ) : (
                             <Grid item xs={12}>
                                 <AddAddress addAddress={this.addNewAddress} />
-                                
+
                             </Grid>
                         )}
                     </Grid>
@@ -299,14 +299,14 @@ class Billing extends Component {
 
                 <Dialog
                     open={this.state.manageAddresses}
-                    maxWidth={"sm"}
+                    maxWidth={"md"}
                     fullWidth
                 >
-                    <ManageAddresses closeDialog={this.closeAddresses} />
+                    <ManageBilling checkout={true} closeDialog={this.closeAddresses} />
                 </Dialog>
 
-                <Dialog open={this.state.manageCards} maxWidth={"sm"} fullWidth>
-                    <ManageCards closeDialog={this.closeCards} />
+                <Dialog open={this.state.manageCards} maxWidth={"md"} fullWidth>
+                    <ManageCards checkout={true} closeDialog={this.closeCards} />
                 </Dialog>
             </React.Fragment>
         );

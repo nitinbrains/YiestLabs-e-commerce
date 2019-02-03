@@ -21,7 +21,7 @@ import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 
-import ManageAddresses from "./ManageAddresses";
+import ManageShipping from "../../MyAccount/ManageShipping";
 import AddAddress from "./AddAddress";
 
 // custom
@@ -57,31 +57,31 @@ class Shipping extends Component {
                         </Typography>
                         <div className={classes.sectionTitleDivider} />
 
-                        {this.props.user.selectedShipping.id ? (
+                        {this.props.user.shipping.id ? (
                             <div>
                                 <Typography>
-                                    {this.props.user.selectedShipping.attn}
+                                    {this.props.user.shipping.attn}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.selectedShipping.addressee}
+                                    {this.props.user.shipping.addressee}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.selectedShipping.address1}
+                                    {this.props.user.shipping.address1}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.selectedShipping.address2}
+                                    {this.props.user.shipping.address2}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.selectedShipping.address3}
+                                    {this.props.user.shipping.address3}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.selectedShipping.city}
+                                    {this.props.user.shipping.city}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.selectedShipping.countryid}
+                                    {this.props.user.shipping.countryid}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.selectedShipping.zip}
+                                    {this.props.user.shipping.zip}
                                 </Typography>
 
                                 <Button
@@ -124,10 +124,10 @@ class Shipping extends Component {
 
                 <Dialog
                     open={this.state.manageAddresses}
-                    maxWidth={"sm"}
+                    maxWidth={"md"}
                     fullWidth
                 >
-                    <ManageAddresses closeDialog={this.closeAddresses} />
+                    <ManageShipping checkout={true} closeDialog={this.closeAddresses} />
                 </Dialog>
             </React.Fragment>
         );
