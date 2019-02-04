@@ -27,7 +27,8 @@ class ManageShipping extends Component {
         super(props);
         this.state = {
             newAddress: false,
-            boxHover: false
+            boxHover: false,
+            confirmation: false
         };
     }
 
@@ -49,6 +50,27 @@ class ManageShipping extends Component {
 
     handleBoxHover = () => {
         this.setState({ boxHover: !this.state.boxHover });
+    };
+
+    handleConfirmation = (address) => {
+        this.setState({
+            confirmation: true,
+            deleteAddress: address
+        });
+    };
+
+    handleNo = () => {
+        this.setState({
+            confirmation: false
+        });
+    };
+
+    handleYes = () => {
+        const address = this.state.deleteAddress;
+        this.props.deleteAddress({address});
+        this.setState({
+            confirmation: false
+        });
     };
 
     render() {
@@ -92,6 +114,7 @@ class ManageShipping extends Component {
                                 color="inherit"
                                 size="small"
                                 aria-label="Menu"
+                                onClick={(e)=> { this.handleConfirmation(address) }}
                             >
                                 <CancelIcon />
                             </IconButton>
@@ -165,6 +188,24 @@ class ManageShipping extends Component {
                             </Grid>
                         )}
                     </Grid>
+                    <Dialog open={this.state.confirmation}>
+                        <DialogTitle id="alert-dialog-title">
+                            {"Are you sure you want to delete this address?"}
+                        </DialogTitle>
+                        <DialogContent />
+                        <DialogActions>
+                            <Button color="primary" onClick={this.handleNo}>
+                                No
+                            </Button>
+                            <Button
+                                color="primary"
+                                autoFocus
+                                onClick={this.handleYes}
+                            >
+                                Yes
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </DialogContent>
             </React.Fragment>
         );
