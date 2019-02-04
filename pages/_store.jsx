@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { compose } from "redux";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 
 import PropTypes from "prop-types";
@@ -41,6 +43,9 @@ import HomebrewCard from "../components/Store/Homebrew/HomebrewCard";
 import FormButton from "../components/Form/FormButton";
 import AddHomebrewContainer from "../components/Store/Homebrew/AddHomebrewContainer";
 import SearchBarItems from "../components/NavBar/SearchBarItems";
+import Alert from "../components/UI/Alert";
+import { userActions } from "../redux/actions/userActions";
+import { messageActions } from '../redux/actions/messageActions';
 
 import withInventory from "../hocs/inventory";
 
@@ -67,7 +72,16 @@ class Store extends Component {
     handleLeaveItem = () => {
         this.setState({ openDialog: false, item: null });
     };
-
+    displayAlert = (messageList=[], type) => {
+        let alert = []
+        messageList.map((message, i) => {
+            if(message.displayType === 'banner')
+            alert.push(
+                <Alert message={message} index={i} type={type} />
+            )
+        })
+        return alert;
+    }
     getCard = (item, i) => {
         if (this.props.store.isHomebrew) {
             return <HomebrewCard key={i} item={item} />;
@@ -140,12 +154,15 @@ class Store extends Component {
     };
 
     render() {
-        const { classes, theme, message } = this.props;
+        const { classes, theme, message, messages } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
+        
         // isHomebrew = true
         return (
             <NavBarUserSearchDrawerLayout>
                 <LoadingIndicator visible={(this.props.loading.isLoading && this.props.loading.type == "loadingInventory")} label={"Loading Inventory"} />
+                {this.displayAlert(messages.messages, 'message')}
+                {this.displayAlert(messages.networkRequestError, 'networkError')}
                 <Grid container spacing={8} id="professional-homebrew-switch">
                     <Grid item xs={6} dir="rtl">
                         <FormButton className={`form-button-small-size ${isHomebrew ? "form-button-active" : ""}`} text="Professional" onClick={() => this.props.switchToProfessional()} />
@@ -213,7 +230,22 @@ Store.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-export default compose(
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+        messages: state.messages,
+        loading: state.loading
+    };
+};
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators({...userActions, ...messageActions}, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(compose(
     withStyles(styles, { withTheme: true }),
     withInventory
-)(Store);
+)(Store));
+

@@ -61,17 +61,22 @@ class Login extends Component {
             this.props.userLogin(values);            
         }
     }
-
+    displayAlert = (messageList=[], type) => {
+        let alert = []
+        messageList.map((message, i) => {
+            if(message.displayType === 'banner')
+            alert.push(
+                <Alert message={message} index={i} type={type} />
+            )
+        })
+        return alert;
+    }
     render() {
         const { classes, messages, loading:{isLoading, type} } = this.props;
         return (
             <React.Fragment>
-                {messages.messages.map((message, i) => (
-                    <Alert message={message} index={i} />
-                ))}
-                {messages.networkRequestError.length ? 
-                <Alert message={messages.networkRequestError[0]} error/>: null
-                }
+                {this.displayAlert(messages.messages, 'message')}
+                {this.displayAlert(messages.networkRequestError, 'networkError')}
                 <LoadingIndicator visible={isLoading && (type === 'userLogin' || type === 'getUserInfo' || type === 'setUserInfo') } />
                 <main className={classes.layout}>
                     <div className={classes.container}>

@@ -29,11 +29,12 @@ componentWillReceiveProps(props){
     const { messages } = this.props;
     if(messages.networkRequestError.length > 0) {
       return messages.networkRequestError.map((msg)=>{
-        if(msg.type !== 'banner'){
+        if(!msg.displayType || msg.displayType === 'snackbar'){
+          
           let options = {
             variant: msg.variant, 
             anchorOrigin: msg.anchorOrigin ? msg.anchorOrigin :{vertical: 'top',horizontal: 'center'},
-            autoHideDuration: 5000
+            autoHideDuration: 15000
           }
           this.props.enqueueSnackbar( msg.message, options);
         }

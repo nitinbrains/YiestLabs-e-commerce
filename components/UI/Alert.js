@@ -9,7 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import ErrorIcon from "@material-ui/icons/Error";
-// import DoneIcon from "@material-ui/icons/Done";
+import DoneIcon from "@material-ui/icons/Done";
 // import warning from 'warning.png'
 import { messageActions } from '../../redux/actions/messageActions';
 /* Usage
@@ -53,34 +53,46 @@ class Alert extends React.Component {
         }
     }
 
-    handleClose = () => {
-        this.setState({ visible: false });
+    handleClose = (index, category) => {
+        // this.setState({ visible: false });
+        if(category === 'message'){
+            this.props.hideMessage({index})
+        } else {
+            this.props.hideNetworkError({index})
+        }
     };
 
     render() {
-        const { classes, children, error } = this.props;
-        if(error){
+        const { classes, children, error, message, category } = this.props;
+        let _classname = classes.error;
+        let _icon = <ErrorIcon />
+        if(message.variant === 'success'){
+            _classname = classes.success;
+            _icon = <DoneIcon />
+        }else if(message.variant === 'info'){
+            _classname = classes.info;
+            _icon = <ErrorIcon />
+        }
+        if(true){
             return (
                 <React.Fragment>
                     <div
-                        className={classes.success}
-                        // className={classes.error}
+                        className={_classname}
                         style={{
                             backgroundColor: this.state.color,
                             borderColor: this.setState.borderColor
                         }}
                     >
                         <div className="alert-message">
-                            {/* <ErrorIcon /> */}
-                            {/* <DoneIcon /> */}
-                            <span>{this.props.message.message}</span>
+                            {_icon}
+                            <span>{message.message}</span>
                         </div>
                         <div className={classes.close}>
                             <IconButton
                                 color="inherit"
                                 size="small"
                                 aria-label="Menu"
-                                onClick={() => this.props.hideMessage(this.props.index)}
+                                onClick={() => this.handleClose(message.index, category)}
                             >
                                 <CloseIcon />
                             </IconButton>
@@ -145,8 +157,8 @@ const styles = theme => ({
         borderRadius: 3,
         width: "100%",
         position: "relative",
-        background: "#f9dde0",
-        color: "#b76a6d",
+        background: "rgba(0, 128, 0, 0.11)",
+        color: "green",
         border: "1px solid",
         display:"flex",
         justifyContent: 'space-between',

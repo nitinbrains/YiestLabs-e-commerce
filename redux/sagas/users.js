@@ -17,37 +17,34 @@ export function * loginUser (action) {
     try {
         const { res, err } = yield call(api.login, username, password);
         if(err) throw err;
-        console.log('resresresres', res, res.error && res.error.code === 0, res.userID );
         let {userID} = res;
         yield put(responseSuccess());
-        console.log('1111111111111', userID);
         if(res.error && res.error.code === 0 ){
-            
-            yield put(messageActions.showNetworkError({ 
+            yield put(messageActions.showNetworkError({
+                displayType: 'banner',
                 title: 'Yeastman', 
-                message: res.error.message, variant:'error', 
-                anchorOrigin:{vertical: 'top', horizontal: 'center'}, 
-                disableAutoHide: true 
+                message: res.error.message, 
+                variant:'error',
             }));        
-        } else if (!_isEmpty(res.userID)){
-            console.log('userID',userID, userActions);
-            
+        } else if (!_isEmpty(userID)){
+            userID = Number(userID)
             yield put(userActions.getUserInfo({userID}));
             yield put(messageActions.showNetworkError({
+                displayType:'banner',
                 title: 'Authorization',
                 message: 'You have successfully logged in!',
                 variant:'success',
-                anchorOrigin:{vertical: 'top', horizontal: 'center'}
             }));
         }else{
-            console.log('==================');
-            
+            yield put(messageActions.showNetworkError({
+                displayType: 'banner',
+                title: 'Error', 
+                message: "Something went wrong", 
+                variant:'error',
+            })); 
         }
         
-
     } catch (err) {
-        console.log('ssssssssssswwwwwwwwwww', err);
-        
         if(error.status){
             // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
@@ -65,8 +62,6 @@ export function * loginUser (action) {
 };
 
 export function * getUserInfo(action) {
-    console.log('getUserInfo',action);
-    
     const { responseSuccess, responseFailure,  data: { userID }} = action;
     try {
         const { res: userInfo, error } = yield call(api.getUserInfo, { userID });
@@ -95,32 +90,30 @@ export function * getUserInfo(action) {
 export function * setUserInfo(action) {
     const { responseSuccess, responseFailure, data: { userInfo } } = action;
     try {
-        console.log('setUserInfo', action);
-        
         const { subsidiary, shipmethod, shipping: { countryid } } = userInfo;
         userInfo.shipMethods = WLHelper.shipMethodGroup(subsidiary, shipmethod, countryid);
         userInfo.subsidiaryOptions = loadSubsidiaryOptions(userInfo);
-        const creditCard = getDefaultOrFirstCreditCard(userInfo);
+        yield put(responseSuccess(userInfo));
+        const creditCard = yield getDefaultOrFirstCreditCard(userInfo);
         if(creditCard) {
             userInfo.selectedCard = creditCard;
         }
 
-        yield put(responseSuccess(userInfo));
 
-        } catch (err) {
+        } catch (error) {
             if(error.status){
                 // show network error is any regaring with api status
                 yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
             } else {
-                if(err.code == 0 ){
+                if(error.code == 0 ){
                     // Yeastman error when we have error with code == 0
                     yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
-                } else if(err.code == -1){
+                } else if(error.code == -1){
                     // Other error when we have error with code == -1
                     yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
                 }
             }
-        yield put(responseFailure(err));
+        yield put(responseFailure(error));
     }
 }
 
