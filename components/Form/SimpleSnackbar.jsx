@@ -28,13 +28,15 @@ componentWillReceiveProps(props){
   handleNotification = () => {
     const { messages } = this.props;
     if(messages.networkRequestError.length > 0) {
-      return messages.networkRequestError.map((data)=>{
-        let options = {
-          variant: data.variant, 
-          anchorOrigin: data.anchorOrigin ? data.anchorOrigin :{vertical: 'top',horizontal: 'center'},
-          autoHideDuration: 5000
+      return messages.networkRequestError.map((msg)=>{
+        if(msg.type !== 'banner'){
+          let options = {
+            variant: msg.variant, 
+            anchorOrigin: msg.anchorOrigin ? msg.anchorOrigin :{vertical: 'top',horizontal: 'center'},
+            autoHideDuration: 5000
+          }
+          this.props.enqueueSnackbar( msg.message, options);
         }
-        this.props.enqueueSnackbar( data.message, options);
       })
     }
   }

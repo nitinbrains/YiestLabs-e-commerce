@@ -53,3 +53,11 @@ $color-white: #fff;
 	padding: 5px !important;
 	font-size: 12px !important;
 }
+
+.alert-message{
+	display: flex;
+	align-items: center;
+	span{
+		margin-left: 10px;
+	}
+}

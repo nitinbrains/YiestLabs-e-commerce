@@ -8,7 +8,9 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-
+import ErrorIcon from "@material-ui/icons/Error";
+// import DoneIcon from "@material-ui/icons/Done";
+// import warning from 'warning.png'
 import { messageActions } from '../../redux/actions/messageActions';
 /* Usage
 
@@ -61,15 +63,18 @@ class Alert extends React.Component {
             return (
                 <React.Fragment>
                     <div
-                        className={classes.error}
+                        className={classes.success}
+                        // className={classes.error}
                         style={{
                             backgroundColor: this.state.color,
                             borderColor: this.setState.borderColor
                         }}
                     >
-                        <Typography variant="title" gutterBottom>
-                            {this.props.message.message}
-                        </Typography>
+                        <div className="alert-message">
+                            {/* <ErrorIcon /> */}
+                            {/* <DoneIcon /> */}
+                            <span>{this.props.message.message}</span>
+                        </div>
                         <div className={classes.close}>
                             <IconButton
                                 color="inherit"
@@ -121,14 +126,30 @@ const styles = theme => ({
         width: "100%",
         position: "relative"
     },
-    close: { position: "absolute", right: 0, top: 0 },
+    close: {  },
     error: {
         marginBottom: 15,
         padding: 10,
-        borderWidth: 5,
         borderRadius: 3,
         width: "100%",
-        position: "relative"
+        position: "relative",
+        background: "#f9dde0",
+        color: "#b76a6d",
+        border: "1px solid",
+        display:"flex",
+        justifyContent: 'space-between',
+    },
+    success: {
+        marginBottom: 15,
+        padding: 10,
+        borderRadius: 3,
+        width: "100%",
+        position: "relative",
+        background: "#f9dde0",
+        color: "#b76a6d",
+        border: "1px solid",
+        display:"flex",
+        justifyContent: 'space-between',
     }
 });
 
