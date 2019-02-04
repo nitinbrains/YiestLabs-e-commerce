@@ -81,7 +81,7 @@ describe('testing of users sagas', () => {
         }).put(
             action.responseSuccess({
                 ...user,
-                selectedCard: user.cards[0]
+                card: user.otherCards[0]
             })
         ).run();
     });
@@ -105,7 +105,7 @@ describe('testing of users sagas', () => {
         }).put(
             action.responseSuccess({
                 cards: [
-                    ...user.cards,
+                    ...user.otherCards,
                     { ...newCard, id: 1 }
                 ],
                 creditCard: { ...newCard, id: 1 }

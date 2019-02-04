@@ -93,7 +93,7 @@ class Store extends Component {
                 id: 1743261,
                 zip: "94518"
             },
-            selectedCard: {
+            card: {
                 ccexpire: "2022-12-01T08:00:00.000Z",
                 ccname: "Joe Discovery",
                 ccnumber: "************1117",
@@ -101,6 +101,16 @@ class Store extends Component {
                 id: 38421,
                 type: "3"
             },
+            otherCards: [
+                {
+                    ccexpire: "2022-12-01T08:00:00.000Z",
+                    ccname: "Joe Discovery",
+                    ccnumber: "************1117",
+                    default: true,
+                    id: 38421,
+                    type: "3"
+                }
+            ],
             shipmethod: "2789",
             subsidiary: 2,
             terms: "10",

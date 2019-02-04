@@ -7,17 +7,14 @@ const initialState = {
     id: null,
     username: '',
     password: '',
-    cards: [],
     cardsToRemove: [],
     category: "",
     companyname: "",
     connectedaccounts: [],
     currency: "",
     email: "",
-    otherAddresses: [],
     phone: "",
-    shipping: [],
-    selectedShipping: {
+    shipping: {
         address1: "",
         address2: "",
         address3: "",
@@ -27,8 +24,7 @@ const initialState = {
         countryid: "",
         zip: ""
     },
-    billing: [],
-    selectedBilling: {
+    billing: {
         address1: "",
         address2: "",
         address3: "",
@@ -38,12 +34,13 @@ const initialState = {
         countryid: "",
         zip: "",
     },
+    otherAddresses: [],
     shipmethod: "",
     shipzip: "",
     subsidiary: "",
     terms: "",
     vat: "",
-    selectedCard: {
+    card: {
         id: '',
         ccnumber: '',
         ccname: '',
@@ -51,6 +48,7 @@ const initialState = {
         type: '',
         default: false
     },
+    otherCards: [],
     shipMethods: [],
     isLoading: false,
     orderHistory: [],
@@ -94,11 +92,7 @@ export default createReducer(initialState, {
         isUnsaved: false
     }),
     [userTypes.SET_CREDIT_CARD_SUCCESS]: (state, { data: { creditCard} }) => ({
-        selectedCard: creditCard
-    }),
-    [userTypes.ADD_CREDIT_CARD_SUCCESS]: (state, { data: { cards, creditCard} }) => ({
-        selectedCard: creditCard,
-        cards
+        card: creditCard
     }),
     [userTypes.SET_SHIP_ADDRESS_SUCCESS]: (state, { data }) => ({
         shipping: data

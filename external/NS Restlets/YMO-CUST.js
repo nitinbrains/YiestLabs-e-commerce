@@ -59,12 +59,12 @@ function(record, log, search, email)
                 countryid
             }
             otherAddresses = {...}
-            cards = {
+            otherCards = [{
                 id
                 ccnumber
                 ccexpire
                 default
-            }
+            }]
             connectedaccounts[{
                 internalid
                 name
@@ -242,7 +242,8 @@ function(record, log, search, email)
 
                 //Credit Cards
                 message.cardsToRemove = [];
-                message.cards = [];
+                message.otherCards = [];
+                message.card = {};
                 for (var j = customerRecord.getLineCount({sublistId: 'creditcards'}) - 1; j >= 0; j--)
                 {
                     var card = {};
@@ -262,12 +263,13 @@ function(record, log, search, email)
                     if(customerRecord.getSublistValue({sublistId: 'creditcards', fieldId: 'ccdefault', line: j}))
                     {
                         card.default = true;
-                        message.cards.splice(0, 0, card);
+                        message.otherCards.splice(0, 0, card);
+                        message.card = card;
                     }
                     else
                     {
                         card.default = false;
-                        message.cards.push(card);
+                        message.otherCards.push(card);
                     }
                 }
 

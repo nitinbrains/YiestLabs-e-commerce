@@ -537,7 +537,7 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                         if (message.creditID) {
                             salesOrderRecord.setValue({ fieldId: "customform", value: 102 });
                             salesOrderRecord.setValue({ fieldId: "entity", value: message.user.id });
-                            salesOrderRecord.setValue({ fieldId: "creditcard", value: message.user.selectedCard.id });
+                            salesOrderRecord.setValue({ fieldId: "creditcard", value: message.user.card.id });
                         } else {
                             salesOrderRecord.setValue({ fieldId: "customform", value: 101 });
                             salesOrderRecord.setValue({ fieldId: "entity", value: message.user.id });
