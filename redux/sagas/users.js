@@ -8,7 +8,7 @@ import * as api from '../../services/users.js';
 import {
     loadSubsidiaryOptions,
     getDefaultOrFirstCreditCard,
-} from './UserUtils.js';
+} from '../../lib/UserUtils.js';
 
 import WLHelper from '../../lib/WLHelper';
 

@@ -176,8 +176,7 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                                     continue;
                                 }
 
-                                var checkProduction = true,
-                                    isPurepitch = true;
+                                var checkProduction = true, isPurepitch = true;
                                 var packMethods = itemRecord.getText({ fieldId: "custitem_wl_packaging_methods" });
                                 if (packMethods == "Custom Pour") {
                                     isPurepitch = false;
