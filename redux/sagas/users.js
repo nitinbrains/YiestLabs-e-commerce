@@ -51,10 +51,10 @@ export function * loginUser (action) {
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(err));
@@ -77,10 +77,10 @@ export function * getUserInfo(action) {
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error))
@@ -107,10 +107,10 @@ export function * setUserInfo(action) {
             } else {
                 if(error.code == 0 ){
                     // Yeastman error when we have error with code == 0
-                    yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                    yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
                 } else if(error.code == -1){
                     // Other error when we have error with code == -1
-                    yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+                    yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
                 }
             }
         yield put(responseFailure(error));
@@ -140,10 +140,10 @@ export function * updateUserInfo(action) {
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
@@ -172,10 +172,10 @@ export function * getOrderHistory(action) {
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
@@ -246,10 +246,10 @@ export function * setCreditCard(action) {
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
@@ -294,10 +294,10 @@ export function * addAddress(action) {
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
