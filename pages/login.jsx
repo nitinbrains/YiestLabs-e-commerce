@@ -22,7 +22,7 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
 // custom
-import Alert from "../components/UI/Alert";
+import Banner from "../components/UI/Banner";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
 import { userActions } from "../redux/actions/userActions";
 import { messageActions } from '../redux/actions/messageActions';
@@ -61,22 +61,11 @@ class Login extends Component {
             this.props.userLogin(values);            
         }
     }
-    displayAlert = (messageList=[], type) => {
-        let alert = []
-        messageList.map((message, i) => {
-            if(message.displayType === 'banner')
-            alert.push(
-                <Alert message={message} index={i} type={type} />
-            )
-        })
-        return alert;
-    }
     render() {
         const { classes, messages, loading:{isLoading, type} } = this.props;
         return (
             <React.Fragment>
-                {this.displayAlert(messages.messages, 'message')}
-                {this.displayAlert(messages.networkRequestError, 'networkError')}
+                <Banner />
                 <LoadingIndicator visible={isLoading && (type === 'userLogin' || type === 'getUserInfo' || type === 'setUserInfo') } />
                 <main className={classes.layout}>
                     <div className={classes.container}>

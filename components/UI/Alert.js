@@ -69,56 +69,32 @@ class Alert extends React.Component {
         if(message.variant === 'success'){
             _classname = classes.success;
             _icon = <DoneIcon />
+            setTimeout(()=>{
+                this.handleClose(message.index, category)
+            },30000)
         }else if(message.variant === 'info'){
             _classname = classes.info;
             _icon = <ErrorIcon />
         }
-        if(true){
-            return (
-                <React.Fragment>
-                    <div
-                        className={_classname}
-                        style={{
-                            backgroundColor: this.state.color,
-                            borderColor: this.setState.borderColor
-                        }}
-                    >
-                        <div className="alert-message">
-                            {_icon}
-                            <span>{message.message}</span>
-                        </div>
-                        <div className={classes.close}>
-                            <IconButton
-                                color="inherit"
-                                size="small"
-                                aria-label="Menu"
-                                onClick={() => this.handleClose(message.index, category)}
-                            >
-                                <CloseIcon />
-                            </IconButton>
-                        </div>
-                    </div>
-                </React.Fragment>
-            );
-        }
         return (
             <React.Fragment>
                 <div
-                    className={classes.alert}
+                    className={_classname}
                     style={{
                         backgroundColor: this.state.color,
                         borderColor: this.setState.borderColor
                     }}
                 >
-                    <Typography variant="title" gutterBottom>
-                        {this.props.message.message}
-                    </Typography>
+                    <div className="alert-message">
+                        {_icon}
+                        <span>{message.message}</span>
+                    </div>
                     <div className={classes.close}>
                         <IconButton
                             color="inherit"
                             size="small"
                             aria-label="Menu"
-                            onClick={() => this.props.hideMessage(this.props.index)}
+                            onClick={() => this.handleClose(message.index, category)}
                         >
                             <CloseIcon />
                         </IconButton>
@@ -159,6 +135,18 @@ const styles = theme => ({
         position: "relative",
         background: "rgba(0, 128, 0, 0.11)",
         color: "green",
+        border: "1px solid",
+        display:"flex",
+        justifyContent: 'space-between',
+    },
+    info: {
+        marginBottom: 15,
+        padding: 10,
+        borderRadius: 3,
+        width: "100%",
+        position: "relative",
+        background: "rgba(0, 0, 255, 0.13)",
+        color: "rgba(0, 0, 255, 0.45)",
         border: "1px solid",
         display:"flex",
         justifyContent: 'space-between',
