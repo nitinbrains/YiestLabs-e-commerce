@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { compose } from "redux";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 
 import PropTypes from "prop-types";
@@ -41,6 +43,8 @@ import HomebrewCard from "../components/Store/Homebrew/HomebrewCard";
 import FormButton from "../components/Form/FormButton";
 import AddHomebrewContainer from "../components/Store/Homebrew/AddHomebrewContainer";
 import SearchBarItems from "../components/NavBar/SearchBarItems";
+import { userActions } from "../redux/actions/userActions";
+import { messageActions } from '../redux/actions/messageActions';
 
 import withInventory from "../hocs/inventory";
 
@@ -53,72 +57,11 @@ class Store extends Component {
     }
 
     componentWillMount() {
-        var userInfo = {
-            billing: {
-                address1: "123 My Way",
-                address2: "",
-                address3: "",
-                addressee: "Home",
-                attn: "",
-                city: "Concord",
-                countryid: "US",
-                id: 1743060,
-                zip: "94518"
-            },
-            cards: [{ ccexpire: "2022-12-01T08:00:00.000Z", ccname: "Joe Discovery", ccnumber: "************1117", default: true, id: 38421, type: "3" }],
-            cardsToRemove: [],
-            category: "2",
-            companyname: "XAbove It All YM TEST",
-            connectedaccounts: [
-                { internalid: 43148, subsidiary: "White Labs Inc", subsidiaryid: "2" },
-                { internalid: 863039, subsidiary: "White Labs Hong Kong", subsidiaryid: "5" },
-                { internalid: 1184976, subsidiary: "White Labs Copenhagen ApS", subsidiaryid: "7" }
-            ],
-            currency: "1",
-            email: "dkonecny@whitelabs.com",
-            get: true,
-            id: 43148,
-            otherAddresses: [
-                { address1: "One way", address2: "", address3: "", addressee: "", attn: "Attn", city: "City", countryid: "US", defaultBill: false, defaultShip: true, id: 1743261, zip: "94518" }
-            ],
-            phone: "7142995620",
-            shipping: {
-                address1: "One way",
-                address2: "",
-                address3: "",
-                addressee: "",
-                attn: "Attn",
-                city: "City",
-                countryid: "US",
-                id: 1743261,
-                zip: "94518"
-            },
-            card: {
-                ccexpire: "2022-12-01T08:00:00.000Z",
-                ccname: "Joe Discovery",
-                ccnumber: "************1117",
-                default: true,
-                id: 38421,
-                type: "3"
-            },
-            otherCards: [
-                {
-                    ccexpire: "2022-12-01T08:00:00.000Z",
-                    ccname: "Joe Discovery",
-                    ccnumber: "************1117",
-                    default: true,
-                    id: 38421,
-                    type: "3"
-                }
-            ],
-            shipmethod: "2789",
-            subsidiary: 2,
-            terms: "10",
-            vat: "",
-            version: "2.3.7"
-        };
-
-        this.props.setUserInfo({ userInfo });
+        let isUserLoggedIn = sessionStorage.getItem('isLoggedin')
+        let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+        if(isUserLoggedIn && userInfo){
+            this.props.setUserInfo({ userInfo });
+        }
     }
 
     handleClickItem = item => {
@@ -128,7 +71,6 @@ class Store extends Component {
     handleLeaveItem = () => {
         this.setState({ openDialog: false, item: null });
     };
-
     getCard = (item, i) => {
         if (this.props.store.isHomebrew) {
             return <HomebrewCard key={i} item={item} />;
@@ -201,8 +143,9 @@ class Store extends Component {
     };
 
     render() {
-        const { classes, theme } = this.props;
+        const { classes, theme, message, messages } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
+        
         // isHomebrew = true
         return (
             <NavBarUserSearchDrawerLayout>
@@ -274,7 +217,22 @@ Store.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-export default compose(
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+        messages: state.messages,
+        loading: state.loading
+    };
+};
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators({...userActions, ...messageActions}, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(compose(
     withStyles(styles, { withTheme: true }),
     withInventory
-)(Store);
+)(Store));
+

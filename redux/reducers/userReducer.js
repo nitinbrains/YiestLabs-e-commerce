@@ -113,5 +113,8 @@ export default createReducer(initialState, {
         isLoading: false,
         orderHistory
     }),
-    [userTypes.USER_LOGOUT_ATTEMPT]: () => null,    // this will return initial state
+    [userTypes.USER_LOGOUT_ATTEMPT]: () => {
+        sessionStorage.clear();
+        return null
+    },    // this will return initial state
 });

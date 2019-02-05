@@ -16,28 +16,46 @@ export function* loginUser(action) {
         data: { username, password }
     } = action;
     try {
-        const { res: userID, error } = yield call(api.login, username, password);
-        if (error) throw error;
-
-        yield put(userActions.getUserInfo({ userID }));
-
-        yield put(
-            messageActions.displayMessage({
-                title: "Authorization",
-                message: "You have successfully logged in!",
-                variant: "success"
-            })
-        );
-
+        const { res, err } = yield call(api.login, username, password);
+        if(err) throw err;
+        let {userID} = res;
         yield put(responseSuccess());
-    } catch (error) {
-        if (error.status) {
-            yield put(messageActions.showNetworkError({ title: "Error", message: error.message, variant: "error" }));
+        if(res.error && res.error.code === 0 ){
+            yield put(messageActions.showNetworkError({
+                displayType: 'banner',
+                title: 'Yeastman', 
+                message: res.error.message, 
+                variant:'error',
+            }));        
+        } else if (!_isEmpty(userID)){
+            userID = Number(userID)
+            yield put(userActions.getUserInfo({userID}));
+            yield put(messageActions.showNetworkError({
+                displayType:'banner',
+                title: 'Authorization',
+                message: 'You have successfully logged in!',
+                variant:'success',
+            }));
+        }else{
+            yield put(messageActions.showNetworkError({
+                displayType: 'banner',
+                title: 'Error', 
+                message: "Something went wrong", 
+                variant:'error',
+            })); 
+        }
+        
+    } catch (err) {
+        if(error.status){
+            // show network error is any regaring with api status
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            if (error.code == 0) {
-                yield put(messageActions.showNetworkError({ title: "Yeastman", error: error.message, variant: "error" }));
-            } else if (error.code == -1) {
-                yield put(messageActions.showNetworkError({ title: "Error", error: error.message, variant: "error" }));
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
@@ -52,15 +70,23 @@ export function* getUserInfo(action) {
     } = action;
     try {
         const { res: userInfo, error } = yield call(api.getUserInfo, { userID });
-        if (error) throw error;
-        yield put(userActions.setUserInfo({ userInfo }));
+        if(error) throw error;
+        sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
+        sessionStorage.setItem('isLoggedin', true)
+        yield put(userActions.setUserInfo({ userInfo}));
         yield put(responseSuccess());
     } catch (error) {
-        if (error.status) {
-            yield put(messageActions.showNetworkError({ title: "Error", message: error.message, variant: "error" }));
+        if(error.status){
+            // show network error is any regaring with api status
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: "Error", error: error.message, variant: "error" }));
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
@@ -73,18 +99,29 @@ export function* setUserInfo(action) {
         data: { userInfo }
     } = action;
     try {
-        const {subsidiary, shipmethod, shipping: { countryid }} = userInfo;
+        const { subsidiary, shipmethod, shipping: { countryid } } = userInfo;
         userInfo.shipMethods = WLHelper.shipMethodGroup(subsidiary, shipmethod, countryid);
         userInfo.subsidiaryOptions = loadSubsidiaryOptions(userInfo);
-
         yield put(responseSuccess(userInfo));
-    } catch (error) {
-        if (error.status) {
-            yield put(messageActions.showNetworkError({ title: "Error", message: error.message, variant: "error" }));
-        } else {
-            yield put(messageActions.showNetworkError({ title: "Error", error: error.message, variant: "error" }));
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));
+        const creditCard = yield getDefaultOrFirstCreditCard(userInfo);
+        if(creditCard) {
+            userInfo.selectedCard = creditCard;
         }
+
+
+        } catch (error) {
+            if(error.status){
+                // show network error is any regaring with api status
+                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            } else {
+                if(error.code == 0 ){
+                    // Yeastman error when we have error with code == 0
+                    yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+                } else if(error.code == -1){
+                    // Other error when we have error with code == -1
+                    yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+                }
+            }
         yield put(responseFailure(error));
     }
 }
@@ -105,17 +142,22 @@ export function* updateUserInfo(action) {
 
         if (error) throw error;
 
-        yield put(
-            userActions.getUserInfo({
-                userID: user.id
-            })
-        );
-    } catch (error) {
-        if (error.status) {
-            yield put(messageActions.showNetworkError({ title: "Error", message: error.message, variant: "error" }));
+        yield put(userActions.getUserInfo({
+            userID: user.id
+        }))
+
+    } catch(error) {
+        if(error.status){
+            // show network error is any regaring with api status
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: "Error", error: error.message, variant: "error" }));
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
@@ -138,12 +180,18 @@ export function* getOrderHistory(action) {
         if (error) throw error;
 
         yield put(responseSuccess({ orderHistory }));
-    } catch (error) {
-        if (error.status) {
-            yield put(messageActions.showNetworkError({ title: "Error", message: error.message, variant: "error" }));
+    } catch(error) {
+        if(error.status){
+            // show network error is any regaring with api status
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: "Error", error: error.message, variant: "error" }));
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
@@ -211,12 +259,18 @@ export function* setCreditCard(action) {
     } = action;
     try {
         yield put(responseSuccess({ creditCard }));
-    } catch (error) {
-        if (error.status) {
-            yield put(messageActions.showNetworkError({ title: "Error", message: error.message, variant: "error" }));
+    } catch(error) {
+        if(error.status){
+            // show network error is any regaring with api status
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: "Error", error: error.message, variant: "error" }));
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
@@ -257,14 +311,21 @@ export function* addAddress(action) {
         }
         let request = {};
         request.addAddress = true;
-        request.address = address;
-        yield put(userActions.updateUserInfo({ request }));
-    } catch (error) {
-        if (error.status) {
-            yield put(messageActions.showNetworkError({ title: "Error", message: error.message, variant: "error" }));
+        request.address = address
+        yield put(userActions.updateUserInfo({request}))
+    
+    } catch(error) {
+        if(error.status){
+            // show network error is any regaring with api status
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: "Error", error: error.message, variant: "error" }));
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }

@@ -132,11 +132,15 @@ app.prepare()
  				{
  					if(result.CustomerInformation.NetSuiteID[0].$.UserType == "Staff" || result.CustomerInformation.NetSuiteID[0]._ == '43148')
  					{
- 						return res.send(result.CustomerInformation.NetSuiteID[0]._);
+						 console.log('sssssssssssssssss');
+						 
+ 						return res.send({userID: result.CustomerInformation.NetSuiteID[0]._});
  					}
  					else
  					{
- 						return res.send(result.CustomerInformation.NetSuiteID[0]._);
+						 console.log('3333333333333333333');
+						 
+ 						return res.send({userID: result.CustomerInformation.NetSuiteID[0]._});
  					}
  				}
  				else
