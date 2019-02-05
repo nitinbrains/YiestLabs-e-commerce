@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import axios from 'axios';
+import isEmpty from 'lodash/isEmpty';
+
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -16,7 +19,6 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -27,11 +29,12 @@ import LoadingIndicator from '../../UI/LoadingIndicator';
 import { cartActions } from "../../../redux/actions/cartActions";
 
 class EnzymesNutrientsDialog extends Component {
+    
     constructor(props) {
         super(props);
         this.state = {
             quantity: "1",
-            availability:false,
+            availability: {},
             isLoading: false,
         };
 
@@ -78,16 +81,22 @@ class EnzymesNutrientsDialog extends Component {
         }
     };
 
-    checkAvalibality = () => {
-        this.setState({
-            isLoading: true,
+    checkAvailability = () => {
+
+        const itemID = this.item.volID[0];
+
+        this.setState({isLoading: true});
+        axios.post('/get-item-availability', {itemID})
+        .then(({ data: { availability, error}}) => {
+
+            if(error) throw error;
+            this.setState({availability});
         })
-        setTimeout(() => {
-            this.setState({
-                isLoading: false,
-                availability: true
-            })
-        }, 5000);
+        .catch(error => {
+            // TO-DO: Display error if code == 0
+            console.log('error', error);
+        })
+        .finally(() => this.setState({isLoading: false}));
     }
 
     changeQuantity = event => {
@@ -103,7 +112,7 @@ class EnzymesNutrientsDialog extends Component {
 
         return (
             <React.Fragment>
-                <LoadingIndicator visible={this.state.isLoading} label={"Getting Avalibality"} />                
+                <LoadingIndicator visible={this.state.isLoading} label={"Getting Availability"} />                
                 <DialogContent>
                 <div className={classes.close}>
                     <IconButton
@@ -148,9 +157,7 @@ class EnzymesNutrientsDialog extends Component {
                   
                     <Grid
                         item
-                        xs
                         container
-                        spacing={24}
                         style={{ marginTop: 5 }}
                         direction={"row"}
                     >
@@ -162,34 +169,36 @@ class EnzymesNutrientsDialog extends Component {
                             direction={"row"}
                             justify="flex-start"
                         >
-                            {this.state.availability ?
-                                <Grid item style={{margin: '12px 0px'}} >
-                                    <Typography> Availability : 25 </Typography>
+                            {!isEmpty(this.state.availability) ? 
+                                <Grid item style={{margin: '10px 0px'}} >
+                                    <Typography>San Diego: {this.state.availability[9]}</Typography>
+                                    <Typography>Asheville: {this.state.availability[11]}</Typography>
+                                    <Typography>Copenhagen: {this.state.availability[30]}</Typography>
+                                    <Typography>Hong Kong: {this.state.availability[31]}</Typography>
                                 </Grid> 
-                                :
-                                <Grid item />
-                            }
-                            <Grid
-                                item
-                                xs
-                                container
-                                spacing={24}
-                                direction={"row"}
-                                justify="flex-end"
-                            >
-                                <Grid item>
-                                    <div className={classes.buttons}>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={this.checkAvailability}
-                                            className={classes.button}
-                                        >
-                                            Get Availability
-                                        </Button>
-                                    </div>
+                            :
+                                <Grid
+                                    item
+                                    xs
+                                    container
+                                    spacing={24}
+                                    direction={"row"}
+                                    justify="flex-end"
+                                >
+                                    <Grid item>
+                                        <div className={classes.buttons}>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={this.checkAvailability}
+                                                className={classes.button}
+                                            >
+                                                Get Availability
+                                            </Button>
+                                        </div>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
+                            }
                         </Grid>
                     </Grid>
 

@@ -40,7 +40,7 @@ const initialState = {
     subsidiary: "",
     terms: "",
     vat: "",
-    selectedCard: {
+    card: {
         id: '',
         ccnumber: '',
         ccname: '',
@@ -114,15 +114,15 @@ describe('testing of user reducer',() => {
             type: userTypes.SET_CREDIT_CARD_SUCCESS,
             data: {
                 ...user,
-                selectedCard: user.cards[0]
+                card: user.otherCards[0]
             }
         })).toEqual({
             ...user,
-            selectedCard: user.cards[0]
+            card: user.otherCards[0]
         })
     });
 
-    it('add credit card success set new cards and selectedCard to current state', () => {
+    it('add credit card success set new cards and card to current state', () => {
         const today = new Date()
         today.setYear(today.getFullYear() + 1);
         const currentMonth = today.getMonth().toString();
@@ -137,18 +137,18 @@ describe('testing of user reducer',() => {
             type: userTypes.SET_CREDIT_CARD_SUCCESS,
             data: {
                 cards: [
-                    ...user.cards,
+                    ...user.otherCards,
                     card
                 ],
-                selectedCard: card
+                card: card
             }
         })).toEqual({
             ...user,
             cards: [
-                ...user.cards,
+                ...user.otherCards,
                 card
             ],
-            selectedCard: card
+            card: card
         })
     });
 

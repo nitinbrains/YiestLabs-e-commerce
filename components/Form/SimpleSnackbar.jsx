@@ -30,7 +30,9 @@ componentWillReceiveProps(props){
     if(messages.networkRequestError.length > 0) {
       return messages.networkRequestError.map((msg)=>{
         if(!msg.displayType || msg.displayType === 'snackbar'){
-          
+          if(msg.variant === 'error'){
+            console.error('Error: ', msg.message)
+          }
           let options = {
             variant: msg.variant, 
             anchorOrigin: msg.anchorOrigin ? msg.anchorOrigin :{vertical: 'top',horizontal: 'center'},

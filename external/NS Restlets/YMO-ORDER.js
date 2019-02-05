@@ -176,8 +176,7 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                                     continue;
                                 }
 
-                                var checkProduction = true,
-                                    isPurepitch = true;
+                                var checkProduction = true, isPurepitch = true;
                                 var packMethods = itemRecord.getText({ fieldId: "custitem_wl_packaging_methods" });
                                 if (packMethods == "Custom Pour") {
                                     isPurepitch = false;
@@ -538,7 +537,7 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                         if (message.creditID) {
                             salesOrderRecord.setValue({ fieldId: "customform", value: 102 });
                             salesOrderRecord.setValue({ fieldId: "entity", value: message.user.id });
-                            salesOrderRecord.setValue({ fieldId: "creditcard", value: message.user.selectedCard.id });
+                            salesOrderRecord.setValue({ fieldId: "creditcard", value: message.user.card.id });
                         } else {
                             salesOrderRecord.setValue({ fieldId: "customform", value: 101 });
                             salesOrderRecord.setValue({ fieldId: "entity", value: message.user.id });

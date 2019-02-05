@@ -48,6 +48,7 @@ import {
 // Inventory sagas
 import {
     getInventory,
+    getItemAvailability,
     searchItem,
     changeCategory,
     switchToHomebrew,
@@ -94,6 +95,7 @@ function * rootSaga () {
         takeLatest(userTypes.SET_DEFAULT_BILL_ADDRESS_ATTEMPT, setDefaultBillAddress),
         // INVENTORY
         takeEvery(inventoryTypes.GET_INVENTORY_ATTEMPT, getInventory),
+        takeEvery(inventoryTypes.GET_ITEM_AVAILABILITY_ATTEMPT, getItemAvailability),
         takeEvery(inventoryTypes.SEARCH_INVENTORY_ATTEMPT, searchItem),
         takeEvery(inventoryTypes.CHANGE_CATEGORY_ATTEMPT, changeCategory),
         takeEvery(inventoryTypes.SWITCH_TO_HOMEBREW_ATTEMPT, switchToHomebrew),

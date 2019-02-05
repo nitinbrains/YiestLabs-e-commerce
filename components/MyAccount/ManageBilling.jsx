@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -25,7 +26,9 @@ class ManageBilling extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            newAddress: false
+            newAddress: false,
+            boxHover: false,
+            confirmation: false
         };
     }
 
@@ -44,6 +47,31 @@ class ManageBilling extends Component {
     selectDefaultAddress = (address) => {
         this.props.setDefaultBillAddress({address})
     }
+
+    handleBoxHover = () => {
+        this.setState({ boxHover: !this.state.boxHover });
+    };
+
+    handleConfirmation = (address) => {
+        this.setState({
+            confirmation: true,
+            deleteAddress: address
+        });
+    };
+
+    handleNo = () => {
+        this.setState({
+            confirmation: false
+        });
+    };
+
+    handleYes = () => {
+        const address = this.state.deleteAddress;
+        this.props.deleteAddress({address});
+        this.setState({
+            confirmation: false
+        });
+    };
 
     render() {
         const { classes, user } = this.props;
@@ -68,8 +96,30 @@ class ManageBilling extends Component {
                                 sm={4}
                                 xs={12}
                             >
-                                <div className={classes.addressBoxSelected}>
-                                    <Grid item container xs spacing={8}>
+                            <div
+                                className={
+                                    this.props.user.billing.address1 ==
+                                    address.address1
+                                        ? classes.addressBoxSelected
+                                        : classes.addressBox
+                                }
+                                onMouseEnter={this.handleBoxHover}
+                                onMouseLeave={this.handleBoxHover}
+                            >
+                            <div className={classNames(
+                                classes.deleteIcon,
+                                !this.state.boxHover && classes.hide
+                            )}>
+                            <IconButton
+                                color="inherit"
+                                size="small"
+                                aria-label="Menu"
+                                onClick={(e)=> { this.handleConfirmation(address) }}
+                            >
+                                <CancelIcon />
+                            </IconButton>
+                            </div>
+                                    <Grid item container xs spacing={8} justify="center" alignItems="center">
                                         <Grid item>
                                             <Typography>{address.address1}</Typography>
                                         </Grid>
@@ -89,14 +139,29 @@ class ManageBilling extends Component {
                                             <Typography>{address.countryid}</Typography>
                                         </Grid>
                                     {this.props.user.billing.address1 !=
-                                        address.address1 && (
+                                        address.address1 && !this.props.checkout && (
                                         <Grid item>
                                             <Button
                                                 variant="contained"
                                                 color="primary"
-                                                onClick={(e)=> { this.selectDefaultAddress(address) }}                                                
+                                                onClick={(e)=> { this.selectDefaultAddress(address) }}
                                             >
-                                                Select Address
+                                                Set as Default
+                                            </Button>
+                                        </Grid>
+                                    )}
+                                    {this.props.checkout && (
+                                        <Grid item>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={() =>
+                                                    this.props.setBillAddress(
+                                                        i
+                                                    )
+                                                }
+                                            >
+                                                Select
                                             </Button>
                                         </Grid>
                                     )}
@@ -121,6 +186,24 @@ class ManageBilling extends Component {
                             </Grid>
                         )}
                     </Grid>
+                    <Dialog open={this.state.confirmation}>
+                        <DialogTitle id="alert-dialog-title">
+                            {"Are you sure you want to delete this address?"}
+                        </DialogTitle>
+                        <DialogContent />
+                        <DialogActions>
+                            <Button color="primary" onClick={this.handleNo}>
+                                No
+                            </Button>
+                            <Button
+                                color="primary"
+                                autoFocus
+                                onClick={this.handleYes}
+                            >
+                                Yes
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </DialogContent>
             </React.Fragment>
         );
@@ -129,16 +212,24 @@ class ManageBilling extends Component {
 
 const styles = theme => ({
     addressBox: {
+        position: "relative",
         border: "solid 1px",
         borderColor: "#CCCCCC",
-        padding: theme.spacing.unit * 2
+        padding: theme.spacing.unit * 2,
+        textAlign:'center'
     },
     addressBoxSelected: {
+        position: "relative",
         border: "solid 2px",
         borderColor: "#f28411",
-        padding: theme.spacing.unit * 2
+        padding: theme.spacing.unit * 2,
+        textAlign:'center'
     },
-    close: { position: "absolute", right: 0, top: 0 }
+    close: { position: "absolute", right: 0, top: 0 },
+    deleteIcon: { position: "absolute", right: -25, top: -25},
+    hide: {
+        display: "none"
+    },
 });
 
 ManageBilling.propTypes = {

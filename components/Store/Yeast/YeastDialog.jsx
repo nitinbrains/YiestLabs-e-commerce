@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import axios from 'axios';
+import isEmpty from 'lodash/isEmpty';
+
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -16,7 +19,6 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -25,6 +27,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 import LoadingIndicator from '../../UI/LoadingIndicator';
 import { cartActions } from "../../../redux/actions/cartActions";
+import { inventoryActions } from "../../../redux/actions/inventoryActions";
 
 const YeastElements = {
     "2": {
@@ -68,7 +71,6 @@ const YeastElements = {
     }
 }
 
-
 function getIcon(salesCategory) {
     try {
         return YeastElements[parseInt(salesCategory)].icon;
@@ -98,10 +100,10 @@ class YeastDialog extends Component {
                 { label: "1.5L", value: "1" },
                 { label: "2L", value: "2" }
             ],
-            pack: "",
+            pack: "0",
             packagingOptions: [],
-            packaging: "",
-            availability:false,
+            packaging: "pp",
+            availability:{},
             isLoading: false,
         };
 
@@ -255,133 +257,172 @@ class YeastDialog extends Component {
     };
 
     addToCart = () => {
-        try {
-            var packaging = this.state.packaging;
-            var pack = this.state.pack;
-            var quantity = this.state.quantity;
-            var item = this.item;
+        const packaging = this.state.packaging;
+        const pack = this.state.pack;
+        const quantity = this.state.quantity;
+        var item = this.item;
 
-            // Create cart item
-            var cartItem = {};
-            cartItem.Name = String(item.Name);
-            cartItem.salesCategory = parseInt(item.salesCategory);
-            cartItem.dispQuantity = parseInt(quantity);
-            cartItem.OrderDetailQty = parseFloat(quantity);
+        // Create cart item
+        var cartItem = {};
+        cartItem.Name = String(item.Name);
+        cartItem.salesCategory = parseInt(item.salesCategory);
+        cartItem.dispQuantity = parseInt(quantity);
+        cartItem.OrderDetailQty = parseFloat(quantity);
 
-            // PurePitch / 1L Nalgene bottle
-            if (packaging == "pp" || packaging == "nl") {
-                switch (pack) {
-                    // Nano
-                    case "0":
-                        cartItem.MerchandiseID = item.volID[0];
-                        cartItem.details = "Nano";
-                        break;
+        // PurePitch / 1L Nalgene bottle
+        if (packaging == "pp" || packaging == "nl") {
+            switch (pack) {
+                // Nano
+                case "0":
+                    cartItem.MerchandiseID = item.volID[0];
+                    cartItem.details = "Nano";
+                    break;
 
-                    // 1.5L
-                    case "1":
-                        cartItem.MerchandiseID = item.volID[1];
-                        cartItem.details = "1.5L";
-                        break;
+                // 1.5L
+                case "1":
+                    cartItem.MerchandiseID = item.volID[1];
+                    cartItem.details = "1.5L";
+                    break;
 
-                    // 2L
-                    case "2":
-                        cartItem.MerchandiseID = item.volID[2];
-                        cartItem.details = "2L";
-                        break;
-                    default:
-                        console.log(
-                            "cannot add to cart",
-                            item,
-                            packaging,
-                            pack,
-                            quantity
-                        );
-                        return;
-                }
+                // 2L
+                case "2":
+                    cartItem.MerchandiseID = item.volID[2];
+                    cartItem.details = "2L";
+                    break;
+                default:
+                    console.log("cannot add to cart", item, packaging, pack, quantity);
+                    return;
+            }
 
-                if (item.purePitch) {
-                    cartItem.details = "PurePitch® " + cartItem.details;
-                }
+            if (item.purePitch) {
+                cartItem.details = "PurePitch® " + cartItem.details;
+            }
 
-                cartItem.type = 1;
-            } else {
-                switch (packaging) {
-                    // Yeast
-                    case "0":
-                        cartItem.MerchandiseID = item.volID[0];
-                        cartItem.type = 3;
-                        cartItem.details = "Yeast";
-                        break;
+            cartItem.type = 1;
+        } else {
+            switch (packaging) {
+                // Yeast
+                case "0":
+                    cartItem.MerchandiseID = item.volID[0];
+                    cartItem.type = 3;
+                    cartItem.details = "Yeast";
+                    break;
 
-                    // Custom Pour
-                    case "3":
-                        cartItem.MerchandiseID = item.volID[3];
-                        cartItem.type = 5;
-                        cartItem.dispQuantity = 1;
-                        cartItem.size = parseFloat(quantity);
-                        cartItem.details = quantity + "L Custom Pour";
-                        cartItem.relatives = [];
-                        var multipliers = [0.5, 1.5, 2];
+                // Custom Pour
+                case "3":
+                    cartItem.MerchandiseID = item.volID[3];
+                    cartItem.type = 5;
+                    cartItem.dispQuantity = 1;
+                    cartItem.size = parseFloat(quantity);
+                    cartItem.details = quantity + "L Custom Pour";
+                    cartItem.relatives = [];
+                    var multipliers = [0.5, 1.5, 2];
 
-                        for (var i = 0; i < 3; i++) {
-                            if (item.volID[i]) {
-                                var relative = {};
-                                relative.id = parseInt(item.volID[i]);
-                                if (isNaN(relative.id)) {
-                                    throw {
-                                        message:
-                                            "Invalid VolID Index! in Relatives",
-                                        code: 0
-                                    };
-                                }
-                                relative.mult = multipliers[i];
-                                cartItem.relatives.push(relative);
+                    for (var i = 0; i < 3; i++) {
+                        if (item.volID[i]) {
+                            var relative = {};
+                            relative.id = parseInt(item.volID[i]);
+                            if (isNaN(relative.id)) {
+                                throw { message: "Invalid VolID Index! in Relatives", code: 0 };
                             }
+                            relative.mult = multipliers[i];
+                            cartItem.relatives.push(relative);
                         }
-                        break;
+                    }
+                    break;
 
-                    // Homebrew
-                    case "4":
-                        cartItem.MerchandiseID = item.volID[4];
-                        cartItem.type = 2;
-                        cartItem.details = "Homebrew packs";
-                        break;
+                // Homebrew
+                case "4":
+                    cartItem.MerchandiseID = item.volID[4];
+                    cartItem.type = 2;
+                    cartItem.details = "Homebrew packs";
+                    break;
 
-                    // Slant
-                    case "5":
-                        cartItem.MerchandiseID = item.volID[5];
-                        cartItem.type = 3;
-                        cartItem.details = "Slants";
-                        break;
+                // Slant
+                case "5":
+                    cartItem.MerchandiseID = item.volID[5];
+                    cartItem.type = 3;
+                    cartItem.details = "Slants";
+                    break;
 
-                    // 1L Nalgene Bottle
-                    case "6":
-                        cartItem.MerchandiseID = item.volID[6];
-                        cartItem.type = 1;
-                        cartItem.details = "1L Nalgene Bottle";
-                        break;
-                }
+                // 1L Nalgene Bottle
+                case "6":
+                    cartItem.MerchandiseID = item.volID[6];
+                    cartItem.type = 1;
+                    cartItem.details = "1L Nalgene Bottle";
+                    break;
             }
+        }
 
-            if (this.checkQuantity(cartItem)) {
-                this.props.addItem({ cartItem });
-                this.props.closeDialog();
-            }
-        } catch (error) {
-            console.log("could not add item to cart", error);
+        if (this.checkQuantity(cartItem)) {
+            this.props.addItem({ cartItem });
+            this.props.closeDialog();
         }
     };
 
-    checkAvalibality = () => {
-        this.setState({
-            isLoading: true,
+    checkAvailability = () => {
+
+        const packaging = this.state.packaging;
+        const pack = this.state.pack;
+        const item = this.item;
+        let itemID;
+
+        if (packaging == "pp" || packaging == "nl") {
+            switch (pack) {
+                // Nano
+                case "0":
+                    itemID = item.volID[0]
+                    break;
+
+                // 1.5L
+                case "1":
+                    itemID = item.volID[1];
+                    break;
+
+                // 2L
+                case "2":
+                    itemID = item.volID[2];
+                    break;
+
+                default:
+                    return;
+            }
+        } else {
+            switch (packaging) {
+                // Homebrew
+                case "4":
+                    itemID = item.volID[4];
+                    break;
+
+                // Slant
+                case "5":
+                    itemID = item.volID[5];
+                    break;
+
+                // 1L Nalgene Bottle
+                case "6":
+                    itemID = item.volID[6];
+                    break;
+
+                default: 
+                    return;
+                
+            }
+        }
+
+        this.setState({isLoading: true});
+        axios.post('/get-item-availability', {itemID})
+        .then(({ data: { availability, error}}) => {
+
+            if(error) throw error;
+            
+            this.setState({availability});
         })
-        setTimeout(() => {
-            this.setState({
-                isLoading: false,
-                availability: true
-            })
-        }, 5000);
+        .catch(error => {
+            // TO-DO: Display error if code == 0
+            console.log('error', error);
+        })
+        .finally(() => this.setState({isLoading: false}));
     }
 
     handleDialogClose() {
@@ -389,7 +430,10 @@ class YeastDialog extends Component {
     };
 
     setPack = event => {
-        this.setState({ pack: event.target.value });
+        this.setState({ 
+            pack: event.target.value,
+            availability: {}
+        });
     };
 
     setPackaging = event => {
@@ -400,15 +444,20 @@ class YeastDialog extends Component {
             pack = "0";
         }
 
-        this.setState({ packaging: event.target.value, pack: pack });
+        this.setState({ 
+            packaging: event.target.value, 
+            pack: pack,
+            availability: {}
+        });
     };
 
     changeQuantity = event => {
         this.setState({ quantity: event.target.value });
     };
 
-    render() {
-        const { classes, theme, item } = this.props;
+    render() 
+    {
+        const { classes, theme, item, inventory} = this.props;
 
         const spaceIndex = item.Name.indexOf(" ");
         const itemID = item.Name.substr(0, spaceIndex);
@@ -416,7 +465,7 @@ class YeastDialog extends Component {
 
         return (
             <React.Fragment>
-                <LoadingIndicator visible={this.state.isLoading} label={"Getting Avalibality"} />                
+                <LoadingIndicator visible={this.state.isLoading} label={"Getting Availability"} />                
                 <DialogContent>
                     <div className={classes.close}>
                         <IconButton
@@ -550,9 +599,7 @@ class YeastDialog extends Component {
                     
                     <Grid
                         item
-                        xs
                         container
-                        spacing={24}
                         style={{ marginTop: 5 }}
                         direction={"row"}
                     >
@@ -564,35 +611,36 @@ class YeastDialog extends Component {
                             direction={"row"}
                             justify="flex-start"
                         >
-                            {this.state.availability ?
+                            {!isEmpty(this.state.availability) ? 
                                 <Grid item style={{margin: '10px 0px'}} >
-                                    <Typography> Availability : 25 </Typography>
+                                    <Typography>San Diego: {this.state.availability[9]}</Typography>
+                                    <Typography>Asheville: {this.state.availability[11]}</Typography>
+                                    <Typography>Copenhagen: {this.state.availability[30]}</Typography>
+                                    <Typography>Hong Kong: {this.state.availability[31]}</Typography>
                                 </Grid> 
-                                :
-                                <Grid item />
-                            }
-                            
-                            <Grid
-                                item
-                                xs
-                                container
-                                spacing={24}
-                                direction={"row"}
-                                justify="flex-end"
-                            >
-                                <Grid item>
-                                    <div className={classes.buttons}>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={this.checkAvalibality}
-                                            className={classes.button}
-                                        >
-                                            Get Availability
-                                        </Button>
-                                    </div>
+                            :
+                                <Grid
+                                    item
+                                    xs
+                                    container
+                                    spacing={24}
+                                    direction={"row"}
+                                    justify="flex-end"
+                                >
+                                    <Grid item>
+                                        <div className={classes.buttons}>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={this.checkAvailability}
+                                                className={classes.button}
+                                            >
+                                                Get Availability
+                                            </Button>
+                                        </div>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
+                            }
                         </Grid>
                     </Grid>
                 
@@ -706,7 +754,6 @@ const styles = theme => ({
     },
     circle: {
         textAlign: "center",
-        position: "absolute",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -733,13 +780,12 @@ YeastDialog.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        user: state.user,
         inventory: state.inventory
     };
 };
 
 const mapDispatchToProps = dispatch =>
-    bindActionCreators(cartActions, dispatch);
+    bindActionCreators({ ...inventoryActions, ...cartActions}, dispatch);
 
 export default connect(
     mapStateToProps,

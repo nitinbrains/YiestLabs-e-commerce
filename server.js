@@ -288,8 +288,6 @@ app.prepare()
 		});
 	})
 
-	server.post('/change-password')
-
 	/***********************
 	* NetSuite Connections *
 	***********************/
@@ -323,7 +321,7 @@ app.prepare()
 			else
 			{
 				var message = NSReceiveMessage(response);
-				//CHECK VERSION WARNING HERE
+				
 				if(message.items.length > 0)
 				{
 					return res.send(message);
@@ -336,9 +334,59 @@ app.prepare()
 			}
 		})
 		.catch(error => {
-			return res.send({error: {message: "service unavailable", code: -1}});
+			res.send({error: { message: error, code: -1 }});
 		});
 	});
+
+
+	server.post('/get-item-availability', function(req, res, next) {
+		var itemID = req.body.itemID;
+
+		if(itemID) {
+
+			var body = NSSendMessage({itemID});
+			
+			//YMO-ITEM
+			fetch("https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=912&deploy=1", {
+				method: 'POST',
+				headers: {
+					'Authorization': NSAuth(912, "post"),
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				},
+				body
+			})
+			.then((response) => response.json())
+			.then(response => {
+				if(response.type == 'error.SuiteScriptError')
+				{
+					res.send({error: {message: response.message, code: -1}})
+				}
+				else if(response.error)
+				{
+					if(!(response.error.code == 'WS_CONCUR_SESSION_DISALLWD' || response.error.code == 'WS_REQUEST_BLOCKED' || response.error.code == -1))
+					{
+						console.log('server', 'get-item-availability', response, true);
+					}
+
+					res.send({error: { message: response.error.message, code: response.error.code}});
+				}
+				else
+				{
+					var message = NSReceiveMessage(response);
+					return res.send(message);
+				}
+			})
+			.catch(error => {
+				res.send({error: { message: error, code: -1 }});
+			});
+		}
+		else
+		{
+			res.send({error: { message: 'No item provided. Cannot get item availability', code: -1 }});
+		}
+
+	})
 
 	server.post('/get-user-info', function(req, res, next){
 
@@ -346,6 +394,8 @@ app.prepare()
 
 		if(userID)
 		{
+			var body = NSSendMessage({id: userID, get: true});
+
 			//YMO-CUST
 			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=913&deploy=1', {
 		  		method: 'POST',
@@ -354,7 +404,7 @@ app.prepare()
 					'Accept': 'application/json',
 		    		'Content-Type': 'application/json',
 		  		},
-		  		body: NSSendMessage({id: userID, get: true})
+		  		body
 			})
 			.then(response => response.json())
 			.then(response => {
@@ -388,14 +438,14 @@ app.prepare()
 				}
 			})
 			.catch(error => {
-				res.send({error: { message: 'could not get user info', code: -1 }});
+				res.send({error: { message: error, code: -1 }});
 			});
 		}
 		else
 		{
 			res.send({error: { message: 'User is not logged in, cannot retrieve User Info', code: -1 }});
 		}
-	})
+	});
 
 	server.post('/prepare-order', function(req, res, next){
 
@@ -444,8 +494,6 @@ app.prepare()
 				}
 			})
 			.catch(error => {
-				// TO-DO: Implement retry handler
-				console.log('error', error);
 				res.send({error: { message: error, code: -1 }});
 			});
 		}
@@ -502,8 +550,6 @@ app.prepare()
 				}
 			})
 			.catch(error => {
-				// TO-DO: Implement retry handler
-				console.log('error', error);
 				res.send({error: { message: error, code: -1 }});
 			});
 		}
@@ -541,7 +587,7 @@ app.prepare()
 				{
 					if(!(response.error.code == 'WS_CONCUR_SESSION_DISALLWD' || response.error.code == 'WS_REQUEST_BLOCKED' || response.error.code == -1))
 					{
-						console.log('server', 'change-cust-info', response, true);
+						console.log('server', 'update-user-info', response, true);
 					}
 
 					res.status(500).send({error: {message: response.error.message, code: response.error.code}});
@@ -554,9 +600,8 @@ app.prepare()
 				}
 			})
 			.catch(error => {
-				// TO-DO: Implement retry handler
-				console.log('error', err);
-				res.send({error: { message: err, code: -1 }});
+				res.send({error: { message: error, code: -1 }});
+
 			});
 		}
 		else
@@ -621,8 +666,6 @@ app.prepare()
 				}
 			})
 			.catch(error => {
-				// TO-DO: Implement retry handler
-				console.log('error', error);
 				res.send({error: { message: error, code: -1 }});
 			});
 		}
@@ -690,8 +733,6 @@ app.prepare()
 				}
 			})
 			.catch(error => {
-				// TO-DO: Implement retry handler
-				console.log('error', error);
 				res.send({error: { message: error, code: -1 }});
 			});
 		}
@@ -747,73 +788,9 @@ app.prepare()
 			}
 		})
 		.catch(error => {
-			// TO-DO: Implement retry handler
-			console.log('error', error);
 			res.send({error: { message: error, code: -1 }});
 		});
 
-	})
-
-	/**
-	* Get order history for a user
-	*
-	* @param {int} userID - ID of user logged in
-	*
-	* @return [Object] - array of orders
-	*/
-	server.post('/order-history', function(req, res, next) {
-		var userID = req.query.userID;
-
-		if(userID)
-		{
-			//YMO-ORDER
-			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=914&deploy=1', {
-				method: 'POST',
-				headers: {
-					'Authorization' : NSAuth(914, 'post'),
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-				},
-				body: NSSendMessage({id: userID, admin: false, get: true})
-			})
-			.then(response => response.json())
-			.then(response => {
-
-				if(response.type == 'error.SuiteScriptError')
-				{
-					res.send({error: {message: response.message, code: -1}});
-				}
-				else if(response.error)
-				{
-					if(!(response.error.code == 'WS_CONCUR_SESSION_DISALLWD' || response.error.code == 'WS_REQUEST_BLOCKED' || response.error.code == -1))
-					{
-						console.log('server', 'order-history', response, true);
-					}
-
-					res.send({ error: { message: response.error.message, code: -1 }});
-				}
-				else
-				{
-					var message = NSReceiveMessage(response);
-					if(message.orders && message.orders.length > 0)
-					{
-						res.send(message.orders);
-					}
-					else
-					{
-						res.send({ error: { message: 'No past orders were found', code: 0 }});
-					}
-				}
-			})
-			.catch(error => {
-				// TO-DO: Implement retry handler
-				console.log('error', error);
-				res.send({error: { message: error, code: -1 }});
-			});
-		}
-		else {
-			res.send({error: {message: 'User is not logged in', code: -1}})
-		}
 	})
 
 	/**
@@ -879,8 +856,6 @@ app.prepare()
 				}
 			})
 			.catch(error => {
-				// TO-DO: Implement retry handler
-				console.log('error', error);
 				res.send({error: { message: error, code: -1 }});
 			});
 		}
@@ -959,8 +934,6 @@ app.prepare()
 				}
 			})
 			.catch(error => {
-				// TO-DO: Implement retry handler
-				console.log('error', error);
 				res.send({error: { message: error, code: -1 }});
 			});
 		}

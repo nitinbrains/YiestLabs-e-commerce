@@ -66,7 +66,9 @@ class Alert extends React.Component {
         const { classes, children, error, message, category } = this.props;
         let _classname = classes.error;
         let _icon = <ErrorIcon />
-        if(message.variant === 'success'){
+        if(message.variant === 'error'){
+            console.error('Error: ', message.message)
+        } else if(message.variant === 'success'){
             _classname = classes.success;
             _icon = <DoneIcon />
             setTimeout(()=>{
