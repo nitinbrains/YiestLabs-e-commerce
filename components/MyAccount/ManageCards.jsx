@@ -26,7 +26,7 @@ class ManageCards extends Component {
         super(props);
         this.state = {
             newCard: false,
-            cardHover: false,
+            cardHover: null,
             confirmation: false
         };
     }
@@ -47,8 +47,12 @@ class ManageCards extends Component {
         this.setState({ newCard: false });
     };
 
-    handleCardHover = () => {
-        this.setState({ cardHover: !this.state.cardHover });
+    handleCardHover = i => {
+        this.setState({ cardHover: i });
+    };
+
+    handleCardLeaveHover = () => {
+        this.setState({ cardHover: null });
     };
 
     handleConfirmation = (card) => {
@@ -97,12 +101,12 @@ class ManageCards extends Component {
                                             ? classes.cardBoxSelected
                                             : classes.cardBox
                                     }
-                                    onMouseEnter={this.handleCardHover}
-                                    onMouseLeave={this.handleCardHover}
+                                    onMouseEnter={() => this.handleCardHover(i)}
+                                    onMouseLeave={this.handleCardLeaveHover}
                                 >
                                 <div className={classNames(
                                     classes.deleteIcon,
-                                    !this.state.cardHover && classes.hide
+                                    this.state.cardHover != i && classes.hide
                                 )}>
                                 <IconButton
                                     color="inherit"
@@ -205,14 +209,16 @@ const styles = theme => ({
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
-        textAlign:'center'
+        textAlign:'center',
+        height: 200
     },
     cardBoxSelected: {
         position: "relative",
         border: "solid 2px",
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
-        textAlign:'center'
+        textAlign:'center',
+        height: 200
     },
     close: { position: "absolute", right: 0, top: 0 },
     deleteIcon: { position: "absolute", right: -25, top: -25},
