@@ -114,6 +114,7 @@ class YeastDialog extends Component {
             packaging: "pp",
             availability:{},
             isLoading: false,
+            errors:{},
         };
 
         this.item = this.props.item;
@@ -181,19 +182,25 @@ class YeastDialog extends Component {
             console.log("error in filterPackageTypes", error);
         }
     }
-
+    handleErrors = (field, err) => {
+        let {errors} = this.state;
+        errors[field] = err
+        this.setState({errors})
+    }
     checkQuantity = item => {
         try {
             var quantity = parseFloat(item.OrderDetailQty);
 
             if (isNaN(quantity) || quantity <= 0) {
                 // TO-DO: Display message to user
+                this.handleErrors('quantity', "Please enter a valid value for the quantity")
                 console.log("Please enter a valid value for the quantity");
                 return false;
             }
 
             // Wild Yeast must have mimimum 1L
             if (item.salesCategory == 4 && quantity < 1.0) {
+                this.handleErrors('quantity', "Notice: The minimum quantity sold for Wild Yeast strains is 1L. Please adjust your quantity")
                 console.log(
                     "Notice",
                     "The minimum quantity sold for Wild Yeast strains is 1L. Please adjust your quantity"
@@ -206,6 +213,7 @@ class YeastDialog extends Component {
                 // Vault strains must have minimum 1.5L Custom Pour
                 if (item.salesCategory == 32 && quantity < 1.5) {
                     // TO-DO: Display message to user
+                    this.handleErrors('quantity', "Notice: The minimum quantity sold for Custom Pour Vault strains is 1.5L. Please adjust your quantity")
                     console.log(
                         "Notice",
                         "The minimum quantity sold for Custom Pour Vault strains is 1.5L. Please adjust your quantity"
@@ -219,6 +227,7 @@ class YeastDialog extends Component {
                         quantity = Math.round(quantity);
 
                         // TO-DO: Display message to user
+                        this.handleErrors('quantity', "Notice: Quantities for this strain must be in 1L increments, your value has been rounded accordingly. Please review your cart.")
                         console.log(
                             "Notice",
                             "Quantities for this strain must be in 1L increments, your value has been rounded accordingly. Please review your cart."
@@ -241,6 +250,7 @@ class YeastDialog extends Component {
                             }
 
                             // TO-DO: Display message to user
+                            this.handleErrors('quantity', "Notice: Quantities for this strain must be in 0.5L increments, your value has been rounded accordingly. Please review your cart.")
                             console.log(
                                 "Notice",
                                 "Quantities for this strain must be in 0.5L increments, your value has been rounded accordingly. Please review your cart."
@@ -256,11 +266,13 @@ class YeastDialog extends Component {
 
             // Non-custom pour strains must be in increments of 1
             else if (parseFloat(quantity) / parseInt(quantity) != 1.0) {
+                this.handleErrors('quantity', "Quantity Error !!")
                 return false;
             }
 
             return true;
         } catch (error) {
+            this.handleErrors('quantity', `Could not check quantity ${error}`)
             console.log("Could not check quantity", error);
         }
     };
@@ -299,6 +311,7 @@ class YeastDialog extends Component {
                     cartItem.details = "2L";
                     break;
                 default:
+                    this.handleErrors('pack', `cannot add to cart, ${item}, ${packaging}, ${pack}, ${quantity}`)
                     console.log("cannot add to cart", item, packaging, pack, quantity);
                     return;
             }
@@ -467,11 +480,11 @@ class YeastDialog extends Component {
     render() 
     {
         const { classes, theme, item, inventory} = this.props;
-
+        const {errors} = this.state;
         const spaceIndex = item.Name.indexOf(" ");
         const itemID = item.Name.substr(0, spaceIndex);
         const itemName = item.Name.substr(spaceIndex + 1);
-
+        
         return (
             <React.Fragment>
                 <LoadingIndicator visible={this.state.isLoading} label={"Getting Availability"} />                
@@ -667,9 +680,12 @@ class YeastDialog extends Component {
                             validationSchema={customFormValidation}
                             onSubmit={values => this.addToCart(values)}
                         >
-                            {({ values, errors, touched, handleChange }) => {
+                            {({ values, handleChange }) => {
                                 return(
                                     <Form className={classes.form}> 
+                                        {errors.packaging && <div className="error"  >* {errors.packaging}</div>}
+                                        {errors.pack  && <div className="error" >* {errors.pack}</div>}
+                                        {errors.quantity  && <div className="error" >* {errors.quantity}</div>}
                                         <Grid
                                             item
                                             xs
@@ -697,7 +713,6 @@ class YeastDialog extends Component {
                                                         )}
                                                     </Select>
                                                 </FormControl>
-                                                {errors.packaging && touched.packaging && <div style={{color:'red'}} >{errors.packaging}</div>}
                                             </Grid>
                                             {this.state.pack && (
                                                 <Grid item>
@@ -719,7 +734,6 @@ class YeastDialog extends Component {
                                                             )}
                                                         </Select>
                                                     </FormControl>
-                                                    {errors.pack && touched.pack && <div style={{color:'red'}} >{errors.pack}</div>}
                                                 </Grid>
                                             )}
                                             <Grid item>
@@ -731,7 +745,6 @@ class YeastDialog extends Component {
                                                     onChange={this.changeQuantity}
                                                     type="number"
                                                 />
-                                                {errors.quantity && touched.quantity && <div style={{color:'red'}} >{errors.quantity}</div>}
                                             </Grid>
                                             <Grid
                                                 item

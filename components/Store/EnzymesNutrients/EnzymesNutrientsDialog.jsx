@@ -43,15 +43,21 @@ class EnzymesNutrientsDialog extends Component {
             quantity: "1",
             availability: {},
             isLoading: false,
+            errors: {},
         };
 
         this.item = this.props.item;
     }
-
+    handleErrors = (field, err) => {
+        let {errors} = this.state;
+        errors[field] = err
+        this.setState({errors})
+    }
     checkQuantity = item => {
         var quantity = parseFloat(item.OrderDetailQty);
 
         if (isNaN(quantity) || quantity <= 0) {
+            this.handleErrors('quantity','Please enter a valid value for the quantity')
             console.log("Please enter a valid value for the quantity");
             return false;
         }
@@ -112,7 +118,7 @@ class EnzymesNutrientsDialog extends Component {
 
     render() {
         const { classes, theme, item } = this.props;
-
+        const { errors } = this.state;
         const spaceIndex = item.Name.indexOf(" ");
         const itemID = item.Name.substr(0, spaceIndex);
         const itemName = item.Name.substr(spaceIndex + 1);
@@ -222,9 +228,10 @@ class EnzymesNutrientsDialog extends Component {
                             validationSchema={customFormValidation}
                             onSubmit={values => this.addToCart(values)}
                         >
-                            {({ values, errors, touched, handleChange }) => {
+                            {({ values, handleChange }) => {
                                 return(
                                     <Form className={classes.form}> 
+                                        {errors.quantity && <div className="error" >* {errors.quantity}</div>}
                                         <Grid
                                             item
                                             xs
@@ -243,7 +250,6 @@ class EnzymesNutrientsDialog extends Component {
                                                     type="number"
                                                 />
                                             </Grid>
-                                            {errors.quantity && touched.quantity && <div style={{color:'red'}} >{errors.quantity}</div>}
                                             <Grid
                                                 item
                                                 xs
