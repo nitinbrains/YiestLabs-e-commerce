@@ -85,7 +85,7 @@ function * rootSaga () {
         takeLatest(userTypes.ADD_CREDIT_CARD_ATTEMPT, addCreditCard),
         takeLatest(userTypes.DELETE_CREDIT_CARD_ATTEMPT, deleteCreditCard),
         takeLatest(userTypes.SET_CREDIT_CARD_ATTEMPT, setCreditCard),
-        takeLatest(userTypes.SET_DEFAULT_CARD_ATTEMPT, setDefaultCreditCard),
+        takeLatest(userTypes.SET_DEFAULT_CREDIT_CARD_ATTEMPT, setDefaultCreditCard),
         takeLatest(userTypes.ADD_ADDRESS_ATTEMPT, addAddress),
         takeLatest(userTypes.EDIT_ADDRESS_ATTEMPT, editAddress),
         takeLatest(userTypes.DELETE_ADDRESS_ATTEMPT, deleteAddress),

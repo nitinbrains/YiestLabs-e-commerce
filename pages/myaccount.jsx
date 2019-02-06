@@ -96,18 +96,18 @@ class MyAccount extends Component {
     }
 
     componentDidMount() {
-        const { user: { id, email, phone, shipping, billing, card, subsidiaryOptions, subsidiary, ...rest }} = this.props;
+
+        const { user } = this.props;
+        const { id, email, phone, shipping, billing, subsidiaryOptions, subsidiary } = user;
         this.setState({
             id,
             email,
             phone,
             shipping,
             billing,
-            card,
             shipFrom: subsidiaryOptions[0],
             subsidiaryOptions,
             subsidiary,
-            ...rest
         });
     }
 

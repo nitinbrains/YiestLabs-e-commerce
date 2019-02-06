@@ -31,10 +31,6 @@ class ManageCards extends Component {
         };
     }
 
-    componentWillMount(){
-        console.log('user', this.props.user);
-    }
-
     handleDialogClose() {
         this.props.closeDialog();
     }
@@ -69,12 +65,18 @@ class ManageCards extends Component {
     };
 
     handleYes = () => {
-        const card = this.state.deleteCard;
-        this.props.deleteCreditCard({card});
+        const creditCard = this.state.deleteCard;
+        this.props.deleteCreditCard({creditCard});
         this.setState({
             confirmation: false
         });
     };
+
+    setDefaultCreditCard = (creditCard) => {
+        if(!creditCard.default) {
+            this.props.setDefaultCreditCard({creditCard});
+        }
+    }
 
     render() {
         const { classes, user } = this.props;
@@ -139,7 +141,7 @@ class ManageCards extends Component {
                                                 className={classNames(
                                                     this.state.cardHover != i && classes.hide
                                                 )}
-                                                onClick={() => this.props.setCreditCard(i)}
+                                                onClick={() => this.setDefaultCreditCard(card)}
                                             >
                                                 Make Default
                                             </Button>
@@ -181,7 +183,7 @@ class ManageCards extends Component {
                     </Grid>
                     <Dialog open={this.state.confirmation}>
                         <DialogTitle id="alert-dialog-title">
-                            {"Are you sure you want to delete this card?"}
+                            Are you sure you want to delete this card?
                         </DialogTitle>
                         <DialogContent />
                         <DialogActions>

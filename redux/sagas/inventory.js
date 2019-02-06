@@ -35,15 +35,9 @@ export function * getInventory (action) {
 export function * getItemAvailability (action) {
     const { responseSuccess, responseFailure, data: { itemID } } = action;
     try {
-
-        console.log('itemID', itemID);
-        
         const { res: { availability, error }} = yield call(api.getItemAvailability, {
             itemID
         }); 
-
-        console.log('availability', availability);
-        console.log('error', error);
         
         if( error ) {
             throw error

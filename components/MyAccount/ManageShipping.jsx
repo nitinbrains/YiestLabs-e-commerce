@@ -197,7 +197,7 @@ class ManageShipping extends Component {
                     </Grid>
                     <Dialog open={this.state.confirmation}>
                         <DialogTitle id="alert-dialog-title">
-                            {"Are you sure you want to delete this address?"}
+                            Are you sure you want to delete this address?
                         </DialogTitle>
                         <DialogContent />
                         <DialogActions>

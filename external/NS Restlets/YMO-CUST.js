@@ -791,7 +791,7 @@ function(record, log, search, email)
                     try
                     {
                         // find index of existing address, and edit address at that location
-                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: message.shipping.id});
+                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: String(message.shipping.id)});
                         if(line >= 0) 
                         {
                             customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'attention', value: message.address.attn, line: line});
@@ -822,7 +822,7 @@ function(record, log, search, email)
                     try 
                     {
                         // find index of existing address, and remove address at that location
-                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: message.address.id});
+                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: String(message.address.id)});
                         customerRecord.removeLine({sublistId: 'addressbook', line: line});
                     }
                     catch(error) 
@@ -837,12 +837,12 @@ function(record, log, search, email)
                 {
                     try 
                     {
-                            // remove old default
+                        // remove old default
                         var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'defaultshipping', value: true});
                         customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'defaultshipping', value: false, line: line});
 
                         // set new default
-                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'id', value: message.address.id});
+                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'id', value: String(message.address.id)});
                         customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'defaultshipping', value: true, line: line});
                     }
                     catch(error) 
@@ -861,7 +861,7 @@ function(record, log, search, email)
                         customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'defaultbilling', value: false, line: line});
 
                         // set new default
-                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'id', value: message.address.id});
+                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'id', value: String(message.address.id)});
                         customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'defaultbilling', value: true, line: line});
                     }
                     catch(error) 
