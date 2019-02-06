@@ -1,92 +1,137 @@
-import { put, call, select } from 'redux-saga/effects';
-import _isNumber from 'lodash/isNumber';
-import _isEmpty from 'lodash/isEmpty';
+import { put, call, select } from "redux-saga/effects";
+import _isNumber from "lodash/isNumber";
+import _isEmpty from "lodash/isEmpty";
 
-import { userActions, userTypes } from '../actions/userActions';
-import { messageActions } from '../actions/messageActions';
-import * as api from '../../services/users.js';
-import {
-    loadSubsidiaryOptions,
-    getDefaultOrFirstCreditCard,
-} from './UserUtils.js';
+import { userActions, userTypes } from "../actions/userActions";
+import { messageActions } from "../actions/messageActions";
+import * as api from "../../services/users.js";
+import { loadSubsidiaryOptions, getDefaultOrFirstCreditCard } from "../../lib/UserUtils.js";
 
-import WLHelper from '../../lib/WLHelper';
+import WLHelper from "../../lib/WLHelper";
 
-export function * loginUser (action) {
-    const { responseSuccess, responseFailure, data: { username, password } } = action;
+export function* loginUser(action) {
+    const {
+        responseSuccess,
+        responseFailure,
+        data: { username, password }
+    } = action;
     try {
-        const { res: userID, err } = yield call(api.login, username, password);
+        const { res, err } = yield call(api.login, username, password);
         if(err) throw err;
-
-        yield put(userActions.getUserInfo({userID}));
-
-        yield put(messageActions.displayMessage({
-            title: 'Authorization',
-            message: 'You have successfully logged in!',
-            variant:'success'
-        }));
-
+        let {userID} = res;
         yield put(responseSuccess());
-
+        if(res.error && res.error.code === 0 ){
+            yield put(messageActions.showNetworkError({
+                displayType: 'banner',
+                title: 'Yeastman', 
+                message: res.error.message, 
+                variant:'error',
+            }));        
+        } else if (!_isEmpty(userID)){
+            userID = Number(userID)
+            yield put(userActions.getUserInfo({userID}));
+            yield put(messageActions.showNetworkError({
+                displayType:'banner',
+                title: 'Authorization',
+                message: 'You have successfully logged in!',
+                variant:'success',
+            }));
+        }else{
+            yield put(messageActions.showNetworkError({
+                displayType: 'banner',
+                title: 'Error', 
+                message: "Something went wrong", 
+                variant:'error',
+            })); 
+        }
+        
     } catch (err) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
             if(err.code == 0 ){
-                yield put(messageActions.showNetworkError({ title: 'Yeastman', error: error.message, variant:'error' }));        
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
-                yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));                
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
             }
         }
-        yield put(responseFailure(err));
+        yield put(responseFailure(error));
     }
-};
+}
 
-export function * getUserInfo(action) {
-    const { responseSuccess, responseFailure,  data: { userID }} = action;
+export function* getUserInfo(action) {
+    const {
+        responseSuccess,
+        responseFailure,
+        data: { userID }
+    } = action;
     try {
         const { res: userInfo, error } = yield call(api.getUserInfo, { userID });
         if(error) throw error;
+        sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
+        sessionStorage.setItem('isLoggedin', true)
         yield put(userActions.setUserInfo({ userInfo}));
         yield put(responseSuccess());
     } catch (error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
-        yield put(responseFailure(error))
+        yield put(responseFailure(error));
     }
 }
 
-export function * setUserInfo(action) {
-    const { responseSuccess, responseFailure, data: { userInfo } } = action;
+export function* setUserInfo(action) {
+    const {
+        responseSuccess,
+        responseFailure,
+        data: { userInfo }
+    } = action;
     try {
-
         const { subsidiary, shipmethod, shipping: { countryid } } = userInfo;
         userInfo.shipMethods = WLHelper.shipMethodGroup(subsidiary, shipmethod, countryid);
         userInfo.subsidiaryOptions = loadSubsidiaryOptions(userInfo);
-        const creditCard = getDefaultOrFirstCreditCard(userInfo);
+        yield put(responseSuccess(userInfo));
+        const creditCard = yield getDefaultOrFirstCreditCard(userInfo);
         if(creditCard) {
             userInfo.selectedCard = creditCard;
         }
 
-        yield put(responseSuccess(userInfo));
 
-        } catch (err) {
-        if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
-        } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
-        }
-        yield put(responseFailure(err));
+        } catch (error) {
+            if(error.status){
+                // show network error is any regaring with api status
+                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            } else {
+                if(error.code == 0 ){
+                    // Yeastman error when we have error with code == 0
+                    yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+                } else if(error.code == -1){
+                    // Other error when we have error with code == -1
+                    yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+                }
+            }
+        yield put(responseFailure(error));
     }
 }
 
-export function * updateUserInfo(action) {
-    const { responseSuccess, responseFailure, data: { request } } = action;
+export function* updateUserInfo(action) {
+    const {
+        responseSuccess,
+        responseFailure,
+        data: { request }
+    } = action;
     try {
         const user = yield select(state => state.user);
         request.id = user.id;
@@ -95,7 +140,7 @@ export function * updateUserInfo(action) {
             request
         });
 
-        if(error) throw error;
+        if (error) throw error;
 
         yield put(userActions.getUserInfo({
             userID: user.id
@@ -103,47 +148,60 @@ export function * updateUserInfo(action) {
 
     } catch(error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
 }
 
-export function * getOrderHistory(action) {
+export function* getOrderHistory(action) {
     const { responseSuccess, responseFailure } = action;
     try {
-
         var user = yield select(state => state.user);
 
         var request = {};
         request.id = user.id;
 
-        var { res: { orderHistory }, error } = yield call(api.getOrderHistory, {
+        var {
+            res: { orderHistory },
+            error
+        } = yield call(api.getOrderHistory, {
             request
         });
-        if(error) throw error;
+        if (error) throw error;
 
         yield put(responseSuccess({ orderHistory }));
     } catch(error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
 }
 
-
-export function * setShipMethod(action) {
+export function* setShipMethod(action) {
     const { responseSuccess, responseFailure, data: shipmethod } = action;
     try {
         yield put(responseSuccess(shipmethod));
-    } catch(error) {
+    } catch (error) {
         yield put(responseFailure(error));
     }
 }
@@ -152,70 +210,85 @@ export function * setShipMethod(action) {
 /* Credit Card Functions */
 /*************************/
 
-export function * addCreditCard(action) {
-    const { responseSuccess, responseFailure, data: { creditCard }} = action;
+export function* addCreditCard(action) {
+    const {
+        responseSuccess,
+        responseFailure,
+        data: { creditCard }
+    } = action;
     try {
         const user = yield select(state => state.user);
 
-        if(!user.id) {
-            throw {message: 'No user id. Cannot add credit card', code: 0};
+        if (!user.id) {
+            throw { message: "No user id. Cannot add credit card", code: 0 };
         }
         let request = {};
         request.addCreditCard = true;
         request.token = WLHelper.generateCreditToken(creditCard);
 
-        yield put(userActions.updateUserInfo({request}));
-    
-    } catch(error) {
+        yield put(userActions.updateUserInfo({ request }));
+    } catch (error) {
         yield put(responseFailure(error));
     }
 }
 
-export function * deleteCreditCard(action) {
+export function* deleteCreditCard(action) {
     const { responseSuccess, responseFailure, data: creditCard } = action;
     try {
         const user = yield select(state => state.user);
 
-        if(!user.id) {
-            throw {message: 'No user id. Cannot delete credit card', code: 0};
+        if (!user.id) {
+            throw { message: "No user id. Cannot delete credit card", code: 0 };
         }
 
         let request = {};
         request.deleteCreditCard = true;
         request.card = creditCard;
-        
-        yield put(userActions.updateUserInfo({request}));
-    
-    } catch(error) {
+
+        yield put(userActions.updateUserInfo({ request }));
+    } catch (error) {
         yield put(responseFailure(error));
     }
 }
 
-export function * setCreditCard(action) {
-    const { responseSuccess, responseFailure, data: { creditCard }} = action;
+export function* setCreditCard(action) {
+    const {
+        responseSuccess,
+        responseFailure,
+        data: { creditCard }
+    } = action;
     try {
         yield put(responseSuccess({ creditCard }));
     } catch(error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
 }
 
-export function * setDefaultCreditCard(action) {
-    const { responseSuccess, responseFailure, data: { creditCard} } = action;
+export function* setDefaultCreditCard(action) {
+    const {
+        responseSuccess,
+        responseFailure,
+        data: { creditCard }
+    } = action;
     try {
         // Update default card in NetSuite
         let request = {};
         request.defaultCreditCard = true;
         request.card = creditCard;
-        yield put(userActions.updateUserInfo({request}));
-
-    } catch(error) {
+        yield put(userActions.updateUserInfo({ request }));
+    } catch (error) {
         yield put(responseFailure(error));
     }
 }
@@ -224,13 +297,17 @@ export function * setDefaultCreditCard(action) {
 /* General Address Functions */
 /*****************************/
 
-export function * addAddress(action) {
-    const { responseSuccess, responseFailure, data: { address }} = action;
+export function* addAddress(action) {
+    const {
+        responseSuccess,
+        responseFailure,
+        data: { address }
+    } = action;
     try {
         const user = yield select(state => state.user);
 
-        if(!user.id) {
-            throw {message: 'No user id. Cannot add Address', code: 0};
+        if (!user.id) {
+            throw { message: "No user id. Cannot add Address", code: 0 };
         }
         let request = {};
         request.addAddress = true;
@@ -239,43 +316,52 @@ export function * addAddress(action) {
     
     } catch(error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
 }
 
-export function * editAddress(action) {
-    const { responseSuccess, responseFailure, data: { address }} = action;
+export function* editAddress(action) {
+    const {
+        responseSuccess,
+        responseFailure,
+        data: { address }
+    } = action;
     try {
         const user = yield select(state => state.user);
 
-        if(!user.id) {
-            throw {message: 'No user id. Cannot add credit card', code: 0};
+        if (!user.id) {
+            throw { message: "No user id. Cannot add credit card", code: 0 };
         }
 
         let request = {};
         request.id = user.id;
         request.editAddress = true;
-        request.address = address
+        request.address = address;
 
-        yield call(updateUserInfo, {request});
-    
-    } catch(error) {
+        yield call(updateUserInfo, { request });
+    } catch (error) {
         yield put(responseFailure(error));
     }
 }
 
-export function * deleteAddress(action) {
+export function* deleteAddress(action) {
     const { responseSuccess, responseFailure, data: address } = action;
     try {
         const user = yield select(state => state.user);
 
-        if(!user.id) {
-            throw {message: 'No user id. Cannot add credit card', code: 0};
+        if (!user.id) {
+            throw { message: "No user id. Cannot add credit card", code: 0 };
         }
 
         let request = {};
@@ -283,9 +369,8 @@ export function * deleteAddress(action) {
         request.deleteAddress = true;
         request.address = address;
 
-        yield call(updateUserInfo, {request});
-    
-    } catch(error) {
+        yield call(updateUserInfo, { request });
+    } catch (error) {
         yield put(responseFailure(error));
     }
 }
@@ -294,23 +379,27 @@ export function * deleteAddress(action) {
 /* Shipping Address Functions */
 /******************************/
 
-export function * setShipAddress(action) {
-    const { responseSuccess, responseFailure, data: { address }} = action;
+export function* setShipAddress(action) {
+    const {
+        responseSuccess,
+        responseFailure,
+        data: { address }
+    } = action;
     try {
-        yield put(responseSuccess({address}));
-    } catch(error) {
+        yield put(responseSuccess({ address }));
+    } catch (error) {
         yield put(responseFailure(error));
     }
 }
 
-export function * setDefaultShipAddress(action) {
+export function* setDefaultShipAddress(action) {
     const { responseSuccess, responseFailure, data: address } = action;
-    console.log(action,'asd')
+    console.log(action, "asd");
     try {
         const user = yield select(state => state.user);
 
-        if(!user.id) {
-            throw {message: 'No user id. Cannot set default ship address', code: 0};
+        if (!user.id) {
+            throw { message: "No user id. Cannot set default ship address", code: 0 };
         }
 
         let request = {};
@@ -318,9 +407,8 @@ export function * setDefaultShipAddress(action) {
         request.defaultShipAddress = true;
         request.address = address;
 
-        yield put(userActions.updateUserInfo({request}))
-    
-    } catch(error) {
+        yield put(userActions.updateUserInfo({ request }));
+    } catch (error) {
         yield put(responseFailure(error));
     }
 }
@@ -329,22 +417,26 @@ export function * setDefaultShipAddress(action) {
 /* Billing Address Functions */
 /*****************************/
 
-export function * setBillAddress(action) {
-    const { responseSuccess, responseFailure, data: { address }} = action;
+export function* setBillAddress(action) {
+    const {
+        responseSuccess,
+        responseFailure,
+        data: { address }
+    } = action;
     try {
-        yield put(responseSuccess({address}));
-    } catch(error) {
+        yield put(responseSuccess({ address }));
+    } catch (error) {
         yield put(responseFailure(error));
     }
 }
 
-export function * setDefaultBillAddress(action) {
+export function* setDefaultBillAddress(action) {
     const { responseSuccess, responseFailure, data: address } = action;
     try {
         const user = yield select(state => state.user);
 
-        if(!user.id) {
-            throw {message: 'No user id. Cannot set default bill address', code: 0};
+        if (!user.id) {
+            throw { message: "No user id. Cannot set default bill address", code: 0 };
         }
 
         let request = {};
@@ -352,9 +444,8 @@ export function * setDefaultBillAddress(action) {
         request.defaultBillAddress = true;
         request.address = address;
 
-        yield put(userActions.updateUserInfo({request}))        
-    
-    } catch(error) {
+        yield put(userActions.updateUserInfo({ request }));
+    } catch (error) {
         yield put(responseFailure(error));
     }
 }

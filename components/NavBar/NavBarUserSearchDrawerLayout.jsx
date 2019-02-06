@@ -29,6 +29,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { userActions } from "../../redux/actions/userActions";
 import { messageActions } from "../../redux/actions/messageActions";
 import SimpleSnackbar from "../Form/SimpleSnackbar";
+import Banner from "../UI/Banner";
 
 class NavBarUserSearchDrawerLayout extends Component {
     state = {
@@ -148,8 +149,8 @@ class NavBarUserSearchDrawerLayout extends Component {
                             !this.state.openUserBar &&
                                 !this.state.openUserBarHover &&
                                 classes.drawerPaperClose
-                        )
-                    }}
+                                )
+                            }}
                 >
                     <div
                         className={classes.toolbar}
@@ -167,15 +168,19 @@ class NavBarUserSearchDrawerLayout extends Component {
                             [classes.contentShift]: this.state.openSearchBar,
                             [classes[`contentShift-search`]]: this.state
                                 .openSearchBar
-                        },
-                        {
-                            [classes.contentShift]: this.state.openUserBar,
-                            [classes[`contentShift-user`]]: this.state
+                            },
+                            {
+                                [classes.contentShift]: this.state.openUserBar,
+                                [classes[`contentShift-user`]]: this.state
                                 .openUserBar
-                        }
-                    )}
+                            }
+                            )}
                 >
                     <div className={classes.toolbar} />
+                    <div className={classes.alertWrapper}>
+                        <Banner />
+                    </div>
+                    {/* <div style={{height:'50px', width:'100%', border:'3px solid'}}>daksjhdkajs</div> */}
                     {children}
                 </main>
                 
@@ -329,6 +334,9 @@ const styles = theme => ({
     },
     close: {
         padding: theme.spacing.unit / 2,
+    },
+    alertWrapper: {
+        marginTop:'42px'
     },
 });
 

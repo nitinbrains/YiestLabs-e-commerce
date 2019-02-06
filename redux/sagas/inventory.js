@@ -2,8 +2,9 @@ import { take, call, put, cancelled, takeEvery, all, fork, select  } from 'redux
 import { messageActions } from '../actions/messageActions';
 import { inventoryActions } from '../actions/inventoryActions';
 
-import WLHelper from '../../lib/WLHelper';
-import SalesLib from '../../lib/SalesLib';
+import {
+    filterItems,
+} from '../../lib/InventoryUtils';
 
 import * as api from '../../services/';
 
@@ -11,17 +12,14 @@ export function * getInventory (action) {
     const { responseSuccess, responseFailure, data: { search } } = action;
     try {
         yield put(messageActions.hideNetworkError({}))
-        const { res, error } = yield call(api.getInventory);        
+        const { res: { items, error }} = yield call(api.getInventory);       
         if( error ) {
             throw error
-        } else {
-            if( res && res.items ){
-                const items = res.items;
-                var category = 1;
-                const itemsToShow = filterItems(items, category, null, false)
-                yield put(responseSuccess({ items, itemsToShow, category })); 
-                yield put(messageActions.hideNetworkError())   
-            }
+        } else if(items){
+            var category = 1;
+            const itemsToShow = filterItems(items, category, null, false)
+            yield put(responseSuccess({ items, itemsToShow, category })); 
+            yield put(messageActions.hideNetworkError())   
         }
     } catch (error) {
         yield put(responseFailure(error));
@@ -34,6 +32,41 @@ export function * getInventory (action) {
     }
 };
 
+export function * getItemAvailability (action) {
+    const { responseSuccess, responseFailure, data: { itemID } } = action;
+    try {
+
+        console.log('itemID', itemID);
+        
+        const { res: { availability, error }} = yield call(api.getItemAvailability, {
+            itemID
+        }); 
+
+        console.log('availability', availability);
+        console.log('error', error);
+        
+        if( error ) {
+            throw error
+        } else if(availability) {
+            yield put(responseSuccess({availability}));
+        }
+    } catch (error) {
+        yield put(responseFailure(error));
+        if(error.status){
+            // show network error is any regaring with api status
+            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+        } else {
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+            }
+        }
+    }
+};
+
 export function * changeCategory(action) {
     const { responseSuccess, responseFailure, data: { category } } = action;
     try {
@@ -42,10 +75,16 @@ export function * changeCategory(action) {
         yield put(responseSuccess({ itemsToShow, category }));
     } catch(error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
@@ -59,10 +98,16 @@ export function * searchForStrain(action) {
         yield put(responseSuccess({ itemsToShow }));
     } catch(error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
@@ -76,10 +121,16 @@ export function * switchToHomebrew(action) {
         yield put(responseSuccess({ itemsToShow }));
     } catch(error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
@@ -96,10 +147,16 @@ export function * switchToProfessional(action) {
         }));
     } catch(error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
     }
@@ -112,210 +169,17 @@ export function * searchItem(action) {
         yield put(responseSuccess({ itemsToShow, category }));
     } catch(error) {
         if(error.status){
+            // show network error is any regaring with api status
             yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+            }
         }
         yield put(responseFailure(error));
-    }
-}
-
-/***** Business Logic *****/
-
-function filterItems(items, type=null, search=null, userInfo=null, retail=false, homebrew=false) {
-    try {
-        var itemsToShow = [],
-            similarItems = [],
-            subsidiary,
-            userID,
-            userIsRetailer = false,
-            category = parseInt(type);
-
-        if(userInfo) {
-            subsidiary = parseInt(userInfo.subsidiary);
-            userIsRetailer = [2, 1, 7].includes(parseInt(userInfo.category));
-            userID = userInfo.id;
-        }
-        else {
-            subsidiary = 2;
-            userIsRetailer = false;
-        }
-
-        if(search) {
-            search = search.toLowerCase();
-        }
-
-        if(retail) {
-            category = 0;
-        }
-
-
-        for (var i = 0, length = items.length; i < length; i++)
-        {
-            var containsSearchTerm = false;
-            var name = items[i].Name ? items[i].Name : '';
-            var styleRec = items[i].styleRec ? items[i].styleRec : '';
-            var searchTags = items[i].searchTags ? items[i].searchTags : '';
-            var description = items[i].Description ? items[i].Description : '';
-            var partNum = items[i].partNum ? items[i].partNum : '';
-            var beerStyles = items[i].beerStylesSearch ? items[i].beerStylesSearch : '';
-            const salesCategory = parseInt(items[i].salesCategory);
-
-
-            if(homebrew)
-            {
-                if(!items[i].IsPrivate[0] || items[i].IsPrivate.indexOf(UserID) >= 0)
-                {
-                    if(items[i].volID[4] && SalesLib.SALESCATEGORY[16].includes(items[i].salesCategory))
-                    {
-                        itemsToShow.push(Inventory[i]);
-                    }
-                }
-            }
-            else if(WLHelper.warehouseMatch(items[i].warehouse, subsidiary) && (!SalesLib.POSItems.includes(items[i].volID[0]) || (SalesLib.POSItems.includes(items[i].volID[0]) && userIsRetailer)))
-            {
-                if(userID)
-                {
-                    if(!items[i].IsPrivate[0] || items[i].IsPrivate.indexOf(userID) >= 0)
-                    {
-                        if(search)
-                        {
-                            if(name.toLowerCase().includes(search))
-                            {
-                                containsSearchTerm = true;
-                            }
-                            else if(styleRec.toLowerCase().includes(search))
-                            {
-                                containsSearchTerm = true;
-                            }
-                            else if(searchTags.toLowerCase().includes(search))
-                            {
-                                containsSearchTerm = true;
-                            }
-                            else if(description.toLowerCase().includes(search))
-                            {
-                                containsSearchTerm = true;
-                            }
-                            else if(partNum.toLowerCase().includes(search))
-                            {
-                                containsSearchTerm = true;
-                            }
-                            else if(beerStyles.toLowerCase().includes(search))
-                            {
-                                containsSearchTerm = true;
-                            }
-
-
-                            if(containsSearchTerm)
-                            {
-                                if(SalesLib.SALESCATEGORY[category].indexOf(salesCategory) >= 0 && !(retail && !items[i].volID[4]))
-                                {
-                                    itemsToShow.push(items[i]);
-                                }
-                                else if(!retail)
-                                {
-                                    similarItems.push(items[i]);
-                                }
-                            }
-                        }
-                        else if(SalesLib.SALESCATEGORY[category].indexOf(salesCategory) >= 0 && !(retail && !items[i].volID[4]))
-                        {
-                            itemsToShow.push(items[i]);
-                        }
-                    }
-                }
-                else if(!items[i].IsPrivate[0])
-                {
-                    if(search)
-                    {
-                        if(name.toLowerCase().includes(search))
-                        {
-                            containsSearchTerm = true;
-                        }
-                        else if(styleRec.toLowerCase().includes(search))
-                        {
-                            containsSearchTerm = true;
-                        }
-                        else if(searchTags.toLowerCase().includes(search))
-                        {
-                            containsSearchTerm = true;
-                        }
-                        else if(description.toLowerCase().includes(search))
-                        {
-                            containsSearchTerm = true;
-                        }
-                        else if(partNum.toLowerCase().includes(search))
-                        {
-                            containsSearchTerm = true;
-                        }
-                        else if(beerStyles.toLowerCase().includes(search))
-                        {
-                            containsSearchTerm = true;
-                        }
-
-                        if(containsSearchTerm)
-                        {
-                            if(SalesLib.SALESCATEGORY[category].indexOf(salesCategory) >= 0 && !(retail && !items[i].volID[4]))
-                            {
-                                itemsToShow.push(items[i]);
-                            }
-                            else if(!retail)
-                            {
-                                similarItems.push(items[i]);
-                            }
-                        }
-                    }
-                    else if(SalesLib.SALESCATEGORY[category].indexOf(salesCategory) >= 0 && !(retail && !items[i].volID[4]))
-                    {
-                        itemsToShow.push(items[i]);
-                    }
-                }
-            }
-        }
-
-        var finalResult = sortItems(itemsToShow);
-
-        if(similarItems.length > 0)
-        {
-            finalResult.push('altresult');
-            finalResult = finalResult.concat(similarItems);
-        }
-
-        return finalResult;
-    }
-    catch(error)
-    {
-        console.log('error', error);
-    }
-}
-
-function sortItems(items)
-{
-    try
-    {
-        return items.sort(function(item1, item2)
-        {
-            if(item1.Name.includes("WLP") && item2.Name.includes("WLP"))
-            {
-                return item1.Name.slice(3).localeCompare(item2.Name.slice(3));
-            }
-            else if(item1.Name.includes("WLP"))
-            {
-                return -1;
-            }
-            else if(item2.Name.includes("WLP"))
-            {
-                return 1;
-            }
-            else
-            {
-                return item1.Name.localeCompare(item2.Name);
-            }
-        });
-    }
-    catch(error)
-    {
-        console.log('error', error);
     }
 }

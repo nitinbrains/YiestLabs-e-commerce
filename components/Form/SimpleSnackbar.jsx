@@ -28,8 +28,18 @@ componentWillReceiveProps(props){
   handleNotification = () => {
     const { messages } = this.props;
     if(messages.networkRequestError.length > 0) {
-      return messages.networkRequestError.map((data)=>{
-        this.props.enqueueSnackbar( data.message, { variant: data.variant} );
+      return messages.networkRequestError.map((msg)=>{
+        if(!msg.displayType || msg.displayType === 'snackbar'){
+          if(msg.variant === 'error'){
+            console.error('Error: ', msg.message)
+          }
+          let options = {
+            variant: msg.variant, 
+            anchorOrigin: msg.anchorOrigin ? msg.anchorOrigin :{vertical: 'top',horizontal: 'center'},
+            autoHideDuration: 15000
+          }
+          this.props.enqueueSnackbar( msg.message, options);
+        }
       })
     }
   }
@@ -67,17 +77,11 @@ class SimpleSnackbar extends React.Component {
 
   render() {
     const { classes } = this.props;
-    let a = Object.assign({}, this.props.messageList)
     return (
       <div>
         <SnackbarProvider 
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
           maxSnack={5}
           onClose={this.handleClose}
-          autoHideDuration={5000}
           action={[
             <IconButton
               key="close"

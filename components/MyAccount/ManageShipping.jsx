@@ -75,7 +75,7 @@ class ManageShipping extends Component {
 
     render() {
         const { classes, user } = this.props;
-        console.log('user',this.props);
+
         return (
             <React.Fragment>
                 <DialogContent id="my-order-details">

@@ -92,11 +92,11 @@ class ManageCards extends Component {
                         </IconButton>
                     </div>
                     <Grid style={{ padding: 10 }} container spacing={24}>
-                        {user.cards.map((card, i) => (
+                        {user.otherCards.map((card, i) => (
                             <Grid item sm={4} xs={12}>
                                 <div
                                     className={
-                                        this.props.user.selectedCard.ccnumber ==
+                                        this.props.user.card.ccnumber ==
                                         card.ccnumber
                                             ? classes.cardBoxSelected
                                             : classes.cardBox
@@ -130,7 +130,7 @@ class ManageCards extends Component {
                                             <Typography>{moment(card.ccexpire).format("MM-YYYY")}</Typography>
                                         </Grid>
 
-                                        {this.props.user.selectedCard.ccnumber !=
+                                        {this.props.user.card.ccnumber !=
                                                 card.ccnumber && !this.props.checkout && (
                                         <Grid item>
                                             <Button

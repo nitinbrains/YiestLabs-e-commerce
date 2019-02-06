@@ -36,7 +36,7 @@ import LoadingIndicator from '../components/UI/LoadingIndicator';
 import * as Util from '../lib/Utils';
 
 import { userActions } from '../redux/actions/userActions';
-import { changesWereMade } from '../redux/sagas/UserUtils';
+import { changesWereMade } from '../lib/UserUtils';
 import WLHelper from '../lib/WLHelper';
 
 class MyAccount extends Component {
@@ -96,14 +96,14 @@ class MyAccount extends Component {
     }
 
     componentDidMount() {
-        const { user: { id, email, phone, shipping, billing, selectedCard, subsidiaryOptions, subsidiary, ...rest }} = this.props;
+        const { user: { id, email, phone, shipping, billing, card, subsidiaryOptions, subsidiary, ...rest }} = this.props;
         this.setState({
             id,
             email,
             phone,
             shipping,
             billing,
-            selectedCard,
+            card,
             shipFrom: subsidiaryOptions[0],
             subsidiaryOptions,
             subsidiary,
@@ -111,18 +111,14 @@ class MyAccount extends Component {
         });
     }
 
-
-
     componentWillUnmount() {
-        const { user: { id, email, phone, shipping, billing, selectedCard, subsidiary, subsidiaryOptions }} = this.props;
+        const { user: { id, email, phone, shipping, billing, card, subsidiary, subsidiaryOptions }} = this.props;
         const isShippingDiff = Util.checkDifference(shipping,this.state.shipping);
         const isBillingDiff = Util.checkDifference( billing, this.state.billing);
         if( email != this.state.email || phone != this.state.phone || subsidiary != this.state.shipFrom || isShippingDiff || isBillingDiff ) {
             this.props.unsavedUserInfo()
         }
     }
-
-
 
     selectAccount = (e) => {
         this.setState({
