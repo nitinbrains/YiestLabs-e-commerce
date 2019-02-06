@@ -19,8 +19,17 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
 import { cartActions } from '../../../redux/actions/cartActions';
+
+const customFormValidation = Yup.object().shape({
+    size: Yup.string()
+    .required('Required'),
+    quantity: Yup.string()
+      .required('Required'),
+  });
 
 class LabSuppliesDialog extends Component {
 
@@ -51,8 +60,8 @@ class LabSuppliesDialog extends Component {
         return true;
     }
 
-    addToCart = () => {
-
+    addToCart = (values) => {
+        console.log('ssssssssssss', values, this.state);
         var quantity = this.state.quantity;
         var item = this.item;
 
@@ -84,45 +93,58 @@ class LabSuppliesDialog extends Component {
                 <DialogTitle id="form-dialog-title">
                     {this.item.Name}
                 </DialogTitle>
-                <DialogContent>
-                    <Grid
-                        item
-                        xs
-                        container
-                        spacing={24}
-                        style={{ marginTop: 5 }}
-                        direction={"row"}
+                <Formik
+                        initialValues={this.state}
+                        validationSchema={customFormValidation}
+                        onSubmit={values => this.addToCart(values)}
                     >
-                        <Grid
-                            item
-                            xs
-                            container
-                            spacing={24}
-                            direction={"row"}
-                            justify="flex-start"
-                        >
-                            <Grid item>
-                                <TextField
-                                    id="quantity"
-                                    label="Quantity"
-                                    className={classes.quantity}
-                                    value={this.state.quantity}
-                                    onChange={this.changeQuantity}
-                                    type="number"
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        onClick={this.addToCart}
-                        color="primary"
-                        onChange={this.changeQuantity}
-                    >
-                        Add to Cart
-                    </Button>
-                </DialogActions>
+                        {({ values, errors, touched, handleChange }) => {
+                            return(
+                                <Form className={classes.form}> 
+                                    <DialogContent>
+                                        <Grid
+                                            item
+                                            xs
+                                            container
+                                            spacing={24}
+                                            style={{ marginTop: 5 }}
+                                            direction={"row"}
+                                        >
+                                            <Grid
+                                                item
+                                                xs
+                                                container
+                                                spacing={24}
+                                                direction={"row"}
+                                                justify="flex-start"
+                                            >
+                                                <Grid item>
+                                                    <TextField
+                                                        id="quantity"
+                                                        label="Quantity"
+                                                        className={classes.quantity}
+                                                        value={this.state.quantity}
+                                                        onChange={this.changeQuantity}
+                                                        type="number"
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button
+                                            type="submit"
+                                            // onClick={this.addToCart}
+                                            color="primary"
+                                            // onChange={this.changeQuantity}
+                                        >
+                                            Add to Cart
+                                        </Button>
+                                    </DialogActions>
+                                </Form> 
+                            )   
+                        }}
+                    </Formik>
             </React.Fragment>
         );
     }
@@ -156,6 +178,9 @@ const styles = theme => ({
     },
     hide: {
         display: "none"
+    },
+    form:{
+        width:'100%',
     }
 });
 

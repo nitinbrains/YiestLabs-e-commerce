@@ -9,7 +9,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Link from "next/link";
 import { messageActions } from "../../redux/actions/messageActions";
 import SimpleSnackbar from "../Form/SimpleSnackbar";
-import Banner from "../components/UI/Banner";
 class NavBarLayout extends Component {
     componentWillUnmount() {
         if( this.props.messages.networkRequestError != false ){
@@ -52,7 +51,6 @@ class NavBarLayout extends Component {
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
                     {children}
-                    <div style={{height:'50px', width:'100%', border:'3px solid'}}>daksjhdkajs</div>
                 </main>
 
                 <SimpleSnackbar
