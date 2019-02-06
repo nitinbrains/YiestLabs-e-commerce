@@ -48,8 +48,12 @@ class ManageShipping extends Component {
         this.props.setDefaultShipAddress({address})
     }
 
-    handleBoxHover = () => {
-        this.setState({ boxHover: !this.state.boxHover });
+    handleCardHover = i => {
+        this.setState({ boxHover: i });
+    };
+
+    handleCardLeaveHover = () => {
+        this.setState({ boxHover: null });
     };
 
     handleConfirmation = (address) => {
@@ -89,8 +93,8 @@ class ManageShipping extends Component {
                             <CloseIcon />
                         </IconButton>
                     </div>
-                    <Grid style={{ padding: 10 }} container spacing={24}>
-                        {user.otherAddresses.map(address => (
+                    <Grid style={{ padding: 20 }} container spacing={24}>
+                        {user.otherAddresses.map((address, i) => (
                             <Grid item
                                 key={address.id}
                                 sm={4}
@@ -103,12 +107,12 @@ class ManageShipping extends Component {
                                         ? classes.addressBoxSelected
                                         : classes.addressBox
                                 }
-                                onMouseEnter={this.handleBoxHover}
-                                onMouseLeave={this.handleBoxHover}
+                                onMouseEnter={() => this.handleCardHover(i)}
+                                onMouseLeave={this.handleCardLeaveHover}
                             >
                             <div className={classNames(
                                 classes.deleteIcon,
-                                !this.state.boxHover && classes.hide
+                                this.state.boxHover != i && classes.hide
                             )}>
                             <IconButton
                                 color="inherit"
@@ -145,6 +149,9 @@ class ManageShipping extends Component {
                                             <Button
                                                 variant="contained"
                                                 color="primary"
+                                                className={classNames(
+                                                    this.state.boxHover != i && classes.hide
+                                                )}
                                                 onClick={(e)=> { this.selectDefaultAddress(address) }}
                                             >
                                                 Set as Default
@@ -218,14 +225,16 @@ const styles = theme => ({
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
-        textAlign:'center'
+        textAlign:'center',
+        height: 180
     },
     addressBoxSelected: {
         position: "relative",
         border: "solid 2px",
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
-        textAlign:'center'
+        textAlign:'center',
+        height: 180
     },
     close: { position: "absolute", right: 0, top: 0 },
     deleteIcon: { position: "absolute", right: -25, top: -25},
