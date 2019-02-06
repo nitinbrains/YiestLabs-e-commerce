@@ -91,7 +91,7 @@ class ManageCards extends Component {
                             <CloseIcon />
                         </IconButton>
                     </div>
-                    <Grid style={{ padding: 10 }} container spacing={24}>
+                    <Grid style={{ padding: 20 }} container spacing={24}>
                         {user.otherCards.map((card, i) => (
                             <Grid item sm={4} xs={12}>
                                 <div
@@ -137,7 +137,7 @@ class ManageCards extends Component {
                                                 variant="contained"
                                                 color="primary"
                                                 className={classNames(
-                                                    !this.state.cardHover && classes.hide
+                                                    this.state.cardHover != i && classes.hide
                                                 )}
                                                 onClick={() => this.props.setCreditCard(i)}
                                             >
@@ -210,7 +210,7 @@ const styles = theme => ({
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
         textAlign:'center',
-        height: 200
+        height: 150
     },
     cardBoxSelected: {
         position: "relative",
@@ -218,7 +218,7 @@ const styles = theme => ({
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
         textAlign:'center',
-        height: 200
+        height: 150
     },
     close: { position: "absolute", right: 0, top: 0 },
     deleteIcon: { position: "absolute", right: -25, top: -25},
