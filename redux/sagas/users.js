@@ -30,12 +30,6 @@ export function* loginUser(action) {
         } else if (!_isEmpty(userID)){
             userID = Number(userID)
             yield put(userActions.getUserInfo({userID}));
-            yield put(messageActions.showNetworkError({
-                displayType:'banner',
-                title: 'Authorization',
-                message: 'You have successfully logged in!',
-                variant:'success',
-            }));
         }else{
             yield put(messageActions.showNetworkError({
                 displayType: 'banner',
@@ -75,6 +69,12 @@ export function* getUserInfo(action) {
         sessionStorage.setItem('isLoggedin', true)
         yield put(userActions.setUserInfo({ userInfo}));
         yield put(responseSuccess());
+        yield put(messageActions.showNetworkError({
+            displayType:'banner',
+            title: 'Authorization',
+            message: 'You have successfully logged in!',
+            variant:'success',
+        }));
     } catch (error) {
         if(error.status){
             // show network error is any regaring with api status
