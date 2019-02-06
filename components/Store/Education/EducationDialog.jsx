@@ -38,7 +38,8 @@ class EducationDialog extends Component {
         this.state = {
             quantity: "1",
             types: [],
-            selectedType: ""
+            selectedType: "",
+            errors:{}
         };
 
         this.item = this.props.item;
@@ -63,11 +64,16 @@ class EducationDialog extends Component {
             this.setState({ types, selectedType });
         }
     }
-
+    handleErrors = (field, err) => {
+        let {errors} = this.state;
+        errors[field] = err
+        this.setState({errors})
+    }
     checkQuantity = item => {
         var quantity = parseFloat(item.OrderDetailQty);
 
         if (isNaN(quantity) || quantity <= 0) {
+            this.handleErrors('quantity', 'Please enter a valid value for the quantity')
             console.log("Please enter a valid value for the quantity");
             return false;
         }
@@ -120,6 +126,7 @@ class EducationDialog extends Component {
         }
 
         if (SalesLib.YeastEssentials.includes(cartItem.MerchandiseID)) {
+            this.handleErrors('yeastEssentials','Attending Yeast Essentials? If you are considering or already attending Yeast Essentials 2.0, consider attending the 1 day Lab Practicum course that follows each Yeast Essentials course and allows you to apply the skills that you learn.')
             console.log(
                 "Attending Yeast Essentials?",
                 "If you are considering or already attending Yeast Essentials 2.0, consider attending the 1 day Lab Practicum course that follows each Yeast Essentials course and allows you to apply the skills that you learn."
@@ -146,7 +153,7 @@ class EducationDialog extends Component {
 
     render() {
         const { classes, theme, item } = this.props;
-
+        const { errors }  = this.state;
         return (
             <React.Fragment>
                 <DialogContent>
@@ -232,9 +239,11 @@ class EducationDialog extends Component {
                             validationSchema={customFormValidation}
                             onSubmit={values => this.addToCart(values)}
                         >
-                            {({ values, errors, touched, handleChange }) => {
+                            {({ values, handleChange }) => {
                                 return(
                                     <Form className={classes.form}> 
+                                        {errors.YeastEssentials && <div className="info"  >* {errors.YeastEssentials}</div>}
+                                        {errors.quantity  && <div className="error" >* {errors.quantity}</div>}
                                         <Grid
                                             item
                                             xs
@@ -253,7 +262,6 @@ class EducationDialog extends Component {
                                                     type="number"
                                                 />
                                             </Grid>
-                                            {errors.quantity && touched.quantity && <div style={{color:'red'}} >{errors.quantity}</div>}
                                             <Grid
                                                 item
                                                 xs

@@ -39,7 +39,8 @@ class GiftShopDialog extends Component {
         this.state = {
             quantity: "1",
             sizes: [],
-            size: ""
+            size: "",
+            errors: {},
         };
 
         this.item = this.props.item;
@@ -69,7 +70,11 @@ class GiftShopDialog extends Component {
             this.setState({ sizes, size });
         }
     }
-
+    handleErrors = (field, err) => {
+        let {errors} = this.state;
+        errors[field] = err
+        this.setState({errors})
+    }
     setSize = event => {
         this.setState({ size: event.target.value });
     };
@@ -78,6 +83,7 @@ class GiftShopDialog extends Component {
         var quantity = parseFloat(item.OrderDetailQty);
 
         if (isNaN(quantity) || quantity <= 0) {
+            this.handleErrors('quantity', 'Please enter a valid value for the quantity')
             console.log("Please enter a valid value for the quantity");
             return false;
         }
@@ -91,7 +97,6 @@ class GiftShopDialog extends Component {
     };
 
     addToCart = (values) => {
-        console.log('ssssssssssss', values, this.state);
         var quantity = this.state.quantity;
         var item = this.item;
 
@@ -156,7 +161,7 @@ class GiftShopDialog extends Component {
 
     render() {
         const { classes, theme } = this.props;
-
+        const { errors } = this.state;
         return (
             <React.Fragment>
                 <DialogContent>
@@ -206,9 +211,10 @@ class GiftShopDialog extends Component {
                         validationSchema={customFormValidation}
                         onSubmit={values => this.addToCart(values)}
                     >
-                        {({ values, errors, touched, handleChange }) => {
+                        {({ values, handleChange }) => {
                             return(
-                                <Form className={classes.form}> 
+                                <Form className={classes.form}>
+                                    {errors.quantity  && <div className="error" >* {errors.quantity}</div>} 
                                     <Grid
                                         item
                                         xs
@@ -235,7 +241,6 @@ class GiftShopDialog extends Component {
                                                         ))}
                                                     </Select>
                                                 </FormControl>
-                                                {errors.size && touched.size && <div style={{color:'red'}} >{errors.size}</div>}
                                             </Grid>
                                         )}
 
@@ -248,7 +253,6 @@ class GiftShopDialog extends Component {
                                                 onChange={this.changeQuantity}
                                                 type="number"
                                             />
-                                            {errors.quantity && touched.quantity && <div style={{color:'red'}} >{errors.quantity}</div>}
                                         </Grid>
                                         <Grid
                                             item
@@ -261,10 +265,10 @@ class GiftShopDialog extends Component {
                                             <Grid item>
                                                 <div className={classes.buttons}>
                                                     <Button
-                                                        type="submit"
+                                                        // type="submit"
                                                         variant="contained"
                                                         color="primary"
-                                                        // onClick={this.addToCart}
+                                                        onClick={this.addToCart}
                                                         className={classes.button}
                                                     >
                                                         Add to Cart

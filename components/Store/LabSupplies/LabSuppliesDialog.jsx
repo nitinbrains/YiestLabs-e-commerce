@@ -38,16 +38,22 @@ class LabSuppliesDialog extends Component {
         super(props);
         this.state = {
             quantity: '1',
+            errors: {},
         };
 
         this.item = this.props.item;
     }
-
+    handleErrors = (field, err) => {
+        let {errors} = this.state;
+        errors[field] = err
+        this.setState({errors})
+    }
     checkQuantity = (item) => {
 
         var quantity = parseFloat(item.OrderDetailQty);
 
         if(isNaN(quantity) || quantity <= 0 ) {
+            this.handleErrors('quantity', 'Please enter a valid value for the quantity')
             console.log('Please enter a valid value for the quantity');
             return false;
         }
@@ -61,7 +67,7 @@ class LabSuppliesDialog extends Component {
     }
 
     addToCart = (values) => {
-        console.log('ssssssssssss', values, this.state);
+
         var quantity = this.state.quantity;
         var item = this.item;
 
@@ -87,7 +93,8 @@ class LabSuppliesDialog extends Component {
 
     render() {
         const { classes, theme } = this.props;
-
+        const { errors } = this.state;
+        
         return (
             <React.Fragment>
                 <DialogTitle id="form-dialog-title">
@@ -98,10 +105,11 @@ class LabSuppliesDialog extends Component {
                         validationSchema={customFormValidation}
                         onSubmit={values => this.addToCart(values)}
                     >
-                        {({ values, errors, touched, handleChange }) => {
+                        {({ values, handleChange }) => {
                             return(
                                 <Form className={classes.form}> 
                                     <DialogContent>
+                                        {errors.quantity  && <div className="error" >* {errors.quantity}</div>} 
                                         <Grid
                                             item
                                             xs
@@ -133,8 +141,8 @@ class LabSuppliesDialog extends Component {
                                     </DialogContent>
                                     <DialogActions>
                                         <Button
-                                            type="submit"
-                                            // onClick={this.addToCart}
+                                            // type="submit"
+                                            onClick={this.addToCart}
                                             color="primary"
                                             // onChange={this.changeQuantity}
                                         >

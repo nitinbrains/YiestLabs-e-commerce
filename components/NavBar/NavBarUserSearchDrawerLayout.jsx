@@ -180,7 +180,6 @@ class NavBarUserSearchDrawerLayout extends Component {
                     <div className={classes.alertWrapper}>
                         <Banner />
                     </div>
-                    {/* <div style={{height:'50px', width:'100%', border:'3px solid'}}>daksjhdkajs</div> */}
                     {children}
                 </main>
                 
@@ -336,7 +335,7 @@ const styles = theme => ({
         padding: theme.spacing.unit / 2,
     },
     alertWrapper: {
-        marginTop:'42px'
+        marginTop:'50px'
     },
 });
 
