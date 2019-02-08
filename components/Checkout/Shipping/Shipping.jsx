@@ -21,8 +21,8 @@ import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 
-import ManageAddresses from "./ManageAddresses";
-import AddAddress from "./AddAddress";
+import ManageShipping from "../../MyAccount/ManageShipping";
+import AddAddress from "../../MyAccount/AddAddress";
 
 // custom
 import SalesLib from "../../../lib/SalesLib";
@@ -47,7 +47,7 @@ class Shipping extends Component {
 
     render() {
         var { classes } = this.props;
-        
+
         return (
             <React.Fragment>
                 <Grid container spacing={24}>
@@ -86,6 +86,7 @@ class Shipping extends Component {
 
                                 <Button
                                     style={{ marginTop: 10 }}
+                                    variant="outlined" color="primary"
                                     onClick={this.manageAddresses}
                                 >
                                     Change Shipping Address
@@ -123,10 +124,10 @@ class Shipping extends Component {
 
                 <Dialog
                     open={this.state.manageAddresses}
-                    maxWidth={"sm"}
+                    maxWidth={"md"}
                     fullWidth
                 >
-                    <ManageAddresses closeDialog={this.closeAddresses} />
+                    <ManageShipping checkout={true} closeDialog={this.closeAddresses} />
                 </Dialog>
             </React.Fragment>
         );

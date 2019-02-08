@@ -27,11 +27,11 @@ import SalesLib from "../../../lib/SalesLib";
 import Utils from "../../../lib/Utils";
 import { userActions } from "../../../redux/actions/userActions";
 
-import ManageAddresses from "./ManageAddresses";
-import AddAddress from "./AddAddress";
+import ManageBilling from "../../MyAccount/ManageBilling";
+import AddAddress from "../../MyAccount/AddAddress";
 
-import ManageCards from "./ManageCards";
-import AddCard from "./AddCard";
+import ManageCards from "../../MyAccount/ManageCards";
+import AddCard from "../../MyAccount/AddCard";
 
 class Billing extends Component {
     constructor(props) {
@@ -151,6 +151,7 @@ class Billing extends Component {
                                         </Typography>
                                         <Button
                                             style={{ marginTop: 10 }}
+                                            variant="outlined" color="primary"
                                             onClick={this.manageCards}
                                         >
                                             Change Card
@@ -215,6 +216,7 @@ class Billing extends Component {
                                         </Typography>
                                             <Button
                                                 style={{ marginTop: 10 }}
+                                                variant="outlined" color="primary"
                                                 onClick={this.manageCards}
                                             >
                                                 Change Card
@@ -280,6 +282,7 @@ class Billing extends Component {
 
                                 <Button
                                     style={{ marginTop: 10 }}
+                                    variant="outlined" color="primary"
                                     onClick={this.manageAddresses}
                                 >
                                     Change Billing Address
@@ -287,22 +290,8 @@ class Billing extends Component {
                             </div>
                         ) : (
                             <Grid item xs={12}>
-                                <AddAddress />
-                                <Grid
-                                    style={{ marginTop: 10 }}
-                                    container
-                                    justify="flex-end"
-                                >
-                                    <Grid item>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={() => this.addNewAddress()}
-                                        >
-                                            Add Address
-                                        </Button>
-                                    </Grid>
-                                </Grid>
+                                <AddAddress addAddress={this.addNewAddress} />
+
                             </Grid>
                         )}
                     </Grid>
@@ -310,14 +299,14 @@ class Billing extends Component {
 
                 <Dialog
                     open={this.state.manageAddresses}
-                    maxWidth={"sm"}
+                    maxWidth={"md"}
                     fullWidth
                 >
-                    <ManageAddresses closeDialog={this.closeAddresses} />
+                    <ManageBilling checkout={true} closeDialog={this.closeAddresses} />
                 </Dialog>
 
-                <Dialog open={this.state.manageCards} maxWidth={"sm"} fullWidth>
-                    <ManageCards closeDialog={this.closeCards} />
+                <Dialog open={this.state.manageCards} maxWidth={"md"} fullWidth>
+                    <ManageCards checkout={true} closeDialog={this.closeCards} />
                 </Dialog>
             </React.Fragment>
         );
