@@ -11,7 +11,7 @@ import * as api from '../../services/';
 export function * getInventory (action) {
     const { responseSuccess, responseFailure, data: { search } } = action;
     try {
-        yield put(messageActions.hideNetworkError({}))
+        yield put(messageActions.hideSnackbar({}))
         const { res: { items, error }} = yield call(api.getInventory);       
         if( error ) {
             throw error
@@ -19,14 +19,14 @@ export function * getInventory (action) {
             var category = 1;
             const itemsToShow = filterItems(items, category, null, false)
             yield put(responseSuccess({ items, itemsToShow, category })); 
-            yield put(messageActions.hideNetworkError())   
+            yield put(messageActions.hideSnackbar())   
         }
     } catch (error) {
         yield put(responseFailure(error));
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message, variant:'error' }));        
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
     }
@@ -54,14 +54,14 @@ export function * getItemAvailability (action) {
         yield put(responseFailure(error));
         if(error.status){
             // show network error is any regaring with api status
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
             }
         }
     }
@@ -76,14 +76,14 @@ export function * changeCategory(action) {
     } catch(error) {
         if(error.status){
             // show network error is any regaring with api status
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
@@ -99,14 +99,14 @@ export function * searchForStrain(action) {
     } catch(error) {
         if(error.status){
             // show network error is any regaring with api status
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
@@ -122,14 +122,14 @@ export function * switchToHomebrew(action) {
     } catch(error) {
         if(error.status){
             // show network error is any regaring with api status
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
@@ -148,14 +148,14 @@ export function * switchToProfessional(action) {
     } catch(error) {
         if(error.status){
             // show network error is any regaring with api status
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
@@ -170,14 +170,14 @@ export function * searchItem(action) {
     } catch(error) {
         if(error.status){
             // show network error is any regaring with api status
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));

@@ -13,6 +13,7 @@ const styles = theme => ({
     padding: theme.spacing.unit / 2,
   },
 });
+const defaultAnchorOrigin  = {vertical: 'top',horizontal: 'center'};
 
 class App extends React.Component {
   state = {
@@ -27,19 +28,15 @@ componentWillReceiveProps(props){
 }
   handleNotification = () => {
     const { messages } = this.props;
-    if(messages.networkRequestError.length > 0) {
-      return messages.networkRequestError.map((msg)=>{
-        if(!msg.displayType || msg.displayType === 'snackbar'){
-          if(msg.variant === 'error'){
-            console.error('Error: ', msg.message)
-          }
+    if(messages.length > 0) {
+      return messages.map((msg)=>{
+          if(msg.variant === 'error') console.error('Error: ', msg.message)
           let options = {
             variant: msg.variant, 
-            anchorOrigin: msg.anchorOrigin ? msg.anchorOrigin :{vertical: 'top',horizontal: 'center'},
-            autoHideDuration: 15000
+            anchorOrigin: msg.anchorOrigin || defaultAnchorOrigin,
+            autoHideDuration: msg.timeOut || 15000,
           }
           this.props.enqueueSnackbar( msg.message, options);
-        }
       })
     }
   }
@@ -76,7 +73,9 @@ class SimpleSnackbar extends React.Component {
   
 
   render() {
-    const { classes } = this.props;
+    const { classes, messageList } = this.props;
+    console.log('messageList', messageList);
+    
     return (
       <div>
         <SnackbarProvider 
@@ -94,7 +93,7 @@ class SimpleSnackbar extends React.Component {
             </IconButton>
           ]}
         >
-          <Notification messages={this.props.messageList} />
+          <Notification messages={messageList} />
         </SnackbarProvider>
       </div>
     );

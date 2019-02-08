@@ -44,9 +44,9 @@ export function * calculatePacks(action) {
 
     } catch(error) {
         if(error.status){
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message }));
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message }));
         } else {
-            yield put(messageActions.showNetworkError({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message }));        
             // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
         }
         yield put(responseFailure(error));

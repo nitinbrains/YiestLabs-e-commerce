@@ -21,8 +21,7 @@ export function* loginUser(action) {
         let {userID} = res;
         yield put(responseSuccess());
         if(res.error && res.error.code === 0 ){
-            yield put(messageActions.showNetworkError({
-                displayType: 'banner',
+            yield put(messageActions.showBanner({
                 title: 'Yeastman', 
                 message: res.error.message, 
                 variant:'error',
@@ -31,8 +30,7 @@ export function* loginUser(action) {
             userID = Number(userID)
             yield put(userActions.getUserInfo({userID, isLogin:true}));
         }else{
-            yield put(messageActions.showNetworkError({
-                displayType: 'banner',
+            yield put(messageActions.showBanner({
                 title: 'Error', 
                 message: "Something went wrong", 
                 variant:'error',
@@ -42,14 +40,14 @@ export function* loginUser(action) {
     } catch (err) {
         if(error.status){
             // show network error is any regaring with api status
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showBanner({ title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showBanner({ title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
@@ -70,8 +68,7 @@ export function* getUserInfo(action) {
         yield put(userActions.setUserInfo({ userInfo}));
         yield put(responseSuccess());
         if(isLogin){
-            yield put(messageActions.showNetworkError({
-                displayType:'banner',
+            yield put(messageActions.showBanner({
                 title: 'Authorization',
                 message: 'You have successfully logged in!',
                 variant:'success',
@@ -80,14 +77,14 @@ export function* getUserInfo(action) {
     } catch (error) {
         if(error.status){
             // show network error is any regaring with api status
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showBanner({ title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showBanner({ title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
@@ -114,14 +111,14 @@ export function* setUserInfo(action) {
         } catch (error) {
             if(error.status){
                 // show network error is any regaring with api status
-                yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
             } else {
                 if(error.code == 0 ){
                     // Yeastman error when we have error with code == 0
-                    yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+                    yield put(messageActions.showBanner({ title: 'Yeastman', message: error.message, variant:'error' }));        
                 } else if(error.code == -1){
                     // Other error when we have error with code == -1
-                    yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+                    yield put(messageActions.showBanner({ title: 'Error', message: error.message, variant:'error' }));                
                 }
             }
         yield put(responseFailure(error));
@@ -143,16 +140,14 @@ export function* updateUserInfo(action) {
         });
         
         if (error){
-            yield put(messageActions.showNetworkError({ 
-                displayType:'banner', 
+            yield put(messageActions.showBanner({
                 title: 'Yeastman', 
                 message: "Error: error updating your account" + error,
                 variant:'error' 
             }));
             throw error;
         } else {
-            yield put(messageActions.showNetworkError({ 
-                displayType:'banner', 
+            yield put(messageActions.showBanner({
                 title: 'Yeastman', 
                 message: "Your account information has been successfully updated",
                 variant:'success' 
@@ -167,14 +162,14 @@ export function* updateUserInfo(action) {
     } catch(error) {
         if(error.status){
             // show network error is any regaring with api status
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showBanner({ title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showBanner({ title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
@@ -201,14 +196,14 @@ export function* getOrderHistory(action) {
     } catch(error) {
         if(error.status){
             // show network error is any regaring with api status
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showBanner({ title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showBanner({ title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
@@ -238,8 +233,7 @@ export function* addCreditCard(action) {
         const user = yield select(state => state.user);
 
         if (!user.id) {
-            yield put(messageActions.showNetworkError({ 
-                displayType:'banner', 
+            yield put(messageActions.showBanner({
                 title: 'Yeastman', 
                 message: "No user id. Cannot add credit card",
                 variant:'error' 
@@ -251,7 +245,7 @@ export function* addCreditCard(action) {
         request.token = WLHelper.generateCreditToken(creditCard);
 
         yield put(userActions.updateUserInfo({ request }));
-        yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));
+        yield put(messageActions.showBanner({ title: 'Yeastman', message: error.message, variant:'error' }));
     } catch (error) {
         yield put(responseFailure(error));
     }
@@ -263,8 +257,7 @@ export function* deleteCreditCard(action) {
         const user = yield select(state => state.user);
 
         if (!user.id) {
-            yield put(messageActions.showNetworkError({ 
-                displayType:'banner', 
+            yield put(messageActions.showBanner({
                 title: 'Yeastman', 
                 message: "No user id. Cannot delete credit card",
                 variant:'error' 
@@ -293,14 +286,14 @@ export function* setCreditCard(action) {
     } catch(error) {
         if(error.status){
             // show network error is any regaring with api status
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showBanner({ title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showBanner({ title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
@@ -338,8 +331,7 @@ export function* addAddress(action) {
         const user = yield select(state => state.user);
 
         if (!user.id) {
-            yield put(messageActions.showNetworkError({ 
-                displayType:'banner', 
+            yield put(messageActions.showBanner({ 
                 title: 'Yeastman', 
                 message: "No user id. Cannot add Address",
                 variant:'error' 
@@ -354,14 +346,14 @@ export function* addAddress(action) {
     } catch(error) {
         if(error.status){
             // show network error is any regaring with api status
-            yield put(messageActions.showNetworkError({ title: 'Error', message: error.message, variant:'error' }));
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
             if(err.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showBanner({ title: 'Yeastman', message: error.message, variant:'error' }));        
             } else if(err.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showNetworkError({ displayType:'banner', title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showBanner({ title: 'Error', message: error.message, variant:'error' }));                
             }
         }
         yield put(responseFailure(error));
@@ -378,8 +370,7 @@ export function* editAddress(action) {
         const user = yield select(state => state.user);
 
         if (!user.id) {
-            yield put(messageActions.showNetworkError({ 
-                displayType:'banner', 
+            yield put(messageActions.showBanner({ 
                 title: 'Yeastman', 
                 message: "No user id. Cannot edit Address",
                 variant:'error' 
@@ -404,8 +395,7 @@ export function* deleteAddress(action) {
         const user = yield select(state => state.user);
 
         if (!user.id) {
-            yield put(messageActions.showNetworkError({ 
-                displayType:'banner', 
+            yield put(messageActions.showBanner({ 
                 title: 'Yeastman', 
                 message: "No user id. Cannot delete Address",
                 variant:'error' 
@@ -447,8 +437,7 @@ export function* setDefaultShipAddress(action) {
         const user = yield select(state => state.user);
 
         if (!user.id) {
-            yield put(messageActions.showNetworkError({ 
-                displayType:'banner', 
+            yield put(messageActions.showBanner({ 
                 title: 'Yeastman', 
                 message: "No user id. Cannot set default ship address",
                 variant:'error' 
@@ -490,8 +479,7 @@ export function* setDefaultBillAddress(action) {
         const user = yield select(state => state.user);
 
         if (!user.id) {
-            yield put(messageActions.showNetworkError({ 
-                displayType:'banner', 
+            yield put(messageActions.showBanner({ 
                 title: 'Yeastman', 
                 message: "No user id. Cannot set default bill address",
                 variant:'error' 
