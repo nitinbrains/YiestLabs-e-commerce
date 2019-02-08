@@ -135,19 +135,19 @@ class Billing extends Component {
                             "Credit Card" ||
                             (WLHelper.getPaymentTerm(this.state.terms) ==
                             "None" ? (
-                                this.props.user.selectedCard.id ? (
+                                this.props.user.card.id ? (
                                     <div>
                                         <Typography>
-                                            {this.props.user.selectedCard.ccname}
+                                            {this.props.user.card.ccname}
                                         </Typography>
                                         <Typography>
                                             {
-                                                this.props.user.selectedCard
+                                                this.props.user.card
                                                     .ccnumber
                                             }
                                         </Typography>
                                         <Typography>
-                                            {moment(this.props.user.selectedCard.ccexpire).format("MM-YYYY")}
+                                            {moment(this.props.user.card.ccexpire).format("MM-YYYY")}
                                         </Typography>
                                         <Button
                                             style={{ marginTop: 10 }}
@@ -199,19 +199,19 @@ class Billing extends Component {
                                             />
                                         </Grid>
                                     </Grid>
-                                    {this.props.user.selectedCard.id ? (
+                                    {this.props.user.card.id ? (
                                         <div>
                                         <Typography>
-                                            {this.props.user.selectedCard.ccname}
+                                            {this.props.user.card.ccname}
                                         </Typography>
                                         <Typography>
                                             {
-                                                this.props.user.selectedCard
+                                                this.props.user.card
                                                     .ccnumber
                                             }
                                         </Typography>
                                         <Typography>
-                                            {moment(this.props.user.selectedCard.ccexpire).format("MM-YYYY")}
+                                            {moment(this.props.user.card.ccexpire).format("MM-YYYY")}
                                         </Typography>
                                             <Button
                                                 style={{ marginTop: 10 }}

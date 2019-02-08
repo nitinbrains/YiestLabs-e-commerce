@@ -70,11 +70,11 @@ class ManageCards extends Component {
                         </IconButton>
                     </div>
                     <Grid style={{ padding: 10 }} container spacing={24}>
-                        {this.props.user.cards.map((card, i) => (
+                        {this.props.user.otherCards.map((card, i) => (
                             <Grid item xs={12} sm={4}>
                                 <div
                                     className={
-                                        this.props.user.selectedCard.number ==
+                                        this.props.user.card.number ==
                                         card.number
                                             ? classes.cardBoxSelected
                                             : classes.cardBox

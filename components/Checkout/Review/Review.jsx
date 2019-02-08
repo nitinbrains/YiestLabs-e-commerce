@@ -92,7 +92,7 @@ function Review(props) {
                         Payment details
                     </Typography>
                     {
-                        props.user.selectedCard &&                     
+                        props.user.card &&                     
                         <Grid container>
                             <Grid item xs={6}>
                                 <Typography gutterBottom>
@@ -111,7 +111,7 @@ function Review(props) {
                             </Grid>
                             <Grid item xs={6}>
                                 <Typography gutterBottom>
-                                    {props.user.selectedCard.ccname}
+                                    {props.user.card.ccname}
                                 </Typography>
                             </Grid>
                             <Grid item xs={6}>
@@ -121,7 +121,7 @@ function Review(props) {
                             </Grid>
                             <Grid item xs={6}>
                                 <Typography gutterBottom>
-                                    {props.user.selectedCard.ccnumber}
+                                    {props.user.card.ccnumber}
                                 </Typography>
                             </Grid>
                             <Grid item xs={6}>
@@ -131,7 +131,7 @@ function Review(props) {
                             </Grid>
                             <Grid item xs={6}>
                                 <Typography gutterBottom>
-                                    {moment(props.user.selectedCard.ccexpire).format('MM/YYYY')}
+                                    {moment(props.user.card.ccexpire).format('MM/YYYY')}
                                 </Typography>
                             </Grid>
                         </Grid>

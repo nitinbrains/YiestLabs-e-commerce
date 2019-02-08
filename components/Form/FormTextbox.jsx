@@ -2,61 +2,56 @@ import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
-import TextField from '@material-ui/core/TextField';
+import TextField from "@material-ui/core/TextField";
 
 class FormTextbox extends React.Component {
-  
-  constructor(props) {
-    super(props);
-    this.state = {
-      label: this.props.label,
-      value: this.props.label
+    constructor(props) {
+        super(props);
+        this.state = {
+            label: this.props.label,
+            value: this.props.label
+        };
     }
-  }
 
-  static getDerivedStateFromProps(nextProps, prevState){
-    if( nextProps.value){
-      return {
-        value: nextProps.value,
-        // label: nextProps.label
-      }
-    } else {
-      return null
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.value) {
+            return {
+                value: nextProps.value
+                // label: nextProps.label
+            };
+        } else {
+            return null;
+        }
     }
-  }
-  
-  render() {
-    const { classes } = this.props;
-    return (
-      <TextField
-        required={ this.props.required || false }
-        error={ this.props.error || false }
-        id="standard-bare"
-        label={ this.props.showLabel ? this.props.label : '' }
-        className={`form-textbox ${this.props.className || ''}`}
-        value={this.state.value}
-        margin="normal"
-        variant="outlined"
-        onClick={(e) => {
-          if( this.state.value == this.state.label ){
-            this.setState({
-              value: ''
-            })
-          }
-        }}
-        onBlur={() => {
-          if( this.state.value == "" ){
-            this.setState({
-              value: this.state.label
-            })
-          }
-        }}
-        onChange={ (e) => {
-          this.props.onChange(e)   
-        }}
-      />
-    );
-  }
+
+    render() {
+        const { classes } = this.props;
+        return (
+            <TextField
+                required={this.props.required || false}
+                error={this.props.error || false}
+                id="standard-bare"
+                label={this.props.showLabel ? this.props.label : ""}
+                className={`form-textbox ${this.props.className || ""}`}
+                value={this.state.value}
+                margin="normal"
+                variant="outlined"
+                onClick={e => {
+                    if (this.state.value == this.state.label) {
+                        this.setState({value: ""});
+                    }
+                }}
+                onBlur={() => {
+                    if (this.state.value == "") {
+                        this.setState({value: this.state.label});
+                    }
+                }}
+                onChange={e => {
+                    this.props.onChange(e);
+                }}
+            />
+        );
+    }
 }
 
 const styles = theme => ({
