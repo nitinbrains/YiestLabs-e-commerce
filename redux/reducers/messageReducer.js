@@ -4,63 +4,49 @@ import { finished } from 'stream';
 import {find} from 'lodash';
 
 const initialState = {
-    messages: [],
-    networkRequestError: []
+    banner: [],
+    snackbar: [],
 };
 
-const getType = (message, error) => {
-    if (message != null) {
-        return 'NOTIFICATION';
-    } else if (error != null) {
-        console.log('error message', error);
-        return 'ERROR';
-    }
-    return 'UNDEFINED'
-};
 
 export default createReducer(initialState, {
-    [messageTypes.DISPLAY_MESSAGE_ATTEMPT]: (state, { data: { displayType, title, message, error, variant, anchorOrigin } }) =>{
-        console.log(error,message,variant,title,'to display error message message')
-        let type = getType(message, error);
+    [messageTypes.SHOW_BANNER_ATTEMPT]: (state, { data:{ title, message, variant, timeOut } }) =>{
         // check duplicate message
-        if(!find(state.messages, (err)=>{ return err.type === type && err.variant === variant && (err.message === message || err.message === error)})){
-            return({
-                messages: [
-                    ...state.messages,
-                    {
-                        index: state.messages.length,
-                        type,
-                        displayType,
-                        title,
-                        message: message || error,
-                        variant: variant,
-                        anchorOrigin,
-                    }
-                ] 
-            })
-        }else{
-            return {...state}
-        }
-    },
-    [messageTypes.HIDE_MESSAGE_ATTEMPT]: ({ messages }, { data: idx }) => ({
-        messages: messages.filter((message, index) => message.index !== idx.index)
-    }),
-    [messageTypes.SHOW_NETWORK_ERROR_ATTEMPT]: (state, { data:{ displayType, title, message, error, variant, anchorOrigin } }) =>{ 
-        console.log(title,message,error,'error message if any')
-        let type = getType(message, error);
-        // check duplicate message
-        let mes = find(state.networkRequestError, (err)=>{return  err.type === type && err.variant === variant && (err.message === message || err.message === error)})
+        let msgText = message.message || message;
+        let mes = find(state.banner, (err)=>{return  err.title === title && err.variant === variant && err.message === msgText})
         if(!mes){
             return({
-                networkRequestError: [
-                    ...state.networkRequestError,
+                banner: [
+                    ...state.banner,
                     {
-                        index: state.networkRequestError.length,
-                        type,
-                        displayType,
+                        index: state.banner.length,
                         title,
-                        message: message || error,
-                        variant: variant,
+                        message: msgText,
+                        variant,
+                        timeOut,
+                    }
+                ] 
+            })
+        }else{
+            return {...state}
+        }
+    },
+    [messageTypes.HIDE_BANNER_ATTEMPT]: ({banner}, {data: idx} ) => ({
+        banner: banner.filter((error, index) => error.index !== idx.index)
+    }),
+    [messageTypes.SHOW_SNACKBAR_ATTEMPT]: (state, { data:{ title, message, variant, anchorOrigin } }) =>{ 
+        // check duplicate message
+        let msgText = message.message || message;
+        let mes = find(state.snackbar, (err)=>{return  err.title === title && err.variant === variant && err.message === msgText})
+        if(!mes){
+            return({
+                snackbar: [
+                    ...state.snackbar,
+                    {
+                        index: state.snackbar.length,
+                        title,
+                        message: msgText,
+                        variant,
                         anchorOrigin,
                     }
                 ] 
@@ -69,7 +55,7 @@ export default createReducer(initialState, {
             return {...state}
         }
     },
-    [messageTypes.HIDE_NETWORK_ERROR_ATTEMPT]: ({networkRequestError}, {data: idx} ) => ({
-        networkRequestError: networkRequestError.filter((error, index) => error.index !== idx.index)
+    [messageTypes.HIDE_SNACKBAR_ATTEMPT]: ({snackbar}, {data: idx} ) => ({
+        snackbar: snackbar.filter((error, index) => error.index !== idx.index)
     }),
 });

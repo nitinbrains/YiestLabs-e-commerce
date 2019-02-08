@@ -11,12 +11,12 @@ import { messageActions } from "../../redux/actions/messageActions";
 import SimpleSnackbar from "../Form/SimpleSnackbar";
 class NavBarLayout extends Component {
     componentWillUnmount() {
-        if( this.props.messages.networkRequestError != false ){
-            this.props.hideNetworkError()
+        if( this.props.messages.snackbar != false ){
+            this.props.hideSnackbar()
         }
     }
     render() {
-        const { children, classes, theme } = this.props;
+        const { children, classes, theme, messages } = this.props;
 
         return (
             <div className={classes.root}>
@@ -54,8 +54,8 @@ class NavBarLayout extends Component {
                 </main>
 
                 <SimpleSnackbar
-                    messageList={this.props.messages}
-                    handleClose={() => this.props.hideNetworkError()}
+                    messageList={messages.snackbar || []}
+                    handleClose={() => this.props.hideSnackbar()}
                 />
 
             </div>

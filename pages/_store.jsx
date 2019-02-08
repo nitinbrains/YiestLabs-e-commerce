@@ -62,6 +62,8 @@ class Store extends Component {
         if(isUserLoggedIn && userInfo){
             this.props.setUserInfo({ userInfo });
         }
+        console.log('messageActions', messageActions);
+        
     }
 
     handleClickItem = item => {
