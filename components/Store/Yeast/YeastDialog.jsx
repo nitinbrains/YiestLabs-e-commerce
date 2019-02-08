@@ -24,6 +24,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
 import LoadingIndicator from '../../UI/LoadingIndicator';
 import { cartActions } from "../../../redux/actions/cartActions";
@@ -89,7 +91,14 @@ function getColor(salesCategory) {
         throw error;
     }
 }
-
+const customFormValidation = Yup.object().shape({
+    packaging: Yup.string()
+      .required('Required'),
+    pack: Yup.string()
+      .required('Required'),
+    quantity: Yup.string()
+      .required('Required'),
+  });
 class YeastDialog extends Component {
     constructor(props) {
         super(props);
@@ -105,6 +114,7 @@ class YeastDialog extends Component {
             packaging: "pp",
             availability:{},
             isLoading: false,
+            errors:{},
         };
 
         this.item = this.props.item;
@@ -172,19 +182,25 @@ class YeastDialog extends Component {
             console.log("error in filterPackageTypes", error);
         }
     }
-
+    handleErrors = (field, err) => {
+        let {errors} = this.state;
+        errors[field] = err
+        this.setState({errors})
+    }
     checkQuantity = item => {
         try {
             var quantity = parseFloat(item.OrderDetailQty);
 
             if (isNaN(quantity) || quantity <= 0) {
                 // TO-DO: Display message to user
+                this.handleErrors('quantity', "Please enter a valid value for the quantity")
                 console.log("Please enter a valid value for the quantity");
                 return false;
             }
 
             // Wild Yeast must have mimimum 1L
             if (item.salesCategory == 4 && quantity < 1.0) {
+                this.handleErrors('quantity', "Notice: The minimum quantity sold for Wild Yeast strains is 1L. Please adjust your quantity")
                 console.log(
                     "Notice",
                     "The minimum quantity sold for Wild Yeast strains is 1L. Please adjust your quantity"
@@ -197,6 +213,7 @@ class YeastDialog extends Component {
                 // Vault strains must have minimum 1.5L Custom Pour
                 if (item.salesCategory == 32 && quantity < 1.5) {
                     // TO-DO: Display message to user
+                    this.handleErrors('quantity', "Notice: The minimum quantity sold for Custom Pour Vault strains is 1.5L. Please adjust your quantity")
                     console.log(
                         "Notice",
                         "The minimum quantity sold for Custom Pour Vault strains is 1.5L. Please adjust your quantity"
@@ -210,6 +227,7 @@ class YeastDialog extends Component {
                         quantity = Math.round(quantity);
 
                         // TO-DO: Display message to user
+                        this.handleErrors('quantity', "Notice: Quantities for this strain must be in 1L increments, your value has been rounded accordingly. Please review your cart.")
                         console.log(
                             "Notice",
                             "Quantities for this strain must be in 1L increments, your value has been rounded accordingly. Please review your cart."
@@ -232,6 +250,7 @@ class YeastDialog extends Component {
                             }
 
                             // TO-DO: Display message to user
+                            this.handleErrors('quantity', "Notice: Quantities for this strain must be in 0.5L increments, your value has been rounded accordingly. Please review your cart.")
                             console.log(
                                 "Notice",
                                 "Quantities for this strain must be in 0.5L increments, your value has been rounded accordingly. Please review your cart."
@@ -247,16 +266,18 @@ class YeastDialog extends Component {
 
             // Non-custom pour strains must be in increments of 1
             else if (parseFloat(quantity) / parseInt(quantity) != 1.0) {
+                this.handleErrors('quantity', "Quantity Error !!")
                 return false;
             }
 
             return true;
         } catch (error) {
+            this.handleErrors('quantity', `Could not check quantity ${error}`)
             console.log("Could not check quantity", error);
         }
     };
 
-    addToCart = () => {
+    addToCart = (values) => {
         const packaging = this.state.packaging;
         const pack = this.state.pack;
         const quantity = this.state.quantity;
@@ -290,6 +311,7 @@ class YeastDialog extends Component {
                     cartItem.details = "2L";
                     break;
                 default:
+                    this.handleErrors('pack', `cannot add to cart, ${item}, ${packaging}, ${pack}, ${quantity}`)
                     console.log("cannot add to cart", item, packaging, pack, quantity);
                     return;
             }
@@ -458,11 +480,11 @@ class YeastDialog extends Component {
     render() 
     {
         const { classes, theme, item, inventory} = this.props;
-
+        const {errors} = this.state;
         const spaceIndex = item.Name.indexOf(" ");
         const itemID = item.Name.substr(0, spaceIndex);
         const itemName = item.Name.substr(spaceIndex + 1);
-
+        
         return (
             <React.Fragment>
                 <LoadingIndicator visible={this.state.isLoading} label={"Getting Availability"} />                
@@ -653,88 +675,105 @@ class YeastDialog extends Component {
                         style={{ marginTop: 5 }}
                         direction={"row"}
                     >
-                        <Grid
-                            item
-                            xs
-                            container
-                            spacing={24}
-                            direction={"row"}
-                            justify="flex-start"
+                        <Formik
+                            initialValues={this.state}
+                            validationSchema={customFormValidation}
+                            onSubmit={values => this.addToCart(values)}
                         >
-                            <Grid item>
-                                <FormControl>
-                                    <InputLabel>Packaging</InputLabel>
-                                    <Select
-                                        value={this.state.packaging}
-                                        onChange={this.setPackaging}
-                                    >
-                                        {this.state.packagingOptions.map(
-                                            (option, i) => (
-                                                <MenuItem
-                                                    key={i}
-                                                    value={option.value}
-                                                >
-                                                    {option.label}
-                                                </MenuItem>
-                                            )
-                                        )}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            {this.state.pack && (
-                                <Grid item>
-                                    <FormControl>
-                                        <InputLabel>Pack</InputLabel>
-                                        <Select
-                                            value={this.state.pack}
-                                            onChange={this.setPack}
+                            {({ values, handleChange }) => {
+                                return(
+                                    <Form className={classes.form}> 
+                                        {errors.packaging && <div className="error"  >* {errors.packaging}</div>}
+                                        {errors.pack  && <div className="error" >* {errors.pack}</div>}
+                                        {errors.quantity  && <div className="error" >* {errors.quantity}</div>}
+                                        <Grid
+                                            item
+                                            xs
+                                            container
+                                            spacing={24}
+                                            direction={"row"}
+                                            justify="flex-start"
                                         >
-                                            {this.state.packOptions.map(
-                                                (option, i) => (
-                                                    <MenuItem
-                                                        key={i}
-                                                        value={option.value}
+                                            <Grid item>
+                                                <FormControl>
+                                                    <InputLabel>Packaging</InputLabel>
+                                                    <Select
+                                                        value={this.state.packaging}
+                                                        onChange={this.setPackaging}
                                                     >
-                                                        {option.label}
-                                                    </MenuItem>
-                                                )
+                                                        {this.state.packagingOptions.map(
+                                                            (option, i) => (
+                                                                <MenuItem
+                                                                    key={i}
+                                                                    value={option.value}
+                                                                >
+                                                                    {option.label}
+                                                                </MenuItem>
+                                                            )
+                                                        )}
+                                                    </Select>
+                                                </FormControl>
+                                            </Grid>
+                                            {this.state.pack && (
+                                                <Grid item>
+                                                    <FormControl>
+                                                        <InputLabel>Pack</InputLabel>
+                                                        <Select
+                                                            value={this.state.pack}
+                                                            onChange={this.setPack}
+                                                        >
+                                                            {this.state.packOptions.map(
+                                                                (option, i) => (
+                                                                    <MenuItem
+                                                                        key={i}
+                                                                        value={option.value}
+                                                                    >
+                                                                        {option.label}
+                                                                    </MenuItem>
+                                                                )
+                                                            )}
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
                                             )}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                            )}
-                            <Grid item>
-                                <TextField
-                                    id="quantity"
-                                    label="Quantity"
-                                    className={classes.quantity}
-                                    value={this.state.quantity}
-                                    onChange={this.changeQuantity}
-                                    type="number"
-                                />
-                            </Grid>
-                            <Grid
-                                item
-                                xs
-                                container
-                                spacing={24}
-                                direction={"row"}
-                                justify="flex-end"
-                            >
-                                <Grid item>
-                                    <div className={classes.buttons}>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={this.addToCart}
-                                            className={classes.button}
-                                        >
-                                            Add to Cart
-                                        </Button>
-                                    </div>
-                                </Grid>
-                            </Grid>
-                        </Grid>
+                                            <Grid item>
+                                                <TextField
+                                                    id="quantity"
+                                                    label="Quantity"
+                                                    className={classes.quantity}
+                                                    value={this.state.quantity}
+                                                    onChange={this.changeQuantity}
+                                                    type="number"
+                                                />
+                                            </Grid>
+                                            <Grid
+                                                item
+                                                xs
+                                                container
+                                                spacing={24}
+                                                direction={"row"}
+                                                justify="flex-end"
+                                            >
+                                                <Grid item>
+                                                    <div className={classes.buttons}>
+                                                        <Button
+                                                            type="submit"
+                                                            variant="contained"
+                                                            color="primary"
+                                                            // onClick={this.addToCart}
+                                                            className={classes.button}
+                                                        >
+                                                            Add to Cart
+                                                        </Button>
+                                                    </div>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                    </Form> 
+                                )   
+                            }
+                        }
+                        </Formik>
                     </Grid>
                 </DialogContent>
             </React.Fragment>
@@ -770,7 +809,10 @@ const styles = theme => ({
         marginTop: theme.spacing.unit,
         marginRight: theme.spacing.unit * -5
     },
-    close: { position: "absolute", right: 0, top: 0 }
+    close: { position: "absolute", right: 0, top: 0 },
+    form:{
+        width:'100%',
+    }
 });
 
 YeastDialog.propTypes = {

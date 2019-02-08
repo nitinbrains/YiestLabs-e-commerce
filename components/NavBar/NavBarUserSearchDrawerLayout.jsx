@@ -59,13 +59,13 @@ class NavBarUserSearchDrawerLayout extends Component {
     };
 
     componentWillUnmount() {
-        if( this.props.messages.networkRequestError != false ){
-            this.props.hideNetworkError()
+        if( this.props.messages.snackbar != false ){
+            this.props.hideSnackbar()
         }
     }
 
     render() {
-        const { children, classes, theme } = this.props;
+        const { children, classes, theme, messages } = this.props;
         return (
             <div className={classes.root}>
                 <div
@@ -180,7 +180,6 @@ class NavBarUserSearchDrawerLayout extends Component {
                     <div className={classes.alertWrapper}>
                         <Banner />
                     </div>
-                    {/* <div style={{height:'50px', width:'100%', border:'3px solid'}}>daksjhdkajs</div> */}
                     {children}
                 </main>
                 
@@ -211,8 +210,8 @@ class NavBarUserSearchDrawerLayout extends Component {
                 />
 
                 <SimpleSnackbar
-                    messageList={this.props.messages}
-                    handleClose={() => this.props.hideNetworkError()}
+                    messageList={messages.snackbar || []}
+                    handleClose={() => this.props.hideSnackbar()}
                 />
             </div>
         );
@@ -336,7 +335,7 @@ const styles = theme => ({
         padding: theme.spacing.unit / 2,
     },
     alertWrapper: {
-        marginTop:'42px'
+        marginTop:'50px'
     },
 });
 

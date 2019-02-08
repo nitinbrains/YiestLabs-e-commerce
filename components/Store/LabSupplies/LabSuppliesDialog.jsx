@@ -19,8 +19,17 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
 import { cartActions } from '../../../redux/actions/cartActions';
+
+const customFormValidation = Yup.object().shape({
+    size: Yup.string()
+    .required('Required'),
+    quantity: Yup.string()
+      .required('Required'),
+  });
 
 class LabSuppliesDialog extends Component {
 
@@ -29,16 +38,22 @@ class LabSuppliesDialog extends Component {
         super(props);
         this.state = {
             quantity: '1',
+            errors: {},
         };
 
         this.item = this.props.item;
     }
-
+    handleErrors = (field, err) => {
+        let {errors} = this.state;
+        errors[field] = err
+        this.setState({errors})
+    }
     checkQuantity = (item) => {
 
         var quantity = parseFloat(item.OrderDetailQty);
 
         if(isNaN(quantity) || quantity <= 0 ) {
+            this.handleErrors('quantity', 'Please enter a valid value for the quantity')
             console.log('Please enter a valid value for the quantity');
             return false;
         }
@@ -51,7 +66,7 @@ class LabSuppliesDialog extends Component {
         return true;
     }
 
-    addToCart = () => {
+    addToCart = (values) => {
 
         var quantity = this.state.quantity;
         var item = this.item;
@@ -78,51 +93,66 @@ class LabSuppliesDialog extends Component {
 
     render() {
         const { classes, theme } = this.props;
-
+        const { errors } = this.state;
+        
         return (
             <React.Fragment>
                 <DialogTitle id="form-dialog-title">
                     {this.item.Name}
                 </DialogTitle>
-                <DialogContent>
-                    <Grid
-                        item
-                        xs
-                        container
-                        spacing={24}
-                        style={{ marginTop: 5 }}
-                        direction={"row"}
+                <Formik
+                        initialValues={this.state}
+                        validationSchema={customFormValidation}
+                        onSubmit={values => this.addToCart(values)}
                     >
-                        <Grid
-                            item
-                            xs
-                            container
-                            spacing={24}
-                            direction={"row"}
-                            justify="flex-start"
-                        >
-                            <Grid item>
-                                <TextField
-                                    id="quantity"
-                                    label="Quantity"
-                                    className={classes.quantity}
-                                    value={this.state.quantity}
-                                    onChange={this.changeQuantity}
-                                    type="number"
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        onClick={this.addToCart}
-                        color="primary"
-                        onChange={this.changeQuantity}
-                    >
-                        Add to Cart
-                    </Button>
-                </DialogActions>
+                        {({ values, handleChange }) => {
+                            return(
+                                <Form className={classes.form}> 
+                                    <DialogContent>
+                                        {errors.quantity  && <div className="error" >* {errors.quantity}</div>} 
+                                        <Grid
+                                            item
+                                            xs
+                                            container
+                                            spacing={24}
+                                            style={{ marginTop: 5 }}
+                                            direction={"row"}
+                                        >
+                                            <Grid
+                                                item
+                                                xs
+                                                container
+                                                spacing={24}
+                                                direction={"row"}
+                                                justify="flex-start"
+                                            >
+                                                <Grid item>
+                                                    <TextField
+                                                        id="quantity"
+                                                        label="Quantity"
+                                                        className={classes.quantity}
+                                                        value={this.state.quantity}
+                                                        onChange={this.changeQuantity}
+                                                        type="number"
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button
+                                            // type="submit"
+                                            onClick={this.addToCart}
+                                            color="primary"
+                                            // onChange={this.changeQuantity}
+                                        >
+                                            Add to Cart
+                                        </Button>
+                                    </DialogActions>
+                                </Form> 
+                            )   
+                        }}
+                    </Formik>
             </React.Fragment>
         );
     }
@@ -156,6 +186,9 @@ const styles = theme => ({
     },
     hide: {
         display: "none"
+    },
+    form:{
+        width:'100%',
     }
 });
 

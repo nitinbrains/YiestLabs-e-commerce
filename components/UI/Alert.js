@@ -10,7 +10,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import ErrorIcon from "@material-ui/icons/Error";
 import DoneIcon from "@material-ui/icons/Done";
-// import warning from 'warning.png'
+
 import { messageActions } from '../../redux/actions/messageActions';
 /* Usage
 
@@ -53,17 +53,12 @@ class Alert extends React.Component {
         }
     }
 
-    handleClose = (index, category) => {
-        // this.setState({ visible: false });
-        if(category === 'message'){
-            this.props.hideMessage({index})
-        } else {
-            this.props.hideNetworkError({index})
-        }
-    };
+    handleClose = (index) => {
+        this.props.hideBanner({index})
+    }
 
     render() {
-        const { classes, children, error, message, category } = this.props;
+        const { classes, children, error, message } = this.props;
         let _classname = classes.error;
         let _icon = <ErrorIcon />
         if(message.variant === 'error'){
@@ -72,8 +67,8 @@ class Alert extends React.Component {
             _classname = classes.success;
             _icon = <DoneIcon />
             setTimeout(()=>{
-                this.handleClose(message.index, category)
-            },30000)
+                this.handleClose(message.index)
+            },message.timeOut || 30000)
         }else if(message.variant === 'info'){
             _classname = classes.info;
             _icon = <ErrorIcon />
@@ -96,7 +91,7 @@ class Alert extends React.Component {
                             color="inherit"
                             size="small"
                             aria-label="Menu"
-                            onClick={() => this.handleClose(message.index, category)}
+                            onClick={() => this.handleClose(message.index)}
                         >
                             <CloseIcon />
                         </IconButton>

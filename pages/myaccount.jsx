@@ -96,18 +96,18 @@ class MyAccount extends Component {
     }
 
     componentDidMount() {
-        const { user: { id, email, phone, shipping, billing, card, subsidiaryOptions, subsidiary, ...rest }} = this.props;
+
+        const { user } = this.props;
+        const { id, email, phone, shipping, billing, subsidiaryOptions, subsidiary } = user;
         this.setState({
             id,
             email,
             phone,
             shipping,
             billing,
-            card,
             shipFrom: subsidiaryOptions[0],
             subsidiaryOptions,
             subsidiary,
-            ...rest
         });
     }
 
@@ -291,9 +291,8 @@ class MyAccount extends Component {
                                         return(
                                             <Grid item xs={3}>
                                                 <TextField
-                                                    className={ user.email != props.field.value && classes.updateField}
                                                     value={props.field.value}
-                                                    InputLabelProps={{ shrink: props.field.value != '' }}
+                                                    InputLabelProps={{ shrink: props.field.value !== '' }}
                                                     onChange={e => { props.form.setFieldValue('email',e.target.value); this.setState({email: e.target.value})}}
                                                     variant="outlined"
                                                     onFocus={e => {
@@ -319,9 +318,8 @@ class MyAccount extends Component {
                                         return(
                                             <Grid item xs={3}>
                                                 <TextField
-                                                    className={ user.phone != props.field.value && classes.updateField}
                                                     value={props.field.value}
-                                                    InputLabelProps={{ shrink: props.field.value != '' }}
+                                                    InputLabelProps={{ shrink: props.field.value !== '' }}
                                                     onChange={e => { props.form.setFieldValue('phone',e.target.value); this.setState({phone: e.target.value})}}
                                                     variant="outlined"
                                                     onFocus={e => {
@@ -347,7 +345,6 @@ class MyAccount extends Component {
                                         return(
                                             <Grid item xs={3}>
                                                 <TextField
-                                                    className={ user.subsidiary != props.field.value && classes.updateField}
                                                     variant="outlined"
                                                     id="select-shipfrom"
                                                     select
@@ -424,10 +421,9 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.shipping.attn != props.field.value && classes.updateField}
                                                 onChange={e => { props.form.setFieldValue('shippingAttn',e.target.value); this.setState({shipping: {...this.state.shipping, attn: e.target.value}})}}
                                                 value={props.field.value}
-                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 onFocus={e => {
                                                     if (focus !== 'shippingAttn')
                                                     this.setState({
@@ -452,9 +448,8 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.shipping.addressee != props.field.value && classes.updateField}
                                                 value={props.field.value}
-                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 onChange={e => { props.form.setFieldValue('shippingAddressee',e.target.value); this.setState({shipping: {...this.state.shipping, addressee: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'shippingAddressee')
@@ -480,9 +475,8 @@ class MyAccount extends Component {
                                     return(
                                     <Grid item xs={12}>
                                         <TextField
-                                            className={ user.shipping.address1 != props.field.value && classes.updateField}
                                             value={props.field.value}
-                                            InputLabelProps={{ shrink: props.field.value != '' }}
+                                            InputLabelProps={{ shrink: props.field.value !== '' }}
                                             onChange={e => { props.form.setFieldValue('shippingAddress1',e.target.value); this.setState({shipping: {...this.state.shipping, address1: e.target.value}})}}
                                             onFocus={e => {
                                                 if (focus !== 'shippingAddress1')
@@ -508,9 +502,8 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.shipping.address2 != props.field.value && classes.updateField}
                                                 value={props.field.value}
-                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 onChange={e => { props.form.setFieldValue('shippingAddress2',e.target.value); this.setState({shipping: {...this.state.shipping, address2: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'shippingAddress2')
@@ -536,9 +529,8 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.shipping.address3 != props.field.value && classes.updateField}
                                                 value={props.field.value}
-                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 onChange={e => { props.form.setFieldValue('shippingAddress3',e.target.value); this.setState({shipping: {...this.state.shipping, address3: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'shippingAddress3')
@@ -564,9 +556,8 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.shipping.city != props.field.value && classes.updateField}
                                                 value={props.field.value}
-                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 onChange={e => { props.form.setFieldValue('shippingCity',e.target.value); this.setState({shipping: {...this.state.shipping, city: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'shippingCity')
@@ -592,9 +583,8 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.shipping.zip != props.field.value && classes.updateField}
                                                 value={props.field.value}
-                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 onChange={e => { props.form.setFieldValue('shippingZip',e.target.value); this.setState({shipping: {...this.state.shipping, zip: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'shippingZip')
@@ -621,7 +611,6 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.shipping.countryid != props.field.value && classes.updateField}
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('shippingCountryid',e.target.value); this.setState({shipping: {...this.state.shipping, countryid: e.target.value}})}}
@@ -680,7 +669,6 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.billing.attn != props.field.value && classes.updateField}
                                                 value={props.field.value}
                                                 InputLabelProps={{ shrink: props.field.value != '' }}
                                                 onChange={e => { props.form.setFieldValue('billingAttn',e.target.value); this.setState({billing: {...this.state.billing, attn: e.target.value}})}}
@@ -708,9 +696,8 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.billing.addressee != props.field.value && classes.updateField}
                                                 value={props.field.value}
-                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 onChange={e => { props.form.setFieldValue('billingAddressee',e.target.value); this.setState({billing: {...this.state.billing, addressee: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingAddressee')
@@ -736,9 +723,8 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.billing.address1 != props.field.value && classes.updateField}
                                                 value={props.field.value}
-                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 onChange={e => { props.form.setFieldValue('billingAddress1',e.target.value); this.setState({billing: {...this.state.billing, address1: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingAddress1')
@@ -764,9 +750,8 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.billing.address2 != props.field.value && classes.updateField}
                                                 value={props.field.value}
-                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 onChange={e => { props.form.setFieldValue('billingAddress2',e.target.value); this.setState({billing: {...this.state.billing, address2: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingAddress2')
@@ -792,9 +777,8 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.billing.address3 != props.field.value && classes.updateField}
                                                 value={props.field.value}
-                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 onChange={e => { props.form.setFieldValue('billingAddress3',e.target.value); this.setState({billing: {...this.state.billing, address3: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingAddress3')
@@ -821,9 +805,8 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.billing.city != props.field.value && classes.updateField}
                                                 value={props.field.value}
-                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 onChange={e => { props.form.setFieldValue('volVal',e.target.value); this.setState({billing: {...this.state.billing, city: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingCity')
@@ -849,9 +832,8 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.billing.zip != props.field.value && classes.updateField}
                                                 value={props.field.value}
-                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 onChange={e => { props.form.setFieldValue('billingZip',e.target.value); this.setState({billing: {...this.state.billing, zip: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingZip')
@@ -877,9 +859,8 @@ class MyAccount extends Component {
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
-                                                className={ user.billing.countryid != props.field.value && classes.updateField}
                                                 value={props.field.value}
-                                                InputLabelProps={{ shrink: props.field.value != '' }}
+                                                InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 onChange={e => { props.form.setFieldValue('billingCountryid',e.target.value); this.setState({billing: {...this.state.billing, countryid: e.target.value}})}}
                                                 onFocus={e => {
                                                     if (focus !== 'billingCountryid')
@@ -1002,9 +983,6 @@ const styles = theme => ({
         borderColor: "#CCCCCC",
         marginBottom: 10
     },
-    updateField: {
-        backgroundColor:'#FF9933',
-    }
 });
 
 MyAccount.propTypes = {

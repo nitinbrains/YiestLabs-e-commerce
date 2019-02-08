@@ -24,24 +24,37 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
 import LoadingIndicator from '../../UI/LoadingIndicator';
 import { cartActions } from "../../../redux/actions/cartActions";
+
+const customFormValidation = Yup.object().shape({
+    quantity: Yup.string()
+      .required('Required'),
+  });
 
 class ServicesDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
             quantity: "1",
+            errors:{},
         };
 
         this.item = this.props.item;
     }
-
+    handleErrors = (field, err) => {
+        let {errors} = this.state;
+        errors[field] = err
+        this.setState({errors})
+    }
     checkQuantity = item => {
         var quantity = parseFloat(item.OrderDetailQty);
 
         if (isNaN(quantity) || quantity <= 0) {
+            this.handleErrors('quantity', 'Please enter a valid value for the quantity')
             console.log("Please enter a valid value for the quantity");
             return false;
         }
@@ -54,7 +67,7 @@ class ServicesDialog extends Component {
         return true;
     };
 
-    addToCart = () => {
+    addToCart = (values) => {
         var quantity = this.state.quantity;
         var item = this.item;
 
@@ -92,7 +105,7 @@ class ServicesDialog extends Component {
 
     render() {
         const { classes, theme, item } = this.props;
-
+        const { errors } = this.state;
         const spaceIndex = item.Name.indexOf(" ");
         const itemID = item.Name.substr(0, spaceIndex);
         const itemName = item.Name.substr(spaceIndex + 1);
@@ -149,46 +162,60 @@ class ServicesDialog extends Component {
                         style={{ marginTop: 5 }}
                         direction={"row"}
                     >
-                        <Grid
-                            item
-                            xs
-                            container
-                            spacing={24}
-                            direction={"row"}
-                            justify="flex-start"
-                        >
-                            <Grid item>
-                                <TextField
-                                    id="quantity"
-                                    label="Quantity"
-                                    className={classes.quantity}
-                                    value={this.state.quantity}
-                                    onChange={this.changeQuantity}
-                                    type="number"
-                                />
-                            </Grid>
-                            <Grid
-                                item
-                                xs
-                                container
-                                spacing={24}
-                                direction={"row"}
-                                justify="flex-end"
-                            >
-                                <Grid item>
-                                    <div className={classes.buttons}>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={this.addToCart}
-                                            className={classes.button}
+                    <Formik
+                        initialValues={this.state}
+                        validationSchema={customFormValidation}
+                        onSubmit={values => this.addToCart(values)}
+                    >
+                        {({ values, handleChange }) => {
+                            return(
+                                <Form className={classes.form}> 
+                                    {errors.quantity  && <div className="error" >* {errors.quantity}</div>}
+                                    <Grid
+                                        item
+                                        xs
+                                        container
+                                        spacing={24}
+                                        direction={"row"}
+                                        justify="flex-start"
+                                    >
+                                        <Grid item>
+                                            <TextField
+                                                id="quantity"
+                                                label="Quantity"
+                                                className={classes.quantity}
+                                                value={this.state.quantity}
+                                                onChange={this.changeQuantity}
+                                                type="number"
+                                            />
+                                        </Grid>
+                                        <Grid
+                                            item
+                                            xs
+                                            container
+                                            spacing={24}
+                                            direction={"row"}
+                                            justify="flex-end"
                                         >
-                                            Add to Cart
-                                        </Button>
-                                    </div>
-                                </Grid>
-                            </Grid>
-                        </Grid>
+                                            <Grid item>
+                                                <div className={classes.buttons}>
+                                                    <Button
+                                                        type="submit"
+                                                        variant="contained"
+                                                        color="primary"
+                                                        // onClick={this.addToCart}
+                                                        className={classes.button}
+                                                    >
+                                                        Add to Cart
+                                                    </Button>
+                                                </div>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Form> 
+                            )   
+                        }}
+                    </Formik>
                     </Grid>
                 </DialogContent>
             </React.Fragment>
@@ -233,7 +260,10 @@ const styles = theme => ({
         marginTop: theme.spacing.unit,
         marginRight: theme.spacing.unit * -5
     },
-    close: { position: "absolute", right: 0, top: 0 }
+    close: { position: "absolute", right: 0, top: 0 },
+    form:{
+        width:'100%',
+    }
 });
 
 ServicesDialog.propTypes = {

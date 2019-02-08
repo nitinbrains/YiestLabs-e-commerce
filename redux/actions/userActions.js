@@ -11,7 +11,7 @@ export const { userTypes, userActions } = createActionsStructure('user', [
   { name: 'ADD_CREDIT_CARD', async: true },
   { name: 'DELETE_CREDIT_CARD', async: true },
   { name: 'SET_CREDIT_CARD', async: true },
-  { name: 'SET_DEFAULT_CARD', async: true },
+  { name: 'SET_DEFAULT_CREDIT_CARD', async: true },
   { name: 'ADD_ADDRESS', async: true },
   { name: 'EDIT_ADDRESS', async: true },
   { name: 'DELETE_ADDRESS', async: true },

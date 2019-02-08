@@ -13,12 +13,11 @@ class Banner extends React.Component {
         
     };
 
-    displayAlert = (messageList=[], type) => {
+    displayAlert = (messageList = []) => {
         let alert = []
         messageList.map((message, i) => {
-            if(message.displayType === 'banner')
             alert.push(
-                <Alert message={message} index={i} type={type} />
+                <Alert key={i} message={message} />
             )
         })
         return alert;
@@ -27,8 +26,7 @@ class Banner extends React.Component {
         const { messages } = this.props;
         return (
             <React.Fragment>
-                {this.displayAlert(messages.messages, 'message')}
-                {this.displayAlert(messages.networkRequestError, 'networkError')}
+                {this.displayAlert(messages.banner)}
             </React.Fragment>
         );
     }

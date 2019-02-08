@@ -21,8 +21,17 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
 import { cartActions } from "../../../redux/actions/cartActions";
+
+const customFormValidation = Yup.object().shape({
+    size: Yup.string()
+    .required('Required'),
+    quantity: Yup.string()
+      .required('Required'),
+  });
 
 class GiftShopDialog extends Component {
     constructor(props) {
@@ -30,7 +39,8 @@ class GiftShopDialog extends Component {
         this.state = {
             quantity: "1",
             sizes: [],
-            size: ""
+            size: "",
+            errors: {},
         };
 
         this.item = this.props.item;
@@ -60,7 +70,11 @@ class GiftShopDialog extends Component {
             this.setState({ sizes, size });
         }
     }
-
+    handleErrors = (field, err) => {
+        let {errors} = this.state;
+        errors[field] = err
+        this.setState({errors})
+    }
     setSize = event => {
         this.setState({ size: event.target.value });
     };
@@ -69,6 +83,7 @@ class GiftShopDialog extends Component {
         var quantity = parseFloat(item.OrderDetailQty);
 
         if (isNaN(quantity) || quantity <= 0) {
+            this.handleErrors('quantity', 'Please enter a valid value for the quantity')
             console.log("Please enter a valid value for the quantity");
             return false;
         }
@@ -81,7 +96,7 @@ class GiftShopDialog extends Component {
         return true;
     };
 
-    addToCart = () => {
+    addToCart = (values) => {
         var quantity = this.state.quantity;
         var item = this.item;
 
@@ -146,7 +161,7 @@ class GiftShopDialog extends Component {
 
     render() {
         const { classes, theme } = this.props;
-
+        const { errors } = this.state;
         return (
             <React.Fragment>
                 <DialogContent>
@@ -191,67 +206,81 @@ class GiftShopDialog extends Component {
                             <Typography>{this.item.Price}</Typography>
                         </Grid>
                     </Grid>
-                    <Grid
-                        item
-                        xs
-                        container
-                        spacing={24}
-                        style={{ marginTop: 5 }}
-                        direction={"row"}
+                    <Formik
+                        initialValues={this.state}
+                        validationSchema={customFormValidation}
+                        onSubmit={values => this.addToCart(values)}
                     >
-                        {this.state.sizes.length > 0 && (
-                            <Grid item>
-                                <FormControl>
-                                    <InputLabel>Sizes</InputLabel>
-                                    <Select
-                                        value={this.state.size}
-                                        onChange={this.setSize}
+                        {({ values, handleChange }) => {
+                            return(
+                                <Form className={classes.form}>
+                                    {errors.quantity  && <div className="error" >* {errors.quantity}</div>} 
+                                    <Grid
+                                        item
+                                        xs
+                                        container
+                                        spacing={24}
+                                        style={{ marginTop: 5 }}
+                                        direction={"row"}
                                     >
-                                        {this.state.sizes.map((option, i) => (
-                                            <MenuItem
-                                                key={i}
-                                                value={option.value}
-                                            >
-                                                {option.label}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                        )}
+                                        {this.state.sizes.length > 0 && (
+                                            <Grid item>
+                                                <FormControl>
+                                                    <InputLabel>Sizes</InputLabel>
+                                                    <Select
+                                                        value={this.state.size}
+                                                        onChange={this.setSize}
+                                                    >
+                                                        {this.state.sizes.map((option, i) => (
+                                                            <MenuItem
+                                                                key={i}
+                                                                value={option.value}
+                                                            >
+                                                                {option.label}
+                                                            </MenuItem>
+                                                        ))}
+                                                    </Select>
+                                                </FormControl>
+                                            </Grid>
+                                        )}
 
-                        <Grid item>
-                            <TextField
-                                id="quantity"
-                                label="Quantity"
-                                className={classes.quantity}
-                                value={this.state.quantity}
-                                onChange={this.changeQuantity}
-                                type="number"
-                            />
-                        </Grid>
-                        <Grid
-                            item
-                            xs
-                            container
-                            spacing={24}
-                            direction={"row"}
-                            justify="flex-end"
-                        >
-                            <Grid item>
-                                <div className={classes.buttons}>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={this.addToCart}
-                                        className={classes.button}
-                                    >
-                                        Add to Cart
-                                    </Button>
-                                </div>
-                            </Grid>
-                        </Grid>
-                    </Grid>
+                                        <Grid item>
+                                            <TextField
+                                                id="quantity"
+                                                label="Quantity"
+                                                className={classes.quantity}
+                                                value={this.state.quantity}
+                                                onChange={this.changeQuantity}
+                                                type="number"
+                                            />
+                                        </Grid>
+                                        <Grid
+                                            item
+                                            xs
+                                            container
+                                            spacing={24}
+                                            direction={"row"}
+                                            justify="flex-end"
+                                        >
+                                            <Grid item>
+                                                <div className={classes.buttons}>
+                                                    <Button
+                                                        // type="submit"
+                                                        variant="contained"
+                                                        color="primary"
+                                                        onClick={this.addToCart}
+                                                        className={classes.button}
+                                                    >
+                                                        Add to Cart
+                                                    </Button>
+                                                </div>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Form> 
+                            )   
+                        }}
+                    </Formik>
                 </DialogContent>
             </React.Fragment>
         );
@@ -287,7 +316,10 @@ const styles = theme => ({
         marginTop: theme.spacing.unit,
         marginRight: theme.spacing.unit * -5
     },
-    close: { position: "absolute", right: 0, top: 0 }
+    close: { position: "absolute", right: 0, top: 0 },
+    form:{
+        width:'100%',
+    }
 });
 
 GiftShopDialog.propTypes = {
