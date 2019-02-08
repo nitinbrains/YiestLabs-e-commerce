@@ -28,13 +28,12 @@ class AddAddress extends Component {
     }
 
     addAddress = () => {
-        const { address } = this.state;
-        this.props.addAddress({ address });
+        this.props.addAddress({ address: this.state });
     };
 
     render() {
         const { classes } = this.props;
-        const { address, focus } = this.state;
+        const { focus, ...rest } = this.state;
         const customFormValidation = Yup.object().shape({
             attn: Yup.string().required("Required"),
             address1: Yup.string().required("Required"),
@@ -47,14 +46,14 @@ class AddAddress extends Component {
             <React.Fragment>
                 <Formik
                     initialValues={{
-                        address1: address.address1,
-                        address2: address.address2,
-                        address3: address.address3,
-                        addressee: address.addressee,
-                        attn: address.attn,
-                        city: address.city,
-                        countryid: address.countryid,
-                        zip: address.zip
+                        address1: rest.address1,
+                        address2: rest.address2,
+                        address3: rest.address3,
+                        addressee: rest.addressee,
+                        attn: rest.attn,
+                        city: rest.city,
+                        countryid: rest.countryid,
+                        zip: rest.zip
                     }}
                     validationSchema={customFormValidation}
                     enableReinitialize

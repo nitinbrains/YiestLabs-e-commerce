@@ -93,20 +93,15 @@ export function* getUserInfo(action) {
 
 export function* setUserInfo(action) {
     const {
-        responseSuccess,
-        responseFailure,
+        responseSuccess, 
+        responseFailure, 
         data: { userInfo }
     } = action;
     try {
-        const { subsidiary, shipmethod, shipping: { countryid } } = userInfo;
+        const { subsidiary, shipmethod, shipping: { countryid }} = userInfo;
         userInfo.shipMethods = WLHelper.shipMethodGroup(subsidiary, shipmethod, countryid);
         userInfo.subsidiaryOptions = loadSubsidiaryOptions(userInfo);
         yield put(responseSuccess(userInfo));
-        const creditCard = yield getDefaultOrFirstCreditCard(userInfo);
-        if(creditCard) {
-            userInfo.selectedCard = creditCard;
-        }
-
 
         } catch (error) {
             if(error.status){
@@ -126,13 +121,14 @@ export function* setUserInfo(action) {
 }
 
 export function* updateUserInfo(action) {
-    const {
-        responseSuccess,
-        responseFailure,
+    const { 
+        responseSuccess, 
+        responseFailure, 
         data: { request }
     } = action;
     try {
         const user = yield select(state => state.user);
+        
         request.id = user.id;
 
         var { res, error } = yield call(api.updateUserInfo, {
@@ -179,7 +175,11 @@ export function* updateUserInfo(action) {
 export function* getOrderHistory(action) {
     const { responseSuccess, responseFailure } = action;
     try {
-        var user = yield select(state => state.user);
+        const user = yield select(state => state.user);
+
+        if (!user.id) {
+            throw { message: "No user id. Cannot get order history", code: 0 };
+        }
 
         var request = {};
         request.id = user.id;
@@ -187,9 +187,7 @@ export function* getOrderHistory(action) {
         var {
             res: { orderHistory },
             error
-        } = yield call(api.getOrderHistory, {
-            request
-        });
+        } = yield call(api.getOrderHistory, { request });
         if (error) throw error;
 
         yield put(responseSuccess({ orderHistory }));
@@ -211,7 +209,11 @@ export function* getOrderHistory(action) {
 }
 
 export function* setShipMethod(action) {
-    const { responseSuccess, responseFailure, data: shipmethod } = action;
+    const { 
+        responseSuccess, 
+        responseFailure, 
+        data: { shipmethod }
+    } = action;
     try {
         yield put(responseSuccess(shipmethod));
     } catch (error) {
@@ -224,9 +226,9 @@ export function* setShipMethod(action) {
 /*************************/
 
 export function* addCreditCard(action) {
-    const {
-        responseSuccess,
-        responseFailure,
+    const { 
+        responseSuccess, 
+        responseFailure, 
         data: { creditCard }
     } = action;
     try {
@@ -240,6 +242,7 @@ export function* addCreditCard(action) {
             }));
             throw { message: "No user id. Cannot add credit card", code: 0 };
         }
+
         let request = {};
         request.addCreditCard = true;
         request.token = WLHelper.generateCreditToken(creditCard);
@@ -252,7 +255,11 @@ export function* addCreditCard(action) {
 }
 
 export function* deleteCreditCard(action) {
-    const { responseSuccess, responseFailure, data: creditCard } = action;
+    const { 
+        responseSuccess, 
+        responseFailure, 
+        data: { creditCard }
+    } = action;
     try {
         const user = yield select(state => state.user);
 
@@ -307,6 +314,12 @@ export function* setDefaultCreditCard(action) {
         data: { creditCard }
     } = action;
     try {
+        const user = yield select(state => state.user);
+
+        if (!user.id) {
+            throw { message: "No user id. Cannot set default card", code: 0 };
+        }
+
         // Update default card in NetSuite
         let request = {};
         request.defaultCreditCard = true;
@@ -338,6 +351,7 @@ export function* addAddress(action) {
             }));
             throw { message: "No user id. Cannot add Address", code: 0 };
         }
+
         let request = {};
         request.addAddress = true;
         request.address = address
@@ -379,18 +393,21 @@ export function* editAddress(action) {
         }
 
         let request = {};
-        request.id = user.id;
         request.editAddress = true;
         request.address = address;
 
-        yield call(updateUserInfo, { request });
+        yield put(userActions.updateUserInfo({ request }));
     } catch (error) {
         yield put(responseFailure(error));
     }
 }
 
 export function* deleteAddress(action) {
-    const { responseSuccess, responseFailure, data: address } = action;
+    const { 
+        responseSuccess, 
+        responseFailure, 
+        data: { address }
+    } = action;
     try {
         const user = yield select(state => state.user);
 
@@ -404,11 +421,10 @@ export function* deleteAddress(action) {
         }
 
         let request = {};
-        request.id = user.id;
         request.deleteAddress = true;
         request.address = address;
 
-        yield call(updateUserInfo, { request });
+        yield put(userActions.updateUserInfo({ request }));
     } catch (error) {
         yield put(responseFailure(error));
     }
@@ -432,7 +448,11 @@ export function* setShipAddress(action) {
 }
 
 export function* setDefaultShipAddress(action) {
-    const { responseSuccess, responseFailure, data: address } = action;
+    const { 
+        responseSuccess, 
+        responseFailure, 
+        data: { address }
+    } = action;
     try {
         const user = yield select(state => state.user);
 
@@ -446,7 +466,6 @@ export function* setDefaultShipAddress(action) {
         }
 
         let request = {};
-        request.id = user.id;
         request.defaultShipAddress = true;
         request.address = address;
 
@@ -474,7 +493,7 @@ export function* setBillAddress(action) {
 }
 
 export function* setDefaultBillAddress(action) {
-    const { responseSuccess, responseFailure, data: address } = action;
+    const { responseSuccess, responseFailure, data: { address }} = action;
     try {
         const user = yield select(state => state.user);
 

@@ -26,13 +26,9 @@ class ManageCards extends Component {
         super(props);
         this.state = {
             newCard: false,
-            cardHover: false,
+            cardHover: null,
             confirmation: false
         };
-    }
-
-    componentWillMount(){
-        console.log('user', this.props.user);
     }
 
     handleDialogClose() {
@@ -47,8 +43,12 @@ class ManageCards extends Component {
         this.setState({ newCard: false });
     };
 
-    handleCardHover = () => {
-        this.setState({ cardHover: !this.state.cardHover });
+    handleCardHover = i => {
+        this.setState({ cardHover: i });
+    };
+
+    handleCardLeaveHover = () => {
+        this.setState({ cardHover: null });
     };
 
     handleConfirmation = (card) => {
@@ -65,12 +65,18 @@ class ManageCards extends Component {
     };
 
     handleYes = () => {
-        const card = this.state.deleteCard;
-        this.props.deleteCreditCard({card});
+        const creditCard = this.state.deleteCard;
+        this.props.deleteCreditCard({creditCard});
         this.setState({
             confirmation: false
         });
     };
+
+    setDefaultCreditCard = (creditCard) => {
+        if(!creditCard.default) {
+            this.props.setDefaultCreditCard({creditCard});
+        }
+    }
 
     render() {
         const { classes, user } = this.props;
@@ -87,7 +93,7 @@ class ManageCards extends Component {
                             <CloseIcon />
                         </IconButton>
                     </div>
-                    <Grid style={{ padding: 10 }} container spacing={24}>
+                    <Grid style={{ padding: 20 }} container spacing={24}>
                         {user.otherCards.map((card, i) => (
                             <Grid item sm={4} xs={12}>
                                 <div
@@ -97,12 +103,12 @@ class ManageCards extends Component {
                                             ? classes.cardBoxSelected
                                             : classes.cardBox
                                     }
-                                    onMouseEnter={this.handleCardHover}
-                                    onMouseLeave={this.handleCardHover}
+                                    onMouseEnter={() => this.handleCardHover(i)}
+                                    onMouseLeave={this.handleCardLeaveHover}
                                 >
                                 <div className={classNames(
                                     classes.deleteIcon,
-                                    !this.state.cardHover && classes.hide
+                                    this.state.cardHover != i && classes.hide
                                 )}>
                                 <IconButton
                                     color="inherit"
@@ -133,9 +139,9 @@ class ManageCards extends Component {
                                                 variant="contained"
                                                 color="primary"
                                                 className={classNames(
-                                                    !this.state.cardHover && classes.hide
+                                                    this.state.cardHover != i && classes.hide
                                                 )}
-                                                onClick={() => this.props.setCreditCard(i)}
+                                                onClick={() => this.setDefaultCreditCard(card)}
                                             >
                                                 Make Default
                                             </Button>
@@ -177,7 +183,7 @@ class ManageCards extends Component {
                     </Grid>
                     <Dialog open={this.state.confirmation}>
                         <DialogTitle id="alert-dialog-title">
-                            {"Are you sure you want to delete this card?"}
+                            Are you sure you want to delete this card?
                         </DialogTitle>
                         <DialogContent />
                         <DialogActions>
@@ -205,14 +211,16 @@ const styles = theme => ({
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
-        textAlign:'center'
+        textAlign:'center',
+        height: 150
     },
     cardBoxSelected: {
         position: "relative",
         border: "solid 2px",
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
-        textAlign:'center'
+        textAlign:'center',
+        height: 150
     },
     close: { position: "absolute", right: 0, top: 0 },
     deleteIcon: { position: "absolute", right: -25, top: -25},
