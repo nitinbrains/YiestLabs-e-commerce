@@ -147,7 +147,6 @@ class Store extends Component {
     render() {
         const { classes, theme, message, messages } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
-        console.log('user', this.props.user);
         
         // isHomebrew = true
         return (

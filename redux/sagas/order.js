@@ -38,10 +38,10 @@ export function * prepareOrder(action) {
             // show network error is any regaring with api status
             yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            if(err.code == 0 ){
+            if(error.code == 0 ){
                 // Yeastman error when we have error with code == 0
                 yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
-            } else if(err.code == -1){
+            } else if(error.code == -1){
                 // Other error when we have error with code == -1
                 yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
             }
@@ -71,10 +71,10 @@ export function * placeOrder(action) {
             // show network error is any regaring with api status
             yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            if(err.code == 0 ){
+            if(error.code == 0 ){
                 // Yeastman error when we have error with code == 0
                 yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
-            } else if(err.code == -1){
+            } else if(error.code == -1){
                 // Other error when we have error with code == -1
                 yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
             }
@@ -97,10 +97,10 @@ export function * setShippingOption(action) {
             // show network error is any regaring with api status
             yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            if(err.code == 0 ){
+            if(error.code == 0 ){
                 // Yeastman error when we have error with code == 0
                 yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
-            } else if(err.code == -1){
+            } else if(error.code == -1){
                 // Other error when we have error with code == -1
                 yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
             }
@@ -123,10 +123,10 @@ export function * incrementShipDate(action) {
             // show network error is any regaring with api status
             yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            if(err.code == 0 ){
+            if(error.code == 0 ){
                 // Yeastman error when we have error with code == 0
                 yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
-            } else if(err.code == -1){
+            } else if(error.code == -1){
                 // Other error when we have error with code == -1
                 yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
             }
@@ -149,10 +149,10 @@ export function * decrementShipDate(action) {
             // show network error is any regaring with api status
             yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            if(err.code == 0 ){
+            if(error.code == 0 ){
                 // Yeastman error when we have error with code == 0
                 yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
-            } else if(err.code == -1){
+            } else if(error.code == -1){
                 // Other error when we have error with code == -1
                 yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
             }
