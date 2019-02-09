@@ -65,37 +65,22 @@ class Checkout extends Component {
     };
 
     handleOrder = () => {
-        this.setState({
-            terms: true
-        });
+        this.setState({terms: true});
     };
 
     handleTerms = () => {
-        this.setState({
-            terms: false
-        });
+        this.setState({terms: false});
     };
 
-    handleAccept = () => {
-        this.setState({
-            terms: false,
-            isLoading: true,
-        },()=>{
-            setTimeout(() => {
-                this.setState({
-                    confirmation: true,
-                    isLoading: false
-                })
-            }, 5000);
-        });
+    placeOrder = () => {
+        this.setState({terms: false});
+        this.props.placeOrder();
     };
 
     handleComplete = () => {
         const { completed } = this.state;
         completed[this.state.activeStep] = true;
-        this.setState({
-            completed
-        });
+        this.setState({ completed });
         this.handleNext();
     };
 
@@ -104,34 +89,23 @@ class Checkout extends Component {
         if (activeStep == steps.length - 1) {
             this.props.placeOrder();
         } else {
-            this.setState({
-                activeStep: activeStep + 1
-            });
+            this.setState({ activeStep: activeStep + 1 });
         }
     };
 
     handleBack = () => {
         const { activeStep } = this.state;
-        this.setState({
-            activeStep: activeStep - 1
-        });
+        this.setState({ activeStep: activeStep - 1 });
     };
 
     handleReset = () => {
-        this.setState({
-            activeStep: 0
-        });
+        this.setState({ activeStep: 0  });
     };
 
     handleStep = step => () => {
         const { completed } = this.state;
         completed[this.state.activeStep] = true;
-        this.setState({
-            completed
-        });
-        this.setState({
-            activeStep: step
-        });
+        this.setState({completed, activeStep: step });
     };
 
     render() {
@@ -140,9 +114,6 @@ class Checkout extends Component {
         return (
             <NavBarLayout>
             <LoadingIndicator visible={this.state.isLoading} label={"Placing Order"} />
-                {this.props.message.messages.map((message, i) => (
-                    <Alert key={i}  message={message} index={i} />
-                ))}
                 <div className={classes.container}>
                     <div className={classes.title}>
                         <Typography variant="h4" color="secondary">
@@ -231,7 +202,7 @@ class Checkout extends Component {
 
                 <Dialog open={this.state.terms}>
                     <DialogTitle id="alert-dialog-title">
-                        {"Do you accept the White Labs Terms & Conditions?"}
+                        Do you accept the White Labs Terms &amp; Conditions?
                     </DialogTitle>
                     <DialogContent />
                     <DialogActions>
@@ -239,7 +210,7 @@ class Checkout extends Component {
                             Decline
                         </Button>
                         <Button
-                            onClick={this.handleAccept}
+                            onClick={this.placeOrder}
                             color="primary"
                             autoFocus
                         >
@@ -249,7 +220,7 @@ class Checkout extends Component {
                 </Dialog>
                 <Dialog open={this.state.confirmation}>
                     <DialogTitle id="alert-dialog-title">
-                        {"Your order has been confirmed"}
+                        Your order has been confirmed
                     </DialogTitle>
                     <DialogContent />
                     <DialogActions>

@@ -51,7 +51,7 @@ export function * prepareOrder(action) {
 };
 
 export function * placeOrder(action) {
-    const { responseSuccess, responseFailure, data: option } = action;
+    const { responseSuccess, responseFailure } = action;
     try {
         var order = yield select(state => state.order);
         const user = yield select(state => state.user);

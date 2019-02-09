@@ -63,7 +63,6 @@ class Store extends Component {
         if(isUserLoggedIn && userInfo){
             this.props.setUserInfo({ userInfo });
         }
-        console.log('messageActions', messageActions);
         
     }
 
@@ -148,6 +147,7 @@ class Store extends Component {
     render() {
         const { classes, theme, message, messages } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
+        console.log('user', this.props.user);
         
         // isHomebrew = true
         return (

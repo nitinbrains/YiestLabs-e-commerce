@@ -32,7 +32,6 @@ class Cart extends Component {
         super(props);
         this.state = {
             showWantSoonerDialog: false,
-            subTotal: '1234'
         }
     }
 
@@ -66,7 +65,7 @@ class Cart extends Component {
                                 </Link>
                                 :
                                 <Typography variant="h5" color="primary" align="center">
-                                    Cart is EMPTY
+                                    Cart is Empty
                                 </Typography>
                             }
                         </Grid>
