@@ -53,7 +53,8 @@ const initialState = {
     isLoading: false,
     orderHistory: [],
     isUnsaved: false,
-    subsidiaryOptions: []
+    subsidiaryOptions: [],
+    isLoggedin: false,
 }; // empty for now
 
 
@@ -65,7 +66,8 @@ export default createReducer(initialState, {
     }),
     [userTypes.USER_LOGIN_FAILURE]: () => null, // this will return initial state
     [userTypes.SET_USER_INFO_SUCCESS]: (state, { data: userInfo }) => ({
-        ...userInfo
+        ...userInfo,
+        isLoggedin: true
     }),
     [userTypes.UPDATE_USER_INFO_ATTEMPT]: (state, { data }) => ({
         isLoading: true,

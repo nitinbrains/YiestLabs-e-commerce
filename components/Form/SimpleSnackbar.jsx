@@ -74,8 +74,6 @@ class SimpleSnackbar extends React.Component {
 
   render() {
     const { classes, messageList } = this.props;
-    console.log('messageList', messageList);
-    
     return (
       <div>
         <SnackbarProvider 
