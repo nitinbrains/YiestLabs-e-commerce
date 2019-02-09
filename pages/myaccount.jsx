@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { compose } from "redux";
 import { bindActionCreators } from "redux";
 import _isEmpty from 'lodash/isEmpty';
 
@@ -38,6 +39,7 @@ import * as Util from '../lib/Utils';
 import { userActions } from '../redux/actions/userActions';
 import { changesWereMade } from '../lib/UserUtils';
 import WLHelper from '../lib/WLHelper';
+import isLoggedUser from "../hocs/isLoggedUser";
 
 class MyAccount extends Component {
     constructor(props) {
@@ -1002,4 +1004,8 @@ const mapDispatchToProps = dispatch =>
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles, { withTheme: true })(MyAccount));
+)(compose(
+    withStyles(styles, { withTheme: true })(
+        isLoggedUser(MyAccount)
+    )
+))

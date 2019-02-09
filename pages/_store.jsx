@@ -47,6 +47,7 @@ import { userActions } from "../redux/actions/userActions";
 import { messageActions } from '../redux/actions/messageActions';
 
 import withInventory from "../hocs/inventory";
+import isLoggedUser from "../hocs/isLoggedUser";
 
 class Store extends Component {
     constructor(props) {
@@ -146,7 +147,6 @@ class Store extends Component {
     render() {
         const { classes, theme, message, messages } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
-        console.log('user', this.props.user);
         
         // isHomebrew = true
         return (
@@ -230,11 +230,19 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
     bindActionCreators({...userActions, ...messageActions}, dispatch);
 
+// export default connect(
+//     mapStateToProps,
+//     mapDispatchToProps
+// )(compose(
+//     withStyles(styles, { withTheme: true }),
+//     withInventory(isLoggedUser())
+// )(Store));
+
 export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(compose(
-    withStyles(styles, { withTheme: true }),
-    withInventory
-)(Store));
-
+    withStyles(styles, { withTheme: true })(
+        isLoggedUser(withInventory(Store))
+    )
+));
