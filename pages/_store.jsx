@@ -47,7 +47,6 @@ import { userActions } from "../redux/actions/userActions";
 import { messageActions } from '../redux/actions/messageActions';
 
 import withInventory from "../hocs/inventory";
-import isLoggedUser from "../hocs/isLoggedUser";
 
 class Store extends Component {
     constructor(props) {
@@ -243,6 +242,7 @@ export default connect(
     mapDispatchToProps
 )(compose(
     withStyles(styles, { withTheme: true })(
-        isLoggedUser(withInventory(Store))
+        // RootComponent(withInventory(Store))
+        withInventory(Store)
     )
 ));
