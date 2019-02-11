@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { compose } from "redux";
 
 import PropTypes from "prop-types";
 import Link from "next/link";
@@ -28,6 +29,7 @@ import { userActions } from "../redux/actions/userActions";
 import { messageActions } from '../redux/actions/messageActions';
 import FormTextbox from "../components/Form/FormTextbox";
 import SimpleSnackbar from "../components/Form/SimpleSnackbar";
+// import RootComponent from "../hocs/RootComponent";
 
 const customFormValidation = Yup.object().shape({
     username: Yup.string()
@@ -221,3 +223,9 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(withStyles(styles)(Login));
+// (compose(
+//     withStyles(styles, { withTheme: true })(
+//         RootComponent(Login)
+//     )
+// ))
+
