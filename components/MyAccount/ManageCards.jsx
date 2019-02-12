@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import classNames from "classnames";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
-import moment from 'moment';
+import moment from "moment";
 
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -19,7 +19,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 import AddCard from "./AddCard";
-import { userActions } from '../../redux/actions/userActions';
+import { userActions } from "../../redux/actions/userActions";
 
 class ManageCards extends Component {
     constructor(props) {
@@ -51,7 +51,7 @@ class ManageCards extends Component {
         this.setState({ cardHover: null });
     };
 
-    handleConfirmation = (card) => {
+    handleConfirmation = card => {
         this.setState({
             confirmation: true,
             deleteCard: card
@@ -66,17 +66,17 @@ class ManageCards extends Component {
 
     handleYes = () => {
         const creditCard = this.state.deleteCard;
-        this.props.deleteCreditCard({creditCard});
+        this.props.deleteCreditCard({ creditCard });
         this.setState({
             confirmation: false
         });
     };
 
-    setDefaultCreditCard = (creditCard) => {
-        if(!creditCard.default) {
-            this.props.setDefaultCreditCard({creditCard});
+    setDefaultCreditCard = creditCard => {
+        if (!creditCard.default) {
+            this.props.setDefaultCreditCard({ creditCard });
         }
-    }
+    };
 
     render() {
         const { classes, user } = this.props;
@@ -93,6 +93,25 @@ class ManageCards extends Component {
                             <CloseIcon />
                         </IconButton>
                     </div>
+                    <Grid
+                        item
+                        container
+                        xs
+                        style={{
+                            display: "flex",
+                            marginTop: -10,
+                            marginBottom: 10
+                        }}
+                        direction={"row"}
+                        spacing={4}
+                    >
+                        <Grid item xs={12}>
+                            <Typography variant="h6" color="textPrimary">
+                                MANAGE CREDIT CARDS
+                            </Typography>
+                            <div className={classes.sectionTitleDivider} />
+                        </Grid>
+                    </Grid>
                     <Grid style={{ padding: 20 }} container spacing={24}>
                         {user.otherCards.map((card, i) => (
                             <Grid item sm={4} xs={12}>
@@ -106,22 +125,36 @@ class ManageCards extends Component {
                                     onMouseEnter={() => this.handleCardHover(i)}
                                     onMouseLeave={this.handleCardLeaveHover}
                                 >
-                                <div className={classNames(
-                                    classes.deleteIcon,
-                                    this.state.cardHover != i && classes.hide
-                                )}>
-                                <IconButton
-                                    color="inherit"
-                                    size="small"
-                                    aria-label="Menu"
-                                    onClick={(e)=> { this.handleConfirmation(card) }}
-                                >
-                                    <CancelIcon />
-                                </IconButton>
-                                </div>
-                                    <Grid item container xs spacing={8} justify="center" alignItems="center">
+                                    <div
+                                        className={classNames(
+                                            classes.deleteIcon,
+                                            this.state.cardHover != i &&
+                                                classes.hide
+                                        )}
+                                    >
+                                        <IconButton
+                                            color="inherit"
+                                            size="small"
+                                            aria-label="Menu"
+                                            onClick={e => {
+                                                this.handleConfirmation(card);
+                                            }}
+                                        >
+                                            <CancelIcon />
+                                        </IconButton>
+                                    </div>
+                                    <Grid
+                                        item
+                                        container
+                                        xs
+                                        spacing={8}
+                                        justify="center"
+                                        alignItems="center"
+                                    >
                                         <Grid item xs={12}>
-                                            <Typography>{card.ccname}</Typography>
+                                            <Typography>
+                                                {card.ccname}
+                                            </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <Typography>
@@ -129,32 +162,48 @@ class ManageCards extends Component {
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
-                                            <Typography>{moment(card.ccexpire).format("MM-YYYY")}</Typography>
+                                            <Typography>
+                                                {moment(card.ccexpire).format(
+                                                    "MM-YYYY"
+                                                )}
+                                            </Typography>
                                         </Grid>
 
                                         {this.props.user.card.ccnumber !=
-                                                card.ccnumber && !this.props.checkout && (
-                                        <Grid item>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                className={classNames(
-                                                    this.state.cardHover != i && classes.hide
-                                                )}
-                                                onClick={() => this.setDefaultCreditCard(card)}
-                                            >
-                                                Make Default
-                                            </Button>
-                                        </Grid>
-                                        )}
+                                            card.ccnumber &&
+                                            !this.props.checkout && (
+                                                <Grid item>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        style={{bottom:2}}
+                                                        className={classNames(
+                                                            this.state
+                                                                .cardHover !=
+                                                                i &&
+                                                                classes.hide
+                                                        )}
+                                                        onClick={() =>
+                                                            this.setDefaultCreditCard(
+                                                                card
+                                                            )
+                                                        }
+                                                    >
+                                                        Make Default
+                                                    </Button>
+                                                </Grid>
+                                            )}
 
                                         {this.props.checkout && (
                                             <Grid item>
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
+                                                    style={{bottom:2}}
                                                     onClick={() =>
-                                                        this.props.setCreditCard(i)
+                                                        this.props.setCreditCard(
+                                                            i
+                                                        )
                                                     }
                                                 >
                                                     Select
@@ -168,16 +217,16 @@ class ManageCards extends Component {
 
                         {!this.state.newCard ? (
                             <Grid item xs={12}>
-                                <Button
-                                    onClick={this.newCard}
-                                    color="primary"
-                                >
+                                <Button onClick={this.newCard} color="primary">
                                     Add New Card
                                 </Button>
                             </Grid>
                         ) : (
                             <Grid item xs={12}>
-                                <AddCard {...this.props} closeNewCard={this.closeNewCard} />
+                                <AddCard
+                                    {...this.props}
+                                    closeNewCard={this.closeNewCard}
+                                />
                             </Grid>
                         )}
                     </Grid>
@@ -211,7 +260,7 @@ const styles = theme => ({
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
-        textAlign:'center',
+        textAlign: "center",
         height: 150
     },
     cardBoxSelected: {
@@ -219,14 +268,19 @@ const styles = theme => ({
         border: "solid 2px",
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
-        textAlign:'center',
+        textAlign: "center",
         height: 150
     },
     close: { position: "absolute", right: 0, top: 0 },
-    deleteIcon: { position: "absolute", right: -25, top: -25},
+    deleteIcon: { position: "absolute", right: -25, top: -25 },
     hide: {
         display: "none"
     },
+    sectionTitleDivider: {
+        borderTop: "solid 1.5px",
+        borderColor: "#CCCCCC",
+        marginBottom: 10
+    }
 });
 
 ManageCards.propTypes = {

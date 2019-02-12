@@ -18,7 +18,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-import { userActions } from '../../redux/actions/userActions';
+import { userActions } from "../../redux/actions/userActions";
 
 import AddAddress from "./AddAddress";
 
@@ -41,12 +41,12 @@ class ManageBilling extends Component {
     };
 
     closeForm = () => {
-        this.setState({ newAddress: false})
-    }
+        this.setState({ newAddress: false });
+    };
 
-    selectDefaultAddress = (address) => {
-        this.props.setDefaultBillAddress({address})
-    }
+    selectDefaultAddress = address => {
+        this.props.setDefaultBillAddress({ address });
+    };
 
     handleCardHover = i => {
         this.setState({ boxHover: i });
@@ -56,7 +56,7 @@ class ManageBilling extends Component {
         this.setState({ boxHover: null });
     };
 
-    handleConfirmation = (address) => {
+    handleConfirmation = address => {
         this.setState({
             confirmation: true,
             deleteAddress: address
@@ -71,7 +71,7 @@ class ManageBilling extends Component {
 
     handleYes = () => {
         const address = this.state.deleteAddress;
-        this.props.deleteAddress({address});
+        this.props.deleteAddress({ address });
         this.setState({
             confirmation: false
         });
@@ -93,85 +93,136 @@ class ManageBilling extends Component {
                             <CloseIcon />
                         </IconButton>
                     </div>
+                    <Grid
+                        item
+                        container
+                        xs
+                        style={{
+                            display: "flex",
+                            marginTop: -10,
+                            marginBottom: 10
+                        }}
+                        direction={"row"}
+                        spacing={4}
+                    >
+                        <Grid item xs={12}>
+                            <Typography variant="h6" color="textPrimary">
+                                MANAGE BILLING ADDRESSES
+                            </Typography>
+                            <div className={classes.sectionTitleDivider} />
+                        </Grid>
+                    </Grid>
                     <Grid style={{ padding: 20 }} container spacing={24}>
                         {user.otherAddresses.map((address, i) => (
-                            <Grid item
-                                key={address.id}
-                                sm={4}
-                                xs={12}
-                            >
-                            <div
-                                className={
-                                    this.props.user.billing.address1 ==
-                                    address.address1
-                                        ? classes.addressBoxSelected
-                                        : classes.addressBox
-                                }
-                                onMouseEnter={() => this.handleCardHover(i)}
-                                onMouseLeave={this.handleCardLeaveHover}
-                            >
-                            <div className={classNames(
-                                classes.deleteIcon,
-                                this.state.boxHover != i && classes.hide
-                            )}>
-                            <IconButton
-                                color="inherit"
-                                size="small"
-                                aria-label="Menu"
-                                onClick={(e)=> { this.handleConfirmation(address) }}
-                            >
-                                <CancelIcon />
-                            </IconButton>
-                            </div>
-                                    <Grid item container xs spacing={8} justify="center" alignItems="center">
+                            <Grid item key={address.id} sm={4} xs={12}>
+                                <div
+                                    className={
+                                        this.props.user.billing.address1 ==
+                                        address.address1
+                                            ? classes.addressBoxSelected
+                                            : classes.addressBox
+                                    }
+                                    onMouseEnter={() => this.handleCardHover(i)}
+                                    onMouseLeave={this.handleCardLeaveHover}
+                                >
+                                    <div
+                                        className={classNames(
+                                            classes.deleteIcon,
+                                            this.state.boxHover != i &&
+                                                classes.hide
+                                        )}
+                                    >
+                                        <IconButton
+                                            color="inherit"
+                                            size="small"
+                                            aria-label="Menu"
+                                            onClick={e => {
+                                                this.handleConfirmation(
+                                                    address
+                                                );
+                                            }}
+                                        >
+                                            <CancelIcon />
+                                        </IconButton>
+                                    </div>
+                                    <Grid
+                                        item
+                                        container
+                                        xs
+                                        spacing={8}
+                                        justify="center"
+                                        alignItems="center"
+                                    >
                                         <Grid item>
-                                            <Typography>{address.address1}</Typography>
+                                            <Typography>
+                                                {address.address1}
+                                            </Typography>
                                         </Grid>
                                         <Grid item>
-                                            <Typography>{address.address2}</Typography>
+                                            <Typography>
+                                                {address.address2}
+                                            </Typography>
                                         </Grid>
                                         <Grid item>
-                                            <Typography>{address.address3}</Typography>
+                                            <Typography>
+                                                {address.address3}
+                                            </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
-                                            <Typography>{address.city}</Typography>
+                                            <Typography>
+                                                {address.city}
+                                            </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
-                                            <Typography>{address.zip}</Typography>
+                                            <Typography>
+                                                {address.zip}
+                                            </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
-                                            <Typography>{address.countryid}</Typography>
+                                            <Typography>
+                                                {address.countryid}
+                                            </Typography>
                                         </Grid>
-                                    {this.props.user.billing.address1 !=
-                                        address.address1 && !this.props.checkout && (
-                                        <Grid item>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={(e)=> { this.selectDefaultAddress(address) }}
-                                                className={classNames(
-                                                    this.state.boxHover != i && classes.hide
-                                                )}
-                                            >
-                                                Set as Default
-                                            </Button>
-                                        </Grid>
-                                    )}
-                                    {this.props.checkout && (
-                                        <Grid item>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={() =>
-                                                    this.props.setBillAddress(
-                                                        i
-                                                    )
-                                                }
-                                            >
-                                                Select
-                                            </Button>
-                                        </Grid>
-                                    )}
+                                        {this.props.user.billing.address1 !=
+                                            address.address1 &&
+                                            !this.props.checkout && (
+                                                <Grid item>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        style={{bottom:2}}
+                                                        onClick={e => {
+                                                            this.selectDefaultAddress(
+                                                                address
+                                                            );
+                                                        }}
+                                                        className={classNames(
+                                                            this.state
+                                                                .boxHover !=
+                                                                i &&
+                                                                classes.hide
+                                                        )}
+                                                    >
+                                                        Set as Default
+                                                    </Button>
+                                                </Grid>
+                                            )}
+                                        {this.props.checkout && (
+                                            <Grid item>
+                                                <Button
+                                                    variant="contained"
+                                                    style={{bottom:2}}
+                                                    color="primary"
+                                                    onClick={() =>
+                                                        this.props.setBillAddress(
+                                                            i
+                                                        )
+                                                    }
+                                                >
+                                                    Select
+                                                </Button>
+                                            </Grid>
+                                        )}
                                     </Grid>
                                 </div>
                             </Grid>
@@ -189,7 +240,11 @@ class ManageBilling extends Component {
                             </Grid>
                         ) : (
                             <Grid item xs={12}>
-                                <AddAddress type={'billing'} {...this.props} close={this.closeForm} />
+                                <AddAddress
+                                    type={"billing"}
+                                    {...this.props}
+                                    close={this.closeForm}
+                                />
                             </Grid>
                         )}
                     </Grid>
@@ -223,7 +278,7 @@ const styles = theme => ({
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
-        textAlign:'center',
+        textAlign: "center",
         height: 180
     },
     addressBoxSelected: {
@@ -231,14 +286,19 @@ const styles = theme => ({
         border: "solid 2px",
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
-        textAlign:'center',
+        textAlign: "center",
         height: 180
     },
     close: { position: "absolute", right: 0, top: 0 },
-    deleteIcon: { position: "absolute", right: -25, top: -25},
+    deleteIcon: { position: "absolute", right: -25, top: -25 },
     hide: {
         display: "none"
     },
+    sectionTitleDivider: {
+        borderTop: "solid 1.5px",
+        borderColor: "#CCCCCC",
+        marginBottom: 10
+    }
 });
 
 ManageBilling.propTypes = {
