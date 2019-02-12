@@ -1,8 +1,8 @@
 import { requestWrapper } from './base';
 
-export const getUserInfo = (userID) => requestWrapper(`/get-user-info`, {
+export const getUserInfo = (params) => requestWrapper(`/get-user-info`, {
     method: "POST",
-    body: JSON.stringify(userID)
+    body: JSON.stringify(params)
 });
 
 export const login = (username, password) => requestWrapper(`/get-user-id`, {
@@ -10,14 +10,14 @@ export const login = (username, password) => requestWrapper(`/get-user-id`, {
     body: JSON.stringify({username, password})
 });
 
-export const updateUserInfo = (userInfo) => requestWrapper('/update-user-info', {
+export const updateUserInfo = (params) => requestWrapper('/update-user-info', {
     method: "POST",
-    body: JSON.stringify(userInfo)
+    body: JSON.stringify(params)
 });
 
-export const getOrderHistory = (userInfo) => requestWrapper('/get-order-history', {
+export const getOrderHistory = (params) => requestWrapper('/get-order-history', {
     method: "POST",
-    body: JSON.stringify(userInfo)
+    body: JSON.stringify(params)
 });
 
 export const createNetSuiteAccount = (params) => requestWrapper('/create-netsuite-account', {
