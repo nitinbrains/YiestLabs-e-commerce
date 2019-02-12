@@ -1,5 +1,5 @@
-import { createReducer } from '../../helpers/reduxHelpers';
-import { messageTypes } from '../actions/messageActions';
+import { createReducer } from 'helpers/reduxHelpers';
+import { messageTypes } from 'appRedux/actions/messageActions';
 import { finished } from 'stream';
 import {find} from 'lodash';
 

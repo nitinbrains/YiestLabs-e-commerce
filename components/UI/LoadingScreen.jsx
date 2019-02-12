@@ -24,7 +24,7 @@ class LoadingScreen extends React.Component {
                     />
                     <div className={classes.logo}>
                         <img
-                            src="../../static/images/logo_loading.png"
+                            src="static/images/logo_loading.png"
                             height="300"
                         />
                     </div>

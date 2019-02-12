@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import NavBarLayout from "../NavBar/NavBarLayout";
-import Card from "../UI/Card/Card.jsx";
-import CardBody from "../UI/Card/CardBody.jsx";
-import CardHeader from "../UI/Card/CardHeader.jsx";
+import NavBarLayout from "components/NavBar/NavBarLayout";
+import Card from "components/UI/Card/Card.jsx";
+import CardBody from "components/UI/Card/CardBody.jsx";
+import CardHeader from "components/UI/Card/CardHeader.jsx";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -14,13 +14,13 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
 // custom
-import Alert from "../UI/Alert";
-import FormTextbox from "../Form/FormTextbox";
-import FormSelectbox from "../Form/FormSelectbox";
-import FormButton from "../Form/FormButton";
-import FormCheckbox from "../Form/FormCheckbox";
+import Alert from "components/UI/Alert";
+import FormTextbox from "components/Form/FormTextbox";
+import FormSelectbox from "components/Form/FormSelectbox";
+import FormButton from "components/Form/FormButton";
+import FormCheckbox from "components/Form/FormCheckbox";
 
-import { calculatorActions } from '../../redux/actions/calculatorActions';
+import { calculatorActions } from 'appRedux/actions/calculatorActions';
 
 class CalculatorForm extends Component {
 

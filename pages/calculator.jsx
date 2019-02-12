@@ -7,19 +7,19 @@ import Grid from "@material-ui/core/Grid";
 import Dialog from "@material-ui/core/Dialog";
 
 // custom
-import CalculatorForm from "../components/Calculator/CalculatorForm";
-import CalculatorResult from "../components/Calculator/CalculatorResult";
+import CalculatorForm from "components/Calculator/CalculatorForm";
+import CalculatorResult from "components/Calculator/CalculatorResult";
 
-import Alert from "../components/UI/Alert";
-import FormTextbox from "../components/Form/FormTextbox";
-import FormSelectbox from "../components/Form/FormSelectbox";
-import FormButton from "../components/Form/FormButton";
-import FormCheckbox from "../components/Form/FormCheckbox";
+import Alert from "components/UI/Alert";
+import FormTextbox from "components/Form/FormTextbox";
+import FormSelectbox from "components/Form/FormSelectbox";
+import FormButton from "components/Form/FormButton";
+import FormCheckbox from "components/Form/FormCheckbox";
 
-import { calculatorActions } from "../redux/actions/calculatorActions";
+import { calculatorActions } from "appRedux/actions/calculatorActions";
 
-import PageContainer from '../components/UI/PageContainer';
-import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
+import PageContainer from 'components/UI/PageContainer';
+import NavBarUserSearchDrawerLayout from "components/NavBar/NavBarUserSearchDrawerLayout";
 
 class Calculator extends Component {
     constructor(props) {

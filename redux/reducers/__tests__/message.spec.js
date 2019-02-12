@@ -1,5 +1,5 @@
 import messageReducer from '../messageReducer';
-import { messageTypes } from '../../actions/messageActions';
+import { messageTypes } from 'appRedux/actions/messageActions';
 import { message } from '../../mocks';
 
 

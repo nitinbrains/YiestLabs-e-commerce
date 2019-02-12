@@ -1,11 +1,11 @@
 import { put, select  } from 'redux-saga/effects';
-import { messageActions } from '../actions/messageActions';
-import cartSelectors from '../selectors/cart.js';
+import { messageActions } from 'appRedux/actions/messageActions';
+import cartSelectors from 'appRedux/selectors/cart.js';
 
 import {
     addToCart,
     changeItemQuantity
-} from '../../lib/CartUtils';
+} from 'lib/CartUtils';
 
 export function * addCartItem(action) {
     const { responseSuccess, responseFailure, data: { cartItem } } = action;

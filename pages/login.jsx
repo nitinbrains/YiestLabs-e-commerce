@@ -13,21 +13,21 @@ import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import LockIcon from "@material-ui/icons/LockOutlined";
-import Card from "../components/UI/Card/Card.jsx";
-import CardBody from "../components/UI/Card/CardBody.jsx";
-import CardHeader from "../components/UI/Card/CardHeader.jsx";
+import Card from "components/UI/Card/Card.jsx";
+import CardBody from "components/UI/Card/CardBody.jsx";
+import CardHeader from "components/UI/Card/CardHeader.jsx";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
 // custom
-import Banner from "../components/UI/Banner";
-import LoadingIndicator from "../components/UI/LoadingIndicator";
-import { userActions } from "../redux/actions/userActions";
-import { messageActions } from '../redux/actions/messageActions';
-import FormTextbox from "../components/Form/FormTextbox";
-import SimpleSnackbar from "../components/Form/SimpleSnackbar";
+import Banner from "components/UI/Banner";
+import LoadingIndicator from "components/UI/LoadingIndicator";
+import { userActions } from "appRedux/actions/userActions";
+import { messageActions } from 'appRedux/actions/messageActions';
+import FormTextbox from "components/Form/FormTextbox";
+import SimpleSnackbar from "components/Form/SimpleSnackbar";
 
 const customFormValidation = Yup.object().shape({
     username: Yup.string()
@@ -81,7 +81,7 @@ class Login extends Component {
                             }}
                         >
                             <img
-                                src="../../static/images/logo_circle.png"
+                                src="static/images/logo_circle.png"
                                 height="130"
                             />
                         </div>

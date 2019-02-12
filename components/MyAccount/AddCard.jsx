@@ -11,7 +11,7 @@ import TextField from "@material-ui/core/TextField";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-import { userActions } from "../../redux/actions/userActions";
+import { userActions } from "appRedux/actions/userActions";
 
 class AddCard extends Component {
     constructor(props) {

@@ -24,7 +24,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
-import { cartActions } from "../../../redux/actions/cartActions";
+import { cartActions } from "appRedux/actions/cartActions";
 
 const customFormValidation = Yup.object().shape({
     size: Yup.string()

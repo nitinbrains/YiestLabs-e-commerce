@@ -27,48 +27,48 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
-import LoadingIndicator from '../../UI/LoadingIndicator';
-import { cartActions } from "../../../redux/actions/cartActions";
-import { inventoryActions } from "../../../redux/actions/inventoryActions";
+import LoadingIndicator from 'components/UI/LoadingIndicator';
+import { cartActions } from "appRedux/actions/cartActions";
+import { inventoryActions } from "appRedux/actions/inventoryActions";
 
 const YeastElements = {
     "2": {
-        img: '../../../static/images/categories/Category-core.jpg',
+        img: 'static/images/categories/Category-core.jpg',
         color: '#FFF'
     },
     "3": {  // Ale
-        img: '../../../static/images/categories/Category-ale.jpg',
-        icon: '../../../static/images/icons/Ale-icon.svg',
+        img: 'static/images/categories/Category-ale.jpg',
+        icon: 'static/images/icons/Ale-icon.svg',
         color: "#FF9933"
     },
     "4": {  // Wild Yeast
-        img: '../../../static/images/categories/Category-wild.jpg',
-        icon: '../../../static/images/icons/Wildyeast-icon.svg',
+        img: 'static/images/categories/Category-wild.jpg',
+        icon: 'static/images/icons/Wildyeast-icon.svg',
         color: "#CC9966"
     },
     "5": {  // Lager
-        img: '../../../static/images/categories/Category-lager.jpg',
-        icon: '../../../static/images/icons/Lager-icon.svg',
+        img: 'static/images/categories/Category-lager.jpg',
+        icon: 'static/images/icons/Lager-icon.svg',
         color: "#FFCC33"
     },
     "6": {  // Wine
-        img: '../../../static/images/categories/Category-wine.jpg',
-        icon: '../../../static/images/icons/Wine-icon.svg',
+        img: 'static/images/categories/Category-wine.jpg',
+        icon: 'static/images/icons/Wine-icon.svg',
         color: "#9966CC"
     },
     "7": {  // Distilling
-        img: '../../../static/images/categories/Category-Distilling.jpg',
-        icon: '../../../static/images/icons/Distilling-icon.svg',
+        img: 'static/images/categories/Category-Distilling.jpg',
+        icon: 'static/images/icons/Distilling-icon.svg',
         color: "#6666CC"
     },
     "8": {  // Belgian
-        img: '../../../static/images/categories/Category-belgian.jpg',
-        icon: '../../../static/images/icons/Belgian-icon.svg',
+        img: 'static/images/categories/Category-belgian.jpg',
+        icon: 'static/images/icons/Belgian-icon.svg',
         color: "#66CCCC"
     },
     "32": { // Vault
-        img: '../../../static/images/categories/Category-vault.jpg',
-        icon: '../../../static/images/icons/Vault-icon.svg',
+        img: 'static/images/categories/Category-vault.jpg',
+        icon: 'static/images/icons/Vault-icon.svg',
         color: "#B3B3B3"
     }
 }

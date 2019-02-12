@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import Router from 'next/router';
 
-import { userActions } from '../redux/actions/userActions';
+import { userActions } from 'appRedux/actions/userActions';
 
 export default (Component) => {
     const checkLoginAndRedirect = (userInfo) => {

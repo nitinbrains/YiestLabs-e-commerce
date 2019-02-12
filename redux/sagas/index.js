@@ -2,15 +2,15 @@
 import { all, takeLatest, takeEvery } from 'redux-saga/effects';
 
 // User actions
-import { userTypes } from '../actions/userActions';
+import { userTypes } from 'appRedux/actions/userActions';
 // Cart actions
-import { cartTypes } from '../actions/cartActions';
+import { cartTypes } from 'appRedux/actions/cartActions';
 // Order actions
-import { orderTypes } from '../actions/orderActions';
+import { orderTypes } from 'appRedux/actions/orderActions';
 // Inventory actions
-import { inventoryTypes } from '../actions/inventoryActions';
+import { inventoryTypes } from 'appRedux/actions/inventoryActions';
 // Calculator actions
-import { calculatorTypes } from '../actions/calculatorActions';
+import { calculatorTypes } from 'appRedux/actions/calculatorActions';
 
 // User sagas
 import {

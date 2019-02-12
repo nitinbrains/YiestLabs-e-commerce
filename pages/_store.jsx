@@ -24,30 +24,30 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Divider from "@material-ui/core/Divider";
 
-import SalesLib from "../lib/SalesLib";
-import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
-import LoadingIndicator from "../components/UI/LoadingIndicator";
-import YeastCard from "../components/Store/Yeast/YeastCard";
-import YeastDialog from "../components/Store/Yeast/YeastDialog";
-import EnzymesNutrientsCard from "../components/Store/EnzymesNutrients/EnzymesNutrientsCard";
-import EnzymesNutrientsDialog from "../components/Store/EnzymesNutrients/EnzymesNutrientsDialog";
-import ServicesCard from "../components/Store/Services/ServicesCard";
-import ServicesDialog from "../components/Store/Services/ServicesDialog";
-import LabSuppliesCard from "../components/Store/LabSupplies/LabSuppliesCard";
-import LabSuppliesDialog from "../components/Store/LabSupplies/LabSuppliesDialog";
-import EducationCard from "../components/Store/Education/EducationCard";
-import EducationDialog from "../components/Store/Education/EducationDialog";
-import GiftShopCard from "../components/Store/GiftShop/GiftShopCard";
-import GiftShopDialog from "../components/Store/GiftShop/GiftShopDialog";
-import HomebrewCard from "../components/Store/Homebrew/HomebrewCard";
-import FormButton from "../components/Form/FormButton";
-import AddHomebrewContainer from "../components/Store/Homebrew/AddHomebrewContainer";
-import SearchBarItems from "../components/NavBar/SearchBarItems";
-import { userActions } from "../redux/actions/userActions";
-import { messageActions } from '../redux/actions/messageActions';
+import SalesLib from "lib/SalesLib";
+import NavBarUserSearchDrawerLayout from "components/NavBar/NavBarUserSearchDrawerLayout";
+import LoadingIndicator from "components/UI/LoadingIndicator";
+import YeastCard from "components/Store/Yeast/YeastCard";
+import YeastDialog from "components/Store/Yeast/YeastDialog";
+import EnzymesNutrientsCard from "components/Store/EnzymesNutrients/EnzymesNutrientsCard";
+import EnzymesNutrientsDialog from "components/Store/EnzymesNutrients/EnzymesNutrientsDialog";
+import ServicesCard from "components/Store/Services/ServicesCard";
+import ServicesDialog from "components/Store/Services/ServicesDialog";
+import LabSuppliesCard from "components/Store/LabSupplies/LabSuppliesCard";
+import LabSuppliesDialog from "components/Store/LabSupplies/LabSuppliesDialog";
+import EducationCard from "components/Store/Education/EducationCard";
+import EducationDialog from "components/Store/Education/EducationDialog";
+import GiftShopCard from "components/Store/GiftShop/GiftShopCard";
+import GiftShopDialog from "components/Store/GiftShop/GiftShopDialog";
+import HomebrewCard from "components/Store/Homebrew/HomebrewCard";
+import FormButton from "components/Form/FormButton";
+import AddHomebrewContainer from "components/Store/Homebrew/AddHomebrewContainer";
+import SearchBarItems from "components/NavBar/SearchBarItems";
+import { userActions } from "appRedux/actions/userActions";
+import { messageActions } from 'appRedux/actions/messageActions';
 
-import withInventory from "../hocs/inventory";
-import isLoggedUser from "../hocs/isLoggedUser";
+import withInventory from "hocs/inventory";
+import isLoggedUser from "hocs/isLoggedUser";
 
 class Store extends Component {
     constructor(props) {

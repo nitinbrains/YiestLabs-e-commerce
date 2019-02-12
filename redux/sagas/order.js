@@ -1,7 +1,7 @@
 import { take, call, put, cancelled, takeEvery, all, fork, select  } from 'redux-saga/effects';
-import * as api from '../../services/';
-import { orderActions } from '../actions/orderActions';
-import { messageActions } from '../actions/messageActions';
+import * as api from 'services/';
+import { orderActions } from 'appRedux/actions/orderActions';
+import { messageActions } from 'appRedux/actions/messageActions';
 
 import {
     changeShippingOption,
@@ -9,7 +9,7 @@ import {
     decrementItemDate,
     initOrder,
     validateOrder
-} from '../../lib/OrderUtils';
+} from 'lib/OrderUtils';
 
 const replace = (arr, newItem) => arr.map(
     (item) => item.Name === newItem.Name ? newItem : item

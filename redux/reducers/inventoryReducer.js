@@ -1,5 +1,5 @@
-import { createReducer } from '../../helpers/reduxHelpers';
-import { inventoryTypes } from '../actions/inventoryActions';
+import { createReducer } from 'helpers/reduxHelpers';
+import { inventoryTypes } from 'appRedux/actions/inventoryActions';
 
 const initialState = {
     items: [],

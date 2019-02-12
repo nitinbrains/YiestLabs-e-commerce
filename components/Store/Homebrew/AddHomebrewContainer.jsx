@@ -9,10 +9,10 @@ import _ from "lodash";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import PageContainer from "../../UI/PageContainer";
-import FormTextbox from "../../Form/FormTextbox";
-import FormButton from "../../Form/FormButton";
-import { cartActions } from "../../../redux/actions/cartActions";
+import PageContainer from "components/UI/PageContainer";
+import FormTextbox from "components/Form/FormTextbox";
+import FormButton from "components/Form/FormButton";
+import { cartActions } from "appRedux/actions/cartActions";
 
 class AddHomebrewContainer extends Component {
     constructor(props) {

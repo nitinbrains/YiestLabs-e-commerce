@@ -19,7 +19,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 import AddCard from "./AddCard";
-import { userActions } from '../../redux/actions/userActions';
+import { userActions } from 'appRedux/actions/userActions';
 
 class ManageCards extends Component {
     constructor(props) {

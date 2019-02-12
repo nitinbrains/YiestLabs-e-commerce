@@ -4,11 +4,11 @@ import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Card from "../UI/Card/Card.jsx";
-import CardBody from "../UI/Card/CardBody.jsx";
+import Card from "components/UI/Card/Card.jsx";
+import CardBody from "components/UI/Card/CardBody.jsx";
 import Grid from "@material-ui/core/Grid";
 
-import { calculatorActions } from '../../redux/actions/calculatorActions';
+import { calculatorActions } from 'appRedux/actions/calculatorActions';
 
 class ResultSummary extends Component {
     constructor(props) {

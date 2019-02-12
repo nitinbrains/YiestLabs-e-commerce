@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 
-import { orderActions } from "../redux/actions/orderActions";
+import { orderActions } from "appRedux/actions/orderActions";
 
 
 export default (Component) => {

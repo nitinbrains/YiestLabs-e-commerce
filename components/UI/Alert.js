@@ -11,7 +11,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import ErrorIcon from "@material-ui/icons/Error";
 import DoneIcon from "@material-ui/icons/Done";
 
-import { messageActions } from '../../redux/actions/messageActions';
+import { messageActions } from 'appRedux/actions/messageActions';
 /* Usage
 
 Types: info (blue), error(red), success(green)

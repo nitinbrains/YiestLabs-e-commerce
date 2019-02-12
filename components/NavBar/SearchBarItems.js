@@ -19,7 +19,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Grid from "@material-ui/core/Grid";
 
 
-import { inventoryActions } from '../../redux/actions/inventoryActions';
+import { inventoryActions } from 'appRedux/actions/inventoryActions';
 
 class SearchBarItems extends Component {
 

@@ -13,12 +13,12 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
-import { cartActions } from '../../redux/actions/cartActions';
-import FormSelectbox from '../Form/FormSelectbox';
-import FormTextbox from '../Form/FormTextbox';
-import FormButton from '../Form/FormButton';
+import { cartActions } from 'appRedux/actions/cartActions';
+import FormSelectbox from 'components/Form/FormSelectbox';
+import FormTextbox from 'components/Form/FormTextbox';
+import FormButton from 'components/Form/FormButton';
 
-// import {cartItemImage} from "../../static/images/categories/Category-core.jpg";
+// import {cartItemImage} from "static/images/categories/Category-core.jpg";
 
 class CartItem extends Component {
 
@@ -75,9 +75,9 @@ class CartItem extends Component {
             <Grid item className="cart-item">
                 <Grid container spacing={24}>
                     <Grid item xs={2} className="first-block" style={{
-                        backgroundImage: `url('../../../static/images/categories/Category-ale.jpg')`
+                        backgroundImage: `url('static/images/categories/Category-ale.jpg')`
                     }}>
-                        <img className="icon" src="../../../static/images/icons/Ale-icon.svg"/>
+                        <img className="icon" src="static/images/icons/Ale-icon.svg"/>
                         <div className="code">WLP001</div>
                         <div className="name">{this.props.item.Name}</div> 
                     </Grid>
