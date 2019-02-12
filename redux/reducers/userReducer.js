@@ -78,6 +78,15 @@ export default createReducer(initialState, {
     [userTypes.UPDATE_USER_INFO_SUCCESS]: (state) => ({
         isLoading: false,
     }),
+    [userTypes.CREATE_USER_ATTEMPT]: (state) => ({
+        isLoading: true,
+    }),
+    [userTypes.CREATE_USER_FAILURE]: (state) => ({
+        isLoading: false,
+    }),
+    [userTypes.CREATE_USER_SUCCESS]: (state) => ({
+        isLoading: false,
+    }),
     [userTypes.GET_USER_INFO_ATTEMPT]: (state, { data }) => ({
         isLoading: true,
     }),

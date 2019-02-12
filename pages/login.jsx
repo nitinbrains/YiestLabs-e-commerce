@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { compose } from "redux";
+import _get from 'lodash/get';
 
 import PropTypes from "prop-types";
 import Link from "next/link";
@@ -41,20 +42,22 @@ const customFormValidation = Yup.object().shape({
 class Login extends Component {
     constructor(props) {
         super(props);
+        this.initialFormValue = {
+            username: '',
+            password: '',
+        }
     }
-    initialFormValue = {
-        username: '',
-        password: '',
-    }
+
+
     componentWillMount(){
         let isUserLoggedIn = sessionStorage.getItem('isLoggedin')
         const { user } = this.props;
-        if(isUserLoggedIn || (user && user.id && user.id !== null)){
+        if (_get(user, 'id')){
             Router.push('/')
         }
     }
-    componentWillReceiveProps(props){
-        if(props.user.id && props.user.id !== null){
+    componentWillReceiveProps({user}){
+        if (_get(user, 'id')){
             Router.push('/')
         }
     }
@@ -223,9 +226,5 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(withStyles(styles)(Login));
-// (compose(
-//     withStyles(styles, { withTheme: true })(
-//         RootComponent(Login)
-//     )
-// ))
+
 

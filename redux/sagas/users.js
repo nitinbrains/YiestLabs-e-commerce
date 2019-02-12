@@ -172,6 +172,47 @@ export function* updateUserInfo(action) {
     }
 }
 
+export function* createUser(action) {
+    const {
+        responseSuccess,
+        responseFailure,
+        data: { userInfo }
+    } = action;
+    try {
+
+        var request = Object.assign({}, userInfo);
+        request.creditToken = WLHelper.generateCreditToken(creditCard);
+		request.nonce = Utils.uuid();
+        
+        const res = yield call(api.createNetSuiteAccount, {request});
+        if (res.error) throw error;
+
+        request = {};
+        request.id = res.id;
+        const { res: result, error } = yield call(api.createYeastmanAccount, {request});
+
+        yield put(userActions.setUserInfo({ userInfo}));
+        yield put(responseSuccess());
+
+        // TO-DO: Redirect user to store
+
+    } catch(error) {
+        if(error.status){
+            // show network error is any regaring with api status
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
+        } else {
+            if(err.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showBanner({ title: 'Yeastman', message: error.message, variant:'error' }));        
+            } else if(err.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showBanner({ title: 'Error', message: error.message, variant:'error' }));                
+            }
+        }
+        yield put(responseFailure(error));
+    }
+}
+
 export function* getOrderHistory(action) {
     const { responseSuccess, responseFailure } = action;
     try {
