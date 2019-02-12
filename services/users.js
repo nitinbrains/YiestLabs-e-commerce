@@ -20,12 +20,12 @@ export const getOrderHistory = (params) => requestWrapper('/get-order-history', 
     body: JSON.stringify(params)
 });
 
-export const createNetSuiteAccount = (params) = requestWrapper('/create-netsuite-account', {
+export const createNetSuiteAccount = (params) => requestWrapper('/create-netsuite-account', {
     method: "POST",
     body: JSON.stringify(params)
 });
 
-export const createYeastmanAccount = (params) = requestWrapper('/create-yeastman-account', {
+export const createYeastmanAccount = (params) => requestWrapper('/create-yeastman-account', {
     method: "POST",
     body: JSON.stringify(params)
 })
