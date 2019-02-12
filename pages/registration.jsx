@@ -16,12 +16,7 @@ import Shipping from "../components/Registration/Shipping";
 import Billing from "../components/Registration/Billing";
 import CardInfo from "../components/Registration/CardInfo";
 
-const steps = [
-    "General Information",
-    "Shipping Address",
-    "Billing Address",
-    "Credit Card Information"
-];
+const steps = ["General Information", "Shipping Address", "Billing Address", "Credit Card Information"];
 
 function getStepContent(step) {
     switch (step) {
@@ -75,72 +70,49 @@ class Registration extends React.Component {
 
         return (
             <NavBarLayout>
-            <div className={classes.container}>
-                <div className={classes.title}>
-                    <Typography variant="h4" color="secondary">
-                        REGISTRATION
-                    </Typography>
-                </div>
-                            <Stepper
-                                nonLinear
-                                activeStep={activeStep}
-                                className={classes.stepper}
-                            >
-                                {steps.map((label, index) => {
-                                    const props = {};
-                                    const buttonProps = {};
-                                    return (
-                                        <Step key={label} {...props}>
-                                            <StepButton
-                                                onClick={this.handleStep(index)}
-                                                className={classes.stepper}
-                                                {...buttonProps}
-                                            >
-                                                {label}
-                                            </StepButton>
-                                        </Step>
-                                    );
-                                })}
-                            </Stepper>
+                <div className={classes.container}>
+                    <div className={classes.title}>
+                        <Typography variant="h4" color="secondary">
+                            REGISTRATION
+                        </Typography>
+                    </div>
+                    <Stepper nonLinear activeStep={activeStep} className={classes.stepper}>
+                        {steps.map((label, index) => {
+                            const props = {};
+                            const buttonProps = {};
+                            return (
+                                <Step key={label} {...props}>
+                                    <StepButton onClick={this.handleStep(index)} className={classes.stepper} {...buttonProps}>
+                                        {label}
+                                    </StepButton>
+                                </Step>
+                            );
+                        })}
+                    </Stepper>
+                    <React.Fragment>
+                        {activeStep === steps.length ? (
                             <React.Fragment>
-                                {activeStep === steps.length ? (
-                                    <React.Fragment>
-                                        <Typography
-                                            variant="headline"
-                                            gutterBottom
-                                        >
-                                            You are now registered.
-                                        </Typography>
-                                        <Typography variant="subheading">
-                                            Thank you for registering. You will receive an email shortly with your user information.
-                                        </Typography>
-                                    </React.Fragment>
-                                ) : (
-                                    <React.Fragment>
-                                        {getStepContent(activeStep)}
-                                        <div className={classes.buttons}>
-                                            {activeStep !== 0 && (
-                                                <Button
-                                                    onClick={this.handleBack}
-                                                    className={classes.button}
-                                                >
-                                                    Back
-                                                </Button>
-                                            )}
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={this.handleNext}
-                                                className={classes.button}
-                                            >
-                                                {activeStep === steps.length - 1
-                                                    ? "Register"
-                                                    : "Next"}
-                                            </Button>
-                                        </div>
-                                    </React.Fragment>
-                                )}
+                                <Typography variant="headline" gutterBottom>
+                                    You are now registered.
+                                </Typography>
+                                <Typography variant="subheading">Thank you for registering. You will receive an email shortly with your user information.</Typography>
                             </React.Fragment>
+                        ) : (
+                            <React.Fragment>
+                                {getStepContent(activeStep)}
+                                <div className={classes.buttons}>
+                                    {activeStep !== 0 && (
+                                        <Button onClick={this.handleBack} className={classes.button}>
+                                            Back
+                                        </Button>
+                                    )}
+                                    <Button variant="contained" color="primary" onClick={this.handleNext} className={classes.button}>
+                                        {activeStep === steps.length - 1 ? "Register" : "Next"}
+                                    </Button>
+                                </div>
+                            </React.Fragment>
+                        )}
+                    </React.Fragment>
                 </div>
             </NavBarLayout>
         );
@@ -165,7 +137,7 @@ const styles = theme => ({
     stepper: {
         padding: `${theme.spacing.unit * 3}px 0 ${theme.spacing.unit * 5}px`,
         backgroundColor: "#fafafa",
-        width: '100%'
+        width: "100%"
     },
     container: {
         marginTop: 50,
@@ -192,7 +164,7 @@ const styles = theme => ({
         textAlign: "center",
         marginLeft: theme.spacing.unit * -4,
         marginRight: theme.spacing.unit * -4
-    },
+    }
 });
 
 Registration.propTypes = {

@@ -16,32 +16,6 @@ import storage from 'redux-persist/lib/storage';
 import { rootReducer } from './reducers';
 import rootSaga from './sagas';
 
-//reducers
-// import userReducer from './reducers/user';
-// import storeReducer from './reducers/store';
-// import cartReducer from './reducers/cart';
-// import checkoutReducer from './reducers/checkout';
-// import messageReducer from './reducers/message';
-
-// // single entry point to start all Sagas at once
-// function* rootSaga() {
-// 	yield all([
-// 		userWatcher(),
-// 		storeWatcher(),
-// 		cartWatcher(),
-// 		checkoutWatcher(),
-// 		messageWatcher()
-// 	])
-// }
-
-// const globalReducer = combineReducers({
-//	user: userReducer,
-// 	store: storeReducer,
-// 	cart: cartReducer,
-// 	checkout: checkoutReducer,
-// 	message: messageReducer
-// });
-
 const sagaMiddleware = createSagaMiddleware();
 
 const initializeStore = (initialState = initialState, isServer) => {
@@ -49,7 +23,7 @@ const initializeStore = (initialState = initialState, isServer) => {
     const persistConfig = {
         key: 'root',
         storage,
-        whitelist: ['user','cart']
+        whitelist: ['user', 'cart']
     };
     const persistedReducer = isServer ? rootReducer : persistReducer(persistConfig, rootReducer);
     let store = createStore(
