@@ -28,11 +28,7 @@ export default (Component) => {
                 if( !user.isLoggedin ){
                     return <LoadingScreen />
                 }
-                // return (
-                //     <Suspense fallback={<div>Loading...</div>}>
-                //         <Component {...this.props}/>
-                //     </Suspense>
-                // )
+
                 return <Component {...this.props}/>
             }
         }
