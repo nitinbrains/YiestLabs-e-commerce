@@ -81,11 +81,7 @@ function * rootSaga () {
         takeLatest(userTypes.GET_USER_INFO_ATTEMPT, getUserInfo),
         takeLatest(userTypes.SET_USER_INFO_ATTEMPT, setUserInfo),
         takeLatest(userTypes.UPDATE_USER_INFO_ATTEMPT, updateUserInfo),
-<<<<<<< HEAD
-        takeLatest(userTypes.CREATE_USER_ATTEMPT, createUSer),
-=======
         takeLatest(userTypes.CREATE_USER_ATTEMPT, createUser),
->>>>>>> 396d880dcd45bf37aa88acd6d6840c7350f9cab5
         takeLatest(userTypes.GET_ORDER_HISTORY_ATTEMPT, getOrderHistory),
         takeLatest(userTypes.SET_SHIP_METHOD_ATTEMPT, setShipMethod),
         takeLatest(userTypes.ADD_CREDIT_CARD_ATTEMPT, addCreditCard),
