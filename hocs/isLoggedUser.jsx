@@ -1,20 +1,38 @@
-import React from 'react';
+// import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import Router from 'next/router';
-
+import LoadingScreen from '../components/UI/LoadingScreen';
+import { withRouter } from 'next/router'
 import { userActions } from '../redux/actions/userActions';
 
+const routeList = ['/cart', '/checkout']
+
 export default (Component) => {
+    const checkLoginAndRedirect = (userInfo, router) => {
+        if( !userInfo.isLoggedin ){
+            routeList.includes(router.pathname) ? Router.push('/') : Router.push('/login')
+        }
+    }
     const Wrapper = props => (
         class extends React.Component {
             componentWillMount() {
-                if( this.props.user.email == '' ){ // treating user is not logged in if email is empty
-                    console.log('HOC - user is not logged in, opening login page')
-                    Router.push('/login')
-                }
+                checkLoginAndRedirect(this.props.user, this.props.router)
+            }
+            componentWillReceiveProps(nextProps){
+                checkLoginAndRedirect(nextProps.user, nextProps.router)
             }
             render () {
+                let {user} = this.props;
+                if( !user.isLoggedin ){
+                    return <LoadingScreen />
+                }
+                // return (
+                //     <Suspense fallback={<div>Loading...</div>}>
+                //         <Component {...this.props}/>
+                //     </Suspense>
+                // )
                 return <Component {...this.props}/>
             }
         }
@@ -23,5 +41,5 @@ export default (Component) => {
     return connect(
         state => ({ user: state.user }),
         dispatch => bindActionCreators({...userActions}, dispatch) 
-    )(Wrapper());
+    )(withRouter(Wrapper()));
 }

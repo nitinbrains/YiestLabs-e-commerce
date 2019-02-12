@@ -146,7 +146,6 @@ class Store extends Component {
     render() {
         const { classes, theme, message, messages } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
-        console.log('user', this.props.user);
         
         // isHomebrew = true
         return (
@@ -230,11 +229,20 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
     bindActionCreators({...userActions, ...messageActions}, dispatch);
 
+// export default connect(
+//     mapStateToProps,
+//     mapDispatchToProps
+// )(compose(
+//     withStyles(styles, { withTheme: true }),
+//     withInventory(isLoggedUser())
+// )(Store));
+
 export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(compose(
-    withStyles(styles, { withTheme: true }),
-    withInventory
-)(Store));
-
+    withStyles(styles, { withTheme: true })(
+        // RootComponent(withInventory(Store))
+        withInventory(Store)
+    )
+));

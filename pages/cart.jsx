@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 
 import Link from "next/link";
+import Router from 'next/router';
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -24,7 +25,7 @@ import FormButton from "../components/Form/FormButton";
 import { cartActions } from '../redux/actions/cartActions';
 
 import PageContainer from '../components/UI/PageContainer';
-
+import isLoggedUser from "../hocs/isLoggedUser";
 
 class Cart extends Component {
 
@@ -38,6 +39,14 @@ class Cart extends Component {
     static getDerivedStateFromProps(nextProps, prevState){
         return {
             showWantSoonerDialog: nextProps.cart.showWantSooner,
+        }
+    }
+    handleProceed = () => {
+        const {user} = this.props;
+        if(!user.isLoggedin){
+            Router.push('/login')
+        }else{
+            Router.push('/checkout');
         }
     }
 
@@ -57,12 +66,12 @@ class Cart extends Component {
                     <Grid container spacing={24} dir="rtl" className="block-checkout-button">
                         <Grid item xs={12} >
                             { cart.items.length > 0 ?
-                                <Link prefetch href="/checkout">
+                                <div onClick={this.handleProceed}>
                                     <FormButton
                                         className="checkout-button"
                                         text="PROCEED TO CHECKOUT"
                                     />
-                                </Link>
+                                </div>
                                 :
                                 <Typography variant="h5" color="primary" align="center">
                                     Cart is Empty
@@ -125,5 +134,12 @@ const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch)
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles, { withTheme: true })(Cart));
+)(compose(
+    withStyles(styles, { withTheme: true })(
+        isLoggedUser(Cart)
+    )
+))
+
+// (withStyles(styles, { withTheme: true })(Cart));
+
 
