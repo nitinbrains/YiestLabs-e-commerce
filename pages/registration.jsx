@@ -1,41 +1,34 @@
 import React from "react";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import NavBarLayout from "../components/NavBar/NavBarLayout";
-import Card from "../components/UI/Card/Card.jsx";
-import CardBody from "../components/UI/Card/CardBody.jsx";
-import CardHeader from "../components/UI/Card/CardHeader.jsx";
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepButton from "@material-ui/core/StepButton";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import NavBarLayout from "../components/NavBar/NavBarLayout";
+import Card from "../components/UI/Card/Card.jsx";
+import CardBody from "../components/UI/Card/CardBody.jsx";
+import CardHeader from "../components/UI/Card/CardHeader.jsx";
 import General from "../components/Registration/General";
 import Shipping from "../components/Registration/Shipping";
 import Billing from "../components/Registration/Billing";
 import CardInfo from "../components/Registration/CardInfo";
 
-const steps = ["General Information", "Shipping Address", "Billing Address", "Credit Card Information"];
+import { userActions } from '../redux/actions/userActions';
 
-function getStepContent(step) {
-    switch (step) {
-        case 0:
-            return <General />;
-        case 1:
-            return <Shipping />;
-        case 2:
-            return <Billing />;
-        case 3:
-            return <CardInfo />;
-        default:
-            throw new Error("Unknown step");
-    }
-}
+const steps = ["General Information", "Shipping Address", "Billing Address", "Credit Card Information"];
 
 class Registration extends React.Component {
     state = {
-        activeStep: 0
+        activeStep: 0,
+        formValues: {},
     };
 
     handleNext = () => {
@@ -45,6 +38,20 @@ class Registration extends React.Component {
         });
     };
 
+    getStepContent(step) {
+        switch (step) {
+            case 0:
+                return <General submit={this.submit} />;
+            case 1:
+                return <Shipping submit={this.submit} />;
+            case 2:
+                return <Billing submit={this.submit} />;
+            case 3:
+                return <CardInfo submit={this.submit} />;
+            default:
+                throw new Error("Unknown step");
+        }
+    }
     handleBack = () => {
         const { activeStep } = this.state;
         this.setState({
@@ -63,11 +70,20 @@ class Registration extends React.Component {
             activeStep: step
         });
     };
-
+    submit = (values)=>{
+        let {formValues, activeStep} = this.state;
+        formValues[activeStep] = values;
+        this.setState({
+            activeStep: activeStep + 1,
+            formValues
+        })
+        if(activeStep === steps.length - 1 && Object.keys(formValues).length === steps.length){
+            this.props.createUser(formValues)
+        }
+    }
     render() {
         const { classes } = this.props;
-        const { activeStep } = this.state;
-
+        const { activeStep, formValues } = this.state;
         return (
             <NavBarLayout>
                 <div className={classes.container}>
@@ -99,17 +115,7 @@ class Registration extends React.Component {
                             </React.Fragment>
                         ) : (
                             <React.Fragment>
-                                {getStepContent(activeStep)}
-                                <div className={classes.buttons}>
-                                    {activeStep !== 0 && (
-                                        <Button onClick={this.handleBack} className={classes.button}>
-                                            Back
-                                        </Button>
-                                    )}
-                                    <Button variant="contained" color="primary" onClick={this.handleNext} className={classes.button}>
-                                        {activeStep === steps.length - 1 ? "Register" : "Next"}
-                                    </Button>
-                                </div>
+                                {this.getStepContent(activeStep)}
                             </React.Fragment>
                         )}
                     </React.Fragment>
@@ -171,4 +177,22 @@ Registration.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Registration);
+
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    };
+};
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(userActions, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(compose(
+    withStyles(styles, { withTheme: true })(
+        Registration
+    )
+))
+

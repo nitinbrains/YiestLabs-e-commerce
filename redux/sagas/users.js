@@ -179,7 +179,7 @@ export function* createUser(action) {
         data: { userInfo }
     } = action;
     try {
-
+        
         var request = Object.assign({}, userInfo);
         request.creditToken = WLHelper.generateCreditToken(creditCard);
 		request.nonce = Utils.uuid();
@@ -201,10 +201,10 @@ export function* createUser(action) {
             // show network error is any regaring with api status
             yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            if(err.code == 0 ){
+            if(error.code == 0 ){
                 // Yeastman error when we have error with code == 0
                 yield put(messageActions.showBanner({ title: 'Yeastman', message: error.message, variant:'error' }));        
-            } else if(err.code == -1){
+            } else if(error.code == -1){
                 // Other error when we have error with code == -1
                 yield put(messageActions.showBanner({ title: 'Error', message: error.message, variant:'error' }));                
             }

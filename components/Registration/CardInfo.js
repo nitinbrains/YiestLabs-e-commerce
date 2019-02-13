@@ -1,13 +1,40 @@
 import React from "react";
+import PropTypes from "prop-types";
+import withStyles from "@material-ui/core/styles/withStyles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import Button from "@material-ui/core/Button";
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
-function CardInfo() {
+const initialFormValue = {
+    cardName: '',
+    expDate: '',
+    cardNumber: ''
+}
+
+const customFormValidation = Yup.object().shape({
+    cardName: Yup.string()
+    .required('Required'),
+    expDate: Yup.string()
+    .required('Required'),
+    cardNumber: Yup.string()
+    .required('Required')
+  });
+
+const CardInfo = ({classes, submit, handleBack}) => {
     return (
         <React.Fragment>
+             <Formik
+                initialValues={initialFormValue}
+                validationSchema={customFormValidation}
+                onSubmit={values => submit(values)}
+                >
+                {({ values, errors, touched, handleChange }) => {
+                    return (<Form>
             <Grid container spacing={24}>
                 <Grid item xs={12}>
                     <Typography variant="h6" color="textPrimary">
@@ -23,31 +50,70 @@ function CardInfo() {
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <TextField
-                        required
+                        // required
                         id="cardName"
+                        name="cardName"
                         label="Name on card"
                         fullWidth
+                        onChange={handleChange}
+                        value={values.cardName}
                     />
+                    {errors.cardName && touched.cardName && <div className="error" >{errors.cardName}</div>}
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <TextField
-                        required
+                        // required
                         id="expDate"
+                        name="expDate"
                         label="Expiration date"
                         fullWidth
+                        onChange={handleChange}
+                        value={values.expDate}
                     />
+                    {errors.expDate && touched.expDate && <div className="error" >{errors.expDate}</div>}
                 </Grid>
                 <Grid item xs={12} md={12}>
                     <TextField
-                        required
+                        // required
                         id="cardNumber"
+                        name="cardNumber"
                         label="Card number"
                         fullWidth
+                        onChange={handleChange}
+                        value={values.cardNumber}
                     />
+                    {errors.cardNumber && touched.cardNumber && <div className="error" >{errors.cardNumber}</div>}
                 </Grid>
             </Grid>
+            <div className={classes.buttons}>
+                <Button onClick={()=>handleBack()} className={classes.button}>
+                    Back
+                </Button>
+                <Button type="submit" variant="contained" color="primary" className={classes.button}>
+                    Register
+                </Button>
+            </div>
+                </Form>)
+                }}
+            </Formik>
         </React.Fragment>
     );
 }
 
-export default CardInfo;
+const styles = theme => ({
+    buttons: {
+        display: "flex",
+        justifyContent: "flex-end"
+    },
+    button: {
+        marginTop: theme.spacing.unit * 3,
+        marginLeft: theme.spacing.unit
+    },
+});
+
+CardInfo.propTypes = {
+    classes: PropTypes.object.isRequired
+};
+
+
+export default  withStyles(styles)(CardInfo);
