@@ -9,7 +9,7 @@ import {
     switchToHomebrew,
     switchToProfessional
 } from '../inventory';
-import { inventoryActions } from '../../actions/inventoryActions';
+import { inventoryActions } from 'appRedux/actions/inventoryActions';
 import { inventory, inventoryFetch } from '../../mocks';
 
 describe('testing of inventory sagas',() => {

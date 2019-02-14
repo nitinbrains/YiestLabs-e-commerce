@@ -7,8 +7,8 @@ import {
     removeCartItem,
     updateCartItem
 } from '../cart';
-import cartSelectors from '../../selectors/cart.js';
-import { cartActions } from '../../actions/cartActions';
+import cartSelectors from 'appRedux/selectors/cart.js';
+import { cartActions } from 'appRedux/actions/cartActions';
 import { cart } from '../../mocks';
 
 

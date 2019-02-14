@@ -1,5 +1,5 @@
 import cartReducer from '../cartReducer';
-import { cartTypes } from '../../actions/cartActions';
+import { cartTypes } from 'appRedux/actions/cartActions';
 import { cart } from '../../mocks';
 
 const cartItem = {

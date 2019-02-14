@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
-import NavBarUserSearchDrawerLayout from "../NavBar/NavBarUserSearchDrawerLayout";
+import NavBarUserSearchDrawerLayout from "components/NavBar/NavBarUserSearchDrawerLayout";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 

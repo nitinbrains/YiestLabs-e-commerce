@@ -2,7 +2,7 @@ import React from 'react';
 import App, { Container } from 'next/app';
 
 // redux
-import configureStore from '../redux/configureStore'
+import configureStore from 'appRedux/configureStore'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 
@@ -10,8 +10,8 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import JssProvider from 'react-jss/lib/JssProvider';
-import getPageContext from '../src/getPageContext';
-import "../styles/main.scss"
+import getPageContext from 'src/getPageContext';
+import "styles/main.scss"
 
 class MyApp extends App {
 	constructor(props) {

@@ -1,5 +1,5 @@
 import orderReducer from '../orderReducer';
-import { orderTypes } from '../../actions/orderActions';
+import { orderTypes } from 'appRedux/actions/orderActions';
 import { order, fetchOrderMock } from '../../mocks';
 
 describe('testing of order reducer',() => {

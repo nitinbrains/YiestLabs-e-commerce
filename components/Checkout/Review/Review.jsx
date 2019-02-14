@@ -10,8 +10,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Grid from "@material-ui/core/Grid";
 import moment from 'moment';
-import ItemPanel from "../Items/ItemPanel";
-import { orderActions } from '../../../redux/actions/orderActions';
+import ItemPanel from "components/Checkout/Items/ItemPanel";
+import { orderActions } from 'appRedux/actions/orderActions';
 
 const styles = theme => ({
     listItem: {

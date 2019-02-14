@@ -1,4 +1,4 @@
-import { createActionsStructure } from "../../helpers/reduxHelpers";
+import { createActionsStructure } from "helpers/reduxHelpers";
 
 /* ------------- Action Creators ------------- */
 

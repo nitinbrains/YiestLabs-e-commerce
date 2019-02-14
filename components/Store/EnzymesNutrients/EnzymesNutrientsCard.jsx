@@ -46,7 +46,7 @@ class EnzymesNutrientsCard extends Component {
                     onMouseEnter={this.handleItemHoverEnter}
                     onMouseLeave={this.handleItemHoverLeave}
                     style={{
-                        backgroundImage: `url('../../../static/images/categories/Category-core.jpg')`,
+                        backgroundImage: `url('static/images/categories/Category-core.jpg')`,
                         backgroundRepeat: "no-repeat",
                         backgroundSize: "cover"
                     }}

@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import _ from 'lodash';
 
-import NavBarLayout from "../../NavBar/NavBarLayout";
-import Card from "../../UI/Card/Card.jsx";
-import CardBody from "../../UI/Card/CardBody.jsx";
-import CardHeader from "../../UI/Card/CardHeader.jsx";
+import NavBarLayout from "components/NavBar/NavBarLayout";
+import Card from "components/UI/Card/Card.jsx";
+import CardBody from "components/UI/Card/CardBody.jsx";
+import CardHeader from "components/UI/Card/CardHeader.jsx";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from '@material-ui/core/Grid';

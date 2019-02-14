@@ -14,8 +14,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from "@material-ui/core/Button";
 
 
-import Utils from '../../../lib/Utils';
-import { orderActions } from '../../../redux/actions/orderActions';
+import Utils from 'lib/Utils';
+import { orderActions } from 'appRedux/actions/orderActions';
 
 
 class SaleItem extends Component {

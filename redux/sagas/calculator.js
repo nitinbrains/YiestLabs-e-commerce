@@ -1,9 +1,9 @@
 import { put, select  } from 'redux-saga/effects';
 import _ from 'lodash';
 
-import { calculatorActions } from '../actions/calculatorActions';
-import { inventoryActions } from '../actions/inventoryActions';
-import { messageActions } from '../actions/messageActions';
+import { calculatorActions } from 'appRedux/actions/calculatorActions';
+import { inventoryActions } from 'appRedux/actions/inventoryActions';
+import { messageActions } from 'appRedux/actions/messageActions';
 
 export function * calculatePacks(action) {
     const { responseSuccess, responseFailure } = action;

@@ -2,12 +2,12 @@ import { put, call, select } from "redux-saga/effects";
 import _isNumber from "lodash/isNumber";
 import _isEmpty from "lodash/isEmpty";
 
-import { userActions, userTypes } from "../actions/userActions";
-import { messageActions } from "../actions/messageActions";
-import * as api from "../../services/users.js";
-import { loadSubsidiaryOptions, getDefaultOrFirstCreditCard } from "../../lib/UserUtils.js";
+import { userActions, userTypes } from "appRedux/actions/userActions";
+import { messageActions } from "appRedux/actions/messageActions";
+import * as api from "services/users.js";
+import { loadSubsidiaryOptions, getDefaultOrFirstCreditCard } from "lib/UserUtils.js";
 
-import WLHelper from "../../lib/WLHelper";
+import WLHelper from "lib/WLHelper";
 
 export function* loginUser(action) {
     const {

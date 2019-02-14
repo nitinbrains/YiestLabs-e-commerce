@@ -25,7 +25,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 import _ from 'lodash';
 
-import FormButton from "../Form/FormButton";
+import FormButton from "components/Form/FormButton";
 
 class OrderDetails extends Component {
 

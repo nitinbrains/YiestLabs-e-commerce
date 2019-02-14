@@ -17,9 +17,9 @@ import {
     addShipAddress,
     addBillAddress
 } from '../users';
-import { userActions } from '../../actions/userActions';
-import { messageActions } from '../../actions/messageActions';
-import Utils from '../../../lib/Utils';
+import { userActions } from 'appRedux/actions/userActions';
+import { messageActions } from 'appRedux/actions/messageActions';
+import Utils from 'lib/Utils';
 import { user } from '../../mocks';
 
 const userId = 123;

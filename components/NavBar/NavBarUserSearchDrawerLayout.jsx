@@ -26,10 +26,10 @@ import SearchBarItems from "./SearchBarItems";
 import Snackbar from '@material-ui/core/Snackbar';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { userActions } from "../../redux/actions/userActions";
-import { messageActions } from "../../redux/actions/messageActions";
-import SimpleSnackbar from "../Form/SimpleSnackbar";
-import Banner from "../UI/Banner";
+import { userActions } from "appRedux/actions/userActions";
+import { messageActions } from "appRedux/actions/messageActions";
+import SimpleSnackbar from "components/Form/SimpleSnackbar";
+import Banner from "components/UI/Banner";
 
 class NavBarUserSearchDrawerLayout extends Component {
     state = {
@@ -106,7 +106,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                                 aria-label="Login"
                             >
                                 <img
-                                    src="../../static/images/yeastman.png"
+                                    src="static/images/yeastman.png"
                                     height="30"
                                 />
                             </IconButton>
@@ -114,7 +114,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                         <Link prefetch href="/">
                             <div className={classes.circle}>
                                 <img
-                                    src="../../static/images/logo_circle.png"
+                                    src="static/images/logo_circle.png"
                                     height="130"
                                 />
                             </div>

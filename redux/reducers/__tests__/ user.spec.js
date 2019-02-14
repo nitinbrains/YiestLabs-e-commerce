@@ -1,5 +1,5 @@
 import userReducer from '../userReducer';
-import { userTypes } from '../../actions/userActions';
+import { userTypes } from 'appRedux/actions/userActions';
 import { user } from '../../mocks';
 
 const initialState = {

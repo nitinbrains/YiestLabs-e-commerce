@@ -56,7 +56,7 @@ class EducationCard extends Component {
                     style={
                         !this.state.hover
                             ? {
-                                  backgroundImage: `url('../../../static/images/categories/Category-core.jpg')`,
+                                  backgroundImage: `url('static/images/categories/Category-core.jpg')`,
                                   backgroundRepeat: "no-repeat",
                                   backgroundSize: "cover"
                               }

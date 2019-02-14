@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { compose, bindActionCreators } from "redux";
-import { orderActions } from "../redux/actions/orderActions";
+import { orderActions } from "appRedux/actions/orderActions";
 
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -11,11 +11,11 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Link from "next/link";
-import NavBarLayout from "../components/NavBar/NavBarLayout";
-import Card from "../components/UI/Card/Card.jsx";
-import CardBody from "../components/UI/Card/CardBody.jsx";
-import LoadingIndicator from '../components/UI/LoadingIndicator';
-import CardHeader from "../components/UI/Card/CardHeader.jsx";
+import NavBarLayout from "components/NavBar/NavBarLayout";
+import Card from "components/UI/Card/Card.jsx";
+import CardBody from "components/UI/Card/CardBody.jsx";
+import LoadingIndicator from 'components/UI/LoadingIndicator';
+import CardHeader from "components/UI/Card/CardHeader.jsx";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
@@ -23,16 +23,16 @@ import StepButton from "@material-ui/core/StepButton";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import Shipping from "../components/Checkout/Shipping/Shipping";
-import Billing from "../components/Checkout/Billing/Billing";
-import Items from "../components/Checkout/Items/Items";
-import Review from "../components/Checkout/Review/Review";
-import isLoggedUser from "../hocs/isLoggedUser";
-import cartHasItems from "../hocs/cartHasItems";
-import prepareOrder from "../hocs/prepareOrder";
+import Shipping from "components/Checkout/Shipping/Shipping";
+import Billing from "components/Checkout/Billing/Billing";
+import Items from "components/Checkout/Items/Items";
+import Review from "components/Checkout/Review/Review";
+import isLoggedUser from "hocs/isLoggedUser";
+import cartHasItems from "hocs/cartHasItems";
+import prepareOrder from "hocs/prepareOrder";
 
 // custom
-import Alert from "../components/UI/Alert";
+import Alert from "components/UI/Alert";
 
 const steps = ["Shipping", "Billing", "Items", "Review your order"];
 

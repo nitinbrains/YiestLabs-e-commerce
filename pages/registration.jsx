@@ -1,20 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
-import NavBarLayout from "../components/NavBar/NavBarLayout";
-import Card from "../components/UI/Card/Card.jsx";
-import CardBody from "../components/UI/Card/CardBody.jsx";
-import CardHeader from "../components/UI/Card/CardHeader.jsx";
+import NavBarLayout from "components/NavBar/NavBarLayout";
+import Card from "components/UI/Card/Card.jsx";
+import CardBody from "components/UI/Card/CardBody.jsx";
+import CardHeader from "components/UI/Card/CardHeader.jsx";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepButton from "@material-ui/core/StepButton";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import General from "../components/Registration/General";
-import Shipping from "../components/Registration/Shipping";
-import Billing from "../components/Registration/Billing";
-import CardInfo from "../components/Registration/CardInfo";
+import General from "components/Registration/General";
+import Shipping from "components/Registration/Shipping";
+import Billing from "components/Registration/Billing";
+import CardInfo from "components/Registration/CardInfo";
 
 const steps = ["General Information", "Shipping Address", "Billing Address", "Credit Card Information"];
 

@@ -13,7 +13,7 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ItemPanel from "./ItemPanel";
-import { orderActions } from "../../../redux/actions/orderActions";
+import { orderActions } from "appRedux/actions/orderActions";
 
 class Items extends Component {
     render() {

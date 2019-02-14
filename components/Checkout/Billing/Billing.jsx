@@ -22,16 +22,16 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 
-import WLHelper from "../../../lib/WLHelper";
-import SalesLib from "../../../lib/SalesLib";
-import Utils from "../../../lib/Utils";
-import { userActions } from "../../../redux/actions/userActions";
+import WLHelper from "lib/WLHelper";
+import SalesLib from "lib/SalesLib";
+import Utils from "lib/Utils";
+import { userActions } from "appRedux/actions/userActions";
 
-import ManageBilling from "../../MyAccount/ManageBilling";
-import AddAddress from "../../MyAccount/AddAddress";
+import ManageBilling from "components/MyAccount/ManageBilling";
+import AddAddress from "components/MyAccount/AddAddress";
 
-import ManageCards from "../../MyAccount/ManageCards";
-import AddCard from "../../MyAccount/AddCard";
+import ManageCards from "components/MyAccount/ManageCards";
+import AddCard from "components/MyAccount/AddCard";
 
 class Billing extends Component {
     constructor(props) {

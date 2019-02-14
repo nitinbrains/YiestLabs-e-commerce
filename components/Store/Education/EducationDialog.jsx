@@ -24,8 +24,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
-import SalesLib from "../../../lib/SalesLib";
-import { cartActions } from "../../../redux/actions/cartActions";
+import SalesLib from "lib/SalesLib";
+import { cartActions } from "appRedux/actions/cartActions";
 
 const customFormValidation = Yup.object().shape({
     quantity: Yup.string()
