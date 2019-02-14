@@ -17,8 +17,8 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-import WLHelper from "../../../lib/WLHelper";
-import { orderActions } from "../../../redux/actions/orderActions";
+import WLHelper from "lib/WLHelper";
+import { orderActions } from "appRedux/actions/orderActions";
 
 class ItemPanel extends Component {
     constructor(props) {

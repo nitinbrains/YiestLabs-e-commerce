@@ -1,5 +1,5 @@
-import { createReducer } from '../../helpers/reduxHelpers';
-import { orderTypes } from '../actions/orderActions';
+import { createReducer } from 'helpers/reduxHelpers';
+import { orderTypes } from 'appRedux/actions/orderActions';
 
 const initialState = {
 	items: [],

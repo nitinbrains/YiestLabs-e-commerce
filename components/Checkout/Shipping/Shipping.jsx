@@ -21,12 +21,12 @@ import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 
-import ManageShipping from "../../MyAccount/ManageShipping";
-import AddAddress from "../../MyAccount/AddAddress";
+import ManageShipping from "components/MyAccount/ManageShipping";
+import AddAddress from "components/MyAccount/AddAddress";
 
 // custom
-import SalesLib from "../../../lib/SalesLib";
-import { userActions } from "../../../redux/actions/userActions";
+import SalesLib from "lib/SalesLib";
+import { userActions } from "appRedux/actions/userActions";
 
 class Shipping extends Component {
     constructor(props) {

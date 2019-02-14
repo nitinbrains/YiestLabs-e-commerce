@@ -1,12 +1,12 @@
 import { take, call, put, cancelled, takeEvery, all, fork, select  } from 'redux-saga/effects';
-import { messageActions } from '../actions/messageActions';
-import { inventoryActions } from '../actions/inventoryActions';
+import { messageActions } from 'appRedux/actions/messageActions';
+import { inventoryActions } from 'appRedux/actions/inventoryActions';
 
 import {
     filterItems,
-} from '../../lib/InventoryUtils';
+} from 'lib/InventoryUtils';
 
-import * as api from '../../services/';
+import * as api from 'services/';
 
 export function * getInventory (action) {
     const { responseSuccess, responseFailure, data: { search } } = action;

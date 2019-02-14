@@ -14,8 +14,8 @@ import {
     shipAllTogether,
     incrementItemDate
 } from '../OrderUtils';
-// import cartSelectors from '../../selectors/cart.js';
-import { orderActions } from '../../actions/orderActions';
+// import cartSelectors from 'appRedux/selectors/cart.js';
+import { orderActions } from 'appRedux/actions/orderActions';
 import { order, user, today, twoDaysLate, fetchOrderMock } from '../../mocks';
 
 

@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { messageActions } from '../../redux/actions/messageActions';
+import { messageActions } from 'appRedux/actions/messageActions';
 import Alert from "./Alert";
 
 class Banner extends React.Component {

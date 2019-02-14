@@ -7,8 +7,8 @@ import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Link from "next/link";
-import { messageActions } from "../../redux/actions/messageActions";
-import SimpleSnackbar from "../Form/SimpleSnackbar";
+import { messageActions } from "appRedux/actions/messageActions";
+import SimpleSnackbar from "components/Form/SimpleSnackbar";
 class NavBarLayout extends Component {
     componentWillUnmount() {
         if( this.props.messages.snackbar != false ){
@@ -38,7 +38,7 @@ class NavBarLayout extends Component {
                         <Link prefetch href="/">
                             <div className={classes.circle}>
                                 <img
-                                    src="../../static/images/logo_circle.png"
+                                    src="static/images/logo_circle.png"
                                     height="130"
                                 />
                             </div>

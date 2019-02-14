@@ -11,7 +11,7 @@ import FeedbackIcon from "@material-ui/icons/Feedback";
 import PowerSettingsNew from "@material-ui/icons/PowerSettingsNew";
 import { withStyles } from "@material-ui/core/styles";
 
-import { userActions } from '../../redux/actions/userActions';
+import { userActions } from 'appRedux/actions/userActions';
 
 
 class SideBarItems extends Component {

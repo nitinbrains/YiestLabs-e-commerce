@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 
-import { orderActions } from "../redux/actions/orderActions";
-import LoadingScreen from '../components/UI/LoadingScreen';
+import { orderActions } from "appRedux/actions/orderActions";
+import LoadingScreen from 'components/UI/LoadingScreen';
 
 
 export default (Component) => {

@@ -1,5 +1,5 @@
-import { createReducer } from '../../helpers/reduxHelpers';
-import { calculatorTypes } from '../actions/calculatorActions';
+import { createReducer } from 'helpers/reduxHelpers';
+import { calculatorTypes } from 'appRedux/actions/calculatorActions';
 
 const initialState = {
     error: null,

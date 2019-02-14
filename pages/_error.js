@@ -29,7 +29,7 @@ class Error extends Component {
                             }}
                         >
                             <img
-                                src="../../static/images/logo_circle.png"
+                                src="static/images/logo_circle.png"
                                 height="130"
                             />
                         </div>

@@ -8,7 +8,7 @@ import Router from 'next/router';
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
-import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
+import NavBarUserSearchDrawerLayout from "components/NavBar/NavBarUserSearchDrawerLayout";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -18,14 +18,13 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 
-import CartItem from "../components/Cart/CartItem";
-import WantSooner from "../components/Cart/WantSooner/WantSooner";
-import FormButton from "../components/Form/FormButton";
+import CartItem from "components/Cart/CartItem";
+import WantSooner from "components/Cart/WantSooner/WantSooner";
+import FormButton from "components/Form/FormButton";
+import PageContainer from 'components/UI/PageContainer';
 
-import { cartActions } from '../redux/actions/cartActions';
+import { cartActions } from 'appRedux/actions/cartActions';
 
-import PageContainer from '../components/UI/PageContainer';
-import isLoggedUser from "../hocs/isLoggedUser";
 
 class Cart extends Component {
 
@@ -45,7 +44,7 @@ class Cart extends Component {
         const {user} = this.props;
         if(!user.isLoggedin){
             Router.push('/login')
-        }else{
+        } else {
             Router.push('/checkout');
         }
     }

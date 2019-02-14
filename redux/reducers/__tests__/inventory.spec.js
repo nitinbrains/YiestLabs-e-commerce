@@ -1,5 +1,5 @@
 import inventoryReducer from '../inventoryReducer';
-import { inventoryTypes } from '../../actions/inventoryActions';
+import { inventoryTypes } from 'appRedux/actions/inventoryActions';
 import { inventory, inventoryFetch } from '../../mocks';
 
 const cartItem = {

@@ -1,5 +1,5 @@
-import { createReducer } from '../../helpers/reduxHelpers';
-import { userTypes } from '../actions/userActions';
+import { createReducer } from 'helpers/reduxHelpers';
+import { userTypes } from 'appRedux/actions/userActions';
 
 /* ------------- Initial State ------------- */
 

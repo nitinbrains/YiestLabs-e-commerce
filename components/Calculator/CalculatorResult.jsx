@@ -9,7 +9,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import ResultSummary from "./ResultSummary";
 import ResultItem from "./ResultItem";
 
-import { calculatorActions } from '../../redux/actions/calculatorActions';
+import { calculatorActions } from 'appRedux/actions/calculatorActions';
 
 class CalculatorResult extends Component {
     getResultItems = () => {

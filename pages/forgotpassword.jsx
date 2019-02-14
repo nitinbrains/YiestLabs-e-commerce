@@ -9,9 +9,9 @@ import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import TextField from "@material-ui/core/TextField";
 import LockIcon from "@material-ui/icons/LockOutlined";
-import Card from "../components/UI/Card/Card.jsx";
-import CardBody from "../components/UI/Card/CardBody.jsx";
-import CardHeader from "../components/UI/Card/CardHeader.jsx";
+import Card from "components/UI/Card/Card.jsx";
+import CardBody from "components/UI/Card/CardBody.jsx";
+import CardHeader from "components/UI/Card/CardHeader.jsx";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Formik, Form, Field } from 'formik';
@@ -31,7 +31,7 @@ function ForgotPassword(props) {
                     <CardHeader color="primary">
                         <div className={classes.logo}>
                             <img
-                                src="../../static/images/logoHeader.png"
+                                src="static/images/logoHeader.png"
                                 width="100%"
                             />
                         </div>

@@ -3,9 +3,11 @@ import React, { Suspense, lazy } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import Router from 'next/router';
-import LoadingScreen from '../components/UI/LoadingScreen';
+
+
+import LoadingScreen from 'components/UI/LoadingScreen';
 import { withRouter } from 'next/router'
-import { userActions } from '../redux/actions/userActions';
+import { userActions } from 'appRedux/actions/userActions';
 
 const routeList = ['/cart', '/checkout']
 

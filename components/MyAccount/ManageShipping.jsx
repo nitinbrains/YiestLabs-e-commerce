@@ -18,7 +18,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-import { userActions } from "../../redux/actions/userActions";
+import { userActions } from 'appRedux/actions/userActions';
 
 import AddAddress from "./AddAddress";
 

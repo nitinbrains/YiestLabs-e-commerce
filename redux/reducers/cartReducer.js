@@ -1,5 +1,5 @@
-import { createReducer } from '../../helpers/reduxHelpers';
-import { cartTypes } from '../actions/cartActions';
+import { createReducer } from 'helpers/reduxHelpers';
+import { cartTypes } from 'appRedux/actions/cartActions';
 
 export const initialState = {
     items: [],

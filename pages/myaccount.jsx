@@ -15,13 +15,13 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import LockIcon from "@material-ui/icons/LockOutlined";
-import Card from "../components/UI/Card/Card.jsx";
-import CardBody from "../components/UI/Card/CardBody.jsx";
-import CardHeader from "../components/UI/Card/CardHeader.jsx";
+import Card from "components/UI/Card/Card.jsx";
+import CardBody from "components/UI/Card/CardBody.jsx";
+import CardHeader from "components/UI/Card/CardHeader.jsx";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
-import NavBarUserSearchDrawerLayout from "../components/NavBar/NavBarUserSearchDrawerLayout";
-import PageContainer from "../components/UI/PageContainer";
+import NavBarUserSearchDrawerLayout from "components/NavBar/NavBarUserSearchDrawerLayout";
+import PageContainer from "components/UI/PageContainer";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -30,16 +30,16 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
-import ManageShipping from "../components/MyAccount/ManageShipping";
-import ManageBilling from "../components/MyAccount/ManageBilling";
-import ManageCards from "../components/MyAccount/ManageCards";
-import LoadingIndicator from '../components/UI/LoadingIndicator';
-import * as Util from '../lib/Utils';
+import ManageShipping from "components/MyAccount/ManageShipping";
+import ManageBilling from "components/MyAccount/ManageBilling";
+import ManageCards from "components/MyAccount/ManageCards";
+import LoadingIndicator from 'components/UI/LoadingIndicator';
+import * as Util from 'lib/Utils';
 
-import { userActions } from '../redux/actions/userActions';
-import { changesWereMade } from '../lib/UserUtils';
-import WLHelper from '../lib/WLHelper';
-import isLoggedUser from "../hocs/isLoggedUser";
+import { userActions } from 'appRedux/actions/userActions';
+import { changesWereMade } from 'lib/UserUtils';
+import WLHelper from 'lib/WLHelper';
+import isLoggedUser from "hocs/isLoggedUser";
 
 class MyAccount extends Component {
     constructor(props) {
