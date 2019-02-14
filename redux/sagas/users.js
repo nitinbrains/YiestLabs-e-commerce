@@ -179,18 +179,21 @@ export function* createUser(action) {
         data: { userInfo }
     } = action;
     try {
+        console.log('######', action);
         
         var request = Object.assign({}, userInfo);
         request.creditToken = WLHelper.generateCreditToken(creditCard);
 		request.nonce = Utils.uuid();
         
         const res = yield call(api.createNetSuiteAccount, {request});
+        console.log('res', res);
         if (res.error) throw error;
-
+        
         request = {};
         request.id = res.id;
         const { res: result, error } = yield call(api.createYeastmanAccount, {request});
-
+        console.log('result, error',result, error);
+        
         yield put(userActions.setUserInfo({ userInfo}));
         yield put(responseSuccess());
 

@@ -9,6 +9,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import MaskedTextField from '../Form/MaskedTextField';
 
 const initialFormValue = {
     cardName: '',
@@ -25,74 +26,91 @@ const customFormValidation = Yup.object().shape({
     .required('Required')
   });
 
-const CardInfo = ({classes, submit, handleBack}) => {
+const CardInfo = ({classes, formValue, submit, handleBack}) => {
     return (
         <React.Fragment>
-             <Formik
-                initialValues={initialFormValue}
-                validationSchema={customFormValidation}
-                onSubmit={values => submit(values)}
-                >
-                {({ values, errors, touched, handleChange }) => {
-                    return (<Form>
-            <Grid container spacing={24}>
-                <Grid item xs={12}>
-                    <Typography variant="h6" color="textPrimary">
-                        CREDIT CARD INFORMATION
-                    </Typography>
-                    <div
-                        style={{
-                            borderTop: "solid 1.5px",
-                            borderColor: "#CCCCCC",
-                            marginBottom: 10
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <TextField
-                        // required
-                        id="cardName"
-                        name="cardName"
-                        label="Name on card"
-                        fullWidth
-                        onChange={handleChange}
-                        value={values.cardName}
-                    />
-                    {errors.cardName && touched.cardName && <div className="error" >{errors.cardName}</div>}
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <TextField
-                        // required
-                        id="expDate"
-                        name="expDate"
-                        label="Expiration date"
-                        fullWidth
-                        onChange={handleChange}
-                        value={values.expDate}
-                    />
-                    {errors.expDate && touched.expDate && <div className="error" >{errors.expDate}</div>}
-                </Grid>
-                <Grid item xs={12} md={12}>
-                    <TextField
-                        // required
-                        id="cardNumber"
-                        name="cardNumber"
-                        label="Card number"
-                        fullWidth
-                        onChange={handleChange}
-                        value={values.cardNumber}
-                    />
-                    {errors.cardNumber && touched.cardNumber && <div className="error" >{errors.cardNumber}</div>}
-                </Grid>
-            </Grid>
-            <div className={classes.buttons}>
-                <Button onClick={()=>handleBack()} className={classes.button}>
-                    Back
-                </Button>
-                <Button type="submit" variant="contained" color="primary" className={classes.button}>
-                    Register
-                </Button>
-            </div>
+            <Formik
+            initialValues={formValue || initialFormValue}
+            validationSchema={customFormValidation}
+            onSubmit={values => submit(values)}
+            >
+            {({ values, errors, touched, handleChange }) => {
+                return (<Form>
+                    <Grid container spacing={24}>
+                        <Grid item xs={12}>
+                            <Typography variant="h6" color="textPrimary">
+                                CREDIT CARD INFORMATION
+                            </Typography>
+                            <div
+                                style={{
+                                    borderTop: "solid 1.5px",
+                                    borderColor: "#CCCCCC",
+                                    marginBottom: 10
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                // required
+                                id="cardName"
+                                name="cardName"
+                                label="Name on card"
+                                fullWidth
+                                onChange={handleChange}
+                                value={values.cardName}
+                            />
+                            {errors.cardName && touched.cardName && <div className="error" >{errors.cardName}</div>}
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                // required
+                                id="expDate"
+                                name="expDate"
+                                label="Expiration date"
+                                placeholder="MM/YY"
+                                fullWidth
+                                inputProps={{
+                                    options:{
+                                        date: true,
+                                        datePattern: ['m', 'y']
+                                    }, 
+                                    value: values.expDate, 
+                                    onChange: handleChange 
+                                }}
+                                InputProps={{
+                                    inputComponent: MaskedTextField
+                                }}
+                            />
+                            {errors.expDate && touched.expDate && <div className="error" >{errors.expDate}</div>}
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                            <TextField
+                                // required
+                                id="cardNumber"
+                                name="cardNumber"
+                                label="Card number"
+                                placeholder="XXXX XXXX XXXX XXXX"
+                                fullWidth
+                                inputProps={{
+                                    options:{creditCard: true}, 
+                                    value: values.cardNumber, 
+                                    onChange: handleChange 
+                                }}
+                                InputProps={{
+                                    inputComponent: MaskedTextField
+                                }}
+                            />
+                            {errors.cardNumber && touched.cardNumber && <div className="error" >{errors.cardNumber}</div>}
+                        </Grid>
+                    </Grid>
+                    <div className={classes.buttons}>
+                        <Button onClick={()=>handleBack()} className={classes.button}>
+                            Back
+                        </Button>
+                        <Button type="submit" variant="contained" color="primary" className={classes.button}>
+                            Register
+                        </Button>
+                    </div>
                 </Form>)
                 }}
             </Formik>

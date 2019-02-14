@@ -40,11 +40,11 @@ const customFormValidation = Yup.object().shape({
       country: Yup.string()
       .required('Required'),
   });
-const Shipping = ({classes, submit, handleBack}) => {
+const Shipping = ({classes, formValue, submit, handleBack, isSameAddress, handleSameAddress}) => {
     return (
         <React.Fragment>
              <Formik
-                initialValues={initialFormValue}
+                initialValues={formValue || initialFormValue}
                 validationSchema={customFormValidation}
                 onSubmit={values => submit(values)}
                 >
@@ -110,7 +110,7 @@ const Shipping = ({classes, submit, handleBack}) => {
                                     fullWidth
                                     autoComplete="address-line2"
                                     onChange={handleChange}
-                                    value={values.addiress2}
+                                    value={values.address2}
                                 />
                                 {errors.address2 && touched.address2 && <div className="error" >{errors.address2}</div>}
                             </Grid>
@@ -122,7 +122,7 @@ const Shipping = ({classes, submit, handleBack}) => {
                                     fullWidth
                                     autoComplete="address-line3"
                                     onChange={handleChange}
-                                    value={values.addiress3}
+                                    value={values.address3}
                                 />
                                 {errors.address3 && touched.address3 && <div className="error" >{errors.address3}</div>}
                             </Grid>
@@ -172,8 +172,8 @@ const Shipping = ({classes, submit, handleBack}) => {
                                             color="primary"
                                             name="saveAsBilling"
                                             value="yes"
-                                            // onChange={handleChange}
-                                            // value={values.companyName}
+                                            onChange={handleSameAddress}
+                                            checked={isSameAddress}
                                         />
                                     }
                                     label="Use this address as billing address"

@@ -20,6 +20,7 @@ import General from "../components/Registration/General";
 import Shipping from "../components/Registration/Shipping";
 import Billing from "../components/Registration/Billing";
 import CardInfo from "../components/Registration/CardInfo";
+import LoadingIndicator from "../components/UI/LoadingIndicator";
 
 import { userActions } from '../redux/actions/userActions';
 
@@ -29,6 +30,7 @@ class Registration extends React.Component {
     state = {
         activeStep: 0,
         formValues: {},
+        isSameAddress: false,
     };
 
     handleNext = () => {
@@ -39,15 +41,16 @@ class Registration extends React.Component {
     };
 
     getStepContent(step) {
+        let {formValues, isSameAddress} = this.state;
         switch (step) {
             case 0:
-                return <General submit={this.submit} />;
+                return <General formValue={formValues[0]} submit={this.submit} />;
             case 1:
-                return <Shipping submit={this.submit} />;
+                return <Shipping formValue={formValues[1]} submit={this.submit} handleSameAddress={this.handleSameAddress} isSameAddress={isSameAddress}/>;
             case 2:
-                return <Billing submit={this.submit} />;
+                return <Billing formValue={formValues[2]} submit={this.submit} />;
             case 3:
-                return <CardInfo submit={this.submit} />;
+                return <CardInfo formValue={formValues[3]} submit={this.submit} />;
             default:
                 throw new Error("Unknown step");
         }
@@ -70,22 +73,63 @@ class Registration extends React.Component {
             activeStep: step
         });
     };
+    handleSameAddress = (e) =>{
+        this.setState({
+            isSameAddress: e.target.checked
+        })
+    }
     submit = (values)=>{
-        let {formValues, activeStep} = this.state;
+        let {formValues, activeStep, isSameAddress} = this.state;
         formValues[activeStep] = values;
+        if(activeStep === 1 && isSameAddress){
+            formValues[activeStep + 1] = values;
+        }
         this.setState({
             activeStep: activeStep + 1,
             formValues
         })
         if(activeStep === steps.length - 1 && Object.keys(formValues).length === steps.length){
-            this.props.createUser(formValues)
+            this.props.createUser(formValues);
         }
     }
+
     render() {
-        const { classes } = this.props;
-        const { activeStep, formValues } = this.state;
+        const { classes, user,  loading:{isLoading, type}  } = this.props;
+        const { activeStep } = this.state;
+        let formBody = ''
+        if(activeStep < steps.length ){
+            formBody = ( <React.Fragment>
+                {this.getStepContent(activeStep)}
+            </React.Fragment>)
+        } else if(activeStep === steps.length && user.registrationAttempt && user.registrationStatus === 'success'){
+            formBody = (<React.Fragment>
+                <Typography variant="headline" gutterBottom>
+                    You are now registered.
+                </Typography>
+                <Typography variant="subheading">Thank you for registering. You will receive an email shortly with your user information.</Typography>
+            </React.Fragment>)
+        } else if(activeStep === steps.length && user.registrationAttempt && user.registrationStatus === 'failed'){
+            formBody = (<React.Fragment>
+                <Typography variant="headline" gutterBottom>
+                    Registration failed.
+                </Typography>
+                <Button onClick={()=>this.handleReset()} variant="contained" color="primary"  className={classes.button}>
+                    Try again
+                </Button>
+            </React.Fragment>)
+        } else {
+            formBody = (<React.Fragment>
+                <Typography variant="headline" gutterBottom>
+                    Something went wrong. 
+                </Typography>
+                <Button onClick={()=>this.handleReset()}  variant="contained" color="primary" className={classes.button}>
+                    Try again
+                </Button>
+            </React.Fragment>)
+        }
         return (
             <NavBarLayout>
+                <LoadingIndicator visible={isLoading && type === 'createUser' } />
                 <div className={classes.container}>
                     <div className={classes.title}>
                         <Typography variant="h4" color="secondary">
@@ -106,18 +150,7 @@ class Registration extends React.Component {
                         })}
                     </Stepper>
                     <React.Fragment>
-                        {activeStep === steps.length ? (
-                            <React.Fragment>
-                                <Typography variant="headline" gutterBottom>
-                                    You are now registered.
-                                </Typography>
-                                <Typography variant="subheading">Thank you for registering. You will receive an email shortly with your user information.</Typography>
-                            </React.Fragment>
-                        ) : (
-                            <React.Fragment>
-                                {this.getStepContent(activeStep)}
-                            </React.Fragment>
-                        )}
+                        {formBody}
                     </React.Fragment>
                 </div>
             </NavBarLayout>
@@ -180,7 +213,8 @@ Registration.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        user: state.user
+        user: state.user,
+        loading: state.loading
     };
 };
 

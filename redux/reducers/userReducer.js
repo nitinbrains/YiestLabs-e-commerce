@@ -124,6 +124,15 @@ export default createReducer(initialState, {
         isLoading: false,
         orderHistory
     }),
+    [userTypes.CREATE_USER_ATTEMPT]: (state, { data }) =>({
+        registrationAttempt: true,
+    }),
+    [userTypes.CREATE_USER_SUCCESS]: (state, { data }) => ({
+        registrationStatus: 'success'
+    }),
+    [userTypes.CREATE_USER_FAILURE]: (state, { data }) => ({
+        registrationStatus: 'failed'
+    }),
     [userTypes.USER_LOGOUT_ATTEMPT]: () => {
         sessionStorage.clear();
         return null

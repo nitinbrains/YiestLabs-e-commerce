@@ -39,11 +39,11 @@ const customFormValidation = Yup.object().shape({
       .required('Required'),
   });
 
-const Billing = ({classes, submit, handleBack}) => {
+const Billing = ({classes, formValue, submit, handleBack}) => {
     return (
         <React.Fragment>
              <Formik
-                initialValues={initialFormValue}
+                initialValues={formValue || initialFormValue}
                 validationSchema={customFormValidation}
                 onSubmit={values => submit(values)}
                 >
@@ -97,7 +97,7 @@ const Billing = ({classes, submit, handleBack}) => {
                         fullWidth
                         autoComplete="address-line1"
                         onChange={handleChange}
-                        value={values.addresse1}
+                        value={values.address1}
                     />
                     {errors.address1 && touched.address1 && <div className="error" >{errors.address1}</div>}
                 </Grid>
@@ -109,7 +109,7 @@ const Billing = ({classes, submit, handleBack}) => {
                         fullWidth
                         autoComplete="address-line2"
                         onChange={handleChange}
-                        value={values.addresse2}
+                        value={values.address2}
                     />
                     {errors.address2 && touched.address2 && <div className="error" >{errors.address2}</div>}
                 </Grid>
@@ -121,7 +121,7 @@ const Billing = ({classes, submit, handleBack}) => {
                         fullWidth
                         autoComplete="address-line3"
                         onChange={handleChange}
-                        value={values.addresse3}
+                        value={values.address3}
                     />
                     {errors.address3 && touched.address3 && <div className="error" >{errors.address3}</div>}
                 </Grid>
