@@ -20,11 +20,7 @@ import FormSelectbox from "components/Form/FormSelectbox";
 import FormButton from "components/Form/FormButton";
 import FormCheckbox from "components/Form/FormCheckbox";
 
-<<<<<<< HEAD
-import { calculatorActions } from "../../redux/actions/calculatorActions";
-=======
 import { calculatorActions } from 'appRedux/actions/calculatorActions';
->>>>>>> relativeToAbsolutePath
 
 class CalculatorForm extends Component {
     constructor(props) {

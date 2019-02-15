@@ -63,6 +63,19 @@ export default createReducer(initialState, {
         isLoading: false,
         type: ''
     }),
+    // registration / create user
+    [userTypes.CREATE_USER_ATTEMPT]: (state, { data }) => ({
+        isLoading: true,
+        type: 'createUser'
+    }),
+    [userTypes.CREATE_USER_SUCCESS]: (state, { data }) =>({
+        isLoading: false,
+        type: ''
+    }),
+    [userTypes.CREATE_USER_FAILURE]: (state, { data }) => ({
+        isLoading: false,
+        type: ''
+    }),
     [userTypes.GET_USER_INFO_ATTEMPT]: (state, { data }) => ({
         isLoading: true,
         type: 'getUserInfo'
