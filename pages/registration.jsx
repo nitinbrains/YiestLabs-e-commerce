@@ -217,7 +217,7 @@ class Registration extends React.Component {
                     </Stepper>
                     <Formik
                         onSubmit={(values, actions) => console.log('submit', values)}
-                        validationSchema={customFormValidation}
+                        // validationSchema={customFormValidation}
                         initialValues={{companyname: user.companyname}}
                         render={props => {
                             return (
