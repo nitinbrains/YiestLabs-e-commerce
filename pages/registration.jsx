@@ -16,10 +16,25 @@ import General from "components/Registration/General";
 import Shipping from "components/Registration/Shipping";
 import Billing from "components/Registration/Billing";
 import CardInfo from "components/Registration/CardInfo";
+import * as Yup from "yup";
+import { Formik, Form, Field } from "formik";
 
-import { userActions } from '../redux/actions/userActions';
+import { userActions } from 'appRedux/actions/userActions';
 
 const steps = ["General Information", "Shipping Address", "Billing Address", "Credit Card Information"];
+const customFormValidation = Yup.object().shape({
+
+    // General
+    companyName: Yup.string().required("Required"),
+    email: Yup.string().email().required("Required"),
+    phone: Yup.number().required("Required"),
+    pass: Yup.string().required("Required"),
+    cPass: Yup.string().required("Required"),
+    category: Yup.string().required("Required"),
+    orderFrom: Yup.string().required("Required"),
+    acContact: Yup.string().required("Required"),
+    acPhone: Yup.string().required("Required")
+});
 
 class Registration extends React.Component {
     state = {
@@ -88,40 +103,96 @@ class Registration extends React.Component {
         }
     }
 
-    render() {
-        const { classes, user,  loading:{isLoading, type}  } = this.props;
-        const { activeStep } = this.state;
-        let formBody = ''
-        if(activeStep < steps.length ){
-            formBody = ( <React.Fragment>
-                {this.getStepContent(activeStep)}
-            </React.Fragment>)
-        } else if(activeStep === steps.length && user.registrationAttempt && user.registrationStatus === 'success'){
-            formBody = (<React.Fragment>
+    handleSameAddress = (e) =>{
+        this.setState({
+            isSameAddress: e.target.checked
+        })
+    }
+
+    submit = (values) => {
+        let {formValues, activeStep, isSameAddress} = this.state;
+        formValues[activeStep] = values;
+        
+        if(activeStep === 1 && isSameAddress){
+            formValues[activeStep + 1] = values;
+        }
+        this.setState({activeStep: activeStep + 1, formValues });
+        
+        if(activeStep === steps.length - 1 && Object.keys(formValues).length === steps.length){
+            this.props.createUser(formValues);
+        }
+    }
+
+    onChangeStep = (step) => {
+
+    }
+
+    onSubmit = (values) => {
+        
+    }
+
+    renderRegistrationSuccess = () => {
+        const { classes } = this.props;
+
+        return (
+            <React.Fragment>
                 <Typography variant="headline" gutterBottom>
                     You are now registered.
                 </Typography>
                 <Typography variant="subheading">Thank you for registering. You will receive an email shortly with your user information.</Typography>
-            </React.Fragment>)
-        } else if(activeStep === steps.length && user.registrationAttempt && user.registrationStatus === 'failed'){
-            formBody = (<React.Fragment>
+            </React.Fragment>
+        )
+    }
+
+    renderRegistrationFailure = () => {
+        const { classes } = this.props;
+
+        return (
+            <React.Fragment>
                 <Typography variant="headline" gutterBottom>
                     Registration failed.
                 </Typography>
-                <Button onClick={()=>this.handleReset()} variant="contained" color="primary"  className={classes.button}>
+                <Button onClick={this.handleReset} variant="contained" color="primary"  className={classes.button}>
                     Try again
                 </Button>
-            </React.Fragment>)
-        } else {
-            formBody = (<React.Fragment>
-                <Typography variant="headline" gutterBottom>
-                    Something went wrong. 
-                </Typography>
-                <Button onClick={()=>this.handleReset()}  variant="contained" color="primary" className={classes.button}>
-                    Try again
-                </Button>
-            </React.Fragment>)
+            </React.Fragment>
+        )
+    }
+
+    getStepContent(step) {
+        let {formValues, isSameAddress} = this.state;
+
+        switch (step) {
+            case 0:
+                return <General formValue={formValues[0]} submit={this.submit} />;
+            case 1:
+                return <Shipping formValue={formValues[1]} submit={this.submit} handleSameAddress={this.handleSameAddress} isSameAddress={isSameAddress}/>;
+            case 2:
+                return <Billing formValue={formValues[2]} submit={this.submit} />;
+            case 3:
+                return <CardInfo formValue={formValues[3]} submit={this.submit} />;
+            default:
+                throw new Error("Unknown step");
         }
+    }
+
+    render() {
+        const { classes, user,  loading: {isLoading, type}} = this.props;
+        const { activeStep } = this.state;
+        let formBody = '';
+        
+        // if(activeStep < steps.length ){
+        //     formBody = this.getStepContent(activeStep)
+        // } 
+        // else if(activeStep === steps.length && user.registrationAttempt && user.registrationStatus === 'success'){
+        //     formBody = this.renderRegistrationSuccess();
+        // } 
+        // else if(activeStep === steps.length && user.registrationAttempt && user.registrationStatus === 'failed'){
+        //     formBody = this.renderRegistrationFailure();
+        // } 
+        // else {
+        //     formBody = t;
+        // }
         return (
             <NavBarLayout>
                 <LoadingIndicator visible={isLoading && type === 'createUser' } />
@@ -144,9 +215,18 @@ class Registration extends React.Component {
                             );
                         })}
                     </Stepper>
-                    <React.Fragment>
-                        {formBody}
-                    </React.Fragment>
+                    <Formik
+                        onSubmit={(values, actions) => console.log('submit', values)}
+                        validationSchema={customFormValidation}
+                        initialValues={{companyname: user.companyname}}
+                        render={props => {
+                            return (
+                                <Form>
+                                    <General {...props}/>
+                                </Form>
+                            )
+                        }}
+                    />
                 </div>
             </NavBarLayout>
         );

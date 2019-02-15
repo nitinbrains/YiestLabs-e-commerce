@@ -11,8 +11,8 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
 const initialFormValue = {
-    attention: '',
-    addresse: '',
+    attn: '',
+    addressee: '',
     address1: '',
     address2: '',
     address3: '',
@@ -21,9 +21,9 @@ const initialFormValue = {
     country: '',
 }
 const customFormValidation = Yup.object().shape({
-    attention: Yup.string()
+    attn: Yup.string()
       .required('Required'),
-      addresse: Yup.string()
+      addressee: Yup.string()
       .required('Required'),
       address1: Yup.string()
       .required('Required'),
@@ -65,28 +65,28 @@ const Billing = ({classes, formValue, submit, handleBack}) => {
                 <Grid item xs={12} sm={6}>
                     <TextField
                         // required
-                        id="attention"
-                        name="attention"
-                        label="Attention"
+                        id="attn"
+                        name="attn"
+                        label="attn"
                         fullWidth
-                        autoComplete="attention"
+                        autoComplete="attn"
                         onChange={handleChange}
-                        value={values.attention}
+                        value={values.attn}
                     />
-                    {errors.attention && touched.attention && <div className="error" >{errors.attention}</div>}
+                    {errors.attn && touched.attn && <div className="error" >{errors.attn}</div>}
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
                         // required
-                        id="addresse"
-                        name="addresse"
-                        label="Addresse"
+                        id="addressee"
+                        name="addressee"
+                        label="addressee"
                         fullWidth
-                        autoComplete="addresse"
+                        autoComplete="addressee"
                         onChange={handleChange}
-                        value={values.addresse}
+                        value={values.addressee}
                     />
-                    {errors.addresse && touched.addresse && <div className="error" >{errors.addresse}</div>}
+                    {errors.addressee && touched.addressee && <div className="error" >{errors.addressee}</div>}
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
