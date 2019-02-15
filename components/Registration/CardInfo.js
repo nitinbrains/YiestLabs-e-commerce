@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import MaskedTextField from '../Form/MaskedTextField';
+var moment = require('moment');
 
 const initialFormValue = {
     cardName: '',
@@ -21,7 +22,17 @@ const customFormValidation = Yup.object().shape({
     cardName: Yup.string()
     .required('Required'),
     expDate: Yup.string()
-    .required('Required'),
+    .required('Required')
+    .test({
+        message: 'Invalid Date',
+        test:(expDate)=>{
+            let exp = moment(expDate, 'MM/YYYY')
+            if(exp.isValid() && !exp.isBefore(moment(), 'month')){
+                return true
+            }
+            return false
+        }
+    }),
     cardNumber: Yup.string()
     .required('Required')
   });
@@ -72,7 +83,7 @@ const CardInfo = ({classes, formValue, submit, handleBack}) => {
                                 inputProps={{
                                     options:{
                                         date: true,
-                                        datePattern: ['m', 'y']
+                                        datePattern: ['m', 'Y']
                                     }, 
                                     value: values.expDate, 
                                     onChange: handleChange 
