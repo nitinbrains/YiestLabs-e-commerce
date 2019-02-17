@@ -39,6 +39,7 @@
 		"now": "^13.0.3",
 		"prop-types": "latest",
 		"react": "latest",
+		"react-country-region-selector": "^1.4.3",
 		"react-dom": "latest",
 		"react-jss": "latest",
 		"react-redux": "^5.0.7",

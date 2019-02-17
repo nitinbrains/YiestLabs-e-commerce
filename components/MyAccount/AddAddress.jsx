@@ -11,6 +11,12 @@ import TextField from "@material-ui/core/TextField";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 
+import { CountryRegionData } from "react-country-region-selector";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
+
 class AddAddress extends Component {
     constructor(props) {
         super(props);
@@ -442,7 +448,7 @@ class AddAddress extends Component {
                                         component={props => {
                                             return (
                                                 <Grid item xs={12}>
-                                                    <TextField
+                                                    <FormControl
                                                         id="country"
                                                         value={
                                                             props.field.value
@@ -475,7 +481,32 @@ class AddAddress extends Component {
                                                         label="Country"
                                                         fullWidth
                                                         autoComplete="country"
-                                                    />
+                                                    >
+                                                        <InputLabel>
+                                                            Country
+                                                        </InputLabel>
+                                                        <Select>
+                                                            {CountryRegionData.map(
+                                                                (
+                                                                    option,
+                                                                    index
+                                                                ) => (
+                                                                    <MenuItem
+                                                                        key={
+                                                                            option[0]
+                                                                        }
+                                                                        value={
+                                                                            option
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            option[0]
+                                                                        }
+                                                                    </MenuItem>
+                                                                )
+                                                            )}
+                                                        </Select>
+                                                    </FormControl>
                                                     {errors.countryid &&
                                                         touched.countryid && (
                                                             <div
