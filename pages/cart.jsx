@@ -22,7 +22,7 @@ import CartItem from "components/Cart/CartItem";
 import WantSooner from "components/Cart/WantSooner/WantSooner";
 import FormButton from "components/Form/FormButton";
 import PageContainer from 'components/UI/PageContainer';
-
+import isLoggedUser from "hocs/isLoggedUser";
 import { cartActions } from 'appRedux/actions/cartActions';
 
 
