@@ -10,271 +10,280 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import _get from 'lodash/get';
+import _isEmpty from 'lodash/isEmpty';
 import MaskedTextField from "../Form/MaskedTextField";
+import Cleave from "cleave.js/react";
 
-const initialFormValue = {
-    companyName: "",
-    email: "",
-    phone: "",
-    pass: "",
-    cPass: "",
-    category: "",
-    orderFrom: "",
-    acContact: "",
-    acPhone: ""
-};
+import * as validation from './GeneralValidation';
 
-const customFormValidation = Yup.object().shape({
-    companyName: Yup.string().required("Required"),
-    email: Yup.string().email().required("Required"),
-    phone: Yup.number().required("Required"),
-    pass: Yup.string().required("Required"),
-    cPass: Yup.string().required("Required"),
-    category: Yup.string().required("Required"),
-    orderFrom: Yup.string().required("Required"),
-    acContact: Yup.string().required("Required"),
-    acPhone: Yup.string().required("Required")
-});
+function PhoneMaskedTextField(props) {
+    let { options, onChange, inputRef, ...other } = props;
+    options={phone: true, phoneRegionCode: 'US'};
+    return <Cleave {...other} onChange={onChange} ref={inputRef} options={options} />;
+}
+
 
 const FormikErrorMessage = ({className, touched, error}) => {
-    if (!touched) {
-        return null;
-    }
+    // if (!touched) {
+    //     return null;
+    // }
 
     return (
         <div className="error">{error}</div>
     );
 };
 
+const handleNext = (props) => {
+    const { validateForm, onNext, values } = props;
+
+    validateForm(values).then((res) => {
+        if (_isEmpty(res.errors)) {
+            onNext();
+        }
+    });
+
+}
+
 const General = (props) => {
 
-    console.log('props', props);
-
     const {
-        values,
         touched,
         errors,
-        isSubmitting,
-        handleChange,
-        setFieldValue,
-        handleBlur,
-        handleSubmit,
-        onCancel,
-        submitForm
+        classes,
+        onNext,
+        onBack,
+        validateField
     } = props;
     
     return (
-             <Grid container spacing={24}>
-                <Grid item xs={12}>
-                    <Typography variant="h6" color="textPrimary">
-                        General Information
-                    </Typography>
-                    <div
-                        style={{
-                            borderTop: "solid 1.5px",
-                            borderColor: "#CCCCCC",
-                            marginBottom: 10
-                        }}
-                    />                    
-                </Grid>
-                <Grid item xs={12}>
-                    <Field
-                        render={({field: {value, onChange }}) => {
-                            return (
-                                <TextField
-                                    name="companyname"
-                                    label="Company name"
-                                    fullWidth
-                                    autoComplete="cname"
-                                    onChange={onChange}
-                                    value={value.companyname}
-                                />
-                            )
-                        }}
-                    />
-                    <FormikErrorMessage error={errors.companyName} touched={touched.companyName} />
-                </Grid>
-                <button type="submit">Submit</button>
+        <Grid container spacing={24}>
+            <Grid item xs={12}>
+                <Typography variant="h6" color="textPrimary">
+                    General Information
+                </Typography>
+                <div
+                    style={{
+                        borderTop: "solid 1.5px",
+                        borderColor: "#CCCCCC",
+                        marginBottom: 10
+                    }}
+                />                    
             </Grid>
+            <Grid item xs={12}>
+                <Field
+                    validate={validation.companyName}
+                    name="companyname"
+                    render={({field: {value, onChange }, form: { touched }}) => {
+                        return (
+                            <React.Fragment>
+                                <FormikErrorMessage error={_get(errors, 'companyname')} touched={_get(touched, 'companyname')} />
+                                <TextField
+                                    id="companyname"
+                                    label="Company Name"
+                                    fullWidth
+                                    autoComplete="company name"
+                                    onChange={onChange}
+                                    value={_get(value, 'companyname')}
+                                />
+                            </React.Fragment>
+                        )
+                    }}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <Field
+                    render={({field: {value, onChange }, form: { touched }}) => {
+                        return (
+                            <React.Fragment>
+                                <FormikErrorMessage error={_get(errors, 'email')} touched={_get(touched, 'email')} />
+                                <TextField
+                                    id="email"
+                                    name="email"
+                                    label="Email"
+                                    fullWidth
+                                    autoComplete="email"
+                                    onChange={onChange}
+                                    value={_get(value, 'email')}
+                                />
+                            </React.Fragment>
+                        )
+                    }}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <Field
+                    render={({field: {value, onChange }, form: { touched }}) => {
+                        return (
+                            <React.Fragment>
+                                <FormikErrorMessage error={_get(errors, 'phone')} touched={_get(touched, 'phone')} />
+                                <TextField
+                                    id="phone"
+                                    name="phone"
+                                    label="Phone"
+                                    fullWidth
+                                    autoComplete="phone"
+                                    InputProps={{
+                                        inputComponent: PhoneMaskedTextField
+                                    }}
+                                />
+                            </React.Fragment>
+                        )
+                    }}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <Field
+                    render={({field: {value, onChange }, form: { touched }}) => {
+                        return (
+                            <React.Fragment>
+                                <FormikErrorMessage error={_get(errors, 'password')} touched={_get(touched, 'password')} />
+                                <TextField
+                                    id="password"
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    fullWidth
+                                    autoComplete="password"
+                                    onChange={onChange}
+                                    value={value.password}
+                                />
+                            </React.Fragment>
+                        )
+                    }}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <Field
+                    render={({field: {value, onChange }, form: { touched }}) => {
+                        return (
+                            <React.Fragment>
+                                <FormikErrorMessage error={_get(errors, 'confirmPassword')} touched={_get(touched, 'confirmPassword')} />
+                                <TextField
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    label="Confirm Password"
+                                    type="password"
+                                    fullWidth
+                                    autoComplete="confirmPassword"
+                                    onChange={onChange}
+                                    value={_get(value, 'confirmPassword')}
+                                />
+                            </React.Fragment>
+                        )
+                    }}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <Field
+                    render={({field: {value, onChange }, form: { touched }}) => {
+                        return (
+                            <React.Fragment>
+                                <FormikErrorMessage error={_get(errors, 'category')} touched={_get(touched, 'category')} />
+                                <TextField
+                                    id="category"
+                                    name="category"
+                                    label="Category"
+                                    select
+                                    fullWidth
+                                    autoComplete="category"
+                                    onChange={onChange}
+                                    value={_get(value, 'category')}
+                                >
+                                    <MenuItem value={1}>Retailer</MenuItem>
+                                    <MenuItem value={2}>Individual</MenuItem>
+                                    <MenuItem value={3}>Proffesional Brewery</MenuItem>
+                                    <MenuItem value={4}>Proffesional Winery</MenuItem>
+                                    <MenuItem value={5}>Proffesional Destillery</MenuItem>
+                                </TextField>
+                            </React.Fragment>
+                        )
+                    }}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <Field
+                    render={({field: {value, onChange }, form: { touched }}) => {
+                        return (
+                            <React.Fragment>
+                                <FormikErrorMessage error={_get(errors, 'orderFrom')} touched={_get(touched, 'orderFrom')} />
+                                <TextField
+                                    id="orderFrom"
+                                    name="orderFrom"
+                                    label="Order From"
+                                    select
+                                    fullWidth
+                                    autoComplete="orderFrom"
+                                    onChange={onChange}
+                                    value={_get(value, 'orderFrom')}
+                                >
+                                    <MenuItem value={1}>
+                                        US Only
+                                        </MenuItem>
+                                    <MenuItem value={2}>
+                                        US &amp; Copenhagen (For Europe, No Homebrew)
+                                    </MenuItem>
+                                    <MenuItem value={3}>
+                                        US &amp; Hong Kong (For Asia, No Homebrew)
+                                    </MenuItem>
+                                    <MenuItem value={4}>
+                                        US, Copenhagen, and Hong Kong
+                                    </MenuItem>
+                                </TextField>
+                            </React.Fragment>
+                        )
+                    }}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <Field
+                    render={({field: {value, onChange }, form: { touched }}) => {
+                        return (
+                            <React.Fragment>
+                                <FormikErrorMessage error={_get(errors, 'acContact')} touched={_get(touched, 'acContact')} />
+                                <TextField
+                                    id="acContact"
+                                    name="acContact"
+                                    label="Accounting Contact"
+                                    fullWidth
+                                    autoComplete="acContact"
+                                    onChange={onChange}
+                                    value={_get(value, 'acContact')}
+                                />
+                            </React.Fragment>
+                        )
+                    }}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <Field
+                    render={({field: {value, onChange }, form: { touched }}) => {
+                        return (
+                            <React.Fragment>
+                                <FormikErrorMessage error={_get(errors, 'acPhone')} touched={_get(touched, 'acPhone')} />
+                                <TextField
+                                    id="acPhone"
+                                    name="acPhone"
+                                    label="Accounting Phone Number"
+                                    fullWidth
+                                    autoComplete="acPhone"
+                                    InputProps={{
+                                        inputComponent: PhoneMaskedTextField
+                                    }}
+                                />
+                            </React.Fragment>
+                        )
+                    }}
+                />
+            </Grid>
+            <Button variant="contained" className={classes.button} onClick={onBack}>
+                Back
+            </Button>
+            <Button variant="contained" color="primary" className={classes.button} onClick={() => handleNext(props)}>
+                Next
+            </Button>
+        </Grid>
     )
-
-
-    // return (
-    //     <React.Fragment>
-    //         <Formik 
-    //             initialValues={formValue || initialFormValue} 
-    //             validationSchema={customFormValidation} 
-    //             onSubmit={values => submit(values)}
-    //         >
-    //             {({ values, errors, touched, handleChange }) => {
-    //                 return (
-    //                     <Form>
-    //                         <Grid container spacing={24}>
-    //                             <Grid item xs={12}>
-                                    // <Typography variant="h6" color="textPrimary">
-                                    //     GENERAL INFORMATION
-                                    // </Typography>
-                                    // <div
-                                    //     style={{
-                                    //         borderTop: "solid 1.5px",
-                                    //         borderColor: "#CCCCCC",
-                                    //         marginBottom: 10
-                                    //     }}
-                                    // />
-    //                             </Grid>
-    //                             <Grid item xs={12}>
-                                    // <TextField
-                                    //     // required
-                                    //     id="companyName"
-                                    //     name="companyName"
-                                    //     label="Company name"
-                                    //     fullWidth
-                                    //     autoComplete="cname"
-                                    //     onChange={handleChange}
-                                    //     value={values.companyName}
-                                    // />
-    //                                 {errors.companyName && touched.companyName && <div className="error">{errors.companyName}</div>}
-    //                             </Grid>
-    //                             <Grid item xs={12} sm={6}>
-    //                                 <TextField
-    //                                     // required
-    //                                     id="email"
-    //                                     name="email"
-    //                                     label="E-mail"
-    //                                     fullWidth
-    //                                     autoComplete="email"
-    //                                     onChange={handleChange}
-    //                                     value={values.email}
-    //                                 />
-    //                                 {errors.email && touched.email && <div className="error">{errors.email}</div>}
-    //                             </Grid>
-    //                             <Grid item xs={12} sm={6}>
-    //                                 <TextField
-    //                                     // required
-    //                                     id="phone"
-    //                                     name="phone"
-    //                                     label="Phone"
-    //                                     fullWidth
-    //                                     autoComplete="phone"
-    //                                     inputProps={{
-    //                                         options: {
-    //                                             phone: true,
-    //                                             phoneRegionCode: "US"
-    //                                         },
-    //                                         value: values.phone,
-    //                                         onChange: handleChange
-    //                                     }}
-    //                                     InputProps={{
-    //                                         inputComponent: MaskedTextField
-    //                                     }}
-    //                                 />
-    //                                 {errors.phone && touched.phone && <div className="error">{errors.phone}</div>}
-    //                             </Grid>
-    //                             <Grid item xs={12} sm={6}>
-    //                                 <TextField
-    //                                     // required
-    //                                     id="pass"
-    //                                     name="pass"
-    //                                     label="Password"
-    //                                     type="password"
-    //                                     fullWidth
-    //                                     autoComplete="pass"
-    //                                     onChange={handleChange}
-    //                                     value={values.pass}
-    //                                 />
-    //                                 {errors.pass && touched.pass && <div className="error">{errors.pass}</div>}
-    //                             </Grid>
-    //                             <Grid item xs={12} sm={6}>
-    //                                 <TextField
-    //                                     // required
-    //                                     id="cPass"
-    //                                     name="cPass"
-    //                                     label="Confirm Password"
-    //                                     type="password"
-    //                                     fullWidth
-    //                                     autoComplete="cpass"
-    //                                     onChange={handleChange}
-    //                                     value={values.cPass}
-    //                                 />
-    //                                 {errors.cPass && touched.cPass && <div className="error">{errors.cPass}</div>}
-    //                             </Grid>
-    //                             <Grid item xs={12} sm={6}>
-    //                                 <TextField
-    //                                     // required
-    //                                     id="category"
-    //                                     name="category"
-    //                                     label="Category"
-    //                                     select
-    //                                     fullWidth
-    //                                     autoComplete="category"
-    //                                     onChange={handleChange}
-    //                                     value={values.category}
-    //                                 >
-    //                                     <MenuItem value={1}>Retailer</MenuItem>
-    //                                     <MenuItem value={2}>Individual</MenuItem>
-    //                                     <MenuItem value={3}>Proffesional Brewery</MenuItem>
-    //                                     <MenuItem value={4}>Proffesional Winery</MenuItem>
-    //                                     <MenuItem value={5}>Proffesional Destillery</MenuItem>
-    //                                 </TextField>
-    //                                 {errors.category && touched.category && <div className="error">{errors.category}</div>}
-    //                             </Grid>
-    //                             <Grid item xs={12} sm={6}>
-    //                                 <TextField
-    //                                     // required
-    //                                     id="orderFrom"
-    //                                     name="orderFrom"
-    //                                     label="Order From"
-    //                                     select
-    //                                     fullWidth
-    //                                     autoComplete="orderFrom"
-    //                                     onChange={handleChange}
-    //                                     value={values.orderFrom}
-    //                                 >
-    //                                     <MenuItem value={1}>US Only</MenuItem>
-    //                                     <MenuItem value={2}>US & Copenhagen (For Europe, No Homebrew)</MenuItem>
-    //                                     <MenuItem value={3}>US & Hong Kong (For Asia, No Homebrew)</MenuItem>
-    //                                     <MenuItem value={4}>US, Copenhagen, and Hong Kong</MenuItem>
-    //                                 </TextField>
-    //                                 {errors.orderFrom && touched.orderFrom && <div className="error">{errors.orderFrom}</div>}
-    //                             </Grid>
-    //                             <Grid item xs={12} sm={6}>
-    //                                 <TextField
-    //                                     // required
-    //                                     id="acContact"
-    //                                     name="acContact"
-    //                                     label="Accounting Contact"
-    //                                     fullWidth
-    //                                     autoComplete="acContact"
-    //                                     onChange={handleChange}
-    //                                     value={values.acContact}
-    //                                 />
-    //                                 {errors.acContact && touched.acContact && <div className="error">{errors.acContact}</div>}
-    //                             </Grid>
-    //                             <Grid item xs={12} sm={6}>
-    //                                 <TextField
-    //                                     // required
-    //                                     id="acPhone"
-    //                                     name="acPhone"
-    //                                     label="Accounting Phone Number"
-    //                                     fullWidth
-    //                                     autoComplete="acPhone"
-    //                                     onChange={handleChange}
-    //                                     value={values.acPhone}
-    //                                 />
-    //                                 {errors.acPhone && touched.acPhone && <div className="error">{errors.acPhone}</div>}
-    //                             </Grid>
-    //                         </Grid>
-    //                         <div className={classes.buttons}>
-    //                             <Button type="submit" variant="contained" color="primary" className={classes.button}>
-    //                                 Next
-    //                             </Button>
-    //                         </div>
-    //                     </Form>
-    //                 );
-    //             }}
-    //         </Formik>
-    //     </React.Fragment>
-    // );
 };
 
 const styles = theme => ({
