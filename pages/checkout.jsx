@@ -23,6 +23,8 @@ import StepButton from "@material-ui/core/StepButton";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+// import WantSooner from "components/WantSooner/WantSooner";
 import Shipping from "components/Checkout/Shipping/Shipping";
 import Billing from "components/Checkout/Billing/Billing";
 import Items from "components/Checkout/Items/Items";
@@ -30,6 +32,7 @@ import Review from "components/Checkout/Review/Review";
 import isLoggedUser from "hocs/isLoggedUser";
 import cartHasItems from "hocs/cartHasItems";
 import prepareOrder from "hocs/prepareOrder";
+import { cartActions } from 'appRedux/actions/cartActions';
 
 // custom
 import Alert from "components/UI/Alert";
@@ -61,9 +64,14 @@ class Checkout extends Component {
         isLoading: false,
         terms: false,
         confirmation: false,
-        completed: {}
+        completed: {},
+        showWantSoonerDialog: false,
     };
-
+    static getDerivedStateFromProps(nextProps, prevState){
+        return {
+            showWantSoonerDialog: nextProps.cart.showWantSooner,
+        }
+    }
     handleOrder = () => {
         this.setState({terms: true});
     };
@@ -199,7 +207,6 @@ class Checkout extends Component {
                         )}
                     </React.Fragment>
                 </div>
-
                 <Dialog open={this.state.terms}>
                     <DialogTitle id="alert-dialog-title">
                         Do you accept the White Labs Terms &amp; Conditions?
@@ -290,8 +297,21 @@ Checkout.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default compose(
+
+const mapStateToProps = state => {
+    return {
+        cart: state.cart,
+        user: state.user
+    };
+};
+
+const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(compose(
     withStyles(styles, { withTheme: true })(
         isLoggedUser(cartHasItems(prepareOrder(Checkout)))
     )
-);
+))

@@ -19,10 +19,9 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 
 import CartItem from "components/Cart/CartItem";
-import WantSooner from "components/Cart/WantSooner/WantSooner";
 import FormButton from "components/Form/FormButton";
 import PageContainer from 'components/UI/PageContainer';
-
+import isLoggedUser from "hocs/isLoggedUser";
 import { cartActions } from 'appRedux/actions/cartActions';
 
 
@@ -31,15 +30,10 @@ class Cart extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showWantSoonerDialog: false,
+            
         }
     }
 
-    static getDerivedStateFromProps(nextProps, prevState){
-        return {
-            showWantSoonerDialog: nextProps.cart.showWantSooner,
-        }
-    }
     handleProceed = () => {
         const {user} = this.props;
         if(!user.isLoggedin){
@@ -58,7 +52,7 @@ class Cart extends Component {
                     <Grid container spacing={24}>
                         {this.props.cart.items && this.props.cart.items.map((item, i) => {
                             return (                                
-                                <CartItem key={i} item={item} index={i} openWantSoonerDialog={() => { this.props.showWantSooner({activeTab : 'SimilarStrains'}) }} />                                
+                                <CartItem key={i} item={item} index={i} />                                
                             );
                         })}
                     </Grid>
@@ -77,16 +71,7 @@ class Cart extends Component {
                                 </Typography>
                             }
                         </Grid>
-                    </Grid>
-
-                    <Dialog
-                        open={this.state.showWantSoonerDialog}
-                        onClose={() => {this.props.hideWantSooner()}}
-                        aria-labelledby="form-dialog-title"
-                        classes={{ paper: classes.dialogPaper }}
-                    >
-                        <WantSooner {...this.props}/>
-                    </Dialog>                    
+                    </Grid>                  
                 </PageContainer>
             </NavBarUserSearchDrawerLayout>
         );
@@ -110,9 +95,6 @@ const styles = theme => ({
     details: {
         display: "flex",
         flexDirection: "column"
-    },
-    dialogPaper: {
-        minWidth: '70%',
     },
 });
 
@@ -138,7 +120,3 @@ export default connect(
         isLoggedUser(Cart)
     )
 ))
-
-// (withStyles(styles, { withTheme: true })(Cart));
-
-

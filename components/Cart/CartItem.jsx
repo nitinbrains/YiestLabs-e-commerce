@@ -85,7 +85,7 @@ class CartItem extends Component {
                         {this.props.item.Name}
                         <br/>
                         <br/>
-                        <span className="sooner" onClick={this.props.openWantSoonerDialog}>Want this Strain sooner?</span>
+                        {/* <span className="sooner" onClick={this.props.openWantSoonerDialog}>Want this Strain sooner?</span> */}
                     </Grid>
                     {/*
                     <Grid className="detail" item xs={2}>

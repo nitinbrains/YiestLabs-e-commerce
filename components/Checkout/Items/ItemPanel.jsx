@@ -27,7 +27,7 @@ class ItemPanel extends Component {
             expanded: false
         };
     }
-
+   
     handleExpand = () => {
         this.setState({
             expanded: !this.state.expanded
@@ -121,7 +121,11 @@ class ItemPanel extends Component {
                                     {this.props.item.deliveryDate.toDateString()}
                                 </Typography>
                             </Grid>
-
+                            <Grid className="detail" item xs={12}>
+                                <br/>
+                                <br/>
+                                <span className="sooner" onClick={this.props.showWantSooner}>Want this Strain sooner?</span>
+                            </Grid>
                             <Grid item xs={12}>
                                 {order.selectedShippingOption ==
                                     "Custom" && (
