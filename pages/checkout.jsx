@@ -24,7 +24,7 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import WantSooner from "components/WantSooner/WantSooner";
+// import WantSooner from "components/WantSooner/WantSooner";
 import Shipping from "components/Checkout/Shipping/Shipping";
 import Billing from "components/Checkout/Billing/Billing";
 import Items from "components/Checkout/Items/Items";
@@ -206,20 +206,7 @@ class Checkout extends Component {
                             </React.Fragment>
                         )}
                     </React.Fragment>
-                    <Grid className="detail" item xs={8}>
-                        <br/>
-                        <br/>
-                        <span className="sooner" onClick={() => this.props.showWantSooner({activeTab : 'SimilarStrains'})}>Want this Strain sooner?</span>
-                    </Grid>
                 </div>
-                <Dialog
-                    open={this.state.showWantSoonerDialog}
-                    onClose={() => {this.props.hideWantSooner()}}
-                    aria-labelledby="form-dialog-title"
-                    classes={{ paper: classes.dialogPaper }}
-                >
-                    <WantSooner {...this.props}/>
-                </Dialog>  
                 <Dialog open={this.state.terms}>
                     <DialogTitle id="alert-dialog-title">
                         Do you accept the White Labs Terms &amp; Conditions?
@@ -303,10 +290,7 @@ const styles = theme => ({
     button: {
         marginTop: theme.spacing.unit * 3,
         marginLeft: theme.spacing.unit
-    },
-    dialogPaper: {
-        minWidth: '70%',
-    },
+    }
 });
 
 Checkout.propTypes = {
