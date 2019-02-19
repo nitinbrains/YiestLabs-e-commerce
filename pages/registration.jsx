@@ -22,18 +22,19 @@ import { Formik, Form, Field } from "formik";
 import { userActions } from 'appRedux/actions/userActions';
 
 const steps = ["General Information", "Shipping Address", "Billing Address", "Credit Card Information"];
-const customFormValidation = Yup.object().shape({
+
+const ValidationSchema = Yup.object().shape({
 
     // General
     companyName: Yup.string().required("Required"),
-    email: Yup.string().email().required("Required"),
-    phone: Yup.number().required("Required"),
-    pass: Yup.string().required("Required"),
-    cPass: Yup.string().required("Required"),
-    category: Yup.string().required("Required"),
-    orderFrom: Yup.string().required("Required"),
-    acContact: Yup.string().required("Required"),
-    acPhone: Yup.string().required("Required")
+    // email: Yup.string().email().required("Required"),
+    // phone: Yup.number().required("Required"),
+    // pass: Yup.string().required("Required"),
+    // cPass: Yup.string().required("Required"),
+    // category: Yup.string().required("Required"),
+    // orderFrom: Yup.string().required("Required"),
+    // acContact: Yup.string().required("Required"),
+    // acPhone: Yup.string().required("Required")
 });
 
 class Registration extends React.Component {
@@ -43,92 +44,33 @@ class Registration extends React.Component {
         isSameAddress: false,
     };
 
-    handleNext = () => {
-        const { activeStep } = this.state;
-        this.setState({
-            activeStep: activeStep + 1
-        });
-    };
-
-    getStepContent(step) {
-        let {formValues, isSameAddress} = this.state;
-        switch (step) {
-            case 0:
-                return <General formValue={formValues[0]} submit={this.submit} />;
-            case 1:
-                return <Shipping formValue={formValues[1]} submit={this.submit} handleSameAddress={this.handleSameAddress} isSameAddress={isSameAddress}/>;
-            case 2:
-                return <Billing formValue={formValues[2]} submit={this.submit} />;
-            case 3:
-                return <CardInfo formValue={formValues[3]} submit={this.submit} />;
-            default:
-                throw new Error("Unknown step");
-        }
+    handleSameAddress = (e) =>{
+        this.setState({ isSameAddress: e.target.checked })
     }
-    handleBack = () => {
-        const { activeStep } = this.state;
-        this.setState({
-            activeStep: activeStep - 1
-        });
+
+    handleStep = step => () => {
+        this.setState( {activeStep: step });
     };
 
     handleReset = () => {
-        this.setState({
-            activeStep: 0
-        });
+        this.setState({ activeStep: 0 });
     };
 
-    handleStep = step => () => {
-        this.setState({
-            activeStep: step
-        });
-    };
-    handleSameAddress = (e) =>{
-        this.setState({
-            isSameAddress: e.target.checked
-        })
+    onNext = () => {
+        const { activeStep } = this.state;
+        this.setState({activeStep: activeStep + 1});
     }
-    submit = (values)=>{
-        let {formValues, activeStep, isSameAddress} = this.state;
-        formValues[activeStep] = values;
-        if(activeStep === 1 && isSameAddress){
-            formValues[activeStep + 1] = values;
-        }
-        this.setState({
-            activeStep: activeStep + 1,
-            formValues
-        })
-        if(activeStep === steps.length - 1 && Object.keys(formValues).length === steps.length){
-            this.props.createUser(formValues);
+
+    onBack = () => {
+        const { activeStep } = this.state;
+        if (activeStep > 0) {
+            this.setState({activeStep: activeStep - 1});
         }
     }
 
-    handleSameAddress = (e) =>{
-        this.setState({
-            isSameAddress: e.target.checked
-        })
-    }
-
-    submit = (values) => {
-        let {formValues, activeStep, isSameAddress} = this.state;
-        formValues[activeStep] = values;
-        
-        if(activeStep === 1 && isSameAddress){
-            formValues[activeStep + 1] = values;
-        }
-        this.setState({activeStep: activeStep + 1, formValues });
-        
-        if(activeStep === steps.length - 1 && Object.keys(formValues).length === steps.length){
-            this.props.createUser(formValues);
-        }
-    }
-
-    onChangeStep = (step) => {
-
-    }
-
-    onSubmit = (values) => {
-        
+    onSubmit = (values, actions) => {
+        console.log('submit', values);
+        console.log('actions', actions);
     }
 
     renderRegistrationSuccess = () => {
@@ -159,40 +101,21 @@ class Registration extends React.Component {
         )
     }
 
-    getStepContent(step) {
-        let {formValues, isSameAddress} = this.state;
-
-        switch (step) {
-            case 0:
-                return <General formValue={formValues[0]} submit={this.submit} />;
-            case 1:
-                return <Shipping formValue={formValues[1]} submit={this.submit} handleSameAddress={this.handleSameAddress} isSameAddress={isSameAddress}/>;
-            case 2:
-                return <Billing formValue={formValues[2]} submit={this.submit} />;
-            case 3:
-                return <CardInfo formValue={formValues[3]} submit={this.submit} />;
-            default:
-                throw new Error("Unknown step");
-        }
-    }
-
     render() {
-        const { classes, user,  loading: {isLoading, type}} = this.props;
+        const { classes, user, loading: {isLoading, type}} = this.props;
         const { activeStep } = this.state;
-        let formBody = '';
+        let renderBody = '';
         
         // if(activeStep < steps.length ){
-        //     formBody = this.getStepContent(activeStep)
+        //     renderBody = this.getStepContent(activeStep)
         // } 
-        // else if(activeStep === steps.length && user.registrationAttempt && user.registrationStatus === 'success'){
-        //     formBody = this.renderRegistrationSuccess();
+        // if(activeStep === steps.length && user.registrationAttempt && user.registrationStatus === 'success'){
+        //     renderBody = this.renderRegistrationSuccess();
         // } 
         // else if(activeStep === steps.length && user.registrationAttempt && user.registrationStatus === 'failed'){
-        //     formBody = this.renderRegistrationFailure();
+        //     renderBody = this.renderRegistrationFailure();
         // } 
-        // else {
-        //     formBody = t;
-        // }
+
         return (
             <NavBarLayout>
                 <LoadingIndicator visible={isLoading && type === 'createUser' } />
@@ -216,13 +139,56 @@ class Registration extends React.Component {
                         })}
                     </Stepper>
                     <Formik
-                        onSubmit={(values, actions) => console.log('submit', values)}
-                        // validationSchema={customFormValidation}
-                        initialValues={{companyname: user.companyname}}
+                        onSubmit={(values, actions) => this.onSubmit(values, actions)}
+                        validate={(values) => {
+                            var errors = {};
+
+                            if (!values.companyname) {
+                                errors.companyname = "Company name is required"
+                            }
+
+                            // let exp = moment(values.ccexpire, 'MM/YYYY')
+                            // if (!exp.isValid() || exp.isAfter(moment(), 'month')) {
+                            //     errors.ccexpire = "Expiration date is invalid";
+                            // }
+
+                            if (!values.ccname) {
+                                errors.ccname = "Credit Card name is required";
+                            }
+
+                            return { errors };
+                        }}
+
                         render={props => {
+
+                            let view = null;
+
+                            var handlerProps = {
+                                onBack: this.onBack,
+                                onNext: this.onNext,
+                                ...props
+                            };
+
+                            switch (activeStep) {
+                                default:
+                                case 0:
+                                    view = <General {...handlerProps} />;
+                                    break;
+                                case 1:
+                                    view = <Shipping {...handlerProps} />;
+                                    break;
+                                case 2:
+                                    view = <Billing {...handlerProps} />;
+                                    break;
+                                case 3:
+                                    view = <CardInfo {...handlerProps} onSubmit={this.onSubmit} />;
+                                    break;
+                                
+                            }
+
                             return (
                                 <Form>
-                                    <General {...props}/>
+                                    {view}
                                 </Form>
                             )
                         }}
