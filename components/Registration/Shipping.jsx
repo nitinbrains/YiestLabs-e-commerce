@@ -17,6 +17,7 @@ import {handleChange, handleNext} from  './GeneralValidation';
 
 const fields = 'shipping'; //['shipping.attn', 'shipping.addressee', 'shipping.address1', 'shipping.address2', 'shipping.address3', 'shipping.city', 'shipping.zip' ,'shipping.countryid']
 
+
 const FormikErrorMessage = ({className, touched, error}) => {
     // if (!touched) {
     //     return null;

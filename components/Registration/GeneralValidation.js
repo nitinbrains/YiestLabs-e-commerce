@@ -18,6 +18,8 @@ export const formFields = {
 
 export const validate = (props, fields) => {
     const { values, touched, errors, setTouched, setErrors } = props;
+    console.log('111111111111111111', props  , fields);
+    
     var err = {};
     fields.map((field)=>{
         touched[field] = true
@@ -28,11 +30,15 @@ export const validate = (props, fields) => {
         }
     })
     setTouched(touched)
-    setErrors({...errors, ...err})
+    setErrors(err)
+    console.log('sssssssssssssssssss', errors, err, touched, {...errors, ...err});
+    
     return {errors: err, touched};
 }
 export const handleNext = (props, fields) => {
     const { onNext } = props;
+    console.log('props, fields', props, fields);
+    
     let res = validate(props, formFields[fields]);
     if(_isEmpty(res.errors)) {
         onNext();
