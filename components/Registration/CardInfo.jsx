@@ -14,6 +14,10 @@ import _get from "lodash/get";
 import MaskedTextField from "../Form/MaskedTextField";
 import moment from "moment";
 import Cleave from "cleave.js/react";
+import {handleChange, handleNext, handleSubmit} from  './GeneralValidation';
+
+const fields = 'cardInfo';// ['ccnumber', 'ccname', 'ccexpire']
+
 
 function CreditCardMaskedTextField(props) {
     let { options, onChange, inputRef, ...other } = props;
@@ -57,7 +61,7 @@ const CardInfo = props => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({ field: { value, onChange }, form: { touched } }) => {
+                    render={({ field: { value, onChange }, form}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, "ccnumber")} touched={_get(touched, "ccnumber")} />
@@ -67,7 +71,8 @@ const CardInfo = props => {
                                     label="Credit Card number"
                                     fullWidth
                                     autoComplete="ccnumber"
-                                    onChange={onChange}
+                                    // onChange={onChange}
+                                    onChange={(e)=>handleChange(e, form, fields)}
                                     value={_get(value, 'ccnumber')}
                                     InputProps={{
                                         inputComponent: CreditCardMaskedTextField
@@ -80,11 +85,14 @@ const CardInfo = props => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({ field: { value, onChange }, form: { touched } }) => {
+                    render={({ field: { value, onChange }, form}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, "ccname")} touched={_get(touched, "ccname")} />
-                                <TextField id="ccname" name="ccname" label="Name on card" fullWidth autoComplete="ccname" onChange={onChange} value={_get(value, "ccname")} />
+                                <TextField id="ccname" name="ccname" label="Name on card" fullWidth autoComplete="ccname" 
+                                // onChange={onChange} 
+                                onChange={(e)=>handleChange(e, form, fields)}
+                                value={_get(value, "ccname")} />
                             </React.Fragment>
                         );
                     }}
@@ -92,7 +100,7 @@ const CardInfo = props => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({ field: { value, onChange }, form: { touched } }) => {
+                    render={({ field: { value, onChange }, form}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, "ccexpire")} touched={_get(touched, "ccexpire")} />
@@ -105,6 +113,7 @@ const CardInfo = props => {
                                     InputProps={{
                                         inputComponent: DateMaskedTextField
                                     }}
+                                    onChange={(e)=>handleChange(e, form, fields)}
                                 />
                             </React.Fragment>
                         );
@@ -114,7 +123,9 @@ const CardInfo = props => {
             <Button variant="contained" className={classes.button} onClick={onBack}>
                 Back
             </Button>
-            <Button type="submit" variant="contained" color="primary" className={classes.button}>
+            <Button 
+            // type="submit"
+             variant="contained" color="primary" className={classes.button} onClick={()=>handleSubmit(props, fields)}>
                 Submit
             </Button>
         </Grid>

@@ -12,6 +12,9 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import _get from 'lodash/get';
 import SalesLib from 'lib/SalesLib';
+import {handleChange, handleNext} from  './GeneralValidation';
+
+const fields = 'billing'; //['billing.attn', 'billing.addressee', 'billing.address1', 'billing.address2', 'billing.address3', 'billing.city', 'billing.zip' ,'billing.countryid']
 
 const FormikErrorMessage = ({className, touched, error}) => {
     // if (!touched) {
@@ -50,7 +53,7 @@ const Billing = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'billing.attn')} touched={_get(touched, 'billing.attn')} />
@@ -60,7 +63,8 @@ const Billing = (props) => {
                                     label="Attention"
                                     fullWidth
                                     autoComplete="attention"
-                                    onChange={onChange}
+                                    // onChange={onChange}
+                                    onChange={(e)=>handleChange(e, form, fields)}
                                     value={_get(value, 'billing.attn')}
                                 />
                             </React.Fragment>
@@ -70,7 +74,7 @@ const Billing = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'billing.addressee')} touched={_get(touched, 'billing.addressee')} />
@@ -80,7 +84,8 @@ const Billing = (props) => {
                                     label="Addressee"
                                     fullWidth
                                     autoComplete="addressee"
-                                    onChange={onChange}
+                                    // onChange={onChange}
+                                    onChange={(e)=>handleChange(e, form, fields)}
                                     value={_get(value, 'billing.addressee')}
                                 />
                             </React.Fragment>
@@ -90,7 +95,7 @@ const Billing = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'billing.address1')} touched={_get(touched, 'billing.address1')} />
@@ -100,7 +105,8 @@ const Billing = (props) => {
                                     label="Address 1"
                                     fullWidth
                                     autoComplete="address1"
-                                    onChange={onChange}
+                                    // onChange={onChange}
+                                    onChange={(e)=>handleChange(e, form, fields)}
                                     value={_get(value, 'billing.address1')}
                                 />
                             </React.Fragment>
@@ -110,7 +116,7 @@ const Billing = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'billing.address2')} touched={_get(touched, 'billing.address2')} />
@@ -120,7 +126,8 @@ const Billing = (props) => {
                                     label="Address 2"
                                     fullWidth
                                     autoComplete="address2"
-                                    onChange={onChange}
+                                    // onChange={onChange}
+                                    onChange={(e)=>handleChange(e, form, fields)}
                                     value={_get(value, 'billing.address2')}
                                 />
                             </React.Fragment>
@@ -130,7 +137,7 @@ const Billing = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'billing.address3')} touched={_get(touched, 'billing.address3')} />
@@ -140,7 +147,8 @@ const Billing = (props) => {
                                     label="Address3"
                                     fullWidth
                                     autoComplete="address3"
-                                    onChange={onChange}
+                                    // onChange={onChange}
+                                    onChange={(e)=>handleChange(e, form, fields)}
                                     value={_get(value, 'billing.address3')}
                                 />
                             </React.Fragment>
@@ -150,7 +158,7 @@ const Billing = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'billing.city')} touched={_get(touched, 'billing.city')} />
@@ -160,7 +168,8 @@ const Billing = (props) => {
                                     label="City"
                                     fullWidth
                                     autoComplete="city"
-                                    onChange={onChange}
+                                    // onChange={onChange}
+                                    onChange={(e)=>handleChange(e, form, fields)}
                                     value={_get(value, 'billing.city')}
                                 />
                             </React.Fragment>
@@ -170,7 +179,7 @@ const Billing = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'billing.zip')} touched={_get(touched, 'billing.zip')} />
@@ -180,7 +189,8 @@ const Billing = (props) => {
                                     label="Zip Code"
                                     fullWidth
                                     autoComplete="zip"
-                                    onChange={onChange}
+                                    // onChange={onChange}
+                                    onChange={(e)=>handleChange(e, form, fields)}
                                     value={_get(value, 'billing.zip')}
                                 />
                             </React.Fragment>
@@ -190,7 +200,7 @@ const Billing = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'billing.countryid')} touched={_get(touched, 'billing.countryid')} />
@@ -201,7 +211,8 @@ const Billing = (props) => {
                                     label="Country"
                                     fullWidth
                                     autoComplete="zip"
-                                    onChange={onChange}
+                                    // onChange={onChange}
+                                    onChange={(e)=>handleChange(e, form, fields)}
                                     value={_get(value, 'billing.countryid')}
                                 >
                                     {SalesLib.COUNTRY_MAP.map((country, index) => (
@@ -217,7 +228,7 @@ const Billing = (props) => {
             <Button variant="contained" className={classes.button} onClick={onBack}>
                 Back
             </Button>
-            <Button variant="contained" color="primary" className={classes.button} onClick={onNext}>
+            <Button variant="contained" color="primary" className={classes.button} onClick={()=>handleNext(props, fields)}>
                 Next
             </Button>
         </Grid>

@@ -104,12 +104,7 @@ class Registration extends React.Component {
             </React.Fragment>
         )
     }
-    fields = {
-        0:['companyName'],
-        1:['shipping.attn'],
-        2:['billing.attn'],
-        3:['ccnumber'],
-    }
+
     validateGeneral = (values, fields) => {
         console.log('values, fields',values, fields);
         var errors = {};
@@ -187,6 +182,7 @@ class Registration extends React.Component {
                     <Formik
                         onSubmit={(values, actions) => this.onSubmit(values, actions)}
                         // validationSchema={ValidationSchema}
+                        // touched={{companyName:true,ccnumber:true}}
                         validate={(values) => this.validate(values)
                         //     {
                         //     var errors = {};
@@ -209,7 +205,8 @@ class Registration extends React.Component {
                     }
 
                         render={props => {
-
+                            // console.log('props', props);
+                            
                             let view = null;
 
                             var handlerProps = {
