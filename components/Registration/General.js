@@ -35,10 +35,15 @@ const FormikErrorMessage = ({className, touched, error}) => {
 };
 
 const handleNext = (props) => {
-    const { validateForm, onNext, values } = props;
-
+    const { validateForm, onNext, values, errors } = props;
+    console.log('errors', errors);
+    
     validateForm(values).then((res) => {
+        console.log('@@@@@@@@@@@@@@@@', res, _isEmpty(res.errors));
+        
         if (_isEmpty(res.errors)) {
+            console.log('next');
+            
             onNext();
         }
     });
@@ -55,6 +60,7 @@ const General = (props) => {
         onBack,
         validateField
     } = props;
+    console.log('11111', touched, errors);
     
     return (
         <Grid container spacing={24}>
@@ -72,12 +78,17 @@ const General = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    validate={validation.companyName}
-                    name="companyname"
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    // validate={validation.companyName}
+                    name="companyName"
+                    render={({field: {value, onChange }, 
+                        // form: { touched }
+                        form
+                    }) => {
+                        console.log('form', form);
+                        
                         return (
                             <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'companyname')} touched={_get(touched, 'companyname')} />
+                                <FormikErrorMessage error={_get(errors, 'companyName')} touched={_get(touched, 'companyName')} />
                                 <TextField
                                     id="companyname"
                                     label="Company Name"

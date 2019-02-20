@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
+import isEmpty from 'lodash/isEmpty';
 import withStyles from "@material-ui/core/styles/withStyles";
 import NavBarLayout from "components/NavBar/NavBarLayout";
 import Stepper from "@material-ui/core/Stepper";
@@ -27,14 +28,15 @@ const ValidationSchema = Yup.object().shape({
 
     // General
     companyName: Yup.string().required("Required"),
-    // email: Yup.string().email().required("Required"),
-    // phone: Yup.number().required("Required"),
-    // pass: Yup.string().required("Required"),
-    // cPass: Yup.string().required("Required"),
-    // category: Yup.string().required("Required"),
-    // orderFrom: Yup.string().required("Required"),
-    // acContact: Yup.string().required("Required"),
-    // acPhone: Yup.string().required("Required")
+    email: Yup.string().email().required("Required"),
+    phone: Yup.number().required("Required"),
+    pass: Yup.string().required("Required"),
+    cPass: Yup.string().required("Required"),
+    category: Yup.string().required("Required"),
+    orderFrom: Yup.string().required("Required"),
+    acContact: Yup.string().required("Required"),
+    acPhone: Yup.string().required("Required"),
+    "shipping.attn": Yup.string().required("Required"),
 });
 
 class Registration extends React.Component {
@@ -58,6 +60,8 @@ class Registration extends React.Component {
 
     onNext = () => {
         const { activeStep } = this.state;
+        console.log('sssssssssssssss');
+        
         this.setState({activeStep: activeStep + 1});
     }
 
@@ -100,7 +104,49 @@ class Registration extends React.Component {
             </React.Fragment>
         )
     }
-
+    fields = {
+        0:['companyName'],
+        1:['shipping.attn'],
+        2:['billing.attn'],
+        3:['ccnumber'],
+    }
+    validateGeneral = (values, fields) => {
+        console.log('values, fields',values, fields);
+        var errors = {};
+        var touched = {};
+        fields.map((field)=>{
+            console.log('isEmpty(values[field])', isEmpty(values[field]));
+            
+            if(isEmpty(values[field])){
+                errors[field] = `${field} required`
+                touched[field] = true
+            }
+        })
+        return {errors, touched};
+    }
+    validate = (values) => {
+        const { activeStep } = this.state;
+        var errors = {};
+        switch (activeStep) {
+            default:
+            case 0:
+                errors = this.validateGeneral(values, this.fields[0]);
+                break;
+            case 1:
+                errors = this.validateGeneral(values, this.fields[1]);
+                break;
+            case 2:
+                errors = this.validateGeneral(values, this.fields[2]);
+                break;
+            case 3:
+                errors = this.validateGeneral(values, this.fields[3]);
+                break;
+        }
+        console.log('errors-1', errors);
+        
+        // return { errors };
+        return errors;
+    }
     render() {
         const { classes, user, loading: {isLoading, type}} = this.props;
         const { activeStep } = this.state;
@@ -140,24 +186,27 @@ class Registration extends React.Component {
                     </Stepper>
                     <Formik
                         onSubmit={(values, actions) => this.onSubmit(values, actions)}
-                        validate={(values) => {
-                            var errors = {};
+                        // validationSchema={ValidationSchema}
+                        validate={(values) => this.validate(values)
+                        //     {
+                        //     var errors = {};
 
-                            if (!values.companyname) {
-                                errors.companyname = "Company name is required"
-                            }
+                        //     if (!values.companyname) {
+                        //         errors.companyname = "Company name is required"
+                        //     } 
 
-                            // let exp = moment(values.ccexpire, 'MM/YYYY')
-                            // if (!exp.isValid() || exp.isAfter(moment(), 'month')) {
-                            //     errors.ccexpire = "Expiration date is invalid";
-                            // }
+                        //     // let exp = moment(values.ccexpire, 'MM/YYYY')
+                        //     // if (!exp.isValid() || exp.isAfter(moment(), 'month')) {
+                        //     //     errors.ccexpire = "Expiration date is invalid";
+                        //     // }
 
-                            if (!values.ccname) {
-                                errors.ccname = "Credit Card name is required";
-                            }
+                        //     if (!values.ccname) {
+                        //         errors.ccname = "Credit Card name is required";
+                        //     }
 
-                            return { errors };
-                        }}
+                        //     return { errors };
+                        // }
+                    }
 
                         render={props => {
 
