@@ -13,31 +13,16 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import LoadingIndicator from "components/UI/LoadingIndicator";
-import General from "components/Registration/General";
-import Shipping from "components/Registration/Shipping";
-import Billing from "components/Registration/Billing";
-import CardInfo from "components/Registration/CardInfo";
+import General from "components/Registration/general/General";
+import Shipping from "components/Registration/shipping/Shipping";
+import Billing from "components/Registration/billing/Billing";
+import CardInfo from "components/Registration/card-info/CardInfo";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
 
 import { userActions } from 'appRedux/actions/userActions';
 
 const steps = ["General Information", "Shipping Address", "Billing Address", "Credit Card Information"];
-
-const ValidationSchema = Yup.object().shape({
-
-    // General
-    // companyName: Yup.string().required("Required"),
-    // email: Yup.string().email().required("Required"),
-    // phone: Yup.number().required("Required"),
-    // pass: Yup.string().required("Required"),
-    // cPass: Yup.string().required("Required"),
-    // category: Yup.string().required("Required"),
-    // orderFrom: Yup.string().required("Required"),
-    // acContact: Yup.string().required("Required"),
-    // acPhone: Yup.string().required("Required"),
-    // "shipping.attn": Yup.string().required("Required"),
-});
 
 class Registration extends React.Component {
     state = {
@@ -116,7 +101,11 @@ class Registration extends React.Component {
         // else if(activeStep === steps.length && user.registrationAttempt && user.registrationStatus === 'failed'){
         //     renderBody = this.renderRegistrationFailure();
         // } 
-        const validate = (values, fields) => {}
+        const validate = (values, fields) => {
+
+            console.log('values', values);
+            console.log('fields', fields);
+        }
         return (
             <NavBarLayout>
                 <LoadingIndicator visible={isLoading && type === 'createUser' } />
@@ -141,7 +130,6 @@ class Registration extends React.Component {
                     </Stepper>
                     <Formik
                         onSubmit={(values, actions) => this.onSubmit(values, actions)}
-                        // validationSchema={ValidationSchema}
                         validate={(values)=>validate(values, fields)}
                         render={props => {
                             let view = null;

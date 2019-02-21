@@ -12,12 +12,10 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import _get from 'lodash/get';
 import _isEmpty from 'lodash/isEmpty';
-import MaskedTextField from "../Form/MaskedTextField";
+import MaskedTextField from "../../Form/MaskedTextField";
 import Cleave from "cleave.js/react";
 
-// import * as validation from './GeneralValidation';
-import {handleChange, handleNext} from  './GeneralValidation';
-
+import { handleChange, handleNext } from  './Validation';
 
 function PhoneMaskedTextField(props) {
     let { options, onChange, inputRef, ...other } = props;
@@ -25,60 +23,12 @@ function PhoneMaskedTextField(props) {
     return <Cleave {...other} onChange={onChange} ref={inputRef} options={options} />;
 }
 
-const fields = 'general'; //['companyName', 'email', 'phone', 'password', 'confirmPassword', 'category', 'orderFrom' ,'acContact', 'acPhone']
 const FormikErrorMessage = ({className, touched, error}) => {
-    // if (!touched) {
-    //     return null;
-    // }
-
     return (
         <div className="error">{error}</div>
     );
 };
-// const validateGeneral = (props) => {
-//     const { validateForm, values, onNext, setTouched, validateField, setErrors } = props;
-//     console.log('values, fields',values, fields);
-//     var errors = {};
-//     var touched = {};
-//     fields.map((field)=>{
-//         console.log('isEmpty(values[field])', _isEmpty(values[field]));
-//         touched[field] = true
-        
-//         if(_isEmpty(values[field])){
-//             errors[field] = `${field} required`
-//         }
-//     })
-//     setTouched(touched)
-//     setErrors(errors)
-//     return {errors, touched};
-// }
-// const handleNext = (props) => {
-//     const { validateForm, onNext, values, errors, setTouched, touched, validateField, setErrors } = props;
-//     let res = validateGeneral(props);
-//     if(_isEmpty(res.errors)) {
-//         onNext();
-//     }
-//     // validateForm(values).then((res) => {
-//     //     // console.log('@@@@@@@@@@@@@@@@', res, _isEmpty(res.errors));
-        
-//     //     if (_isEmpty(res.errors)) {
-//     //         // console.log('next');
-            
-//     //         onNext();
-//     //     }
-//     // });
 
-// }
-// const handleChange1 = (e, props) => {
-//     console.log('e, form', e.target.value,e.target.name, props);
-//     const {setValues, values, touched} = props;
-//     let value = e.target.value
-//     let name = e.target.name
-//     values[name] = value
-//     props = {...props, values}
-//     if(touched[name]) validateGeneral(props);
-//     setValues(values)
-// }
 const General = (props) => {
     const {
         touched,
@@ -87,7 +37,6 @@ const General = (props) => {
         onNext,
         onBack,
     } = props;
-    // console.log('touched, errors=====', touched, errors);
     
     return (
         <Grid container spacing={24}>
@@ -105,7 +54,6 @@ const General = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    name="companyName"
                     render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
@@ -116,7 +64,7 @@ const General = (props) => {
                                     label="Company Name"
                                     fullWidth
                                     autoComplete="company name"
-                                    onChange={(e)=>handleChange(e, form, fields)}
+                                    onChange={(e)=>handleChange(e, form)}
                                     value={_get(value, 'companyName')}
                                 />
                             </React.Fragment>
@@ -136,8 +84,7 @@ const General = (props) => {
                                     label="Email"
                                     fullWidth
                                     autoComplete="email"
-                                    // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form, fields)}
+                                    onChange={(e)=>handleChange(e, form)}
                                     value={_get(value, 'email')}
                                 />
                             </React.Fragment>
@@ -160,7 +107,7 @@ const General = (props) => {
                                     InputProps={{
                                         inputComponent: PhoneMaskedTextField
                                     }}
-                                    onChange={(e)=>handleChange(e, form, fields)}  
+                                    onChange={(e)=>handleChange(e, form)}  
                                     value={_get(value, 'phone')} 
                                 />
                             </React.Fragment>
@@ -181,8 +128,7 @@ const General = (props) => {
                                     type="password"
                                     fullWidth
                                     autoComplete="password"
-                                    // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form, fields)}
+                                    onChange={(e)=>handleChange(e, form)}
                                     value={value.password}
                                 />
                             </React.Fragment>
@@ -203,8 +149,7 @@ const General = (props) => {
                                     type="password"
                                     fullWidth
                                     autoComplete="confirmPassword"
-                                    // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form, fields)}
+                                    onChange={(e)=>handleChange(e, form)}
                                     value={_get(value, 'confirmPassword')}
                                 />
                             </React.Fragment>
@@ -225,8 +170,7 @@ const General = (props) => {
                                     select
                                     fullWidth
                                     autoComplete="category"
-                                    // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form, fields)}
+                                    onChange={(e)=>handleChange(e, form)}
                                     value={_get(value, 'category')}
                                 >
                                     <MenuItem value={1}>Retailer</MenuItem>
@@ -254,7 +198,7 @@ const General = (props) => {
                                     fullWidth
                                     autoComplete="orderFrom"
                                     // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form, fields)}
+                                    onChange={(e)=>handleChange(e, form)}
                                     value={_get(value, 'orderFrom')}
                                 >
                                     <MenuItem value={1}>
@@ -287,8 +231,7 @@ const General = (props) => {
                                     label="Accounting Contact"
                                     fullWidth
                                     autoComplete="acContact"
-                                    // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form, fields)}
+                                    onChange={(e)=>handleChange(e, form)}
                                     value={_get(value, 'acContact')}
                                 />
                             </React.Fragment>
@@ -311,7 +254,7 @@ const General = (props) => {
                                     InputProps={{
                                         inputComponent: PhoneMaskedTextField
                                     }}
-                                    onChange={(e)=>handleChange(e, form, fields)}
+                                    onChange={(e)=>handleChange(e, form)}
                                     value={_get(value, 'acPhone')}
                                 />
                             </React.Fragment>
@@ -322,7 +265,7 @@ const General = (props) => {
             <Button variant="contained" className={classes.button} onClick={onBack}>
                 Back
             </Button>
-            <Button variant="contained" color="primary" className={classes.button} onClick={() => handleNext(props, fields)}>
+            <Button variant="contained" color="primary" className={classes.button} onClick={() => handleNext(props)}>
                 Next
             </Button>
         </Grid>

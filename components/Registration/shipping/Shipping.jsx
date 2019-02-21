@@ -12,21 +12,16 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import _get from 'lodash/get';
 import SalesLib from 'lib/SalesLib';
-import {handleChange, handleNext} from  './GeneralValidation';
-
-const fields = 'billing'; //['billing.attn', 'billing.addressee', 'billing.address1', 'billing.address2', 'billing.address3', 'billing.city', 'billing.zip' ,'billing.countryid']
+import {handleChange, handleNext} from  './Validation';
 
 const FormikErrorMessage = ({className, touched, error}) => {
-    // if (!touched) {
-    //     return null;
-    // }
 
     return (
         <div className="error">{error}</div>
     );
 };
 
-const Billing = (props) => {
+const Shipping = (props) => {
 
     const {
         values,
@@ -41,7 +36,7 @@ const Billing = (props) => {
         <Grid container spacing={24}>
             <Grid item xs={12}>
                 <Typography variant="h6" color="textPrimary">
-                    Billing
+                    Shipping
                 </Typography>
                 <div
                     style={{
@@ -56,16 +51,16 @@ const Billing = (props) => {
                     render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'billing.attn')} touched={_get(touched, 'billing.attn')} />
+                                <FormikErrorMessage error={_get(errors, 'shipping.attn')} touched={_get(touched, 'shipping.attn')} />
                                 <TextField
-                                    id="billing.attn"
-                                    name="billing.attn"
+                                    id="shipping.attn"
+                                    name="shipping.attn"
                                     label="Attention"
                                     fullWidth
                                     autoComplete="attention"
                                     // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form, fields)}
-                                    value={_get(value, 'billing.attn')}
+                                    onChange={(e)=>handleChange(e, form)}
+                                    value={_get(value, 'shipping.attn')}
                                 />
                             </React.Fragment>
                         )
@@ -77,16 +72,16 @@ const Billing = (props) => {
                     render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'billing.addressee')} touched={_get(touched, 'billing.addressee')} />
+                                <FormikErrorMessage error={_get(errors, 'shipping.addressee')} touched={_get(touched, 'shipping.addressee')} />
                                 <TextField
-                                    id="billing.addressee"
-                                    name="billing.addressee"
+                                    id="shipping.addressee"
+                                    name="shipping.addressee"
                                     label="Addressee"
                                     fullWidth
                                     autoComplete="addressee"
                                     // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form, fields)}
-                                    value={_get(value, 'billing.addressee')}
+                                    onChange={(e)=>handleChange(e, form)}
+                                    value={_get(value, 'shipping.addressee')}
                                 />
                             </React.Fragment>
                         )
@@ -98,16 +93,16 @@ const Billing = (props) => {
                     render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'billing.address1')} touched={_get(touched, 'billing.address1')} />
+                                <FormikErrorMessage error={_get(errors, 'shipping.address1')} touched={_get(touched, 'shipping.address1')} />
                                 <TextField
-                                    id="billing.address1"
-                                    name="billing.address1"
+                                    id="shipping.address1"
+                                    name="shipping.address1"
                                     label="Address 1"
                                     fullWidth
                                     autoComplete="address1"
                                     // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form, fields)}
-                                    value={_get(value, 'billing.address1')}
+                                    onChange={(e)=>handleChange(e, form)}
+                                    value={_get(value, 'shipping.address1')}
                                 />
                             </React.Fragment>
                         )
@@ -119,16 +114,16 @@ const Billing = (props) => {
                     render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'billing.address2')} touched={_get(touched, 'billing.address2')} />
+                                <FormikErrorMessage error={_get(errors, 'shipping.address2')} touched={_get(touched, 'shipping.address2')} />
                                 <TextField
-                                    id="billing.address2"
-                                    name="billing.address2"
+                                    id="shipping.address2"
+                                    name="shipping.address2"
                                     label="Address 2"
                                     fullWidth
                                     autoComplete="address2"
                                     // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form, fields)}
-                                    value={_get(value, 'billing.address2')}
+                                    onChange={(e)=>handleChange(e, form)}
+                                    value={_get(value, 'shipping.address2')}
                                 />
                             </React.Fragment>
                         )
@@ -140,16 +135,16 @@ const Billing = (props) => {
                     render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'billing.address3')} touched={_get(touched, 'billing.address3')} />
+                                <FormikErrorMessage error={_get(errors, 'shipping.address3')} touched={_get(touched, 'shipping.address3')} />
                                 <TextField
-                                    id="billing.address3"
-                                    name="billing.address3"
+                                    id="shipping.address3"
+                                    name="shipping.address3"
                                     label="Address3"
                                     fullWidth
                                     autoComplete="address3"
                                     // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form, fields)}
-                                    value={_get(value, 'billing.address3')}
+                                    onChange={(e)=>handleChange(e, form)}
+                                    value={_get(value, 'shipping.address3')}
                                 />
                             </React.Fragment>
                         )
@@ -161,16 +156,16 @@ const Billing = (props) => {
                     render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'billing.city')} touched={_get(touched, 'billing.city')} />
+                                <FormikErrorMessage error={_get(errors, 'shipping.city')} touched={_get(touched, 'shipping.city')} />
                                 <TextField
-                                    id="billing.city"
-                                    name="billing.city"
+                                    id="shipping.city"
+                                    name="shipping.city"
                                     label="City"
                                     fullWidth
                                     autoComplete="city"
                                     // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form, fields)}
-                                    value={_get(value, 'billing.city')}
+                                    onChange={(e)=>handleChange(e, form)}
+                                    value={_get(value, 'shipping.city')}
                                 />
                             </React.Fragment>
                         )
@@ -182,16 +177,16 @@ const Billing = (props) => {
                     render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'billing.zip')} touched={_get(touched, 'billing.zip')} />
+                                <FormikErrorMessage error={_get(errors, 'shipping.zip')} touched={_get(touched, 'shipping.zip')} />
                                 <TextField
-                                    id="billing.zip"
-                                    name="billing.zip"
+                                    id="shipping.zip"
+                                    name="shipping.zip"
                                     label="Zip Code"
                                     fullWidth
                                     autoComplete="zip"
                                     // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form, fields)}
-                                    value={_get(value, 'billing.zip')}
+                                    onChange={(e)=>handleChange(e, form)}
+                                    value={_get(value, 'shipping.zip')}
                                 />
                             </React.Fragment>
                         )
@@ -203,17 +198,17 @@ const Billing = (props) => {
                     render={({field: {value, onChange }, form}) => {
                         return (
                             <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'billing.countryid')} touched={_get(touched, 'billing.countryid')} />
+                                <FormikErrorMessage error={_get(errors, 'shipping.countryid')} touched={_get(touched, 'shipping.countryid')} />
                                 <TextField
                                     select
-                                    id="billing.countryid"
-                                    name="billing.countryid"
+                                    id="shipping.countryid"
+                                    name="shipping.countryid"
                                     label="Country"
                                     fullWidth
                                     autoComplete="zip"
                                     // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form, fields)}
-                                    value={_get(value, 'billing.countryid')}
+                                    onChange={(e)=>handleChange(e, form)}
+                                    value={_get(value, 'shipping.countryid')}
                                 >
                                     {SalesLib.COUNTRY_MAP.map((country, index) => (
                                         <MenuItem value={country.id}>{country.name}</MenuItem>
@@ -228,14 +223,14 @@ const Billing = (props) => {
             <Button variant="contained" className={classes.button} onClick={onBack}>
                 Back
             </Button>
-            <Button variant="contained" color="primary" className={classes.button} onClick={()=>handleNext(props, fields)}>
+            <Button variant="contained" color="primary" className={classes.button} onClick={()=>handleNext(props)}>
                 Next
             </Button>
         </Grid>
     );
 }
 
-// export default Billing;
+// export default Shipping;
 const styles = theme => ({
     buttons: {
         display: "flex",
@@ -247,9 +242,9 @@ const styles = theme => ({
     },
 });
 
-Billing.propTypes = {
+Shipping.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
 
-export default  withStyles(styles)(Billing);
+export default  withStyles(styles)(Shipping);
