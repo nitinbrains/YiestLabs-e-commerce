@@ -104,6 +104,7 @@ class Registration extends React.Component {
     render() {
         const { classes, user, loading: {isLoading, type}} = this.props;
         const { activeStep } = this.state;
+       // console.log(this.state.activeStep,'activemmmmmmmmmmmmmmm')
         let renderBody = '';
         
         // if(activeStep < steps.length ){
@@ -139,14 +140,26 @@ class Registration extends React.Component {
                         })}
                     </Stepper>
                     <Formik
+                         //initialValues={{ email: '', password: '',companyname:'' }}
                         onSubmit={(values, actions) => this.onSubmit(values, actions)}
                         validate={(values) => {
                             var errors = {};
-
+                            var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
                             if (!values.companyname) {
                                 errors.companyname = "Company name is required"
                             }
-
+                            if(!values.email) {
+                                errors.email = "Email is required"
+                            }
+                            if(reg.test(values.email)===false) {
+                                errors.email = "Please Enter a Valid Email"
+                            }
+                            if(!values.phone) {
+                                errors.phone = "Phone is required"
+                            }
+                            // if(values.password.length < 9) {
+                            //     errors.password = "Password must contain atleast 9 characters"
+                            // }
                             // let exp = moment(values.ccexpire, 'MM/YYYY')
                             // if (!exp.isValid() || exp.isAfter(moment(), 'month')) {
                             //     errors.ccexpire = "Expiration date is invalid";
@@ -156,11 +169,12 @@ class Registration extends React.Component {
                                 errors.ccname = "Credit Card name is required";
                             }
 
-                            return { errors };
+                            return errors;
                         }}
 
                         render={props => {
-
+                            console.log(props.touched);
+                            
                             let view = null;
 
                             var handlerProps = {

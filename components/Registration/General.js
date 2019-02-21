@@ -25,10 +25,9 @@ function PhoneMaskedTextField(props) {
 
 
 const FormikErrorMessage = ({className, touched, error}) => {
-    // if (!touched) {
-    //     return null;
-    // }
-
+    if (!touched) {
+        return null;
+    }
     return (
         <div className="error">{error}</div>
     );
@@ -55,7 +54,7 @@ const General = (props) => {
         onBack,
         validateField
     } = props;
-    
+    // console.log(touched,errors,'errorssssssssssssssssssssss')
     return (
         <Grid container spacing={24}>
             <Grid item xs={12}>
@@ -72,19 +71,22 @@ const General = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    validate={validation.companyName}
+                    // validate={validation.companyName}
                     name="companyname"
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field, form: {  }}) => {
+                    console.log(field.value,'valllllllllllllllll')
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'companyname')} touched={_get(touched, 'companyname')} />
                                 <TextField
+                                    name='companyname'
                                     id="companyname"
                                     label="Company Name"
                                     fullWidth
+                                    {...field}
                                     autoComplete="company name"
-                                    onChange={onChange}
-                                    value={_get(value, 'companyname')}
+                                    onChange={field.onChange}
+                                    value={_get(field.value, 'companyname')}
                                 />
                             </React.Fragment>
                         )
@@ -93,7 +95,7 @@ const General = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field, form: { }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'email')} touched={_get(touched, 'email')} />
@@ -102,9 +104,10 @@ const General = (props) => {
                                     name="email"
                                     label="Email"
                                     fullWidth
+                                    {...field}
                                     autoComplete="email"
-                                    onChange={onChange}
-                                    value={_get(value, 'email')}
+                                    onChange={field.onChange}
+                                    value={_get(field.value, 'email')}
                                 />
                             </React.Fragment>
                         )
@@ -113,7 +116,7 @@ const General = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field, form: {  }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'phone')} touched={_get(touched, 'phone')} />
@@ -122,6 +125,7 @@ const General = (props) => {
                                     name="phone"
                                     label="Phone"
                                     fullWidth
+                                    {...field}
                                     autoComplete="phone"
                                     InputProps={{
                                         inputComponent: PhoneMaskedTextField
@@ -134,7 +138,7 @@ const General = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field, form: {  }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'password')} touched={_get(touched, 'password')} />
@@ -144,9 +148,10 @@ const General = (props) => {
                                     label="Password"
                                     type="password"
                                     fullWidth
+                                    {...field}
                                     autoComplete="password"
-                                    onChange={onChange}
-                                    value={value.password}
+                                    onChange={field.onChange}
+                                    value={field.value.password}
                                 />
                             </React.Fragment>
                         )
@@ -155,7 +160,7 @@ const General = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field, form: { }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'confirmPassword')} touched={_get(touched, 'confirmPassword')} />
@@ -165,9 +170,10 @@ const General = (props) => {
                                     label="Confirm Password"
                                     type="password"
                                     fullWidth
+                                    {...field}
                                     autoComplete="confirmPassword"
-                                    onChange={onChange}
-                                    value={_get(value, 'confirmPassword')}
+                                    onChange={field.onChange}
+                                    value={_get(field.value, 'confirmPassword')}
                                 />
                             </React.Fragment>
                         )
@@ -176,7 +182,7 @@ const General = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field, form: {  }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'category')} touched={_get(touched, 'category')} />
@@ -186,9 +192,10 @@ const General = (props) => {
                                     label="Category"
                                     select
                                     fullWidth
+                                    {...field}
                                     autoComplete="category"
-                                    onChange={onChange}
-                                    value={_get(value, 'category')}
+                                    onChange={field.onChange}
+                                    value={_get(field.value, 'category')}
                                 >
                                     <MenuItem value={1}>Retailer</MenuItem>
                                     <MenuItem value={2}>Individual</MenuItem>
@@ -203,7 +210,7 @@ const General = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field, form: {  }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'orderFrom')} touched={_get(touched, 'orderFrom')} />
@@ -213,9 +220,10 @@ const General = (props) => {
                                     label="Order From"
                                     select
                                     fullWidth
+                                    {...field}
                                     autoComplete="orderFrom"
-                                    onChange={onChange}
-                                    value={_get(value, 'orderFrom')}
+                                    onChange={field.onChange}
+                                    value={_get(field.value, 'orderFrom')}
                                 >
                                     <MenuItem value={1}>
                                         US Only
@@ -237,7 +245,7 @@ const General = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field, form: { }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'acContact')} touched={_get(touched, 'acContact')} />
@@ -246,9 +254,10 @@ const General = (props) => {
                                     name="acContact"
                                     label="Accounting Contact"
                                     fullWidth
+                                    {...field}
                                     autoComplete="acContact"
-                                    onChange={onChange}
-                                    value={_get(value, 'acContact')}
+                                    onChange={field.onChange}
+                                    value={_get(field.value, 'acContact')}
                                 />
                             </React.Fragment>
                         )
@@ -257,7 +266,7 @@ const General = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form: { touched }}) => {
+                    render={({field, form: {  }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'acPhone')} touched={_get(touched, 'acPhone')} />
@@ -266,6 +275,7 @@ const General = (props) => {
                                     name="acPhone"
                                     label="Accounting Phone Number"
                                     fullWidth
+                                    {...field}
                                     autoComplete="acPhone"
                                     InputProps={{
                                         inputComponent: PhoneMaskedTextField
