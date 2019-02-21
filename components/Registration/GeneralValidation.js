@@ -15,30 +15,53 @@ export const formFields = {
     cartInfo: ['ccnumber', 'ccname', 'ccexpire'],
     // all: [...formFields.general, ...formFields.shipping, ...formFields.billing, ...formFields.cartInfo]
 }
-
+export const errorBase = {
+    required: {
+        companyName: "Company name is Required",
+        email: "Email is Required",
+        phone: "Phone is Required",
+        password: "Password is Required",
+        confirmPassword: "Confirm password is Required",
+        category: "Category is Required",
+        orderFrom: "Order from is Required",
+        acContact: "Accounting contact is Required",
+        acPhone: "Accounting phone is Required",
+        "shipping.attn": "shipping attention is Required",
+        "shipping.addressee": "shipping addressee is Required",
+        "shipping.address1": "shipping address1 is Required",
+        "shipping.address2": "shipping address2 is Required",
+        "shipping.address3": "shipping address3 is Required",
+        "shipping.zip": "shipping zip is Required",
+        "shipping.countryid": "shipping country is Required",
+        "billing.attn": "billing attention is Required",
+        "billing.addressee": "billing addressee is Required",
+        "billing.address1": "billing address1 is Required",
+        "billing.address2": "billing address2 is Required",
+        "billing.address3": "billing address3 is Required",
+        "billing.zip": "billing zip is Required",
+        "billing.countryid": "billing country is Required",
+        ccnumber: "Credit card number is Required",
+        ccname: "Credit card name is Required",
+        ccexpire: "Credit card expiry date is Required",
+    }
+}
 export const validate = (props, fields) => {
     const { values, touched, errors, setTouched, setErrors } = props;
-    // console.log('111111111111111111', props  , fields);
-    
     var err = {};
     fields.map((field)=>{
         touched[field] = true
         if(!values[field]){
-            err[field] = `${field} required`
+            err[field] = errorBase.required[field]
         }else if(values[field] && errors[field]){
             delete errors[field]
         }
     })
     setTouched(touched)
     setErrors(err)
-    // console.log('sssssssssssssssssss', errors, err, touched, {...errors, ...err});
-    
     return {errors: err, touched};
 }
 export const handleNext = (props, fields) => {
     const { onNext } = props;
-    // console.log('props, fields', props, fields);
-    
     let res = validate(props, formFields[fields]);
     if(_isEmpty(res.errors)) {
         onNext();
