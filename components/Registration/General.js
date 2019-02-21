@@ -87,7 +87,7 @@ const General = (props) => {
         onNext,
         onBack,
     } = props;
-    console.log('touched, errors=====', touched, errors);
+    // console.log('touched, errors=====', touched, errors);
     
     return (
         <Grid container spacing={24}>
