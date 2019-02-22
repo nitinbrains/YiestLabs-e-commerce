@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import {withRouter} from 'next/router'
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 
 import PropTypes from "prop-types";
@@ -29,7 +30,8 @@ import NavBarUserSearchDrawerLayout from "components/NavBar/NavBarUserSearchDraw
 import LoadingIndicator from "components/UI/LoadingIndicator";
 import YeastCard from "components/Store/Yeast/YeastCard";
 import MainMenu from "components/Store/MainMenuCard/MainMenu";
-import SubCat from "components/Store/MainMenuCard/SubCat";
+import SubCat from './SubCat';
+
 import YeastDialog from "components/Store/Yeast/YeastDialog";
 import EnzymesNutrientsCard from "components/Store/EnzymesNutrients/EnzymesNutrientsCard";
 import EnzymesNutrientsDialog from "components/Store/EnzymesNutrients/EnzymesNutrientsDialog";
@@ -144,16 +146,23 @@ class Store extends Component {
         }
         return <div />;
     };
-
+    data
+   
     render() {
         const { classes, theme, message, messages } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
-
+          let pageType =  this.props.router.query.page
         // isHomebrew = true
+        let page = <MainMenu/>;
+        switch(pageType){
+            case 'sub':
+                page = <SubCat/>;
+                break;
+            default:
+        }
         return (
             <NavBarUserSearchDrawerLayout>
-                <MainMenu/>
-                <SubCat/>
+               {page}
                 <LoadingIndicator visible={this.props.loading.isLoading && this.props.loading.type == "loadingInventory"} label={"Loading Inventory"} />
                 <Grid container spacing={8} id="professional-homebrew-switch">
                     <Grid item xs={6} dir="rtl">
@@ -232,11 +241,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => bindActionCreators({ ...userActions, ...messageActions }, dispatch);
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
 )(compose(
     withStyles(styles, { withTheme: true })(
         withInventory(Store)
     )
-));
+))
+)
