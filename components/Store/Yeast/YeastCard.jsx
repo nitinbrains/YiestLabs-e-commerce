@@ -111,7 +111,7 @@ class YeastCard extends Component {
 
     render() {
         const { classes, theme, item } = this.props;
-
+         console.log(this.props.item,'uuuuuuuuuuuuuuuuuuuuuuu')
         const spaceIndex = item.Name.indexOf(" ");
         const itemID = item.Name.substr(0, spaceIndex);
         const itemName = item.Name.substr(spaceIndex + 1);

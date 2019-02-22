@@ -28,6 +28,8 @@ import SalesLib from "lib/SalesLib";
 import NavBarUserSearchDrawerLayout from "components/NavBar/NavBarUserSearchDrawerLayout";
 import LoadingIndicator from "components/UI/LoadingIndicator";
 import YeastCard from "components/Store/Yeast/YeastCard";
+import MainMenu from "components/Store/MainMenuCard/MainMenu";
+import SubCat from "components/Store/MainMenuCard/SubCat";
 import YeastDialog from "components/Store/Yeast/YeastDialog";
 import EnzymesNutrientsCard from "components/Store/EnzymesNutrients/EnzymesNutrientsCard";
 import EnzymesNutrientsDialog from "components/Store/EnzymesNutrients/EnzymesNutrientsDialog";
@@ -150,6 +152,8 @@ class Store extends Component {
         // isHomebrew = true
         return (
             <NavBarUserSearchDrawerLayout>
+                <MainMenu/>
+                <SubCat/>
                 <LoadingIndicator visible={this.props.loading.isLoading && this.props.loading.type == "loadingInventory"} label={"Loading Inventory"} />
                 <Grid container spacing={8} id="professional-homebrew-switch">
                     <Grid item xs={6} dir="rtl">
