@@ -29,12 +29,13 @@ class MyOrders extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            openDialog: false
+            openDialog: false,
+            order:null,
         }
     }
 
-    handleOrderDetails = (item) => {
-        this.setState({ openDialog: true });
+    handleOrderDetails = (order) => {
+        this.setState({ openDialog: true, order: order });
     }
 
     handleLeaveOrderDetails = () => {
@@ -93,7 +94,7 @@ class MyOrders extends Component {
                                                 <Button
                                                     variant="outlined"
                                                     color="primary"
-                                                    onClick={this.handleOrderDetails}
+                                                    onClick={e => {this.handleOrderDetails(order)}}
                                                 >
                                                     Order Details
                                                 </Button>
@@ -135,7 +136,7 @@ class MyOrders extends Component {
                         onClose={this.handleLeaveOrderDetails}
                         maxWidth={'lg'}
                     >
-                        <OrderDetails closeDialog={this.handleLeaveOrderDetails}/>
+                        <OrderDetails order={this.state.order} closeDialog={this.handleLeaveOrderDetails}/>
                     </Dialog>
                 </PageContainer>
             </NavBarUserSearchDrawerLayout>
