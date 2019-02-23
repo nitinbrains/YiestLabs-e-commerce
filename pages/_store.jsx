@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {withRouter} from 'next/router'
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
-
+import {find, filter} from 'lodash';
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -31,6 +31,7 @@ import LoadingIndicator from "components/UI/LoadingIndicator";
 import YeastCard from "components/Store/Yeast/YeastCard";
 import MainMenu from "components/Store/MainMenuCard/MainMenu";
 import SubCat from './SubCat';
+import Demo from './Demo'
 
 import YeastDialog from "components/Store/Yeast/YeastDialog";
 import EnzymesNutrientsCard from "components/Store/EnzymesNutrients/EnzymesNutrientsCard";
@@ -52,7 +53,196 @@ import { messageActions } from "appRedux/actions/messageActions";
 
 import withInventory from "hocs/inventory";
 import isLoggedUser from "hocs/isLoggedUser";
-
+const dataArr = [
+    {
+        id: 1,
+        title: 'CORE YIEST STRAINS',
+        img: 'static/images/categories/Category-core.jpg',
+        page:'sub',
+        subCategories: [{
+            label: 'ALE STRAINS',
+            img: 'static/images/categories/Category-ale.jpg',
+            icon: 'static/images/icons/Ale-icon.svg',
+            value: 1,
+            checked: true,
+            salesCategory:2,
+        }, {
+            label: 'LARGER STRAINS',
+            img: 'static/images/categories/Category-lager.jpg',
+            icon: 'static/images/icons/Lager-icon.svg',
+            value: 2,
+            salesCategory:2,
+            checked: false
+        }, {
+            label: 'WINE MEAD & CIDER STRAINS',
+            img: 'static/images/categories/Category-wine.jpg',
+            icon: 'static/images/icons/Wine-icon.svg',
+            value: 3,
+            salesCategory:2,
+            checked: false
+        }, {
+            label: 'DISTILLING STRAINS',
+            img: 'static/images/categories/Category-Distilling.jpg',
+            icon: 'static/images/icons/Distilling-icon.svg',
+            value: 4,
+            salesCategory:10,
+            checked: false
+        }, {
+            label: 'SPECIALIATY & BELGIAN STRAINS',
+            img: 'static/images/categories/Category-belgian.jpg',
+            icon: 'static/images/icons/Belgian-icon.svg',
+            value: 5,
+            salesCategory:28,
+            checked: false
+        }, {
+            label:  'WILD YIEST & BACTERIA',
+            img: 'static/images/categories/Category-wild.jpg',
+            icon: 'static/images/icons/Wildyeast-icon.svg',
+            value: 6,
+            salesCategory:20,
+            checked: false
+        }, {
+            label: 'VAULT STRAINS',
+            img: 'static/images/categories/Category-vault.jpg',
+            icon: 'static/images/icons/Ale-icon.svg',
+            value: 7,
+            salesCategory:23,
+            checked: false
+        },
+        {
+          img: 'static/images/categories/Category-core.jpg',
+          label: 'ALL CORE STRAINS',
+          icon: 'static/images/icons/Ale-icon.svg',
+          value:1,
+          salesCategory:29,
+          checked: false
+        }]
+    },
+    {
+        title: 'ENZYMES & NUTRIENTS',
+        img: 'static/images/categories/Category-ale.jpg',
+        page:'sub',
+        id: 2
+    },
+    {
+        title: 'ANALYTICAL LAB SERVICES',
+        img: 'static/images/categories/Category-wild.jpg',
+        page:'sub',
+        id: 3
+    },
+    {
+        title: 'EDUCATION',
+        img: 'static/images/categories/Category-wine.jpg',
+        page:'sub',
+        id: 4
+    },
+    {
+        title: 'GIFT SHOP',
+        img: 'static/images/categories/Category-vault.jpg',
+        page:'sub',
+        id: 5
+    }
+]
+const cards = [
+    {
+        categoryId:1,
+        subCatId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+    },
+    {
+        categoryId:1,
+        subCatId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+    },
+    {
+        categoryId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+    },
+    {
+        categoryId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+        itemID: 'ABC1025',
+        itemName: 'abc1'
+    },
+    {
+        categoryId:1,
+        subCatId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+    },
+    {
+        categoryId:1,
+        subCatId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+    },
+    {
+        categoryId:1,
+        subCatId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+    },
+    {
+        categoryId:1,
+        subCatId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+    },
+    {
+        categoryId:1,
+        subCatId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+    },
+    {
+        categoryId:1,
+        subCatId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+    },
+    {
+        categoryId:1,
+        subCatId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+    },
+    {
+        categoryId:1,
+        subCatId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+        itemID: 'ABC1025',
+        itemName: 'abc1'
+    },
+    {
+        categoryId:1,
+        subCatId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+    },
+    {
+        categoryId:1,
+        subCatId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+    },
+    {
+        categoryId:1,
+        subCatId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+    },
+    {
+        categoryId:1,
+        subCatId:1,
+        salesCategory:2,
+        Name: '01140 ABC',
+    },
+]
 class Store extends Component {
     constructor(props) {
         super(props);
@@ -62,6 +252,7 @@ class Store extends Component {
     }
 
     componentWillMount() {
+        console.log(this.props,'check')
         let isUserLoggedIn = sessionStorage.getItem("isLoggedin");
         let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
         if (isUserLoggedIn && userInfo) {
@@ -149,17 +340,32 @@ class Store extends Component {
     data
    
     render() {
-        const { classes, theme, message, messages } = this.props;
+        const { classes, theme, message, messages,router:{query} } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
-          let pageType =  this.props.router.query.page
+        let {pageType, categoryId, subCategoryId} = query;
+        categoryId = 1
+        subCategoryId = 1
         // isHomebrew = true
-        let page = <MainMenu/>;
-        switch(pageType){
-            case 'sub':
-                page = <SubCat/>;
-                break;
-            default:
+        let page = <MainMenu dataArr={dataArr}/>;
+        if(pageType === 'sub'&& categoryId){
+            let category = find(dataArr, {id:Number(categoryId)})
+            page = <SubCat category={category}/>;
+        } else if (pageType === 'cards' && categoryId && subCategoryId){
+            let filteredCard = filter(cards, {categoryId:Number(categoryId), subCatId:Number(subCategoryId)})
+            let cardsNode = [];
+            filteredCard.map((item, i)=>{
+                cardsNode.push(this.getCard(item, i))
+            })
+            page = <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
+        } else if (pageType === 'cards' && categoryId){
+            let filteredCard = filter(cards, {categoryId:Number(categoryId)})
+            let cardsNode = [];
+            filteredCard.map((item, i)=>{
+                cardsNode.push(this.getCard(item, i))
+            })
+            page = <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
         }
+      
         return (
             <NavBarUserSearchDrawerLayout>
                {page}

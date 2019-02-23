@@ -5,39 +5,6 @@ import Typography from "@material-ui/core/Typography";
 import Paper from '@material-ui/core/Paper';
 import Link from "next/link";
 
-let dataArr = [
-    {
-        title: 'CORE YIEST STRAINS',
-        img: '../../../static/images/categories/Category-core.jpg',
-        page:'sub',
-        id: 1
-    },
-    {
-        title: 'ENZYMES & NUTRIENTS',
-        img: '../../../static/images/categories/Category-ale.jpg',
-        page:'sub',
-        id: 2
-    },
-    {
-        title: 'ANALYTICAL LAB SERVICES',
-        img: '../../../static/images/categories/Category-wild.jpg',
-        page:'sub',
-        id: 3
-    },
-    {
-        title: 'EDUCATION',
-        img: '../../../static/images/categories/Category-wine.jpg',
-        page:'sub',
-        id: 4
-    },
-    {
-        title: 'GIFT SHOP',
-        img: '../../../static/images/categories/Category-vault.jpg',
-        page:'sub',
-        id: 5
-    }
-]
-
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -75,7 +42,7 @@ const styles = theme => ({
 
 
 const MainMenu = (props) => {
-    const { classes } = props;
+    const { classes, dataArr } = props;
 
     return (
         <div style={{ marginTop: '5%' }}>
@@ -84,7 +51,7 @@ const MainMenu = (props) => {
                     <Grid container justify="center" spacing={16}>
                         {dataArr.map((v, i) => (
                             <Grid key={i} item item xs={2} spacing={8}>
-                                <Link href={`/?page=${v.page}`}>
+                                <Link href={`/?pageType=${v.page}&&categoryId=${v.id}`}>
                                     <div style={{
                                         textAlign: 'center',
                                         backgroundImage: `url(${v.img})`,

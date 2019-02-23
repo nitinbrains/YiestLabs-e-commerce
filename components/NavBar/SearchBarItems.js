@@ -102,6 +102,7 @@ class SearchBarItems extends Component {
      * cannot unselect a category - can only switch to a new one
      */
     handleCategory = (e) => {
+        console.log(e.target.value,'asd')
         this.setState({
             selectedCategory: e.target.value
         },()=>{
