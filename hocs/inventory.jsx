@@ -2,10 +2,11 @@ import React from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 
-import { inventoryActions } from 'appRedux/actions/inventoryActions';
-import { userActions } from 'appRedux/actions/userActions';
-import { messageActions } from 'appRedux/actions/messageActions';
-import LoadingScreen from 'components/UI/LoadingScreen';
+import { inventoryActions } from '../redux/actions/inventoryActions';
+import { userActions } from '../redux/actions/userActions';
+import { messageActions } from '../redux/actions/messageActions';
+import LoadingScreen from '../components/UI/LoadingScreen';
+import LoadingIndicator from '../components/UI/LoadingIndicator';
 
 
 export default (Component) => {
@@ -18,8 +19,13 @@ export default (Component) => {
             }
 
             render () {
-                if (this.props.loading.isLoading && this.props.loading.type == "loadingInventory") {
-                    return <LoadingScreen />
+                if (
+                    this.props.loading.isLoading &&
+                    this.props.loading.type == "loadingInventory" &&
+                    this.props.store.items.length === 0 &&
+                    this.props.store.itemsToShow === 0
+                ) {
+                    return <LoadingScreen />;
                 }
                 return <Component {...this.props}/>
             }

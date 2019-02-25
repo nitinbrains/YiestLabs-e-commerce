@@ -116,6 +116,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                                 <img
                                     src="static/images/logo_circle.png"
                                     height="130"
+                                    className={classes.logoImg}
                                 />
                             </div>
                         </Link>
@@ -262,6 +263,9 @@ const styles = theme => ({
         margin: 20,
         width: 150,
         height: 150
+    },
+    logoImg: {
+        cursor: 'pointer'
     },
     menuButton: {
         color: "white",
