@@ -118,96 +118,6 @@ const styles = theme => ({
 class SubCat extends Component {
   constructor(props) {
     super(props);
-    this.state={
-  //     categories: [{
-  //       label: "Yeast",
-  //       value: 0,
-  //       checked: true,
-  //       subCategories: [{
-  //           label: 'ALE STRAINS',
-  //           img: 'static/images/categories/Category-ale.jpg',
-  //           icon: 'static/images/icons/Ale-icon.svg',
-  //           value: 1,
-  //           checked: true
-  //       }, {
-  //           label: 'LARGER STRAINS',
-  //           img: 'static/images/categories/Category-lager.jpg',
-  //           icon: 'static/images/icons/Lager-icon.svg',
-  //           value: 2,
-  //           checked: false
-  //       }, {
-  //           label: 'WINE MEAD & CIDER STRAINS',
-  //           img: 'static/images/categories/Category-wine.jpg',
-  //           icon: 'static/images/icons/Wine-icon.svg',
-  //           value: 3,
-  //           checked: false
-  //       }, {
-  //           label: 'DISTILLING STRAINS',
-  //           img: 'static/images/categories/Category-Distilling.jpg',
-  //           icon: 'static/images/icons/Distilling-icon.svg',
-  //           value: 4,
-  //           checked: false
-  //       }, {
-  //           label: 'SPECIALIATY & BELGIAN STRAINS',
-  //           img: 'static/images/categories/Category-belgian.jpg',
-  //           icon: 'static/images/icons/Belgian-icon.svg',
-  //           value: 5,
-  //           checked: false
-  //       }, {
-  //           label:  'WILD YIEST & BACTERIA',
-  //           img: 'static/images/categories/Category-wild.jpg',
-  //           icon: 'static/images/icons/Wildyeast-icon.svg',
-  //           value: 6,
-  //           checked: false
-  //       }, {
-  //           label: 'VAULT STRAINS',
-  //           img: 'static/images/categories/Category-vault.jpg',
-  //           icon: 'static/images/icons/Ale-icon.svg',
-  //           value: 7,
-  //           checked: false
-  //       },
-  //       {
-  //         img: 'static/images/categories/Category-core.jpg',
-  //         label: 'ALL CORE STRAINS',
-  //         icon: 'static/images/icons/Ale-icon.svg',
-  //         value:1,
-  //         checked: false
-  //       }]
-  //   }, {
-  //       label: "Enzymes & Nutrients",
-  //       value: 8,
-  //       checked: false,
-  //       subCategories: [{
-  //           label: "Enzymes",
-  //           value: 9,
-  //           checked: false
-  //       }, {
-  //           label: "Nutrients",
-  //           value: 10,
-  //           checked: false
-  //       }]
-  //   }, {
-  //       label: "Analytical Lab Services",
-  //       value: 12,
-  //       checked: false
-  //   }, {
-  //       label: "Lab Supplies",
-  //       value: 13,
-  //       checked: false
-  //   }, {
-  //       label: "Education",
-  //       value: 14,
-  //       checked: false
-  //   }, {
-  //       label: "Gift Shop",
-  //       value: 15,
-  //       checked: false
-  //   },
-  //  ],
-    selectedCategory: 0,
-    selectedSubCategory: 1,
-    searchText: ''
-    }
   }
 
   onChange=(item)=>{
@@ -224,7 +134,7 @@ class SubCat extends Component {
           <Grid container className={classes.demo} justify="center" spacing={32}>
             {category.subCategories.map((v, i) => (
               <Grid key={i} item xs={3} >
-               <Link href={`/?pageType=cards&&categoryId=${categoryId}&&subCategoryId=${v.value}&&tit=${v.label}`}>
+               <Link href={`/?pageType=cards&&categoryId=${categoryId}&&subCategoryId=${v.value}`}>
                 <div className={classes.imgBack} style={{
                   textAlign: 'center',
                   backgroundImage: `url(${v.img})`,

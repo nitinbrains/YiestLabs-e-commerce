@@ -146,14 +146,14 @@ const dataArr = [
         title: 'ANALYTICAL LAB SERVICES',
         img: 'static/images/categories/Category-belgian.jpg',
         page:'sub',
-        value:12,
+        // value:12,
         id: 12
     },
     {
         img: 'static/images/categories/Category-wild.jpg',
         page:'sub',        
         title: "LAB SUPPLIES",
-        value: 13,
+        // value: 13,
         id:13,
         checked: false
     },
@@ -161,14 +161,14 @@ const dataArr = [
         title: 'EDUCATION',
         img: 'static/images/categories/Category-wine.jpg',
         page:'sub',
-        value:14,
+        // value:14,
         id: 14
     },
     {
         title: 'GIFT SHOP',
         img: 'static/images/categories/Category-vault.jpg',
         page:'sub',
-        value:15,
+        // value:15,
         id: 15
     }
 ]
@@ -275,16 +275,15 @@ class Store extends Component {
         const { classes, theme, message, messages,router:{query} } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
         var {pageType, categoryId, subCategoryId,tit,ctit} = query;
-        // if(categoryId){
-        //     let legCat=dataArr.find((m)=>m.id==categoryId)
-        //     var legCatTit=legCat
-        //      console.log('legcattit',legCatTit)
-        // }
-        // if( subCategoryId!==undefined){
-        //     let legSubcat=dataArr.find((m)=>m.id==categoryId)
-        //     var legSubcatTit=legSubcat.subCategories.find((m)=>m.value==subCategoryId)
-        //     console.log('legSubcattit',legSubcatTit.label)
-        // }
+        if(categoryId && !subCategoryId){
+            let legCat=dataArr.find((m)=>m.id==categoryId)
+            var legCatTit=legCat.title
+        }
+        if( categoryId && subCategoryId){
+            let legSubcat=dataArr.find((m)=>m.id==categoryId)
+            var legSubcatFind=legSubcat.subCategories.find((m)=>m.value==subCategoryId)
+            var legSubcatTit=legSubcatFind.label
+        }
   
         
         // isHomebrew = true
@@ -298,10 +297,6 @@ class Store extends Component {
             this.props.store.itemsToShow.map((item, i)=>{
                 cardsNode.push(this.getCard(item, i))
             })
-            //console.log(this.props.itemsToShow,'iiiiiiiiiiiiiiiiiiiiiiiiii')
-            // {this.props.store.itemsToShow.map((item, i) => {
-            //     cardsNode.push(this.getCard(item, i))
-            // })}
             
             page = <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
         } else if (pageType === 'cards' && categoryId){
@@ -314,15 +309,15 @@ class Store extends Component {
       
         return (
             <NavBarUserSearchDrawerLayout>
-                {tit?<div className={classes.titDiv}>
+                {legCatTit && pageType!='sub'?<div className={classes.titDiv}>
                     <span className={classes.titSpan}></span>
-                    <span style={{width:'16%',textAlign:'center'}}>{tit}</span>
+                    <span className={classes.titText}>{legCatTit}</span>
                     <span className={classes.titSpan}></span>
                 </div>:null}
 
-                {ctit?<div className={classes.titDiv}>
+                {legSubcatTit?<div className={classes.titDiv}>
                     <span  className={classes.titSpan}></span>
-                    <span style={{width:'16%',textAlign:'center'}}>{ctit}</span>
+                    <span  className={classes.titText}>{legSubcatTit}</span>
                     <span  className={classes.titSpan}></span>
                 </div>:null} 
                 
@@ -389,9 +384,13 @@ const styles = theme => ({
         marginBottom:'60px',marginTop:'70px'
     },
     titSpan:{
-        color:'#f28411',marginRight:'5px',
+        color:'#f28411',
         width:'42%',height:'2px',display:'block',
         borderWidth:'1px',borderStyle:'solid'
+    },
+    titText:{
+        width:'16%',
+        textAlign:'center'
     },
     searchInput: {
         marginLeft: 10

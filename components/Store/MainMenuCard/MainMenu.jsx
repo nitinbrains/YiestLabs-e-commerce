@@ -52,7 +52,7 @@ class MainMenu extends Component {
         if(item.subCategories){
              Router.push(`/?pageType=${item.page}&&categoryId=${item.id}`)
         }else{
-             Router.push(`/?pageType=cards&&categoryId=${item.id}&&subCategoryId=${item.value}&&ctit=${item.title}`)
+             Router.push(`/?pageType=cards&&categoryId=${item.id}`)
         }
     }
     render(){
