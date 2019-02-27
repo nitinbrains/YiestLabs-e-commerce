@@ -25,7 +25,6 @@ import ManageShipping from "components/MyAccount/ManageShipping";
 import AddAddress from "components/MyAccount/AddAddress";
 
 // custom
-import SalesLib from "lib/SalesLib";
 import { userActions } from "appRedux/actions/userActions";
 
 class Shipping extends Component {

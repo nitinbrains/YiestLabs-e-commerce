@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -14,8 +17,14 @@ import Dialog from "@material-ui/core/Dialog";
 
 import PageContainer from 'components/UI/PageContainer';
 import OrderDetails from "components/MyOrders/OrderDetails";
+import { userActions } from 'appRedux/actions/userActions';
+
 
 class MyOrders extends Component {
+
+    componentDidMount() {
+            this.props.getOrderHistory();
+    }
 
     constructor(props) {
         super(props);
@@ -34,12 +43,13 @@ class MyOrders extends Component {
 
     render() {
         const { classes, theme } = this.props;
-
         return (
+
             <NavBarUserSearchDrawerLayout>
                 <PageContainer heading="MY ORDERS" id="cart-box">
 
                     <Grid container spacing={24}>
+                    {this.props.user.orderHistory.map((order, i) => (
                         <Grid item xs={12}>
                             <div className={classes.card}>
                             <div style={{position:'absolute', top:-15, left:20, backgroundColor:"#fafafa", paddingLeft:10, paddingRight:10}}>
@@ -47,7 +57,7 @@ class MyOrders extends Component {
                                     variant="h6"
                                     color="textPrimary"
                                 >
-                                    Order # 2625434
+                                    Order # {order.orderNum}
                                 </Typography>
                             </div>
                                 <Grid item container>
@@ -70,7 +80,7 @@ class MyOrders extends Component {
                                                 variant="overline"
                                                 color="textPrimary"
                                             >
-                                                Shiip date is 10/01/2018
+                                                Shiip date is {order.shipdate}
                                             </Typography>
                                         </Grid>
                                         <Grid
@@ -107,7 +117,7 @@ class MyOrders extends Component {
                                                             variant="h6"
                                                             color="secondary"
                                                         >
-                                                            Closed
+                                                            {order.status}
                                                         </Typography>
                                                     </div>
                                                 </Grid>
@@ -117,6 +127,7 @@ class MyOrders extends Component {
                                 </Grid>
                             </div>
                         </Grid>
+                    ))}
                     </Grid>
 
                     <Dialog
@@ -183,4 +194,16 @@ MyOrders.propTypes = {
     theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(MyOrders);
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    };
+};
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(userActions, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(MyOrders));

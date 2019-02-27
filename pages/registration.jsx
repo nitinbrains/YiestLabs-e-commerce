@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
+import isEmpty from 'lodash/isEmpty';
 import withStyles from "@material-ui/core/styles/withStyles";
 import NavBarLayout from "components/NavBar/NavBarLayout";
 import Stepper from "@material-ui/core/Stepper";
@@ -12,30 +13,16 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import LoadingIndicator from "components/UI/LoadingIndicator";
-import General from "components/Registration/General";
-import Shipping from "components/Registration/Shipping";
-import Billing from "components/Registration/Billing";
-import CardInfo from "components/Registration/CardInfo";
+import General from "components/Registration/general/General";
+import Shipping from "components/Registration/shipping/Shipping";
+import Billing from "components/Registration/billing/Billing";
+import CardInfo from "components/Registration/card-info/CardInfo";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
 
 import { userActions } from 'appRedux/actions/userActions';
 
 const steps = ["General Information", "Shipping Address", "Billing Address", "Credit Card Information"];
-
-const ValidationSchema = Yup.object().shape({
-
-    // General
-    companyName: Yup.string().required("Required"),
-    // email: Yup.string().email().required("Required"),
-    // phone: Yup.number().required("Required"),
-    // pass: Yup.string().required("Required"),
-    // cPass: Yup.string().required("Required"),
-    // category: Yup.string().required("Required"),
-    // orderFrom: Yup.string().required("Required"),
-    // acContact: Yup.string().required("Required"),
-    // acPhone: Yup.string().required("Required")
-});
 
 class Registration extends React.Component {
     state = {
@@ -100,7 +87,6 @@ class Registration extends React.Component {
             </React.Fragment>
         )
     }
-
     render() {
         const { classes, user, loading: {isLoading, type}} = this.props;
         const { activeStep } = this.state;
@@ -116,7 +102,11 @@ class Registration extends React.Component {
         // else if(activeStep === steps.length && user.registrationAttempt && user.registrationStatus === 'failed'){
         //     renderBody = this.renderRegistrationFailure();
         // } 
+        const validate = (values, fields) => {
 
+            console.log('values', values);
+            console.log('fields', fields);
+        }
         return (
             <NavBarLayout>
                 <LoadingIndicator visible={isLoading && type === 'createUser' } />
@@ -142,39 +132,8 @@ class Registration extends React.Component {
                     <Formik
                          //initialValues={{ email: '', password: '',companyname:'' }}
                         onSubmit={(values, actions) => this.onSubmit(values, actions)}
-                        validate={(values) => {
-                            var errors = {};
-                            var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-                            if (!values.companyname) {
-                                errors.companyname = "Company name is required"
-                            }
-                            if(!values.email) {
-                                errors.email = "Email is required"
-                            }
-                            if(reg.test(values.email)===false) {
-                                errors.email = "Please Enter a Valid Email"
-                            }
-                            if(!values.phone) {
-                                errors.phone = "Phone is required"
-                            }
-                            // if(values.password.length < 9) {
-                            //     errors.password = "Password must contain atleast 9 characters"
-                            // }
-                            // let exp = moment(values.ccexpire, 'MM/YYYY')
-                            // if (!exp.isValid() || exp.isAfter(moment(), 'month')) {
-                            //     errors.ccexpire = "Expiration date is invalid";
-                            // }
-
-                            if (!values.ccname) {
-                                errors.ccname = "Credit Card name is required";
-                            }
-
-                            return errors;
-                        }}
-
+                        validate={(values)=>validate(values, fields)}
                         render={props => {
-                            console.log(props.touched);
-                            
                             let view = null;
 
                             var handlerProps = {
