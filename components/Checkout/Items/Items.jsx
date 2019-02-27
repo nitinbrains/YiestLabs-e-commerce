@@ -5,6 +5,11 @@ import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -13,9 +18,22 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ItemPanel from "./ItemPanel";
+import WantSooner from "components/WantSooner/WantSooner";
 import { orderActions } from "appRedux/actions/orderActions";
+import { cartActions } from 'appRedux/actions/cartActions';
 
 class Items extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showWantSoonerDialog: false,
+        };
+    }
+    static getDerivedStateFromProps(nextProps, prevState){
+        return {
+            showWantSoonerDialog: nextProps.cart.showWantSooner,
+        }
+    }
     render() {
         const { classes } = this.props;
         return (
@@ -72,7 +90,7 @@ class Items extends Component {
                             <Grid item xs={12}>
                                 <List>
                                     {this.props.order.items.map((item, i) => (
-                                        <ItemPanel key={i} item={item} index={i} />
+                                        <ItemPanel key={i} item={item} index={i} showWantSooner={() => this.props.showWantSooner({activeTab : 'SimilarStrains'})}/>
                                     ))}
 
                                     <ListItem className={classes.listItem}>
@@ -108,7 +126,15 @@ class Items extends Component {
                                 </List>
                             </Grid>
                         </Grid>
-                }                
+                } 
+                <Dialog
+                    open={this.state.showWantSoonerDialog}
+                    onClose={() => {this.props.hideWantSooner()}}
+                    aria-labelledby="form-dialog-title"
+                    classes={{ paper: classes.dialogPaper }}
+                >
+                    <WantSooner {...this.props}/>
+                </Dialog>                 
             </React.Fragment>
         );
     }
@@ -130,7 +156,10 @@ const styles = theme => ({
     },
     title: {
         marginTop: theme.spacing.unit * 2
-    }
+    },
+    dialogPaper: {
+        minWidth: '70%',
+    },
 });
 
 Items.propTypes = {
@@ -139,12 +168,13 @@ Items.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        order: state.order
+        order: state.order,
+        cart: state.cart,
     };
 };
 
 const mapDispatchToProps = dispatch =>
-    bindActionCreators(orderActions, dispatch);
+    bindActionCreators({...orderActions, ...cartActions}, dispatch);
 
 export default connect(
     mapStateToProps,

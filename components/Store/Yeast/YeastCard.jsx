@@ -111,11 +111,10 @@ class YeastCard extends Component {
 
     render() {
         const { classes, theme, item } = this.props;
-         console.log(this.props.item,'uuuuuuuuuuuuuuuuuuuuuuu')
         const spaceIndex = item.Name.indexOf(" ");
         const itemID = item.Name.substr(0, spaceIndex);
         const itemName = item.Name.substr(spaceIndex + 1);
-
+    
         return (
             <Grid
                 item
@@ -126,6 +125,7 @@ class YeastCard extends Component {
                 spacing={24}
                 onClick={this.props.onClick.bind(this, this.props.item)}
             >
+          
                 <div
                     className={classes.card}
                     // onMouseEnter={this.handleItemHoverEnter}
@@ -139,7 +139,7 @@ class YeastCard extends Component {
                               }
                             : { backgroundColor: "#fff" }
                     }
-                >
+                >   
                     {!this.state.hover ? (
                         <Grid item container spacing={8}>
                             <Grid

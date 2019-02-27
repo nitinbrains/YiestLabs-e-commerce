@@ -189,6 +189,7 @@ class SearchBarItems extends Component {
 
     render() {
         const { classes } = this.props;
+        console.log(this.state.selectedCategory,'select')
         return (
             <Grid container spacing={24} >
             <Grid item xs={4}  >

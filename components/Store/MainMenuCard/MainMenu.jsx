@@ -1,10 +1,14 @@
-import React from 'react'
+import React, {Component} from 'react'
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Paper from '@material-ui/core/Paper';
 import Link from "next/link";
-
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { inventoryActions } from 'appRedux/actions/inventoryActions';
+import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
+import Router from 'next/router'
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -41,9 +45,18 @@ const styles = theme => ({
 });
 
 
-const MainMenu = (props) => {
-    const { classes, dataArr } = props;
-
+class MainMenu extends Component {
+    onChange=(item)=>{
+        const {categoryId}=this.props;
+        this.props.changeCategory({category:item.id});
+        if(item.subCategories){
+             Router.push(`/?pageType=${item.page}&&categoryId=${item.id}`)
+        }else{
+             Router.push(`/?pageType=cards&&categoryId=${item.id}&&subCategoryId=${item.value}&&ctit=${item.title}`)
+        }
+    }
+    render(){
+        const { classes, dataArr } = this.props;
     return (
         <div style={{ marginTop: '5%' }}>
             <Grid container spacing={24}>
@@ -51,27 +64,25 @@ const MainMenu = (props) => {
                     <Grid container justify="center" spacing={16}>
                         {dataArr.map((v, i) => (
                             <Grid key={i} item item xs={2} spacing={8}>
-                                <Link href={`/?pageType=${v.page}&&categoryId=${v.id}`}>
-                                    <div style={{
-                                        textAlign: 'center',
-                                        backgroundImage: `url(${v.img})`,
-                                        backgroundRepeat: "no-repeat",
-                                        backgroundSize: "cover",
-                                        height: "490px",
-                                        width: "100%"
-                                    }}>
-                                        <div className={classes.divTitle}>
-                                            <Typography
-                                                variant="title"
-                                                color="secondary"
-                                                className={classes.info}
-                                                className={classes.typoTitle}
-                                            >
-                                                {v.title}
-                                            </Typography>
-                                        </div>
+                                <div style={{
+                                    textAlign: 'center',
+                                    backgroundImage: `url(${v.img})`,
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundSize: "cover",
+                                    height: "490px",
+                                    width: "100%"
+                                }} onClick={()=>this.onChange(v)}>
+                                    <div className={classes.divTitle}>
+                                        <Typography
+                                            variant="title"
+                                            color="secondary"
+                                            className={classes.info}
+                                            className={classes.typoTitle}
+                                        >
+                                            {v.title}
+                                        </Typography>
                                     </div>
-                                </Link>
+                                </div>
                             </Grid>
                         ))}
                     </Grid>
@@ -80,5 +91,17 @@ const MainMenu = (props) => {
         </div>
     )
 }
+}
 
-export default withStyles(styles)(MainMenu);
+const mapStateToProps = state => {
+    return {
+        store: state.inventory,
+    }
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators(inventoryActions, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withWidth()(withStyles(styles, { withTheme: true })(MainMenu)));

@@ -55,10 +55,11 @@ import withInventory from "hocs/inventory";
 import isLoggedUser from "hocs/isLoggedUser";
 const dataArr = [
     {
-        id: 1,
+        id: 0,
         title: 'CORE YIEST STRAINS',
         img: 'static/images/categories/Category-core.jpg',
         page:'sub',
+        value:0,
         subCategories: [{
             label: 'ALE STRAINS',
             img: 'static/images/categories/Category-ale.jpg',
@@ -76,7 +77,7 @@ const dataArr = [
         }, {
             label: 'WINE MEAD & CIDER STRAINS',
             img: 'static/images/categories/Category-wine.jpg',
-            icon: 'static/images/icons/Wine-icon.svg',
+            icon: 'static/images/icons/wine-icon.svg',
             value: 3,
             salesCategory:2,
             checked: false
@@ -97,14 +98,14 @@ const dataArr = [
         }, {
             label:  'WILD YIEST & BACTERIA',
             img: 'static/images/categories/Category-wild.jpg',
-            icon: 'static/images/icons/Wildyeast-icon.svg',
+            icon: 'static/images/icons/wildyeast-icon.svg',
             value: 6,
             salesCategory:20,
             checked: false
         }, {
             label: 'VAULT STRAINS',
             img: 'static/images/categories/Category-vault.jpg',
-            icon: 'static/images/icons/Ale-icon.svg',
+            icon: 'static/images/icons/vault-icon.svg',
             value: 7,
             salesCategory:23,
             checked: false
@@ -113,136 +114,65 @@ const dataArr = [
           img: 'static/images/categories/Category-core.jpg',
           label: 'ALL CORE STRAINS',
           icon: 'static/images/icons/Ale-icon.svg',
-          value:1,
-          salesCategory:29,
-          checked: false
-        }]
+        //   value:1,
+        //   salesCategory:29,
+        //   checked: false
+        }
+    ]
     },
     {
         title: 'ENZYMES & NUTRIENTS',
         img: 'static/images/categories/Category-ale.jpg',
         page:'sub',
-        id: 2
+        value:8,
+        id: 8,
+        subCategories: [
+        {  
+            img: 'static/images/categories/Category-vault.jpg',
+            icon: 'static/images/icons/Ale-icon.svg',
+            label: "Enzymes",
+            value: 9,
+            checked: false
+        }, {
+            img: 'static/images/categories/Category-vault.jpg',
+            icon: 'static/images/icons/Ale-icon.svg',
+            label: "Nutrients",
+            value: 10,
+            checked: false
+        }
+        ],
     },
     {
         title: 'ANALYTICAL LAB SERVICES',
-        img: 'static/images/categories/Category-wild.jpg',
+        img: 'static/images/categories/Category-belgian.jpg',
         page:'sub',
-        id: 3
+        value:12,
+        id: 12
+    },
+    {
+        img: 'static/images/categories/Category-wild.jpg',
+        page:'sub',        
+        title: "LAB SUPPLIES",
+        value: 13,
+        id:13,
+        checked: false
     },
     {
         title: 'EDUCATION',
         img: 'static/images/categories/Category-wine.jpg',
         page:'sub',
-        id: 4
+        value:14,
+        id: 14
     },
     {
         title: 'GIFT SHOP',
         img: 'static/images/categories/Category-vault.jpg',
         page:'sub',
-        id: 5
+        value:15,
+        id: 15
     }
 ]
-const cards = [
-    {
-        categoryId:1,
-        subCatId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-    },
-    {
-        categoryId:1,
-        subCatId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-    },
-    {
-        categoryId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-    },
-    {
-        categoryId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-        itemID: 'ABC1025',
-        itemName: 'abc1'
-    },
-    {
-        categoryId:1,
-        subCatId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-    },
-    {
-        categoryId:1,
-        subCatId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-    },
-    {
-        categoryId:1,
-        subCatId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-    },
-    {
-        categoryId:1,
-        subCatId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-    },
-    {
-        categoryId:1,
-        subCatId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-    },
-    {
-        categoryId:1,
-        subCatId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-    },
-    {
-        categoryId:1,
-        subCatId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-    },
-    {
-        categoryId:1,
-        subCatId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-        itemID: 'ABC1025',
-        itemName: 'abc1'
-    },
-    {
-        categoryId:1,
-        subCatId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-    },
-    {
-        categoryId:1,
-        subCatId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-    },
-    {
-        categoryId:1,
-        subCatId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-    },
-    {
-        categoryId:1,
-        subCatId:1,
-        salesCategory:2,
-        Name: '01140 ABC',
-    },
-]
+
 class Store extends Component {
     constructor(props) {
         super(props);
@@ -252,7 +182,7 @@ class Store extends Component {
     }
 
     componentWillMount() {
-        console.log(this.props,'check')
+        // console.log(this.props,'check')
         let isUserLoggedIn = sessionStorage.getItem("isLoggedin");
         let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
         if (isUserLoggedIn && userInfo) {
@@ -268,12 +198,13 @@ class Store extends Component {
         this.setState({ openDialog: false, item: null });
     };
     getCard = (item, i) => {
+       
         if (this.props.store.isHomebrew) {
             return <HomebrewCard key={i} item={item} />;
         } else if (item) {
             // Yeast
             if (SalesLib.SALESCATEGORY[0].includes(parseInt(item.salesCategory))) {
-                return <YeastCard key={i} item={item} onClick={this.handleClickItem} />;
+                return <YeastCard  key={i} item={item} onClick={this.handleClickItem} />;
             }
 
             // Enzymes & Nutrients
@@ -337,30 +268,45 @@ class Store extends Component {
         }
         return <div />;
     };
-    data
+     data
    
+    
     render() {
         const { classes, theme, message, messages,router:{query} } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
-        let {pageType, categoryId, subCategoryId} = query;
-        categoryId = 1
-        subCategoryId = 1
+        var {pageType, categoryId, subCategoryId,tit,ctit} = query;
+        // if(categoryId){
+        //     let legCat=dataArr.find((m)=>m.id==categoryId)
+        //     var legCatTit=legCat
+        //      console.log('legcattit',legCatTit)
+        // }
+        // if( subCategoryId!==undefined){
+        //     let legSubcat=dataArr.find((m)=>m.id==categoryId)
+        //     var legSubcatTit=legSubcat.subCategories.find((m)=>m.value==subCategoryId)
+        //     console.log('legSubcattit',legSubcatTit.label)
+        // }
+  
+        
         // isHomebrew = true
-        let page = <MainMenu dataArr={dataArr}/>;
+        let page = <MainMenu dataArr={dataArr}  />;
         if(pageType === 'sub'&& categoryId){
             let category = find(dataArr, {id:Number(categoryId)})
             page = <SubCat category={category}/>;
         } else if (pageType === 'cards' && categoryId && subCategoryId){
-            let filteredCard = filter(cards, {categoryId:Number(categoryId), subCatId:Number(subCategoryId)})
-            let cardsNode = [];
-            filteredCard.map((item, i)=>{
+            // let filteredCard = filter(cards, {categoryId:Number(categoryId), subCatId:Number(subCategoryId)})
+             let cardsNode = [];
+            this.props.store.itemsToShow.map((item, i)=>{
                 cardsNode.push(this.getCard(item, i))
             })
+            //console.log(this.props.itemsToShow,'iiiiiiiiiiiiiiiiiiiiiiiiii')
+            // {this.props.store.itemsToShow.map((item, i) => {
+            //     cardsNode.push(this.getCard(item, i))
+            // })}
+            
             page = <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
         } else if (pageType === 'cards' && categoryId){
-            let filteredCard = filter(cards, {categoryId:Number(categoryId)})
             let cardsNode = [];
-            filteredCard.map((item, i)=>{
+            this.props.store.itemsToShow.map((item, i)=>{
                 cardsNode.push(this.getCard(item, i))
             })
             page = <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
@@ -368,17 +314,29 @@ class Store extends Component {
       
         return (
             <NavBarUserSearchDrawerLayout>
+                {tit?<div className={classes.titDiv}>
+                    <span className={classes.titSpan}></span>
+                    <span style={{width:'16%',textAlign:'center'}}>{tit}</span>
+                    <span className={classes.titSpan}></span>
+                </div>:null}
+
+                {ctit?<div className={classes.titDiv}>
+                    <span  className={classes.titSpan}></span>
+                    <span style={{width:'16%',textAlign:'center'}}>{ctit}</span>
+                    <span  className={classes.titSpan}></span>
+                </div>:null} 
+                
                {page}
                 <LoadingIndicator visible={this.props.loading.isLoading && this.props.loading.type == "loadingInventory"} label={"Loading Inventory"} />
-                <Grid container spacing={8} id="professional-homebrew-switch">
+                {/* <Grid container spacing={8} id="professional-homebrew-switch">
                     <Grid item xs={6} dir="rtl">
                         <FormButton className={`form-button-small-size ${isHomebrew ? "form-button-active" : ""}`} text="Professional" onClick={() => this.props.switchToProfessional()} />
                     </Grid>
                     <Grid item xs={6} dir="ltr">
                         <FormButton className={`form-button-small-size ${isHomebrew ? "" : "form-button-active"}`} text="Homebrew" onClick={() => this.props.switchToHomebrew()} />
                     </Grid>
-                </Grid>
-                {!isHomebrew && (
+                </Grid> */}
+                {/* {!isHomebrew && (
                     <div>
                         <Divider variant="inset" className={classes.divider} />
                         <Grid container spacing={24} className={classes.store}>
@@ -389,7 +347,8 @@ class Store extends Component {
                 )}
                 {isHomebrew ? (
                     <AddHomebrewContainer items={this.props.store.itemsToShow} />
-                ) : (
+                 ) : 
+                 (
                     <Grid className={classes.store} container spacing={24}>
                         {this.props.store.itemsToShow.map((item, i) => {
                             return this.getCard(item, i);
@@ -399,7 +358,11 @@ class Store extends Component {
                             {this.getDialogContent(this.state.item)}
                         </Dialog>
                     </Grid>
-                )}
+                )
+                } */}
+                <Dialog open={this.state.openDialog} onClose={this.handleLeaveItem} aria-labelledby="form-dialog-title">
+                            {this.getDialogContent(this.state.item)}
+                        </Dialog>
             </NavBarUserSearchDrawerLayout>
         );
     }
@@ -419,6 +382,16 @@ const styles = theme => ({
             paddingLeft: 150,
             paddingRight: 150
         }
+    },
+    titDiv:{
+        display:'flex',alignItems:'center',flexDirection:'row'
+        ,width:'88%',margin:'auto',
+        marginBottom:'60px',marginTop:'70px'
+    },
+    titSpan:{
+        color:'#f28411',marginRight:'5px',
+        width:'42%',height:'2px',display:'block',
+        borderWidth:'1px',borderStyle:'solid'
     },
     searchInput: {
         marginLeft: 10

@@ -62,6 +62,7 @@ export function * getItemAvailability (action) {
 };
 
 export function * changeCategory(action) {
+    
     const { responseSuccess, responseFailure, data: { category } } = action;
     try {
         const inventory = yield select(state => state.inventory);

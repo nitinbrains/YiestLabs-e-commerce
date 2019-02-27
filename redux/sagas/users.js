@@ -63,9 +63,9 @@ export function* getUserInfo(action) {
     try {
         const { res: userInfo, error } = yield call(api.getUserInfo, { userID });
         if(error) throw error;
-        sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
-        sessionStorage.setItem('isLoggedin', true)
-        yield put(userActions.setUserInfo({ userInfo}));
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+        localStorage.setItem('isLoggedin', true);
+        yield put(userActions.setUserInfo({ userInfo }));
         yield put(responseSuccess());
         if(isLogin){
             yield put(messageActions.showBanner({

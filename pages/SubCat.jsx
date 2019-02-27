@@ -5,6 +5,11 @@ import Typography from "@material-ui/core/Typography";
 import Paper from '@material-ui/core/Paper';
 import Link from "next/link";
 import {withRouter} from 'next/router'
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { compose } from "redux";
+import { inventoryActions } from 'appRedux/actions/inventoryActions';
+import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 // import YeastCard from "components/Store/Yeast/YeastCard";
 
 // let subDataArr = [
@@ -205,6 +210,10 @@ class SubCat extends Component {
     }
   }
 
+  onChange=(item)=>{
+    this.props.changeCategory({category:item.value});
+}
+
   render(){
     const { classes, category, router:{query}} = this.props;
     let {pageType, categoryId, subCategoryId} = query;
@@ -215,7 +224,7 @@ class SubCat extends Component {
           <Grid container className={classes.demo} justify="center" spacing={32}>
             {category.subCategories.map((v, i) => (
               <Grid key={i} item xs={3} >
-               <Link href={`/?pageType=cards&&categoryId=${categoryId}&&subCategoryId=${v.value}`}>
+               <Link href={`/?pageType=cards&&categoryId=${categoryId}&&subCategoryId=${v.value}&&tit=${v.label}`}>
                 <div className={classes.imgBack} style={{
                   textAlign: 'center',
                   backgroundImage: `url(${v.img})`,
@@ -224,7 +233,7 @@ class SubCat extends Component {
                   height: "200px",
                   width: 'auto',
                   
-                }}>
+                }} onClick={()=>this.onChange(v)}>
                   <div className={classes.info} className={classes.divIcon}
                     className={classes.divIcon} >
                     <img className={classes.imgIcon} src={v.icon}></img>
@@ -248,4 +257,20 @@ class SubCat extends Component {
   )
 }}
 
-export default withRouter(withStyles(styles)(SubCat))
+const mapStateToProps = state => {
+  return {
+      store: state.inventory,
+  }
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators(inventoryActions, dispatch);
+
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(compose(
+  withStyles(styles, { withTheme: true })(
+      SubCat
+  )
+))
+)

@@ -1,7 +1,12 @@
 import { createReducer } from 'helpers/reduxHelpers';
+import { safeExecute } from 'helpers/utils';
 import { userTypes } from 'appRedux/actions/userActions';
 
 /* ------------- Initial State ------------- */
+
+
+
+const userInfo = safeExecute(() => localStorage.getItem('userInfo') || {}, {});
 
 const initialState = {
     id: null,
@@ -54,9 +59,8 @@ const initialState = {
     orderHistory: [],
     isUnsaved: false,
     subsidiaryOptions: [],
-    isLoggedin: false,
+    ...userInfo
 }; // empty for now
-
 
 /* ------------- Hookup Reducers To Types ------------- */
 
@@ -134,7 +138,7 @@ export default createReducer(initialState, {
         registrationStatus: 'failed'
     }),
     [userTypes.USER_LOGOUT_ATTEMPT]: () => {
-        sessionStorage.clear();
+        localStorage.clear();
         return null
     },    // this will return initial state
 });
