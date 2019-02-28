@@ -83,6 +83,12 @@ class ManageShipping extends Component {
         return (
             <React.Fragment>
                 <DialogContent id="my-order-details">
+                <div className="main-block">
+                <div className="order-number">
+                <Typography variant="h6" color="textPrimary">
+                    MANAGE SHIPPING ADDRESSES
+                </Typography>
+                </div>
                     <div className={classes.close}>
                         <IconButton
                             color="inherit"
@@ -106,10 +112,10 @@ class ManageShipping extends Component {
                         spacing={4}
                     >
                         <Grid item xs={12}>
-                            <Typography variant="h6" color="textPrimary">
+                            {/* <Typography variant="h6" color="textPrimary">
                                 MANAGE SHIPPING ADDRESSES
-                            </Typography>
-                            <div className={classes.sectionTitleDivider} />
+                            </Typography> */}
+                            {/* <div className={classes.sectionTitleDivider} /> */}
                         </Grid>
                     </Grid>
                     <Grid style={{ padding: 20 }} container spacing={24}>
@@ -248,8 +254,11 @@ class ManageShipping extends Component {
                                     close={this.closeForm}
                                 />
                             </Grid>
+                            
                         )}
+                        
                     </Grid>
+                    
                     <Dialog open={this.state.confirmation}>
                         <DialogTitle id="alert-dialog-title">
                             Are you sure you want to delete this address?
@@ -268,6 +277,7 @@ class ManageShipping extends Component {
                             </Button>
                         </DialogActions>
                     </Dialog>
+                    </div>
                 </DialogContent>
             </React.Fragment>
         );

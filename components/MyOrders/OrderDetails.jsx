@@ -43,6 +43,7 @@ class OrderDetails extends Component {
                     </Grid>
                     <Grid item sm={9} container alignItems="center">
                         <Grid item xs={12}>
+                        
                             <Typography variant="subtitle1" color="textPrimary">SUMMARY</Typography>
                             <div style={{borderTop: "solid 1.5px",borderColor: "#CCCCCC"}}/>
                         </Grid>
