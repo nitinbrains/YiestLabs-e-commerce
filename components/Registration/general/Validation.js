@@ -1,4 +1,5 @@
-import _isEmpty from 'lodash/isEmpty';
+import _isEmpty from "lodash/isEmpty";
+import * as yup from "yup";
 
 export const errorBase = {
     required: {
@@ -10,45 +11,41 @@ export const errorBase = {
         category: "Category is Required",
         orderFrom: "Order from is Required",
         acContact: "Accounting contact is Required",
-        acPhone: "Accounting phone is Required",
+        acPhone: "Accounting phone is Required"
     }
-}
+};
 
-export const validate = (props) => {
-    const { values, touched, errors, setTouched, setErrors } = props;
-    const fields = Object.keys(errorBase.required);
-    var err = {};
-    fields.map((field)=> {
-        touched[field] = true;
-        if (!values[field]) {
-            err[field] = errorBase.required[field]
-        } else if(values[field] && errors[field]) {
-            delete errors[field];
-        }
-    })
-    setTouched(touched)
-    setErrors(err)
-    return {errors: err, touched};
-}
+yup.match = function(key, message, func) {
+    message = message || "Values do not match";
+    func =
+        func ||
+        function(value) {
+            return value === this.options.context[key];
+        };
 
-export const handleNext = (props) => {
-    const { onNext } = props;
-    let res = validate(props);
-    if(_isEmpty(res.errors)) {
-        onNext();
+    return yup.mixed().test("match", message, func);
+};
+
+export const validationSchema = yup.object().shape({
+    companyName: yup.string().required().typeError("Company name is required"),
+    email: yup.string().email().required().typeError("Email is required"),
+    phone: yup.string().required().typeError("Phone is required"),
+    password: yup.string().min(8).required().typeError("Password is required"),
+    confirmPassword: yup.string().required().typeError("Confirm Password is required"),
+    category: yup.string().required().typeError("Category is required"),
+    orderFrom: yup.string().required().typeError("Order From is required"),
+    acContact: yup.string().required().typeError("Accounting Contact is required"),
+    acPhone: yup.string().required().typeError("Accounting phone number is required")
+});
+
+export const validate = props => {
+    const { values, setErrors } = props;
+    try {
+        const result = validationSchema.validateSync(values);
+        console.log('result', result);
+    } catch (error) {
+        console.log('error', error);
+        setErrors(error)
+        return { error: error };
     }
-
-}
-
-export const handleChange = (e, props, fields) => {
-    const {setValues, values, touched} = props;
-    let value = e.target.value
-    let name = e.target.name
-    values[name] = value
-    props = {...props, values}
-    if(touched[name]) {
-        validate(props);
-    }
-    setValues(values)
-}
-
+};

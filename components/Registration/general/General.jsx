@@ -15,7 +15,7 @@ import _isEmpty from 'lodash/isEmpty';
 import MaskedTextField from "../../Form/MaskedTextField";
 import Cleave from "cleave.js/react";
 
-import { handleChange, handleNext } from  './Validation';
+import { validate } from  './Validation';
 
 function PhoneMaskedTextField(props) {
     let { options, onChange, inputRef, ...other } = props;
@@ -29,6 +29,7 @@ const FormikErrorMessage = ({className, touched, error}) => {
     );
 };
 
+
 const General = (props) => {
     const {
         touched,
@@ -37,7 +38,15 @@ const General = (props) => {
         onNext,
         onBack,
     } = props;
-    
+
+    const handleNext = () => {
+        const { onNext } = props;
+        let res = validate(props);
+        if(_isEmpty(res.error)) {
+            onNext();
+        }
+    }
+
     return (
         <Grid container spacing={24}>
             <Grid item xs={12}>
@@ -64,7 +73,7 @@ const General = (props) => {
                                     label="Company Name"
                                     fullWidth
                                     autoComplete="company name"
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'companyName')}
                                 />
                             </React.Fragment>
@@ -84,7 +93,7 @@ const General = (props) => {
                                     label="Email"
                                     fullWidth
                                     autoComplete="email"
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'email')}
                                 />
                             </React.Fragment>
@@ -107,7 +116,7 @@ const General = (props) => {
                                     InputProps={{
                                         inputComponent: PhoneMaskedTextField
                                     }}
-                                    onChange={(e)=>handleChange(e, form)}  
+                                    onChange={onChange}
                                     value={_get(value, 'phone')} 
                                 />
                             </React.Fragment>
@@ -128,7 +137,7 @@ const General = (props) => {
                                     type="password"
                                     fullWidth
                                     autoComplete="password"
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={value.password}
                                 />
                             </React.Fragment>
@@ -149,7 +158,7 @@ const General = (props) => {
                                     type="password"
                                     fullWidth
                                     autoComplete="confirmPassword"
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'confirmPassword')}
                                 />
                             </React.Fragment>
@@ -170,7 +179,7 @@ const General = (props) => {
                                     select
                                     fullWidth
                                     autoComplete="category"
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'category')}
                                 >
                                     <MenuItem value={1}>Retailer</MenuItem>
@@ -197,13 +206,12 @@ const General = (props) => {
                                     select
                                     fullWidth
                                     autoComplete="orderFrom"
-                                    // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'orderFrom')}
                                 >
                                     <MenuItem value={1}>
                                         US Only
-                                        </MenuItem>
+                                    </MenuItem>
                                     <MenuItem value={2}>
                                         US &amp; Copenhagen (For Europe, No Homebrew)
                                     </MenuItem>
@@ -231,7 +239,7 @@ const General = (props) => {
                                     label="Accounting Contact"
                                     fullWidth
                                     autoComplete="acContact"
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'acContact')}
                                 />
                             </React.Fragment>
@@ -254,7 +262,7 @@ const General = (props) => {
                                     InputProps={{
                                         inputComponent: PhoneMaskedTextField
                                     }}
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'acPhone')}
                                 />
                             </React.Fragment>
@@ -265,7 +273,7 @@ const General = (props) => {
             <Button variant="contained" className={classes.button} onClick={onBack}>
                 Back
             </Button>
-            <Button variant="contained" color="primary" className={classes.button} onClick={() => handleNext(props)}>
+            <Button variant="contained" color="primary" className={classes.button} onClick={handleNext}>
                 Next
             </Button>
         </Grid>

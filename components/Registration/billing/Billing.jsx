@@ -12,7 +12,7 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import _get from 'lodash/get';
 import SalesLib from 'lib/SalesLib';
-import {handleChange, handleNext} from  './Validation';
+import { validate } from  './Validation';
 
 const FormikErrorMessage = ({className, touched, error}) => {
 
@@ -31,6 +31,15 @@ const Billing = (props) => {
         onNext,
         onBack
     } = props;
+
+    const handleNext = () => {
+        const { onNext } = props;
+        let res = validate(props);
+        if(_isEmpty(res.errors)) {
+            onNext();
+        }
+    
+    }
     
     return (
         <Grid container spacing={24}>
@@ -58,8 +67,7 @@ const Billing = (props) => {
                                     label="Attention"
                                     fullWidth
                                     autoComplete="attention"
-                                    // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'billing.attn')}
                                 />
                             </React.Fragment>
@@ -79,8 +87,7 @@ const Billing = (props) => {
                                     label="Addressee"
                                     fullWidth
                                     autoComplete="addressee"
-                                    // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'billing.addressee')}
                                 />
                             </React.Fragment>
@@ -100,8 +107,7 @@ const Billing = (props) => {
                                     label="Address 1"
                                     fullWidth
                                     autoComplete="address1"
-                                    // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'billing.address1')}
                                 />
                             </React.Fragment>
@@ -121,8 +127,7 @@ const Billing = (props) => {
                                     label="Address 2"
                                     fullWidth
                                     autoComplete="address2"
-                                    // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'billing.address2')}
                                 />
                             </React.Fragment>
@@ -142,8 +147,7 @@ const Billing = (props) => {
                                     label="Address3"
                                     fullWidth
                                     autoComplete="address3"
-                                    // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'billing.address3')}
                                 />
                             </React.Fragment>
@@ -163,8 +167,7 @@ const Billing = (props) => {
                                     label="City"
                                     fullWidth
                                     autoComplete="city"
-                                    // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'billing.city')}
                                 />
                             </React.Fragment>
@@ -184,8 +187,7 @@ const Billing = (props) => {
                                     label="Zip Code"
                                     fullWidth
                                     autoComplete="zip"
-                                    // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'billing.zip')}
                                 />
                             </React.Fragment>
@@ -206,8 +208,7 @@ const Billing = (props) => {
                                     label="Country"
                                     fullWidth
                                     autoComplete="zip"
-                                    // onChange={onChange}
-                                    onChange={(e)=>handleChange(e, form)}
+                                    onChange={onChange}
                                     value={_get(value, 'billing.countryid')}
                                 >
                                     {SalesLib.COUNTRY_MAP.map((country, index) => (

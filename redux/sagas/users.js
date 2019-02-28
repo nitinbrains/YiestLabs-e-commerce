@@ -185,7 +185,6 @@ export function* createUser(action) {
 		request.nonce = Utils.uuid();
         
         const res = yield call(api.createNetSuiteAccount, {request});
-        console.log('res', res);
         if (res.error) throw error;
         
         request = {};

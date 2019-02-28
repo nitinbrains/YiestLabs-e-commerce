@@ -25,22 +25,3 @@ export const validate = (props) => {
     return {errors: err, touched};
 }
 
-export const handleChange = (e, props, fields) => {
-    const {setValues, values, touched} = props;
-    let value = e.target.value
-    let name = e.target.name
-    values[name] = value
-    props = {...props, values}
-    if(touched[name]) {
-        validate(props);
-    }
-    setValues(values)
-}
-
-export const handleSubmit = (props, fields) => {
-    const { submitForm } = props;
-    let res = validate(props);
-    if(_isEmpty(res.errors)) {
-        submitForm();
-    }
-}

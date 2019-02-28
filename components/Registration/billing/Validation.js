@@ -1,20 +1,6 @@
 import _isEmpty from 'lodash/isEmpty';
 import WLHelper from 'lib/WLHelper';
 
-// export const errorBase = {
-//     required: {
-//         billing: {
-//             attn: "Billing attention is Required",
-//             addressee: "Billing addressee is Required",
-//             address1: "Billing address1 is Required",
-//             address2: "Billing address2 is Required",
-//             address3: "Billing address3 is Required",
-//             zip: "Billing zip is Required",
-//             countryid: "Billing country is Required",
-//         }
-//     }
-// }
-// Above format is not working
 export const errorBase = {
     required: {
         "billing.attn": "Billing attention is Required",
@@ -52,25 +38,5 @@ export const validate = (props) => {
     setTouched(touched)
     setErrors(err)
     return {errors: err, touched};
-}
-
-export const handleNext = (props) => {
-    const { onNext } = props;
-    let res = validate(props);
-    if(_isEmpty(res.errors)) {
-        onNext();
-    }
-
-}
-export const handleChange = (e, props, fields) => {
-    const {setValues, values, touched} = props;
-    let value = e.target.value
-    let name = e.target.name
-    values[name] = value
-    props = {...props, values}
-    if(touched[name]) {
-        validate(props);
-    }
-    setValues(values)
 }
 

@@ -101,11 +101,7 @@ class Registration extends React.Component {
         // else if(activeStep === steps.length && user.registrationAttempt && user.registrationStatus === 'failed'){
         //     renderBody = this.renderRegistrationFailure();
         // } 
-        const validate = (values, fields) => {
 
-            console.log('values', values);
-            console.log('fields', fields);
-        }
         return (
             <NavBarLayout>
                 <LoadingIndicator visible={isLoading && type === 'createUser' } />
