@@ -18,9 +18,9 @@ import Cleave from "cleave.js/react";
 import { handleChange, handleNext } from  './Validation';
 
 function PhoneMaskedTextField(props) {
-    let { options, onChange, inputRef, ...other } = props;
+    let { options, onChange, inputRef,value, ...other } = props;
     options={phone: true, phoneRegionCode: 'US'};
-    return <Cleave {...other} onChange={onChange} ref={inputRef} options={options} />;
+    return <Cleave {...other} onChange={onChange} ref={inputRef} options={options} value={value}/>;
 }
 
 const FormikErrorMessage = ({className, touched, error}) => {
@@ -89,7 +89,7 @@ const General = (props) => {
                                     // {...field}
                                     autoComplete="email"
                                     onChange={(e)=>handleChange(e, form)}
-                                    value={_get(value, 'email')}
+                                    value={_get(value, 'email')||''}
                                 />
                             </React.Fragment>
                         )
@@ -113,7 +113,7 @@ const General = (props) => {
                                         inputComponent: PhoneMaskedTextField
                                     }}
                                     onChange={(e)=>handleChange(e, form)}  
-                                    value={_get(value, 'phone')} 
+                                    value={_get(value, 'phone')||''} 
                                 />
                             </React.Fragment>
                         )
@@ -179,7 +179,7 @@ const General = (props) => {
                                     // {...field}
                                     autoComplete="category"
                                     onChange={(e)=>handleChange(e, form)}
-                                    value={_get(value, 'category')}
+                                    value={_get(value, 'category')||''}
                                 >
                                     <MenuItem value={1}>Retailer</MenuItem>
                                     <MenuItem value={2}>Individual</MenuItem>
@@ -208,7 +208,7 @@ const General = (props) => {
                                     autoComplete="orderFrom"
                                     // onChange={onChange}
                                     onChange={(e)=>handleChange(e, form)}
-                                    value={_get(value, 'orderFrom')}
+                                    value={_get(value, 'orderFrom'||'')}
                                 >
                                     <MenuItem value={1}>
                                         US Only
@@ -266,7 +266,7 @@ const General = (props) => {
                                         inputComponent: PhoneMaskedTextField
                                     }}
                                     onChange={(e)=>handleChange(e, form)}
-                                    value={_get(value, 'acPhone')}
+                                    value={_get(value, 'acPhone')||''}
                                 />
                             </React.Fragment>
                         )

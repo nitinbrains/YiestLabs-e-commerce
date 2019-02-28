@@ -68,7 +68,7 @@ const CardInfo = props => {
                                     autoComplete="ccnumber"
                                     // onChange={onChange}
                                     onChange={(e)=>handleChange(e, form)}
-                                    value={_get(value, 'ccnumber')}
+                                    value={_get(value, 'ccnumber')||''}
                                     InputProps={{
                                         inputComponent: CreditCardMaskedTextField
                                     }}
@@ -86,7 +86,7 @@ const CardInfo = props => {
                                 <FormikErrorMessage error={_get(errors, "ccname")} touched={_get(touched, "ccname")} />
                                 <TextField id="ccname" name="ccname" label="Name on card" fullWidth autoComplete="ccname" 
                                 onChange={(e)=>handleChange(e, form)}
-                                value={_get(value, "ccname")} />
+                                value={_get(value, "ccname")||''} />
                             </React.Fragment>
                         );
                     }}

@@ -60,7 +60,7 @@ const Billing = (props) => {
                                     autoComplete="attention"
                                     // onChange={onChange}
                                     onChange={(e)=>handleChange(e, form)}
-                                    value={_get(value, 'billing.attn')}
+                                    value={_get(value, 'billing.attn')||''}
                                 />
                             </React.Fragment>
                         )
@@ -81,7 +81,7 @@ const Billing = (props) => {
                                     autoComplete="addressee"
                                     // onChange={onChange}
                                     onChange={(e)=>handleChange(e, form)}
-                                    value={_get(value, 'billing.addressee')}
+                                    value={_get(value, 'billing.addressee')||''}
                                 />
                             </React.Fragment>
                         )
@@ -102,7 +102,7 @@ const Billing = (props) => {
                                     autoComplete="address1"
                                     // onChange={onChange}
                                     onChange={(e)=>handleChange(e, form)}
-                                    value={_get(value, 'billing.address1')}
+                                    value={_get(value, 'billing.address1')||''}
                                 />
                             </React.Fragment>
                         )
@@ -123,7 +123,7 @@ const Billing = (props) => {
                                     autoComplete="address2"
                                     // onChange={onChange}
                                     onChange={(e)=>handleChange(e, form)}
-                                    value={_get(value, 'billing.address2')}
+                                    value={_get(value, 'billing.address2')||''}
                                 />
                             </React.Fragment>
                         )
@@ -144,7 +144,7 @@ const Billing = (props) => {
                                     autoComplete="address3"
                                     // onChange={onChange}
                                     onChange={(e)=>handleChange(e, form)}
-                                    value={_get(value, 'billing.address3')}
+                                    value={_get(value, 'billing.address3')||''}
                                 />
                             </React.Fragment>
                         )
@@ -165,7 +165,7 @@ const Billing = (props) => {
                                     autoComplete="city"
                                     // onChange={onChange}
                                     onChange={(e)=>handleChange(e, form)}
-                                    value={_get(value, 'billing.city')}
+                                    value={_get(value, 'billing.city')||''}
                                 />
                             </React.Fragment>
                         )
@@ -186,7 +186,7 @@ const Billing = (props) => {
                                     autoComplete="zip"
                                     // onChange={onChange}
                                     onChange={(e)=>handleChange(e, form)}
-                                    value={_get(value, 'billing.zip')}
+                                    value={_get(value, 'billing.zip')||''}
                                 />
                             </React.Fragment>
                         )
@@ -208,7 +208,7 @@ const Billing = (props) => {
                                     autoComplete="zip"
                                     // onChange={onChange}
                                     onChange={(e)=>handleChange(e, form)}
-                                    value={_get(value, 'billing.countryid')}
+                                    value={_get(value, 'billing.countryid')||''}
                                 >
                                     {SalesLib.COUNTRY_MAP.map((country, index) => (
                                         <MenuItem value={country.id}>{country.name}</MenuItem>

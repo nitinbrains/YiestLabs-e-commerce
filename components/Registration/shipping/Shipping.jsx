@@ -208,7 +208,7 @@ const Shipping = (props) => {
                                     autoComplete="zip"
                                     // onChange={onChange}
                                     onChange={(e)=>handleChange(e, form)}
-                                    value={_get(value, 'shipping.countryid')}
+                                    value={_get(value, 'shipping.countryid')||''}
                                 >
                                     {SalesLib.COUNTRY_MAP.map((country, index) => (
                                         <MenuItem value={country.id}>{country.name}</MenuItem>
