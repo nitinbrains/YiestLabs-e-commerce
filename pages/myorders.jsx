@@ -42,6 +42,7 @@ class MyOrders extends Component {
     }
 
     render() {
+        console.log(this.props.user,'usersssssssssssss')
         const { classes, theme } = this.props;
         return (
 
@@ -49,7 +50,7 @@ class MyOrders extends Component {
                 <PageContainer heading="MY ORDERS" id="cart-box">
 
                     <Grid container spacing={24}>
-                    {this.props.user.orderHistory.map((order, i) => (
+                    {this.props.user.orderHistory && this.props.user.orderHistory.map((order, i) => (
                         <Grid item xs={12}>
                             <div className={classes.card}>
                             <div style={{position:'absolute', top:-15, left:20, backgroundColor:"#fafafa", paddingLeft:10, paddingRight:10}}>
