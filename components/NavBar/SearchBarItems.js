@@ -102,7 +102,6 @@ class SearchBarItems extends Component {
      * cannot unselect a category - can only switch to a new one
      */
     handleCategory = (e) => {
-        console.log(e.target.value,'asd')
         this.setState({
             selectedCategory: e.target.value
         },()=>{
@@ -189,7 +188,6 @@ class SearchBarItems extends Component {
 
     render() {
         const { classes } = this.props;
-        console.log(this.state.selectedCategory,'select')
         return (
             <Grid container spacing={24} >
             <Grid item xs={4}  >

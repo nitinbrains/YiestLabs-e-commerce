@@ -38,8 +38,7 @@ class CartItem extends Component {
 
         var quantity = parseFloat(item.OrderDetailQty);
 
-        if(isNaN(quantity) || quantity <= 0 ) {
-            console.log('Please enter a valid value for the quantity');
+        if(isNaN(quantity) || quantity <= 0 ) {;
             return false;
         }
 
@@ -62,7 +61,6 @@ class CartItem extends Component {
 
         }
         catch(error) {
-            console.log('could not add item to cart', error);
         }
 
     }

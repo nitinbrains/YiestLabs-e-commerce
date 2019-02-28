@@ -150,7 +150,6 @@ class OrderDetails extends Component {
 
     render() {
         const { classes, order } = this.props;
-                console.log(this.props.order)
         return (
             <React.Fragment>
                 <DialogContent id="my-order-details">

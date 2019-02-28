@@ -62,7 +62,6 @@ class AddHomebrewContainer extends Component {
     checkQuantity = cartItem => {
         let quantity = parseFloat(cartItem.OrderDetailQty);
         if (isNaN(quantity) || quantity <= 0) {
-            console.log("Please enter a valid value for the quantity");
             return false;
         }
         //  Must be in increments of 1
@@ -89,7 +88,6 @@ class AddHomebrewContainer extends Component {
                 this.props.addItem({ cartItem });
             }
         } catch (error) {
-            console.log("Could not add item to cart", error);
         }
     }
 
@@ -97,7 +95,6 @@ class AddHomebrewContainer extends Component {
         try {
             this.props.updateItem({ index: this.state.updateCartIndex, quantity: event.target.value });
         } catch (error) {
-            console.log("Could not add item to cart", error);
         }
     };
 

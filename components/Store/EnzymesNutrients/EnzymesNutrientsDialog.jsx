@@ -58,7 +58,6 @@ class EnzymesNutrientsDialog extends Component {
 
         if (isNaN(quantity) || quantity <= 0) {
             this.handleErrors('quantity','Please enter a valid value for the quantity')
-            console.log("Please enter a valid value for the quantity");
             return false;
         }
 
@@ -107,7 +106,6 @@ class EnzymesNutrientsDialog extends Component {
         })
         .catch(error => {
             // TO-DO: Display error if code == 0
-            console.log('error', error);
         })
         .finally(() => this.setState({isLoading: false}));
     }

@@ -70,7 +70,7 @@ function getImage(salesCategory) {
         return YeastElements[parseInt(salesCategory)].img;
     }
     catch(error) {
-        console.log('error', salesCategory, error);
+      
     }
 }
 
@@ -79,7 +79,7 @@ function getIcon(salesCategory) {
         return YeastElements[parseInt(salesCategory)].icon;
     }
     catch(error) {
-        console.log('error', salesCategory, error);
+       
     }
 }
 
@@ -88,7 +88,7 @@ function getColor(salesCategory) {
         return YeastElements[parseInt(salesCategory)].color;
     }
     catch(error) {
-        console.log(error);
+       
         throw error;
     }
 }
@@ -120,7 +120,7 @@ class HomebrewCard extends Component {
         var quantity = parseFloat(cartItem.OrderDetailQty);
 
         if(isNaN(quantity) || quantity <= 0 ) {
-            console.log('Please enter a valid value for the quantity');
+          
             return false;
         }
 
@@ -157,7 +157,7 @@ class HomebrewCard extends Component {
                 this.props.closeDialog();
             }
         } catch (error) {
-            console.log("could not add item to cart", error);
+           
         }
     };
 

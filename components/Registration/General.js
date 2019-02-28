@@ -54,7 +54,6 @@ const General = (props) => {
         onBack,
         validateField
     } = props;
-    // console.log(touched,errors,'errorssssssssssssssssssssss')
     return (
         <Grid container spacing={24}>
             <Grid item xs={12}>
@@ -74,7 +73,6 @@ const General = (props) => {
                     // validate={validation.companyName}
                     name="companyname"
                     render={({field, form: {  }}) => {
-                    console.log(field.value,'valllllllllllllllll')
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'companyname')} touched={_get(touched, 'companyname')} />

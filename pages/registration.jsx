@@ -69,8 +69,6 @@ class Registration extends React.Component {
     }
 
     onSubmit = (values, actions) => {
-        console.log('submit', values);
-        console.log('actions', actions);
     }
 
     renderRegistrationSuccess = () => {

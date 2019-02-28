@@ -166,7 +166,6 @@ class MyAccount extends Component {
     handleSubmit = () => {
         try {
             var request = changesWereMade(this.state, this.props.user);
-            console.log(request)
             if(!_isEmpty(request)) {
                 this.props.updateUserInfo({request});
             }
@@ -175,7 +174,6 @@ class MyAccount extends Component {
             }
         }
         catch(error) {
-            console.log('error', error);
             // this.props.displayError();
         }
     }

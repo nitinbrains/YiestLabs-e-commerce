@@ -60,6 +60,7 @@ const dataArr = [
         img: 'static/images/categories/Category-core.jpg',
         page:'sub',
         value:0,
+        color:'#95b95e',
         subCategories: [{
             label: 'ALE STRAINS',
             img: 'static/images/categories/Category-ale.jpg',
@@ -67,48 +68,55 @@ const dataArr = [
             value: 1,
             checked: true,
             salesCategory:2,
+            color:'#f68f32'
         }, {
             label: 'LARGER STRAINS',
             img: 'static/images/categories/Category-lager.jpg',
             icon: 'static/images/icons/Lager-icon.svg',
             value: 2,
             salesCategory:2,
-            checked: false
+            checked: false,
+            color:'#f7ac31'
         }, {
             label: 'WINE MEAD & CIDER STRAINS',
             img: 'static/images/categories/Category-wine.jpg',
             icon: 'static/images/icons/wine-icon.svg',
             value: 3,
             salesCategory:2,
-            checked: false
+            checked: false,
+            color:'#af81ca'
         }, {
             label: 'DISTILLING STRAINS',
             img: 'static/images/categories/Category-Distilling.jpg',
             icon: 'static/images/icons/Distilling-icon.svg',
             value: 4,
             salesCategory:10,
-            checked: false
+            checked: false,
+            color:'#5251a1'
         }, {
             label: 'SPECIALIATY & BELGIAN STRAINS',
             img: 'static/images/categories/Category-belgian.jpg',
             icon: 'static/images/icons/Belgian-icon.svg',
             value: 5,
             salesCategory:28,
-            checked: false
+            checked: false,
+            color:'#5ed1d1'
         }, {
             label:  'WILD YIEST & BACTERIA',
             img: 'static/images/categories/Category-wild.jpg',
             icon: 'static/images/icons/wildyeast-icon.svg',
             value: 6,
             salesCategory:20,
-            checked: false
+            checked: false,
+            color:'#daab77'
         }, {
             label: 'VAULT STRAINS',
             img: 'static/images/categories/Category-vault.jpg',
             icon: 'static/images/icons/vault-icon.svg',
             value: 7,
             salesCategory:23,
-            checked: false
+            checked: false,
+            color:'#c4bab4'
         },
         {
           img: 'static/images/categories/Category-core.jpg',
@@ -132,13 +140,15 @@ const dataArr = [
             icon: 'static/images/icons/Ale-icon.svg',
             label: "Enzymes",
             value: 9,
-            checked: false
+            checked: false,
+            color:'#95b95e'
         }, {
             img: 'static/images/categories/Category-vault.jpg',
             icon: 'static/images/icons/Ale-icon.svg',
             label: "Nutrients",
             value: 10,
-            checked: false
+            checked: false,
+            color:'#95b95e'
         }
         ],
     },
@@ -147,7 +157,8 @@ const dataArr = [
         img: 'static/images/categories/Category-belgian.jpg',
         page:'sub',
         // value:12,
-        id: 12
+        id: 12,
+        color:'#95b95e'
     },
     {
         img: 'static/images/categories/Category-wild.jpg',
@@ -155,21 +166,24 @@ const dataArr = [
         title: "LAB SUPPLIES",
         // value: 13,
         id:13,
-        checked: false
+        checked: false,
+        color:'#95b95e'
     },
     {
         title: 'EDUCATION',
         img: 'static/images/categories/Category-wine.jpg',
         page:'sub',
         // value:14,
-        id: 14
+        id: 14,
+        color:'#95b95e'
     },
     {
         title: 'GIFT SHOP',
         img: 'static/images/categories/Category-vault.jpg',
         page:'sub',
         // value:15,
-        id: 15
+        id: 15,
+        color:'#95b95e'
     }
 ]
 
@@ -278,11 +292,15 @@ class Store extends Component {
         if(categoryId && !subCategoryId){
             let legCat=dataArr.find((m)=>m.id==categoryId)
             var legCatTit=legCat.title
+            var legCatCol=legCat.color
+           
         }
         if( categoryId && subCategoryId){
             let legSubcat=dataArr.find((m)=>m.id==categoryId)
             var legSubcatFind=legSubcat.subCategories.find((m)=>m.value==subCategoryId)
             var legSubcatTit=legSubcatFind.label
+            var legSubcatCol=legSubcatFind.color
+            
         }
   
         
@@ -310,15 +328,15 @@ class Store extends Component {
         return (
             <NavBarUserSearchDrawerLayout>
                 {legCatTit && pageType!='sub'?<div className={classes.titDiv}>
-                    <span className={classes.titSpan}></span>
+                    <span className={classes.titSpan1} style={{color:legCatCol}}></span>
                     <span className={classes.titText}>{legCatTit}</span>
-                    <span className={classes.titSpan}></span>
+                    <span className={classes.titSpan1} style={{color:legCatCol}}></span>
                 </div>:null}
 
                 {legSubcatTit?<div className={classes.titDiv}>
-                    <span  className={classes.titSpan}></span>
+                    <span  className={classes.titSpan2} style={{color:legSubcatCol}}></span>
                     <span  className={classes.titText}>{legSubcatTit}</span>
-                    <span  className={classes.titSpan}></span>
+                    <span  className={classes.titSpan2} style={{color:legSubcatCol}}></span>
                 </div>:null} 
                 
                {page}
@@ -363,7 +381,7 @@ class Store extends Component {
     }
 }
 
-const styles = theme => ({
+const styles = (theme) => ({
     store: {
         [theme.breakpoints.up("md")]: {
             paddingLeft: 50,
@@ -383,8 +401,13 @@ const styles = theme => ({
         ,width:'88%',margin:'auto',
         marginBottom:'60px',marginTop:'70px'
     },
-    titSpan:{
-        color:'#f28411',
+    titSpan1:{
+        // color:legCatCol,
+        width:'42%',height:'2px',display:'block',
+        borderWidth:'1px',borderStyle:'solid'
+    },
+    titSpan2:{
+        //color:legSubcatCol,
         width:'42%',height:'2px',display:'block',
         borderWidth:'1px',borderStyle:'solid'
     },
