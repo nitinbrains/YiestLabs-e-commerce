@@ -86,7 +86,7 @@ class ManageShipping extends Component {
                 <div className="main-block">
                 <div className="order-number">
                 <Typography variant="h6" color="textPrimary">
-                                MANAGE SHIPPING ADDRESSES
+                    MANAGE SHIPPING ADDRESSES
                 </Typography>
                 </div>
                     <div className={classes.close}>
