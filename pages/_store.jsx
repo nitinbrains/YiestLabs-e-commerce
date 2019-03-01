@@ -211,6 +211,11 @@ class Store extends Component {
     handleLeaveItem = () => {
         this.setState({ openDialog: false, item: null });
     };
+
+    handleSearchCall=()=>{
+
+    }
+    
     getCard = (item, i) => {
        
         if (this.props.store.isHomebrew) {
@@ -326,7 +331,9 @@ class Store extends Component {
         }
       
         return (
-            <NavBarUserSearchDrawerLayout>
+            <NavBarUserSearchDrawerLayout
+            handleSearch={(searchData)=>this.handleSearchCall(searchData)}
+            >
                 {legCatTit && pageType!='sub'?<div className={classes.titDiv}>
                     <span className={classes.titSpan1} style={{color:legCatCol}}></span>
                     <span className={classes.titText}>{legCatTit}</span>
@@ -338,18 +345,24 @@ class Store extends Component {
                     <span  className={classes.titText}>{legSubcatTit}</span>
                     <span  className={classes.titSpan2} style={{color:legSubcatCol}}></span>
                 </div>:null} 
-                
                {page}
                 <LoadingIndicator visible={this.props.loading.isLoading && this.props.loading.type == "loadingInventory"} label={"Loading Inventory"} />
-                {/* <Grid container spacing={8} id="professional-homebrew-switch">
+                {/* <div>
+                        <Divider variant="inset" className={classes.divider} />
+                        <Grid container spacing={24} className={classes.store}>
+                            <SearchBarItems />
+                        </Grid>
+                        <Divider variant="inset" className={classes.divider} />
+                    </div> */}
+                 <Grid container spacing={8} id="professional-homebrew-switch">
                     <Grid item xs={6} dir="rtl">
                         <FormButton className={`form-button-small-size ${isHomebrew ? "form-button-active" : ""}`} text="Professional" onClick={() => this.props.switchToProfessional()} />
                     </Grid>
                     <Grid item xs={6} dir="ltr">
                         <FormButton className={`form-button-small-size ${isHomebrew ? "" : "form-button-active"}`} text="Homebrew" onClick={() => this.props.switchToHomebrew()} />
                     </Grid>
-                </Grid> */}
-                {/* {!isHomebrew && (
+                </Grid> 
+                 {!isHomebrew && (
                     <div>
                         <Divider variant="inset" className={classes.divider} />
                         <Grid container spacing={24} className={classes.store}>
@@ -372,7 +385,10 @@ class Store extends Component {
                         </Dialog>
                     </Grid>
                 )
-                } */}
+                } 
+
+
+
                 <Dialog open={this.state.openDialog} onClose={this.handleLeaveItem} aria-labelledby="form-dialog-title">
                             {this.getDialogContent(this.state.item)}
                         </Dialog>

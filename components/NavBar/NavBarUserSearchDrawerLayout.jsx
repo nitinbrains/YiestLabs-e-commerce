@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import InputBase from '@material-ui/core/InputBase';
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -36,7 +37,8 @@ class NavBarUserSearchDrawerLayout extends Component {
         openUserBar: false,
         openUserBarHover: false,
         openSearchBar: false,
-        isLoggedIn: true
+        isLoggedIn: true,
+        searchText:''
     };
 
     handleUserBar = () => {
@@ -52,7 +54,8 @@ class NavBarUserSearchDrawerLayout extends Component {
     };
 
     handleSearchBarClose = () => {
-        this.setState({ openSearchBar: false });
+         this.setState({ openSearchBar: false });
+        // console.log('hello')
     };
     handleClose = () => {
         this.props.unsavedUserClose()
@@ -135,6 +138,34 @@ class NavBarUserSearchDrawerLayout extends Component {
                                 <ShoppingCartIcon />
                             </IconButton>
                         </Link>
+                   
+                        <IconButton color="inherit" aria-label="Menu">
+                             <SearchIcon/>
+                        </IconButton>
+                       
+
+                {/* {this.state.openSearchBar &&  <InputBase
+              id="search"
+              placeholder="Search"
+              type="search"
+             
+              // value={this.state.searchText}
+              // onChange={this.handleSearch}
+              classes={{
+                root: classes.inputRoot
+              }}
+                  />} */}
+                   <InputBase
+              id="search"
+              placeholder="Search"
+              type="search"
+             
+               value={this.state.searchText}
+               onChange={this.props.handleSearch(this.state.searchText)}
+              classes={{
+                root: classes.inputRoot
+              }}
+                  />
 
                     </Toolbar>
                 </AppBar>
@@ -332,15 +363,43 @@ const styles = theme => ({
     "contentShift-user": {
         marginLeft: drawerWidth
     },
-    searchInput: {
-        marginLeft: 10
-    },
+    // searchInput: {
+    //     marginLeft: 10
+    // },
     close: {
         padding: theme.spacing.unit / 2,
     },
     alertWrapper: {
         marginTop:'50px'
     },
+    // searchInput: {
+    //     marginLeft: 10
+    // },
+    // search:{
+    //     padding: '5px',
+    //     marginTop: '1vw',
+    // }
+
+    inputRoot: {
+        color: 'inherit',
+        width: '10%',
+      },
+      inputInput: {
+        // paddingTop: theme.spacing.unit,
+        // paddingRight: theme.spacing.unit,
+        // paddingBottom: theme.spacing.unit,
+        // paddingLeft: theme.spacing.unit * 10,
+        // transition: theme.transitions.create('width'),
+        // width: '10%',
+        // [theme.breakpoints.up('sm')]: {
+        //   width: 12,
+        //   '&:focus': {
+        //     width: 20,
+        //   },
+        // },
+        width:'50%'
+      }
+    
 });
 
 NavBarUserSearchDrawerLayout.propTypes = {
