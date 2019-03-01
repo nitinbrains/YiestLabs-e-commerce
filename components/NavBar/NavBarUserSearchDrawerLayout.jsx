@@ -33,12 +33,12 @@ import SimpleSnackbar from "components/Form/SimpleSnackbar";
 import Banner from "components/UI/Banner";
 
 class NavBarUserSearchDrawerLayout extends Component {
+    // ref=React.createRef();
     state = {
         openUserBar: false,
         openUserBarHover: false,
         openSearchBar: false,
         isLoggedIn: true,
-        searchText:''
     };
 
     handleUserBar = () => {
@@ -159,9 +159,9 @@ class NavBarUserSearchDrawerLayout extends Component {
               id="search"
               placeholder="Search"
               type="search"
-             
-               value={this.state.searchText}
-               onChange={this.props.handleSearch(this.state.searchText)}
+              name="searchText"
+              value={this.props.searchText}
+              onChange={(e)=>this.props.handleSearch(e.target.value)}
               classes={{
                 root: classes.inputRoot
               }}

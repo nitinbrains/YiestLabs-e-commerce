@@ -191,7 +191,9 @@ class Store extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            openDialog: false
+            openDialog: false,
+            searchText:'',
+            selectedCategory:''
         };
     }
 
@@ -212,8 +214,14 @@ class Store extends Component {
         this.setState({ openDialog: false, item: null });
     };
 
-    handleSearchCall=()=>{
+    handleSearchCall=(data)=>{
+     this.setState({
+         searchText:data
+     },()=>{
+        let search = this.state.searchText;
 
+        //  console.log(this.state.searchText,'daaaaaaaaaaaaaaaaaaaattttttttttaaaaaaa')
+     })
     }
     
     getCard = (item, i) => {
@@ -331,7 +339,7 @@ class Store extends Component {
         }
       
         return (
-            <NavBarUserSearchDrawerLayout
+            <NavBarUserSearchDrawerLayout inputVal={this.state.searchText}
             handleSearch={(searchData)=>this.handleSearchCall(searchData)}
             >
                 {legCatTit && pageType!='sub'?<div className={classes.titDiv}>
@@ -354,15 +362,15 @@ class Store extends Component {
                         </Grid>
                         <Divider variant="inset" className={classes.divider} />
                     </div> */}
-                 <Grid container spacing={8} id="professional-homebrew-switch">
+                 {/* <Grid container spacing={8} id="professional-homebrew-switch">
                     <Grid item xs={6} dir="rtl">
                         <FormButton className={`form-button-small-size ${isHomebrew ? "form-button-active" : ""}`} text="Professional" onClick={() => this.props.switchToProfessional()} />
                     </Grid>
                     <Grid item xs={6} dir="ltr">
                         <FormButton className={`form-button-small-size ${isHomebrew ? "" : "form-button-active"}`} text="Homebrew" onClick={() => this.props.switchToHomebrew()} />
                     </Grid>
-                </Grid> 
-                 {!isHomebrew && (
+                </Grid>  */}
+                 {/* {!isHomebrew && (
                     <div>
                         <Divider variant="inset" className={classes.divider} />
                         <Grid container spacing={24} className={classes.store}>
@@ -370,8 +378,8 @@ class Store extends Component {
                         </Grid>
                         <Divider variant="inset" className={classes.divider} />
                     </div>
-                )}
-                {isHomebrew ? (
+                )} */}
+                {/* {isHomebrew ? (
                     <AddHomebrewContainer items={this.props.store.itemsToShow} />
                  ) : 
                  (
@@ -384,8 +392,8 @@ class Store extends Component {
                             {this.getDialogContent(this.state.item)}
                         </Dialog>
                     </Grid>
-                )
-                } 
+                ) 
+                } */}
 
 
 
