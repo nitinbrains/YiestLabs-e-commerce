@@ -160,19 +160,20 @@ class ManageCards extends Component {
                                     >
                                         <Grid item xs={12}>
                                             <Typography>
-                                                {card.ccname}
+                                                <div className="block"> <span className="label">Name: </span> {card.ccname}</div>
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Typography>                                            
+                                                <div className="block"> <span className="label">CC Number: </span>  {card.ccnumber}</div>
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <Typography>
-                                                {card.ccnumber}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Typography>
-                                                {moment(card.ccexpire).format(
+                                                  <div className="block"> <span className="label">CC Expiry: </span> {moment(card.ccexpire).format(
                                                     "MM-YYYY"
-                                                )}
+                                                )}</div>
+                                                
                                             </Typography>
                                         </Grid>
 
@@ -269,7 +270,7 @@ const styles = theme => ({
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 150
+        height: 200
     },
     cardBoxSelected: {
         position: "relative",
@@ -277,7 +278,7 @@ const styles = theme => ({
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 150
+        height: 200
     },
     close: { position: "absolute", right: 0, top: 0 },
     deleteIcon: { position: "absolute", right: -25, top: -25 },

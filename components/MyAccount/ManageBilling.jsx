@@ -161,32 +161,32 @@ class ManageBilling extends Component {
                                     >
                                         <Grid item>
                                             <Typography>
-                                                {address.address1}
+                                            <div className="block"> <span className="label">Address line 1: </span>{address.address1}</div>
                                             </Typography>
                                         </Grid>
                                         <Grid item>
                                             <Typography>
-                                                {address.address2}
+                                                {address.address2 ?  <div className="block"> <span className="label">Address line 2: </span>{address.address2}</div> :null}
                                             </Typography>
                                         </Grid>
                                         <Grid item>
                                             <Typography>
-                                                {address.address3}
+                                            {address.address3 ?  <div className="block"> <span className="label">Address line 3: </span>{address.address3}</div> :null}
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <Typography>
-                                                {address.city}
+                                            <div className="block"> <span className="label">City: </span>{address.city}</div>
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <Typography>
-                                                {address.zip}
+                                            <div className="block"> <span className="label">Zip-Code: </span>{address.zip}</div>
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <Typography>
-                                                {address.countryid}
+                                            <div className="block"> <span className="label">Country: </span>{address.countryid}</div>
                                             </Typography>
                                         </Grid>
                                         {this.props.user.billing.address1 !=
@@ -286,7 +286,7 @@ const styles = theme => ({
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 180
+        height: 250
     },
     addressBoxSelected: {
         position: "relative",
@@ -294,7 +294,7 @@ const styles = theme => ({
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 180
+        height: 250
     },
     close: { position: "absolute", right: 0, top: 0 },
     deleteIcon: { position: "absolute", right: -25, top: -25 },
