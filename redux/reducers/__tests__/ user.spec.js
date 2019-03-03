@@ -8,7 +8,7 @@ const initialState = {
     cards: [],
     cardsToRemove: [],
     category: "",
-    companyname: "",
+    companyName: "",
     connectedaccounts: [],
     currency: "",
     email: "",

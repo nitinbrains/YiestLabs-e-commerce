@@ -10,12 +10,11 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import _get from "lodash/get";
-import MaskedTextField from "../../Form/MaskedTextField";
+import _get from 'lodash/get';
+import _isEmpty from 'lodash/isEmpty';
 import moment from "moment";
 import Cleave from "cleave.js/react";
 
-import { validate } from  './Validation';
 
 function CreditCardMaskedTextField(props) {
     let { options, onChange, inputRef, ...other } = props;
@@ -32,20 +31,50 @@ function DateMaskedTextField(props) {
     return <Cleave {...other} onChange={onChange} ref={inputRef} options={options} />;
 }
 
-const FormikErrorMessage = ({ className, touched, error }) => {
-
-    return <div className="error">{error}</div>;
+const FormikErrorMessage = ({ error }) => {
+    return error ? <div className="error">{error}</div> : null;
 };
 
-const CardInfo = props => {
-    const { touched, errors, classes, onNext, onBack } = props;
+const CardInfo = ({
+    values,
+    touched, 
+    errors, 
+    classes, 
+    onBack,
+    setErrors,
+    submitForm
+}) => {
 
     const handleSubmit = () => {
-        const { submitForm } = props;
-        let res = validate(props);
-        if(_isEmpty(res.errors)) {
+        let errors = validate();
+        if (_isEmpty(errors.card)) {
             submitForm();
+        } else {
+            setErrors(errors);
         }
+    }
+
+    const validate = () => {
+        let errors = {card: {}};
+
+        if (!_get(values, 'card.ccnumber')) {
+            errors.card.ccnumber = "Credit card number is required";
+        }
+
+        if (!_get(values, 'card.ccname')) {
+            errors.card.ccname = "Name is required";
+        }
+
+        if (!_get(values, 'card.ccexpire')) {
+            errors.card.ccexpire = "Expiration date is required";
+        } else {
+            let exp = moment(values.card.ccexpire, 'MM/YYYY')
+            if (!exp.isValid() || exp.isBefore(moment())) {
+                errors.card.ccexpire = "Expiration date is invalid";
+            }
+        }
+        
+        return errors;
     }
 
     return (
@@ -64,21 +93,19 @@ const CardInfo = props => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({ field: { value, onChange }, form}) => {
+                    render={({ field: { value, onChange }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, "card.ccnumber")} touched={_get(touched, "card.ccnumber")} />
                                 <TextField
-                                    id="ccnumber"
-                                    name="ccnumber"
+                                    id="card.ccnumber"
+                                    name="card.ccnumber"
                                     label="Credit Card number"
                                     fullWidth
-                                    autoComplete="card.ccnumber"
+                                    autoComplete="ccnumber"
                                     onChange={onChange}
                                     value={_get(value, 'card.ccnumber')}
-                                    InputProps={{
-                                        inputComponent: CreditCardMaskedTextField
-                                    }}
+                                    InputProps={{ inputComponent: CreditCardMaskedTextField }}
                                 />
                             </React.Fragment>
                         );
@@ -87,12 +114,13 @@ const CardInfo = props => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({ field: { value, onChange }, form}) => {
+                    render={({ field: { value, onChange }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, "card.ccname")} touched={_get(touched, "card.ccname")} />
                                 <TextField 
-                                id="ccname" name="ccname" 
+                                id="card.ccname" 
+                                name="card.ccname" 
                                 label="Name on card" 
                                 fullWidth 
                                 autoComplete="card.ccname" 
@@ -105,19 +133,17 @@ const CardInfo = props => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({ field: { value, onChange }, form}) => {
+                    render={({ field: { value, onChange }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, "card.ccexpire")} touched={_get(touched, "card.ccexpire")} />
                                 <TextField
-                                    id="ccexpire"
-                                    name="ccexpire"
+                                    id="card.ccexpire"
+                                    name="card.ccexpire"
                                     label="Expiration date"
                                     placeholder="MM/YY"
                                     fullWidth
-                                    InputProps={{
-                                        inputComponent: DateMaskedTextField
-                                    }}
+                                    InputProps={{ inputComponent: DateMaskedTextField }}
                                     onChange={onChange}
                                     value={_get(value, "card.ccexpire")}    
                                 />
@@ -129,8 +155,7 @@ const CardInfo = props => {
             <Button variant="contained" className={classes.button} onClick={onBack}>
                 Back
             </Button>
-            <Button 
-                variant="contained" color="primary" className={classes.button} onClick={handleSubmit}>
+            <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmit}>
                 Submit
             </Button>
         </Grid>
@@ -153,3 +178,4 @@ CardInfo.propTypes = {
 };
 
 export default withStyles(styles)(CardInfo);
+

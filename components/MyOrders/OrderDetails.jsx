@@ -34,6 +34,7 @@ class OrderDetails extends Component {
     }
 
     _renderSumamry() {
+
         return (
             <Grid container>
                 <Grid container spacing={24}>
@@ -47,7 +48,7 @@ class OrderDetails extends Component {
                         </Grid>
                         <Grid container spacing={24}>
                             <Grid item sm={6}>
-                                <div className="block"> <span className="label">Company: </span> Name</div>
+                                <div className="block"> <span className="label">Company: </span> {order.companyName}</div>
                                 <div className="block"> <span className="label">Ordered From: </span>White Labs.</div>
                                 <div className="block"> <span className="label">Order Date: </span>02/01/2018</div>
                             </Grid>
@@ -148,7 +149,7 @@ class OrderDetails extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, order } = this.props;
         return (
             <React.Fragment>
                 <DialogContent id="my-order-details">
@@ -163,7 +164,7 @@ class OrderDetails extends Component {
                         </IconButton>
                     </div>
                     <div className="main-block">
-                        <div className="order-number">Order # 2625434</div>
+                        <div className="order-number">Order # {order.orderNum}</div>
                         <Grid container spacing={24}>
                             <Grid item container spacing={24}>
                                 {this._renderSumamry()}

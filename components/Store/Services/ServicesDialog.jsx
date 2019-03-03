@@ -55,7 +55,6 @@ class ServicesDialog extends Component {
 
         if (isNaN(quantity) || quantity <= 0) {
             this.handleErrors('quantity', 'Please enter a valid value for the quantity')
-            console.log("Please enter a valid value for the quantity");
             return false;
         }
 

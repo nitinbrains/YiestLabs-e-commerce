@@ -59,7 +59,7 @@ export const user = {
     ],
     cardsToRemove: [],
     category: "2",
-    companyname: "XAbove It All YM TEST",
+    companyName: "XAbove It All YM TEST",
     connectedaccounts: [
         {internalid: 43148, subsidiary: "White Labs Inc", subsidiaryid: "2"},
         {internalid: 863039, subsidiary: "White Labs Hong Kong", subsidiaryid: "5"},

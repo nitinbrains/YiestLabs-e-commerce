@@ -74,7 +74,6 @@ class EducationDialog extends Component {
 
         if (isNaN(quantity) || quantity <= 0) {
             this.handleErrors('quantity', 'Please enter a valid value for the quantity')
-            console.log("Please enter a valid value for the quantity");
             return false;
         }
 
@@ -127,10 +126,6 @@ class EducationDialog extends Component {
 
         if (SalesLib.YeastEssentials.includes(cartItem.MerchandiseID)) {
             this.handleErrors('yeastEssentials','Attending Yeast Essentials? If you are considering or already attending Yeast Essentials 2.0, consider attending the 1 day Lab Practicum course that follows each Yeast Essentials course and allows you to apply the skills that you learn.')
-            console.log(
-                "Attending Yeast Essentials?",
-                "If you are considering or already attending Yeast Essentials 2.0, consider attending the 1 day Lab Practicum course that follows each Yeast Essentials course and allows you to apply the skills that you learn."
-            );
         }
 
         if (this.checkQuantity(cartItem)) {

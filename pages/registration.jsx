@@ -13,10 +13,10 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import LoadingIndicator from "components/UI/LoadingIndicator";
-import General from "components/Registration/general/General";
-import Shipping from "components/Registration/shipping/Shipping";
-import Billing from "components/Registration/billing/Billing";
-import CardInfo from "components/Registration/card-info/CardInfo";
+import General from "components/Registration/General";
+import Shipping from "components/Registration/Shipping";
+import Billing from "components/Registration/Billing";
+import CardInfo from "components/Registration/CardInfo";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
 
@@ -26,8 +26,7 @@ const steps = ["General Information", "Shipping Address", "Billing Address", "Cr
 
 class Registration extends React.Component {
     state = {
-        activeStep: 0,
-        formValues: {},
+        activeStep: 3,
         isSameAddress: false,
     };
 
@@ -55,9 +54,8 @@ class Registration extends React.Component {
         }
     }
 
-    onSubmit = (values, actions) => {
-        console.log('submit', values);
-        console.log('actions', actions);
+    onSubmit = (values) => {
+        this.props.createUser(values);
     }
 
     renderRegistrationSuccess = () => {
@@ -126,7 +124,6 @@ class Registration extends React.Component {
                     </Stepper>
                     <Formik
                         onSubmit={(values, actions) => this.onSubmit(values, actions)}
-                        validate={(values)=>validate(values, fields)}
                         render={props => {
                             let view = null;
 

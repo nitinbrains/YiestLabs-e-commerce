@@ -93,7 +93,6 @@ export const requestWrapper = async (url, data = {}, token, jsonRequest = true) 
     checkResponseStatus(response);
     return response.ok ? { res: responseBody } : { error: responseBody };
   } catch (error) {
-    console.log('error', error);
     return response && response.ok ? { res: { code: response.status } } : { error: error };
   }
 }

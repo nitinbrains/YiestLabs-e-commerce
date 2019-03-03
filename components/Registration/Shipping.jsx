@@ -11,33 +11,62 @@ import Button from "@material-ui/core/Button";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import _get from 'lodash/get';
+import _isEmpty from 'lodash/isEmpty';
 import SalesLib from 'lib/SalesLib';
-import { validate } from  './Validation';
 
-const FormikErrorMessage = ({className, touched, error}) => {
-
-    return (
-        <div className="error">{error}</div>
-    );
+const FormikErrorMessage = ({ error }) => {
+    return error ? <div className="error">{error}</div> : null;
 };
 
-const Shipping = (props) => {
-
-    const {
-        values,
-        touched,
-        errors,
-        classes,
-        onNext,
-        onBack
-    } = props;
+const Shipping = ({
+    values,
+    touched,
+    errors,
+    classes,
+    onNext,
+    onBack,
+    setErrors
+}) => {
 
     const handleNext = () => {
-        const { onNext } = props;
-        let res = validate(props);
-        if(_isEmpty(res.errors)) {
+        let errors = validate();
+        if (_isEmpty(errors.shipping)) {
             onNext();
+        } else {
+            setErrors(errors);
         }
+    }
+
+    const validate = () => {
+        var errors = { shipping: {}};
+
+        _get(values, 'shipping.')
+       
+        if(!_get(values, 'shipping.attn')) {
+            errors.shipping.attn = "Attention is required";
+        }
+
+        if(!_get(values, 'shipping.addressee')) {
+            errors.shipping.addressee = "Addressee is required";
+        }
+
+        if(!_get(values, 'shipping.address1')) {
+            errors.shipping.address1 = "Address1 is required";
+        }
+
+        if(!_get(values, 'shipping.city')) {
+            errors.shipping.city = "City is required";
+        }
+
+        if(!_get(values, 'shipping.zip')) {
+            errors.shipping.zip = "Zip is required";
+        }
+
+        if(!_get(values, 'shipping.countryid')) {
+            errors.shipping.countryid = "Country is required";
+        }
+
+        return errors;
     }
     
     return (
@@ -56,7 +85,7 @@ const Shipping = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form}) => {
+                    render={({field: {value, onChange }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'shipping.attn')} touched={_get(touched, 'shipping.attn')} />
@@ -76,7 +105,7 @@ const Shipping = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form}) => {
+                    render={({field: {value, onChange }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'shipping.addressee')} touched={_get(touched, 'shipping.addressee')} />
@@ -96,7 +125,7 @@ const Shipping = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form}) => {
+                    render={({field: {value, onChange }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'shipping.address1')} touched={_get(touched, 'shipping.address1')} />
@@ -116,7 +145,7 @@ const Shipping = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form}) => {
+                    render={({field: {value, onChange }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'shipping.address2')} touched={_get(touched, 'shipping.address2')} />
@@ -136,7 +165,7 @@ const Shipping = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form}) => {
+                    render={({field: {value, onChange }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'shipping.address3')} touched={_get(touched, 'shipping.address3')} />
@@ -176,7 +205,7 @@ const Shipping = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form}) => {
+                    render={({field: {value, onChange }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'shipping.zip')} touched={_get(touched, 'shipping.zip')} />
@@ -196,7 +225,7 @@ const Shipping = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    render={({field: {value, onChange }, form}) => {
+                    render={({field: {value, onChange }}) => {
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'shipping.countryid')} touched={_get(touched, 'shipping.countryid')} />
@@ -210,8 +239,8 @@ const Shipping = (props) => {
                                     onChange={onChange}
                                     value={_get(value, 'shipping.countryid')}
                                 >
-                                    {SalesLib.COUNTRY_MAP.map((country, index) => (
-                                        <MenuItem value={country.id}>{country.name}</MenuItem>
+                                    {SalesLib.COUNTRY_MAP.map((country) => (
+                                        <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
                                     ))}
                                 </TextField>
 
@@ -247,4 +276,4 @@ Shipping.propTypes = {
 };
 
 
-export default  withStyles(styles)(Shipping);
+export default withStyles(styles)(Shipping);

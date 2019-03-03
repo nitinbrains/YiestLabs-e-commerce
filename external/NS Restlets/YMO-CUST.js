@@ -27,7 +27,7 @@ function(record, log, search, email)
             id
             phone
             email
-            companyname
+            companyName
             category
             terms
             shipmethod = {
@@ -178,7 +178,7 @@ function(record, log, search, email)
 
 
                 //Not Customer Editable
-                message.companyname = customerRecord.getValue({fieldId: 'companyname'});
+                message.companyName = customerRecord.getValue({fieldId: 'companyname'});
                 message.category = customerRecord.getValue({fieldId: 'category'});
                 message.terms = customerRecord.getValue({fieldId: 'terms'});
                 message.subsidiary = parseInt(customerRecord.getValue({fieldId: 'subsidiary'}));
@@ -368,12 +368,12 @@ function(record, log, search, email)
                     customerRecord.setValue({fieldId: 'phone', value: message.phone});
                     customerRecord.setValue({fieldId: 'custentity_gs_phonenumber', value: message.phone});
 
-                    if(!message.companyname)
+                    if(!message.companyName)
                     {
                         throw {message: 'Missing Company Name', code: 0};
                     }
-                    customerRecord.setValue({fieldId: 'companyname', value: message.companyname});
-                    customerRecord.setValue({fieldId: 'entityid', value: message.companyname});
+                    customerRecord.setValue({fieldId: 'companyname', value: message.companyName});
+                    customerRecord.setValue({fieldId: 'entityid', value: message.companyName});
 
                     if(!message.email)
                     {

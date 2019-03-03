@@ -57,7 +57,6 @@ class ResultItem extends Component {
 						cartItem.MerchandiseID = parseInt(this.item.volID[2]);
 						break;
 					default:
-						console.log('should not get here');
 						break;
 				}
 
