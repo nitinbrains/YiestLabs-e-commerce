@@ -193,7 +193,8 @@ class Store extends Component {
         this.state = {
             openDialog: false,
             searchText:'',
-            selectedCategory:0
+            selectedCategory:0,
+            selectedSubCategory:1
         };
     }
 
@@ -219,21 +220,29 @@ class Store extends Component {
 
     handleSearchCall=(data)=>{
         const {router:{query} } = this.props;
-        var {categoryId} = query;
+        var {categoryId,subCategoryId,pageType} = query;
         if(categoryId){this.setState({ selectedCategory:categoryId })}
         if(categoryId===undefined){this.setState({ selectedCategory:0 })}
+        if(subCategoryId){this.setState({ selectedSubCategory:subCategoryId })}
+        if(subCategoryId===undefined){this.setState({ selectedSubCategory:1 })}
      this.setState({
          searchText:data
      }
      ,()=>{
         let search = this.state.searchText;
         let category = this.state.selectedCategory;
+        let catSub=this.state.selectedSubCategory;
         if(search != ''){
             this.props.searchInventory({category, search})
          }
-        else {
-            this.props.changeCategory({category});
-        }
+        else if(pageType==='cards' && search==='' && !subCategoryId) {
+            this.props.changeCategory({category:category});
+        } 
+        else 
+        {  this.props.changeCategory({category:catSub}); 
+    
+           }
+        
      })
     }
     
@@ -312,9 +321,6 @@ class Store extends Component {
    
     
     render() {
-        // console.log(this.state.searchText,'daaaaaaaaaaaaaaaaaaaattttttttttaaaaaaa')
-        // console.log(this.state.selectedCategory,'selected cat')
-        // console.log(this.props.store.itemsToShow,'itemtoshow')
         const { classes, theme, message, messages,router:{query} } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
         var {pageType, categoryId, subCategoryId,tit,ctit} = query;
@@ -329,7 +335,7 @@ class Store extends Component {
             var legSubcatFind=legSubcat.subCategories.find((m)=>m.value==subCategoryId)
             var legSubcatTit=legSubcatFind.label
             var legSubcatCol=legSubcatFind.color
-            
+    
         }
   
         
@@ -342,10 +348,14 @@ class Store extends Component {
             })
             page=<Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
         }
+        if(isHomebrew){
+            page =  <AddHomebrewContainer items={this.props.store.itemsToShow} />
+        }
         if(pageType === 'sub'&& categoryId){
             let category = find(dataArr, {id:Number(categoryId)})
             page = <SubCat category={category}/>;
         } 
+        
         
 
         else if (pageType === 'cards' && categoryId && subCategoryId){
@@ -382,50 +392,18 @@ class Store extends Component {
                     <span  className={classes.titText}>{legSubcatTit}</span>
                     <span  className={classes.titSpan2} style={{color:legSubcatCol}}></span>
                 </div>:null} 
-               {page}
-                <LoadingIndicator visible={this.props.loading.isLoading && this.props.loading.type == "loadingInventory"} label={"Loading Inventory"} />
-                {/* <div>
-                        <Divider variant="inset" className={classes.divider} />
-                        <Grid container spacing={24} className={classes.store}>
-                            <SearchBarItems />
-                        </Grid>
-                        <Divider variant="inset" className={classes.divider} />
-                    </div> */}
-                 {/* <Grid container spacing={8} id="professional-homebrew-switch">
+
+               {!pageType ?   <Grid container spacing={8} id="professional-homebrew-switch">
                     <Grid item xs={6} dir="rtl">
                         <FormButton className={`form-button-small-size ${isHomebrew ? "form-button-active" : ""}`} text="Professional" onClick={() => this.props.switchToProfessional()} />
                     </Grid>
                     <Grid item xs={6} dir="ltr">
                         <FormButton className={`form-button-small-size ${isHomebrew ? "" : "form-button-active"}`} text="Homebrew" onClick={() => this.props.switchToHomebrew()} />
                     </Grid>
-                </Grid>  */}
-                 {/* {!isHomebrew && (
-                    <div>
-                        <Divider variant="inset" className={classes.divider} />
-                        <Grid container spacing={24} className={classes.store}>
-                            <SearchBarItems />
-                        </Grid>
-                        <Divider variant="inset" className={classes.divider} />
-                    </div>
-                )} */}
-                {/* {isHomebrew ? (
-                    <AddHomebrewContainer items={this.props.store.itemsToShow} />
-                 ) : 
-                 (
-                    <Grid className={classes.store} container spacing={24}>
-                        {this.props.store.itemsToShow.map((item, i) => {
-                            return this.getCard(item, i);
-                        })}
+                </Grid> : null }
 
-                        <Dialog open={this.state.openDialog} onClose={this.handleLeaveItem} aria-labelledby="form-dialog-title">
-                            {this.getDialogContent(this.state.item)}
-                        </Dialog>
-                    </Grid>
-                ) 
-                } */}
-
-
-
+               {page}
+                <LoadingIndicator visible={this.props.loading.isLoading && this.props.loading.type == "loadingInventory"} label={"Loading Inventory"} />
                 <Dialog open={this.state.openDialog} onClose={this.handleLeaveItem} aria-labelledby="form-dialog-title">
                             {this.getDialogContent(this.state.item)}
                         </Dialog>
