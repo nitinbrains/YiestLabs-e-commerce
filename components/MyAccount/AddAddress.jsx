@@ -66,7 +66,7 @@ class AddAddress extends Component {
                     enableReinitialize
                     onSubmit={values => this.addAddress()}
                 >
-                    {({ errors, touched, isValidating }) => {
+                    {({ errors, touched, isValidating, handleChange }) => {
                         return (
                             <Form>
                                 <Grid container spacing={24}>
@@ -78,12 +78,13 @@ class AddAddress extends Component {
                                                     <TextField
                                                         id="attention"
                                                         value={props.field.value}
-                                                        onChange={e => {
-                                                            props.form.setFieldValue("attn", e.target.value);
-                                                            this.setState({
-                                                                attn: e.target.value
-                                                            });
-                                                        }}
+                                                        onChange={handleChange
+                                                            // e => {
+                                                            // props.form.setFieldValue("attn", e.target.value);
+                                                            // this.setState({
+                                                            //     attn: e.target.value
+                                                            // });
+                                                        }
                                                         onFocus={e => {
                                                             if (focus !== "attn")
                                                                 this.setState({

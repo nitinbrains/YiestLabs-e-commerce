@@ -193,12 +193,15 @@ class Store extends Component {
         this.state = {
             openDialog: false,
             searchText:'',
-            selectedCategory:''
+            selectedCategory:0
         };
     }
 
     componentWillMount() {
         // console.log(this.props,'check')
+        this.setState({
+            selectedCategory:0
+        })
         let isUserLoggedIn = sessionStorage.getItem("isLoggedin");
         let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
         if (isUserLoggedIn && userInfo) {
@@ -215,12 +218,22 @@ class Store extends Component {
     };
 
     handleSearchCall=(data)=>{
+        const {router:{query} } = this.props;
+        var {categoryId} = query;
+        if(categoryId){this.setState({ selectedCategory:categoryId })}
+        if(categoryId===undefined){this.setState({ selectedCategory:0 })}
      this.setState({
          searchText:data
-     },()=>{
+     }
+     ,()=>{
         let search = this.state.searchText;
-
-        //  console.log(this.state.searchText,'daaaaaaaaaaaaaaaaaaaattttttttttaaaaaaa')
+        let category = this.state.selectedCategory;
+        if(search != ''){
+            this.props.searchInventory({category, search})
+         }
+        else {
+            this.props.changeCategory({category});
+        }
      })
     }
     
@@ -299,6 +312,9 @@ class Store extends Component {
    
     
     render() {
+        // console.log(this.state.searchText,'daaaaaaaaaaaaaaaaaaaattttttttttaaaaaaa')
+        // console.log(this.state.selectedCategory,'selected cat')
+        // console.log(this.props.store.itemsToShow,'itemtoshow')
         const { classes, theme, message, messages,router:{query} } = this.props;
         let isHomebrew = this.props.store.isHomebrew;
         var {pageType, categoryId, subCategoryId,tit,ctit} = query;
@@ -319,10 +335,20 @@ class Store extends Component {
         
         // isHomebrew = true
         let page = <MainMenu dataArr={dataArr}  />;
+        if(this.state.searchText!=''){
+            let cardsNode = [];
+         this.props.store.itemsToShow && this.props.store.itemsToShow.map((item, i)=>{
+                cardsNode.push(this.getCard(item, i))
+            })
+            page=<Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
+        }
         if(pageType === 'sub'&& categoryId){
             let category = find(dataArr, {id:Number(categoryId)})
             page = <SubCat category={category}/>;
-        } else if (pageType === 'cards' && categoryId && subCategoryId){
+        } 
+        
+
+        else if (pageType === 'cards' && categoryId && subCategoryId){
             // let filteredCard = filter(cards, {categoryId:Number(categoryId), subCatId:Number(subCategoryId)})
              let cardsNode = [];
             this.props.store.itemsToShow.map((item, i)=>{
@@ -330,13 +356,16 @@ class Store extends Component {
             })
             
             page = <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
-        } else if (pageType === 'cards' && categoryId){
+        } 
+
+        else if (pageType === 'cards' && categoryId){
             let cardsNode = [];
             this.props.store.itemsToShow.map((item, i)=>{
                 cardsNode.push(this.getCard(item, i))
             })
             page = <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
         }
+       
       
         return (
             <NavBarUserSearchDrawerLayout inputVal={this.state.searchText}
