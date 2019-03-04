@@ -26,7 +26,7 @@ const steps = ["General Information", "Shipping Address", "Billing Address", "Cr
 
 class Registration extends React.Component {
     state = {
-        activeStep: 3,
+        activeStep: 0,
         isSameAddress: false,
     };
 

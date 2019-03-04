@@ -16,11 +16,10 @@ import MaskedTextField from "../Form/MaskedTextField";
 import Cleave from "cleave.js/react";
 
 function PhoneMaskedTextField(props) {
-    let { options, onChange, inputRef, ...other } = props;
+    let { options, onChange, inputRef,value, ...other } = props;
     options={phone: true, phoneRegionCode: 'US'};
-    return <Cleave {...other} onChange={onChange} ref={inputRef} options={options} />;
+    return <Cleave {...other} onChange={onChange} ref={inputRef} options={options} value={value}/>;
 }
-
 const FormikErrorMessage = ({ error }) => {
     return error ? <div className="error">{error}</div> : null;
 }
@@ -112,6 +111,7 @@ const General = ({
                 <Field
                     name="companyName"
                     render={({field: {value, onChange }}) => {
+
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'companyName')} touched={_get(touched, 'companyName')} />
@@ -122,7 +122,7 @@ const General = ({
                                     fullWidth
                                     autoComplete="companyName"
                                     onChange={onChange}
-                                    value={_get(value, 'companyName')}
+                                    value={_get(value, 'companyName') || ''}
                                 />
                             </React.Fragment>
                         )
@@ -143,7 +143,7 @@ const General = ({
                                     fullWidth
                                     autoComplete="email"
                                     onChange={onChange}
-                                    value={_get(value, 'email')}
+                                    value={_get(value, 'email') || ''}
                                 />
                             </React.Fragment>
                         )
@@ -166,7 +166,7 @@ const General = ({
                                         inputComponent: PhoneMaskedTextField
                                     }}
                                     onChange={onChange}
-                                    value={_get(value, 'phone')} 
+                                    value={_get(value, 'phone') || ''} 
                                 />
                             </React.Fragment>
                         )
@@ -176,6 +176,7 @@ const General = ({
             <Grid item xs={12}>
                 <Field
                     render={({field: {value, onChange }}) => {
+
                         return (
                             <React.Fragment>
                                 <FormikErrorMessage error={_get(errors, 'password')} touched={_get(touched, 'password')} />
@@ -187,7 +188,8 @@ const General = ({
                                     fullWidth
                                     autoComplete="password"
                                     onChange={onChange}
-                                    value={_get(value, 'password')}
+                                    value={_get(value, 'password') || ''}
+
                                 />
                             </React.Fragment>
                         )
@@ -208,7 +210,7 @@ const General = ({
                                     fullWidth
                                     autoComplete="confirmPassword"
                                     onChange={onChange}
-                                    value={_get(value, 'confirmPassword')}
+                                    value={_get(value, 'confirmPassword') || ''}
                                 />
                             </React.Fragment>
                         )
@@ -229,7 +231,7 @@ const General = ({
                                     fullWidth
                                     autoComplete="category"
                                     onChange={onChange}
-                                    value={_get(value, 'category')}
+                                    value={_get(value, 'category') || ''}
                                 >
                                     <MenuItem value={1}>Retailer</MenuItem>
                                     <MenuItem value={2}>Individual</MenuItem>
@@ -256,7 +258,7 @@ const General = ({
                                     fullWidth
                                     autoComplete="orderFrom"
                                     onChange={onChange}
-                                    value={_get(value, 'orderFrom')}
+                                    value={_get(value, 'orderFrom') || ''}
                                 >
                                     <MenuItem value={1}>
                                         US Only
@@ -289,7 +291,8 @@ const General = ({
                                     fullWidth
                                     autoComplete="contactName"
                                     onChange={onChange}
-                                    value={_get(value, 'contactName')}
+                                    value={_get(value, 'contactName') || ''}
+
                                 />
                             </React.Fragment>
                         )
@@ -308,11 +311,10 @@ const General = ({
                                     label="Accounting Phone Number"
                                     fullWidth
                                     autoComplete="contactPhone"
-                                    InputProps={{
-                                        inputComponent: PhoneMaskedTextField
-                                    }}
+                                    InputProps={{ inputComponent: PhoneMaskedTextField }}
                                     onChange={onChange}
-                                    value={_get(value, 'contactPhone')}
+                                    value={_get(value, 'contactPhone') || ''}
+
                                 />
                             </React.Fragment>
                         )

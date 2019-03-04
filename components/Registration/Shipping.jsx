@@ -116,7 +116,7 @@ const Shipping = ({
                                     fullWidth
                                     autoComplete="addressee"
                                     onChange={onChange}
-                                    value={_get(value, 'shipping.addressee')}
+                                    value={_get(value, 'shipping.addressee') || ''}
                                 />
                             </React.Fragment>
                         )
@@ -136,7 +136,7 @@ const Shipping = ({
                                     fullWidth
                                     autoComplete="address1"
                                     onChange={onChange}
-                                    value={_get(value, 'shipping.address1')}
+                                    value={_get(value, 'shipping.address1' || '')}
                                 />
                             </React.Fragment>
                         )
@@ -156,7 +156,7 @@ const Shipping = ({
                                     fullWidth
                                     autoComplete="address2"
                                     onChange={onChange}
-                                    value={_get(value, 'shipping.address2')}
+                                    value={_get(value, 'shipping.address2') || ''}
                                 />
                             </React.Fragment>
                         )
@@ -176,7 +176,7 @@ const Shipping = ({
                                     fullWidth
                                     autoComplete="address3"
                                     onChange={onChange}
-                                    value={_get(value, 'shipping.address3')}
+                                    value={_get(value, 'shipping.address3') || ''}
                                 />
                             </React.Fragment>
                         )
@@ -196,7 +196,7 @@ const Shipping = ({
                                     fullWidth
                                     autoComplete="city"
                                     onChange={onChange}
-                                    value={_get(value, 'shipping.city')}
+                                    value={_get(value, 'shipping.city') || ''}
                                 />
                             </React.Fragment>
                         )
@@ -216,7 +216,7 @@ const Shipping = ({
                                     fullWidth
                                     autoComplete="zip"
                                     onChange={onChange}
-                                    value={_get(value, 'shipping.zip')}
+                                    value={_get(value, 'shipping.zip') || ''}
                                 />
                             </React.Fragment>
                         )
@@ -237,7 +237,7 @@ const Shipping = ({
                                     fullWidth
                                     autoComplete="zip"
                                     onChange={onChange}
-                                    value={_get(value, 'shipping.countryid')}
+                                    value={_get(value, 'shipping.countryid') || ''}
                                 >
                                     {SalesLib.COUNTRY_MAP.map((country) => (
                                         <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>

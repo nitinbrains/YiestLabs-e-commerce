@@ -56,7 +56,7 @@ import isLoggedUser from "hocs/isLoggedUser";
 const dataArr = [
     {
         id: 0,
-        title: 'CORE YIEST STRAINS',
+        title: 'CORE YEAST STRAINS',
         img: 'static/images/categories/Category-core.jpg',
         page:'sub',
         value:0,
@@ -117,14 +117,6 @@ const dataArr = [
             salesCategory:23,
             checked: false,
             color:'#c4bab4'
-        },
-        {
-          img: 'static/images/categories/Category-core.jpg',
-          label: 'ALL CORE STRAINS',
-          icon: 'static/images/icons/Ale-icon.svg',
-        //   value:1,
-        //   salesCategory:29,
-        //   checked: false
         }
     ]
     },

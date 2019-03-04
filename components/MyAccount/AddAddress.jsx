@@ -11,11 +11,11 @@ import TextField from "@material-ui/core/TextField";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-import { CountryRegionData } from "react-country-region-selector";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
+import SalesLib from "lib/SalesLib";
 
 class AddAddress extends Component {
     constructor(props) {
@@ -369,43 +369,24 @@ class AddAddress extends Component {
                                                         fullWidth
                                                         autoComplete="country"
                                                     >
-                                                        <InputLabel>
-                                                            Country
-                                                        </InputLabel>
+                                                        <InputLabel>Country</InputLabel>
                                                         <Select>
-                                                            {CountryRegionData.map(
-                                                                (
-                                                                    option,
-                                                                    index
-                                                                ) => (
-                                                                    <MenuItem
-                                                                        key={
-                                                                            option[0]
-                                                                        }
-                                                                        value={
-                                                                            option
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            option[0]
-                                                                        }
-                                                                    </MenuItem>
-                                                                )
-                                                            )}
+                                                            {SalesLib.COUNTRY_MAP.map(country => (
+                                                                <MenuItem key={country.id} value={country.id}>
+                                                                    {country.name}
+                                                                </MenuItem>
+                                                            ))}
                                                         </Select>
                                                     </FormControl>
-                                                    {errors.countryid &&
-                                                        touched.countryid && (
-                                                            <div
-                                                                style={{
-                                                                    color: "red"
-                                                                }}
-                                                            >
-                                                                {
-                                                                    errors.countryid
-                                                                }
-                                                            </div>
-                                                        )}
+                                                    {errors.countryid && touched.countryid && (
+                                                        <div
+                                                            style={{
+                                                                color: "red"
+                                                            }}
+                                                        >
+                                                            {errors.countryid}
+                                                        </div>
+                                                    )}
                                                 </Grid>
                                             );
                                         }}

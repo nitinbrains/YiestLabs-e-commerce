@@ -14,7 +14,7 @@ import _get from 'lodash/get';
 import _isEmpty from 'lodash/isEmpty';
 import moment from "moment";
 import Cleave from "cleave.js/react";
-
+import Utils from "lib/Utils";
 
 function CreditCardMaskedTextField(props) {
     let { options, onChange, inputRef, ...other } = props;
@@ -59,6 +59,11 @@ const CardInfo = ({
 
         if (!_get(values, 'card.ccnumber')) {
             errors.card.ccnumber = "Credit card number is required";
+        } else {
+            const cardType = Utils.getCardType(values.card.ccnumber);
+            if(!cardType) {
+                errors.card.ccnumber = "Credit card type could not be inferred. Enter valid credit card number";
+            }
         }
 
         if (!_get(values, 'card.ccname')) {
@@ -104,7 +109,7 @@ const CardInfo = ({
                                     fullWidth
                                     autoComplete="ccnumber"
                                     onChange={onChange}
-                                    value={_get(value, 'card.ccnumber')}
+                                    value={_get(value, 'card.ccnumber') || ''}
                                     InputProps={{ inputComponent: CreditCardMaskedTextField }}
                                 />
                             </React.Fragment>
@@ -125,7 +130,8 @@ const CardInfo = ({
                                 fullWidth 
                                 autoComplete="card.ccname" 
                                 onChange={onChange} 
-                                value={_get(value, "card.ccname")} />
+                                value={_get(value, "card.ccname") || ''} />
+
                             </React.Fragment>
                         );
                     }}
@@ -145,7 +151,7 @@ const CardInfo = ({
                                     fullWidth
                                     InputProps={{ inputComponent: DateMaskedTextField }}
                                     onChange={onChange}
-                                    value={_get(value, "card.ccexpire")}    
+                                    value={_get(value, "card.ccexpire") || ''}    
                                 />
                             </React.Fragment>
                         );

@@ -34,7 +34,7 @@ import ManageShipping from "components/MyAccount/ManageShipping";
 import ManageBilling from "components/MyAccount/ManageBilling";
 import ManageCards from "components/MyAccount/ManageCards";
 import LoadingIndicator from 'components/UI/LoadingIndicator';
-import * as Util from 'lib/Utils';
+import Util from 'lib/Utils';
 
 import { userActions } from 'appRedux/actions/userActions';
 import { changesWereMade } from 'lib/UserUtils';
