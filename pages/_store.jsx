@@ -295,7 +295,7 @@ class Store extends Component {
             
         }
   
-        
+    
         // isHomebrew = true
         let page = <MainMenu dataArr={dataArr}  />;
         if(pageType === 'sub'&& categoryId){
@@ -316,6 +316,7 @@ class Store extends Component {
             })
             page = <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
         }
+    
       
         return (
             <NavBarUserSearchDrawerLayout>
