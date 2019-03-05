@@ -12,10 +12,8 @@ const initialState = {
 
 
 export default createReducer(initialState, {
-    [inventoryTypes.GET_INVENTORY_SUCCESS]: (state, { data: { itemsToShow, items, category }}) => ({
-        itemsToShow,
+    [inventoryTypes.GET_INVENTORY_SUCCESS]: (state, { data: { items }}) => ({
         items,
-        category,
     }),
     [inventoryTypes.SEARCH_INVENTORY_SUCCESS]: (state, { data: { itemsToShow,  category }}) => ({
         itemsToShow,
