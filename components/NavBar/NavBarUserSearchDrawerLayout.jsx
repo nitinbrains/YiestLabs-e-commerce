@@ -25,11 +25,14 @@ import SideBarItems from "./SideBarItems";
 import SearchBarItems from "./SearchBarItems";
 import Snackbar from '@material-ui/core/Snackbar';
 import CloseIcon from '@material-ui/icons/Close';
+import Badge from '@material-ui/core/Badge';
 
 import { userActions } from "appRedux/actions/userActions";
 import { messageActions } from "appRedux/actions/messageActions";
 import SimpleSnackbar from "components/Form/SimpleSnackbar";
 import Banner from "components/UI/Banner";
+import isLoggedUser from "hocs/isLoggedUser";
+import { cartActions } from 'appRedux/actions/cartActions';
 
 class NavBarUserSearchDrawerLayout extends Component {
     state = {
@@ -131,8 +134,12 @@ class NavBarUserSearchDrawerLayout extends Component {
                         <Button color="secondary">About Us</Button>
 
                         <Link prefetch href="/cart">
-                            <IconButton color="inherit" aria-label="Menu">
+                        <IconButton color="inherit" aria-label="Menu">
+
+                        <Badge color="secondary" badgeContent={this.props.cart.items.length} className={classes.margin} classes={{ badge: classes.badge }}>
+
                                 <ShoppingCartIcon />
+                            </Badge>
                             </IconButton>
                         </Link>
 
@@ -183,7 +190,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                     </div>
                     {children}
                 </main>
-                
+
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'top',
@@ -341,6 +348,13 @@ const styles = theme => ({
     alertWrapper: {
         marginTop:'50px'
     },
+    margin: {
+    margin: theme.spacing.unit,
+  },
+  badge: {
+  border: "solid 2px",
+  borderColor: "#f28411",
+},
 });
 
 NavBarUserSearchDrawerLayout.propTypes = {
@@ -350,6 +364,7 @@ NavBarUserSearchDrawerLayout.propTypes = {
 
 const mapStateToProps = state => ({
     user: state.user,
+    cart: state.cart,
     messages: state.messages
 });
 
