@@ -78,13 +78,14 @@ class AddAddress extends Component {
                                                     <TextField
                                                         id="attention"
                                                         value={props.field.value}
-                                                        onChange={handleChange
-                                                            // e => {
-                                                            // props.form.setFieldValue("attn", e.target.value);
-                                                            // this.setState({
-                                                            //     attn: e.target.value
-                                                            // });
-                                                        }
+                                                        onChange={
+                                                           e => {
+                                                            props.form.setFieldValue("attn", e.target.value);
+                                                            this.setState({
+                                                                attn: e.target.value
+                                                            });
+                                                        
+                                                        }}
                                                         onFocus={e => {
                                                             if (focus !== "attn")
                                                                 this.setState({
