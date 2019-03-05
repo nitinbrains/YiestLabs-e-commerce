@@ -20,7 +20,7 @@ import SalesLib from "lib/SalesLib";
 class AddAddress extends Component {
     constructor(props) {
         super(props);
-        // this.state = {
+        this.state = {
         //     address1: "",
         //     address2: "",
         //     address3: "",
@@ -29,8 +29,8 @@ class AddAddress extends Component {
         //     city: "",
         //     countryid: "",
         //     zip: "",
-        //     focus: ""
-        // };
+            focus: ""
+        };
     }
 
     // addAddress = () => {
@@ -44,7 +44,8 @@ class AddAddress extends Component {
 
     render() {
         const { classes } = this.props;
-        // const { focus, ...rest } = this.state;
+        //const { focus, ...rest } = this.state;
+        const { focus, ...rest } = this.state;
         const customFormValidation = Yup.object().shape({
             attn: Yup.string().required("Required"),
             address1: Yup.string().required("Required"),
@@ -82,13 +83,15 @@ class AddAddress extends Component {
                   //  onSubmit={values => this.addAddress()}
                   onSubmit={values => this.addAddress(values)}
                 >
-                    {({ errors, touched, isValidating, values,handleChange }) => {
+                    {({ errors, touched, isValidating, values, handleChange }) => {
                         return (
                             <Form>
                                 <Grid container spacing={24}>
                                     <Field
                                         name="attn"
                                         component={props => {
+                                            console.log(props);
+                                            
                                             return (
                                                 <Grid item xs={12} sm={6}>
                                                     <TextField
@@ -102,14 +105,14 @@ class AddAddress extends Component {
                                                         //     });
                                                         // }}
                                                         onChange={handleChange}
-                                                        // onFocus={e => {
-                                                        //     if (focus !== "attn")
-                                                        //         this.setState({
-                                                        //             focus: "attn"
-                                                        //         });
-                                                        // }}
+                                                        onFocus={e => {
+                                                            if (focus !== "attn")
+                                                                this.setState({
+                                                                    focus: "attn"
+                                                                });
+                                                        }}
                                                         //autoFocus={focus == "attn"}
-                                                         autoFocus={values.attn}
+                                                        //  autoFocus={values.attn}
                                                         name="attn"
                                                         label="Attention"
                                                         fullWidth
@@ -147,14 +150,14 @@ class AddAddress extends Component {
                                                         //     });
                                                         // }}
                                                         onChange={handleChange}
-                                                        // onFocus={e => {
-                                                        //     if (focus !== "addressee")
-                                                        //         this.setState({
-                                                        //             focus: "addressee"
-                                                        //         });
-                                                        // }}
+                                                        onFocus={e => {
+                                                            if (focus !== "addressee")
+                                                                this.setState({
+                                                                    focus: "addressee"
+                                                                });
+                                                        }}
                                                         //autoFocus={focus == "addressee"}
-                                                        autoFocus={values.addressee}
+                                                      
                                                         name='addressee'
                                                         label="addressee"
                                                         fullWidth
@@ -189,14 +192,14 @@ class AddAddress extends Component {
                                                         //     });
                                                         // }}
                                                         onChange={handleChange}
-                                                        // onFocus={e => {
-                                                        //     if (focus !== "address1")
-                                                        //         this.setState({
-                                                        //             focus: "address1"
-                                                        //         });
-                                                        // }}
+                                                        onFocus={e => {
+                                                            if (focus !== "address1")
+                                                                this.setState({
+                                                                    focus: "address1"
+                                                                });
+                                                        }}
                                                         // autoFocus={focus == "address1"}
-                                                        autoFocus={values.address1}
+                                               
                                                         name="address1"
                                                         label="Address line 1"
                                                         fullWidth
@@ -231,14 +234,14 @@ class AddAddress extends Component {
                                                         //     });
                                                         // }}
                                                         onChange={handleChange}
-                                                        // onFocus={e => {
-                                                        //     if (focus !== "address2")
-                                                        //         this.setState({
-                                                        //             focus: "address2"
-                                                        //         });
-                                                        // }}
+                                                        onFocus={e => {
+                                                            if (focus !== "address2")
+                                                                this.setState({
+                                                                    focus: "address2"
+                                                                });
+                                                        }}
                                                         // autoFocus={focus == "address2"}
-                                                        autoFocus={values.address2}
+                                                      
                                                         name="address2"
                                                         label="Address line 2"
                                                         fullWidth
@@ -273,14 +276,14 @@ class AddAddress extends Component {
                                                         //     });
                                                         // }}
                                                         onChange={handleChange}
-                                                        // onFocus={e => {
-                                                        //     if (focus !== "address3")
-                                                        //         this.setState({
-                                                        //             focus: "address3"
-                                                        //         });
-                                                        // }}
+                                                        onFocus={e => {
+                                                            if (focus !== "address3")
+                                                                this.setState({
+                                                                    focus: "address3"
+                                                                });
+                                                        }}
                                                         // autoFocus={focus == "address3"}
-                                                        autoFocus={values.address3}
+                                                
                                                         name="address3"
                                                         label="Address line 3"
                                                         fullWidth
@@ -315,14 +318,14 @@ class AddAddress extends Component {
                                                         //     });
                                                         // }}
                                                         onChange={handleChange}
-                                                        // onFocus={e => {
-                                                        //     if (focus !== "city")
-                                                        //         this.setState({
-                                                        //             focus: "city"
-                                                        //         });
-                                                        // }}
+                                                        onFocus={e => {
+                                                            if (focus !== "city")
+                                                                this.setState({
+                                                                    focus: "city"
+                                                                });
+                                                        }}
                                                         // autoFocus={focus == "city"}
-                                                        autoFocus={values.city}
+                                                
                                                         name="city"
                                                         label="City"
                                                         fullWidth
@@ -356,14 +359,14 @@ class AddAddress extends Component {
                                                         //     });
                                                         // }}
                                                         onChange={handleChange}
-                                                        // onFocus={e => {
-                                                        //     if (focus !== "zip")
-                                                        //         this.setState({
-                                                        //             focus: "zip"
-                                                        //         });
-                                                        // }}
+                                                        onFocus={e => {
+                                                            if (focus !== "zip")
+                                                                this.setState({
+                                                                    focus: "zip"
+                                                                });
+                                                        }}
                                                         // autoFocus={focus == "zip"}
-                                                        autoFocus={values.zip}
+                                                    
                                                         id="zip"
                                                         name="zip"
                                                         label="Zip / Postal code"
@@ -399,14 +402,14 @@ class AddAddress extends Component {
                                                         //     });
                                                         // }}
                                                         onChange={handleChange}
-                                                        // onFocus={e => {
-                                                        //     if (focus !== "countryid")
-                                                        //         this.setState({
-                                                        //             focus: "countryid"
-                                                        //         });
-                                                        // }}
+                                                        onFocus={e => {
+                                                            if (focus !== "countryid")
+                                                                this.setState({
+                                                                    focus: "countryid"
+                                                                });
+                                                        }}
                                                         // autoFocus={focus == "countryid"}
-                                                        autoFocus={values.countryid}
+                                                    
                                                         name="countryid"
                                                         label="Country"
                                                         fullWidth
