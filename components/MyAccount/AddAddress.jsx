@@ -21,30 +21,21 @@ class AddAddress extends Component {
     constructor(props) {
         super(props);
         this.state = {
-        //     address1: "",
-        //     address2: "",
-        //     address3: "",
-        //     addressee: "",
-        //     attn: "",
-        //     city: "",
-        //     countryid: "",
-        //     zip: "",
+         
             focus: ""
         };
     }
 
-    // addAddress = () => {
-    //     this.props.addAddress({ address: this.state });
-    //     this.props.close();
-    // };
+  
     addAddress = (values) => {
+
         this.props.addAddress({ address: values });
         this.props.close();
     };
 
     render() {
         const { classes } = this.props;
-        //const { focus, ...rest } = this.state;
+      
         const { focus, ...rest } = this.state;
         const customFormValidation = Yup.object().shape({
             attn: Yup.string().required("Required"),
@@ -58,14 +49,7 @@ class AddAddress extends Component {
             <React.Fragment>
                 <Formik
                     initialValues={{
-                        // address1: rest.address1,
-                        // address2: rest.address2,
-                        // address3: rest.address3,
-                        // addressee: rest.addressee,
-                        // attn: rest.attn,
-                        // city: rest.city,
-                        // countryid: rest.countryid,
-                        // zip: rest.zip
+              
 
                         address1: '',
                         address2: '',
@@ -80,8 +64,11 @@ class AddAddress extends Component {
                     }}
                     validationSchema={customFormValidation}
                     enableReinitialize
-                  //  onSubmit={values => this.addAddress()}
-                  onSubmit={values => this.addAddress(values)}
+          
+                    onSubmit={(values, actions) => {
+                        
+                        this.addAddress(values)
+                    }}
                 >
                     {({ errors, touched, isValidating, values, handleChange }) => {
                         return (
@@ -91,19 +78,13 @@ class AddAddress extends Component {
                                         name="attn"
                                         component={props => {
                                             console.log(props);
-                                            
+
                                             return (
                                                 <Grid item xs={12} sm={6}>
                                                     <TextField
                                                         id="attention"
                                                         value={values.attn}
-                                                        // value={props.field.value}
-                                                        // onChange={e => {
-                                                        //     props.form.setFieldValue("attn", e.target.value);
-                                                        //     this.setState({
-                                                        //         attn: e.target.value
-                                                        //     });
-                                                        // }}
+                                                      
                                                         onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "attn")
@@ -111,8 +92,8 @@ class AddAddress extends Component {
                                                                     focus: "attn"
                                                                 });
                                                         }}
-                                                        //autoFocus={focus == "attn"}
-                                                        //  autoFocus={values.attn}
+                                                        autoFocus={focus == "attn"}
+                                                    
                                                         name="attn"
                                                         label="Attention"
                                                         fullWidth
@@ -135,20 +116,14 @@ class AddAddress extends Component {
                                         name="addressee"
                                         component={props => {
                                             console.log(props);
-                                            
+
                                             return (
                                                 <Grid item xs={12} sm={6}>
                                                     <TextField
                                                         id="addressee"
                                                         name="addressee"
                                                         value={values.addressee}
-                                                        //value={props.field.value}
-                                                        // onChange={e => {
-                                                        //     props.form.setFieldValue("addressee", e.target.value);
-                                                        //     this.setState({
-                                                        //         addressee: e.target.value
-                                                        //     });
-                                                        // }}
+                                                     
                                                         onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "addressee")
@@ -156,8 +131,8 @@ class AddAddress extends Component {
                                                                     focus: "addressee"
                                                                 });
                                                         }}
-                                                        //autoFocus={focus == "addressee"}
-                                                      
+                                                        autoFocus={focus == "addressee"}
+
                                                         name='addressee'
                                                         label="addressee"
                                                         fullWidth
@@ -183,14 +158,9 @@ class AddAddress extends Component {
                                                 <Grid item xs={12}>
                                                     <TextField
                                                         id="address1"
-                                                       // value={props.field.value}
-                                                       value={values.address1}
-                                                        // onChange={e => {
-                                                        //     props.form.setFieldValue("address1", e.target.value);
-                                                        //     this.setState({
-                                                        //         address1: e.target.value
-                                                        //     });
-                                                        // }}
+                                                     
+                                                        value={values.address1}
+                                                    
                                                         onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "address1")
@@ -198,8 +168,8 @@ class AddAddress extends Component {
                                                                     focus: "address1"
                                                                 });
                                                         }}
-                                                        // autoFocus={focus == "address1"}
-                                               
+                                                        autoFocus={focus == "address1"}
+
                                                         name="address1"
                                                         label="Address line 1"
                                                         fullWidth
@@ -225,14 +195,9 @@ class AddAddress extends Component {
                                                 <Grid item xs={12}>
                                                     <TextField
                                                         id="addiress2"
-                                                       // value={props.field.value}
-                                                       value={values.address2}
-                                                        // onChange={e => {
-                                                        //     props.form.setFieldValue("address2", e.target.value);
-                                                        //     this.setState({
-                                                        //         address2: e.target.value
-                                                        //     });
-                                                        // }}
+                                                   
+                                                        value={values.address2}
+                                                      
                                                         onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "address2")
@@ -240,8 +205,8 @@ class AddAddress extends Component {
                                                                     focus: "address2"
                                                                 });
                                                         }}
-                                                        // autoFocus={focus == "address2"}
-                                                      
+                                                        autoFocus={focus == "address2"}
+
                                                         name="address2"
                                                         label="Address line 2"
                                                         fullWidth
@@ -267,14 +232,9 @@ class AddAddress extends Component {
                                                 <Grid item xs={12}>
                                                     <TextField
                                                         id="addiress3"
-                                                       // value={props.field.value}
-                                                       value={values.address3}
-                                                        // onChange={e => {
-                                                        //     props.form.setFieldValue("address3", e.target.value);
-                                                        //     this.setState({
-                                                        //         address3: e.target.value
-                                                        //     });
-                                                        // }}
+                                             
+                                                        value={values.address3}
+                                                     
                                                         onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "address3")
@@ -282,8 +242,8 @@ class AddAddress extends Component {
                                                                     focus: "address3"
                                                                 });
                                                         }}
-                                                        // autoFocus={focus == "address3"}
-                                                
+                                                        autoFocus={focus == "address3"}
+
                                                         name="address3"
                                                         label="Address line 3"
                                                         fullWidth
@@ -309,14 +269,9 @@ class AddAddress extends Component {
                                                 <Grid item xs={12} sm={6}>
                                                     <TextField
                                                         id="city"
-                                                        // value={props.field.value}
+                                                 
                                                         value={values.city}
-                                                        // onChange={e => {
-                                                        //     props.form.setFieldValue("city", e.target.value);
-                                                        //     this.setState({
-                                                        //         city: e.target.value
-                                                        //     });
-                                                        // }}
+                                                     
                                                         onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "city")
@@ -324,8 +279,8 @@ class AddAddress extends Component {
                                                                     focus: "city"
                                                                 });
                                                         }}
-                                                        // autoFocus={focus == "city"}
-                                                
+                                                        autoFocus={focus == "city"}
+
                                                         name="city"
                                                         label="City"
                                                         fullWidth
@@ -350,14 +305,9 @@ class AddAddress extends Component {
                                             return (
                                                 <Grid item xs={12} sm={6}>
                                                     <TextField
-                                                        // value={props.field.value}
+                                                      
                                                         value={values.zip}
-                                                        // onChange={e => {
-                                                        //     props.form.setFieldValue("zip", e.target.value);
-                                                        //     this.setState({
-                                                        //         zip: e.target.value
-                                                        //     });
-                                                        // }}
+                                                   
                                                         onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "zip")
@@ -365,8 +315,8 @@ class AddAddress extends Component {
                                                                     focus: "zip"
                                                                 });
                                                         }}
-                                                        // autoFocus={focus == "zip"}
-                                                    
+                                                        autoFocus={focus == "zip"}
+
                                                         id="zip"
                                                         name="zip"
                                                         label="Zip / Postal code"
@@ -392,36 +342,36 @@ class AddAddress extends Component {
                                             return (
                                                 <Grid item xs={12}>
                                                     <FormControl
-                                                        id="country"
-                                                        // value={props.field.value}
-                                                        value={values.countryid}
-                                                        // onChange={e => {
-                                                        //     props.form.setFieldValue("countryid", e.target.value);
-                                                        //     this.setState({
-                                                        //         countryid: e.target.value
-                                                        //     });
-                                                        // }}
-                                                        onChange={handleChange}
-                                                        onFocus={e => {
+                                                        
+                                                        fullWidth
+                                                        // autoComplete="country"
+                                                    >
+                                                        <InputLabel>Country</InputLabel>
+                                                        <Select
+                                                         onFocus={e => {
                                                             if (focus !== "countryid")
                                                                 this.setState({
                                                                     focus: "countryid"
                                                                 });
                                                         }}
-                                                        // autoFocus={focus == "countryid"}
-                                                    
-                                                        name="countryid"
-                                                        label="Country"
-                                                        fullWidth
+                                                        autoFocus={focus == "countryid"}
+                                                               onChange={handleChange}
+                                                               value={values.countryid}
+                                                               inputProps={{
+                                                                name: "countryid",
+                                                                id:"country",
+                                                            
+                                                              }}
+                                                              
                                                         autoComplete="country"
-                                                    >
-                                                        <InputLabel>Country</InputLabel>
-                                                        <Select>
-                                                            {SalesLib.COUNTRY_MAP.map(country => (
-                                                                <MenuItem key={country.id} value={country.id}>
+                                                               >
+                                                            {SalesLib.COUNTRY_MAP.map(country => {
+                                                                console.log(country);
+                                                                
+                                                             return   <MenuItem key={country.id} value={country.id}>
                                                                     {country.name}
                                                                 </MenuItem>
-                                                            ))}
+                                                            })}
                                                         </Select>
                                                     </FormControl>
                                                     {errors.countryid && touched.countryid && (
@@ -439,7 +389,7 @@ class AddAddress extends Component {
                                     />
                                     <Grid style={{ marginTop: 10 }} container justify="flex-end">
                                         <Grid item>
-                                            <Button variant="contained" color="primary" type="submit" onClick={this.addAddress}>
+                                            <Button variant="contained" color="primary" type="submit">
                                                 Add Address
                                             </Button>
                                         </Grid>

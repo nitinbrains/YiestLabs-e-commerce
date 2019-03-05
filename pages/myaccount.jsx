@@ -168,7 +168,7 @@ class MyAccount extends Component {
             var request = changesWereMade(this.state, this.props.user);
             if(!_isEmpty(request)) {
                 this.props.updateUserInfo({request});
-                console.log('submitclick')
+              
             }
             else {
                 throw { message: 'Empty request. Cannot update user information', code: 0 };
@@ -176,14 +176,14 @@ class MyAccount extends Component {
         }
         catch(error) {
             // this.props.displayError();
-            console.log('empty')
+          
         }
-        console.log('submitclickout')
+        
     }
 
     render() {
         const { classes, user } = this.props;
-        console.log(this.props.user.shipping,'shipinggggggggggg')
+        
         const { focus } = this.state;
         const customFormValidation = Yup.object().shape({
             shippingAttn: Yup.string()
