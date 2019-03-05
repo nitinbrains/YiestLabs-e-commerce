@@ -168,6 +168,7 @@ class MyAccount extends Component {
             var request = changesWereMade(this.state, this.props.user);
             if(!_isEmpty(request)) {
                 this.props.updateUserInfo({request});
+                console.log('submitclick')
             }
             else {
                 throw { message: 'Empty request. Cannot update user information', code: 0 };
@@ -175,11 +176,14 @@ class MyAccount extends Component {
         }
         catch(error) {
             // this.props.displayError();
+            console.log('empty')
         }
+        console.log('submitclickout')
     }
 
     render() {
         const { classes, user } = this.props;
+        console.log(this.props.user.shipping,'shipinggggggggggg')
         const { focus } = this.state;
         const customFormValidation = Yup.object().shape({
             shippingAttn: Yup.string()
@@ -222,7 +226,8 @@ class MyAccount extends Component {
                 <Formik
                   initialValues={{
                         //shipping
-                            shippingAddress1: this.state.shipping.address1,
+                             shippingAddress1: this.state.shipping.address1,
+                            // shippingAddress1:this.props.user.shipping.address1,
                             shippingAddress2: this.state.shipping.address2,
                             shippingAddress3: this.state.shipping.address3,
                             shippingAddressee: this.state.shipping.addressee,
@@ -265,7 +270,7 @@ class MyAccount extends Component {
                 >
                 {({ errors, touched, isValidating }) => {
                     return(
-                        <Form>
+                        <Form >
                     <Grid container spacing={24}>
                                 <Grid
                                     item
