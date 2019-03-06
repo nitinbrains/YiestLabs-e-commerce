@@ -178,6 +178,7 @@ class MyAccount extends Component {
             // this.props.displayError();
           
         }
+        console.log('clicked')
         
     }
 
