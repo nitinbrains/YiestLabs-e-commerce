@@ -61,6 +61,7 @@ export function* getUserInfo(action) {
         data: { userID, isLogin }
     } = action;
     try {
+        console.log('get action fired')
         const { res: userInfo, error } = yield call(api.getUserInfo, { userID });
         if(error) throw error;
         localStorage.setItem('userInfo', JSON.stringify(userInfo));
@@ -134,6 +135,7 @@ export function* updateUserInfo(action) {
         var { res, error } = yield call(api.updateUserInfo, {
             request
         });
+        yield put(responseSuccess(request));
         
         if (error){
             yield put(messageActions.showBanner({

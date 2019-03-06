@@ -164,10 +164,14 @@ class MyAccount extends Component {
     };
 
     handleSubmit = () => {
+        const { user } = this.props;
         try {
             var request = changesWereMade(this.state, this.props.user);
             if(!_isEmpty(request)) {
                 this.props.updateUserInfo({request});
+                this.props.getUserInfo({
+                    userID: user.id
+                })
             }
             else {
                 throw { message: 'Empty request. Cannot update user information', code: 0 };
