@@ -50,8 +50,8 @@ class MyAccount extends Component {
             manageCards: false,
             shipFrom: 1,
             confirmDialog: false,
-            shipping: {},
-            billing: {},
+            // shipping: {},
+            // billing: {},
             focus:'',
         };
     }
@@ -101,13 +101,11 @@ class MyAccount extends Component {
 
         const { user } = this.props;
         const { id, email, phone, shipping, billing, subsidiaryOptions, subsidiary } = user;
-        console.log(user,'userprops')
+        console.log(user.billing,'userprops')
         this.setState({
             id,
-            email,
-            phone,
-            shipping,
-            billing,
+            // shipping,
+            // billing,
             shipFrom: subsidiaryOptions[0],
             subsidiaryOptions,
             subsidiary,
@@ -185,13 +183,6 @@ class MyAccount extends Component {
         console.log('form values',values)
         
     }
-
-
-    addAddress = (values) => {
-
-        this.props.addAddress({ address: values });
-        this.props.close();
-    };
 
     render() {
         const { classes, user } = this.props;

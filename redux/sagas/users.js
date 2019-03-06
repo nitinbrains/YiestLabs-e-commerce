@@ -126,7 +126,9 @@ export function* updateUserInfo(action) {
         responseFailure, 
         data: { request }
     } = action;
+
     try {
+        console.log(request,'reqredsaga')
         const user = yield select(state => state.user);
         
         request.id = user.id;
