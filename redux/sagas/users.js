@@ -61,7 +61,10 @@ export function* getUserInfo(action) {
         data: { userID, isLogin }
     } = action;
     try {
+        console.log('getuserinfo action fired')
         const { res: userInfo, error } = yield call(api.getUserInfo, { userID });
+        console.log(userInfo,'getuserinfo response')
+        
         if(error) throw error;
         localStorage.setItem('userInfo', JSON.stringify(userInfo));
         localStorage.setItem('isLoggedin', true);
@@ -79,10 +82,10 @@ export function* getUserInfo(action) {
             // show network error is any regaring with api status
             yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            if(err.code == 0 ){
+            if(error.code == 0 ){
                 // Yeastman error when we have error with code == 0
                 yield put(messageActions.showBanner({ title: 'Yeastman', message: error.message, variant:'error' }));        
-            } else if(err.code == -1){
+            } else if(error.code == -1){
                 // Other error when we have error with code == -1
                 yield put(messageActions.showBanner({ title: 'Error', message: error.message, variant:'error' }));                
             }
@@ -136,7 +139,7 @@ export function* updateUserInfo(action) {
         var { res, error } = yield call(api.updateUserInfo, {
             request
         });
-      
+        yield put(responseSuccess(request));
         
         if (error){
             yield put(messageActions.showBanner({

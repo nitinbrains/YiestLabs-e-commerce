@@ -179,8 +179,12 @@ class MyAccount extends Component {
         //     console.log('catch err',error)
           
         // }
+        const {user}=this.props;
         this.props.updateUserInfo({request:values});
         console.log('form values',values)
+        this.props.getUserInfo({
+            userID: user.id
+        })
         
     }
 
