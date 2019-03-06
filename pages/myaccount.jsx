@@ -114,12 +114,12 @@ class MyAccount extends Component {
 
     componentWillUnmount() {
         const { user: { id, email, phone, shipping, billing, card, subsidiary, subsidiaryOptions }} = this.props;
-        const isShippingDiff = Util.checkDifference(shipping,this.state.shipping);
-        const isBillingDiff = Util.checkDifference( billing, this.state.billing);
-        if( email != this.state.email || phone != this.state.phone || subsidiary != this.state.shipFrom || isShippingDiff || isBillingDiff ) {
-            this.props.unsavedUserInfo()
-        }
-    }
+    //     const isShippingDiff = Util.checkDifference(shipping,this.state.shipping);
+    //     const isBillingDiff = Util.checkDifference( billing, this.state.billing);
+    //     if( email != this.state.email || phone != this.state.phone || subsidiary != this.state.shipFrom || isShippingDiff || isBillingDiff ) {
+    //         this.props.unsavedUserInfo()
+    //     }
+     }
 
     selectAccount = (e) => {
         this.setState({
@@ -186,7 +186,7 @@ class MyAccount extends Component {
 
     render() {
         const { classes, user } = this.props;
-        
+        console.log(user.billing,'beforeafter')
         const { focus } = this.state;
         const customFormValidation = Yup.object().shape({
             shippingAttn: Yup.string()

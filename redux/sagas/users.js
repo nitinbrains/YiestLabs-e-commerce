@@ -126,9 +126,9 @@ export function* updateUserInfo(action) {
         responseFailure, 
         data: { request }
     } = action;
-
+     console.log(responseSuccess,'res succ')
     try {
-        console.log(request,'reqredsaga')
+        // console.log(request,'reqredsaga')
         const user = yield select(state => state.user);
         
         request.id = user.id;
@@ -136,6 +136,7 @@ export function* updateUserInfo(action) {
         var { res, error } = yield call(api.updateUserInfo, {
             request
         });
+      
         
         if (error){
             yield put(messageActions.showBanner({
@@ -145,6 +146,7 @@ export function* updateUserInfo(action) {
             }));
             throw error;
         } else {
+            // console.log(res,'res update')
             yield put(messageActions.showBanner({
                 title: 'Yeastman', 
                 message: "Your account information has been successfully updated",
@@ -383,6 +385,7 @@ export function* addAddress(action) {
         responseFailure,
         data: { address }
     } = action;
+    console.log(responseSuccess,'rezposeeeeeeeeeeeeeeeeeeeeeeeeeee')
     try {
         const user = yield select(state => state.user);
 

@@ -366,7 +366,7 @@ class AddAddress extends Component {
                                                         autoComplete="country"
                                                                >
                                                             {SalesLib.COUNTRY_MAP.map(country => {
-                                                                console.log(country);
+                                                                //console.log(country);
                                                                 
                                                              return   <MenuItem key={country.id} value={country.id}>
                                                                     {country.name}
