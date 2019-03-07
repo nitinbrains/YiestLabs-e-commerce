@@ -168,7 +168,7 @@ class MyAccount extends Component {
            
             if(!_isEmpty(request)) {
                 this.props.updateUserInfo({request});
-              
+              console.log('done')
             }
             else {
                 throw { message: 'Empty request. Cannot update user information', code: 0 };
@@ -180,8 +180,8 @@ class MyAccount extends Component {
           
         }
         const {user}=this.props;
-        // this.props.updateUserInfo({request:values});
-        // console.log('form values',values)
+        //  this.props.updateUserInfo({request:values});
+        //  console.log('form values',values)
         this.props.getUserInfo({
             userID: user.id
         })
@@ -193,31 +193,36 @@ class MyAccount extends Component {
         console.log(user.billing,'beforeafter')
         const { focus } = this.state;
         const customFormValidation = Yup.object().shape({
-            shippingAttn: Yup.string()
+            shipping:{
+                attn: Yup.string()
             .required('Required'),
-            shippingAddress1: Yup.string()
+            address1: Yup.string()
             .required('Required'),
-            shippingAddressee: Yup.string()
+            addressee: Yup.string()
             .required('Required'),
-            shippingCity: Yup.string()
+            city: Yup.string()
             .required('Required'),
-            shippingZip: Yup.number()
+            zip: Yup.number()
             .required('Required'),
-            shippingCountryid: Yup.string()
+            countryid: Yup.string()
             .required('Required'),
+            },
 
-            billingAttn: Yup.string()
+            billing:{
+
+            attn: Yup.string()
             .required('Required'),
-            billingAddress1: Yup.string()
+            address1: Yup.string()
             .required('Required'),
-            billingAddressee: Yup.string()
+            addressee: Yup.string()
             .required('Required'),
-            billingCity: Yup.string()
+            city: Yup.string()
             .required('Required'),
-            billingZip: Yup.number()
+            zip: Yup.number()
             .required('Required'),
-            billingCountryid: Yup.string()
+            countryid: Yup.string()
             .required('Required'),
+            },
 
             phone: Yup.number()
             .required('Required'),
@@ -242,14 +247,17 @@ class MyAccount extends Component {
                             // shippingZip: this.state.shipping.zip,
                             // shippingCountryid: this.state.shipping.countryid,
 
-                            shippingAddress1:this.props.user.shipping.address1,
-                            shippingAddress2: this.props.user.shipping.address2,
-                            shippingAddress3: this.props.user.shipping.address3,
-                            shippingAddressee: this.props.user.shipping.addressee,
-                            shippingAttn: this.props.user.shipping.attn,
-                            shippingCity: this.props.user.shipping.city,
-                            shippingZip: this.props.user.shipping.zip,
-                            shippingCountryid:this.props.user.shipping.countryid,
+                            shipping:{
+
+                            address1:this.props.user.shipping.address1,
+                            address2: this.props.user.shipping.address2,
+                            address3: this.props.user.shipping.address3,
+                            addressee: this.props.user.shipping.addressee,
+                            attn: this.props.user.shipping.attn,
+                            city: this.props.user.shipping.city,
+                            zip: this.props.user.shipping.zip,
+                            countryid:this.props.user.shipping.countryid
+                        },
 
                         // Billing
                             // billingAddress1: this.state.billing.address1,
@@ -261,14 +269,17 @@ class MyAccount extends Component {
                             // billingCity: this.state.billing.city,
                             // billingCountryid: this.state.billing.countryid,
 
-                            billingAddress1: this.props.user.billing.address1,
-                            billingAddress2:this.props.user.billing.address2,
-                            billingAddress3: this.props.user.billing.address3,
-                            billingAddressee: this.props.user.billing.addressee,
-                            billingAttn:this.props.user.billing.attn,
-                            billingZip: this.props.user.billing.zip,
-                            billingCity: this.props.user.billing.city,
-                            billingCountryid: this.props.user.billing.countryid,
+                            billing:{
+
+                            address1: this.props.user.billing.address1,
+                            address2:this.props.user.billing.address2,
+                            address3: this.props.user.billing.address3,
+                            addressee: this.props.user.billing.addressee,
+                            attn:this.props.user.billing.attn,
+                            zip: this.props.user.billing.zip,
+                            city: this.props.user.billing.city,
+                            countryid: this.props.user.billing.countryid
+                               },
 
                         //user
                             email:  this.props.user.email,
@@ -279,8 +290,8 @@ class MyAccount extends Component {
                     validate={( values, props) => {
                         // add more validation which will execute before submit
                         let errors={};
-                        let billZipValidate = WLHelper.validateZipCode(values.billingZip,values.billingCountryid)
-                        let shipZipValidate = WLHelper.validateZipCode(values.shippingZip,values.shippingCountryid)
+                        let billZipValidate = WLHelper.validateZipCode(values.billing.zip,values.billing.countryid)
+                        let shipZipValidate = WLHelper.validateZipCode(values.shipping.zip,values.shipping.countryid)
                         // if(!billZipValidate){
                         //     errors.billingZip = 'MUST BE VALID ZIP CODE'
                         // }
@@ -294,11 +305,14 @@ class MyAccount extends Component {
 
 
                     onSubmit={(values, actions) => {
+                        console.log("in submit");
+                        
                         
                         this.handleSubmit(values)
                     }}
                 >
                 {({ errors, touched, isValidating, values, handleChange}) => {
+                    console.log(errors,'errrrrrrrrrrrrrrrr')
                     return(
                         <Form >
                     <Grid container spacing={24}>
@@ -323,6 +337,7 @@ class MyAccount extends Component {
                                     <Field
                                         name="email"
                                         component={(props)=>{
+                                            console.log(props,'props')
                                         return(
                                             <Grid item xs={3}>
                                                 <TextField
@@ -434,7 +449,10 @@ class MyAccount extends Component {
                                     </Grid>
                                 </Grid>
 
-                        <Grid item container justify="center">
+                            <Grid item container justify="center">
+                                        
+                            </Grid>
+                         <Grid item container justify="center">
 
                             <Grid
                                 item
@@ -457,26 +475,28 @@ class MyAccount extends Component {
                                     />
                                 </Grid>
                                 <Field
-                                    name="shippingAttn"
+                                    name="shipping.attn"
                                     component={(props)=>{
+                                        console.log(props,"sjshj");
+                                        
                                     return(
                                         <Grid item xs={12}>
                                             <TextField
                                                 // onChange={e => { props.form.setFieldValue('shippingAttn',e.target.value); this.setState({shipping: {...this.state.shipping, attn: e.target.value}})}}
                                                 // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value !== '' }}
-                                                value={values.shippingAttn}
+                                                value={values && values.shipping && values.shipping.attn}
                                                 onChange={handleChange}
-                                                InputLabelProps={{ shrink: values.shippingAttn !== '' }}
+                                                InputLabelProps={{ shrink: values.shipping.attn !== '' }}
                                                 onFocus={e => {
-                                                    if (focus !== 'shippingAttn')
+                                                    if (focus !== 'shipping.attn')
                                                     this.setState({
-                                                        focus : 'shippingAttn'
+                                                        focus : 'shipping.attn'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'shippingAttn' }
-                                                id="shippingAttn"
-                                                name="shippingAttn"
+                                                autoFocus={ focus == 'shipping.attn' }
+                                                id="shipping.attn"
+                                                name="shipping.attn"
                                                 label="Attention"
                                                 fullWidth
                                                 autoComplete="attention"
@@ -485,7 +505,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.shippingAttn && touched.shippingAttn && <div style={{color:'red'}} >{errors.shippingAttn}</div>}
+                                {/* {errors.shippingAttn && touched.shippingAttn && <div style={{color:'red'}} >{errors.shippingAttn}</div>} */}
                                 <Field
                                     name="shippingAddressee"
                                     component={(props)=>{
@@ -495,18 +515,18 @@ class MyAccount extends Component {
                                                 // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 // onChange={e => { props.form.setFieldValue('shippingAddressee',e.target.value); this.setState({shipping: {...this.state.shipping, addressee: e.target.value}})}}
-                                                value={values.shippingAddressee}
-                                                InputLabelProps={{ shrink: values.shippingAddressee!== '' }}
+                                                value={values.shipping.addressee}
+                                                InputLabelProps={{ shrink: values.shipping.addressee!== '' }}
                                                 onChange={handleChange}
                                                 onFocus={e => {
-                                                    if (focus !== 'shippingAddressee')
+                                                    if (focus !== 'addressee')
                                                     this.setState({
-                                                        focus : 'shippingAddressee'
+                                                        focus : 'shipping.addressee'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'shippingAddressee' }
-                                                id="shippingAddressee"
-                                                name="shippingAddressee"
+                                                autoFocus={ focus == 'shipping.addressee' }
+                                                id="shipping.addressee"
+                                                name="shipping.addressee"
                                                 label="Addressee"
                                                 fullWidth
                                                 autoComplete="addressee"
@@ -515,7 +535,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.shippingAddressee && touched.shippingAddressee && <div style={{color:'red'}} >{errors.shippingAddressee}</div>}
+                                {/* {errors.shipping.addressee && touched.shipping.addressee && <div style={{color:'red'}} >{errors.shipping.addressee}</div>} */}
                                 <Field
                                     name="shippingAddress1"
                                     component={(props)=>{
@@ -525,18 +545,18 @@ class MyAccount extends Component {
                                             // value={props.field.value}
                                             // InputLabelProps={{ shrink: props.field.value !== '' }}
                                             // onChange={e => { props.form.setFieldValue('shippingAddress1',e.target.value); this.setState({shipping: {...this.state.shipping, address1: e.target.value}})}}
-                                            value={values.shippingAddress1}
+                                            value={values.shipping.address1}
                                             onChange={handleChange}
-                                            InputLabelProps={{ shrink: values.shippingAddress1 !== '' }}
+                                            InputLabelProps={{ shrink: values.shipping.address1 !== '' }}
                                             onFocus={e => {
-                                                if (focus !== 'shippingAddress1')
+                                                if (focus !== 'shipping.address1')
                                                 this.setState({
-                                                    focus : 'shippingAddress1'
+                                                    focus : 'shipping.address1'
                                                 })
                                             }}
-                                            autoFocus={ focus == 'shippingAddress1' }
-                                            id="shippingAddress1"
-                                            name="shippingAddress1"
+                                            autoFocus={ focus == 'shipping.address1' }
+                                            id="shipping.address1"
+                                            name="shipping.address1"
                                             label="Address line 1"
                                             fullWidth
                                             autoComplete="address-line1"
@@ -545,7 +565,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.shippingAddress1 && touched.shippingAddress1 && <div style={{color:'red'}} >{errors.shippingAddress1}</div>}
+                                {/* {errors.shipping.address1 && touched.shipping.address1 && <div style={{color:'red'}} >{errors.shipping.address1}</div>} */}
                                 <Field
                                     name="shippingAddress2"
                                     component={(props)=>{
@@ -555,18 +575,18 @@ class MyAccount extends Component {
                                                 // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 // onChange={e => { props.form.setFieldValue('shippingAddress2',e.target.value); this.setState({shipping: {...this.state.shipping, address2: e.target.value}})}}
-                                                value={values.shippingAddress2}
+                                                value={values.shipping.address2}
                                                 onChange={handleChange}
-                                                InputLabelProps={{ shrink: values.shippingAddress2 !== '' }}
+                                                InputLabelProps={{ shrink: values.shipping.address2 !== '' }}
                                                 onFocus={e => {
-                                                    if (focus !== 'shippingAddress2')
+                                                    if (focus !== 'shipping.address2')
                                                     this.setState({
-                                                        focus : 'shippingAddress2'
+                                                        focus : 'shipping.address2'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'shippingAddress2' }
-                                                id="shippingAddress2"
-                                                name="shippingAddress2"
+                                                autoFocus={ focus == 'shipping.address2' }
+                                                id='shipping.address2'
+                                                name='shipping.address2'
                                                 label="Address line 2"
                                                 fullWidth
                                                 autoComplete="address-line2"
@@ -575,7 +595,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.shippingAddress2 && touched.shippingAddress2 && <div style={{color:'red'}} >{errors.shippingAddress2}</div>}
+                                {/* {errors.shipping.address2 && touched.shipping.address2 && <div style={{color:'red'}} >{errors.shipping.address2}</div>} */}
                                 <Field
                                     name="shippingAddress3"
                                     component={(props)=>{
@@ -585,18 +605,18 @@ class MyAccount extends Component {
                                                 // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 // onChange={e => { props.form.setFieldValue('shippingAddress3',e.target.value); this.setState({shipping: {...this.state.shipping, address3: e.target.value}})}}
-                                                value={values.shippingAddress3}
+                                                value={values.shipping.address3}
                                                 onChange={handleChange}
-                                                InputLabelProps={{ shrink: values.shippingAddress3 !== '' }}
+                                                InputLabelProps={{ shrink: values.shipping.address3 !== '' }}
                                                 onFocus={e => {
-                                                    if (focus !== 'shippingAddress3')
+                                                    if (focus !== 'shipping.address3')
                                                     this.setState({
-                                                        focus : 'shippingAddress3'
+                                                        focus : 'shipping.address3'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'shippingAddress3' }
-                                                id="shippingAddress3"
-                                                name="shippingAddress3"
+                                                autoFocus={ focus == 'shipping.address3' }
+                                                id="shipping.address3"
+                                                name="shipping.address3"
                                                 label="Address line 3"
                                                 fullWidth
                                                 autoComplete="address-line3"
@@ -605,7 +625,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.shippingAddress3 && touched.shippingAddress3 && <div style={{color:'red'}} >{errors.shippingAddress3}</div>}
+                                {/* {errors.shipping.address3 && touched.shipping.address3 && <div style={{color:'red'}} >{errors.shipping.address3}</div>} */}
                                 <Field
                                     name="shippingCity"
                                     component={(props)=>{
@@ -615,18 +635,18 @@ class MyAccount extends Component {
                                                 // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 // onChange={e => { props.form.setFieldValue('shippingCity',e.target.value); this.setState({shipping: {...this.state.shipping, city: e.target.value}})}}
-                                                value={values.shippingCity}
+                                                value={values.shipping.city}
                                                 onChange={handleChange}
-                                                InputLabelProps={{ shrink: values.shippingCity!== '' }}
+                                                InputLabelProps={{ shrink: values.shipping.city!== '' }}
                                                 onFocus={e => {
-                                                    if (focus !== 'shippingCity')
+                                                    if (focus !== 'shipping.city')
                                                     this.setState({
-                                                        focus : 'shippingCity'
+                                                        focus : 'shipping.city'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'shippingCity' }
-                                                id="shippingCity"
-                                                name="shippingCity"
+                                                autoFocus={ focus == 'shipping.city' }
+                                                id="shipping.city"
+                                                name="shipping.city"
                                                 label="City"
                                                 fullWidth
                                                 autoComplete="address-level2"
@@ -635,7 +655,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.shippingCity && touched.shippingCity && <div style={{color:'red'}} >{errors.shippingCity}</div>}
+                                {/* {errors.shipping.city && touched.shipping.city && <div style={{color:'red'}} >{errors.shipping.city}</div>} */}
                                 <Field
                                     name="shippingZip"
                                     component={(props)=>{
@@ -645,19 +665,19 @@ class MyAccount extends Component {
                                                // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 // onChange={e => { props.form.setFieldValue('shippingZip',e.target.value); this.setState({shipping: {...this.state.shipping, zip: e.target.value}})}}
-                                                value={values.shippingZip}
+                                                value={values.shipping.zip}
                                                 onChange={handleChange}
-                                                InputLabelProps={{ shrink: values.shippingZip!== '' }}
+                                                InputLabelProps={{ shrink: values.shipping.zip!== '' }}
                                                 onFocus={e => {
-                                                    if (focus !== 'shippingZip')
+                                                    if (focus !== 'shipping.zip')
                                                     this.setState({
-                                                        focus : 'shippingZip'
+                                                        focus : 'shipping.zip'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'shippingZip' }
-                                                id="shippingZip"
+                                                autoFocus={ focus == 'shipping.zip' }
+                                                id="shipping.zip"
                                                 type='number'
-                                                name="shippingZip"
+                                                name="shipping.zip"
                                                 label="Zip / Postal code"
                                                 fullWidth
                                                 autoComplete="postal-code"
@@ -666,7 +686,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.shippingZip && touched.shippingZip && <div style={{color:'red'}} >{errors.shippingZip}</div>}
+                                {/* {errors.shipping.zip && touched.shipping.zip && <div style={{color:'red'}} >{errors.shipping.zip}</div>} */}
                                 <Field
                                     name="shippingCountryid"
                                     component={(props)=>{
@@ -676,18 +696,18 @@ class MyAccount extends Component {
                                                 // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value != '' }}
                                                 // onChange={e => { props.form.setFieldValue('shippingCountryid',e.target.value); this.setState({shipping: {...this.state.shipping, countryid: e.target.value}})}}
-                                               value={values.shippingCountryid}
+                                               value={values.shipping.countryid}
                                                onChange={handleChange}
-                                               InputLabelProps={{ shrink: values.shippingCountryid != '' }}
+                                               InputLabelProps={{ shrink: values.shipping.countryid != '' }}
                                                 onFocus={e => {
-                                                    if (focus !== 'shippingCountryid')
+                                                    if (focus !== 'shipping.countryid')
                                                     this.setState({
-                                                        focus : 'shippingCountryid'
+                                                        focus : 'shipping.countryid'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'shippingCountryid' }
-                                                id="shippingCountryid"
-                                                name="shippingCountryid"
+                                                autoFocus={ focus == 'shipping.countryid' }
+                                                id="shipping.countryid"
+                                                name="shipping.countryid"
                                                 label="Country"
                                                 fullWidth
                                                 autoComplete="country"
@@ -696,7 +716,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.shippingCountryid && touched.shippingCountryid && <div style={{color:'red'}} >{errors.shippingCountryid}</div>}
+                                {/* {errors.shipping.countryid && touched.shipping.countryid && <div style={{color:'red'}} >{errors.shipping.countryid}</div>} */}
                                 <Grid item xs={12}>
                                     <Button
                                         onClick={this.manageShipping}
@@ -737,18 +757,18 @@ class MyAccount extends Component {
                                                 // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value != '' }}
                                                 // onChange={e => { props.form.setFieldValue('billingAttn',e.target.value); this.setState({billing: {...this.state.billing, attn: e.target.value}})}}
-                                                value={values.billingAttn}
+                                                value={values.billing.attn}
                                                 onChange={handleChange}
-                                                InputLabelProps={{ shrink: values.billingAttn}}
+                                                InputLabelProps={{ shrink: values.billing.attn}}
                                                 onFocus={e => {
-                                                    if (focus !== 'billingAttn')
+                                                    if (focus !== 'billing.attn')
                                                     this.setState({
-                                                        focus : 'billingAttn'
+                                                        focus : 'billing.attn'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'billingAttn' }
-                                                id="billingAttn"
-                                                name="billingAttn"
+                                                autoFocus={ focus == 'billing.attn' }
+                                                id="billing.attn"
+                                                name="billing.attn"
                                                 label="Attention"
                                                 fullWidth
                                                 autoComplete="attention"
@@ -757,7 +777,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.billingAttn && touched.billingAttn && <div style={{color:'red'}} >{errors.billingAttn}</div>}
+                                {/* {errors.billing.attn && touched.billing.attn && <div style={{color:'red'}} >{errors.billing.attn}</div>} */}
                                 <Field
                                     name="billingAddressee"
                                     component={(props)=>{
@@ -767,18 +787,18 @@ class MyAccount extends Component {
                                                 // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 // onChange={e => { props.form.setFieldValue('billingAddressee',e.target.value); this.setState({billing: {...this.state.billing, addressee: e.target.value}})}}
-                                               value={values.billingAddressee}
+                                               value={values.billing.addressee}
                                                onChange={handleChange}
-                                               InputLabelProps={{ shrink: values.billingAddressee !== '' }}
+                                               InputLabelProps={{ shrink: values.billing.addressee !== '' }}
                                                 onFocus={e => {
-                                                    if (focus !== 'billingAddressee')
+                                                    if (focus !== 'billing.addressee')
                                                     this.setState({
-                                                        focus : 'billingAddressee'
+                                                        focus : 'billing.addressee'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'billingAddressee' }
-                                                id="billingAddressee"
-                                                name="billingAddressee"
+                                                autoFocus={ focus == 'billing.addressee' }
+                                                id="billing.addressee"
+                                                name="billing.addressee"
                                                 label="Addressee"
                                                 fullWidth
                                                 autoComplete="addressee"
@@ -787,7 +807,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.billingAddressee && touched.billingAddressee && <div style={{color:'red'}} >{errors.billingAddressee}</div>}
+                                {/* {errors.billing.addressee && touched.billing.addressee && <div style={{color:'red'}} >{errors.billing.addressee}</div>} */}
                                 <Field
                                     name="billingAddress1"
                                     component={(props)=>{
@@ -797,18 +817,18 @@ class MyAccount extends Component {
                                                 // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 // onChange={e => { props.form.setFieldValue('billingAddress1',e.target.value); this.setState({billing: {...this.state.billing, address1: e.target.value}})}}
-                                               value={values.billingAddress1}
+                                               value={values.billing.address1}
                                                onChange={handleChange}
-                                               InputLabelProps={{shrink:values.billingAddress1}}
+                                               InputLabelProps={{shrink: values.billing.address1}}
                                                 onFocus={e => {
-                                                    if (focus !== 'billingAddress1')
+                                                    if (focus !== 'billing.address1')
                                                     this.setState({
-                                                        focus : 'billingAddress1'
+                                                        focus : 'billing.address1'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'billingAddress1' }
-                                                id="billingAddress1"
-                                                name="billingAddress1"
+                                                autoFocus={ focus == 'billing.address1' }
+                                                id="billing.address1"
+                                                name="billing.address1"
                                                 label="Address line 1"
                                                 fullWidth
                                                 autoComplete="address-line1"
@@ -817,7 +837,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.billingAddress1 && touched.billingAddress1 && <div style={{color:'red'}} >{errors.billingAddress1}</div>}
+                                {/* {errors.billing.address1 && touched.billing.address1 && <div style={{color:'red'}} >{errors.billing.address1}</div>} */}
                                 <Field
                                     name="billingAddress2"
                                     component={(props)=>{
@@ -827,18 +847,18 @@ class MyAccount extends Component {
                                                 // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 // onChange={e => { props.form.setFieldValue('billingAddress2',e.target.value); this.setState({billing: {...this.state.billing, address2: e.target.value}})}}
-                                                value={values.billingAddress2}
+                                                value={values.billing.address2}
                                                 onChange={handleChange}
-                                                InputLabelProps={{shrink: values.billingAddress2}}
+                                                InputLabelProps={{shrink: values.billing.address2}}
                                                 onFocus={e => {
-                                                    if (focus !== 'billingAddress2')
+                                                    if (focus !== 'billing.address2')
                                                     this.setState({
-                                                        focus : 'billingAddress2'
+                                                        focus : 'billing.address2'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'billingAddress2' }
-                                                id="billingAddress2"
-                                                name="billingAddress2"
+                                                autoFocus={ focus == 'billing.address2' }
+                                                id="billing.address2"
+                                                name="billing.address2"
                                                 label="Address line 2"
                                                 fullWidth
                                                 autoComplete="address-line2"
@@ -847,7 +867,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.billingAddress2 && touched.billingAddress2 && <div style={{color:'red'}} >{errors.billingAddress2}</div>}
+                                {/* {errors.billing.address2 && touched.billing.address2 && <div style={{color:'red'}} >{errors.billing.address2}</div>} */}
                                 <Field
                                     name="billingAddress3"
                                     component={(props)=>{
@@ -857,18 +877,18 @@ class MyAccount extends Component {
                                                // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 // onChange={e => { props.form.setFieldValue('billingAddress3',e.target.value); this.setState({billing: {...this.state.billing, address3: e.target.value}})}}
-                                               value={values.billingAddress3}
+                                               value={values.billing.address3}
                                                onChange={handleChange}
-                                               InputLabelProps={{shrink: values.billingAddress3}}
+                                               InputLabelProps={{shrink: values.billing.address3}}
                                                 onFocus={e => {
-                                                    if (focus !== 'billingAddress3')
+                                                    if (focus !== 'billing.address3')
                                                     this.setState({
-                                                        focus : 'billingAddress3'
+                                                        focus : 'billing.address3'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'billingAddress3' }
-                                                id="billingAddress3"
-                                                name="billingAddress3"
+                                                autoFocus={ focus == 'billing.address3' }
+                                                id="billing.address3"
+                                                name="billing.address3"
                                                 label="Address line 3"
                                                 fullWidth
                                                 autoComplete="address-line3"
@@ -878,7 +898,7 @@ class MyAccount extends Component {
                                     }}
                                 />
 
-                                {errors.billingAddress3 && touched.billingAddress3 && <div style={{color:'red'}}>{errors.billingAddress3}</div>}
+                                {/* {errors.billing.address3 && touched.billing.address3 && <div style={{color:'red'}}>{errors.billing.address3}</div>} */}
                                 <Field
                                     name="billingCity"
                                     component={(props)=>{
@@ -888,18 +908,18 @@ class MyAccount extends Component {
                                                 // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 // onChange={e => { props.form.setFieldValue('volVal',e.target.value); this.setState({billing: {...this.state.billing, city: e.target.value}})}}
-                                               value={values.billingCity}
+                                               value={values.billing.city}
                                                onChange={handleChange}
-                                               InputLabelProps={{ shrink: values.billingCity}}
+                                               InputLabelProps={{ shrink: values.billing.city}}
                                                 onFocus={e => {
-                                                    if (focus !== 'billingCity')
+                                                    if (focus !== 'billing.city')
                                                     this.setState({
-                                                        focus : 'billingCity'
+                                                        focus : 'billing.city'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'billingCity' }
-                                                id="billingCity"
-                                                name="billingCity"
+                                                autoFocus={ focus == 'billing.city' }
+                                                id="billing.city"
+                                                name="billing.city"
                                                 label="City"
                                                 fullWidth
                                                 autoComplete="address-level2"
@@ -908,7 +928,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.billingCity && touched.billingCity && <div style={{color:'red'}} >{errors.billingCity}</div>}
+                                {/* {errors.billing.city && touched.billing.city && <div style={{color:'red'}} >{errors.billing.city}</div>} */}
                                 <Field
                                     name="billingZip"
                                     component={(props)=>{
@@ -918,18 +938,18 @@ class MyAccount extends Component {
                                                 // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 // onChange={e => { props.form.setFieldValue('billingZip',e.target.value); this.setState({billing: {...this.state.billing, zip: e.target.value}})}}
-                                                value={values.billingZip}
+                                                value={values.billing.zip}
                                                 onChange={handleChange}
-                                                InputLabelProps={{shrink: values.billingZip}}
+                                                InputLabelProps={{shrink: values.billing.zip}}
                                                 onFocus={e => {
-                                                    if (focus !== 'billingZip')
+                                                    if (focus !== 'billing.zip')
                                                     this.setState({
-                                                        focus : 'billingZip'
+                                                        focus : 'billing.zip'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'billingZip' }
-                                                id="billingZip"
-                                                name="billingZip"
+                                                autoFocus={ focus == 'billing.zip' }
+                                                id="billing.zip"
+                                                name="billing.zip"
                                                 label="Zip / Postal code"
                                                 fullWidth
                                                 autoComplete="postal-code"
@@ -938,7 +958,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.billingZip && touched.billingZip && <div style={{color:'red'}} >{errors.billingZip}</div>}
+                                {/* {errors.billing.zip && touched.billing.zip && <div style={{color:'red'}} >{errors.billing.zip}</div>} */}
                                 <Field
                                     name="billingCountryid"
                                     component={(props)=>{
@@ -948,18 +968,18 @@ class MyAccount extends Component {
                                                 // value={props.field.value}
                                                 // InputLabelProps={{ shrink: props.field.value !== '' }}
                                                 // onChange={e => { props.form.setFieldValue('billingCountryid',e.target.value); this.setState({billing: {...this.state.billing, countryid: e.target.value}})}}
-                                                value={values.billingCountryid}
+                                                value={values.billing.countryid}
                                                 onChange={handleChange}
-                                                InputLabelProps={{shrink: values.billingCountryid}}
+                                                InputLabelProps={{shrink: values.billing.countryid}}
                                                 onFocus={e => {
-                                                    if (focus !== 'billingCountryid')
+                                                    if (focus !== 'billing.countryid')
                                                     this.setState({
-                                                        focus : 'billingCountryid'
+                                                        focus : 'billing.countryid'
                                                     })
                                                 }}
-                                                autoFocus={ focus == 'billingCountryid' }
-                                                id="billingCountryid"
-                                                name="billingCountryid"
+                                                autoFocus={ focus == 'billing.countryid' }
+                                                id="billing.countryid"
+                                                name="billing.countryid"
                                                 label="Country"
                                                 fullWidth
                                                 autoComplete="country"
@@ -968,7 +988,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {errors.billingCountryid && touched.billingCountryid && <div style={{color:'red'}} >{errors.billingCountryid}</div>}
+                                {/* {errors.billing.countryid && touched.billing.countryid && <div style={{color:'red'}} >{errors.billing.countryid}</div>} */}
                                 <Grid item xs={12} md={7}>
                                     <Button
                                         style={{ marginTop: 10 }}
@@ -988,7 +1008,7 @@ class MyAccount extends Component {
                                     </Button>
                                 </Grid>
                             </Grid>
-                        </Grid>
+                        </Grid> 
                     </Grid>
                     <div className={classes.buttonContainer}>
                         <Button

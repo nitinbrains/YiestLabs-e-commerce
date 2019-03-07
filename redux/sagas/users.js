@@ -129,7 +129,7 @@ export function* updateUserInfo(action) {
         responseFailure, 
         data: { request }
     } = action;
-     console.log(responseSuccess,'res succ')
+    // console.log(responseSuccess,'res succ')
     try {
         // console.log(request,'reqredsaga')
         const user = yield select(state => state.user);
@@ -139,6 +139,7 @@ export function* updateUserInfo(action) {
         var { res, error } = yield call(api.updateUserInfo, {
             request
         });
+        console.log(request,'reqredsaga')
         yield put(responseSuccess(request));
         
         if (error){
