@@ -193,8 +193,8 @@ class MyAccount extends Component {
         console.log(user.billing,'beforeafter')
         const { focus } = this.state;
         const customFormValidation = Yup.object().shape({
-            shipping:{
-                attn: Yup.string()
+            shipping:Yup.object().shape({
+             attn: Yup.string()
             .required('Required'),
             address1: Yup.string()
             .required('Required'),
@@ -206,9 +206,9 @@ class MyAccount extends Component {
             .required('Required'),
             countryid: Yup.string()
             .required('Required'),
-            },
+            }),
 
-            billing:{
+            billing:Yup.object().shape({
 
             attn: Yup.string()
             .required('Required'),
@@ -222,13 +222,14 @@ class MyAccount extends Component {
             .required('Required'),
             countryid: Yup.string()
             .required('Required'),
-            },
+            }),
 
             phone: Yup.number()
             .required('Required'),
             email: Yup.string()
             .email('Must Be Email')
             .required('Required'),
+        
         });
         return (
             <NavBarUserSearchDrawerLayout>
@@ -777,7 +778,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {/* {errors.billing.attn && touched.billing.attn && <div style={{color:'red'}} >{errors.billing.attn}</div>} */}
+                                {errors.billingAttn && touched.billingAttn && <div style={{color:'red'}} >{errors.billingAttn}</div>}
                                 <Field
                                     name="billingAddressee"
                                     component={(props)=>{
