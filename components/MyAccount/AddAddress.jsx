@@ -77,7 +77,6 @@ class AddAddress extends Component {
                                     <Field
                                         name="attn"
                                         component={props => {
-                                            console.log(props);
 
                                             return (
                                                 <Grid item xs={12} sm={6}>
@@ -115,7 +114,6 @@ class AddAddress extends Component {
                                     <Field
                                         name="addressee"
                                         component={props => {
-                                            console.log(props);
 
                                             return (
                                                 <Grid item xs={12} sm={6}>
