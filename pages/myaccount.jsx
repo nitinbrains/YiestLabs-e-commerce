@@ -163,25 +163,25 @@ class MyAccount extends Component {
     };
 
     handleSubmit = (values) => {
-        // try {
-        //     var request = changesWereMade(this.state, this.props.user);
+        try {
+            var request = changesWereMade(values, this.props.user);
            
-        //     if(!_isEmpty(request)) {
-        //         this.props.updateUserInfo({request});
+            if(!_isEmpty(request)) {
+                this.props.updateUserInfo({request});
               
-        //     }
-        //     else {
-        //         throw { message: 'Empty request. Cannot update user information', code: 0 };
-        //     }
-        // }
-        // catch(error) {
-        //     // this.props.displayError();
-        //     console.log('catch err',error)
+            }
+            else {
+                throw { message: 'Empty request. Cannot update user information', code: 0 };
+            }
+        }
+        catch(error) {
+            // this.props.displayError();
+            console.log('catch err',error)
           
-        // }
+        }
         const {user}=this.props;
-        this.props.updateUserInfo({request:values});
-        console.log('form values',values)
+        // this.props.updateUserInfo({request:values});
+        // console.log('form values',values)
         this.props.getUserInfo({
             userID: user.id
         })
