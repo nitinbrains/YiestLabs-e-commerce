@@ -505,7 +505,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                {/* {errors.shippingAttn && touched.shippingAttn && <div style={{color:'red'}} >{errors.shippingAttn}</div>} */}
+                                {errors && errors.shippingAttn && touched && touched.shippingAttn && <div style={{color:'red'}} >{errors.shippingAttn}</div>}
                                 <Field
                                     name="shippingAddressee"
                                     component={(props)=>{
