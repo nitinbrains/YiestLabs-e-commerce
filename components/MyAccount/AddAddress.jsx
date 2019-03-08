@@ -342,17 +342,9 @@ class AddAddress extends Component {
                                                     <FormControl
                                                         
                                                         fullWidth
-                                                        // autoComplete="country"
                                                     >
                                                         <InputLabel>Country</InputLabel>
                                                         <Select
-                                                         onFocus={e => {
-                                                            if (focus !== "countryid")
-                                                                this.setState({
-                                                                    focus: "countryid"
-                                                                });
-                                                        }}
-                                                        autoFocus={focus == "countryid"}
                                                                onChange={handleChange}
                                                                value={values.countryid}
                                                                inputProps={{
@@ -363,13 +355,13 @@ class AddAddress extends Component {
                                                               
                                                         autoComplete="country"
                                                                >
-                                                            {SalesLib.COUNTRY_MAP.map(country => {
-                                                                //console.log(country);
-                                                                
-                                                             return   <MenuItem key={country.id} value={country.id}>
+                                                            {
+                                                                SalesLib.COUNTRY_MAP && SalesLib.COUNTRY_MAP.map(country=>(
+                                                                    <MenuItem key={country.id} value={country.id}>
                                                                     {country.name}
                                                                 </MenuItem>
-                                                            })}
+                                                                ))  
+                                                            }
                                                         </Select>
                                                     </FormControl>
                                                     {errors.countryid && touched.countryid && (
@@ -392,7 +384,15 @@ class AddAddress extends Component {
                                             </Button>
                                         </Grid>
                                     </Grid>
+                                    <Grid >
+                                        <Grid item>
+                                            <Button variant="contained" color="primary" >
+                                                Cancel
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
+                            
                             </Form>
                         );
                     }}

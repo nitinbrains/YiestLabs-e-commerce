@@ -83,16 +83,16 @@ class ManageBilling extends Component {
         return (
             <React.Fragment>
                 <DialogContent id="my-order-details">
+                <div className={classes.close}>
+                            <IconButton style={{padding:'4.5px'}} color="inherit" size="small" aria-label="Menu" onClick={() => this.handleDialogClose()}>
+                                <CloseIcon />
+                            </IconButton>
+                        </div>
                     <div className="main-block">
                         <div className="order-number">
                             <Typography variant="h6" color="textPrimary">
                                 MANAGE BILLING ADDRESSES
                             </Typography>
-                        </div>
-                        <div className={classes.close}>
-                            <IconButton color="inherit" size="small" aria-label="Menu" onClick={() => this.handleDialogClose()}>
-                                <CloseIcon />
-                            </IconButton>
                         </div>
                         <Grid
                             item
@@ -267,7 +267,7 @@ const styles = theme => ({
         textAlign: "center",
         height: 250
     },
-    close: { position: "absolute", right: 0, top: 0 },
+    close: { position: "absolute", right: 33, top: 2 },
     deleteIcon: { position: "absolute", right: -25, top: -25 },
     hide: {
         display: "none"

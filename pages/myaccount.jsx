@@ -879,7 +879,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
-                                 {errors && errors.billing && errors.billing.address1 &&  <div style={{color:'red'}} >{errors.billing.address1}</div>}
+                                 {errors && errors.billing && errors.billing.city &&  <div style={{color:'red'}} >{errors.billing.city}</div>}
                                 {/* {errors.billing.city && touched.billing.city && <div style={{color:'red'}} >{errors.billing.city}</div>} */}
                                 <Field
                                     name="billingZip"
@@ -908,6 +908,7 @@ class MyAccount extends Component {
                                     )
                                     }}
                                 />
+                                {errors && errors.billing && errors.billing.zip && <div style={{color:'red'}} >{errors.billing.zip}</div>}
                                 {/* {errors.billing.zip && touched.billing.zip && <div style={{color:'red'}} >{errors.billing.zip}</div>} */}
                                 <Field
                                     name="billingCountryid"
