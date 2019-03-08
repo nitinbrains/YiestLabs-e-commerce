@@ -63,6 +63,12 @@ class ManageBilling extends Component {
         });
     };
 
+    handleCancelAddress=(data)=>{
+        this.setState({
+            newAddress:data
+        })
+    }
+
     handleNo = () => {
         this.setState({
             confirmation: false
@@ -227,7 +233,7 @@ class ManageBilling extends Component {
                                 </Grid>
                             ) : (
                                 <Grid item xs={12}>
-                                    <AddAddress type={"billing"} {...this.props} close={this.closeForm} />
+                                    <AddAddress type={"billing"} {...this.props} close={this.closeForm} handleCancelAdd={this.handleCancelAddress} />
                                 </Grid>
                             )}
                         </Grid>
@@ -267,7 +273,7 @@ const styles = theme => ({
         textAlign: "center",
         height: 250
     },
-    close: { position: "absolute", right: 33, top: 2 },
+    close: { position: 'relative',display: 'flex',justifyContent: 'flex-end' },
     deleteIcon: { position: "absolute", right: -25, top: -25 },
     hide: {
         display: "none"

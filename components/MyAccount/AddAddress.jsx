@@ -379,18 +379,15 @@ class AddAddress extends Component {
                                     />
                                     <Grid style={{ marginTop: 10 }} container justify="flex-end">
                                         <Grid item>
-                                            <Button variant="contained" color="primary" type="submit">
+                                            <Button style={{marginRight:'10px'}}variant="contained" color="primary" type="submit">
                                                 Add Address
                                             </Button>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid >
-                                        <Grid item>
-                                            <Button variant="contained" color="primary" >
+                                            <Button variant="contained" color="primary" onClick={()=>this.props.handleCancelAdd(false)} >
                                                 Cancel
                                             </Button>
                                         </Grid>
                                     </Grid>
+        
                                 </Grid>
                             
                             </Form>

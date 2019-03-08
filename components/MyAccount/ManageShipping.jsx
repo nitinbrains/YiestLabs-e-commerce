@@ -77,11 +77,14 @@ class ManageShipping extends Component {
         });
     };
 
+    handleCancelAddress=(data)=>{
+        this.setState({
+            newAddress:data
+        })
+    }
+
     render() {
         const { classes, user } = this.props;
-      console.log(this.state.newAddress,'newadd')
-       
-
         return (
             <React.Fragment>
                 <DialogContent id="my-order-details">
@@ -108,12 +111,7 @@ class ManageShipping extends Component {
                             direction={"row"}
                             spacing={4}
                         >
-                            <Grid item xs={12}>
-                                {/* <Typography variant="h6" color="textPrimary">
-                                MANAGE SHIPPING ADDRESSES
-                            </Typography> */}
-                                {/* <div className={classes.sectionTitleDivider} /> */}
-                            </Grid>
+                           
                         </Grid>
                         <Grid style={{ padding: 20 }} container spacing={24}>
                             {user.otherAddresses.map((address, i) => (
@@ -232,7 +230,7 @@ class ManageShipping extends Component {
                                 </Grid>
                             ) : (
                                 <Grid item xs={12}>
-                                    <AddAddress type={"shipping"} {...this.props} close={this.closeForm} />
+                                    <AddAddress type={"shipping"} {...this.props} close={this.closeForm} handleCancelAdd={this.handleCancelAddress} />
                                 </Grid>
                             )}
                         </Grid>
@@ -273,7 +271,7 @@ const styles = theme => ({
         textAlign: "center",
         height: 250
     },
-    close: { position: "absolute", right: 33, top: -2, padding:'4.5px' },
+    close: { position: 'relative',display: 'flex',justifyContent: 'flex-end' },
     deleteIcon: { position: "absolute", right: -25, top: -25 },
     hide: {
         display: "none"
