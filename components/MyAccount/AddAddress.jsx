@@ -345,6 +345,7 @@ class AddAddress extends Component {
                                                     >
                                                         <InputLabel>Country</InputLabel>
                                                         <Select
+                                                               MenuProps={{ disablePortal: true }}
                                                                onChange={handleChange}
                                                                value={values.countryid}
                                                                inputProps={{

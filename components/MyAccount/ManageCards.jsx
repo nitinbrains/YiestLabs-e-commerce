@@ -17,7 +17,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import AddCard from "./AddCard";
 
 import { userActions } from "appRedux/actions/userActions";
@@ -33,6 +33,9 @@ class ManageCards extends Component {
     }
 
     handleDialogClose() {
+        this.props.closeDialog();
+    }
+    handleClickAway=()=>{
         this.props.closeDialog();
     }
 
@@ -83,6 +86,7 @@ class ManageCards extends Component {
         const { classes, user } = this.props;
         return (
             <React.Fragment>
+                 <ClickAwayListener onClickAway={this.handleClickAway}>
                 <DialogContent id="my-order-details">
                     <div className="main-block">
                         <div className="order-number">
@@ -112,7 +116,7 @@ class ManageCards extends Component {
                                             <Grid item xs={12}>
                                                 <Typography>
                                                     <div className="block">
-                                                        {" "}
+                                                        
                                                         <span className="label">Name: </span> {card.ccname}
                                                     </div>
                                                 </Typography>
@@ -120,7 +124,7 @@ class ManageCards extends Component {
                                             <Grid item xs={12}>
                                                 <Typography>
                                                     <div className="block">
-                                                        {" "}
+                                                        
                                                         <span className="label">CC Number: </span> {card.ccnumber}
                                                     </div>
                                                 </Typography>
@@ -128,7 +132,7 @@ class ManageCards extends Component {
                                             <Grid item xs={12}>
                                                 <Typography>
                                                     <div className="block">
-                                                        {" "}
+                                                    
                                                         <span className="label">CC Expiry: </span> {moment(card.ccexpire).format("MM-YYYY")}
                                                     </div>
                                                 </Typography>
@@ -186,6 +190,7 @@ class ManageCards extends Component {
                         </Dialog>
                     </div>
                 </DialogContent>
+                </ClickAwayListener>
             </React.Fragment>
         );
     }

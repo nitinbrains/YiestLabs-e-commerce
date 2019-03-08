@@ -17,7 +17,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { userActions } from "appRedux/actions/userActions";
 
 import AddAddress from "./AddAddress";
@@ -83,11 +83,17 @@ class ManageBilling extends Component {
         });
     };
 
+    handleClickAway=()=>{
+        this.props.closeDialog();
+    }
+
+
     render() {
         const { classes, user } = this.props;
 
         return (
             <React.Fragment>
+                  <ClickAwayListener onClickAway={this.handleClickAway}>
                 <DialogContent id="my-order-details">
                 <div className={classes.close}>
                             <IconButton style={{padding:'4.5px'}} color="inherit" size="small" aria-label="Menu" onClick={() => this.handleDialogClose()}>
@@ -143,7 +149,7 @@ class ManageBilling extends Component {
                                             <Grid item>
                                                 <Typography>
                                                     <div className="block">
-                                                        {" "}
+                                                      
                                                         <span className="label">Address line 1: </span>
                                                         {address.address1}
                                                     </div>
@@ -153,7 +159,7 @@ class ManageBilling extends Component {
                                                 <Typography>
                                                     {address.address2 ? (
                                                         <div className="block">
-                                                            {" "}
+                                                            
                                                             <span className="label">Address line 2: </span>
                                                             {address.address2}
                                                         </div>
@@ -164,7 +170,7 @@ class ManageBilling extends Component {
                                                 <Typography>
                                                     {address.address3 ? (
                                                         <div className="block">
-                                                            {" "}
+                                                    
                                                             <span className="label">Address line 3: </span>
                                                             {address.address3}
                                                         </div>
@@ -174,7 +180,7 @@ class ManageBilling extends Component {
                                             <Grid item xs={12}>
                                                 <Typography>
                                                     <div className="block">
-                                                        {" "}
+                                                        
                                                         <span className="label">City: </span>
                                                         {address.city}
                                                     </div>
@@ -183,7 +189,7 @@ class ManageBilling extends Component {
                                             <Grid item xs={12}>
                                                 <Typography>
                                                     <div className="block">
-                                                        {" "}
+                                                    
                                                         <span className="label">Zip-Code: </span>
                                                         {address.zip}
                                                     </div>
@@ -192,7 +198,7 @@ class ManageBilling extends Component {
                                             <Grid item xs={12}>
                                                 <Typography>
                                                     <div className="block">
-                                                        {" "}
+                                                        
                                                         <span className="label">Country: </span>
                                                         {address.countryid}
                                                     </div>
@@ -251,6 +257,7 @@ class ManageBilling extends Component {
                         </Dialog>
                     </div>
                 </DialogContent>
+                </ClickAwayListener>
             </React.Fragment>
         );
     }
