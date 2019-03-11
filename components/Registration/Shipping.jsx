@@ -83,171 +83,149 @@ const Shipping = ({
                     }}
                 />                    
             </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'shipping.attn')} touched={_get(touched, 'shipping.attn')} />
-                                <TextField
-                                    id="shipping.attn"
-                                    name="shipping.attn"
-                                    label="Attention"
-                                    fullWidth
-                                    autoComplete="attention"
-                                    onChange={onChange}
-                                    value={_get(value, 'shipping.attn')}
-                                />
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'shipping.addressee')} touched={_get(touched, 'shipping.addressee')} />
-                                <TextField
-                                    id="shipping.addressee"
-                                    name="shipping.addressee"
-                                    label="Addressee"
-                                    fullWidth
-                                    autoComplete="addressee"
-                                    onChange={onChange}
-                                    value={_get(value, 'shipping.addressee') || ''}
-                                />
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'shipping.address1')} touched={_get(touched, 'shipping.address1')} />
-                                <TextField
-                                    id="shipping.address1"
-                                    name="shipping.address1"
-                                    label="Address 1"
-                                    fullWidth
-                                    autoComplete="address1"
-                                    onChange={onChange}
-                                    value={_get(value, 'shipping.address1' || '')}
-                                />
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'shipping.address2')} touched={_get(touched, 'shipping.address2')} />
-                                <TextField
-                                    id="shipping.address2"
-                                    name="shipping.address2"
-                                    label="Address 2"
-                                    fullWidth
-                                    autoComplete="address2"
-                                    onChange={onChange}
-                                    value={_get(value, 'shipping.address2') || ''}
-                                />
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'shipping.address3')} touched={_get(touched, 'shipping.address3')} />
-                                <TextField
-                                    id="shipping.address3"
-                                    name="shipping.address3"
-                                    label="Address3"
-                                    fullWidth
-                                    autoComplete="address3"
-                                    onChange={onChange}
-                                    value={_get(value, 'shipping.address3') || ''}
-                                />
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }, form}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'shipping.city')} touched={_get(touched, 'shipping.city')} />
-                                <TextField
-                                    id="shipping.city"
-                                    name="shipping.city"
-                                    label="City"
-                                    fullWidth
-                                    autoComplete="city"
-                                    onChange={onChange}
-                                    value={_get(value, 'shipping.city') || ''}
-                                />
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'shipping.zip')} touched={_get(touched, 'shipping.zip')} />
-                                <TextField
-                                    id="shipping.zip"
-                                    name="shipping.zip"
-                                    label="Zip Code"
-                                    fullWidth
-                                    autoComplete="zip"
-                                    onChange={onChange}
-                                    value={_get(value, 'shipping.zip') || ''}
-                                />
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'shipping.countryid')} touched={_get(touched, 'shipping.countryid')} />
-                                <TextField
-                                    select
-                                    id="shipping.countryid"
-                                    name="shipping.countryid"
-                                    label="Country"
-                                    fullWidth
-                                    autoComplete="zip"
-                                    onChange={onChange}
-                                    value={_get(value, 'shipping.countryid') || ''}
-                                >
-                                    {SalesLib.COUNTRY_MAP.map((country) => (
-                                        <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
-                                    ))}
-                                </TextField>
 
-                            </React.Fragment>
-                        )
-                    }}
-                />
+            <Field
+                render={({ field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'shipping.attn')} touched={_get(touched, 'shipping.attn')} />
+                            <TextField
+                                name="shipping.attn"
+                                label="Attention"
+                                fullWidth
+                                autoComplete="attention"
+                                onChange={onChange}
+                                value={_get(value, 'shipping.attn')}
+                            />
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({ field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'shipping.addressee')} touched={_get(touched, 'shipping.addressee')} />
+                            <TextField
+                                name="shipping.addressee"
+                                label="Addressee"
+                                fullWidth
+                                autoComplete="addressee"
+                                onChange={onChange}
+                                value={_get(value, 'shipping.addressee') || ''}
+                            />
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({ field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'shipping.address1')} touched={_get(touched, 'shipping.address1')} />
+                            <TextField
+                                name="shipping.address1"
+                                label="Address 1"
+                                fullWidth
+                                autoComplete="address1"
+                                onChange={onChange}
+                                value={_get(value, 'shipping.address1' || '')}
+                            />
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({ field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'shipping.address2')} touched={_get(touched, 'shipping.address2')} />
+                            <TextField
+                                name="shipping.address2"
+                                label="Address 2"
+                                fullWidth
+                                autoComplete="address2"
+                                onChange={onChange}
+                                value={_get(value, 'shipping.address2') || ''}
+                            />
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({ field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'shipping.address3')} touched={_get(touched, 'shipping.address3')} />
+                            <TextField
+                                name="shipping.address3"
+                                label="Address3"
+                                fullWidth
+                                autoComplete="address3"
+                                onChange={onChange}
+                                value={_get(value, 'shipping.address3') || ''}
+                            />
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({field: {value, onChange }, form}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'shipping.city')} touched={_get(touched, 'shipping.city')} />
+                            <TextField
+                                name="shipping.city"
+                                label="City"
+                                fullWidth
+                                autoComplete="city"
+                                onChange={onChange}
+                                value={_get(value, 'shipping.city') || ''}
+                            />
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({ field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'shipping.zip')} touched={_get(touched, 'shipping.zip')} />
+                            <TextField
+                                name="shipping.zip"
+                                label="Zip Code"
+                                fullWidth
+                                autoComplete="zip"
+                                onChange={onChange}
+                                value={_get(value, 'shipping.zip') || ''}
+                            />
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({ field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'shipping.countryid')} touched={_get(touched, 'shipping.countryid')} />
+                            <TextField
+                                select
+                                name="shipping.countryid"
+                                label="Country"
+                                fullWidth
+                                autoComplete="zip"
+                                onChange={onChange}
+                                value={_get(value, 'shipping.countryid') || ''}
+                            >
+                                {SalesLib.COUNTRY_MAP.map((country) => (
+                                    <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
+                                ))}
+                            </TextField>
+
+                        </Grid>
+                    )
+                }}
+            />
             </Grid>
             <Button variant="contained" className={classes.button} onClick={onBack}>
                 Back
