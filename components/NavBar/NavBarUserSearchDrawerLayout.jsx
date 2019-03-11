@@ -108,10 +108,8 @@ class NavBarUserSearchDrawerLayout extends Component {
                                 color="inherit"
                                 aria-label="Login"
                             >
-                                <img
-                                    src="static/images/yeastman.png"
-                                    height="30"
-                                />
+                            <AccountCircleIcon />
+
                             </IconButton>
                         </Link>
                         <Link prefetch href="/">
@@ -126,7 +124,11 @@ class NavBarUserSearchDrawerLayout extends Component {
                         <div style={{ flexGrow: 1 }} />
 
                         <Link prefetch href="/">
-                            <Button color="secondary">Yeastman Store</Button>
+                            <Button color="secondary">
+                            <img
+                                src="static/images/yeastman.png"
+                                height="30"
+                            /> Store</Button>
                         </Link>
                         <Link prefetch href="/calculator">
                             <Button color="secondary">Calculator</Button>
