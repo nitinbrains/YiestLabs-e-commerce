@@ -16,9 +16,7 @@ export function * getInventory (action) {
         if( error ) {
             throw error
         } else if(items){
-            var category = 1;
-            const itemsToShow = filterItems(items, category, null, false)
-            yield put(responseSuccess({ items, itemsToShow, category })); 
+            yield put(responseSuccess({ items })); 
             yield put(messageActions.hideSnackbar())   
         }
     } catch (error) {
