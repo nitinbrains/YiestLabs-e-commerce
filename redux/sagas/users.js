@@ -195,7 +195,22 @@ export function* createUser(action) {
 		request.nonce = Utils.uuid();
         
         const res = yield call(api.createNetSuiteAccount, {request});
-        if (res.error) throw error;
+        if (res.error) 
+        {
+            yield put(messageActions.showBanner({
+                title: 'Yeastman', 
+                message: "Error: error creating account" + error,
+                variant:'error' 
+            }));
+            throw error;
+        }
+       
+         else {
+            yield put(messageActions.showBanner({
+                title: 'Yeastman', 
+                message: "Your account has been successfully created",
+                variant:'success' 
+            }));
         
         request = {};
         request.id = res.id;
@@ -203,7 +218,7 @@ export function* createUser(action) {
         console.log(result,'result')
         yield put(userActions.setUserInfo({ userInfo}));
         yield put(responseSuccess());
-
+        }
         // TO-DO: Redirect user to store
 
     } catch(error) {
