@@ -22,7 +22,7 @@ const FormikErrorMessage = ({ error, touched }) => {
         return <div className="error">{error}</div>;
     } else {
         return null;
-    } 
+    }
 }
 
 const Billing = ({
@@ -33,14 +33,14 @@ const Billing = ({
     setErrors
 }) => {
     return (
-        <Grid item xs={12} md={5} container style={{ marginRight: 30, textAlign: "center" }}>
+        <Grid item xs={12} md={5} container spacing={16} style={{ marginRight: 30, textAlign: "center" }}>
             <Grid item xs={12}>
                 <Typography style={{ textAlign: "left" }} variant="h6" color="textPrimary">
                     BILLING INFORMATION
                 </Typography>
                 <div className={classes.sectionTitleDivider} />
             </Grid>
-            
+
             <Field
                 render={({ field: { value, onChange } }) => {
                     return (
@@ -187,7 +187,7 @@ const Billing = ({
                                 InputLabelProps={{ shrink: _get(value, "billing.countryid") !== "" }}
                                 onChange={onChange}
                                 variant="outlined"
-                                label="countryid"
+                                label="Country"
                                 autoComplete="billing.countryid"
                             >
                                 {SalesLib.COUNTRY_MAP.map((country) => (

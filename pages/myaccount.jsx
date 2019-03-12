@@ -159,7 +159,16 @@ class MyAccount extends Component {
     render() {
         const {
             classes,
-            user: { shipping, billing, email, phone, shipFrom, isLoading, subsidiaryOptions }
+            user: { 
+                id,
+                shipping, 
+                billing, 
+                email, 
+                phone, 
+                shipFrom, 
+                isLoading, 
+                subsidiaryOptions 
+            }
         } = this.props;
 
         return (
@@ -190,7 +199,7 @@ class MyAccount extends Component {
                             },
                             email: email,
                             phone: phone,
-                            shipFrom: shipFrom
+                            shipFrom: shipFrom,
                         }}
                         validate={(values, props) => {
                             let errors = {};
@@ -211,7 +220,7 @@ class MyAccount extends Component {
                                         <Grid item xs={12} container justify="center" alignItems="center" spacing={24} style={{ marginBottom: 20 }}>
                                             <Grid item xs={3}>
                                                 <Typography style={{ textAlign: "center" }} variant="title" gutterBottom>
-                                                    Account # {this.state.id}
+                                                    Account # {id}
                                                 </Typography>
                                             </Grid>
                                             <Field
