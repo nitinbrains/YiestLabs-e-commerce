@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import Router from 'next/router';
 import { compose } from "redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
@@ -56,7 +57,7 @@ class Registration extends React.Component {
 
     onSubmit = (values) => {
         this.props.createUser(values);
-        console.log(values,'values')
+      //  console.log(values,'values')
     }
 
     renderRegistrationSuccess = () => {
@@ -86,6 +87,18 @@ class Registration extends React.Component {
             </React.Fragment>
         )
     }
+
+    componentDidUpdate(){
+        console.log(this.props.user);
+        
+        if(this.props.user.isSuccess){   //need to look again
+        Router.push('/')
+        }
+    }
+    // componentDidMount(){
+    //     console.log(this.props.user,'ussss');
+    // }
+
     render() {
         const { classes, user, loading: {isLoading, type}} = this.props;
         const { activeStep } = this.state;
@@ -223,9 +236,12 @@ Registration.propTypes = {
 
 
 const mapStateToProps = state => {
+    console.log(state);
+    
     return {
         user: state.user,
-        loading: state.loading
+        loading: state.loading,
+        success:state.success
     };
 };
 

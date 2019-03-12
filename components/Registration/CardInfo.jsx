@@ -48,7 +48,7 @@ const CardInfo = ({
     const handleSubmit = () => {
         let errors = validate();
         if (_isEmpty(errors.card)) {
-            console.log('if hello')
+            //console.log('if hello')
             submitForm();
            
         } else {

@@ -1,5 +1,6 @@
 import { createReducer } from 'helpers/reduxHelpers';
 import { orderTypes } from 'appRedux/actions/orderActions';
+// import { userTypes } from 'appRedux/actions/userActions';
 
 const initialState = {
 	items: [],
@@ -10,11 +11,15 @@ const initialState = {
     orderSub: 0,
     shippingOptions: ["Ship All Together", "Earliest For Each", "Custom"],
     selectedShippingOption: 'Ship All Together',
+    // isSuccess: false
 };
 
 /* ------------- Hookup Reducers To Types ------------- */
 
 export default createReducer(initialState, {
+    // [userTypes.CREATE_USER_SUCCESS]: (state) => ({
+    //     isSuccess:true
+    // }),
     [orderTypes.PREPARE_ORDER_SUCCESS]: (state, { data }) => ({
         ...data,
     }),

@@ -187,19 +187,25 @@ export function* createUser(action) {
         responseFailure,
         data
     } = action;
-    console.log(action,'action')
+  
     try {
-        console.log('createuser action fired')
+        
         var request = Object.assign({}, data);
         request.creditToken = WLHelper.generateCreditToken(data.card);
-		request.nonce = Utils.uuid();
+		request.nonce = uuid();
         
         const res = yield call(api.createNetSuiteAccount, {request});
+        if (res.error) 
+            throw error;     
+        request = {};
+        request.id = res.id;
+        const { res: result, error } = yield call(api.createYeastmanAccount, {request});
+        yield put(responseSuccess());
         if (res.error) 
         {
             yield put(messageActions.showBanner({
                 title: 'Yeastman', 
-                message: "Error: error creating account" + error,
+                message: "Error creating account",
                 variant:'error' 
             }));
             throw error;
@@ -210,33 +216,37 @@ export function* createUser(action) {
                 title: 'Yeastman', 
                 message: "Your account has been successfully created",
                 variant:'success' 
-            }));
-        
-        request = {};
-        request.id = res.id;
-        const { res: result, error } = yield call(api.createYeastmanAccount, {request});
-        console.log(result,'result')
-        yield put(userActions.setUserInfo({ userInfo}));
-        yield put(responseSuccess());
-        }
+            })); 
         // TO-DO: Redirect user to store
-
+        }
+        yield put(userActions.setUserInfo({ userInfo}));
     } catch(error) {
-        console.log('some error')
-        if(error.status){
+       // console.log('some error',error)
+        yield put(messageActions.showBanner({
+            title: 'Yeastman', 
+            message: "Error creating account",
+            variant:'error' 
+        }));
+        
+        if(error && error.status){
             // show network error is any regaring with api status
+            yield put(messageActions.showBanner({
+                title: 'Yeastman', 
+                message: "Network Failure ",
+                variant:'error' 
+            }));
             yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            if(error.code == 0 ){
+            if(error && error.code == 0 ){
                 // Yeastman error when we have error with code == 0
                 yield put(messageActions.showBanner({ title: 'Yeastman', message: error.message, variant:'error' }));        
-            } else if(error.code == -1){
+            } else if(error && error.code == -1){
                 // Other error when we have error with code == -1
                 yield put(messageActions.showBanner({ title: 'Error', message: error.message, variant:'error' }));                
             }
-        }
-        yield put(responseFailure(error));
-        console.log(error)
+       }
+        yield put(responseFailure(error && error));
+       // console.log(error && error,'enderr')
     }
 }
 

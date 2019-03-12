@@ -90,6 +90,7 @@ class ManageBilling extends Component {
 
     render() {
         const { classes, user } = this.props;
+        console.log(user,'hhhhhhhhhhhhhhhhhhhhhhhhh')
 
         return (
             <React.Fragment>
