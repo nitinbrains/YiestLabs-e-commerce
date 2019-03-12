@@ -61,11 +61,7 @@ export function* getUserInfo(action) {
         data: { userID, isLogin }
     } = action;
     try {
-<<<<<<< HEAD
-        console.log('get action fired')
-=======
         console.log('getuserinfo action fired')
->>>>>>> f04e1d4b685b101d9d9c8398448782d24bb22e80
         const { res: userInfo, error } = yield call(api.getUserInfo, { userID });
        
         
