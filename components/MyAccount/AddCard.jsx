@@ -17,17 +17,13 @@ class AddCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ccnumber: "",
-            ccname: "",
-            ccexpire: "",
-            type: "",
-            default: false,
+           
             focus: ""
         };
     }
 
-    addCard = () => {
-        this.props.addCreditCard({ creditCard: this.state });
+    addCard = (values) => {
+        this.props.addCreditCard({ creditCard: values });
         this.props.closeNewCard();
     };
 
@@ -43,9 +39,10 @@ class AddCard extends Component {
             <React.Fragment>
                 <Formik
                     initialValues={{
-                        ccnumber: rest.ccnumber,
-                        ccname: rest.ccname,
-                        ccexpire: rest.ccexpire
+
+                        ccnumber: '',
+                        ccname: '',
+                        ccexpire: ''
                     }}
                     validationSchema={customFormValidation}
                     enableReinitialize
@@ -56,11 +53,12 @@ class AddCard extends Component {
                         // let cardNumberValidate = Utils.getCardType(values.ccnumber);
                         // console.log(cardNumberValidate,'card type')
                     }}
-                    onSubmit={values => {
-                        this.addCard();
-                    }}
+                    onSubmit={(values, actions) => {
+                         
+                        this.addCard(values);
+                     }}
                 >
-                    {({ errors, touched, isValidating }) => {
+                    {({ errors, touched, isValidating,handleChange,values }) => {
                         return (
                             <Form>
                                 <Grid container spacing={24}>
@@ -70,13 +68,11 @@ class AddCard extends Component {
                                             return (
                                                 <Grid item xs={12} md={6}>
                                                     <TextField
-                                                        // required
                                                         id="cardName"
-                                                        value={props.field.value}
-                                                        onChange={e => {
-                                                            props.form.setFieldValue("ccname", e.target.value);
-                                                            this.setState({ ccname: e.target.value });
-                                                        }}
+                                                        value={values.ccname}
+                                                        name='ccname'
+                                                    
+                                                        onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "ccname")  this.setState({ focus: "ccname" });
                                                         }}
@@ -99,13 +95,13 @@ class AddCard extends Component {
                                             return (
                                                 <Grid item xs={12} md={6}>
                                                     <TextField
-                                                        // required
+                                                      
                                                         id="cardNumber"
-                                                        value={props.field.value}
-                                                        onChange={e => {
-                                                            props.form.setFieldValue("ccnumber", e.target.value);
-                                                            this.setState({ ccnumber: e.target.value });
-                                                        }}
+                                                       
+                                                        value={values.ccnumber}
+                                                      
+                                                        onChange={handleChange}
+                                                        name='ccnumber'
                                                         onFocus={e => {
                                                             if (focus !== "ccnumber") this.setState({ focus: "ccnumber" });
                                                         }}
@@ -128,13 +124,13 @@ class AddCard extends Component {
                                             return (
                                                 <Grid item xs={12} md={6}>
                                                     <TextField
-                                                        // required
+                                                    
                                                         id="expDate"
-                                                        value={props.field.value}
-                                                        onChange={e => {
-                                                            props.form.setFieldValue("ccexpire", e.target.value);
-                                                            this.setState({ ccexpire: e.target.value  });
-                                                        }}
+                                                        name='ccexpire'
+                                                   
+                                                        value={values.ccexpire}
+                                                      
+                                                        onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "ccexpire") this.setState({ focus: "ccexpire" });
                                                         }}
