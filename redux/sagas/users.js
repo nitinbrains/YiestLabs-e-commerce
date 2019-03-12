@@ -61,8 +61,14 @@ export function* getUserInfo(action) {
         data: { userID, isLogin }
     } = action;
     try {
+<<<<<<< HEAD
         console.log('get action fired')
+=======
+        console.log('getuserinfo action fired')
+>>>>>>> f04e1d4b685b101d9d9c8398448782d24bb22e80
         const { res: userInfo, error } = yield call(api.getUserInfo, { userID });
+       
+        
         if(error) throw error;
         localStorage.setItem('userInfo', JSON.stringify(userInfo));
         localStorage.setItem('isLoggedin', true);
@@ -80,10 +86,10 @@ export function* getUserInfo(action) {
             // show network error is any regaring with api status
             yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
         } else {
-            if(err.code == 0 ){
+            if(error.code == 0 ){
                 // Yeastman error when we have error with code == 0
                 yield put(messageActions.showBanner({ title: 'Yeastman', message: error.message, variant:'error' }));        
-            } else if(err.code == -1){
+            } else if(error.code == -1){
                 // Other error when we have error with code == -1
                 yield put(messageActions.showBanner({ title: 'Error', message: error.message, variant:'error' }));                
             }
@@ -127,7 +133,9 @@ export function* updateUserInfo(action) {
         responseFailure, 
         data: { request }
     } = action;
+    // console.log(responseSuccess,'res succ')
     try {
+        // console.log(request,'reqredsaga')
         const user = yield select(state => state.user);
         
         request.id = user.id;
@@ -135,6 +143,7 @@ export function* updateUserInfo(action) {
         var { res, error } = yield call(api.updateUserInfo, {
             request
         });
+        // console.log(request,'reqredsaga')
         yield put(responseSuccess(request));
         
         if (error){
@@ -145,6 +154,7 @@ export function* updateUserInfo(action) {
             }));
             throw error;
         } else {
+            // console.log(res,'res update')
             yield put(messageActions.showBanner({
                 title: 'Yeastman', 
                 message: "Your account information has been successfully updated",
@@ -383,6 +393,7 @@ export function* addAddress(action) {
         responseFailure,
         data: { address }
     } = action;
+   
     try {
         const user = yield select(state => state.user);
 

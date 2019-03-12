@@ -43,7 +43,7 @@ class MyOrders extends Component {
     }
 
     render() {
-        console.log(this.props.user,'usersssssssssssss')
+       
         const { classes, theme } = this.props;
         return (
 

@@ -96,68 +96,60 @@ const CardInfo = ({
                     }}
                 />
             </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({ field: { value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, "card.ccnumber")} touched={_get(touched, "card.ccnumber")} />
-                                <TextField
-                                    id="card.ccnumber"
-                                    name="card.ccnumber"
-                                    label="Credit Card number"
-                                    fullWidth
-                                    autoComplete="ccnumber"
-                                    onChange={onChange}
-                                    value={_get(value, 'card.ccnumber') || ''}
-                                    InputProps={{ inputComponent: CreditCardMaskedTextField }}
-                                />
-                            </React.Fragment>
-                        );
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({ field: { value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, "card.ccname")} touched={_get(touched, "card.ccname")} />
-                                <TextField 
-                                id="card.ccname" 
-                                name="card.ccname" 
-                                label="Name on card" 
-                                fullWidth 
-                                autoComplete="card.ccname" 
-                                onChange={onChange} 
-                                value={_get(value, "card.ccname") || ''} />
+            <Field
+                render={({ field: { value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, "card.ccnumber")} touched={_get(touched, "card.ccnumber")} />
+                            <TextField
+                                name="card.ccnumber"
+                                label="Credit Card number"
+                                fullWidth
+                                autoComplete="ccnumber"
+                                onChange={onChange}
+                                value={_get(value, 'card.ccnumber') || ''}
+                                InputProps={{ inputComponent: CreditCardMaskedTextField }}
+                            />
+                        </Grid>
+                    );
+                }}
+            />
+            <Field
+                render={({ field: { value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, "card.ccname")} touched={_get(touched, "card.ccname")} />
+                            <TextField 
+                            name="card.ccname" 
+                            label="Name on card" 
+                            fullWidth 
+                            autoComplete="card.ccname" 
+                            onChange={onChange} 
+                            value={_get(value, "card.ccname") || ''} />
 
-                            </React.Fragment>
-                        );
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({ field: { value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, "card.ccexpire")} touched={_get(touched, "card.ccexpire")} />
-                                <TextField
-                                    id="card.ccexpire"
-                                    name="card.ccexpire"
-                                    label="Expiration date"
-                                    placeholder="MM/YY"
-                                    fullWidth
-                                    InputProps={{ inputComponent: DateMaskedTextField }}
-                                    onChange={onChange}
-                                    value={_get(value, "card.ccexpire") || ''}    
-                                />
-                            </React.Fragment>
-                        );
-                    }}
-                />
-            </Grid>
+                        </Grid>
+                    );
+                }}
+            />
+            <Field
+                render={({ field: { value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, "card.ccexpire")} touched={_get(touched, "card.ccexpire")} />
+                            <TextField
+                                id="card.ccexpire"
+                                name="card.ccexpire"
+                                label="Expiration date"
+                                placeholder="MM/YY"
+                                fullWidth
+                                InputProps={{ inputComponent: DateMaskedTextField }}
+                                onChange={onChange}
+                                value={_get(value, "card.ccexpire") || ''}    
+                            />
+                        </Grid>
+                    );
+                }}
+            />
             <Button variant="contained" className={classes.button} onClick={onBack}>
                 Back
             </Button>
