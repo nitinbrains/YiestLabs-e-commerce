@@ -50,8 +50,6 @@ class MyAccount extends Component {
             manageCards: false,
             shipFrom: 1,
             confirmDialog: false,
-            // shipping: {},
-            // billing: {},
             focus:'',
         };
     }
@@ -103,8 +101,6 @@ class MyAccount extends Component {
         const { id, email, phone, shipping, billing, subsidiaryOptions, subsidiary } = user;
         this.setState({
             id,
-            // shipping,
-            // billing,
             shipFrom: subsidiaryOptions[0],
             subsidiaryOptions,
             subsidiary,
@@ -176,10 +172,6 @@ class MyAccount extends Component {
             // this.props.displayError();
           
         }
-        // const {user}=this.props;
-        // this.props.getUserInfo({
-        //     userID: user.id
-        // })
         
     }
 
