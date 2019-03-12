@@ -29,6 +29,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Formik, Form, Field } from "formik";
 import _get from "lodash/get";
+import _extend from "lodash/extend";
 
 import ManageShipping from "components/MyAccount/ManageShipping";
 import ManageBilling from "components/MyAccount/ManageBilling";
@@ -39,9 +40,9 @@ import Billing from "components/MyAccount/Billing";
 import Cleave from "cleave.js/react";
 
 import { userActions } from "appRedux/actions/userActions";
-import { changesWereMade } from "lib/UserUtils";
 import WLHelper from "lib/WLHelper";
 import isLoggedUser from "hocs/isLoggedUser";
+import Utils from "lib/Utils";
 
 const FormikErrorMessage = ({ error, touched }) => {
     if (touched && error) {
@@ -142,19 +143,127 @@ class MyAccount extends Component {
         this.setState({ confirmDialog: false });
     };
 
-    handleSubmit = values => {
-        try {
-            var request = changesWereMade(values, user);
+    handleSubmit = (values, { setErrors }) => {
 
-            if (!_isEmpty(request)) {
-                this.props.updateUserInfo({ request });
-            } else {
-                throw { message: "Empty request. Cannot update user information", code: 0 };
-            }
-        } catch (error) {
-            console.log("error", error);
+        const errors = this.validate(values);
+        if (_isEmpty(errors)) {
+            const request = buildRequest(this.props.user, values);
+            this.props.updateUserInfo({ request });
+        } else {
+            setErrors(errors);
         }
     };
+
+    buildRequest = (oldState, newState) => {
+        var request = {};
+
+        if (newState.email !== oldState.email) {
+            request.email = newState.email;
+        }
+        
+        if (newState.phone !== oldState.phone) {
+            request.phone = newState.phone;
+        }
+
+        if (newState.currency != oldState.currency) {
+            request.currency = newState.currency;
+        }
+
+        if (newState.vat != oldState.vat) {
+            request.vat = newState.vat;
+        }
+
+        if (newState.shipmethod != oldState.shipmethod) {
+            request.shipmethod = newState.shipmethod;
+        }
+
+        if (newState.orderFrom != oldState.orderFrom) {
+            request.orderFrom = newState.orderFrom;
+        }
+
+        if(!_isEqual(newState.shipping, oldState.shipping)) {
+            request.shipping = {};
+            request.shipChange = true;
+            request.shipping = Object.assign({}, newState.shipping);
+        }
+
+        if(!_isEqual(newState.billing, oldState.billing)) {
+            request.billing = {};
+            request.billChange = true;
+            request.billing = Object.assign({}, newState.billing);
+        }
+
+        return request;
+    }
+
+    validate = values => {
+        
+        var errors = {};
+
+        if (!values.email) {
+            Utils.addProps(errors, "email", "Email is required");
+        } else if (reg.test(values.email) === false) {
+            Utils.addProps(errors, "email", "Enter a valid email");
+        }
+
+        if (!values.phone) {
+            Utils.addProps(errors, "phone", "Phone is required");
+        }
+
+        if (!values.orderFrom) {
+            Utils.addProps(errors, "orderFrom", "Enter a subsidiary to order from");
+        }
+
+        if (!_get(values, "shipping.attn")) {
+            Utils.addProps(errors, "shipping.attn", "Attention is required");
+        }
+
+        if (!_get(values, "shipping.addressee")) {
+            Utils.addProps(errors, "shipping.addressee", "Addressee is required");
+        }
+
+        if (!_get(values, "shipping.address1")) {
+            Utils.addProps(errors, "shipping.address1", "Address1 is required");
+        }
+
+        if (!_get(values, "shipping.city")) {
+            Utils.addProps(errors, "shipping.city", "City is required");
+        }
+
+        if (!_get(values, "shipping.zip")) {
+            Utils.addProps(errors, "shipping.zip", "Zip code is required");
+        }
+
+        if (!_get(values, "shipping.countryid")) {
+            Utils.addProps(errors, "shipping.countryid", "Country is required");
+        }
+
+        if (!_get(values, "billing.attn")) {
+            Utils.addProps(errors, "billing.attn", "Attention is required");
+        }
+
+        if (!_get(values, "billing.addressee")) {
+            Utils.addProps(errors, "billing.addressee", "Addressee is required");
+        }
+
+        if (!_get(values, "billing.address1")) {
+            Utils.addProps(errors, "billing.address1", "Address1 is required");
+        }
+
+        if (!_get(values, "billing.city")) {
+            Utils.addProps(errors, "billing.city", "City is required");
+        }
+
+        if (!_get(values, "billing.zip")) {
+            Utils.addProps(errors, "billing.zip", "Zip code is required");
+        }
+
+        if (!_get(values, "billing.countryid")) {
+            Utils.addProps(errors, "billing.countryid", "Country is required");
+        }
+
+        return errors;
+    }
 
     render() {
         const {
@@ -201,14 +310,9 @@ class MyAccount extends Component {
                             phone: phone,
                             shipFrom: shipFrom,
                         }}
-                        validate={(values, props) => {
-                            let errors = {};
-
-                            return errors;
-                        }}
                         enableReinitialize
                         onSubmit={(values, actions) => {
-                            this.handleSubmit(values);
+                            this.handleSubmit(values, actions);
                         }}
                     >
                         {props => {
@@ -229,8 +333,8 @@ class MyAccount extends Component {
                                                         <Grid item xs={3}>
                                                             <FormikErrorMessage error={_get(errors, "email")} touched={_get(touched, "email")} />
                                                             <TextField
-                                                                value={_get(value, "email")}
-                                                                InputLabelProps={{ shrink: _get(value, "email") !== "" }}
+                                                                value={value=_get(value, "email")}
+                                                                InputLabelProps={{ shrink: value !== "" }}
                                                                 onChange={onChange}
                                                                 variant="outlined"
                                                                 name="email"
@@ -292,6 +396,7 @@ class MyAccount extends Component {
                                                         <Grid item xs={3}>
                                                             <FormikErrorMessage error={_get(errors, "currency")} touched={_get(touched, "currency")} />
                                                             <TextField
+                                                                select
                                                                 value={_get(value, "currency")}
                                                                 InputLabelProps={{ shrink: _get(value, "currency") !== "" }}
                                                                 onChange={onChange}
@@ -299,7 +404,11 @@ class MyAccount extends Component {
                                                                 name="currency"
                                                                 label="Currency"
                                                                 autoComplete="currency"
-                                                            />
+                                                            >
+                                                                <MenuItem>Dollar</MenuItem>
+                                                                <MenuItem>EUR</MenuItem>
+                                                                <MenuItem>DDK</MenuItem>
+                                                            </TextField>
                                                         </Grid>
                                                     );
                                                 }}

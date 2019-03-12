@@ -13,6 +13,7 @@ import FormCheckbox from "components/Form/FormCheckbox";
 import * as Yup from "yup";
 import _get from "lodash/get";
 import _isEmpty from "lodash/isEmpty";
+
 import SalesLib from "lib/SalesLib";
 
 const FormikErrorMessage = ({ error }) => {
@@ -96,108 +97,109 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
             {(!sameAsShipping || !_isEmpty(errors)) && (
                 <React.Fragment>
                     <Field
-                        render={({ field: { value, onChange }}) => {
+                        render={({ field: { value, onChange } }) => {
                             return (
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.attn")} touched={_get(touched, "billing.attn")} />
-                                    <TextFiel
-                                        name="billing.attn"
-                                        label="Attention"
-                                        fullWidth
-                                        autoComplete="attention"
-                                        onChange={onChange}
-                                        value={_get(value, "billing.attn") || ""}
+                                    <TextField 
+                                        name="billing.attn" 
+                                        label="Attention" 
+                                        fullWidth 
+                                        autoComplete="attention" 
+                                        onChange={onChange} 
+                                        value={_get(value, "billing.attn") || ""} 
                                     />
                                 </Grid>
                             );
                         }}
                     />
                     <Field
-                        render={({ field: { value, onChange }}) => {
+                        render={({ field: { value, onChange } }) => {
                             return (
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.addressee")} touched={_get(touched, "billing.addressee")} />
-                                    <TextFiel
-                                        name="billing.addressee"
-                                        label="Addressee"
-                                        fullWidth
-                                        autoComplete="addressee"
-                                        onChange={onChange}
-                                        value={_get(value, "billing.addressee") || ""}
+                                    <TextField 
+                                        name="billing.addressee" 
+                                        label="Addressee" 
+                                        fullWidth 
+                                        autoComplete="addressee" 
+                                        onChange={onChange} 
+                                        value={_get(value, "billing.addressee") || ""} 
                                     />
                                 </Grid>
                             );
                         }}
                     />
                     <Field
-                        render={({ field: { value, onChange }}) => {
+                        render={({ field: { value, onChange } }) => {
                             return (
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.address1")} touched={_get(touched, "billing.address1")} />
-                                    <TextFiel
-                                        name="billing.address1"
-                                        label="Address 1"
-                                        fullWidth
-                                        autoComplete="address1"
-                                        onChange={onChange}
-                                        value={_get(value, "billing.address1") || ""}
-                                    />
+                                    <TextField 
+                                    name="billing.address1" 
+                                    label="Address 1" 
+                                    fullWidth 
+                                    autoComplete="address1" 
+                                    onChange={onChange} 
+                                    value={_get(value, "billing.address1") || ""} 
+                                />
                                 </Grid>
                             );
                         }}
                     />
                     <Field
-                        render={({ field: { value, onChange }}) => {
+                        render={({ field: { value, onChange } }) => {
                             return (
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.address2")} touched={_get(touched, "billing.address2")} />
-                                    <TextFiel
-                                        name="billing.address2"
-                                        label="Address 2"
-                                        fullWidth
-                                        autoComplete="address2"
-                                        onChange={onChange}
-                                        value={_get(value, "billing.address2") || ""}
+                                    <TextField 
+                                        name="billing.address2" 
+                                        label="Address 2" 
+                                        fullWidth 
+                                        autoComplete="address2" 
+                                        onChange={onChange} 
+                                        value={_get(value, "billing.address2") || ""} 
                                     />
                                 </Grid>
                             );
                         }}
                     />
                     <Field
-                        render={({ field: { value, onChange }}) => {
+                        render={({ field: { value, onChange } }) => {
                             return (
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.address3")} touched={_get(touched, "billing.address3")} />
-                                    <TextFiel
-                                        name="billing.address3"
-                                        label="Address3"
-                                        fullWidth
-                                        autoComplete="address3"
-                                        onChange={onChange}
-                                        value={_get(value, "billing.address3") || ''}
+                                    <TextField 
+                                        name="billing.address3" 
+                                        label="Address3" 
+                                        fullWidth 
+                                        autoComplete="address3" 
+                                        onChange={onChange} 
+                                        value={_get(value, "billing.address3") || ""} 
                                     />
                                 </Grid>
                             );
                         }}
                     />
                     <Field
-                        render={({ field: { value, onChange }}) => {
+                        render={({ field: { value, onChange } }) => {
                             return (
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.city")} touched={_get(touched, "billing.city")} />
-                                    <TextField
+                                    <TextField 
                                         name="billing.city" 
                                         label="City" 
                                         fullWidth 
                                         autoComplete="city" 
                                         onChange={onChange} 
-                                        value={_get(value, "billing.city") || ''} />
+                                        value={_get(value, "billing.city") || ""} 
+                                    />
                                 </Grid>
                             );
                         }}
                     />
                     <Field
-                        render={({ field: { value, onChange }}) => {
+                        render={({ field: { value, onChange } }) => {
                             return (
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.zip")} touched={_get(touched, "billing.zip")} />
@@ -207,24 +209,25 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                         fullWidth 
                                         autoComplete="zip" 
                                         onChange={onChange} 
-                                        value={_get(value, "billing.zip") || ''} />
+                                        value={_get(value, "billing.zip") || ""} 
+                                    />
                                 </Grid>
                             );
                         }}
                     />
                     <Field
-                        render={({ field: { value, onChange }}) => {
+                        render={({ field: { value, onChange } }) => {
                             return (
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.countryid")} touched={_get(touched, "billing.countryid")} />
-                                    <TextField
-                                        select
-                                        name="billing.countryid"
-                                        label="Country"
-                                        fullWidth
-                                        autoComplete="zip"
-                                        onChange={onChange}
-                                        value={_get(value, "billing.countryid") || ''}
+                                    <TextField 
+                                        select 
+                                        name="billing.countryid" 
+                                        label="Country" 
+                                        fullWidth 
+                                        autoComplete="zip" 
+                                        onChange={onChange} 
+                                        value={_get(value, "billing.countryid") || ""}
                                     >
                                         {SalesLib.COUNTRY_MAP.map(country => (
                                             <MenuItem key={country.id} value={country.id}>
