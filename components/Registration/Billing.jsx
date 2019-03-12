@@ -65,6 +65,9 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
         if (!_get(values, "billing.zip")) {
             errors.billing.zip = "Zip is required";
         }
+        else if (values.billing.zip.length < 6) {
+            errors.billing.zip = "Invalid Zip Code";
+        }
 
         if (!_get(values, "billing.countryid")) {
             errors.billing.countryid = "Country is required";

@@ -6,6 +6,7 @@ import { userActions, userTypes } from "appRedux/actions/userActions";
 import { messageActions } from "appRedux/actions/messageActions";
 import * as api from "services/users.js";
 import { loadSubsidiaryOptions, getDefaultOrFirstCreditCard } from "lib/UserUtils.js";
+import { uuid } from "lib/Utils.js";
 
 import WLHelper from "lib/WLHelper";
 
@@ -186,8 +187,9 @@ export function* createUser(action) {
         responseFailure,
         data
     } = action;
+    console.log(action,'action')
     try {
-        
+        console.log('createuser action fired')
         var request = Object.assign({}, data);
         request.creditToken = WLHelper.generateCreditToken(data.card);
 		request.nonce = Utils.uuid();
@@ -198,13 +200,14 @@ export function* createUser(action) {
         request = {};
         request.id = res.id;
         const { res: result, error } = yield call(api.createYeastmanAccount, {request});
-        
+        console.log(result,'result')
         yield put(userActions.setUserInfo({ userInfo}));
         yield put(responseSuccess());
 
         // TO-DO: Redirect user to store
 
     } catch(error) {
+        console.log('some error')
         if(error.status){
             // show network error is any regaring with api status
             yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
@@ -218,6 +221,7 @@ export function* createUser(action) {
             }
         }
         yield put(responseFailure(error));
+        console.log(error)
     }
 }
 

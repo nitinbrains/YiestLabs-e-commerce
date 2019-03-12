@@ -56,6 +56,7 @@ class Registration extends React.Component {
 
     onSubmit = (values) => {
         this.props.createUser(values);
+        console.log(values,'values')
     }
 
     renderRegistrationSuccess = () => {
@@ -114,8 +115,10 @@ class Registration extends React.Component {
                             const props = {};
                             const buttonProps = {};
                             return (
-                                <Step key={label} {...props}>
-                                    <StepButton onClick={this.handleStep(index)} className={classes.stepper} {...buttonProps}>
+                                <Step key={label} {...props}  className={
+                                    label === "Items" && classes.step
+                                }>
+                                    <StepButton onClick={this.handleStep(index)} {...buttonProps}>
                                         {label}
                                     </StepButton>
                                 </Step>
@@ -182,6 +185,9 @@ const styles = theme => ({
         padding: `${theme.spacing.unit * 3}px 0 ${theme.spacing.unit * 5}px`,
         backgroundColor: "#fafafa",
         width: "100%"
+    },
+    step: {
+        width: "98px"
     },
     container: {
         marginTop: 50,

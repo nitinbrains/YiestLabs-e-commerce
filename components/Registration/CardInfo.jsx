@@ -48,8 +48,11 @@ const CardInfo = ({
     const handleSubmit = () => {
         let errors = validate();
         if (_isEmpty(errors.card)) {
+            console.log('if hello')
             submitForm();
+           
         } else {
+           
             setErrors(errors);
         }
     }
@@ -59,12 +62,13 @@ const CardInfo = ({
 
         if (!_get(values, 'card.ccnumber')) {
             errors.card.ccnumber = "Credit card number is required";
-        } else {
-            const cardType = Utils.getCardType(values.card.ccnumber);
-            if(!cardType) {
-                errors.card.ccnumber = "Credit card type could not be inferred. Enter valid credit card number";
-            }
-        }
+         } 
+       // else {
+        //     const cardType = Utils.getCardType(values.card.ccnumber);
+        //     if(!cardType) {
+        //         errors.card.ccnumber = "Credit card type could not be inferred. Enter valid credit card number";
+        //     }
+        // }
 
         if (!_get(values, 'card.ccname')) {
             errors.card.ccname = "Name is required";
