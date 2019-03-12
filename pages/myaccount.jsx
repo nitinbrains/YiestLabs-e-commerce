@@ -211,7 +211,7 @@ class MyAccount extends Component {
                                         <Grid item xs={12} container justify="center" alignItems="center" spacing={24} style={{ marginBottom: 20 }}>
                                             <Grid item xs={3}>
                                                 <Typography style={{ textAlign: "center" }} variant="title" gutterBottom>
-                                                    Account # {this.state.id}
+                                                    Account # {this.props.user.id}
                                                 </Typography>
                                             </Grid>
                                             <Field
