@@ -57,7 +57,6 @@ class Registration extends React.Component {
 
     onSubmit = (values) => {
         this.props.createUser(values);
-      //  console.log(values,'values')
     }
 
     renderRegistrationSuccess = () => {
@@ -89,15 +88,12 @@ class Registration extends React.Component {
     }
 
     componentDidUpdate(){
-        console.log(this.props.user);
+        //console.log(this.props.user);
         
         if(this.props.user.isSuccess){   //need to look again
         Router.push('/')
         }
     }
-    // componentDidMount(){
-    //     console.log(this.props.user,'ussss');
-    // }
 
     render() {
         const { classes, user, loading: {isLoading, type}} = this.props;
