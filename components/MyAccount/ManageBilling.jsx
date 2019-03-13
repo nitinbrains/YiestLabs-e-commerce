@@ -88,15 +88,14 @@ class ManageBilling extends Component {
     };
 
     handleClickAway=(e)=>{
-        console.log(e.target,'jhgf')
+       // console.log(e.target,'jhgf')
         this.props.closeDialog();
     }
 
 
     render() {
         const { classes, user } = this.props;
-        // console.log(user,'hhhhhhhhhhhhhhhhhhhhhhhhh')
-        console.log(this.textField)
+        //console.log(this.textField)
 
         return (
             <React.Fragment>

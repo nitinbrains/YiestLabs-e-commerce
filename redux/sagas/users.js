@@ -62,7 +62,7 @@ export function* getUserInfo(action) {
         data: { userID, isLogin }
     } = action;
     try {
-        console.log('getuserinfo action fired')
+       
         const { res: userInfo, error } = yield call(api.getUserInfo, { userID });
        
         
@@ -130,9 +130,9 @@ export function* updateUserInfo(action) {
         responseFailure, 
         data: { request }
     } = action;
-    // console.log(responseSuccess,'res succ')
+
     try {
-        // console.log(request,'reqredsaga')
+        
         const user = yield select(state => state.user);
         
         request.id = user.id;
@@ -140,7 +140,7 @@ export function* updateUserInfo(action) {
         var { res, error } = yield call(api.updateUserInfo, {
             request
         });
-        // console.log(request,'reqredsaga')
+  
         yield put(responseSuccess(request));
         
         if (error){
@@ -151,7 +151,7 @@ export function* updateUserInfo(action) {
             }));
             throw error;
         } else {
-            // console.log(res,'res update')
+        
             yield put(messageActions.showBanner({
                 title: 'Yeastman', 
                 message: "Your account information has been successfully updated",
@@ -246,7 +246,7 @@ export function* createUser(action) {
             }
        }
         yield put(responseFailure(error && error));
-       // console.log(error && error,'enderr')
+      
     }
 }
 

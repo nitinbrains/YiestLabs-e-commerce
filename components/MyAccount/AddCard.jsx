@@ -47,11 +47,11 @@ class AddCard extends Component {
                     validationSchema={customFormValidation}
                     enableReinitialize
                     validate={values => {
-                        // console.log(values,'asas',Utils)
+                  
                         // let error ={};
                         // // check getcard type
                         // let cardNumberValidate = Utils.getCardType(values.ccnumber);
-                        // console.log(cardNumberValidate,'card type')
+                   
                     }}
                     onSubmit={(values, actions) => {
                          

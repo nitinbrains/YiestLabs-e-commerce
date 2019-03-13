@@ -230,8 +230,6 @@ Registration.propTypes = {
 
 
 const mapStateToProps = state => {
-    console.log(state);
-    
     return {
         user: state.user,
         loading: state.loading,
