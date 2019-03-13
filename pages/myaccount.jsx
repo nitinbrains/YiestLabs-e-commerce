@@ -199,10 +199,10 @@ class MyAccount extends Component {
     validate = values => {
         
         var errors = {};
-
+        var reg='!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i'
         if (!values.email) {
             Utils.addProps(errors, "email", "Email is required");
-        } else if (reg.test(values.email) === false) {
+        } else if (reg.match(values.email) === false) {
             Utils.addProps(errors, "email", "Enter a valid email");
         }
 
