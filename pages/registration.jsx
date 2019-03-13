@@ -87,9 +87,7 @@ class Registration extends React.Component {
         )
     }
 
-    componentDidUpdate(){
-        //console.log(this.props.user);
-        
+    componentDidUpdate(){        
         if(this.props.user.isSuccess){   //need to look again
         Router.push('/')
         }
