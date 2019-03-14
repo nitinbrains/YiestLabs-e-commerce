@@ -291,10 +291,10 @@ app.prepare()
 	server.get('/get-inventory', (req, res, next) => {
 
 		//YMO-ITEM
-		fetch("https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=912&deploy=1", {
+		fetch("https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=942&deploy=1", {
 	  		method: 'GET',
 	  		headers: {
-				'Authorization': NSAuth(912, "get"),
+				'Authorization': NSAuth(942, "get"),
 				'Accept': 'application/json',
 	    		'Content-Type': 'application/json',
 	  		},
@@ -343,10 +343,10 @@ app.prepare()
 			var body = NSSendMessage({itemID});
 			
 			//YMO-ITEM
-			fetch("https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=912&deploy=1", {
+			fetch("https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=942&deploy=1", {
 				method: 'POST',
 				headers: {
-					'Authorization': NSAuth(912, "post"),
+					'Authorization': NSAuth(942, "post"),
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
 				},
@@ -393,10 +393,10 @@ app.prepare()
 			var body = NSSendMessage({id: userID, get: true});
 
 			//YMO-CUST
-			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=913&deploy=1', {
+			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=941&deploy=1', {
 		  		method: 'POST',
 		  		headers: {
-					'Authorization': NSAuth(913, 'post'),
+					'Authorization': NSAuth(941, 'post'),
 					'Accept': 'application/json',
 		    		'Content-Type': 'application/json',
 		  		},
@@ -451,10 +451,10 @@ app.prepare()
 			var message = NSSendMessage(request);
 
 			// YMO-ORDER
-			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=914&deploy=1', {
+			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=943&deploy=1', {
 			 	method: 'PUT',
 			  	headers: {
-			    	'Authorization' : NSAuth(914, 'put'),
+			    	'Authorization' : NSAuth(943, 'put'),
 			    	'Accept': 'application/json',
 			    	'Content-Type': 'application/json',
 			  	},
@@ -508,10 +508,10 @@ app.prepare()
 			var message = NSSendMessage(request);
 
 			//YMO-ORDER
-			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=914&deploy=1', {
+			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=943&deploy=1', {
 				method: 'POST',
 				headers: {
-					'Authorization' : NSAuth(914, 'post'),
+					'Authorization' : NSAuth(943, 'post'),
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
 				},
@@ -563,10 +563,10 @@ app.prepare()
 			var message = NSSendMessage(request);
 
 			//YMO-CUST
-			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=913&deploy=1', {
+			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=941&deploy=1', {
 			  method: 'PUT',
 			  headers: {
-				'Authorization' : NSAuth(913, 'put'),
+				'Authorization' : NSAuth(941, 'put'),
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
 			  },
@@ -623,10 +623,10 @@ app.prepare()
 			const body = NSSendMessage({id: request.id, admin: false, get: true});
 
 			//YMO-ORDER
-			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=914&deploy=1', {
+			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=943&deploy=1', {
 				method: 'POST',
 				headers: {
-					'Authorization' : NSAuth(914, 'post'),
+					'Authorization' : NSAuth(943, 'post'),
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
 				},
@@ -686,10 +686,10 @@ app.prepare()
 			var message = NSSendMessage(request);
 
 			//YMO-ORDER
-			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=914&deploy=1', {
+			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=943&deploy=1', {
 				method: 'PUT',
 				headers: {
-					'Authorization' : NSAuth(914, 'put'),
+					'Authorization' : NSAuth(943, 'put'),
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
 				},
@@ -752,10 +752,10 @@ app.prepare()
 		creditInfo = null;
 
 		// YMO-CUST
-		fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=913&deploy=1', {
+		fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=941&deploy=1', {
 			method: 'POST',
 			headers: {
-				'Authorization' : NSAuth(913),
+				'Authorization' : NSAuth(941),
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
 			},
@@ -808,10 +808,10 @@ app.prepare()
 			var message = NSSendMessage({id: request.userID, SaleItem: request.item, ItemGroup: request.itemRef.volID.slice(0,3), selectedStyles: request.selectedStyles});
 
 			//YMO-ITEM
-			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=912&deploy=1', {
+			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=942&deploy=1', {
 				method: 'PUT',
 				headers: {
-					'Authorization' : NSAuth(912, 'put'),
+					'Authorization' : NSAuth(942, 'put'),
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
 				},
@@ -879,10 +879,10 @@ app.prepare()
 			var message = NSSendMessage({alternateSizes: true, id: request.userID, SaleItem: request.item, ItemGroup: request.itemRef.volID.slice(0,3), subsidiary: parseInt(request.subsidiary)});
 
 			//YMO-ITEM
-			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=912&deploy=1', {
+			fetch('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=942&deploy=1', {
 				method: 'PUT',
 				headers: {
-					'Authorization' : NSAuth(912, 'put'),
+					'Authorization' : NSAuth(942, 'put'),
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
 				},
