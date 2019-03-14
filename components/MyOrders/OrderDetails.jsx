@@ -34,6 +34,7 @@ class OrderDetails extends Component {
     }
 
     _renderSumamry() {
+        console.log(this.props.order)
         const { classes, order } = this.props;
         return (
             <Grid container>
@@ -43,7 +44,7 @@ class OrderDetails extends Component {
                     </Grid>
                     <Grid item sm={9} container alignItems="center">
                         <Grid item xs={12}>
-                        
+
                             <Typography variant="subtitle1" color="textPrimary">SUMMARY</Typography>
                             <div style={{borderTop: "solid 1.5px",borderColor: "#CCCCCC"}}/>
                         </Grid>
@@ -51,12 +52,12 @@ class OrderDetails extends Component {
                             <Grid item sm={6}>
                                 <div className="block"> <span className="label">Company: </span> {order && order.companyName}</div>
                                 <div className="block"> <span className="label">Ordered From: </span>White Labs.</div>
-                                <div className="block"> <span className="label">Order Date: </span>02/01/2018</div>
+                                <div className="block"> <span className="label">Order Date: </span>{order.orderDate}</div>
                             </Grid>
                             <Grid item sm={6}>
-                                <div className="block"> <span className="label">Order Total: </span> $0.02</div>
-                                <div className="block"> <span className="label">Order Status: </span> closed</div>
-                                <div className="block"> <span className="label">Tracking: </span> N/A</div>
+                                <div className="block"> <span className="label">Order Total: </span> ${order.totalPrice}</div>
+                                <div className="block"> <span className="label">Order Status: </span> {order.status}</div>
+                                <div className="block"> <span className="label">Tracking: </span> {order.trackingNumber}</div>
                             </Grid>
                         </Grid>
                         <Grid item xs={12}>
@@ -70,7 +71,7 @@ class OrderDetails extends Component {
     }
 
     _renderItems() {
-        let items = [{},{},{},{}];
+        const { classes, order } = this.props;
         return (
             <Grid item container spacing={8}>
                 <Grid container>
@@ -92,18 +93,18 @@ class OrderDetails extends Component {
                         </Grid>
                     </Grid>
                     {
-                        _.map(items, (item, i ) => {
+                        order.items.map((item, i ) => {
                             return (
                                 <Grid key={i} item xs={12}className="item-block">
                                     <Grid container>
                                         <Grid item xs={6}>
-                                            California Yeast
+                                            {item.name}
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <div style={{ textAlign: "center" }}> 2</div>
+                                            <div style={{ textAlign: "center" }}> {item.quantity}</div>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <div style={{ textAlign: "center" }}> $2.29</div>
+                                            <div style={{ textAlign: "center" }}> ${item.price}</div>
                                         </Grid>
                                     </Grid>
                                 </Grid>
@@ -117,6 +118,7 @@ class OrderDetails extends Component {
     }
 
     _renderPaymentShipping() {
+        const { classes, order } = this.props;
         return (
             <Grid item container spacing={8}>
                 <Grid container>
@@ -127,21 +129,17 @@ class OrderDetails extends Component {
                     <Grid container spacing={24}>
                        <Grid item sm={4}>
                             <div className="label block">Billing Address:</div>
-                            line 1<br/>
-                            line 2<br/>
-                            <div className="block"> <span className="label">Card Holder: </span> Name</div>
-                            <div className="block"> <span className="label">Card Number: </span> ************</div>
+                            {order.billaddress}<br/>
                         </Grid>
                         <Grid item sm={4}>
-                            <div className="block"> <span className="label">Ship date: </span>1/1/1</div>
-                            <div className="block"> <span className="label">Expected delivery date: </span>1/1/1</div>
-                            <div className="block"> <span className="label">Ship Method: </span>UPS</div>
-                            <div className="block"> <span className="label">Ship Total: </span> $22</div>
+                            <div className="block"> <span className="label">Ship date: </span>{order.shipdate}</div>
+                            <div className="block"> <span className="label">Delivery date: </span>{order.deliverydate}</div>
+                            <div className="block"> <span className="label">Ship Method: </span>{order.shipmethod}</div>
+                            <div className="block"> <span className="label">Ship Total: </span> {order.shipTotal}</div>
                         </Grid>
                         <Grid item sm={4}>
                             <div className="block label"> Ship Address:</div>
-                            line 1<br/>
-                            line 2<br/>
+                            {order.shipaddress}<br/>
                         </Grid>
                     </Grid>
                 </Grid>

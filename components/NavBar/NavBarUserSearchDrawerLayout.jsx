@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import InputBase from "@material-ui/core/InputBase";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -23,13 +24,16 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import SideBarItems from "./SideBarItems";
 import SearchBarItems from "./SearchBarItems";
-import Snackbar from '@material-ui/core/Snackbar';
-import CloseIcon from '@material-ui/icons/Close';
+import Snackbar from "@material-ui/core/Snackbar";
+import CloseIcon from "@material-ui/icons/Close";
+import Badge from "@material-ui/core/Badge";
 
 import { userActions } from "appRedux/actions/userActions";
 import { messageActions } from "appRedux/actions/messageActions";
 import SimpleSnackbar from "components/Form/SimpleSnackbar";
 import Banner from "components/UI/Banner";
+import isLoggedUser from "hocs/isLoggedUser";
+import { cartActions } from "appRedux/actions/cartActions";
 
 class NavBarUserSearchDrawerLayout extends Component {
     state = {
@@ -55,12 +59,12 @@ class NavBarUserSearchDrawerLayout extends Component {
         this.setState({ openSearchBar: false });
     };
     handleClose = () => {
-        this.props.unsavedUserClose()
+        this.props.unsavedUserClose();
     };
 
     componentWillUnmount() {
-        if( this.props.messages.snackbar != false ){
-            this.props.hideSnackbar()
+        if (this.props.messages.snackbar != false) {
+            this.props.hideSnackbar();
         }
     }
 
@@ -77,22 +81,9 @@ class NavBarUserSearchDrawerLayout extends Component {
                         zIndex: 1000
                     }}
                 />
-                <AppBar
-                    className={classNames(
-                        classes.appBar,
-                        this.state.openSearchBar && classes.appBarShiftSearch
-                    )}
-                >
+                <AppBar className={classNames(classes.appBar, this.state.openSearchBar && classes.appBarShiftSearch)}>
                     <Toolbar>
-                        <IconButton
-                            onClick={this.handleUserBar}
-                            className={classNames(
-                                classes.menuButton,
-                                !this.props.user.id && classes.hide
-                            )}
-                            color="inherit"
-                            aria-label="Menu"
-                        >
+                        <IconButton onClick={this.handleUserBar} className={classNames(classes.menuButton, !this.props.user.id && classes.hide)} color="inherit" aria-label="Menu">
                             <MenuIcon />
                         </IconButton>
 
@@ -105,25 +96,23 @@ class NavBarUserSearchDrawerLayout extends Component {
                                 color="inherit"
                                 aria-label="Login"
                             >
-                                <img
-                                    src="static/images/yeastman.png"
-                                    height="30"
-                                />
+                            <AccountCircleIcon />
+
                             </IconButton>
                         </Link>
                         <Link prefetch href="/">
                             <div className={classes.circle}>
-                                <img
-                                    src="static/images/logo_circle.png"
-                                    height="130"
-                                    className={classes.logoImg}
-                                />
+                                <img src="static/images/logo_circle.png" height="130" className={classes.logoImg} />
                             </div>
                         </Link>
                         <div style={{ flexGrow: 1 }} />
 
                         <Link prefetch href="/">
-                            <Button color="secondary">Yeastman Store</Button>
+                            <Button color="secondary">
+                            <img
+                                src="static/images/yeastman.png"
+                                height="30"
+                            /> Store</Button>
                         </Link>
                         <Link prefetch href="/calculator">
                             <Button color="secondary">Calculator</Button>
@@ -132,10 +121,26 @@ class NavBarUserSearchDrawerLayout extends Component {
 
                         <Link prefetch href="/cart">
                             <IconButton color="inherit" aria-label="Menu">
-                                <ShoppingCartIcon />
+                                <Badge color="secondary" badgeContent={this.props.cart.items.length} className={classes.margin} classes={{ badge: classes.badge }}>
+                                    <ShoppingCartIcon />
+                                </Badge>
                             </IconButton>
                         </Link>
 
+                        <IconButton color="inherit" aria-label="Menu">
+                            <SearchIcon />
+                        </IconButton>
+                        <InputBase
+                            id="search"
+                            placeholder="Search"
+                            type="search"
+                            name="searchText"
+                            value={this.props.searchText}
+                            onChange={e => this.props.handleSearch(e.target.value)}
+                            classes={{
+                                root: classes.inputRoot
+                            }}
+                        />
                     </Toolbar>
                 </AppBar>
 
@@ -144,20 +149,13 @@ class NavBarUserSearchDrawerLayout extends Component {
                     onMouseEnter={this.handleUserBarHover}
                     onMouseLeave={this.handleUserBarHover}
                     classes={{
-                        paper: classNames(
-                            classes.drawerPaper,
-                            !this.props.user.id && classes.hide,
-                            !this.state.openUserBar &&
-                                !this.state.openUserBarHover &&
-                                classes.drawerPaperClose
-                                )
-                            }}
+                        paper: classNames(classes.drawerPaper, !this.props.user.id && classes.hide, !this.state.openUserBar && !this.state.openUserBarHover && classes.drawerPaperClose)
+                    }}
                 >
-                    <div
-                        className={classes.toolbar}
-                        style={{ marginTop: 35 }}
-                    />
-                    <List><SideBarItems/></List>
+                    <div className={classes.toolbar} style={{ marginTop: 35 }} />
+                    <List>
+                        <SideBarItems />
+                    </List>
                     <Divider />
                 </Drawer>
 
@@ -167,15 +165,13 @@ class NavBarUserSearchDrawerLayout extends Component {
                         !this.props.user.id && classes.contentNoUser,
                         {
                             [classes.contentShift]: this.state.openSearchBar,
-                            [classes[`contentShift-search`]]: this.state
-                                .openSearchBar
-                            },
-                            {
-                                [classes.contentShift]: this.state.openUserBar,
-                                [classes[`contentShift-user`]]: this.state
-                                .openUserBar
-                            }
-                            )}
+                            [classes[`contentShift-search`]]: this.state.openSearchBar
+                        },
+                        {
+                            [classes.contentShift]: this.state.openUserBar,
+                            [classes[`contentShift-user`]]: this.state.openUserBar
+                        }
+                    )}
                 >
                     <div className={classes.toolbar} />
                     <div className={classes.alertWrapper}>
@@ -183,37 +179,28 @@ class NavBarUserSearchDrawerLayout extends Component {
                     </div>
                     {children}
                 </main>
-                
+
                 <Snackbar
                     anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
+                        vertical: "top",
+                        horizontal: "right"
                     }}
                     open={true}
                     open={this.props.user.isUnsaved}
                     autoHideDuration={2000}
                     onClose={this.handleClose}
                     ContentProps={{
-                        'aria-describedby': 'message-id',
+                        "aria-describedby": "message-id"
                     }}
-                    message={<span id="message-id">{'Deleting Unsaved Changes from my account page'}</span>}
+                    message={<span id="message-id">{"Deleting Unsaved Changes from my account page"}</span>}
                     action={[
-                        <IconButton
-                        key="close"
-                        aria-label="Close"
-                        color="inherit"
-                        className={classes.close}
-                        onClick={(e)=>this.handleClose()}
-                        >
-                        <CloseIcon />
-                        </IconButton>,
+                        <IconButton key="close" aria-label="Close" color="inherit" className={classes.close} onClick={e => this.handleClose()}>
+                            <CloseIcon />
+                        </IconButton>
                     ]}
                 />
 
-                <SimpleSnackbar
-                    messageList={messages.snackbar || []}
-                    handleClose={() => this.props.hideSnackbar()}
-                />
+                <SimpleSnackbar messageList={messages.snackbar || []} handleClose={() => this.props.hideSnackbar()} />
             </div>
         );
     }
@@ -265,7 +252,7 @@ const styles = theme => ({
         height: 150
     },
     logoImg: {
-        cursor: 'pointer'
+        cursor: "pointer"
     },
     menuButton: {
         color: "white",
@@ -332,15 +319,19 @@ const styles = theme => ({
     "contentShift-user": {
         marginLeft: drawerWidth
     },
-    searchInput: {
-        marginLeft: 10
-    },
     close: {
-        padding: theme.spacing.unit / 2,
+        padding: theme.spacing.unit / 2
     },
     alertWrapper: {
-        marginTop:'50px'
+        marginTop: "50px"
     },
+    inputRoot: {
+        color: "inherit",
+        width: "10%"
+    },
+    inputInput: {
+        width: "50%"
+    }
 });
 
 NavBarUserSearchDrawerLayout.propTypes = {
@@ -350,11 +341,11 @@ NavBarUserSearchDrawerLayout.propTypes = {
 
 const mapStateToProps = state => ({
     user: state.user,
+    cart: state.cart,
     messages: state.messages
 });
 
-const mapDispatchToProps = dispatch =>
-    bindActionCreators({ ...userActions, ...messageActions }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ ...userActions, ...messageActions }, dispatch);
 
 export default connect(
     mapStateToProps,

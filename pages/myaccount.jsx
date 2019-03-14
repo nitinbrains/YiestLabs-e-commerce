@@ -334,7 +334,7 @@ class MyAccount extends Component {
                                                             <FormikErrorMessage error={_get(errors, "email")} touched={_get(touched, "email")} />
                                                             <TextField
                                                                 value={value=_get(value, "email")}
-                                                                InputLabelProps={{ shrink: value !== "" }}
+                                                                InputLabelProps={{ shrink: value=_get(value, "email") !== "" }}
                                                                 onChange={onChange}
                                                                 variant="outlined"
                                                                 name="email"

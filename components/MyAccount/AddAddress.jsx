@@ -71,6 +71,7 @@ class AddAddress extends Component {
                         this.addAddress(values)
                     }}
                 >
+
                     {({ errors, touched, isValidating, values, handleChange }) => {
                         return (
                             <Form>
