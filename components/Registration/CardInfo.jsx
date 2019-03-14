@@ -109,6 +109,7 @@ const CardInfo = ({
                                     id="card.ccnumber"
                                     name="card.ccnumber"
                                     label="Credit Card number"
+                                    variant="outlined"
                                     fullWidth
                                     autoComplete="ccnumber"
                                     onChange={onChange}
@@ -130,6 +131,7 @@ const CardInfo = ({
                                 id="card.ccname" 
                                 name="card.ccname" 
                                 label="Name on card" 
+                                variant="outlined"
                                 fullWidth 
                                 autoComplete="card.ccname" 
                                 onChange={onChange} 
@@ -150,6 +152,7 @@ const CardInfo = ({
                                     id="card.ccexpire"
                                     name="card.ccexpire"
                                     label="Expiration date"
+                                    variant="outlined"
                                     placeholder="MM/YY"
                                     fullWidth
                                     InputProps={{ inputComponent: DateMaskedTextField }}

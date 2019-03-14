@@ -108,6 +108,7 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                             id="billing.attn"
                                             name="billing.attn"
                                             label="Attention"
+                                            variant="outlined"
                                             fullWidth
                                             autoComplete="attention"
                                             onChange={onChange}
@@ -128,6 +129,7 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                             id="billing.addressee"
                                             name="billing.addressee"
                                             label="Addressee"
+                                            variant="outlined"
                                             fullWidth
                                             autoComplete="addressee"
                                             onChange={onChange}
@@ -148,6 +150,7 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                             id="billing.address1"
                                             name="billing.address1"
                                             label="Address 1"
+                                            variant="outlined"
                                             fullWidth
                                             autoComplete="address1"
                                             onChange={onChange}
@@ -168,6 +171,7 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                             id="billing.address2"
                                             name="billing.address2"
                                             label="Address 2"
+                                            variant="outlined"
                                             fullWidth
                                             autoComplete="address2"
                                             onChange={onChange}
@@ -188,6 +192,7 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                             id="billing.address3"
                                             name="billing.address3"
                                             label="Address3"
+                                            variant="outlined"
                                             fullWidth
                                             autoComplete="address3"
                                             onChange={onChange}
@@ -208,6 +213,7 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                             id="billing.city" 
                                             name="billing.city" 
                                             label="City" 
+                                            variant="outlined"
                                             fullWidth 
                                             autoComplete="city" 
                                             onChange={onChange} 
@@ -227,6 +233,7 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                             id="billing.zip" 
                                             name="billing.zip" 
                                             label="Zip Code" 
+                                            variant="outlined"
                                             fullWidth 
                                             autoComplete="zip" 
                                             onChange={onChange} 
@@ -247,6 +254,7 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                             id="billing.countryid"
                                             name="billing.countryid"
                                             label="Country"
+                                            variant="outlined"
                                             fullWidth
                                             autoComplete="zip"
                                             onChange={onChange}

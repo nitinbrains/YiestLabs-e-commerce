@@ -93,6 +93,7 @@ const Shipping = ({
                                     id="shipping.attn"
                                     name="shipping.attn"
                                     label="Attention"
+                                    variant="outlined"
                                     fullWidth
                                     autoComplete="attention"
                                     onChange={onChange}
@@ -113,6 +114,7 @@ const Shipping = ({
                                     id="shipping.addressee"
                                     name="shipping.addressee"
                                     label="Addressee"
+                                    variant="outlined"
                                     fullWidth
                                     autoComplete="addressee"
                                     onChange={onChange}
@@ -133,6 +135,7 @@ const Shipping = ({
                                     id="shipping.address1"
                                     name="shipping.address1"
                                     label="Address 1"
+                                    variant="outlined"
                                     fullWidth
                                     autoComplete="address1"
                                     onChange={onChange}
@@ -153,6 +156,7 @@ const Shipping = ({
                                     id="shipping.address2"
                                     name="shipping.address2"
                                     label="Address 2"
+                                    variant="outlined"
                                     fullWidth
                                     autoComplete="address2"
                                     onChange={onChange}
@@ -173,6 +177,7 @@ const Shipping = ({
                                     id="shipping.address3"
                                     name="shipping.address3"
                                     label="Address3"
+                                    variant="outlined"
                                     fullWidth
                                     autoComplete="address3"
                                     onChange={onChange}
@@ -193,6 +198,7 @@ const Shipping = ({
                                     id="shipping.city"
                                     name="shipping.city"
                                     label="City"
+                                    variant="outlined"
                                     fullWidth
                                     autoComplete="city"
                                     onChange={onChange}
@@ -213,6 +219,7 @@ const Shipping = ({
                                     id="shipping.zip"
                                     name="shipping.zip"
                                     label="Zip Code"
+                                    variant="outlined"
                                     fullWidth
                                     autoComplete="zip"
                                     onChange={onChange}
@@ -234,6 +241,7 @@ const Shipping = ({
                                     id="shipping.countryid"
                                     name="shipping.countryid"
                                     label="Country"
+                                    variant="outlined"
                                     fullWidth
                                     autoComplete="zip"
                                     onChange={onChange}

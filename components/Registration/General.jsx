@@ -46,6 +46,7 @@ const General = ({
         var errors = {};
 
         var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+
         if (!values.companyName) {
             errors.companyName = "Company name is required";
         }
@@ -92,7 +93,7 @@ const General = ({
 
         return errors;
     }
-
+    
     return (
         <Grid container spacing={24}>
             <Grid item xs={12}>
@@ -109,7 +110,6 @@ const General = ({
             </Grid>
             <Grid item xs={12}>
                 <Field
-                    name="companyName"
                     render={({field: {value, onChange }}) => {
 
                         return (
@@ -120,6 +120,7 @@ const General = ({
                                     name="companyName"
                                     label="Company Name"
                                     fullWidth
+                                    variant="outlined"
                                     autoComplete="companyName"
                                     onChange={onChange}
                                     value={_get(value, 'companyName') || ''}
@@ -140,6 +141,7 @@ const General = ({
                                     id="email"
                                     name="email"
                                     label="Email"
+                                    variant="outlined"
                                     fullWidth
                                     autoComplete="email"
                                     onChange={onChange}
@@ -160,6 +162,7 @@ const General = ({
                                     id="phone"
                                     name="phone"
                                     label="Phone"
+                                    variant="outlined"
                                     fullWidth
                                     autoComplete="phone"
                                     InputProps={{
@@ -183,6 +186,7 @@ const General = ({
                                 <TextField
                                     id="password"
                                     name="password"
+                                    variant="outlined"
                                     label="Password"
                                     type="password"
                                     fullWidth
@@ -206,6 +210,7 @@ const General = ({
                                     id="confirmPassword"
                                     name="confirmPassword"
                                     label="Confirm Password"
+                                    variant="outlined"
                                     type="password"
                                     fullWidth
                                     autoComplete="confirmPassword"
@@ -227,6 +232,7 @@ const General = ({
                                     id="category"
                                     name="category"
                                     label="Category"
+                                    variant="outlined"
                                     select
                                     fullWidth
                                     autoComplete="category"
@@ -254,6 +260,7 @@ const General = ({
                                     id="orderFrom"
                                     name="orderFrom"
                                     label="Order From"
+                                    variant="outlined"
                                     select
                                     fullWidth
                                     autoComplete="orderFrom"
@@ -288,6 +295,7 @@ const General = ({
                                     id="contactName"
                                     name="contactName"
                                     label="Accounting Contact"
+                                    variant="outlined"
                                     fullWidth
                                     autoComplete="contactName"
                                     onChange={onChange}
@@ -309,6 +317,7 @@ const General = ({
                                     id="contactPhone"
                                     name="contactPhone"
                                     label="Accounting Phone Number"
+                                    variant="outlined"
                                     fullWidth
                                     autoComplete="contactPhone"
                                     InputProps={{ inputComponent: PhoneMaskedTextField }}
