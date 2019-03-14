@@ -24,6 +24,8 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import FormCheckbox from "components/Form/FormCheckbox";
+
 
 // custom
 import Banner from "components/UI/Banner";
@@ -46,6 +48,7 @@ class Login extends Component {
         this.initialFormValue = {
             username: '',
             password: '',
+            rememberMe: false
         }
     }
 
@@ -131,12 +134,13 @@ class Login extends Component {
                                     </FormControl>
                                     <FormControlLabel
                                         control={
-                                        <Checkbox
-                                          
-                                            value="Remember me"
-                                            color="primary"
-                                         
-                                        />
+                                            <Checkbox
+                                                name="rememberMe"
+                                                checked={values.rememberMe}
+                                                color="primary"
+                                                onChange={handleChange}
+                                            />
+
                                         }
                                         label="Remember me"
                                     />
