@@ -96,7 +96,7 @@ class CalculatorForm extends Component {
                                                     return (
                                                         <FormSelectbox
                                                             value={props.field.value}
-                                                            options={volUnits.filter(unit => isHomebrew || !unit.forHomebrew)}
+                                                            options={volUnits.filter(unit => !isHomebrew || unit.forHomebrew)}
                                                             onChange={e => {
                                                                 props.form.setFieldValue("volUnit", e.target.value);
                                                                 this.props.changeVolUnit({ volUnit: e.target.value });
