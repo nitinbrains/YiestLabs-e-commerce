@@ -30,6 +30,10 @@ class ManageBilling extends Component {
             boxHover: false,
             confirmation: false
         };
+        this.textField = null;
+        this.setTextFieldRef = element => {
+            this.textField =element
+        }
     }
 
     handleDialogClose() {
@@ -83,13 +87,15 @@ class ManageBilling extends Component {
         });
     };
 
-    handleClickAway=()=>{
+    handleClickAway=(e)=>{
+       // console.log(e.target,'jhgf')
         this.props.closeDialog();
     }
 
 
     render() {
         const { classes, user } = this.props;
+        //console.log(this.textField)
 
         return (
             <React.Fragment>
@@ -239,7 +245,7 @@ class ManageBilling extends Component {
                                 </Grid>
                             ) : (
                                 <Grid item xs={12}>
-                                    <AddAddress type={"billing"} {...this.props} close={this.closeForm} handleCancelAdd={this.handleCancelAddress} />
+                                    <AddAddress setTextFieldRef={this.setTextFieldRef} type={"billing"} {...this.props} close={this.closeForm} handleCancelAdd={this.handleCancelAddress} />
                                 </Grid>
                             )}
                         </Grid>

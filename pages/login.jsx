@@ -22,6 +22,8 @@ import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 // custom
 import Banner from "components/UI/Banner";
@@ -55,6 +57,7 @@ class Login extends Component {
             Router.push('/')
         }
     }
+   
     componentWillReceiveProps({user}){
         if (_get(user, 'id')){
             Router.push('/')
@@ -126,6 +129,18 @@ class Login extends Component {
                                             value={values.password}
                                         />
                                     </FormControl>
+                                    <FormControlLabel
+                                        control={
+                                        <Checkbox
+                                          
+                                            value="Remember me"
+                                            color="primary"
+                                         
+                                        />
+                                        }
+                                        label="Remember me"
+                                    />
+                                 
                                     {errors.password && touched.password && <div style={{color:'red'}} >{errors.password}</div>}
                                     <Button
                                         type="submit"

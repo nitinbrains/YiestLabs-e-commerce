@@ -56,6 +56,7 @@ const initialState = {
     otherCards: [],
     shipMethods: [],
     isLoading: false,
+    isSuccess:false,
     orderHistory: [],
     isUnsaved: false,
     subsidiaryOptions: [],
@@ -90,6 +91,7 @@ export default createReducer(initialState, {
     }),
     [userTypes.CREATE_USER_SUCCESS]: (state) => ({
         isLoading: false,
+        isSuccess:true
     }),
     [userTypes.GET_USER_INFO_ATTEMPT]: (state, { data }) => ({
         isLoading: true,

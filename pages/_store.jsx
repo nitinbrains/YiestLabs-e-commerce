@@ -188,7 +188,6 @@ class Store extends Component {
     }
 
     componentWillMount() {
-        // console.log(this.props,'check')
         let isUserLoggedIn = sessionStorage.getItem("isLoggedin");
         let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
         if (isUserLoggedIn && userInfo) {

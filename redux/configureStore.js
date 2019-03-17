@@ -9,12 +9,14 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import createSagaMiddleware from "redux-saga";
 import { all } from 'redux-saga/effects';
 import thunk from 'redux-thunk';
+import logger from 'redux-logger'
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; 
 
 //reducers
 import { rootReducer } from './reducers';
 import rootSaga from './sagas';
+
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -30,7 +32,7 @@ const initializeStore = (initialState = initialState, isServer) => {
         persistedReducer,
         initialState,
         composeWithDevTools(
-            applyMiddleware(thunk, sagaMiddleware)
+            applyMiddleware(thunk, sagaMiddleware, logger)
         )
     );
     sagaMiddleware.run(rootSaga);

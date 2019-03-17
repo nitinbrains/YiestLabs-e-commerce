@@ -39,7 +39,7 @@ const styles = theme => ({
         fontWeight: 'bolder', textShadow: '0px 1px, 1px 0px, 1px 1px', letterSpacing: '2px'
     },
     divTitle: {
-        margin: 'auto', width: '50%'
+        margin: 'auto', width: 'auto', justifyContent:'center'
         , height: '100%', display: 'flex', alignItems: 'center', textAlign: 'center'
     }
 });
@@ -63,7 +63,7 @@ class MainMenu extends Component {
                 <Grid item xs={12}>
                     <Grid container justify="center" spacing={16}>
                         {dataArr.map((v, i) => (
-                            <Grid key={i} item item xs={2} spacing={8}>
+                            <Grid key={i} item item xs={12} sm={6} md={4} lg={2}  spacing={8}>
                                 <div style={{
                                     textAlign: 'center',
                                     backgroundImage: `url(${v.img})`,

@@ -16,6 +16,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import SalesLib from "lib/SalesLib";
+//import _get from 'lodash/get';
 
 class AddAddress extends Component {
     constructor(props) {
@@ -83,7 +84,8 @@ class AddAddress extends Component {
                                                     <TextField
                                                         id="attention"
                                                         value={values.attn}
-                                                      
+                                                        variant="outlined"
+                                                        InputLabelProps={{ shrink: values.attn!== '' }}
                                                         onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "attn")
@@ -92,7 +94,7 @@ class AddAddress extends Component {
                                                                 });
                                                         }}
                                                         autoFocus={focus == "attn"}
-                                                    
+                                                         
                                                         name="attn"
                                                         label="Attention"
                                                         fullWidth
@@ -121,7 +123,8 @@ class AddAddress extends Component {
                                                         id="addressee"
                                                         name="addressee"
                                                         value={values.addressee}
-                                                     
+                                                        variant="outlined"
+                                                        InputLabelProps={{ shrink: values.addressee!== '' }}
                                                         onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "addressee")
@@ -158,7 +161,8 @@ class AddAddress extends Component {
                                                         id="address1"
                                                      
                                                         value={values.address1}
-                                                    
+                                                        variant="outlined"
+                                                        InputLabelProps={{ shrink: values.address1!== '' }}
                                                         onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "address1")
@@ -195,7 +199,8 @@ class AddAddress extends Component {
                                                         id="addiress2"
                                                    
                                                         value={values.address2}
-                                                      
+                                                        variant="outlined"
+                                                        InputLabelProps={{ shrink: values.address2!== '' }}
                                                         onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "address2")
@@ -230,7 +235,8 @@ class AddAddress extends Component {
                                                 <Grid item xs={12}>
                                                     <TextField
                                                         id="addiress3"
-                                             
+                                                        variant="outlined"
+                                                        InputLabelProps={{ shrink: values.address3!== '' }}
                                                         value={values.address3}
                                                      
                                                         onChange={handleChange}
@@ -267,7 +273,8 @@ class AddAddress extends Component {
                                                 <Grid item xs={12} sm={6}>
                                                     <TextField
                                                         id="city"
-                                                 
+                                                        variant="outlined"
+                                                        InputLabelProps={{ shrink: values.city!== '' }}
                                                         value={values.city}
                                                      
                                                         onChange={handleChange}
@@ -303,9 +310,10 @@ class AddAddress extends Component {
                                             return (
                                                 <Grid item xs={12} sm={6}>
                                                     <TextField
-                                                      
+                    
                                                         value={values.zip}
-                                                   
+                                                        variant="outlined"
+                                                        InputLabelProps={{ shrink: values.zip!== '' }}
                                                         onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "zip")
@@ -315,7 +323,6 @@ class AddAddress extends Component {
                                                         }}
                                                         autoFocus={focus == "zip"}
 
-                                                        id="zip"
                                                         name="zip"
                                                         label="Zip / Postal code"
                                                         fullWidth
@@ -339,15 +346,18 @@ class AddAddress extends Component {
                                         component={props => {
                                             return (
                                                 <Grid item xs={12}>
-                                                    <FormControl
+                                                    {/* <FormControl
                                                         
                                                         fullWidth
-                                                    >
-                                                        <InputLabel>Country</InputLabel>
+                                                    
+                                                    >   
+                                                        <InputLabel >Country</InputLabel>
                                                         <Select
                                                                MenuProps={{ disablePortal: true }}
                                                                onChange={handleChange}
                                                                value={values.countryid}
+                                                            //    variant="outlined"
+                                                               InputLabelProps={{ shrink: values.country!== '' }}
                                                                inputProps={{
                                                                 name: "countryid",
                                                                 id:"country",
@@ -356,6 +366,7 @@ class AddAddress extends Component {
                                                               
                                                         autoComplete="country"
                                                                >
+                                                              
                                                             {
                                                                 SalesLib.COUNTRY_MAP && SalesLib.COUNTRY_MAP.map(country=>(
                                                                     <MenuItem key={country.id} value={country.id}>
@@ -363,8 +374,31 @@ class AddAddress extends Component {
                                                                 </MenuItem>
                                                                 ))  
                                                             }
+                                                        
                                                         </Select>
-                                                    </FormControl>
+                                                    </FormControl> */}
+
+
+
+                                                             <TextField
+                                                             inputRef = {this.props.setTextFieldRef}
+                                select
+                                name="countryid"
+                                fullWidth
+                                value={values.countryid}
+                                InputLabelProps={{ shrink: values.countryid !== "" }}
+                                onChange={handleChange}
+                                variant="outlined"
+                                label="Country"
+                                autoComplete="countryid"
+                            >
+                                {SalesLib.COUNTRY_MAP.map((country) => (
+                                    <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
+                                ))}
+                            </TextField>
+
+
+
                                                     {errors.countryid && touched.countryid && (
                                                         <div
                                                             style={{

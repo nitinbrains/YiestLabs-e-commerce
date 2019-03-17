@@ -47,11 +47,11 @@ class AddCard extends Component {
                     validationSchema={customFormValidation}
                     enableReinitialize
                     validate={values => {
-                        // console.log(values,'asas',Utils)
+                  
                         // let error ={};
                         // // check getcard type
                         // let cardNumberValidate = Utils.getCardType(values.ccnumber);
-                        // console.log(cardNumberValidate,'card type')
+                   
                     }}
                     onSubmit={(values, actions) => {
                          
@@ -71,7 +71,8 @@ class AddCard extends Component {
                                                         id="cardName"
                                                         value={values.ccname}
                                                         name='ccname'
-                                                    
+                                                        variant="outlined"
+                                                        InputLabelProps={{ shrink: values.ccname!== '' }}
                                                         onChange={handleChange}
                                                         onFocus={e => {
                                                             if (focus !== "ccname")  this.setState({ focus: "ccname" });
@@ -97,7 +98,8 @@ class AddCard extends Component {
                                                     <TextField
                                                       
                                                         id="cardNumber"
-                                                       
+                                                        variant="outlined"
+                                                        InputLabelProps={{ shrink: values.ccnumber!== '' }}
                                                         value={values.ccnumber}
                                                       
                                                         onChange={handleChange}
@@ -127,7 +129,8 @@ class AddCard extends Component {
                                                     
                                                         id="expDate"
                                                         name='ccexpire'
-                                                   
+                                                        variant="outlined"
+                                                        InputLabelProps={{ shrink: values.ccexpire!== '' }}
                                                         value={values.ccexpire}
                                                       
                                                         onChange={handleChange}
