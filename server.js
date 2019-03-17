@@ -318,7 +318,7 @@ app.prepare()
 			{
 				var message = NSReceiveMessage(response);
 				
-				if(message.items.length > 0)
+				if(message.items && message.items.length > 0)
 				{
 					return res.send(message);
 				}

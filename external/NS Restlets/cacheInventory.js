@@ -9,7 +9,7 @@
 */
 
 
-define(['N/record', 'N/log', 'N/search', 'N/email', 'N/runtime', 'N/task', 'N/cache'],
+require(['N/record', 'N/log', 'N/search', 'N/email', 'N/runtime', 'N/task', 'N/cache'],
 function(record, log, search, email, runtime, task, cache)
 {
     /**
@@ -579,7 +579,9 @@ function(record, log, search, email, runtime, task, cache)
         }
     }
 
-    return {
-        execute: execute
-    };
+    // return {
+    //     execute: execute
+    // };
+
+    execute();
 });

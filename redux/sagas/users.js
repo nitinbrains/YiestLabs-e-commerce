@@ -5,7 +5,7 @@ import _isEmpty from "lodash/isEmpty";
 import { userActions, userTypes } from "appRedux/actions/userActions";
 import { messageActions } from "appRedux/actions/messageActions";
 import * as api from "services/users.js";
-import { loadSubsidiaryOptions, getDefaultOrFirstCreditCard } from "lib/UserUtils.js";
+import { loadSubsidiaryOptions } from "lib/UserUtils.js";
 
 import WLHelper from "lib/WLHelper";
 
@@ -19,6 +19,7 @@ export function* loginUser(action) {
         const { res, err } = yield call(api.login, username, password);
         if(err) throw err;
         let {userID} = res;
+        console.log('userID', userID);
         yield put(responseSuccess());
         if(res.error && res.error.code === 0 ){
             yield put(messageActions.showBanner({
@@ -61,7 +62,6 @@ export function* getUserInfo(action) {
         data: { userID, isLogin }
     } = action;
     try {
-        console.log('getuserinfo action fired')
         const { res: userInfo, error } = yield call(api.getUserInfo, { userID });
        
         
@@ -129,9 +129,7 @@ export function* updateUserInfo(action) {
         responseFailure, 
         data: { request }
     } = action;
-    // console.log(responseSuccess,'res succ')
     try {
-        // console.log(request,'reqredsaga')
         const user = yield select(state => state.user);
         
         request.id = user.id;
@@ -139,7 +137,7 @@ export function* updateUserInfo(action) {
         var { res, error } = yield call(api.updateUserInfo, {
             request
         });
-        // console.log(request,'reqredsaga')
+
         yield put(responseSuccess(request));
         
         if (error){
@@ -150,7 +148,6 @@ export function* updateUserInfo(action) {
             }));
             throw error;
         } else {
-            // console.log(res,'res update')
             yield put(messageActions.showBanner({
                 title: 'Yeastman', 
                 message: "Your account information has been successfully updated",

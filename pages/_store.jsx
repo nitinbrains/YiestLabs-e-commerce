@@ -375,19 +375,20 @@ class Store extends Component {
                     {cardsNode}
                 </Grid>
             );
-        }
-
-        let page = <MainMenu dataArr={dataArr}  />;
-        if(pageType === 'sub'&& categoryId){
-            let category = find(dataArr, {id:Number(categoryId)})
-            page = <SubCat category={category}/>;
+        } else if(pageType === 'sub' && categoryId){
+            let category = find(dataArr, {id: Number(categoryId)})
+            pageContent = (
+                <SubCat category={category}/>
+            );
         } else if (pageType === 'cards' && categoryId && subCategoryId){
             let cardsNode = [];
             this.props.store.itemsToShow.map((item, i)=>{
                 cardsNode.push(this.getCard(item, i))
             })
             
-            page = <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
+            pageContent = (
+                <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
+            );
         } else if (pageType === 'cards' && categoryId){
             let cardsNode = [];
             this.props.store.itemsToShow.map((item, i) => {
