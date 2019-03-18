@@ -12,7 +12,7 @@ export function * getInventory (action) {
     const { responseSuccess, responseFailure, data: { search } } = action;
     try {
         yield put(messageActions.hideSnackbar({}))
-        const { res: { items, error }} = yield call(api.getInventory);       
+        const { res: { items, error }} = yield call(api.getInventory);    
         if( error ) {
             throw error
         } else if(items){

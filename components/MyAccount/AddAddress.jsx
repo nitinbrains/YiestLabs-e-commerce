@@ -383,20 +383,20 @@ class AddAddress extends Component {
 
                                                              <TextField
                                                              inputRef = {this.props.setTextFieldRef}
-                                select
-                                name="countryid"
-                                fullWidth
-                                value={values.countryid}
-                                InputLabelProps={{ shrink: values.countryid !== "" }}
-                                onChange={handleChange}
-                                variant="outlined"
-                                label="Country"
-                                autoComplete="countryid"
-                            >
-                                {SalesLib.COUNTRY_MAP.map((country) => (
-                                    <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
-                                ))}
-                            </TextField>
+                                                                select
+                                                                name="countryid"
+                                                                fullWidth
+                                                                value={values.countryid}
+                                                                InputLabelProps={{ shrink: values.countryid !== "" }}
+                                                                onChange={handleChange}
+                                                                variant="outlined"
+                                                                label="Country"
+                                                                autoComplete="countryid"
+                                                            >
+                                                                {SalesLib.COUNTRY_MAP.map((country) => (
+                                                                    <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
+                                                                ))}
+                                                            </TextField>
 
 
 
