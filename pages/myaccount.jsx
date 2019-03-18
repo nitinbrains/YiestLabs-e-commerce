@@ -434,6 +434,36 @@ class MyAccount extends Component {
                                             <Grid item xs={12} container justify="center" alignItems="center" spacing={24} style={{ marginBottom: 20 }}>
                                                 <Shipping {...props} />
                                                 <Billing {...props} />
+
+                                                  <Grid item xs={12} md={4} container justify="center" alignItems="center">
+                                                    <Button
+                                                        onClick={this.manageShipping}
+                                                        variant="outlined" color="primary"
+                                                        style={{ marginTop: 10, marginLeft:16 }}
+                                                    >
+                                                        Manage Shipping Addresses
+                                                    </Button>
+                                               </Grid>
+
+                                             <Grid item xs={12} md={4} container justify="center" alignItems="center">
+                                                    <Button
+                                                        style={{ marginTop: 10 }}
+                                                        variant="outlined" color="primary"
+                                                        onClick={this.manageBilling}
+                                                    >
+                                                        Manage Billing Addresses
+                                                    </Button>
+                                                </Grid>
+                                                <Grid item xs={12} md={4} container justify="center" alignItems="center">
+                                                    <Button
+                                                        style={{ marginTop: 10, marginLeft: 16 }}
+                                                        variant="outlined" color="primary"
+                                                        onClick={this.manageCards}
+                                                    >
+                                                        Manage Cards
+                                                    </Button>
+                                                </Grid>
+
                                             </Grid>
                                         </Grid>
                                     </Grid>
