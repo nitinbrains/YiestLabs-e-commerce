@@ -84,8 +84,10 @@ class ManageShipping extends Component {
         })
     }
 
-    handleClickAway=()=>{
-        this.props.closeDialog();
+    handleClickAway = (e) => {
+        if (e.target.nodeName !== "LI") {
+            this.props.closeDialog();
+        }
     }
 
     render() {

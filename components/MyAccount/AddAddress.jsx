@@ -382,7 +382,6 @@ class AddAddress extends Component {
 
 
                                                              <TextField
-                                                             inputRef = {this.props.setTextFieldRef}
                                                                 select
                                                                 name="countryid"
                                                                 fullWidth
