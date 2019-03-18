@@ -121,10 +121,6 @@ class ManageBilling extends Component {
                             spacing={4}
                         >
                             <Grid item xs={12}>
-                                {/* <Typography variant="h6" color="textPrimary">
-                                MANAGE BILLING ADDRESSES
-                            </Typography>
-                            <div className={classes.sectionTitleDivider} /> */}
                             </Grid>
                         </Grid>
                         <Grid style={{ padding: 20 }} container spacing={24}>

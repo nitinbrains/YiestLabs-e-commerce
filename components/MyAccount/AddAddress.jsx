@@ -347,40 +347,6 @@ class AddAddress extends Component {
                                         component={props => {
                                             return (
                                                 <Grid item xs={12}>
-                                                    {/* <FormControl
-                                                        
-                                                        fullWidth
-                                                    
-                                                    >   
-                                                        <InputLabel >Country</InputLabel>
-                                                        <Select
-                                                               MenuProps={{ disablePortal: true }}
-                                                               onChange={handleChange}
-                                                               value={values.countryid}
-                                                            //    variant="outlined"
-                                                               InputLabelProps={{ shrink: values.country!== '' }}
-                                                               inputProps={{
-                                                                name: "countryid",
-                                                                id:"country",
-                                                            
-                                                              }}
-                                                              
-                                                        autoComplete="country"
-                                                               >
-                                                              
-                                                            {
-                                                                SalesLib.COUNTRY_MAP && SalesLib.COUNTRY_MAP.map(country=>(
-                                                                    <MenuItem key={country.id} value={country.id}>
-                                                                    {country.name}
-                                                                </MenuItem>
-                                                                ))  
-                                                            }
-                                                        
-                                                        </Select>
-                                                    </FormControl> */}
-
-
-
                                                              <TextField
                                                                 select
                                                                 name="countryid"
