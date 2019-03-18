@@ -92,7 +92,6 @@ class ManageBilling extends Component {
 
     render() {
         const { classes, user } = this.props;
-
         return (
             <React.Fragment>
                   <ClickAwayListener onClickAway={this.handleClickAway}>

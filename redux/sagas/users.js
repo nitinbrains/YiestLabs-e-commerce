@@ -130,6 +130,7 @@ export function* updateUserInfo(action) {
         responseFailure, 
         data: { request }
     } = action;
+   
 
     try {
         

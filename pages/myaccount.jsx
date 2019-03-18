@@ -144,7 +144,6 @@ class MyAccount extends Component {
     };
 
     handleSubmit = (values, { setErrors }) => {
-
         const errors = this.validate(values);
         if (_isEmpty(errors)) {
             const request = buildRequest(this.props.user, values);
@@ -199,10 +198,10 @@ class MyAccount extends Component {
     validate = values => {
 
         var errors = {};
-
+        var reg='!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i'
         if (!values.email) {
             Utils.addProps(errors, "email", "Email is required");
-        } else if (reg.test(values.email) === false) {
+        } else if (reg.match(values.email) === false) {
             Utils.addProps(errors, "email", "Enter a valid email");
         }
 
@@ -279,6 +278,7 @@ class MyAccount extends Component {
                 subsidiaryOptions
             }
         } = this.props;
+        console.log(this.props.user,'user')
 
         return (
             <NavBarUserSearchDrawerLayout>
@@ -439,7 +439,7 @@ class MyAccount extends Component {
                                                     <Button
                                                         onClick={this.manageShipping}
                                                         variant="outlined" color="primary"
-                                                        style={{ marginTop: 10, marginLeft:16 }}
+                                                        className={classes.modalbtn}
                                                     >
                                                         Manage Shipping Addresses
                                                     </Button>
@@ -456,8 +456,8 @@ class MyAccount extends Component {
                                                 </Grid>
                                                 <Grid item xs={12} md={4} container justify="center" alignItems="center">
                                                     <Button
-                                                        style={{ marginTop: 10, marginLeft: 16 }}
                                                         variant="outlined" color="primary"
+                                                        className={classes.modalbtn}
                                                         onClick={this.manageCards}
                                                     >
                                                         Manage Cards
@@ -512,6 +512,9 @@ const styles = theme => ({
             marginLeft: 250,
             marginRight: 250
         }
+    },
+    modalbtn:{
+        marginTop: 10, marginLeft: 16 
     },
     title: {
         backgroundColor: "#FF9933",
