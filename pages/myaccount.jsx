@@ -160,7 +160,7 @@ class MyAccount extends Component {
         if (newState.email !== oldState.email) {
             request.email = newState.email;
         }
-        
+
         if (newState.phone !== oldState.phone) {
             request.phone = newState.phone;
         }
@@ -197,7 +197,7 @@ class MyAccount extends Component {
     }
 
     validate = values => {
-        
+
         var errors = {};
 
         if (!values.email) {
@@ -268,15 +268,15 @@ class MyAccount extends Component {
     render() {
         const {
             classes,
-            user: { 
+            user: {
                 id,
-                shipping, 
-                billing, 
-                email, 
-                phone, 
-                shipFrom, 
-                isLoading, 
-                subsidiaryOptions 
+                shipping,
+                billing,
+                email,
+                phone,
+                shipFrom,
+                isLoading,
+                subsidiaryOptions
             }
         } = this.props;
 
@@ -324,7 +324,7 @@ class MyAccount extends Component {
                                         <Grid item xs={12} container justify="center" alignItems="center" spacing={24} style={{ marginBottom: 20 }}>
                                             <Grid item xs={3}>
                                                 <Typography style={{ textAlign: "center" }} variant="title" gutterBottom>
-                                                    Account # {id}
+                                                    Account # {this.props.user.id}
                                                 </Typography>
                                             </Grid>
                                             <Field
