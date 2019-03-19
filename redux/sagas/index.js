@@ -32,7 +32,7 @@ import {
     setDefaultShipAddress,
     setBillAddress,
     setDefaultBillAddress
-} from './users';
+} from './user';
 
 // Cart sagas
 import { updateCartItem, addCartItem, removeCartItem } from './cart';
@@ -98,10 +98,6 @@ function * rootSaga () {
         // INVENTORY
         takeEvery(inventoryTypes.GET_INVENTORY_ATTEMPT, getInventory),
         takeEvery(inventoryTypes.GET_ITEM_AVAILABILITY_ATTEMPT, getItemAvailability),
-        takeEvery(inventoryTypes.SEARCH_INVENTORY_ATTEMPT, searchItem),
-        takeEvery(inventoryTypes.CHANGE_CATEGORY_ATTEMPT, changeCategory),
-        takeEvery(inventoryTypes.SWITCH_TO_HOMEBREW_ATTEMPT, switchToHomebrew),
-        takeEvery(inventoryTypes.SWITCH_TO_PROFESSIONAL_ATTEMPT, switchToProfessional),
         // CART
         takeEvery(cartTypes.ADD_ITEM_ATTEMPT, addCartItem),
         takeEvery(cartTypes.REMOVE_ITEM_ATTEMPT, removeCartItem),

@@ -419,6 +419,7 @@ class MyAccount extends Component {
                                                         <Grid item xs={3}>
                                                             <FormikErrorMessage error={_get(errors, "vat")} touched={_get(touched, "vat")} />
                                                             <TextField
+                                                                placeholder="US-123456"
                                                                 value={_get(value, "vat")}
                                                                 InputLabelProps={{ shrink: _get(value, "vat") !== "" }}
                                                                 onChange={onChange}

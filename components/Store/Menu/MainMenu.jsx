@@ -10,39 +10,32 @@ import { inventoryActions } from "appRedux/actions/inventoryActions";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 import Router from "next/router";
 
+import SalesLib from "lib/SalesLib";
+
 class MainMenu extends Component {
-    onChange = item => {
-        const { categoryId } = this.props;
-        this.props.changeCategory({ category: item.id });
-        if (item.subCategories) {
-            Router.push(`/?pageType=${item.page}&&categoryId=${item.id}`);
-        } else {
-            Router.push(`/?pageType=cards&&categoryId=${item.id}`);
-        }
-    };
     render() {
-        const { classes, dataArr } = this.props;
+        const { classes, changeMainCategory } = this.props;
         return (
             <div style={{ marginTop: "5%" }}>
                 <Grid container spacing={24}>
                     <Grid item xs={12}>
                         <Grid container justify="center" spacing={16}>
-                            {dataArr.map((v, i) => (
-                                <Grid key={i} item item xs={2} spacing={8}>
+                            {SalesLib.filters.map(category => (
+                                <Grid key={category.value} item item xs={2} spacing={8}>
                                     <div
                                         style={{
                                             textAlign: "center",
-                                            backgroundImage: `url(${v.img})`,
+                                            backgroundImage: `url(${category.img})`,
                                             backgroundRepeat: "no-repeat",
                                             backgroundSize: "cover",
                                             height: "490px",
                                             width: "100%"
                                         }}
-                                        onClick={() => this.onChange(v)}
+                                        onClick={() => changeMainCategory(category)}
                                     >
                                         <div className={classes.divTitle}>
                                             <Typography variant="title" color="secondary" className={classes.info} className={classes.typoTitle}>
-                                                {v.title}
+                                                {category.title}
                                             </Typography>
                                         </div>
                                     </div>
