@@ -107,7 +107,7 @@ class Store extends Component {
 
         var selectedSubCategory;
         if ( !selectedMainCategory.subCategories ){
-            selectedSubCategory = category;
+            selectedSubCategory = selectedMainCategory;
         }
 
         var itemsToShow = filterItems(items, selectedMainCategory.value, null, user, isHomebrew);
