@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from "next/router";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
-import { find, filter } from "lodash";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -68,12 +67,16 @@ class Store extends Component {
     }
 
     componentWillMount() {
+
+        const  { inventory: { items }} = this.props;
+
         let isUserLoggedIn = sessionStorage.getItem("isLoggedin");
         let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
         if (isUserLoggedIn && userInfo) {
             this.props.setUserInfo({ userInfo });
         }
-        this.setState({itemsToShow: this.props.inventory.items});
+
+        this.setState({itemsToShow: items});
     }
 
     handleClickItem = item => {
@@ -104,27 +107,24 @@ class Store extends Component {
     changeMainCategory = selectedMainCategory => {
         const { inventory: { items }, user } = this.props;
         const { isHomebrew } = this.state;
+        const { value, subCategories } = selectedMainCategory;
 
         var selectedSubCategory = null;
-        var mainCategoryValue = null;
-        if ( selectedMainCategory ) {
-            mainCategoryValue = selectedMainCategory.value;
-            if ( !selectedMainCategory.subCategories ){
-                selectedSubCategory = selectedMainCategory;
-            }
+
+        if ( !subCategories ){
+            selectedSubCategory = selectedMainCategory;
         }
 
-        var itemsToShow = filterItems(items, mainCategoryValue, null, user, isHomebrew);
+        var itemsToShow = filterItems(items, value, null, user, isHomebrew);
         this.setState({ selectedMainCategory, selectedSubCategory, itemsToShow });
     }
 
     changeSubCategory = selectedSubCategory => {
         const { inventory: { items }, user } = this.props;
         const { isHomebrew } = this.state;
+        const { value } = selectedSubCategory;
 
-        var subCategoryValue = (selectedSubCategory ? selectedSubCategory.value : null);
-
-        var itemsToShow = filterItems(items, subCategoryValue, null, user, isHomebrew);
+        var itemsToShow = filterItems(items, value, null, user, isHomebrew);
         this.setState({ selectedSubCategory, itemsToShow });
     }
 
