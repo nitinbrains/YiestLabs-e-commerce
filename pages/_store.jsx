@@ -94,7 +94,7 @@ class Store extends Component {
     searchItem = searchText => {
         const { inventory: { items }, user } = this.props;
         const { isHomebrew } = this.state;
-        
+
         if (searchText) {
             const itemsToShow = filterItems(items, null, searchText, user, isHomebrew);
             this.setState({ searchText, itemsToShow });
@@ -105,12 +105,16 @@ class Store extends Component {
         const { inventory: { items }, user } = this.props;
         const { isHomebrew } = this.state;
 
-        var selectedSubCategory;
-        if ( !selectedMainCategory.subCategories ){
-            selectedSubCategory = selectedMainCategory;
+        var selectedSubCategory = null;
+        var mainCategoryValue = null;
+        if ( selectedMainCategory ) {
+            mainCategoryValue = selectedMainCategory.value;
+            if ( !selectedMainCategory.subCategories ){
+                selectedSubCategory = selectedMainCategory;
+            }
         }
 
-        var itemsToShow = filterItems(items, selectedMainCategory.value, null, user, isHomebrew);
+        var itemsToShow = filterItems(items, mainCategoryValue, null, user, isHomebrew);
         this.setState({ selectedMainCategory, selectedSubCategory, itemsToShow });
     }
 
@@ -118,7 +122,9 @@ class Store extends Component {
         const { inventory: { items }, user } = this.props;
         const { isHomebrew } = this.state;
 
-        var itemsToShow = filterItems(items, selectedSubCategory.value, null, user, isHomebrew);
+        var subCategoryValue = (selectedSubCategory ? selectedSubCategory.value : null);
+
+        var itemsToShow = filterItems(items, subCategoryValue, null, user, isHomebrew);
         this.setState({ selectedSubCategory, itemsToShow });
     }
 
@@ -195,33 +201,41 @@ class Store extends Component {
         return <React.Fragment />;
     };
 
+    categoryBack() {
+      if (!this.state.selectedSubCategory || this.state.selectedSubCategory == this.state.selectedMainCategory) {
+          this.changeMainCategory(null);
+      } else {
+          this.changeSubCategory(null);
+      }
+    }
+
     render() {
 
         let { classes } = this.props;
-        const { 
-            selectedMainCategory, 
-            selectedSubCategory, 
-            searchText, 
-            isHomebrew, 
-            itemsToShow 
+        const {
+            selectedMainCategory,
+            selectedSubCategory,
+            searchText,
+            isHomebrew,
+            itemsToShow
         } = this.state;
-        
+
         var sectionTitle, sectionColor, pageContent;
         if ( selectedSubCategory || searchText || isHomebrew ) {
             let cardsNode = [];
             itemsToShow.map((item, i)=>{
                 cardsNode.push(this.getCard(item, i))
             })
-            
+
             pageContent = (
                 <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
             );
 
             sectionTitle = selectedSubCategory.label;
             sectionColor = selectedSubCategory.color;
-            
-        } 
-        else if ( selectedMainCategory ) {            
+
+        }
+        else if ( selectedMainCategory ) {
             pageContent = (
                 <SubCat mainCategory={selectedMainCategory} changeSubCategory={this.changeSubCategory} />
             );
@@ -237,12 +251,15 @@ class Store extends Component {
 
         return (
             <NavBarUserSearchDrawerLayout inputVal={this.state.searchText} handleSearch={searchData => this.searchItem(searchData)}>
-                
+
                 <Grid container spacing={8} id="professional-homebrew-switch">
-                    <Grid item xs={6} dir="rtl">
+                    <Grid item xs={1} dir="ltr">
+                        <FormButton className={`form-button-small-size`} text="Back" onClick={() => this.categoryBack()} />
+                    </Grid>
+                    <Grid item xs={5} dir="rtl">
                         <FormButton className={`form-button-small-size ${isHomebrew ? "form-button-active" : ""}`} text="Professional" onClick={() => this.toggleHomebrew(false)} />
                     </Grid>
-                    <Grid item xs={6} dir="ltr">
+                    <Grid item xs={5} dir="ltr">
                         <FormButton className={`form-button-small-size ${isHomebrew ? "" : "form-button-active"}`} text="Homebrew" onClick={() => this.toggleHomebrew(true)} />
                     </Grid>
                 </Grid>
