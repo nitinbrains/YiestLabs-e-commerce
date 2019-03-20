@@ -64,7 +64,7 @@ app.prepare()
 
          var username = req.body.username;
          var password = req.body.password;
-a
+
          var time = new Date();
          var data = '<CustomerInformationRequest Operation="Login"><Token>' + system.YeastmanAuthentication.Token + '</Token>'
                      + '<UserName>' + username.toString() + '</UserName>'
@@ -273,7 +273,7 @@ a
             else
             {
                 var message = NSReceiveMessage(response);
-                
+
                 if(message.items && message.items.length > 0)
                 {
                     return res.send(message);
@@ -297,7 +297,7 @@ a
         if(itemID) {
 
             var body = NSSendMessage({itemID});
-            
+
 
             fetch(system.ITEM.url, {
                 method: 'POST',
@@ -405,7 +405,7 @@ a
 
             var message = NSSendMessage(request);
 
-            fetch(system.ORDER.id, {
+            fetch(system.ORDER.url, {
                  method: 'PUT',
                   headers: {
                     'Authorization' : NSAuth(system.ORDER.id, 'put'),

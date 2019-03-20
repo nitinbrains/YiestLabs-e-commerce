@@ -107,7 +107,9 @@ class Store extends Component {
     changeMainCategory = selectedMainCategory => {
         const { inventory: { items }, user } = this.props;
         const { isHomebrew } = this.state;
-        const { value, subCategories } = selectedMainCategory;
+
+        const value = _.get(selectedMainCategory, "value");
+        const subCategories = _.get(selectedMainCategory, "subCategories");
 
         var selectedSubCategory = null;
 
@@ -122,7 +124,8 @@ class Store extends Component {
     changeSubCategory = selectedSubCategory => {
         const { inventory: { items }, user } = this.props;
         const { isHomebrew } = this.state;
-        const { value } = selectedSubCategory;
+
+        const value = _.get(selectedSubCategory, "value");
 
         var itemsToShow = filterItems(items, value, null, user, isHomebrew);
         this.setState({ selectedSubCategory, itemsToShow });
