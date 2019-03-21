@@ -128,7 +128,7 @@ class YeastCard extends Component {
 
                 <div
                     className={classes.card}
-                    // onMouseEnter={this.handleItemHoverEnter}
+                    onMouseEnter={this.handleItemHoverEnter}
                     onMouseLeave={this.handleItemHoverLeave}
                     style={
                         !this.state.hover
@@ -249,7 +249,8 @@ const styles = theme => ({
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
-        height: 230
+        height: 230,
+        cursor: "pointer"
     },
     cardHover: {
         transition: theme.transitions.create("width", {

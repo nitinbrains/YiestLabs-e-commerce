@@ -34,7 +34,8 @@ class SubCat extends Component {
                                             backgroundRepeat: "no-repeat",
                                             backgroundSize: "cover",
                                             height: "200px",
-                                            width: "auto"
+                                            width: "auto",
+                                            cursor: "pointer"
                                         }}
                                         onClick={() => changeSubCategory(category)}
                                     >

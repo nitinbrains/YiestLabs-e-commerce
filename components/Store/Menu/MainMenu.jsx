@@ -29,7 +29,8 @@ class MainMenu extends Component {
                                             backgroundRepeat: "no-repeat",
                                             backgroundSize: "cover",
                                             height: "490px",
-                                            width: "100%"
+                                            width: "100%",
+                                            cursor: "pointer"
                                         }}
                                         onClick={() => changeMainCategory(category)}
                                     >

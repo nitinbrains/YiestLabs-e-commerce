@@ -70,7 +70,7 @@ function getImage(salesCategory) {
         return YeastElements[parseInt(salesCategory)].img;
     }
     catch(error) {
-      
+
     }
 }
 
@@ -79,7 +79,7 @@ function getIcon(salesCategory) {
         return YeastElements[parseInt(salesCategory)].icon;
     }
     catch(error) {
-       
+
     }
 }
 
@@ -88,7 +88,7 @@ function getColor(salesCategory) {
         return YeastElements[parseInt(salesCategory)].color;
     }
     catch(error) {
-       
+
         throw error;
     }
 }
@@ -120,7 +120,7 @@ class HomebrewCard extends Component {
         var quantity = parseFloat(cartItem.OrderDetailQty);
 
         if(isNaN(quantity) || quantity <= 0 ) {
-          
+
             return false;
         }
 
@@ -157,7 +157,7 @@ class HomebrewCard extends Component {
                 this.props.closeDialog();
             }
         } catch (error) {
-           
+
         }
     };
 
@@ -288,7 +288,8 @@ const styles = theme => ({
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
-        height: 230
+        height: 230,
+        cursor: "pointer"
     },
     cardHover: {
         transition: theme.transitions.create("width", {
