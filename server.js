@@ -29,6 +29,39 @@ app.prepare()
         return "NLAuth nlauth_account=4099054_SB1, nlauth_email=mwhite@whitelabs.com, nlauth_signature=YeastBuddy08, nlauth_role=1067";
     }
 
+    /*
+    function NSAuth(scriptID, type = 'post') {
+    		//Fall back authentication
+  		// return "NLAuth nlauth_account=4099054_SB1, nlauth_email=mwhite@whitelabs.com, nlauth_signature=Yeastman001, nlauth_role=1067";
+
+  		var time = Math.round(new Date().getTime()/1000);
+  		var nonce = Utils.uuid();
+
+  		var base = "deploy=1&oauth_consumer_key=" + system.NSAuthentication.consumerKey
+  				+ "&oauth_nonce=" + nonce
+  				+ "&oauth_signature_method=HMAC-SHA1"
+  				+ "&oauth_timestamp=" + time
+  				+ "&oauth_token=" + system.NSAuthentication.consumerToken
+  				+ "&oauth_version=1.0"
+  				+ "&script=" + scriptID.toString();
+
+  		var encodedBase = type.toUpperCase() + "&" + encodeURIComponent('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl') + "&" + encodeURIComponent(base);
+  		var baseSignature = system.NSAuthentication.consumerSecret + "&" + system.NSAuthentication.consumerTokenSecret;
+  		var signature = encodeURIComponent(CryptoJS.HmacSHA1(encodedBase, baseSignature).toString(CryptoJS.enc.Base64));
+
+  		var header = 'OAuth realm="4099054_SB1",'
+  					+ 'oauth_consumer_key="' + system.NSAuthentication.consumerKey + '",'
+  					+ 'oauth_token="' + system.NSAuthentication.consumerToken + '",'
+  					+ 'oauth_nonce="' + nonce + '",'
+  					+ 'oauth_timestamp="' + time + '",'
+  					+ 'oauth_signature_method="HMAC-SHA1",'
+  					+ 'oauth_version="1.0", '
+  					+ 'oauth_signature="' + signature + '"';
+
+  		return header;
+    }
+    */
+
     function NSReceiveMessage(message)
     {
         return JSON.parse(CryptoJS.AES.decrypt(message.data, system.NSAuthentication.ReceiveAuth, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: system.NSAuthentication.Receiveiv }).toString(CryptoJS.enc.Utf8));
