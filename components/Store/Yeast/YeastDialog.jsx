@@ -43,7 +43,7 @@ const YeastElements = {
     },
     "4": {  // Wild Yeast
         img: 'static/images/categories/Category-wild.jpg',
-        icon: 'static/images/icons/Wildyeast-icon.svg',
+        icon: 'static/images/icons/wildyeast-icon.svg',
         color: "#CC9966"
     },
     "5": {  // Lager
@@ -53,7 +53,7 @@ const YeastElements = {
     },
     "6": {  // Wine
         img: 'static/images/categories/Category-wine.jpg',
-        icon: 'static/images/icons/Wine-icon.svg',
+        icon: 'static/images/icons/wine-icon.svg',
         color: "#9966CC"
     },
     "7": {  // Distilling
@@ -68,7 +68,7 @@ const YeastElements = {
     },
     "32": { // Vault
         img: 'static/images/categories/Category-vault.jpg',
-        icon: 'static/images/icons/Vault-icon.svg',
+        icon: 'static/images/icons/vault-icon.svg',
         color: "#B3B3B3"
     }
 }
@@ -426,9 +426,9 @@ class YeastDialog extends Component {
                     itemID = item.volID[6];
                     break;
 
-                default: 
+                default:
                     return;
-                
+
             }
         }
 
@@ -437,7 +437,7 @@ class YeastDialog extends Component {
         .then(({ data: { availability, error}}) => {
 
             if(error) throw error;
-            
+
             this.setState({availability});
         })
         .catch(error => {
@@ -452,7 +452,7 @@ class YeastDialog extends Component {
     };
 
     setPack = event => {
-        this.setState({ 
+        this.setState({
             pack: event.target.value,
             availability: {}
         });
@@ -466,8 +466,8 @@ class YeastDialog extends Component {
             pack = "0";
         }
 
-        this.setState({ 
-            packaging: event.target.value, 
+        this.setState({
+            packaging: event.target.value,
             pack: pack,
             availability: {}
         });
@@ -477,17 +477,17 @@ class YeastDialog extends Component {
         this.setState({ quantity: event.target.value });
     };
 
-    render() 
+    render()
     {
         const { classes, theme, item, inventory} = this.props;
         const {errors} = this.state;
         const spaceIndex = item.Name.indexOf(" ");
         const itemID = item.Name.substr(0, spaceIndex);
         const itemName = item.Name.substr(spaceIndex + 1);
-        
+
         return (
             <React.Fragment>
-                <LoadingIndicator visible={this.state.isLoading} label={"Getting Availability"} />                
+                <LoadingIndicator visible={this.state.isLoading} label={"Getting Availability"} />
                 <DialogContent>
                     <div className={classes.close}>
                         <IconButton
@@ -618,7 +618,7 @@ class YeastDialog extends Component {
                             <Typography>{this.item.Description}</Typography>
                         </Grid>
                     </Grid>
-                    
+
                     <Grid
                         item
                         container
@@ -633,13 +633,19 @@ class YeastDialog extends Component {
                             direction={"row"}
                             justify="flex-start"
                         >
-                            {!isEmpty(this.state.availability) ? 
+                            {!isEmpty(this.state.availability) ?
                                 <Grid item style={{margin: '10px 0px'}} >
-                                    <Typography>San Diego: {this.state.availability[9]}</Typography>
-                                    <Typography>Asheville: {this.state.availability[11]}</Typography>
-                                    <Typography>Copenhagen: {this.state.availability[30]}</Typography>
-                                    <Typography>Hong Kong: {this.state.availability[31]}</Typography>
-                                </Grid> 
+                                    <Typography>San Diego: {(this.state.availability[9] > 0 ? "In Stock" : "TBD")}</Typography>
+                                    <Typography>Asheville: {(this.state.availability[11] > 0 ? "In Stock" : "TBD")}</Typography>
+                                    <Typography>Copenhagen: {(this.state.availability[30] > 0 ? "In Stock" : "TBD")}</Typography>
+                                    <Typography>Hong Kong: {(this.state.availability[31] > 0 ? "In Stock" : "TBD")}</Typography>
+                                    <Typography>
+                                        <br />
+                                        "In stock" indicates fast shipping available depending on ordering
+                                        location. Add to cart and proceed to checkout for all product ship 
+                                        dates and ranges.
+                                    </Typography>
+                                </Grid>
                             :
                                 <Grid
                                     item
@@ -665,7 +671,7 @@ class YeastDialog extends Component {
                             }
                         </Grid>
                     </Grid>
-                
+
 
                     <Grid
                         item
@@ -682,7 +688,7 @@ class YeastDialog extends Component {
                         >
                             {({ values, handleChange }) => {
                                 return(
-                                    <Form className={classes.form}> 
+                                    <Form className={classes.form}>
                                         {errors.packaging && <div className="error"  >* {errors.packaging}</div>}
                                         {errors.pack  && <div className="error" >* {errors.pack}</div>}
                                         {errors.quantity  && <div className="error" >* {errors.quantity}</div>}
@@ -769,8 +775,8 @@ class YeastDialog extends Component {
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                    </Form> 
-                                )   
+                                    </Form>
+                                )
                             }
                         }
                         </Formik>

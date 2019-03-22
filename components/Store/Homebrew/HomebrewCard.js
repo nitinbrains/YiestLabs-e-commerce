@@ -35,7 +35,7 @@ const YeastElements = {
     },
     "4": {  // Wild Yeast
         img: 'static/images/categories/Category-wild.jpg',
-        icon: 'static/images/icons/Wildyeast-icon.svg',
+        icon: 'static/images/icons/wildyeast-icon.svg',
         color: "#CC9966"
     },
     "5": {  // Lager
@@ -45,7 +45,7 @@ const YeastElements = {
     },
     "6": {  // Wine
         img: 'static/images/categories/Category-wine.jpg',
-        icon: 'static/images/icons/Wine-icon.svg',
+        icon: 'static/images/icons/wine-icon.svg',
         color: "#9966CC"
     },
     "7": {  // Distilling
@@ -60,7 +60,7 @@ const YeastElements = {
     },
     "32": { // Vault
         img: 'static/images/categories/Category-vault.jpg',
-        icon: 'static/images/icons/Vault-icon.svg',
+        icon: 'static/images/icons/vault-icon.svg',
         color: "#B3B3B3"
     }
 }

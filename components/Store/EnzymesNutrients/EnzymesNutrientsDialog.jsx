@@ -36,7 +36,7 @@ const customFormValidation = Yup.object().shape({
   });
 
 class EnzymesNutrientsDialog extends Component {
-    
+
     constructor(props) {
         super(props);
         this.state = {
@@ -76,7 +76,7 @@ class EnzymesNutrientsDialog extends Component {
     addToCart = (values) => {
         var quantity = this.state.quantity;
         var item = this.item;
-        
+
         // Create cart item
         var cartItem = {};
         cartItem.Name = String(item.Name);
@@ -123,7 +123,7 @@ class EnzymesNutrientsDialog extends Component {
 
         return (
             <React.Fragment>
-                <LoadingIndicator visible={this.state.isLoading} label={"Getting Availability"} />                
+                <LoadingIndicator visible={this.state.isLoading} label={"Getting Availability"} />
                 <DialogContent>
                 <div className={classes.close}>
                     <IconButton
@@ -165,7 +165,7 @@ class EnzymesNutrientsDialog extends Component {
                             <Typography>{this.item.Description}</Typography>
                         </Grid>
                     </Grid>
-                  
+
                     <Grid
                         item
                         container
@@ -180,13 +180,19 @@ class EnzymesNutrientsDialog extends Component {
                             direction={"row"}
                             justify="flex-start"
                         >
-                            {!isEmpty(this.state.availability) ? 
+                            {!isEmpty(this.state.availability) ?
                                 <Grid item style={{margin: '10px 0px'}} >
-                                    <Typography>San Diego: {this.state.availability[9]}</Typography>
-                                    <Typography>Asheville: {this.state.availability[11]}</Typography>
-                                    <Typography>Copenhagen: {this.state.availability[30]}</Typography>
-                                    <Typography>Hong Kong: {this.state.availability[31]}</Typography>
-                                </Grid> 
+                                    <Typography>San Diego: {(this.state.availability[9] > 0 ? "In Stock" : "TBD")}</Typography>
+                                    <Typography>Asheville: {(this.state.availability[11] > 0 ? "In Stock" : "TBD")}</Typography>
+                                    <Typography>Copenhagen: {(this.state.availability[30] > 0 ? "In Stock" : "TBD")}</Typography>
+                                    <Typography>Hong Kong: {(this.state.availability[31] > 0 ? "In Stock" : "TBD")}</Typography>
+                                    <Typography>
+                                        <br />
+                                        "In stock" indicates fast shipping available depending on ordering
+                                        location. Add to cart and proceed to checkout for all product ship
+                                        dates and ranges.
+                                    </Typography>                                    
+                                </Grid>
                             :
                                 <Grid
                                     item
@@ -228,7 +234,7 @@ class EnzymesNutrientsDialog extends Component {
                         >
                             {({ values, handleChange }) => {
                                 return(
-                                    <Form className={classes.form}> 
+                                    <Form className={classes.form}>
                                         {errors.quantity && <div className="error" >* {errors.quantity}</div>}
                                         <Grid
                                             item
@@ -271,8 +277,8 @@ class EnzymesNutrientsDialog extends Component {
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                    </Form> 
-                                )   
+                                    </Form>
+                                )
                             }
                         }
                         </Formik>
