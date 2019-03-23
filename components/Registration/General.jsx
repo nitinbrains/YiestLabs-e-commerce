@@ -48,8 +48,8 @@ const General = ({ values, touched, errors, classes, onNext, setErrors }) => {
 
         if (!values.password) {
             errors.password = "Password is required";
-        } else if (values.password.length < 9) {
-            errors.password = "Password must contain at least 9 characters";
+        } else if (values.password.length < 6) {
+            errors.password = "Password must contain at least 6 characters";
         }
 
         if (!values.confirmPassword) {
