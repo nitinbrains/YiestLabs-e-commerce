@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import axios from 'axios';
-import isEmpty from 'lodash/isEmpty';
+import axios from "axios";
+import isEmpty from "lodash/isEmpty";
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -24,16 +24,16 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
 
-import LoadingIndicator from 'components/UI/LoadingIndicator';
+import LoadingIndicator from "components/UI/LoadingIndicator";
 import { cartActions } from "appRedux/actions/cartActions";
+import { IN_STOCK } from "lib/Constants";
 
 const customFormValidation = Yup.object().shape({
-    quantity: Yup.string()
-      .required('Required'),
-  });
+    quantity: Yup.string().required("Required")
+});
 
 class EnzymesNutrientsDialog extends Component {
 
@@ -41,23 +41,23 @@ class EnzymesNutrientsDialog extends Component {
         super(props);
         this.state = {
             quantity: "1",
-            availability: {},
+            availability: null,
             isLoading: false,
-            errors: {},
+            errors: {}
         };
 
         this.item = this.props.item;
     }
     handleErrors = (field, err) => {
-        let {errors} = this.state;
-        errors[field] = err
-        this.setState({errors})
-    }
+        let { errors } = this.state;
+        errors[field] = err;
+        this.setState({ errors });
+    };
     checkQuantity = item => {
         var quantity = parseFloat(item.OrderDetailQty);
 
         if (isNaN(quantity) || quantity <= 0) {
-            this.handleErrors('quantity','Please enter a valid value for the quantity')
+            this.handleErrors("quantity", "Please enter a valid value for the quantity");
             return false;
         }
 
@@ -71,9 +71,9 @@ class EnzymesNutrientsDialog extends Component {
 
     handleDialogClose() {
         this.props.closeDialog();
-    };
+    }
 
-    addToCart = (values) => {
+    addToCart = values => {
         var quantity = this.state.quantity;
         var item = this.item;
 
@@ -94,29 +94,28 @@ class EnzymesNutrientsDialog extends Component {
     };
 
     checkAvailability = () => {
-
         const itemID = this.item.volID[0];
 
-        this.setState({isLoading: true});
-        axios.post('/get-item-availability', {itemID})
-        .then(({ data: { availability, error}}) => {
-
-            if(error) throw error;
-            this.setState({availability});
-        })
-        .catch(error => {
-            // TO-DO: Display error if code == 0
-        })
-        .finally(() => this.setState({isLoading: false}));
-    }
+        this.setState({ isLoading: true });
+        axios
+            .post("/get-item-availability", { itemID })
+            .then(({ data: { availability, error } }) => {
+                if (error) throw error;
+                this.setState({ availability });
+            })
+            .catch(error => {
+                // TO-DO: Display error if code == 0
+            })
+            .finally(() => this.setState({ isLoading: false }));
+    };
 
     changeQuantity = event => {
         this.setState({ quantity: event.target.value });
     };
 
     render() {
-        const { classes, theme, item } = this.props;
-        const { errors } = this.state;
+        const { classes, item } = this.props;
+        const { errors, availability } = this.state;
         const spaceIndex = item.Name.indexOf(" ");
         const itemID = item.Name.substr(0, spaceIndex);
         const itemName = item.Name.substr(spaceIndex + 1);
@@ -125,16 +124,11 @@ class EnzymesNutrientsDialog extends Component {
             <React.Fragment>
                 <LoadingIndicator visible={this.state.isLoading} label={"Getting Availability"} />
                 <DialogContent>
-                <div className={classes.close}>
-                    <IconButton
-                        color="inherit"
-                        size="small"
-                        aria-label="Menu"
-                        onClick={() => this.handleDialogClose()}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                </div>
+                    <div className={classes.close}>
+                        <IconButton color="inherit" size="small" aria-label="Menu" onClick={() => this.handleDialogClose()}>
+                            <CloseIcon />
+                        </IconButton>
+                    </div>
                     <Grid
                         item
                         container
@@ -154,121 +148,51 @@ class EnzymesNutrientsDialog extends Component {
                         </Grid>
                     </Grid>
 
-                    <Grid
-                        item
-                        container
-                        direction={"column"}
-                        spacing={8}
-                        style={{ marginTop: 5 }}
-                    >
+                    <Grid item container direction={"column"} spacing={8} style={{ marginTop: 5 }}>
                         <Grid item>
                             <Typography>{this.item.Description}</Typography>
                         </Grid>
                     </Grid>
 
-                    <Grid
-                        item
-                        container
-                        style={{ marginTop: 5 }}
-                        direction={"row"}
-                    >
-                        <Grid
-                            item
-                            xs
-                            container
-                            spacing={24}
-                            direction={"row"}
-                            justify="flex-start"
-                        >
-                            {!isEmpty(this.state.availability) ?
-                                <Grid item style={{margin: '10px 0px'}} >
-                                    <Typography>San Diego: {(this.state.availability[9] > 0 ? "In Stock" : "TBD")}</Typography>
-                                    <Typography>Asheville: {(this.state.availability[11] > 0 ? "In Stock" : "TBD")}</Typography>
-                                    <Typography>Copenhagen: {(this.state.availability[30] > 0 ? "In Stock" : "TBD")}</Typography>
-                                    <Typography>Hong Kong: {(this.state.availability[31] > 0 ? "In Stock" : "TBD")}</Typography>
-                                    <Typography>
-                                        <br />
-                                        "In stock" indicates fast shipping available depending on ordering
-                                        location. Add to cart and proceed to checkout for all product ship
-                                        dates and ranges.
-                                    </Typography>                                    
-                                </Grid>
-                            :
-                                <Grid
-                                    item
-                                    xs
-                                    container
-                                    spacing={24}
-                                    direction={"row"}
-                                    justify="flex-end"
-                                >
+                    <Grid item container style={{ marginTop: 5 }} direction={"row"}>
+                        <Grid item xs container spacing={24} direction={"row"} justify="flex-start">
+                            {availability ? (
+                                <Typography style={{color: availability == IN_STOCK ? "green" : "red"}}>{availability}</Typography>
+                            ) : (
+                                <Grid item xs container spacing={24} direction={"row"} justify="flex-end">
                                     <Grid item>
                                         <div className={classes.buttons}>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={this.checkAvailability}
-                                                className={classes.button}
-                                            >
+                                            <Button variant="contained" color="primary" onClick={this.checkAvailability} className={classes.button}>
                                                 Get Availability
                                             </Button>
                                         </div>
                                     </Grid>
                                 </Grid>
-                            }
+                            )}
                         </Grid>
                     </Grid>
 
-                    <Grid
-                        item
-                        xs
-                        container
-                        spacing={24}
-                        style={{ marginTop: 5 }}
-                        direction={"row"}
-                    >
-                        <Formik
-                            initialValues={this.state}
-                            validationSchema={customFormValidation}
+                    <Grid item xs container spacing={24} style={{ marginTop: 5 }} direction={"row"}>
+                        <Formik 
+                            initialValues={this.state} 
+                            validationSchema={customFormValidation} 
                             onSubmit={values => this.addToCart(values)}
                         >
                             {({ values, handleChange }) => {
-                                return(
+                                return (
                                     <Form className={classes.form}>
-                                        {errors.quantity && <div className="error" >* {errors.quantity}</div>}
-                                        <Grid
-                                            item
-                                            xs
-                                            container
-                                            spacing={24}
-                                            direction={"row"}
-                                            justify="flex-start"
-                                        >
+                                        {errors.quantity && <div className="error">{errors.quantity}</div>}
+                                        <Grid item xs container spacing={24} direction={"row"} justify="flex-start">
                                             <Grid item>
-                                                <TextField
-                                                    id="quantity"
-                                                    label="Quantity"
-                                                    className={classes.quantity}
-                                                    value={this.state.quantity}
-                                                    onChange={this.changeQuantity}
-                                                    type="number"
-                                                />
+                                                <TextField id="quantity" label="Quantity" className={classes.quantity} value={this.state.quantity} onChange={this.changeQuantity} type="number" />
                                             </Grid>
-                                            <Grid
-                                                item
-                                                xs
-                                                container
-                                                spacing={24}
-                                                direction={"row"}
-                                                justify="flex-end"
-                                            >
+                                            <Grid item xs container spacing={24} direction={"row"} justify="flex-end">
                                                 <Grid item>
                                                     <div className={classes.buttons}>
                                                         <Button
                                                             type="submit"
                                                             variant="contained"
                                                             color="primary"
-                                                            // onClick={this.addToCart}
                                                             className={classes.button}
                                                         >
                                                             Add to Cart
@@ -278,9 +202,8 @@ class EnzymesNutrientsDialog extends Component {
                                             </Grid>
                                         </Grid>
                                     </Form>
-                                )
-                            }
-                        }
+                                );
+                            }}
                         </Formik>
                     </Grid>
                 </DialogContent>
@@ -327,10 +250,9 @@ const styles = theme => ({
         marginRight: theme.spacing.unit * -5
     },
     close: { position: "absolute", right: 0, top: 0 },
-    form:{
-        width:'100%',
+    form: {
+        width: "100%"
     }
-
 });
 
 EnzymesNutrientsDialog.propTypes = {
@@ -345,8 +267,7 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch =>
-    bindActionCreators(cartActions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
 
 export default connect(
     mapStateToProps,

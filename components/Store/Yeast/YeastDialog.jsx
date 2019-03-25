@@ -3,13 +3,10 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import axios from 'axios';
-import isEmpty from 'lodash/isEmpty';
 
 import PropTypes from "prop-types";
-import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
@@ -19,17 +16,15 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import LoadingIndicator from 'components/UI/LoadingIndicator';
 import { cartActions } from "appRedux/actions/cartActions";
 import { inventoryActions } from "appRedux/actions/inventoryActions";
+import { parseAvailabilityResults } from "lib/InventoryUtils";
+import { IN_STOCK, OUT_OF_STOCK } from "lib/Constants";
 
 const YeastElements = {
     "2": {
@@ -112,7 +107,7 @@ class YeastDialog extends Component {
             pack: "0",
             packagingOptions: [],
             packaging: "pp",
-            availability:{},
+            availability: null,
             isLoading: false,
             errors:{},
         };
@@ -435,13 +430,10 @@ class YeastDialog extends Component {
         this.setState({isLoading: true});
         axios.post('/get-item-availability', {itemID})
         .then(({ data: { availability, error}}) => {
-
             if(error) throw error;
-
-            this.setState({availability});
+            this.setState({availability: parseAvailabilityResults(availability)});
         })
         .catch(error => {
-            // TO-DO: Display error if code == 0
             console.log('error', error);
         })
         .finally(() => this.setState({isLoading: false}));
@@ -454,7 +446,7 @@ class YeastDialog extends Component {
     setPack = event => {
         this.setState({
             pack: event.target.value,
-            availability: {}
+            availability: null
         });
     };
 
@@ -469,7 +461,7 @@ class YeastDialog extends Component {
         this.setState({
             packaging: event.target.value,
             pack: pack,
-            availability: {}
+            availability: null
         });
     };
 
@@ -479,8 +471,8 @@ class YeastDialog extends Component {
 
     render()
     {
-        const { classes, theme, item, inventory} = this.props;
-        const {errors} = this.state;
+        const { classes, item} = this.props;
+        const { errors, availability } = this.state;
         const spaceIndex = item.Name.indexOf(" ");
         const itemID = item.Name.substr(0, spaceIndex);
         const itemName = item.Name.substr(spaceIndex + 1);
@@ -631,21 +623,10 @@ class YeastDialog extends Component {
                             container
                             spacing={24}
                             direction={"row"}
-                            justify="flex-start"
+                            justify="flex-end"
                         >
-                            {!isEmpty(this.state.availability) ?
-                                <Grid item style={{margin: '10px 0px'}} >
-                                    <Typography>San Diego: {(this.state.availability[9] > 0 ? "In Stock" : "TBD")}</Typography>
-                                    <Typography>Asheville: {(this.state.availability[11] > 0 ? "In Stock" : "TBD")}</Typography>
-                                    <Typography>Copenhagen: {(this.state.availability[30] > 0 ? "In Stock" : "TBD")}</Typography>
-                                    <Typography>Hong Kong: {(this.state.availability[31] > 0 ? "In Stock" : "TBD")}</Typography>
-                                    <Typography>
-                                        <br />
-                                        "In stock" indicates fast shipping available depending on ordering
-                                        location. Add to cart and proceed to checkout for all product ship 
-                                        dates and ranges.
-                                    </Typography>
-                                </Grid>
+                            {availability ?
+                                <Typography style={{color: availability == IN_STOCK ? "green" : "red"}}>{availability}</Typography>
                             :
                                 <Grid
                                     item
@@ -766,7 +747,6 @@ class YeastDialog extends Component {
                                                             type="submit"
                                                             variant="contained"
                                                             color="primary"
-                                                            // onClick={this.addToCart}
                                                             className={classes.button}
                                                         >
                                                             Add to Cart

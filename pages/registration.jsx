@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import Router from 'next/router';
 import { compose } from "redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
@@ -85,6 +86,13 @@ class Registration extends React.Component {
             </React.Fragment>
         )
     }
+
+    componentDidUpdate(){        
+        if(this.props.user.isSuccess){   //need to look again
+        Router.push('/')
+        }
+    }
+
     render() {
         const { classes, user, loading: {isLoading, type}} = this.props;
         const { activeStep } = this.state;
@@ -114,8 +122,10 @@ class Registration extends React.Component {
                             const props = {};
                             const buttonProps = {};
                             return (
-                                <Step key={label} {...props}>
-                                    <StepButton onClick={this.handleStep(index)} className={classes.stepper} {...buttonProps}>
+                                <Step key={label} {...props}  className={
+                                    label === "Items" && classes.step
+                                }>
+                                    <StepButton onClick={this.handleStep(index)} {...buttonProps}>
                                         {label}
                                     </StepButton>
                                 </Step>
@@ -183,6 +193,9 @@ const styles = theme => ({
         backgroundColor: "#fafafa",
         width: "100%"
     },
+    step: {
+        width: "98px"
+    },
     container: {
         marginTop: 50,
         border: "solid 1px",
@@ -219,7 +232,8 @@ Registration.propTypes = {
 const mapStateToProps = state => {
     return {
         user: state.user,
-        loading: state.loading
+        loading: state.loading,
+        success:state.success
     };
 };
 

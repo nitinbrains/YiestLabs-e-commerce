@@ -225,6 +225,7 @@ class Store extends Component {
 
         var sectionTitle, sectionColor, pageContent;
         if ( selectedSubCategory || searchText || isHomebrew ) {
+
             let cardsNode = [];
             itemsToShow.map((item, i)=>{
                 cardsNode.push(this.getCard(item, i))

@@ -3,379 +3,225 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import PropTypes from "prop-types";
-import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
-
 import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
+
+import { Formik, Form, Field } from "formik";
+import _get from 'lodash/get';
+import _set from 'lodash/set';
+
 import SalesLib from "lib/SalesLib";
 
+const FormikErrorMessage = ({ error }) => {
+    return error ? <div className="error">{error}</div> : null;
+};
 class AddAddress extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-         
-            focus: ""
-        };
     }
 
-  
-    addAddress = (values) => {
-
-        this.props.addAddress({ address: values });
-        this.props.close();
+    addAddress = (values, { setErrors }) => {
+        let errors = validate(values);
+        if(_isEmpty(errors)) {
+            this.props.addAddress({ address: values });
+            this.props.close();
+        } else {
+            setErrors(errors);
+        }
     };
 
-    render() {
-        const { classes } = this.props;
-      
-        const { focus, ...rest } = this.state;
-        const customFormValidation = Yup.object().shape({
-            attn: Yup.string().required("Required"),
-            address1: Yup.string().required("Required"),
-            addressee: Yup.string().required("Required"),
-            city: Yup.string().required("Required"),
-            zip: Yup.number().required("Required"),
-            countryid: Yup.string().required("Required")
-        });
+    validate = (values) => {
+
+        var errors = {};
+
+        if(!_get(values, 'attn')) {
+            _set(errors, 'attn', 'Attention is required');
+        }
+
+        if(!_get(values, 'addressee')) {
+            _set(errors, 'addressee', 'Addressee is required');
+        }
+
+        if(!_get(values, 'address1')) {
+            _set(errors, 'address1', 'Address1 is required');
+        }
+
+        if(!_get(values, 'city')) {
+            _set(errors, 'city', 'City is required');
+        }
+
+        if(!_get(values, 'zip')) {
+            _set(errors, 'zip', 'Zip is required');
+        }
+
+        if(!_get(values, 'countryid')) {
+            _set(errors, 'countryid', 'Country is required');
+        }
+
+        return errors;
+    }
+
+    render() {      
         return (
             <React.Fragment>
                 <Formik
-                    initialValues={{
-              
-
-                        address1: '',
-                        address2: '',
-                        address3: '',
-                        addressee: '',
-                        attn: '',
-                        city: '',
-                        countryid: '',
-                        zip: ''
-
-
-                    }}
-                    validationSchema={customFormValidation}
+                    onSubmit={(values, actions) => this.addAddress(values, actions)}
                     enableReinitialize
-          
-                    onSubmit={(values, actions) => {
-                        
-                        this.addAddress(values)
-                    }}
                 >
-
-                    {({ errors, touched, isValidating, values, handleChange }) => {
+                    {({ errors }) => {
                         return (
                             <Form>
                                 <Grid container spacing={24}>
                                     <Field
-                                        name="attn"
-                                        component={props => {
-
+                                        render={({ field: { value, onChange }}) => {
                                             return (
                                                 <Grid item xs={12} sm={6}>
+                                                    <FormikErrorMessage error={_get(errors, 'attn')} />
                                                     <TextField
-                                                        id="attention"
-                                                        value={values.attn}                               
-                                                        onChange={handleChange}
-                                                        onFocus={e => {
-                                                            if (focus !== "attn")
-                                                                this.setState({
-                                                                    focus: "attn"
-                                                                });
-                                                        }}
-                                                        autoFocus={focus == "attn"}
-                                                    
                                                         name="attn"
                                                         label="Attention"
+                                                        variant="outlined"
                                                         fullWidth
                                                         autoComplete="attention"
+                                                        onChange={onChange}
+                                                        value={_get(value, 'attn') || ''}
                                                     />
-                                                    {errors.attn && touched.attn && (
-                                                        <div
-                                                            style={{
-                                                                color: "red"
-                                                            }}
-                                                        >
-                                                            {errors.attn}
-                                                        </div>
-                                                    )}
                                                 </Grid>
-                                            );
+                                            )
                                         }}
                                     />
                                     <Field
-                                        name="addressee"
-                                        component={props => {
-
+                                        render={({ field: { value, onChange }}) => {
                                             return (
                                                 <Grid item xs={12} sm={6}>
+                                                    <FormikErrorMessage error={_get(errors, 'addressee')} />
                                                     <TextField
-                                                        id="addressee"
                                                         name="addressee"
-                                                        value={values.addressee}
-                                                     
-                                                        onChange={handleChange}
-                                                        onFocus={e => {
-                                                            if (focus !== "addressee")
-                                                                this.setState({
-                                                                    focus: "addressee"
-                                                                });
-                                                        }}
-                                                        autoFocus={focus == "addressee"}
-
-                                                        name='addressee'
-                                                        label="addressee"
+                                                        label="Addressee"
+                                                        variant="outlined"
                                                         fullWidth
-                                                        autoComplete="addressee"
+                                                        autoComplete="attention"
+                                                        onChange={onChange}
+                                                        value={_get(value, 'addressee') || ''}
                                                     />
-                                                    {errors.addressee && touched.addressee && (
-                                                        <div
-                                                            style={{
-                                                                color: "red"
-                                                            }}
-                                                        >
-                                                            {errors.addressee}
-                                                        </div>
-                                                    )}
                                                 </Grid>
-                                            );
+                                            )
                                         }}
                                     />
                                     <Field
-                                        name="address1"
-                                        component={props => {
-                                            return (
-                                                <Grid item xs={12}>
-                                                    <TextField
-                                                        id="address1"
-                                                     
-                                                        value={values.address1}
-                                                    
-                                                        onChange={handleChange}
-                                                        onFocus={e => {
-                                                            if (focus !== "address1")
-                                                                this.setState({
-                                                                    focus: "address1"
-                                                                });
-                                                        }}
-                                                        autoFocus={focus == "address1"}
-
-                                                        name="address1"
-                                                        label="Address line 1"
-                                                        fullWidth
-                                                        autoComplete="address-line1"
-                                                    />
-                                                    {errors.address1 && touched.address1 && (
-                                                        <div
-                                                            style={{
-                                                                color: "red"
-                                                            }}
-                                                        >
-                                                            {errors.address1}
-                                                        </div>
-                                                    )}
-                                                </Grid>
-                                            );
-                                        }}
-                                    />
-                                    <Field
-                                        name="address2"
-                                        component={props => {
-                                            return (
-                                                <Grid item xs={12}>
-                                                    <TextField
-                                                        id="addiress2"
-                                                   
-                                                        value={values.address2}
-                                                      
-                                                        onChange={handleChange}
-                                                        onFocus={e => {
-                                                            if (focus !== "address2")
-                                                                this.setState({
-                                                                    focus: "address2"
-                                                                });
-                                                        }}
-                                                        autoFocus={focus == "address2"}
-
-                                                        name="address2"
-                                                        label="Address line 2"
-                                                        fullWidth
-                                                        autoComplete="address-line2"
-                                                    />
-                                                    {errors.address2 && touched.address2 && (
-                                                        <div
-                                                            style={{
-                                                                color: "red"
-                                                            }}
-                                                        >
-                                                            {errors.address2}
-                                                        </div>
-                                                    )}
-                                                </Grid>
-                                            );
-                                        }}
-                                    />
-                                    <Field
-                                        name="address3"
-                                        component={props => {
-                                            return (
-                                                <Grid item xs={12}>
-                                                    <TextField
-                                                        id="addiress3"
-                                             
-                                                        value={values.address3}
-                                                     
-                                                        onChange={handleChange}
-                                                        onFocus={e => {
-                                                            if (focus !== "address3")
-                                                                this.setState({
-                                                                    focus: "address3"
-                                                                });
-                                                        }}
-                                                        autoFocus={focus == "address3"}
-
-                                                        name="address3"
-                                                        label="Address line 3"
-                                                        fullWidth
-                                                        autoComplete="address-line3"
-                                                    />
-                                                    {errors.address3 && touched.address3 && (
-                                                        <div
-                                                            style={{
-                                                                color: "red"
-                                                            }}
-                                                        >
-                                                            {errors.address3}
-                                                        </div>
-                                                    )}
-                                                </Grid>
-                                            );
-                                        }}
-                                    />
-                                    <Field
-                                        name="city"
-                                        component={props => {
+                                        render={({ field: { value, onChange }}) => {
                                             return (
                                                 <Grid item xs={12} sm={6}>
+                                                    <FormikErrorMessage error={_get(errors, 'address1')} />
                                                     <TextField
-                                                        id="city"
-                                                 
-                                                        value={values.city}
-                                                     
-                                                        onChange={handleChange}
-                                                        onFocus={e => {
-                                                            if (focus !== "city")
-                                                                this.setState({
-                                                                    focus: "city"
-                                                                });
-                                                        }}
-                                                        autoFocus={focus == "city"}
-
+                                                        name="address1"
+                                                        label="Address1"
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        autoComplete="address1"
+                                                        onChange={onChange}
+                                                        value={_get(value, 'address1') || ''}
+                                                    />
+                                                </Grid>
+                                            )
+                                        }}
+                                    />
+                                    <Field
+                                        render={({ field: { value, onChange }}) => {
+                                            return (
+                                                <Grid item xs={12} sm={6}>
+                                                    <FormikErrorMessage error={_get(errors, 'address2')} />
+                                                    <TextField
+                                                        name="address2"
+                                                        label="Address2"
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        autoComplete="address2"
+                                                        onChange={onChange}
+                                                        value={_get(value, 'address2') || ''}
+                                                    />
+                                                </Grid>
+                                            )
+                                        }}
+                                    />
+                                    <Field
+                                        render={({ field: { value, onChange }}) => {
+                                            return (
+                                                <Grid item xs={12} sm={6}>
+                                                    <FormikErrorMessage error={_get(errors, 'address3')} />
+                                                    <TextField
+                                                        name="address3"
+                                                        label="Address3"
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        autoComplete="address3"
+                                                        onChange={onChange}
+                                                        value={_get(value, 'address3') || ''}
+                                                    />
+                                                </Grid>
+                                            )
+                                        }}
+                                    />
+                                    <Field
+                                        render={({ field: { value, onChange }}) => {
+                                            return (
+                                                <Grid item xs={12} sm={6}>
+                                                    <FormikErrorMessage error={_get(errors, 'city')} />
+                                                    <TextField
                                                         name="city"
                                                         label="City"
+                                                        variant="outlined"
                                                         fullWidth
-                                                        autoComplete="address-level2"
+                                                        autoComplete="city"
+                                                        onChange={onChange}
+                                                        value={_get(value, 'city') || ''}
                                                     />
-                                                    {errors.city && touched.city && (
-                                                        <div
-                                                            style={{
-                                                                color: "red"
-                                                            }}
-                                                        >
-                                                            {errors.city}
-                                                        </div>
-                                                    )}
                                                 </Grid>
-                                            );
+                                            )
                                         }}
                                     />
                                     <Field
-                                        name="zip"
-                                        component={props => {
+                                        render={({ field: { value, onChange }}) => {
                                             return (
                                                 <Grid item xs={12} sm={6}>
+                                                    <FormikErrorMessage error={_get(errors, 'zip')} />
                                                     <TextField
-                                                      
-                                                        value={values.zip}
-                                                   
-                                                        onChange={handleChange}
-                                                        onFocus={e => {
-                                                            if (focus !== "zip")
-                                                                this.setState({
-                                                                    focus: "zip"
-                                                                });
-                                                        }}
-                                                        autoFocus={focus == "zip"}
-
-                                                        id="zip"
                                                         name="zip"
-                                                        label="Zip / Postal code"
+                                                        label="Zip"
+                                                        variant="outlined"
                                                         fullWidth
-                                                        autoComplete="postal-code"
+                                                        autoComplete="zip"
+                                                        onChange={onChange}
+                                                        value={_get(value, 'zip') || ''}
                                                     />
-                                                    {errors.zip && touched.zip && (
-                                                        <div
-                                                            style={{
-                                                                color: "red"
-                                                            }}
-                                                        >
-                                                            {errors.zip}
-                                                        </div>
-                                                    )}
                                                 </Grid>
-                                            );
+                                            )
                                         }}
                                     />
                                     <Field
-                                        name="countryid"
-                                        component={props => {
+                                        render={({ field: { value, onChange }}) => {
                                             return (
-                                                <Grid item xs={12}>
-                                                    <FormControl
-                                                        
+                                                <Grid item xs={12} sm={6}>
+                                                    <FormikErrorMessage error={_get(errors, 'countryid')} />
+                                                    <TextField
+                                                        select
+                                                        name="countryid"
+                                                        label="Countryid"
+                                                        variant="outlined"
                                                         fullWidth
+                                                        autoComplete="countryid"
+                                                        onChange={onChange}
+                                                        value={_get(value, 'countryid') || ''}
                                                     >
-                                                        <InputLabel>Country</InputLabel>
-                                                        <Select
-                                                               MenuProps={{ disablePortal: true }}
-                                                               onChange={handleChange}
-                                                               value={values.countryid}
-                                                               inputProps={{
-                                                                name: "countryid",
-                                                                id:"country",
-                                                            
-                                                              }}
-                                                              
-                                                        autoComplete="country"
-                                                               >
-                                                            {
-                                                                SalesLib.COUNTRY_MAP && SalesLib.COUNTRY_MAP.map(country=>(
-                                                                    <MenuItem key={country.id} value={country.id}>
-                                                                    {country.name}
-                                                                </MenuItem>
-                                                                ))  
-                                                            }
-                                                        </Select>
-                                                    </FormControl>
-                                                    {errors.countryid && touched.countryid && (
-                                                        <div
-                                                            style={{
-                                                                color: "red"
-                                                            }}
-                                                        >
-                                                            {errors.countryid}
-                                                        </div>
-                                                    )}
+                                                        {SalesLib.COUNTRY_MAP.map((country) => (
+                                                            <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
+                                                        ))}
+                                                    </TextField>
                                                 </Grid>
-                                            );
+                                            )
                                         }}
                                     />
                                     <Grid style={{ marginTop: 10 }} container justify="flex-end">
@@ -388,9 +234,7 @@ class AddAddress extends Component {
                                             </Button>
                                         </Grid>
                                     </Grid>
-        
                                 </Grid>
-                            
                             </Form>
                         );
                     }}
@@ -407,9 +251,5 @@ const styles = theme => ({
         padding: theme.spacing.unit * 2
     }
 });
-
-AddAddress.propTypes = {
-    classes: PropTypes.object.isRequired
-};
 
 export default withStyles(styles)(AddAddress);

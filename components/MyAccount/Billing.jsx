@@ -16,21 +16,13 @@ import MaskedTextField from "../Form/MaskedTextField";
 import Cleave from "cleave.js/react";
 import SalesLib from 'lib/SalesLib';
 
-const FormikErrorMessage = ({ error, touched }) => {
-
-    if(touched && error) {
-        return <div className="error">{error}</div>;
-    } else {
-        return null;
-    }
-}
+const FormikErrorMessage = ({ error }) => {
+    return error ? <div className="error">{error}</div> : null;
+};
 
 const Billing = ({
-    values,
-    touched,
     errors,
     classes,
-    setErrors
 }) => {
     return (
         <Grid item xs={12} md={5} container spacing={16} style={{ marginRight: 30, textAlign: "center" }}>
@@ -45,7 +37,7 @@ const Billing = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "billing.attn")} touched={_get(touched, "billing.attn")} />
+                            <FormikErrorMessage error={_get(errors, "billing.attn")} />
                             <TextField
                                 name="billing.attn"
                                 fullWidth
@@ -64,7 +56,7 @@ const Billing = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "billing.addressee")} touched={_get(touched, "billing.addressee")} />
+                            <FormikErrorMessage error={_get(errors, "billing.addressee")} />
                             <TextField
                                 name="billing.addressee"
                                 fullWidth
@@ -83,7 +75,7 @@ const Billing = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "billing.address1")} touched={_get(touched, "billing.address1")} />
+                            <FormikErrorMessage error={_get(errors, "billing.address1")} />
                             <TextField
                                 name="billing.address1"
                                 fullWidth
@@ -102,7 +94,7 @@ const Billing = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "billing.address2")} touched={_get(touched, "billing.address2")} />
+                            <FormikErrorMessage error={_get(errors, "billing.address2")} />
                             <TextField
                                 name="billing.address2"
                                 fullWidth
@@ -121,7 +113,7 @@ const Billing = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "billing.address3")} touched={_get(touched, "billing.address3")} />
+                            <FormikErrorMessage error={_get(errors, "billing.address3")} />
                             <TextField
                                 name="billing.address3"
                                 fullWidth
@@ -140,7 +132,7 @@ const Billing = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "billing.city")} touched={_get(touched, "billing.city")} />
+                            <FormikErrorMessage error={_get(errors, "billing.city")} />
                             <TextField
                                 name="billing.city"
                                 fullWidth
@@ -159,7 +151,7 @@ const Billing = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "billing.zip")} touched={_get(touched, "billing.zip")} />
+                            <FormikErrorMessage error={_get(errors, "billing.zip")} />
                             <TextField
                                 name="billing.zip"
                                 fullWidth
@@ -178,7 +170,7 @@ const Billing = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "billing.countryid")} touched={_get(touched, "billing.countryid")} />
+                            <FormikErrorMessage error={_get(errors, "billing.countryid")} />
                             <TextField
                                 select
                                 name="billing.countryid"

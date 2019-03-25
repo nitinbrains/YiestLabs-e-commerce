@@ -18,8 +18,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import AddCard from "./AddCard";
 
+import AddCard from "./AddCard";
 import { userActions } from "appRedux/actions/userActions";
 
 class ManageCards extends Component {
