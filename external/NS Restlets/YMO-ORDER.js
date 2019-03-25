@@ -28,10 +28,6 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
         try {
             var response = ReceiveMessage(input);
 
-            if (!(response.version && versionUpToDate(response.version))) {
-                return { error: { message: "App version is out of date. Please download new version.", code: 0 } };
-            }
-
             const userRecord = record.load({ type: record.Type.CUSTOMER, id: response.user.id });
             const userLocation = parseInt(userRecord.getValue({ fieldId: "subsidiary" }));
             const territory = userRecord.getValue({ fieldId: "territory" });
@@ -339,10 +335,6 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
     //Place Order
     function post(input) {
         var message = ReceiveMessage(input);
-
-        if (!(message.version && versionUpToDate(message.version))) {
-            return { error: { message: "App version is out of date. Please download new version.", code: 0 } };
-        }
 
         if (message.get) {
             try {

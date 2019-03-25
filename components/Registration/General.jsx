@@ -15,6 +15,8 @@ import _isEmpty from 'lodash/isEmpty';
 import MaskedTextField from "../Form/MaskedTextField";
 import Cleave from "cleave.js/react";
 
+import { Utils } from "lib/Utils";
+
 function PhoneMaskedTextField(props) {
     let { options, onChange, inputRef,value, ...other } = props;
     options={phone: true, phoneRegionCode: 'US'};
@@ -45,18 +47,22 @@ const General = ({
     const validate = () => {
         var errors = {};
 
-        var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-
         if (!values.companyName) {
             errors.companyName = "Company name is required";
         }
     
-        if(!values.email) {
+        if (!values.email) {
             errors.email = "Email is required";
+        } else if (!Utils.isValidEmail(values.email)) {
+            errors.email = "Enter a valid email";
         }
-        if (reg.test(values.email) === false) {
-            errors.email = "Please Enter a Valid Email";
+
+        if(!values.vat) {
+            errors.vat = "Vat is required";
+        } else if (!Utils.isValidVat(values.vat)) {
+           errors.vat = "Enter a valid vat";
         }
+
         if (!values.phone) {
             errors.phone = "Phone is required";
         }
@@ -108,228 +114,222 @@ const General = ({
                     }}
                 />                    
             </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
+            <Field
+                render={({field: {value, onChange }}) => {
 
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'companyName')} touched={_get(touched, 'companyName')} />
-                                <TextField
-                                    id="companyName"
-                                    name="companyName"
-                                    label="Company Name"
-                                    fullWidth
-                                    variant="outlined"
-                                    autoComplete="companyName"
-                                    onChange={onChange}
-                                    value={_get(value, 'companyName') || ''}
-                                />
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'companyName')} />
+                            <TextField
+                                name="companyName"
+                                label="Company Name"
+                                fullWidth
+                                variant="outlined"
+                                autoComplete="companyName"
+                                onChange={onChange}
+                                value={_get(value, 'companyName') || ''}
+                            />
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({field: {value, onChange }}) => {
 
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'email')} touched={_get(touched, 'email')} />
-                                <TextField
-                                    id="email"
-                                    name="email"
-                                    label="Email"
-                                    variant="outlined"
-                                    fullWidth
-                                    autoComplete="email"
-                                    onChange={onChange}
-                                    value={_get(value, 'email') || ''}
-                                />
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'phone')} touched={_get(touched, 'phone')} />
-                                <TextField
-                                    id="phone"
-                                    name="phone"
-                                    label="Phone"
-                                    variant="outlined"
-                                    fullWidth
-                                    autoComplete="phone"
-                                    InputProps={{
-                                        inputComponent: PhoneMaskedTextField
-                                    }}
-                                    onChange={onChange}
-                                    value={_get(value, 'phone') || ''} 
-                                />
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'email')} />
+                            <TextField
+                                name="email"
+                                label="Email"
+                                variant="outlined"
+                                fullWidth
+                                autoComplete="email"
+                                onChange={onChange}
+                                value={_get(value, 'email') || ''}
+                            />
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'phone')} />
+                            <TextField
+                                name="phone"
+                                label="Phone"
+                                variant="outlined"
+                                fullWidth
+                                autoComplete="phone"
+                                InputProps={{ inputComponent: PhoneMaskedTextField }}
+                                onChange={onChange}
+                                value={_get(value, 'phone') || ''} 
+                            />
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({field: {value, onChange }}) => {
 
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'password')} touched={_get(touched, 'password')} />
-                                <TextField
-                                    id="password"
-                                    name="password"
-                                    variant="outlined"
-                                    label="Password"
-                                    type="password"
-                                    fullWidth
-                                    autoComplete="password"
-                                    onChange={onChange}
-                                    value={_get(value, 'password') || ''}
-
-                                />
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'confirmPassword')} touched={_get(touched, 'confirmPassword')} />
-                                <TextField
-                                    id="confirmPassword"
-                                    name="confirmPassword"
-                                    label="Confirm Password"
-                                    variant="outlined"
-                                    type="password"
-                                    fullWidth
-                                    autoComplete="confirmPassword"
-                                    onChange={onChange}
-                                    value={_get(value, 'confirmPassword') || ''}
-                                />
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'category')} touched={_get(touched, 'category')} />
-                                <TextField
-                                    id="category"
-                                    name="category"
-                                    label="Category"
-                                    variant="outlined"
-                                    select
-                                    fullWidth
-                                    autoComplete="category"
-                                    onChange={onChange}
-                                    value={_get(value, 'category') || ''}
-                                >
-                                    <MenuItem value={1}>Retailer</MenuItem>
-                                    <MenuItem value={2}>Individual</MenuItem>
-                                    <MenuItem value={3}>Proffesional Brewery</MenuItem>
-                                    <MenuItem value={4}>Proffesional Winery</MenuItem>
-                                    <MenuItem value={5}>Proffesional Destillery</MenuItem>
-                                </TextField>
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'orderFrom')} touched={_get(touched, 'orderFrom')} />
-                                <TextField
-                                    id="orderFrom"
-                                    name="orderFrom"
-                                    label="Order From"
-                                    variant="outlined"
-                                    select
-                                    fullWidth
-                                    autoComplete="orderFrom"
-                                    onChange={onChange}
-                                    value={_get(value, 'orderFrom') || ''}
-                                >
-                                    <MenuItem value={1}>
-                                        US Only
-                                    </MenuItem>
-                                    <MenuItem value={2}>
-                                        US &amp; Copenhagen (For Europe, No Homebrew)
-                                    </MenuItem>
-                                    <MenuItem value={3}>
-                                        US &amp; Hong Kong (For Asia, No Homebrew)
-                                    </MenuItem>
-                                    <MenuItem value={4}>
-                                        US, Copenhagen, and Hong Kong
-                                    </MenuItem>
-                                </TextField>
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'contactName')} touched={_get(touched, 'contactName')} />
-                                <TextField
-                                    id="contactName"
-                                    name="contactName"
-                                    label="Accounting Contact"
-                                    variant="outlined"
-                                    fullWidth
-                                    autoComplete="contactName"
-                                    onChange={onChange}
-                                    value={_get(value, 'contactName') || ''}
-
-                                />
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({field: {value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, 'contactPhone')} touched={_get(touched, 'contactPhone')} />
-                                <TextField
-                                    id="contactPhone"
-                                    name="contactPhone"
-                                    label="Accounting Phone Number"
-                                    variant="outlined"
-                                    fullWidth
-                                    autoComplete="contactPhone"
-                                    InputProps={{ inputComponent: PhoneMaskedTextField }}
-                                    onChange={onChange}
-                                    value={_get(value, 'contactPhone') || ''}
-
-                                />
-                            </React.Fragment>
-                        )
-                    }}
-                />
-            </Grid>
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'password')} />
+                            <TextField
+                                name="password"
+                                variant="outlined"
+                                label="Password"
+                                type="password"
+                                fullWidth
+                                autoComplete="password"
+                                onChange={onChange}
+                                value={_get(value, 'password') || ''}
+                            />
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'confirmPassword')} />
+                            <TextField
+                                name="confirmPassword"
+                                label="Confirm Password"
+                                variant="outlined"
+                                type="password"
+                                fullWidth
+                                autoComplete="confirmPassword"
+                                onChange={onChange}
+                                value={_get(value, 'confirmPassword') || ''}
+                            />
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'category')} />
+                            <TextField
+                                name="vat"
+                                label="Vat"
+                                variant="vat"
+                                select
+                                fullWidth
+                                autoComplete="vat"
+                                placeholder="US-123456"
+                                onChange={onChange}
+                                value={_get(value, 'vat') || ''}
+                            >
+                                <MenuItem value={1}>Retailer</MenuItem>
+                                <MenuItem value={2}>Individual</MenuItem>
+                                <MenuItem value={3}>Proffesional Brewery</MenuItem>
+                                <MenuItem value={4}>Proffesional Winery</MenuItem>
+                                <MenuItem value={5}>Proffesional Destillery</MenuItem>
+                            </TextField>
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'category')} />
+                            <TextField
+                                name="category"
+                                label="Category"
+                                variant="outlined"
+                                select
+                                fullWidth
+                                autoComplete="category"
+                                onChange={onChange}
+                                value={_get(value, 'category') || ''}
+                            >
+                                <MenuItem value={1}>Retailer</MenuItem>
+                                <MenuItem value={2}>Individual</MenuItem>
+                                <MenuItem value={3}>Proffesional Brewery</MenuItem>
+                                <MenuItem value={4}>Proffesional Winery</MenuItem>
+                                <MenuItem value={5}>Proffesional Destillery</MenuItem>
+                            </TextField>
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'orderFrom')} />
+                            <TextField
+                                name="orderFrom"
+                                label="Order From"
+                                variant="outlined"
+                                select
+                                fullWidth
+                                autoComplete="orderFrom"
+                                onChange={onChange}
+                                value={_get(value, 'orderFrom') || ''}
+                            >
+                                <MenuItem value={1}>
+                                    US Only
+                                </MenuItem>
+                                <MenuItem value={2}>
+                                    US &amp; Copenhagen (For Europe, No Homebrew)
+                                </MenuItem>
+                                <MenuItem value={3}>
+                                    US &amp; Hong Kong (For Asia, No Homebrew)
+                                </MenuItem>
+                                <MenuItem value={4}>
+                                    US, Copenhagen, and Hong Kong
+                                </MenuItem>
+                            </TextField>
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'contactName')} />
+                            <TextField
+                                name="contactName"
+                                label="Accounting Contact"
+                                variant="outlined"
+                                fullWidth
+                                autoComplete="contactName"
+                                onChange={onChange}
+                                value={_get(value, 'contactName') || ''}
+\                            />
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'contactPhone')} />
+                            <TextField
+                                name="contactPhone"
+                                label="Accounting Phone Number"
+                                variant="outlined"
+                                fullWidth
+                                autoComplete="contactPhone"
+                                InputProps={{ inputComponent: PhoneMaskedTextField }}
+                                onChange={onChange}
+                                value={_get(value, 'contactPhone') || ''}
+                            />
+                        </Grid>
+                    )
+                }}
+            />
             <Button variant="contained" color="primary" className={classes.button} onClick={handleNext}> 
                 Next
             </Button>

@@ -17,6 +17,7 @@ const initialState = {
     companyName: "",
     connectedaccounts: [],
     currency: "",
+    currencyOptions: [],
     email: "",
     phone: "",
     shipping: {
@@ -60,6 +61,7 @@ const initialState = {
     orderHistory: [],
     isUnsaved: false,
     subsidiaryOptions: [],
+
     ...userInfo
 }; // empty for now
 

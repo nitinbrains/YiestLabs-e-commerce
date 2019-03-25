@@ -16,21 +16,13 @@ import MaskedTextField from "../Form/MaskedTextField";
 import Cleave from "cleave.js/react";
 import SalesLib from 'lib/SalesLib';
 
-const FormikErrorMessage = ({ error, touched }) => {
-
-    if(touched && error) {
-        return <div className="error">{error}</div>;
-    } else {
-        return null;
-    }
-}
+const FormikErrorMessage = ({ error }) => {
+    return error ? <div className="error">{error}</div> : null;
+};
 
 const Shipping = ({
-    values,
-    touched,
     errors,
     classes,
-    setErrors
 }) => {
     return (
         <Grid item xs={12} md={5} container spacing={16} style={{ marginRight: 30, textAlign: "center" }}>
@@ -45,16 +37,16 @@ const Shipping = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "shipping.attn")} touched={_get(touched, "shipping.attn")} />
+                            <FormikErrorMessage error={_get(errors, "shipping.attn")} />
                             <TextField
                                 name="shipping.attn"
                                 fullWidth
-                                value={_get(value, "shipping.attn")}
-                                InputLabelProps={{ shrink: _get(value, "shipping.attn") !== "" }}
-                                onChange={onChange}
                                 variant="outlined"
                                 label="Attention"
                                 autoComplete="shipping.attn"
+                                onChange={onChange}
+                                value={_get(value, "shipping.attn") || ''}
+
                             />
                         </Grid>
                     );
@@ -64,16 +56,15 @@ const Shipping = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "shipping.addressee")} touched={_get(touched, "shipping.addressee")} />
+                            <FormikErrorMessage error={_get(errors, "shipping.addressee")} />
                             <TextField
                                 name="shipping.addressee"
                                 fullWidth
-                                value={_get(value, "shipping.addressee")}
-                                InputLabelProps={{ shrink: _get(value, "shipping.addressee") !== "" }}
-                                onChange={onChange}
                                 variant="outlined"
                                 label="Addressee"
                                 autoComplete="shipping.addressee"
+                                onChange={onChange}
+                                value={_get(value, "shipping.addressee") || ''}
                             />
                         </Grid>
                     );
@@ -83,16 +74,15 @@ const Shipping = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "shipping.address1")} touched={_get(touched, "shipping.address1")} />
+                            <FormikErrorMessage error={_get(errors, "shipping.address1")} />
                             <TextField
                                 name="shipping.address1"
                                 fullWidth
-                                value={_get(value, "shipping.address1")}
-                                InputLabelProps={{ shrink: _get(value, "shipping.address1") !== "" }}
-                                onChange={onChange}
                                 variant="outlined"
                                 label="Address 1"
                                 autoComplete="shipping.address1"
+                                onChange={onChange}
+                                value={_get(value, "shipping.address1") || ''}
                             />
                         </Grid>
                     );
@@ -102,16 +92,15 @@ const Shipping = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "shipping.address2")} touched={_get(touched, "shipping.address2")} />
+                            <FormikErrorMessage error={_get(errors, "shipping.address2")} />
                             <TextField
                                 name="shipping.address2"
                                 fullWidth
-                                value={_get(value, "shipping.address2")}
-                                InputLabelProps={{ shrink: _get(value, "shipping.address2") !== "" }}
-                                onChange={onChange}
                                 variant="outlined"
                                 label="Address 2"
                                 autoComplete="shipping.address2"
+                                onChange={onChange}
+                                value={_get(value, "shipping.address2") || ''}
                             />
                         </Grid>
                     );
@@ -121,16 +110,15 @@ const Shipping = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "shipping.address3")} touched={_get(touched, "shipping.address3")} />
+                            <FormikErrorMessage error={_get(errors, "shipping.address3")} />
                             <TextField
                                 name="shipping.address3"
                                 fullWidth
-                                value={_get(value, "shipping.address3")}
-                                InputLabelProps={{ shrink: _get(value, "shipping.address3") !== "" }}
-                                onChange={onChange}
                                 variant="outlined"
                                 label="Address 3"
                                 autoComplete="shipping.address3"
+                                onChange={onChange}
+                                value={_get(value, "shipping.address3") || ''}
                             />
                         </Grid>
                     );
@@ -140,16 +128,15 @@ const Shipping = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "shipping.city")} touched={_get(touched, "shipping.city")} />
+                            <FormikErrorMessage error={_get(errors, "shipping.city")} />
                             <TextField
                                 name="shipping.city"
                                 fullWidth
-                                value={_get(value, "shipping.city")}
-                                InputLabelProps={{ shrink: _get(value, "shipping.city") !== "" }}
-                                onChange={onChange}
                                 variant="outlined"
                                 label="City"
                                 autoComplete="shipping.city"
+                                onChange={onChange}
+                                value={_get(value, "shipping.city") || ''}
                             />
                         </Grid>
                     );
@@ -159,16 +146,15 @@ const Shipping = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "shipping.zip")} touched={_get(touched, "shipping.zip")} />
+                            <FormikErrorMessage error={_get(errors, "shipping.zip")}  />
                             <TextField
                                 name="shipping.zip"
                                 fullWidth
-                                value={_get(value, "shipping.zip")}
-                                InputLabelProps={{ shrink: _get(value, "shipping.zip") !== "" }}
-                                onChange={onChange}
                                 variant="outlined"
                                 label="Zip"
                                 autoComplete="shipping.zip"
+                                onChange={onChange}
+                                value={_get(value, "shipping.zip")}
                             />
                         </Grid>
                     );
@@ -178,17 +164,17 @@ const Shipping = ({
                 render={({ field: { value, onChange } }) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "shipping.countryid")} touched={_get(touched, "shipping.countryid")} />
+                            <FormikErrorMessage error={_get(errors, "shipping.countryid")} />
                             <TextField
                                 select
                                 name="shipping.countryid"
                                 fullWidth
-                                value={_get(value, "shipping.countryid")}
                                 InputLabelProps={{ shrink: _get(value, "shipping.countryid") !== "" }}
-                                onChange={onChange}
                                 variant="outlined"
                                 label="Country"
                                 autoComplete="shipping.countryid"
+                                onChange={onChange}
+                                value={_get(value, "shipping.countryid") || ''}
                             >
                                 {SalesLib.COUNTRY_MAP.map((country) => (
                                     <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>

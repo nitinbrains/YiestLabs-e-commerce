@@ -4,17 +4,13 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
+
+import { Field } from "formik";
 import _get from 'lodash/get';
 import _isEmpty from 'lodash/isEmpty';
 import moment from "moment";
 import Cleave from "cleave.js/react";
-import Utils from "lib/Utils";
 
 function CreditCardMaskedTextField(props) {
     let { options, onChange, inputRef, ...other } = props;
@@ -47,7 +43,7 @@ const CardInfo = ({
 
     const handleSubmit = () => {
         let errors = validate();
-        if (_isEmpty(errors.card)) {
+        if (_isEmpty(errors)) {
             submitForm();
            
         } else {
@@ -57,28 +53,22 @@ const CardInfo = ({
     }
 
     const validate = () => {
-        let errors = {card: {}};
+        let errors = {};
 
         if (!_get(values, 'card.ccnumber')) {
-            errors.card.ccnumber = "Credit card number is required";
-         } 
-       // else {
-        //     const cardType = Utils.getCardType(values.card.ccnumber);
-        //     if(!cardType) {
-        //         errors.card.ccnumber = "Credit card type could not be inferred. Enter valid credit card number";
-        //     }
-        // }
+            _set(errors, 'card.ccnumber', 'Credit card number is required');
+        }
 
         if (!_get(values, 'card.ccname')) {
-            errors.card.ccname = "Name is required";
+           _set(errors, 'card.ccname', 'Name is required');
         }
 
         if (!_get(values, 'card.ccexpire')) {
-            errors.card.ccexpire = "Expiration date is required";
+            _set(errors, 'card.ccexpire', 'Expiration date is required');
         } else {
             let exp = moment(values.card.ccexpire, 'MM/YYYY')
             if (!exp.isValid() || exp.isBefore(moment())) {
-                errors.card.ccexpire = "Expiration date is invalid";
+                _set(errors, 'card.ccexpire', 'Expiration date is invalid');
             }
         }
         
@@ -99,71 +89,63 @@ const CardInfo = ({
                     }}
                 />
             </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({ field: { value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, "card.ccnumber")} touched={_get(touched, "card.ccnumber")} />
-                                <TextField
-                                    id="card.ccnumber"
-                                    name="card.ccnumber"
-                                    label="Credit Card number"
-                                    variant="outlined"
-                                    fullWidth
-                                    autoComplete="ccnumber"
-                                    onChange={onChange}
-                                    value={_get(value, 'card.ccnumber') || ''}
-                                    InputProps={{ inputComponent: CreditCardMaskedTextField }}
-                                />
-                            </React.Fragment>
-                        );
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({ field: { value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, "card.ccname")} touched={_get(touched, "card.ccname")} />
-                                <TextField 
-                                id="card.ccname" 
+            <Field
+                render={({ field: { value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, "card.ccnumber")} />
+                            <TextField                                
+                                name="card.ccnumber"
+                                label="Credit Card number"
+                                variant="outlined"
+                                fullWidth
+                                autoComplete="ccnumber"
+                                InputProps={{ inputComponent: CreditCardMaskedTextField }}
+                                onChange={onChange}
+                                value={_get(value, 'card.ccnumber') || ''}
+                            />
+                        </Grid>
+                    );
+                }}
+            />
+            <Field
+                render={({ field: { value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, "card.ccname")} />
+                            <TextField                             
                                 name="card.ccname" 
                                 label="Name on card" 
                                 variant="outlined"
                                 fullWidth 
                                 autoComplete="card.ccname" 
                                 onChange={onChange} 
-                                value={_get(value, "card.ccname") || ''} />
+                                value={_get(value, "card.ccname") || ''}
+                            />
 
-                            </React.Fragment>
-                        );
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <Field
-                    render={({ field: { value, onChange }}) => {
-                        return (
-                            <React.Fragment>
-                                <FormikErrorMessage error={_get(errors, "card.ccexpire")} touched={_get(touched, "card.ccexpire")} />
-                                <TextField
-                                    id="card.ccexpire"
-                                    name="card.ccexpire"
-                                    label="Expiration date"
-                                    variant="outlined"
-                                    placeholder="MM/YY"
-                                    fullWidth
-                                    InputProps={{ inputComponent: DateMaskedTextField }}
-                                    onChange={onChange}
-                                    value={_get(value, "card.ccexpire") || ''}    
-                                />
-                            </React.Fragment>
-                        );
-                    }}
-                />
-            </Grid>
+                        </Grid>
+                    );
+                }}
+            />
+            <Field
+                render={({ field: { value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, "card.ccexpire")} />
+                            <TextField                                
+                                name="card.ccexpire"
+                                label="Expiration date"
+                                variant="outlined"
+                                placeholder="MM/YY"
+                                fullWidth
+                                InputProps={{ inputComponent: DateMaskedTextField }}
+                                onChange={onChange}
+                                value={_get(value, "card.ccexpire") || ''} 
+                            />
+                        </Grid>
+                    );
+                }}
+            />
             <Button variant="contained" className={classes.button} onClick={onBack}>
                 Back
             </Button>

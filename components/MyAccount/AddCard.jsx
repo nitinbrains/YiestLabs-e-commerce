@@ -2,150 +2,124 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import PropTypes from "prop-types";
-import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+
 import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
+import _get from "lodash/get";
+import _set from "lodash/set";
 
 import { userActions } from "appRedux/actions/userActions";
 
+function CreditCardMaskedTextField(props) {
+    let { options, onChange, inputRef, ...other } = props;
+    options={creditCard: true};
+    return <Cleave {...other} onChange={onChange} ref={inputRef} options={options} />;
+}
+
+const FormikErrorMessage = ({ error }) => {
+    return error ? <div className="error">{error}</div> : null;
+};
 class AddCard extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-           
-            focus: ""
-        };
     }
 
-    addCard = (values) => {
-        this.props.addCreditCard({ creditCard: values });
-        this.props.closeNewCard();
+    addCard = (values, { setErrors }) => {
+        let errors = validate(values);
+        if (_isEmpty(errors)) {
+            this.props.addCreditCard({ creditCard: values });
+            this.props.closeNewCard();
+        } else {
+            setErrors(errors);
+        }
+    };
+
+    validate = values => {
+        let errors = {};
+
+        if (!_get(values, "ccnumber")) {
+            _set(errors, "ccnumber", "Credit card number is required");
+        }
+
+        if (!_get(values, "ccname")) {
+            _set(errors, "ccname", "Name is required");
+        }
+
+        if (!_get(values, "ccexpire")) {
+            _set(errors, "ccexpire", "Expiration date is required");
+        } else {
+            let exp = moment(values.ccexpire, "MM/YYYY");
+            if (!exp.isValid() || exp.isBefore(moment())) {
+                _set(errors, "ccexpire", "Expiration date is invalid");
+            }
+        }
+
+        return errors;
     };
 
     render() {
-        const { classes } = this.props;
-        const { focus, ...rest } = this.state;
-        const customFormValidation = Yup.object().shape({
-            ccname: Yup.string().required("Required"),
-            ccnumber: Yup.number().required("Required"),
-            ccexpire: Yup.number().required("Required")
-        });
         return (
             <React.Fragment>
-                <Formik
-                    initialValues={{
-
-                        ccnumber: '',
-                        ccname: '',
-                        ccexpire: ''
-                    }}
-                    validationSchema={customFormValidation}
-                    enableReinitialize
-                    validate={values => {
-                  
-                        // let error ={};
-                        // // check getcard type
-                        // let cardNumberValidate = Utils.getCardType(values.ccnumber);
-                   
-                    }}
-                    onSubmit={(values, actions) => {
-                         
-                        this.addCard(values);
-                     }}
-                >
-                    {({ errors, touched, isValidating,handleChange,values }) => {
+                <Formik onSubmit={(values, actions) => this.addCard(values, actions)} enableReinitialize>
+                    {({ errors }) => {
                         return (
                             <Form>
                                 <Grid container spacing={24}>
                                     <Field
-                                        name="ccname"
-                                        component={props => {
+                                        render={({ field: { value, onChange } }) => {
                                             return (
-                                                <Grid item xs={12} md={6}>
+                                                <Grid item xs={12}>
+                                                    <FormikErrorMessage error={_get(errors, "ccnumber")} touched={_get(touched, "ccnumber")} />
                                                     <TextField
-                                                        id="cardName"
-                                                        value={values.ccname}
-                                                        name='ccname'
+                                                        name="ccnumber"
+                                                        label="Credit Card Number"
                                                         variant="outlined"
-                                                        InputLabelProps={{ shrink: values.ccname!== '' }}
-                                                        onChange={handleChange}
-                                                        onFocus={e => {
-                                                            if (focus !== "ccname")  this.setState({ focus: "ccname" });
-                                                        }}
-                                                        autoFocus={focus == "ccname"}
+                                                        fullWidth
+                                                        autoComplete="ccnumber"
+                                                        InputProps={{ inputComponent: CreditCardMaskedTextField }}
+                                                        onChange={onChange}
+                                                        value={_get(value, "ccnumber") || ''}
+                                                    />
+                                                </Grid>
+                                            );
+                                        }}
+                                    />
+                                    <Field
+                                        render={({ field: { value, onChange } }) => {
+                                            return (
+                                                <Grid item xs={12}>
+                                                    <FormikErrorMessage error={_get(errors, "ccname")} touched={_get(touched, "ccname")} />
+                                                    <TextField
+                                                        name="ccname"
                                                         label="Name on card"
+                                                        variant="outlined"
                                                         fullWidth
+                                                        autoComplete="ccname"
+                                                        onChange={onChange}
+                                                        value={_get(value, "ccname") || ''}   
                                                     />
-                                                    {errors.ccname && touched.ccname && (
-                                                        <div style={{ color: "red" }}>
-                                                            {errors.ccname}
-                                                        </div>
-                                                    )}
                                                 </Grid>
                                             );
                                         }}
                                     />
                                     <Field
-                                        name="ccnumber"
-                                        component={props => {
+                                        render={({ field: { value, onChange } }) => {
                                             return (
-                                                <Grid item xs={12} md={6}>
+                                                <Grid item xs={12}>
+                                                    <FormikErrorMessage error={_get(errors, "ccexpire")} touched={_get(touched, "ccexpire")} />
                                                     <TextField
-                                                      
-                                                        id="cardNumber"
+                                                        name="ccexpire"
+                                                        label="Expiration date"
                                                         variant="outlined"
-                                                        InputLabelProps={{ shrink: values.ccnumber!== '' }}
-                                                        value={values.ccnumber}
-                                                      
-                                                        onChange={handleChange}
-                                                        name='ccnumber'
-                                                        onFocus={e => {
-                                                            if (focus !== "ccnumber") this.setState({ focus: "ccnumber" });
-                                                        }}
-                                                        autoFocus={focus == "ccnumber"}
-                                                        label="Card number"
+                                                        placeholder="MM/YY"
                                                         fullWidth
+                                                        InputProps={{ inputComponent: DateMaskedTextField }}
+                                                        onChange={onChange}
+                                                        value={_get(value, "ccexpire") || ''}
                                                     />
-                                                    {errors.ccnumber && touched.ccnumber && (
-                                                        <div style={{ color: "red" }}>
-                                                            {errors.ccnumber}
-                                                        </div>
-                                                    )}
-                                                </Grid>
-                                            );
-                                        }}
-                                    />
-                                    <Field
-                                        name="ccexpire"
-                                        component={props => {
-                                            return (
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField
-                                                    
-                                                        id="expDate"
-                                                        name='ccexpire'
-                                                        variant="outlined"
-                                                        InputLabelProps={{ shrink: values.ccexpire!== '' }}
-                                                        value={values.ccexpire}
-                                                      
-                                                        onChange={handleChange}
-                                                        onFocus={e => {
-                                                            if (focus !== "ccexpire") this.setState({ focus: "ccexpire" });
-                                                        }}
-                                                        autoFocus={focus == "ccexpire"}
-                                                        label="Expiry date"
-                                                        fullWidth
-                                                    />
-                                                    {errors.ccexpire && touched.ccexpire && (
-                                                        <div style={{ color: "red" }}>
-                                                            {errors.ccexpire}
-                                                        </div>
-                                                    )}
                                                 </Grid>
                                             );
                                         }}
@@ -174,10 +148,6 @@ const styles = theme => ({
         padding: theme.spacing.unit * 2
     }
 });
-
-AddCard.propTypes = {
-    classes: PropTypes.object.isRequired
-};
 
 const mapStateToProps = state => {
     return {

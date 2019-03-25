@@ -20,12 +20,6 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
         try
         {
             var message = ReceiveMessage(input);
-
-            if(!(message.version && versionUpToDate(message.version)))
-            {
-                return { error: {message: 'App version is out of date. Please download new version.', code: 0}};
-            }
-
             var response = {};
 
             if(message.alternateSizes)

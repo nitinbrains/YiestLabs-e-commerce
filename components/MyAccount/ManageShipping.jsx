@@ -11,7 +11,6 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import CancelIcon from "@material-ui/icons/Cancel";
-
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -20,7 +19,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import { userActions } from "appRedux/actions/userActions";
-
 import AddAddress from "./AddAddress";
 
 class ManageShipping extends Component {
@@ -146,7 +144,6 @@ class ManageShipping extends Component {
                                             <Grid item>
                                                 <Typography>
                                                     <div className="block">
-                                                        
                                                         <span className="label">Address line 1: </span>
                                                         {address.address1}
                                                     </div>
@@ -154,30 +151,27 @@ class ManageShipping extends Component {
                                             </Grid>
                                             <Grid item>
                                                 <Typography>
-                                                    {address.address2 ? (
+                                                    {address.address2 && (
                                                         <div className="block">
-                                                            
                                                             <span className="label">Address line 2: </span>
                                                             {address.address2}
                                                         </div>
-                                                    ) : null}
+                                                    )}
                                                 </Typography>
                                             </Grid>
                                             <Grid item>
                                                 <Typography>
-                                                    {address.address3 ? (
+                                                    {address.address3 && (
                                                         <div className="block">
-                                                            
                                                             <span className="label">Address line 3: </span>
                                                             {address.address3}
                                                         </div>
-                                                    ) : null}
+                                                    )}
                                                 </Typography>
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <Typography>
                                                     <div className="block">
-                                                        
                                                         <span className="label">City: </span>
                                                         {address.city}
                                                     </div>
@@ -186,7 +180,6 @@ class ManageShipping extends Component {
                                             <Grid item xs={12}>
                                                 <Typography>
                                                     <div className="block">
-                                                        
                                                         <span className="label">Zip-Code: </span>
                                                         {address.zip}
                                                     </div>
@@ -195,13 +188,11 @@ class ManageShipping extends Component {
                                             <Grid item xs={12}>
                                                 <Typography>
                                                     <div className="block">
-                                                    
                                                         <span className="label">Country: </span>
                                                         {address.countryid}
                                                     </div>
                                                 </Typography>
                                             </Grid>
-                                            {}
                                             {this.props.user.shipping.address1 != address.address1 && !this.props.checkout && (
                                                 <Grid item>
                                                     <Button
@@ -209,9 +200,7 @@ class ManageShipping extends Component {
                                                         color="primary"
                                                         style={{ bottom: 2 }}
                                                         className={classNames(this.state.boxHover != i && classes.hide)}
-                                                        onClick={e => {
-                                                            this.selectDefaultAddress(address);
-                                                        }}
+                                                        onClick={e => this.selectDefaultAddress(address)}
                                                     >
                                                         Set as Default
                                                     </Button>
@@ -238,7 +227,7 @@ class ManageShipping extends Component {
                                 </Grid>
                             ) : (
                                 <Grid item xs={12}>
-                                    <AddAddress type={"shipping"} {...this.props} close={this.closeForm} handleCancelAdd={this.handleCancelAddress} />
+                                    <AddAddress {...this.props} close={this.closeForm} handleCancelAdd={this.handleCancelAddress} />
                                 </Grid>
                             )}
                         </Grid>
