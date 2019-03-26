@@ -277,9 +277,9 @@ class CalculatorForm extends Component {
                                                 return (
                                                     <FormTextbox
                                                         required={
-                                                            (errors.startingGravity && touched.startingGravity) || (this.props.messages.messages.length > 0 && startingGravity == "") ? true : false
+                                                            (errors.startingGravity && touched.startingGravity) || (this.props.messages.length > 0 && startingGravity == "") ? true : false
                                                         }
-                                                        error={(errors.startingGravity && touched.startingGravity) || (this.props.messages.messages.length > 0 && startingGravity == "") ? true : false}
+                                                        error={(errors.startingGravity && touched.startingGravity) || (this.props.messages.length > 0 && startingGravity == "") ? true : false}
                                                         label="Starting Gravity"
                                                         showLabel={true}
                                                         value={props.field.value}
@@ -300,9 +300,9 @@ class CalculatorForm extends Component {
                                                 return (
                                                     <FormTextbox
                                                         required={
-                                                            (errors.targetPitchRate && touched.targetPitchRate) || (this.props.messages.messages.length > 0 && targetPitchRate == "") ? true : false
+                                                            (errors.targetPitchRate && touched.targetPitchRate) || (this.props.messages.length > 0 && targetPitchRate == "") ? true : false
                                                         }
-                                                        error={(errors.targetPitchRate && touched.targetPitchRate) || (this.props.messages.messages.length > 0 && targetPitchRate == "") ? true : false}
+                                                        error={(errors.targetPitchRate && touched.targetPitchRate) || (this.props.messages.length > 0 && targetPitchRate == "") ? true : false}
                                                         label="Target Pitch Rate"
                                                         showLabel={true}
                                                         value={props.field.value}
@@ -322,8 +322,8 @@ class CalculatorForm extends Component {
                                             component={props => {
                                                 return (
                                                     <FormTextbox
-                                                        required={(errors.volume && touched.volume) || (this.props.messages.messages.length > 0 && volume == "") ? true : false}
-                                                        error={(errors.volume && touched.volume) || (this.props.messages.messages.length > 0 && volume == "") ? true : false}
+                                                        required={(errors.volume && touched.volume) || (this.props.messages.length > 0 && volume == "") ? true : false}
+                                                        error={(errors.volume && touched.volume) || (this.props.messages.length > 0 && volume == "") ? true : false}
                                                         label="Volume"
                                                         showLabel={true}
                                                         value={props.field.value}
@@ -343,8 +343,8 @@ class CalculatorForm extends Component {
                                             component={props => {
                                                 return (
                                                     <FormTextbox
-                                                        required={(errors.viability && touched.viability) || (this.props.messages.messages.length > 0 && viability == "") ? true : false}
-                                                        error={(errors.viability && touched.viability) || (this.props.messages.messages.length > 0 && viability == "") ? true : false}
+                                                        required={(errors.viability && touched.viability) || (this.props.messages.length > 0 && viability == "") ? true : false}
+                                                        error={(errors.viability && touched.viability) || (this.props.messages.length > 0 && viability == "") ? true : false}
                                                         label="Viability"
                                                         showLabel={true}
                                                         value={props.field.value}
@@ -364,8 +364,8 @@ class CalculatorForm extends Component {
                                             component={props => {
                                                 return (
                                                     <FormTextbox
-                                                        required={(errors.cellCount && touched.cellCount) || (this.props.messages.messages.length > 0 && cellCount == "") ? true : false}
-                                                        error={(errors.cellCount && touched.cellCount) || (this.props.messages.messages.length > 0 && cellCount == "") ? true : false}
+                                                        required={(errors.cellCount && touched.cellCount) || (this.props.messages.length > 0 && cellCount == "") ? true : false}
+                                                        error={(errors.cellCount && touched.cellCount) || (this.props.messages.length > 0 && cellCount == "") ? true : false}
                                                         label="Target Cell Count"
                                                         showLabel={true}
                                                         value={props.field.value}

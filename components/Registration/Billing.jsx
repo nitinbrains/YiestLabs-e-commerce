@@ -47,7 +47,7 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
 
     const validate = () => {
         var errors = {};
-       
+
         if(!_get(values, 'billing.attn')) {
             _set(errors, 'billing.attn', 'Attention is required');
         }
@@ -164,7 +164,7 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                         autoComplete="address2"
                                         onChange={onChange}
                                         value={_get(value, "billing.address2") || ''}
-\                                    />
+                                    />
                                 </Grid>
                             );
                         }}
@@ -192,13 +192,13 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                             return (
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.city")} />
-                                    <TextField 
-                                        name="billing.city" 
-                                        label="City" 
+                                    <TextField
+                                        name="billing.city"
+                                        label="City"
                                         variant="outlined"
-                                        fullWidth 
-                                        autoComplete="city" 
-                                        onChange={onChange} 
+                                        fullWidth
+                                        autoComplete="city"
+                                        onChange={onChange}
                                         value={_get(value, "billing.city") || ''}
                                     />
                                 </Grid>
@@ -210,13 +210,13 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                             return (
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.zip")} />
-                                    <TextField 
-                                        name="billing.zip" 
-                                        label="Zip Code" 
+                                    <TextField
+                                        name="billing.zip"
+                                        label="Zip Code"
                                         variant="outlined"
-                                        fullWidth 
-                                        autoComplete="zip" 
-                                        onChange={onChange} 
+                                        fullWidth
+                                        autoComplete="zip"
+                                        onChange={onChange}
                                         value={_get(value, "billing.zip") || ''}
                                     />
                                 </Grid>
