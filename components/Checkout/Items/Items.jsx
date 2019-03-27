@@ -57,7 +57,7 @@ class Items extends Component {
                         >
                             <Grid item xs={12} md={9}>
                                 <Typography variant="h6" color="textPrimary">
-                                    ITEMS
+                                    ITEMS/SHIP DATES
                                 </Typography>
                                 <div className={classes.sectionTitleDivider} />
                             </Grid>
@@ -100,7 +100,7 @@ class Items extends Component {
                                             color="primary"
                                             className={classes.total}
                                             >
-                                            {this.props.order.itemSubtotal}
+                                            ${this.props.order.itemSubtotal}
                                         </Typography>
                                     </ListItem>
                                     <ListItem className={classes.listItem}>
@@ -110,7 +110,7 @@ class Items extends Component {
                                             color="primary"
                                             className={classes.total}
                                             >
-                                            {this.props.order.shippingSubtotal}
+                                            ${this.props.order.shippingSubtotal}
                                         </Typography>
                                     </ListItem>
                                     <ListItem className={classes.listItem}>
@@ -120,13 +120,13 @@ class Items extends Component {
                                             color="primary"
                                             className={classes.total}
                                             >
-                                            {this.props.order.orderSubtotal}
+                                            ${this.props.order.orderSubtotal}
                                         </Typography>
                                     </ListItem>
                                 </List>
                             </Grid>
                         </Grid>
-                } 
+                }
                 <Dialog
                     open={this.state.showWantSoonerDialog}
                     onClose={() => {this.props.hideWantSooner()}}
@@ -134,7 +134,7 @@ class Items extends Component {
                     classes={{ paper: classes.dialogPaper }}
                 >
                     <WantSooner {...this.props}/>
-                </Dialog>                 
+                </Dialog>
             </React.Fragment>
         );
     }

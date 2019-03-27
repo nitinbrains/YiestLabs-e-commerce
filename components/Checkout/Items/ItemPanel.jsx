@@ -24,10 +24,10 @@ class ItemPanel extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            expanded: false
+            expanded: true
         };
     }
-   
+
     handleExpand = () => {
         this.setState({
             expanded: !this.state.expanded

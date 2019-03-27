@@ -37,7 +37,7 @@ function(record, log, search, email, runtime, task, cache)
                 // rescheduled script task if governance has fallen to less than 50 units
                 if(currentContext.getRemainingUsage() <= 50)
                 {
-                    scriptTask.scriptId = 917;
+                    scriptTask.scriptId = 944;
                     scriptTask.deploymentId = 'customdeploy1';
                     scriptTask.params = {count: index};
                     var scriptTaskId = scriptTask.submit();

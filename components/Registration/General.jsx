@@ -10,15 +10,31 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import { Field } from "formik";
 import * as Yup from "yup";
-import _get from "lodash/get";
-import _isEmpty from "lodash/isEmpty";
+import _get from 'lodash/get';
+import _isEmpty from 'lodash/isEmpty';
+import MaskedTextField from "../Form/MaskedTextField";
 import Cleave from "cleave.js/react";
 
+import Utils from "lib/Utils";
+
+function PhoneMaskedTextField(props) {
+    let { options, onChange, inputRef,value, ...other } = props;
+    options={phone: true, phoneRegionCode: 'US'};
+    return <Cleave {...other} onChange={onChange} ref={inputRef} options={options} value={value}/>;
+}
 const FormikErrorMessage = ({ error }) => {
     return error ? <div className="error">{error}</div> : null;
-};
+}
 
-const General = ({ values, touched, errors, classes, onNext, setErrors }) => {
+const General = ({
+    values,
+    touched,
+    errors,
+    classes,
+    onNext,
+    setErrors
+}) => {
+
     const handleNext = () => {
         let errors = validate();
         if (_isEmpty(errors)) {
@@ -26,20 +42,25 @@ const General = ({ values, touched, errors, classes, onNext, setErrors }) => {
         } else {
             setErrors(errors);
         }
-    };
+    }
 
     const validate = () => {
         var errors = {};
 
-        var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
         if (!values.companyName) {
             errors.companyName = "Company name is required";
         }
 
         if (!values.email) {
             errors.email = "Email is required";
-        } else if (reg.test(values.email) === false) {
-            errors.email = "Enter a valid Email";
+        } else if (!Utils.isValidEmail(values.email)) {
+            errors.email = "Enter a valid email";
+        }
+
+        if(!values.vat) {
+            errors.vat = "Vat is required";
+        } else if (!Utils.isValidVat(values.vat)) {
+           errors.vat = "Enter a valid vat";
         }
 
         if (!values.phone) {
@@ -48,8 +69,8 @@ const General = ({ values, touched, errors, classes, onNext, setErrors }) => {
 
         if (!values.password) {
             errors.password = "Password is required";
-        } else if (values.password.length < 9) {
-            errors.password = "Password must contain at least 9 characters";
+        } else if (values.password.length < 6) {
+            errors.password = "Password must contain at least 6 characters";
         }
 
         if (!values.confirmPassword) {
@@ -59,24 +80,24 @@ const General = ({ values, touched, errors, classes, onNext, setErrors }) => {
             errors.confirmPassword = "Passwords do not match";
         }
 
-        if (!values.category) {
+        if(!values.category) {
             errors.category = "Category is required";
         }
 
-        if (!values.orderFrom) {
+        if(!values.orderFrom) {
             errors.orderFrom = "Order from is required";
         }
 
-        if (!values.contactName) {
+        if(!values.contactName) {
             errors.contactName = "Accounting contact is required";
         }
 
-        if (!values.contactPhone) {
+        if(!values.contactPhone) {
             errors.contactPhone = "Accounting phone number is required";
         }
 
         return errors;
-    };
+    }
 
     return (
         <Grid container spacing={24}>
@@ -92,101 +113,134 @@ const General = ({ values, touched, errors, classes, onNext, setErrors }) => {
                     }}
                 />
             </Grid>
-
             <Field
-                name="companyName"
-                render={({ field: { value, onChange } }) => {
+                render={({field: {value, onChange }}) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "companyName")} touched={_get(touched, "companyName")} />
-                            <TextField 
-                                name="companyName" 
-                                label="Company Name" 
-                                fullWidth 
-                                autoComplete="companyName" 
-                                onChange={onChange} 
-                                value={_get(value, "companyName") || ""} 
+                            <FormikErrorMessage error={_get(errors, 'companyName')} />
+                            <TextField
+                                name="companyName"
+                                label="Company Name"
+                                fullWidth
+                                variant="outlined"
+                                autoComplete="companyName"
+                                onChange={onChange}
+                                value={_get(value, 'companyName') || ''}
                             />
                         </Grid>
-                    );
+                    )
                 }}
             />
             <Field
-                render={({ field: { value, onChange } }) => {
+                render={({field: {value, onChange }}) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "email")} />
-                            <TextField 
-                                name="email" 
-                                label="Email" 
-                                fullWidth 
-                                autoComplete="email" 
-                                onChange={onChange} 
-                                value={_get(value, "email") || ""} 
+                            <FormikErrorMessage error={_get(errors, 'email')} />
+                            <TextField
+                                name="email"
+                                label="Email"
+                                variant="outlined"
+                                fullWidth
+                                autoComplete="email"
+                                onChange={onChange}
+                                value={_get(value, 'email') || ''}
                             />
                         </Grid>
-                    );
+                    )
                 }}
             />
             <Field
-                render={({ field: { value, onChange } }) => {
+                render={({field: {value, onChange }}) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "phone")} />
-                            <TextField 
-                                name="phone" 
-                                label="Phone" 
-                                fullWidth 
-                                autoComplete="phone" 
-                                onChange={onChange} 
-                                value={_get(value, "phone") || ""} 
+                            <FormikErrorMessage error={_get(errors, 'phone')} />
+                            <TextField
+                                name="phone"
+                                label="Phone"
+                                variant="outlined"
+                                fullWidth
+                                autoComplete="phone"
+                                InputProps={{ inputComponent: PhoneMaskedTextField }}
+                                onChange={onChange}
+                                value={_get(value, 'phone') || ''}
                             />
                         </Grid>
-                    );
+                    )
                 }}
             />
             <Field
-                render={({ field: { value, onChange } }) => {
+                render={({field: {value, onChange }}) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "password")} />
-                            <TextField 
-                                name="password" 
-                                label="Password" 
-                                type="password" 
-                                fullWidth 
-                                autoComplete="password" 
-                                onChange={onChange} 
-                                value={_get(value, "password") || ""} 
+                            <FormikErrorMessage error={_get(errors, 'password')} />
+                            <TextField
+                                name="password"
+                                variant="outlined"
+                                label="Password"
+                                type="password"
+                                fullWidth
+                                autoComplete="password"
+                                onChange={onChange}
+                                value={_get(value, 'password') || ''}
                             />
                         </Grid>
-                    );
+                    )
                 }}
             />
             <Field
-                render={({ field: { value, onChange } }) => {
+                render={({field: {value, onChange }}) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "confirmPassword")} />
+                            <FormikErrorMessage error={_get(errors, 'confirmPassword')} />
                             <TextField
                                 name="confirmPassword"
                                 label="Confirm Password"
+                                variant="outlined"
                                 type="password"
                                 fullWidth
                                 autoComplete="confirmPassword"
                                 onChange={onChange}
-                                value={_get(value, "confirmPassword") || ""}
+                                value={_get(value, 'confirmPassword') || ''}
                             />
                         </Grid>
-                    );
+                    )
                 }}
             />
             <Field
-                render={({ field: { value, onChange } }) => {
+                render={({field: {value, onChange }}) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "category")} />
-                            <TextField name="category" label="Category" select fullWidth autoComplete="category" onChange={onChange} value={_get(value, "category") || ""}>
+                            <FormikErrorMessage error={_get(errors, 'category')} />
+                            <TextField
+                                name="vat"
+                                label="Vat"
+                                variant="outlined"
+                                fullWidth
+                                autoComplete="vat"
+                                placeholder="US-123456"
+                                onChange={onChange}
+                                value={_get(value, 'vat') || ''}
+                            >
+                            </TextField>
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({field: {value, onChange }}) => {
+                    return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'category')} />
+                            <TextField
+                                name="category"
+                                label="Category"
+                                variant="outlined"
+                                select
+                                fullWidth
+                                autoComplete="category"
+                                onChange={onChange}
+                                value={_get(value, 'category') || ''}
+                            >
                                 <MenuItem value={1}>Retailer</MenuItem>
                                 <MenuItem value={2}>Individual</MenuItem>
                                 <MenuItem value={3}>Proffesional Brewery</MenuItem>
@@ -194,49 +248,83 @@ const General = ({ values, touched, errors, classes, onNext, setErrors }) => {
                                 <MenuItem value={5}>Proffesional Destillery</MenuItem>
                             </TextField>
                         </Grid>
-                    );
+                    )
                 }}
             />
             <Field
-                render={({ field: { value, onChange } }) => {
+                render={({field: {value, onChange }}) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "orderFrom")} />
-                            <TextField name="orderFrom" label="Order From" select fullWidth autoComplete="orderFrom" onChange={onChange} value={_get(value, "orderFrom") || ""}>
-                                <MenuItem value={1}>US Only</MenuItem>
-                                <MenuItem value={2}>US &amp; Copenhagen (For Europe, No Homebrew)</MenuItem>
-                                <MenuItem value={3}>US &amp; Hong Kong (For Asia, No Homebrew)</MenuItem>
-                                <MenuItem value={4}>US, Copenhagen, and Hong Kong</MenuItem>
+                            <FormikErrorMessage error={_get(errors, 'orderFrom')} />
+                            <TextField
+                                name="orderFrom"
+                                label="Order From"
+                                variant="outlined"
+                                select
+                                fullWidth
+                                autoComplete="orderFrom"
+                                onChange={onChange}
+                                value={_get(value, 'orderFrom') || ''}
+                            >
+                                <MenuItem value={1}>
+                                    US Only
+                                </MenuItem>
+                                <MenuItem value={2}>
+                                    US &amp; Copenhagen (For Europe, No Homebrew)
+                                </MenuItem>
+                                <MenuItem value={3}>
+                                    US &amp; Hong Kong (For Asia, No Homebrew)
+                                </MenuItem>
+                                <MenuItem value={4}>
+                                    US, Copenhagen, and Hong Kong
+                                </MenuItem>
                             </TextField>
                         </Grid>
-                    );
+                    )
                 }}
             />
             <Field
-                render={({ field: { value, onChange } }) => {
+                render={({field: {value, onChange }}) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "contactName")} />
-                            <TextField name="contactName" label="Accounting Contact" fullWidth autoComplete="contactName" onChange={onChange} value={_get(value, "contactName") || ""} />
+                            <FormikErrorMessage error={_get(errors, 'contactName')} />
+                            <TextField
+                                name="contactName"
+                                label="Accounting Contact"
+                                variant="outlined"
+                                fullWidth
+                                autoComplete="contactName"
+                                onChange={onChange}
+                                value={_get(value, 'contactName') || ''}
+                            />
                         </Grid>
-                    );
+                    )
                 }}
             />
             <Field
-                render={({ field: { value, onChange } }) => {
+                render={({field: {value, onChange }}) => {
                     return (
                         <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, "contactPhone")} />
-                            <TextField name="contactPhone" label="Accounting Phone Number" fullWidth autoComplete="contactPhone" onChange={onChange} value={_get(value, "contactPhone") || ""} />
+                            <FormikErrorMessage error={_get(errors, 'contactPhone')} />
+                            <TextField
+                                name="contactPhone"
+                                label="Accounting Phone Number"
+                                variant="outlined"
+                                fullWidth
+                                autoComplete="contactPhone"
+                                InputProps={{ inputComponent: PhoneMaskedTextField }}
+                                onChange={onChange}
+                                value={_get(value, 'contactPhone') || ''}
+                            />
                         </Grid>
-                    );
+                    )
                 }}
             />
             <Button variant="contained" color="primary" className={classes.button} onClick={handleNext}>
                 Next
             </Button>
         </Grid>
-    );
+    )
 };
 
 const styles = theme => ({

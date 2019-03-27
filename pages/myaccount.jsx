@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { bindActionCreators } from "redux";
 import _isEmpty from "lodash/isEmpty";
+import _set from "lodash/set"
+import _get from "lodash/get";
 
 import PropTypes from "prop-types";
 import Link from "next/link";
@@ -28,8 +30,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Formik, Form, Field } from "formik";
-import _get from "lodash/get";
-import _extend from "lodash/extend";
 
 import ManageShipping from "components/MyAccount/ManageShipping";
 import ManageBilling from "components/MyAccount/ManageBilling";
@@ -44,12 +44,8 @@ import WLHelper from "lib/WLHelper";
 import isLoggedUser from "hocs/isLoggedUser";
 import Utils from "lib/Utils";
 
-const FormikErrorMessage = ({ error, touched }) => {
-    if (touched && error) {
-        return <div className="error">{error}</div>;
-    } else {
-        return null;
-    }
+const FormikErrorMessage = ({ error }) => {
+    return error ? <div className="error">{error}</div> : null;
 };
 
 function PhoneMaskedTextField(props) {
@@ -65,15 +61,14 @@ class MyAccount extends Component {
             manageShipping: false,
             manageBilling: false,
             manageCards: false,
-            shipFrom: 1,
             confirmDialog: false,
             focus: ""
         };
     }
 
-    createDialogContent = shipFrom => {
+    createDialogContent = orderFrom => {
         let newAccount;
-        switch (shipFrom) {
+        switch (orderFrom) {
             case -2:
                 newAccount = "USA";
                 break;
@@ -132,8 +127,8 @@ class MyAccount extends Component {
         this.setState({ manageCards: false });
     };
 
-    handleShipFrom = event => {
-        this.setState({ shipFrom: event.target.value });
+    handleorderFrom = event => {
+        this.setState({ orderFrom: event.target.value });
         if (event.target.value > 0) {
             this.setState({ confirmDialog: true });
         }
@@ -144,7 +139,6 @@ class MyAccount extends Component {
     };
 
     handleSubmit = (values, { setErrors }) => {
-
         const errors = this.validate(values);
         if (_isEmpty(errors)) {
             const request = buildRequest(this.props.user, values);
@@ -160,7 +154,7 @@ class MyAccount extends Component {
         if (newState.email !== oldState.email) {
             request.email = newState.email;
         }
-        
+
         if (newState.phone !== oldState.phone) {
             request.phone = newState.phone;
         }
@@ -183,83 +177,89 @@ class MyAccount extends Component {
 
         if(!_isEqual(newState.shipping, oldState.shipping)) {
             request.shipping = {};
-            request.shipChange = true;
-            request.shipping = Object.assign({}, newState.shipping);
+            request.defaultShipAddress = true;
+            request.address = Object.assign({}, newState.shipping);
         }
 
         if(!_isEqual(newState.billing, oldState.billing)) {
             request.billing = {};
-            request.billChange = true;
-            request.billing = Object.assign({}, newState.billing);
+            request.defaultBillAddress = true;
+            request.address = Object.assign({}, newState.billing);
         }
 
         return request;
     }
 
     validate = values => {
-        
+
         var errors = {};
         var reg='!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i'
         if (!values.email) {
-            Utils.addProps(errors, "email", "Email is required");
-        } else if (reg.match(values.email) === false) {
-            Utils.addProps(errors, "email", "Enter a valid email");
+            _set(errors, 'email', 'Email is required');
+        } else if (!Utils.isValidEmail(values.email)) {
+            _set(errors, 'email', 'Enter a valid email');
+        }
+
+        if(!values.vat) {
+            _set(errors, 'vat', 'Vat is required');
+        } else if (!Utils.isValidVat(values.vat)) {
+            _set(errors, 'vat', 'Enter a valid vat');
         }
 
         if (!values.phone) {
-            Utils.addProps(errors, "phone", "Phone is required");
+            _set(errors, 'phone', 'Phone is required');
         }
 
         if (!values.orderFrom) {
-            Utils.addProps(errors, "orderFrom", "Enter a subsidiary to order from");
+            _set(errors, 'orderFrom', 'Enter a subsidiary to order from');
         }
 
-        if (!_get(values, "shipping.attn")) {
-            Utils.addProps(errors, "shipping.attn", "Attention is required");
+        if (!_get(values, 'shipping.attn')) {
+            _set(errors, 'shipping.attn', 'Attention is required');
         }
 
-        if (!_get(values, "shipping.addressee")) {
-            Utils.addProps(errors, "shipping.addressee", "Addressee is required");
+        if (!_get(values, 'shipping.addressee')) {
+            _set(errors, 'shipping.addressee', 'Addressee is required');
         }
 
-        if (!_get(values, "shipping.address1")) {
-            Utils.addProps(errors, "shipping.address1", "Address1 is required");
+        if (!_get(values, 'shipping.address1')) {
+            _set(errors, 'shipping.address1', 'Address1 is required');
         }
 
-        if (!_get(values, "shipping.city")) {
-            Utils.addProps(errors, "shipping.city", "City is required");
+        if (!_get(values, 'shipping.city')) {
+            _set(errors, 'shipping.city', 'City is required');
         }
 
-        if (!_get(values, "shipping.zip")) {
-            Utils.addProps(errors, "shipping.zip", "Zip code is required");
+        if (!_get(values, 'shipping.zip')) {
+            _set(errors, 'shipping.zip', 'Zip code is required');
         }
 
-        if (!_get(values, "shipping.countryid")) {
-            Utils.addProps(errors, "shipping.countryid", "Country is required");
+        if (!_get(values, 'shipping.countryid')) {
+            _set(errors, 'shipping.countryid', 'Country is required');
         }
 
-        if (!_get(values, "billing.attn")) {
-            Utils.addProps(errors, "billing.attn", "Attention is required");
+        if (!_get(values, 'billing.attn')) {
+            _set(errors, 'billing.attn', 'Attention is required');
         }
 
-        if (!_get(values, "billing.addressee")) {
-            Utils.addProps(errors, "billing.addressee", "Addressee is required");
+        if (!_get(values, 'billing.addressee')) {
+            _set(errors, 'billing.addressee', 'Addressee is required');
         }
 
-        if (!_get(values, "billing.address1")) {
-            Utils.addProps(errors, "billing.address1", "Address1 is required");
+        if (!_get(values, 'billing.address1')) {
+            _set(errors, 'billing.address1', 'Address1 is required');
         }
 
-        if (!_get(values, "billing.city")) {
-            Utils.addProps(errors, "billing.city", "City is required");
+        if (!_get(values, 'billing.city')) {
+            _set(errors, 'billing.city', 'City is required');
         }
 
-        if (!_get(values, "billing.zip")) {
-            Utils.addProps(errors, "billing.zip", "Zip code is required");
+        if (!_get(values, 'billing.zip')) {
+            _set(errors, 'billing.zip', 'Zip code is required');
         }
 
-        if (!_get(values, "billing.countryid")) {
-            Utils.addProps(errors, "billing.countryid", "Country is required");
+        if (!_get(values, 'billing.countryid')) {
+            _set(errors, 'billing.countryid', 'Country is required');
         }
 
         return errors;
@@ -268,15 +268,17 @@ class MyAccount extends Component {
     render() {
         const {
             classes,
-            user: { 
+            user: {
                 id,
-                shipping, 
-                billing, 
-                email, 
-                phone, 
-                shipFrom, 
-                isLoading, 
-                subsidiaryOptions 
+                subsidiary,
+                shipping,
+                billing,
+                email,
+                phone,
+                orderFrom,
+                isLoading,
+                subsidiaryOptions,
+                currencyOptions
             }
         } = this.props;
 
@@ -308,7 +310,7 @@ class MyAccount extends Component {
                             },
                             email: email,
                             phone: phone,
-                            shipFrom: shipFrom,
+                            orderFrom: subsidiary,
                         }}
                         enableReinitialize
                         onSubmit={(values, actions) => {
@@ -324,22 +326,21 @@ class MyAccount extends Component {
                                         <Grid item xs={12} container justify="center" alignItems="center" spacing={24} style={{ marginBottom: 20 }}>
                                             <Grid item xs={3}>
                                                 <Typography style={{ textAlign: "center" }} variant="title" gutterBottom>
-                                                    Account # {id}
+                                                    Account # {this.props.user.id}
                                                 </Typography>
                                             </Grid>
                                             <Field
                                                 render={({ field: { value, onChange }}) => {
                                                     return (
                                                         <Grid item xs={3}>
-                                                            <FormikErrorMessage error={_get(errors, "email")} touched={_get(touched, "email")} />
+                                                            <FormikErrorMessage error={_get(errors, "email")} />
                                                             <TextField
-                                                                value={value=_get(value, "email")}
-                                                                InputLabelProps={{ shrink: value=_get(value, "email") !== "" }}
-                                                                onChange={onChange}
-                                                                variant="outlined"
                                                                 name="email"
+                                                                variant="outlined"
                                                                 label="Email"
                                                                 autoComplete="email"
+                                                                onChange={onChange}
+                                                                value={value=_get(value, "email") || ''}
                                                             />
                                                         </Grid>
                                                     );
@@ -349,18 +350,15 @@ class MyAccount extends Component {
                                                 render={({ field: { value, onChange }}) => {
                                                     return (
                                                         <Grid item xs={3}>
-                                                            <FormikErrorMessage error={_get(errors, "phone")} touched={_get(touched, "phone")} />
+                                                            <FormikErrorMessage error={_get(errors, "phone")} />
                                                             <TextField
-                                                                value={value=_get(value, "phone")}
-                                                                InputLabelProps={{ shrink: _get(value, "phone") !== "" }}
-                                                                InputProps={{
-                                                                    inputComponent: PhoneMaskedTextField
-                                                                }}
-                                                                onChange={onChange}
-                                                                variant="outlined"
                                                                 name="phone"
+                                                                InputProps={{ inputComponent: PhoneMaskedTextField }}
+                                                                variant="outlined"
                                                                 label="Phone"
                                                                 autoComplete="phone"
+                                                                onChange={onChange}
+                                                                value={value=_get(value, "phone") || ''}
                                                             />
                                                         </Grid>
                                                     );
@@ -370,18 +368,17 @@ class MyAccount extends Component {
                                                 render={({ field: { value, onChange }}) => {
                                                     return (
                                                         <Grid item xs={3}>
-                                                            <FormikErrorMessage error={_get(errors, "shipFrom")} touched={_get(touched, "shipFrom")} />
+                                                            <FormikErrorMessage error={_get(errors, "orderFrom")} />
                                                             <TextField
                                                                 select
-                                                                value={_get(value, "shipFrom")}
-                                                                InputLabelProps={{ shrink: _get(value, "shipFrom") !== "" }}
-                                                                onChange={onChange}
+                                                                name="orderFrom"
                                                                 variant="outlined"
-                                                                name="shipFrom"
-                                                                label="Ship From"
-                                                                autoComplete="shipFrom"
+                                                                label="Order From"
+                                                                autoComplete="orderFrom"
+                                                                onChange={onChange}
+                                                                value={_get(value, "orderFrom") || ''}
                                                             >
-                                                                {subsidiaryOptions.map((option, i) => {
+                                                                {subsidiaryOptions.map(option => {
                                                                     var label = WLHelper.getSubsidiaryLabel(option);
                                                                     return <MenuItem value={option}>{label}</MenuItem>;
                                                                 })}
@@ -390,50 +387,86 @@ class MyAccount extends Component {
                                                     );
                                                 }}
                                             />
-                                            <Field
-                                                render={({ field: { value, onChange }}) => {
-                                                    return (
-                                                        <Grid item xs={3}>
-                                                            <FormikErrorMessage error={_get(errors, "currency")} touched={_get(touched, "currency")} />
-                                                            <TextField
-                                                                select
-                                                                value={_get(value, "currency")}
-                                                                InputLabelProps={{ shrink: _get(value, "currency") !== "" }}
-                                                                onChange={onChange}
-                                                                variant="outlined"
-                                                                name="currency"
-                                                                label="Currency"
-                                                                autoComplete="currency"
-                                                            >
-                                                                <MenuItem>Dollar</MenuItem>
-                                                                <MenuItem>EUR</MenuItem>
-                                                                <MenuItem>DDK</MenuItem>
-                                                            </TextField>
-                                                        </Grid>
-                                                    );
-                                                }}
-                                            />
+                                            {!_isEmpty(currencyOptions) && (
+                                                <Field
+                                                    render={({ field: { value, onChange }}) => {
+                                                        return (
+                                                            <Grid item xs={3}>
+                                                                <FormikErrorMessage error={_get(errors, "currency")} />
+                                                                <TextField
+                                                                    select
+                                                                    name="currency"
+                                                                    variant="outlined"
+                                                                    label="Currency"
+                                                                    autoComplete="currency"
+                                                                    onChange={onChange}
+                                                                    value={_get(value, "currency") || ''}
+                                                                >
+                                                                    {currencyOptons.map(option => {
+                                                                        <MenuItem value={option.id}>{option.name}</MenuItem>
+                                                                    })}
+                                                                </TextField>
+                                                            </Grid>
+                                                        );
+                                                    }}
+                                                />
+                                            )}
                                             <Field
                                                 render={({ field: { value, onChange }}) => {
                                                     return (
                                                         <Grid item xs={3}>
                                                             <FormikErrorMessage error={_get(errors, "vat")} touched={_get(touched, "vat")} />
                                                             <TextField
+                                                                placeholder="US-123456"
                                                                 value={_get(value, "vat")}
                                                                 InputLabelProps={{ shrink: _get(value, "vat") !== "" }}
                                                                 onChange={onChange}
                                                                 variant="outlined"
+
                                                                 name="vat"
+                                                                variant="outlined"
                                                                 label="Vat"
                                                                 autoComplete="vat"
+                                                                onChange={onChange}
+                                                                value={_get(value, "vat") || ''}
                                                             />
                                                         </Grid>
                                                     );
                                                 }}
                                             />
+
                                             <Grid item xs={12} container justify="center" alignItems="center" spacing={24} style={{ marginBottom: 20 }}>
+                                                
                                                 <Shipping {...props} />
                                                 <Billing {...props} />
+
+                                                <Grid item xs={12} md={4} container justify="center" alignItems="center">
+                                                    <Button
+                                                        onClick={this.manageShipping}
+                                                        variant="outlined" color="primary"
+                                                        className={classes.modalbtn}
+                                                    >
+                                                        Manage Shipping Addresses
+                                                    </Button>
+                                                </Grid>
+                                                <Grid item xs={12} md={4} container justify="center" alignItems="center">
+                                                    <Button
+                                                        style={{ marginTop: 10 }}
+                                                        variant="outlined" color="primary"
+                                                        onClick={this.manageBilling}
+                                                    >
+                                                        Manage Billing Addresses
+                                                    </Button>
+                                                </Grid>
+                                                <Grid item xs={12} md={4} container justify="center" alignItems="center">
+                                                    <Button
+                                                        variant="outlined" color="primary"
+                                                        className={classes.modalbtn}
+                                                        onClick={this.manageCards}
+                                                    >
+                                                        Manage Cards
+                                                    </Button>
+                                                </Grid>
                                             </Grid>
                                         </Grid>
                                     </Grid>
@@ -458,7 +491,7 @@ class MyAccount extends Component {
                     <Dialog open={this.state.manageCards} maxWidth={"md"} fullWidth>
                         <ManageCards closeDialog={this.closeCards} />
                     </Dialog>
-                    {this.createDialogContent(this.state.shipFrom)}
+                    {this.createDialogContent(this.state.orderFrom)}
                 </PageContainer>
             </NavBarUserSearchDrawerLayout>
         );
@@ -482,6 +515,9 @@ const styles = theme => ({
             marginLeft: 250,
             marginRight: 250
         }
+    },
+    modalbtn:{
+        marginTop: 10, marginLeft: 16 
     },
     title: {
         backgroundColor: "#FF9933",

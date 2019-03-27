@@ -114,7 +114,7 @@ class YeastCard extends Component {
         const spaceIndex = item.Name.indexOf(" ");
         const itemID = item.Name.substr(0, spaceIndex);
         const itemName = item.Name.substr(spaceIndex + 1);
-    
+
         return (
             <Grid
                 item
@@ -125,10 +125,10 @@ class YeastCard extends Component {
                 spacing={24}
                 onClick={this.props.onClick.bind(this, this.props.item)}
             >
-          
+
                 <div
                     className={classes.card}
-                    // onMouseEnter={this.handleItemHoverEnter}
+                    onMouseEnter={this.handleItemHoverEnter}
                     onMouseLeave={this.handleItemHoverLeave}
                     style={
                         !this.state.hover
@@ -139,7 +139,7 @@ class YeastCard extends Component {
                               }
                             : { backgroundColor: "#fff" }
                     }
-                >   
+                >
                     {!this.state.hover ? (
                         <Grid item container spacing={8}>
                             <Grid
@@ -249,7 +249,8 @@ const styles = theme => ({
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
-        height: 230
+        height: 230,
+        cursor: "pointer"
     },
     cardHover: {
         transition: theme.transitions.create("width", {

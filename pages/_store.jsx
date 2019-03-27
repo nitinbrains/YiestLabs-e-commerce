@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from "next/router";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
-import { find, filter } from "lodash";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -25,12 +24,12 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Divider from "@material-ui/core/Divider";
 
-import SalesLib from "lib/SalesLib";
 import NavBarUserSearchDrawerLayout from "components/NavBar/NavBarUserSearchDrawerLayout";
 import LoadingIndicator from "components/UI/LoadingIndicator";
 import YeastCard from "components/Store/Yeast/YeastCard";
 import MainMenu from "components/Store/Menu/MainMenu";
 import SubCat from "components/Store/Menu/SubCat";
+import SalesLib from "lib/SalesLib";
 
 import YeastDialog from "components/Store/Yeast/YeastDialog";
 import EnzymesNutrientsCard from "components/Store/EnzymesNutrients/EnzymesNutrientsCard";
@@ -52,139 +51,7 @@ import { messageActions } from "appRedux/actions/messageActions";
 
 import withInventory from "hocs/inventory";
 import isLoggedUser from "hocs/isLoggedUser";
-const dataArr = [
-    {
-        id: 0,
-        title: "CORE YEAST STRAINS",
-        img: "static/images/categories/Category-core.jpg",
-        page: "sub",
-        value: 0,
-        color: "#95b95e",
-        subCategories: [
-            {
-                label: "ALE STRAINS",
-                img: "static/images/categories/Category-ale.jpg",
-                icon: "static/images/icons/Ale-icon.svg",
-                value: 1,
-                checked: true,
-                salesCategory: 2,
-                color: "#f68f32"
-            },
-            {
-                label: "LARGER STRAINS",
-                img: "static/images/categories/Category-lager.jpg",
-                icon: "static/images/icons/Lager-icon.svg",
-                value: 2,
-                salesCategory: 2,
-                checked: false,
-                color: "#f7ac31"
-            },
-            {
-                label: "WINE MEAD & CIDER STRAINS",
-                img: "static/images/categories/Category-wine.jpg",
-                icon: "static/images/icons/Wine-icon.svg",
-                value: 3,
-                salesCategory: 2,
-                checked: false,
-                color: "#af81ca"
-            },
-            {
-                label: "DISTILLING STRAINS",
-                img: "static/images/categories/Category-Distilling.jpg",
-                icon: "static/images/icons/Distilling-icon.svg",
-                value: 4,
-                salesCategory: 10,
-                checked: false,
-                color: "#5251a1"
-            },
-            {
-                label: "SPECIALIATY & BELGIAN STRAINS",
-                img: "static/images/categories/Category-belgian.jpg",
-                icon: "static/images/icons/Belgian-icon.svg",
-                value: 5,
-                salesCategory: 28,
-                checked: false,
-                color: "#5ed1d1"
-            },
-            {
-                label: "WILD YIEST & BACTERIA",
-                img: "static/images/categories/Category-wild.jpg",
-                icon: "static/images/icons/Wildyeast-icon.svg",
-                value: 6,
-                salesCategory: 20,
-                checked: false,
-                color: "#daab77"
-            },
-            {
-                label: "VAULT STRAINS",
-                img: "static/images/categories/Category-vault.jpg",
-                icon: "static/images/icons/Vault-icon.svg",
-                value: 7,
-                salesCategory: 23,
-                checked: false,
-                color: "#c4bab4"
-            }
-        ]
-    },
-    {
-        title: "ENZYMES & NUTRIENTS",
-        img: "static/images/categories/Category-ale.jpg",
-        page: "sub",
-        value: 8,
-        id: 8,
-        subCategories: [
-            {
-                img: "static/images/categories/Category-vault.jpg",
-                icon: "static/images/icons/Ale-icon.svg",
-                label: "Enzymes",
-                value: 9,
-                checked: false,
-                color: "#95b95e"
-            },
-            {
-                img: "static/images/categories/Category-vault.jpg",
-                icon: "static/images/icons/Ale-icon.svg",
-                label: "Nutrients",
-                value: 10,
-                checked: false,
-                color: "#95b95e"
-            }
-        ]
-    },
-    {
-        title: "ANALYTICAL LAB SERVICES",
-        img: "static/images/categories/Category-belgian.jpg",
-        page: "sub",
-        // value:12,
-        id: 12,
-        color: "#95b95e"
-    },
-    {
-        img: "static/images/categories/Category-wild.jpg",
-        page: "sub",
-        title: "LAB SUPPLIES",
-        // value: 13,
-        id: 13,
-        checked: false,
-        color: "#95b95e"
-    },
-    {
-        title: "EDUCATION",
-        img: "static/images/categories/Category-wine.jpg",
-        page: "sub",
-        // value:14,
-        id: 14,
-        color: "#95b95e"
-    },
-    {
-        title: "GIFT SHOP",
-        img: "static/images/categories/Category-vault.jpg",
-        page: "sub",
-        // value:15,
-        id: 15,
-        color: "#95b95e"
-    }
-];
+import { filterItems } from "lib/InventoryUtils";
 
 class Store extends Component {
     constructor(props) {
@@ -192,45 +59,24 @@ class Store extends Component {
         this.state = {
             openDialog: false,
             searchText: "",
-            selectedCategory: 0,
-            selectedSubCategory: 1
+            selectedMainCategory: null,
+            selectedSubCategory: null,
+            itemsToShow: [],
+            isHomebrew: false
         };
     }
 
     componentWillMount() {
 
-        let {
-            router: {
-                query: { pageType, categoryId, subCategoryId }
-            }
-        } = this.props;
-
-        let legendCategory, legendSubcategory;
-
-        if(categoryId) {
-            legendCategory = dataArr.find(m => m.id == categoryId);
-            if(legendCategory) {
-                if (subCategoryId && legendCategory.subCategories) {
-                    legendSubcategory = legendCategory.subCategories.find(m => m.value == subCategoryId);
-                    if (legendSubcategory) {
-                        this.props.changeCategory({category: subCategoryId});
-                        this.setState({selectedCategory: legendCategory, selectedSubCategory: legendSubcategory});
-                    }
-                    
-                }
-                else {
-                    this.props.changeCategory({category: categoryId});
-                    this.setState({selectedCategory: legendCategory, selectedSubCategory: legendSubcategory});
-                }
-                
-            }
-        }
+        const  { inventory: { items }} = this.props;
 
         let isUserLoggedIn = sessionStorage.getItem("isLoggedin");
         let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
         if (isUserLoggedIn && userInfo) {
             this.props.setUserInfo({ userInfo });
         }
+
+        this.setState({itemsToShow: items});
     }
 
     handleClickItem = item => {
@@ -241,24 +87,50 @@ class Store extends Component {
         this.setState({ openDialog: false, item: null });
     };
 
-    handleSearchCall = search => {
-        const {
-            router: { query }
-        } = this.props;
-        var { categoryId = 0, subCategoryId = 1, pageType } = query;
+    toggleHomebrew = (isHomebrew ) => {
+        const { inventory: { items }, user } = this.props;
 
-        this.setState({ selectedCategory: categoryId });
-        this.setState({ selectedSubCategory: subCategoryId });
-        this.setState({ searchText: search });
+        var itemsToShow = filterItems(items, null, null, user, isHomebrew);
+        this.setState({ isHomebrew, itemsToShow });
+    }
 
-        if (search != "") {
-            this.props.searchInventory({ category: categoryId, search });
-        } else if (pageType === "cards" && search === "" && !subCategoryId) {
-            this.props.changeCategory({ category: categoryId });
-        } else {
-            this.props.changeCategory({ category: subCategoryId });
+    searchItem = searchText => {
+        const { inventory: { items }, user } = this.props;
+        const { isHomebrew } = this.state;
+
+        if (searchText) {
+            const itemsToShow = filterItems(items, null, searchText, user, isHomebrew);
+            this.setState({ searchText, itemsToShow });
         }
     };
+
+    changeMainCategory = selectedMainCategory => {
+        const { inventory: { items }, user } = this.props;
+        const { isHomebrew } = this.state;
+
+        const value = _.get(selectedMainCategory, "value");
+        const subCategories = _.get(selectedMainCategory, "subCategories");
+
+        var selectedSubCategory = null;
+
+        if ( !subCategories ){
+            selectedSubCategory = selectedMainCategory;
+        }
+
+        var itemsToShow = filterItems(items, value, null, user, isHomebrew);
+        this.setState({ selectedMainCategory, selectedSubCategory, itemsToShow });
+    }
+
+    changeSubCategory = selectedSubCategory => {
+        const { inventory: { items }, user } = this.props;
+        const { isHomebrew } = this.state;
+
+        const value = _.get(selectedSubCategory, "value");
+
+        var itemsToShow = filterItems(items, value, null, user, isHomebrew);
+        this.setState({ selectedSubCategory, itemsToShow });
+    }
+
 
     getCard = (item, i) => {
         if (this.props.store.isHomebrew) {
@@ -332,112 +204,77 @@ class Store extends Component {
         return <React.Fragment />;
     };
 
+    categoryBack() {
+      if (!this.state.selectedSubCategory || this.state.selectedSubCategory == this.state.selectedMainCategory) {
+          this.changeMainCategory(null);
+      } else {
+          this.changeSubCategory(null);
+      }
+    }
+
     render() {
-        let {
-            classes,
-            router: {
-                query: { pageType, categoryId, subCategoryId }
-            },
-            inventory: { isHomebrew }
-        } = this.props;
 
-        let legendCategory, legendCategoryTitle, legendCategoryColor, legendSubcategory, legendSubcategoryTitle, legendSubcategoryColor
+        let { classes } = this.props;
+        const {
+            selectedMainCategory,
+            selectedSubCategory,
+            searchText,
+            isHomebrew,
+            itemsToShow
+        } = this.state;
 
-        if(categoryId) {
-            legendCategory = dataArr.find(m => m.id == categoryId);
-            if(legendCategory) {
-                if (subCategoryId && legendCategory.subCategories) {
-                    legendSubcategory = legendCategory.subCategories.find(m => m.value == subCategoryId);
-                    if (legendSubcategory) {
-                        legendSubcategoryTitle = legendSubcategory.label;
-                        legendSubcategoryColor = legendSubcategory.color;
-                    }
-                    
-                }
-                else {
-                    legendCategoryTitle = legendCategory.title;
-                    legendCategoryColor = legendCategory.color;
-                }
-                
-            }
-        }
+        var sectionTitle, sectionColor, pageContent;
+        if ( selectedSubCategory || searchText || isHomebrew ) {
 
-        let pageContent = <MainMenu dataArr={dataArr} />;
-
-        if (this.state.searchText != "") {
             let cardsNode = [];
-            this.props.store.itemsToShow &&
-                this.props.store.itemsToShow.map((item, i) => {
-                    cardsNode.push(this.getCard(item, i));
-                });
-            pageContent = (
-                <Grid className={classes.store} container spacing={24}>
-                    {cardsNode}
-                </Grid>
-            );
-        }
-
-        let page = <MainMenu dataArr={dataArr}  />;
-        if(pageType === 'sub'&& categoryId){
-            let category = find(dataArr, {id:Number(categoryId)})
-            page = <SubCat category={category}/>;
-        } else if (pageType === 'cards' && categoryId && subCategoryId){
-            let cardsNode = [];
-            this.props.store.itemsToShow.map((item, i)=>{
+            itemsToShow.map((item, i)=>{
                 cardsNode.push(this.getCard(item, i))
             })
-            
-            page = <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
-        } else if (pageType === 'cards' && categoryId){
-            let cardsNode = [];
-            this.props.store.itemsToShow.map((item, i) => {
-                cardsNode.push(this.getCard(item, i));
-            });
 
             pageContent = (
-                <Grid className={classes.store} container spacing={24}>
-                    {cardsNode}
-                </Grid>
+                <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
             );
-        } else if (pageType === "cards" && legendCategory) {
-            let cardsNode = [];
-            this.props.store.itemsToShow.map((item, i) => {
-                cardsNode.push(this.getCard(item, i));
-            });
+
+            sectionTitle = selectedSubCategory.label;
+            sectionColor = selectedSubCategory.color;
+
+        }
+        else if ( selectedMainCategory ) {
             pageContent = (
-                <Grid className={classes.store} container spacing={24}>
-                    {cardsNode}
-                </Grid>
+                <SubCat mainCategory={selectedMainCategory} changeSubCategory={this.changeSubCategory} />
             );
+
+            sectionTitle = selectedMainCategory.label;
+            sectionColor = selectedMainCategory.color;
+        }
+        else {
+            pageContent = (
+                <MainMenu changeMainCategory={this.changeMainCategory} />
+            )
         }
 
         return (
-            <NavBarUserSearchDrawerLayout inputVal={this.state.searchText} handleSearch={searchData => this.handleSearchCall(searchData)}>
-                
+            <NavBarUserSearchDrawerLayout inputVal={this.state.searchText} handleSearch={searchData => this.searchItem(searchData)}>
+
                 <Grid container spacing={8} id="professional-homebrew-switch">
-                    <Grid item xs={6} dir="rtl">
-                        <FormButton className={`form-button-small-size ${isHomebrew ? "form-button-active" : ""}`} text="Professional" onClick={() => this.props.switchToProfessional()} />
+                    <Grid item xs={1} dir="ltr">
+                        <FormButton className={`form-button-small-size`} text="Back" onClick={() => this.categoryBack()} />
                     </Grid>
-                    <Grid item xs={6} dir="ltr">
-                        <FormButton className={`form-button-small-size ${isHomebrew ? "" : "form-button-active"}`} text="Homebrew" onClick={() => this.props.switchToHomebrew()} />
+                    <Grid item xs={5} dir="rtl">
+                        <FormButton className={`form-button-small-size ${isHomebrew ? "form-button-active" : ""}`} text="Professional" onClick={() => this.toggleHomebrew(false)} />
+                    </Grid>
+                    <Grid item xs={5} dir="ltr">
+                        <FormButton className={`form-button-small-size ${isHomebrew ? "" : "form-button-active"}`} text="Homebrew" onClick={() => this.toggleHomebrew(true)} />
                     </Grid>
                 </Grid>
 
-                {legendCategoryTitle && pageType != "sub" ? (
-                    <div className={classes.titDiv}>
-                        <span className={classes.titSpan1} style={{ color: legendCategoryColor }} />
-                        <span className={classes.titText}>{legendCategoryTitle}</span>
-                        <span className={classes.titSpan1} style={{ color: legendCategoryColor }} />
+                {sectionTitle && (
+                    <div className={classes.sectionTitleDiv}>
+                        <span className={classes.sectionTitleSpan} style={{ color: sectionColor }} />
+                        <span className={classes.titText}>{sectionTitle}</span>
+                        <span className={classes.sectionTitleSpan} style={{ color: sectionColor }} />
                     </div>
-                ) : null}
-
-                {legendSubcategoryTitle ? (
-                    <div className={classes.titDiv}>
-                        <span className={classes.titSpan2} style={{ color: legendSubcategoryColor }} />
-                        <span className={classes.titText}>{legendSubcategoryTitle}</span>
-                        <span className={classes.titSpan2} style={{ color: legendSubcategoryColor }} />
-                    </div>
-                ) : null}
+                )}
 
                 {pageContent}
 
@@ -465,7 +302,7 @@ const styles = theme => ({
             paddingRight: 150
         }
     },
-    titDiv: {
+    sectionTitleDiv: {
         display: "flex",
         alignItems: "center",
         flexDirection: "row",
@@ -474,14 +311,7 @@ const styles = theme => ({
         marginBottom: "60px",
         marginTop: "70px"
     },
-    titSpan1: {
-        width: "42%",
-        height: "2px",
-        display: "block",
-        borderWidth: "1px",
-        borderStyle: "solid"
-    },
-    titSpan2: {
+    sectionTitleSpan: {
         width: "42%",
         height: "2px",
         display: "block",

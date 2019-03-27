@@ -16,45 +16,36 @@ class SubCat extends Component {
         super(props);
     }
 
-    onChange = item => {
-        this.props.changeCategory({ category: item.value });
-    };
-
     render() {
-        const {
-            classes,
-            category,
-            router: { query }
-        } = this.props;
-        let { pageType, categoryId, subCategoryId } = query;
+        const { classes, mainCategory, changeSubCategory } = this.props;
+
         return (
             <div className={classes.divCat}>
                 <Grid container className={classes.root} spacing={16}>
                     <Grid item xs={12}>
                         <Grid container className={classes.demo} justify="center" spacing={32}>
-                            {category.subCategories.map((v, i) => (
-                                <Grid key={i} item xs={3}>
-                                    <Link href={`/?pageType=cards&&categoryId=${categoryId}&&subCategoryId=${v.value}`}>
-                                        <div
-                                            className={classes.imgBack}
-                                            style={{
-                                                textAlign: "center",
-                                                backgroundImage: `url(${v.img})`,
-                                                backgroundRepeat: "no-repeat",
-                                                backgroundSize: "cover",
-                                                height: "200px",
-                                                width: "auto"
-                                            }}
-                                            onClick={() => this.onChange(v)}
-                                        >
-                                            <div className={classes.info} className={classes.divIcon} className={classes.divIcon}>
-                                                <img className={classes.imgIcon} src={v.icon} />
-                                                <Typography variant="subheading" color="secondary" className={classes.info} className={classes.titleTypo}>
-                                                    {v.label}
-                                                </Typography>
-                                            </div>
+                            {mainCategory.subCategories.map(category => (
+                                <Grid key={category.value} item xs={3}>
+                                    <div
+                                        className={classes.imgBack}
+                                        style={{
+                                            textAlign: "center",
+                                            backgroundImage: `url(${category.img})`,
+                                            backgroundRepeat: "no-repeat",
+                                            backgroundSize: "cover",
+                                            height: "200px",
+                                            width: "auto",
+                                            cursor: "pointer"
+                                        }}
+                                        onClick={() => changeSubCategory(category)}
+                                    >
+                                        <div className={classes.info} className={classes.divIcon} className={classes.divIcon}>
+                                            <img className={classes.imgIcon} src={category.icon} />
+                                            <Typography variant="subheading" color="secondary" className={classes.info} className={classes.titleTypo}>
+                                                {category.label}
+                                            </Typography>
                                         </div>
-                                    </Link>
+                                    </div>
                                 </Grid>
                             ))}
                         </Grid>

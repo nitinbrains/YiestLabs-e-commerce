@@ -35,7 +35,7 @@ const YeastElements = {
     },
     "4": {  // Wild Yeast
         img: 'static/images/categories/Category-wild.jpg',
-        icon: 'static/images/icons/Wildyeast-icon.svg',
+        icon: 'static/images/icons/wildyeast-icon.svg',
         color: "#CC9966"
     },
     "5": {  // Lager
@@ -45,7 +45,7 @@ const YeastElements = {
     },
     "6": {  // Wine
         img: 'static/images/categories/Category-wine.jpg',
-        icon: 'static/images/icons/Wine-icon.svg',
+        icon: 'static/images/icons/wine-icon.svg',
         color: "#9966CC"
     },
     "7": {  // Distilling
@@ -60,7 +60,7 @@ const YeastElements = {
     },
     "32": { // Vault
         img: 'static/images/categories/Category-vault.jpg',
-        icon: 'static/images/icons/Vault-icon.svg',
+        icon: 'static/images/icons/vault-icon.svg',
         color: "#B3B3B3"
     }
 }
@@ -70,7 +70,7 @@ function getImage(salesCategory) {
         return YeastElements[parseInt(salesCategory)].img;
     }
     catch(error) {
-      
+
     }
 }
 
@@ -79,7 +79,7 @@ function getIcon(salesCategory) {
         return YeastElements[parseInt(salesCategory)].icon;
     }
     catch(error) {
-       
+
     }
 }
 
@@ -88,7 +88,7 @@ function getColor(salesCategory) {
         return YeastElements[parseInt(salesCategory)].color;
     }
     catch(error) {
-       
+
         throw error;
     }
 }
@@ -120,7 +120,7 @@ class HomebrewCard extends Component {
         var quantity = parseFloat(cartItem.OrderDetailQty);
 
         if(isNaN(quantity) || quantity <= 0 ) {
-          
+
             return false;
         }
 
@@ -157,7 +157,7 @@ class HomebrewCard extends Component {
                 this.props.closeDialog();
             }
         } catch (error) {
-           
+
         }
     };
 
@@ -288,7 +288,8 @@ const styles = theme => ({
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
-        height: 230
+        height: 230,
+        cursor: "pointer"
     },
     cardHover: {
         transition: theme.transitions.create("width", {

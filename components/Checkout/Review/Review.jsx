@@ -71,7 +71,7 @@ function Review(props) {
                     </Typography>
                     {
                     !props.order.isLoading &&
-                    
+
                     <Grid item xs={12}>
                         <List>
                             {props.order.items.map((item, i) => (
@@ -80,9 +80,9 @@ function Review(props) {
                         </List>
                     </Grid>
                     }
-                </Grid>    
+                </Grid>
             </Grid>
-            
+
             <Grid item container direction="column" xs={12} sm={6}>
                     <Typography
                         variant="title"
@@ -92,7 +92,7 @@ function Review(props) {
                         Payment details
                     </Typography>
                     {
-                        props.user.card &&                     
+                        props.user.card &&
                         <Grid container>
                             <Grid item xs={6}>
                                 <Typography gutterBottom>
@@ -148,7 +148,7 @@ function Review(props) {
                         Shipping Address
                     </Typography>
                     <Typography gutterBottom>{ props.user.username? props.user.username :  'Tom Brady'}</Typography>
-                    
+
                     {props.user.shipping  && (
                             <div>
                                 <Typography>
@@ -174,7 +174,7 @@ function Review(props) {
                 </Grid>
 
                 <Grid item xs={12} md={6}>
-                        <Typography 
+                        <Typography
                             variant="title"
                             gutterBottom
                             className={classes.title}
@@ -205,7 +205,7 @@ function Review(props) {
                             </div>
                         )}
                 </Grid>
-                
+
                 <Grid item container direction="column" xs={12} sm={12}>
                 <Grid
                     container
@@ -220,7 +220,7 @@ function Review(props) {
                     </Typography>
                     {
                     !props.order.isLoading &&
-                    
+
                     <Grid item xs={12}>
                         <List>
                             <ListItem className={classes.listItem}>
@@ -230,7 +230,7 @@ function Review(props) {
                                     color="primary"
                                     className={classes.total}
                                     >
-                                    {props.order.itemSubtotal}
+                                    ${props.order.itemSubtotal}
                                 </Typography>
                             </ListItem>
                             <ListItem className={classes.listItem}>
@@ -240,7 +240,7 @@ function Review(props) {
                                     color="primary"
                                     className={classes.total}
                                     >
-                                    {props.order.shippingSubtotal}
+                                    ${props.order.shippingSubtotal}
                                 </Typography>
                             </ListItem>
                             <ListItem className={classes.listItem}>
@@ -250,13 +250,13 @@ function Review(props) {
                                     color="primary"
                                     className={classes.total}
                                     >
-                                    {props.order.orderSubtotal}
+                                    ${props.order.orderSubtotal}
                                 </Typography>
                             </ListItem>
                         </List>
                     </Grid>
                     }
-                </Grid>    
+                </Grid>
             </Grid>
 
             </Grid>

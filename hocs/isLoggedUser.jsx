@@ -9,11 +9,12 @@ import LoadingScreen from 'components/UI/LoadingScreen';
 import { withRouter } from 'next/router'
 import { userActions } from 'appRedux/actions/userActions';
 
-const routeList = ['/cart', '/checkout']
+const routeList = ['/checkout']
+const routeIgnoreList = ['/cart']
 
 export default (Component) => {
     const checkLoginAndRedirect = (userInfo, router) => {
-        if( !userInfo.isLoggedin ){
+        if( !userInfo.isLoggedin && !routeIgnoreList.includes(router.pathname) ){
             routeList.includes(router.pathname) ? Router.push('/') : Router.push('/login')
         }
     }
@@ -27,7 +28,7 @@ export default (Component) => {
             }
             render () {
                 let {user} = this.props;
-                if( !user.isLoggedin ){
+                if( !user.isLoggedin && !routeIgnoreList.includes(Router.pathname) ){
                     return <LoadingScreen />
                 }
 
@@ -38,6 +39,6 @@ export default (Component) => {
 
     return connect(
         state => ({ user: state.user }),
-        dispatch => bindActionCreators({...userActions}, dispatch) 
+        dispatch => bindActionCreators({...userActions}, dispatch)
     )(withRouter(Wrapper()));
 }

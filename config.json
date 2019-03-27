@@ -1,0 +1,30 @@
+{
+    "mode": "dev",
+    "NSAuthentication": {
+		"SendAuth": "5TVDpAHPqLZSNY7EuLWJWDhLVaGBi862qlNp48ULcgaR6oDDH2hCLKdY92MA0pG",
+		"ReceiveAuth": "DHA5ZsROSYuY1jJXxOcHS4dKNODjgzJPnsMFIEumUpOizL6dj9GnU8QC2Ctd2x8",
+		"Sendiv": "ocbEMVHyax6MTNxD",
+		"Receiveiv": "8vr5BxmawvE5mZo7",
+		"consumerKey": "5c464a7bdc5552156e2b923cccccafd72e534d957685e5009b392136cddb0e0f",
+		"consumerSecret": "60e18c70651afaa58058b5c2a15953ea48b442eb08aa36b823f9f2d3aef3512e",
+		"consumerToken": "b73843a72223d08745ce67fbe6a940db0be1b4ffddfece8d88be5ab0cc715b78",
+		"consumerTokenSecret": "38cf0e385fc3c091baa24bcad147ca5635d25b7fde046d22135c82d728005457"
+    },
+    "YeastmanAuthentication": {
+        "Auth": "idPty6huNSNURJeXr1DF6s7ZVRFWFXh5rpgpD5GAmbXCJ3CUfaDO8sOhmMx5wc3",
+		"iv": "TaBbaKrkvqLZ1UEy",
+		"Token": "HSeKXJ61VqOwsrtAXPNRTBuFsZIrhTgYN4NXGroiXM2nQgYP76UPUs47No5poG7"
+    },
+    "CUST": {
+        "url": "https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=941&deploy=1",
+        "id": 941
+    },
+    "ORDER": {
+        "url": "https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=943&deploy=1",
+        "id": 943
+    },
+    "ITEM": {
+        "url": "https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=942&deploy=1",
+        "id": 942
+    }
+}

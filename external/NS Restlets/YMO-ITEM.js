@@ -20,12 +20,6 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
         try
         {
             var message = ReceiveMessage(input);
-
-            if(!(message.version && versionUpToDate(message.version)))
-            {
-                return { error: {message: 'App version is out of date. Please download new version.', code: 0}};
-            }
-
             var response = {};
 
             if(message.alternateSizes)
@@ -183,7 +177,177 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
         {
             var response = {version: versionUpToDate(), items: []};
             var Inventory = cache.getCache({name: 'Inventory', scope: cache.Scope.PUBLIC});
-            response.items = JSON.parse(Inventory.get({key: 'items'}));
+            var items = JSON.parse(Inventory.get({key: 'items'}));
+            
+            if (items) 
+            {
+                response.items = items;
+            }
+            else 
+            {
+                var inventory = searchForStrains();
+
+                // initializations
+                var index = 0, results, parentIDs = [], slantRetries = [];
+                var  yeastMap = {}; //is a map such indexOfItemInResponse = yeastMap[parentName] => response[indexOfItemInResponse]
+
+                do
+                {
+                    results = inventory.getRange({start: index, end: index + 1000});
+                    index += 1000;
+
+                    for (var i = 0; i < results.length; i++) 
+                    {
+                        var slantExceptionStr = results[i].getValue({name: 'itemid'}).toLowerCase();
+                        var itemName = String(results[i].getValue({name: 'itemid'}));
+                        var displayName = String(results[i].getValue({name: 'displayname'}));
+
+                        if(results[i].getText({name: 'parent'}))
+                        {
+
+                            //retrieve yeast size/vol from name
+                            var splitIndex = slantExceptionStr.indexOf('-');
+                            var vol = slantExceptionStr.substring(splitIndex+1, slantExceptionStr.length);
+
+                            //check if sibling item has been encountered before
+                            if(yeastMap[results[i].getText({name: 'parent'})])
+                            {
+                                additionalYInfo(response.items[yeastMap[results[i].getText({name: 'parent'})]], results[i], vol);
+                            }
+                            else
+                            {
+                                yeastMap[results[i].getText({name: 'parent'})] = response.items.length;
+                                parentIDs.push(results[i].getValue({name: 'parent'}));
+                                addItem(response.items, results[i], results[i].getText({name: 'parent'}), vol);
+                            }
+                        }
+                        else if(slantExceptionStr.indexOf('slant') >= 0) //slants don't have parents and must be checked differently
+                        {
+                            //obtain the parent items name from item name
+                            var splitIndex = slantExceptionStr.indexOf('-');
+                            var parentName = results[i].getValue({name: 'itemid'});
+                            parentName = parentName.substring(0,splitIndex);
+
+                            //vol should be 'slant' see addVolId() for details
+                            var vol = slantExceptionStr.substring(splitIndex+1, slantExceptionStr.length);
+
+                            if(yeastMap[parentName])
+                            {
+                                //update item with slant item id
+                                additionalYInfo(response.items[yeastMap[parentName]], results[i], vol);
+                            }
+                            else
+                            {
+                                slantRetries.push(results[i]); //Slant should never be the first item as they generally don't have the correct yeast attributes
+                            }
+                        }
+                        else //Non Yeast Item
+                        {
+                            var itemClass = parseInt(results[i].getValue({name: 'class'}));
+
+                            if([28, 27, 10].indexOf(itemClass) >= 0) //Education and Gift Shop Merchandise
+                            {
+                                if(itemClass == 28 && String(itemName.slice(-3)).toLowerCase() == "web")
+                                {
+                                    var partSlice = itemName.slice(0, -3);
+                                    if(yeastMap[partSlice])
+                                    {
+                                        additionalNYInfo(response.items[yeastMap[partSlice]], results[i], 1);
+                                    }
+                                    else
+                                    {
+                                        yeastMap[partSlice] = response.items.length;
+                                        addItem(response.items, results[i], null, 1);
+                                    }
+                                }
+                                else if([27, 10].indexOf(itemClass) >= 0)
+                                {
+
+                                    if(displayName.indexOf('DO NOT USE') < 0)
+                                    {
+                                        var splitString = itemName.split('-');
+
+                                        var volIDIndex = itemSizeToIndex(splitString[splitString.length-1]);
+
+                                        if(volIDIndex == -1)
+                                        {
+                                            yeastMap[itemName] = response.items.length;
+                                            addItem(response.items, results[i], null, 0);
+                                        }
+                                        else
+                                        {
+                                            var partSlice = itemName.slice(0, itemName.lastIndexOf('-'));
+
+                                            if(yeastMap[partSlice])
+                                            {
+                                                additionalNYInfo(response.items[yeastMap[partSlice]], results[i], volIDIndex);
+                                            }
+                                            else
+                                            {
+                                                yeastMap[partSlice] = response.items.length;
+                                                addItem(response.items, results[i], null, volIDIndex);
+                                            }
+                                        }
+                                    }
+                                }
+                                else if(yeastMap[itemName])
+                                {
+                                    additionalNYInfo(response.items[yeastMap[itemName]], results[i], 0);
+                                }
+                                else if(!yeastMap[itemName])
+                                {
+                                    yeastMap[itemName] = response.items.length;
+                                    addItem(response.items, results[i], null, 0);
+                                } 
+                            }
+                            else //lab services & nutrients and enzymes
+                            {
+                                if(!yeastMap[itemName])
+                                {
+                                    yeastMap[itemName] = response.items.length;
+                                    addItem(response.items, results[i], null, null);
+                                }   
+                            } 
+                        }
+                    }
+                }
+                while(results.length == 1000)
+
+                for (var i = 0; i < slantRetries.length; i++) 
+                {
+                    var slantExceptionStr = slantRetries[i].getValue({name: 'itemid'}).toLowerCase();
+
+                    if(slantExceptionStr.indexOf('slant') >= 0)
+                    {
+                        //obtain the parent items name from item name
+                        var splitIndex = slantExceptionStr.indexOf('-');
+                        var parentName = slantRetries[i].getValue({name: 'itemid'});
+                        parentName = parentName.substring(0,splitIndex);
+
+                        //vol should be 'slant' see addVolId() for details
+                        var vol = slantExceptionStr.substring(splitIndex+1, slantExceptionStr.length);
+                        if(yeastMap[parentName])
+                        {
+                            additionalYInfo(response.items[yeastMap[parentName]], slantRetries[i], vol);
+                        }
+                    }
+                    else
+                    {
+                        //Item is thrown out if it doesn't pass, may lead to possible missing slants                
+                        //nlapiLogExecution('ERROR', 'Failed to add slant, first item', 'Item: '+ slantRetries[i].getId());
+                    }  
+                }
+
+                if(parentIDs.length > 0)
+                {
+                    fixNames(response.items, yeastMap, parentIDs); 
+                }
+
+                var Inventory = cache.getCache({name: 'Inventory', scope: cache.Scope.PUBLIC});
+                Inventory.put({key: 'items', value: response.items});
+
+            }
+
             return SendMessage(response);
 
         }
@@ -193,7 +357,7 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
             return {error: error};
         }
     }
-
+    
     function post(input) 
     {
         try 
@@ -465,6 +629,48 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
         });
 
         return possibleConfigurations;
+    }
+
+    function searchForItems()
+    {
+        // Search for items ready to sync.
+        var filters = [];
+        filters.push(search.createFilter({name: 'type', operator: search.Operator.ANYOF, values: ['Assembly', 'InvtPart', 'Service']}));
+        filters.push(search.createFilter({name: 'custitem_include_in_ymo_website', operator: search.Operator.IS, values: true}));
+        filters.push(search.createFilter({name: 'isinactive', operator: search.Operator.IS, values: false}));
+        filters.push(search.createFilter({name: 'pricinggroup', operator: search.Operator.IS, values: 'MSRP'}));
+
+        var columns = [];
+        columns.push(search.createColumn({name:'parent'}));
+        columns.push(search.createColumn({name:'itemid'}));
+        columns.push(search.createColumn({name:'class'}));
+        columns.push(search.createColumn({name:'displayname'}));
+        columns.push(search.createColumn({name:'custitemauth_purchaser'}));
+        columns.push(search.createColumn({name:'storedescription'}));
+        columns.push(search.createColumn({name:'custitem_ymo_new_image_url'}));
+        columns.push(search.createColumn({name:'custitem_ymo_is_private'}));
+        columns.push(search.createColumn({name:'custitem_wl_attenuation_low'}));
+        columns.push(search.createColumn({name:'custitem_wl_attenuation_high'}));
+        columns.push(search.createColumn({name:'custitem_wl_flocculation'}));
+        columns.push(search.createColumn({name:'custitem_wl_alcohol_tolerance'}));
+        columns.push(search.createColumn({name:'custitem_wl_opt_ferm_faren_low'}));
+        columns.push(search.createColumn({name:'custitem_opt_ferm_temp_high_faren'}));
+        columns.push(search.createColumn({name:'custitem_wl_opt_ferm_celsius_low'}));
+        columns.push(search.createColumn({name:'custitem_wl_opt_ferm_celsius_high'}));
+        columns.push(search.createColumn({name:'custitem_wl_style_recommend'}));
+        columns.push(search.createColumn({name:'custitem_wl_packaging_methods'}));
+        columns.push(search.createColumn({name:'custitemsearchtags'}));
+        columns.push(search.createColumn({name:'custitemwarehouse'}));
+        columns.push(search.createColumn({name:'custitem_wl_yeast_strain_category'}));
+        columns.push(search.createColumn({name:'custitembeerstyles'}));
+        columns.push(search.createColumn({name:'custitem_wl_classlocation'}));
+        columns.push(search.createColumn({name:'custitem_wl_classdates'}));
+        columns.push(search.createColumn({name:'price'}));
+        columns.push(search.createColumn({name:'custitem_wl_yeast_designation'}));
+
+        var inventory = search.create({type: 'item', filters: filters, columns: columns}).run();
+
+        return inventory;
     }
 
     function itemSizeToIndex(itemSize)

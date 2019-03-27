@@ -137,11 +137,11 @@ const initialState = {
 		'SPE': ['less than 1.050', '1.050 - 1.061', '1.061 - 1.074', 'greater than 1.074']
 	},
     volUnits: [
-        { label: "Liter", value: "L" },
-        { label: "US Gallon", value: "SGAL" },
-        { label: "UK Gallon", value: "KGAL" },
-        { label:'Barrel', value:'BBL', forHomebrew: true},
-		{ label:'Hectoliter', value:'HL', forHomebrew: true} 
+        { label: "Liter", value: "L", forHomebrew: true },
+        { label: "US Gallon", value: "SGAL", forHomebrew: true },
+        { label: "UK Gallon", value: "KGAL", forHomebrew: true },
+        { label:'Barrel', value:'BBL' },
+		{ label:'Hectoliter', value:'HL' }
     ],
     gravUnits: [
         { label: "Plato", value: "PLA" },

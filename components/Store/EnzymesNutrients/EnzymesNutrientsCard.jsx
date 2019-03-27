@@ -77,7 +77,8 @@ const styles = theme => ({
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
-        height: 230
+        height: 230,
+        cursor: "pointer"
     },
     cardHover: {
         transition: theme.transitions.create("width", {

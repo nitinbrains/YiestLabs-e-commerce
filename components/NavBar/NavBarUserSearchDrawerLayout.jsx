@@ -117,7 +117,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                         <Link prefetch href="/calculator">
                             <Button color="secondary">Calculator</Button>
                         </Link>
-                        <Button color="secondary">About Us</Button>
+                        <Button style={{display: 'none'}} color="secondary">About Us</Button>
 
                         <Link prefetch href="/cart">
                             <IconButton color="inherit" aria-label="Menu">

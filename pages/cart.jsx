@@ -30,7 +30,7 @@ class Cart extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            
+
         }
     }
 
@@ -45,14 +45,14 @@ class Cart extends Component {
 
     render() {
         const { classes, cart } = this.props;
-        
+
         return (
-            <NavBarUserSearchDrawerLayout>                    
-                <PageContainer heading="SHOPPING CART" id="cart-box">    
+            <NavBarUserSearchDrawerLayout>
+                <PageContainer heading="SHOPPING CART" id="cart-box">
                     <Grid container spacing={24}>
                         {this.props.cart.items && this.props.cart.items.map((item, i) => {
-                            return (                                
-                                <CartItem key={i} item={item} index={i} />                                
+                            return (
+                                <CartItem key={i} item={item} index={i} />
                             );
                         })}
                     </Grid>
@@ -71,7 +71,7 @@ class Cart extends Component {
                                 </Typography>
                             }
                         </Grid>
-                    </Grid>                  
+                    </Grid>
                 </PageContainer>
             </NavBarUserSearchDrawerLayout>
         );
