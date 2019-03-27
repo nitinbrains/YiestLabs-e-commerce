@@ -69,7 +69,6 @@ app.prepare()
 
     function NSSendMessage(data)
     {
-        data.version = SalesLib.clientVersion;
         var message = {data: CryptoJS.AES.encrypt(JSON.stringify(data), system.NSAuthentication.SendAuth, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: system.NSAuthentication.Sendiv }).toString()};
         return JSON.stringify(message);
     }

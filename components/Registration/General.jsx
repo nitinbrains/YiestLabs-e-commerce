@@ -15,7 +15,7 @@ import _isEmpty from 'lodash/isEmpty';
 import MaskedTextField from "../Form/MaskedTextField";
 import Cleave from "cleave.js/react";
 
-import { Utils } from "lib/Utils";
+import Utils from "lib/Utils";
 
 function PhoneMaskedTextField(props) {
     let { options, onChange, inputRef,value, ...other } = props;
@@ -50,7 +50,7 @@ const General = ({
         if (!values.companyName) {
             errors.companyName = "Company name is required";
         }
-    
+
         if (!values.email) {
             errors.email = "Email is required";
         } else if (!Utils.isValidEmail(values.email)) {
@@ -66,13 +66,13 @@ const General = ({
         if (!values.phone) {
             errors.phone = "Phone is required";
         }
-        
+
         if (!values.password) {
             errors.password = "Password is required";
         } else if (values.password.length < 6) {
             errors.password = "Password must contain at least 6 characters";
         }
-        
+
         if (!values.confirmPassword) {
             errors.confirmPassword = "Please enter your password a second time";
         }
@@ -98,7 +98,7 @@ const General = ({
 
         return errors;
     }
-    
+
     return (
         <Grid container spacing={24}>
             <Grid item xs={12}>
@@ -111,7 +111,7 @@ const General = ({
                         borderColor: "#CCCCCC",
                         marginBottom: 10
                     }}
-                />                    
+                />
             </Grid>
             <Field
                 render={({field: {value, onChange }}) => {
@@ -162,7 +162,7 @@ const General = ({
                                 autoComplete="phone"
                                 InputProps={{ inputComponent: PhoneMaskedTextField }}
                                 onChange={onChange}
-                                value={_get(value, 'phone') || ''} 
+                                value={_get(value, 'phone') || ''}
                             />
                         </Grid>
                     )
@@ -214,19 +214,13 @@ const General = ({
                             <TextField
                                 name="vat"
                                 label="Vat"
-                                variant="vat"
-                                select
+                                variant="outlined"
                                 fullWidth
                                 autoComplete="vat"
                                 placeholder="US-123456"
                                 onChange={onChange}
                                 value={_get(value, 'vat') || ''}
                             >
-                                <MenuItem value={1}>Retailer</MenuItem>
-                                <MenuItem value={2}>Individual</MenuItem>
-                                <MenuItem value={3}>Proffesional Brewery</MenuItem>
-                                <MenuItem value={4}>Proffesional Winery</MenuItem>
-                                <MenuItem value={5}>Proffesional Destillery</MenuItem>
                             </TextField>
                         </Grid>
                     )
@@ -326,7 +320,7 @@ const General = ({
                     )
                 }}
             />
-            <Button variant="contained" color="primary" className={classes.button} onClick={handleNext}> 
+            <Button variant="contained" color="primary" className={classes.button} onClick={handleNext}>
                 Next
             </Button>
         </Grid>

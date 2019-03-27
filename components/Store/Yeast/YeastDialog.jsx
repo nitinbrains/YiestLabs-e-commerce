@@ -592,7 +592,7 @@ class YeastDialog extends Component {
                                         }}
                                     >
                                         {this.item.optFermentTempF |
-                                            this.item.optFermentTempF}
+                                            this.item.optFermentTempC}
                                     </Typography>
                                 </div>
                             </Grid>
