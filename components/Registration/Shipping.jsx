@@ -39,7 +39,7 @@ const Shipping = ({
 
     const validate = () => {
         var errors = {};
-       
+
         if(!_get(values, 'shipping.attn')) {
             _set(errors, 'shipping.attn', 'Attention is required');
         }
@@ -66,7 +66,7 @@ const Shipping = ({
 
         return errors;
     }
-    
+
     return (
         <Grid container spacing={24}>
             <Grid item xs={12}>
@@ -79,7 +79,7 @@ const Shipping = ({
                         borderColor: "#CCCCCC",
                         marginBottom: 10
                     }}
-                />                    
+                />
             </Grid>
             <Field
                 render={({field: {value, onChange }}) => {
@@ -171,7 +171,7 @@ const Shipping = ({
                     )
                 }}
             />
-           
+
             <Field
                 render={({field: {value, onChange }, form}) => {
                     return (
@@ -190,7 +190,7 @@ const Shipping = ({
                     )
                 }}
             />
-           
+
             <Field
                 render={({field: {value, onChange }}) => {
                     return (
@@ -198,7 +198,7 @@ const Shipping = ({
                             <FormikErrorMessage error={_get(errors, 'shipping.zip')} />
                             <TextField
                                 name="shipping.zip"
-                                label="Zip Code"
+                                label="Postal Code"
                                 variant="outlined"
                                 fullWidth
                                 autoComplete="zip"

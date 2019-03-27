@@ -231,7 +231,7 @@ class MyAccount extends Component {
         }
 
         if (!_get(values, 'shipping.zip')) {
-            _set(errors, 'shipping.zip', 'Zip code is required');
+            _set(errors, 'shipping.zip', 'Postal code is required');
         }
 
         if (!_get(values, 'shipping.countryid')) {
@@ -255,7 +255,7 @@ class MyAccount extends Component {
         }
 
         if (!_get(values, 'billing.zip')) {
-            _set(errors, 'billing.zip', 'Zip code is required');
+            _set(errors, 'billing.zip', 'Postal code is required');
         }
 
         if (!_get(values, 'billing.countryid')) {
@@ -436,7 +436,7 @@ class MyAccount extends Component {
                                             />
 
                                             <Grid item xs={12} container justify="center" alignItems="center" spacing={24} style={{ marginBottom: 20 }}>
-                                                
+
                                                 <Shipping {...props} />
                                                 <Billing {...props} />
 
@@ -517,7 +517,7 @@ const styles = theme => ({
         }
     },
     modalbtn:{
-        marginTop: 10, marginLeft: 16 
+        marginTop: 10, marginLeft: 16
     },
     title: {
         backgroundColor: "#FF9933",

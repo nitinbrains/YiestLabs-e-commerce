@@ -212,7 +212,7 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                     <FormikErrorMessage error={_get(errors, "billing.zip")} />
                                     <TextField
                                         name="billing.zip"
-                                        label="Zip Code"
+                                        label="Postal Code"
                                         variant="outlined"
                                         fullWidth
                                         autoComplete="zip"

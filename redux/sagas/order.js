@@ -40,10 +40,10 @@ export function * prepareOrder(action) {
         } else {
             if(error.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));
             } else if(error.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
             }
         }
         yield put(responseFailure(error));
@@ -55,7 +55,6 @@ export function * placeOrder(action) {
     try {
         var order = yield select(state => state.order);
         const user = yield select(state => state.user);
-
         var request = validateOrder(order, user);
         var { res: order, error } = yield call(api.placeOrder, {
             request
@@ -64,7 +63,9 @@ export function * placeOrder(action) {
         if (error) {
             throw error
         } else {
-            yield put(responseSuccess(initOrder(order, user)));
+            //yield put(responseSuccess(initOrder(order, user)));
+            //yield put(responseSuccess(order));
+            yield put(messageActions.showSnackbar({ title: 'Success', message: 'Order submitted', variant:'success' }));
         }
     } catch (error) {
         if(error.status){
@@ -73,10 +74,10 @@ export function * placeOrder(action) {
         } else {
             if(error.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));
             } else if(error.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
             }
         }
         yield put(responseFailure(error));
@@ -99,10 +100,10 @@ export function * setShippingOption(action) {
         } else {
             if(error.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));
             } else if(error.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
             }
         }
         yield put(responseFailure(error));
@@ -125,10 +126,10 @@ export function * incrementShipDate(action) {
         } else {
             if(error.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));
             } else if(error.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
             }
         }
         yield put(responseFailure(error));
@@ -151,10 +152,10 @@ export function * decrementShipDate(action) {
         } else {
             if(error.code == 0 ){
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));        
+                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));
             } else if(error.code == -1){
                 // Other error when we have error with code == -1
-                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));                
+                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
             }
         }
         yield put(responseFailure(error));

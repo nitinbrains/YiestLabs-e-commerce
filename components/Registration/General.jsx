@@ -267,16 +267,16 @@ const General = ({
                                 value={_get(value, 'orderFrom') || ''}
                             >
                                 <MenuItem value={1}>
-                                    US Only
+                                    White Labs USA
                                 </MenuItem>
                                 <MenuItem value={2}>
-                                    US &amp; Copenhagen (For Europe, No Homebrew)
+                                    USA &amp; Copenhagen (For Europe, No Homebrew)
                                 </MenuItem>
                                 <MenuItem value={3}>
-                                    US &amp; Hong Kong (For Asia, No Homebrew)
+                                    USA &amp; Hong Kong (For Asia, No Homebrew)
                                 </MenuItem>
                                 <MenuItem value={4}>
-                                    US, Copenhagen, and Hong Kong
+                                    USA, Copenhagen, and Hong Kong
                                 </MenuItem>
                             </TextField>
                         </Grid>
