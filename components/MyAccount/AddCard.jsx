@@ -72,7 +72,7 @@ class AddCard extends Component {
                                         render={({ field: { value, onChange } }) => {
                                             return (
                                                 <Grid item xs={12}>
-                                                    <FormikErrorMessage error={_get(errors, "ccnumber")} touched={_get(touched, "ccnumber")} />
+                                                    <FormikErrorMessage error={_get(errors, "ccnumber")} />
                                                     <TextField
                                                         name="ccnumber"
                                                         label="Credit Card Number"
@@ -91,7 +91,7 @@ class AddCard extends Component {
                                         render={({ field: { value, onChange } }) => {
                                             return (
                                                 <Grid item xs={12}>
-                                                    <FormikErrorMessage error={_get(errors, "ccname")} touched={_get(touched, "ccname")} />
+                                                    <FormikErrorMessage error={_get(errors, "ccname")} />
                                                     <TextField
                                                         name="ccname"
                                                         label="Name on card"
@@ -109,7 +109,7 @@ class AddCard extends Component {
                                         render={({ field: { value, onChange } }) => {
                                             return (
                                                 <Grid item xs={12}>
-                                                    <FormikErrorMessage error={_get(errors, "ccexpire")} touched={_get(touched, "ccexpire")} />
+                                                    <FormikErrorMessage error={_get(errors, "ccexpire")} />
                                                     <TextField
                                                         name="ccexpire"
                                                         label="Expiration date"

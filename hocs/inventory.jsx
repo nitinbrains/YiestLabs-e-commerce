@@ -12,7 +12,7 @@ export default (Component) => {
     const Wrapper = props => (
         class extends React.Component {
             componentDidMount() {
-                if (this.props.store.itemsToShow.length === 0) {
+                if (this.props.store.items.length === 0) {
                     this.props.getInventory();
                 }
             }

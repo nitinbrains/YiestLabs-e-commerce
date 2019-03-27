@@ -44,6 +44,10 @@ class Shipping extends Component {
         this.setState({ manageAddresses: false });
     };
 
+    changeShipMethod = e => {
+        this.props.setShipMethod({shipmethod: e.target.value});
+    }
+
     render() {
         var { classes } = this.props;
 
@@ -108,9 +112,7 @@ class Shipping extends Component {
                             margin="normal"
                             variant="outlined"
                             value={this.props.user.shipmethod}
-                            onChange={event =>
-                                this.props.setShipMethod(event.target.value)
-                            }
+                            onChange={e => this.changeShipMethod(e)}
                         >
                             {this.props.user.shipMethods.map(method => (
                                 <MenuItem key={method.NSID} value={method.NSID}>

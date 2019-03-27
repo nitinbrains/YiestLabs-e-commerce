@@ -21,7 +21,6 @@ export function* loginUser(action) {
 
         if (err) throw err;
         let { userID } = res;
-        yield put(responseSuccess());
         if (res.error && res.error.code === 0) {
             yield put(
                 messageActions.showBanner({
@@ -293,7 +292,7 @@ export function* setShipMethod(action) {
         data: { shipmethod }
     } = action;
     try {
-        yield put(responseSuccess(shipmethod));
+        yield put(responseSuccess({shipmethod}));
     } catch (error) {
         yield put(responseFailure(error));
     }

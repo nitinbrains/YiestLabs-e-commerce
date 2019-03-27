@@ -113,14 +113,14 @@ export default createReducer(initialState, {
     [userTypes.SET_CREDIT_CARD_SUCCESS]: (state, { data: { creditCard} }) => ({
         card: creditCard
     }),
-    [userTypes.SET_SHIP_ADDRESS_SUCCESS]: (state, { data }) => ({
-        shipping: data
+    [userTypes.SET_SHIP_ADDRESS_SUCCESS]: (state, { data: { shipping}}) => ({
+        shipping
     }),
-    [userTypes.SET_BILL_ADDRESS_SUCCESS]: (state, { data }) => ({
-        billing: data
+    [userTypes.SET_BILL_ADDRESS_SUCCESS]: (state, { data: { billing }}) => ({
+        billing
     }),
-    [userTypes.SET_SHIP_METHOD_SUCCESS]: (state, { data }) => ({
-        shipmethod: data
+    [userTypes.SET_SHIP_METHOD_SUCCESS]: (state, { data: { shipmethod }}) => ({
+        shipmethod
     }),
     [userTypes.GET_ORDER_HISTORY_ATTEMPT]: (state, { data }) => ({
         isLoading: true,
