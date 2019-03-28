@@ -205,6 +205,7 @@ class Store extends Component {
     };
 
     categoryBack() {
+      this.setState({searchText: null});
       if (!this.state.selectedSubCategory || this.state.selectedSubCategory == this.state.selectedMainCategory) {
           this.changeMainCategory(null);
       } else {
@@ -235,9 +236,10 @@ class Store extends Component {
                 <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
             );
 
-            sectionTitle = selectedSubCategory.label;
-            sectionColor = selectedSubCategory.color;
-
+            if (selectedSubCategory) {
+                sectionTitle = selectedSubCategory.label;
+                sectionColor = selectedSubCategory.color;
+            }
         }
         else if ( selectedMainCategory ) {
             pageContent = (

@@ -82,7 +82,12 @@ class Checkout extends Component {
 
     placeOrder = () => {
         this.setState({terms: false});
+        //this.setState({isLoading: true});
         this.props.placeOrder();
+    };
+
+    handleCloseTerms = () => {
+        this.setState({terms: false});
     };
 
     handleComplete = () => {

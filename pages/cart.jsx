@@ -36,7 +36,7 @@ class Cart extends Component {
 
     handleProceed = () => {
         const {user} = this.props;
-        if(!user.isLoggedin){
+        if(!user.id){
             Router.push('/login')
         } else {
             Router.push('/checkout');

@@ -289,7 +289,7 @@ export function* addSubsidiary(action) {
         request.id = internalid;
         request.vat = user.vat;
         request.category = user.category;
-        
+
         var { res: { id }, error } = yield call(api.addSubsidiary, { request });
 
         if (error) throw error;
@@ -356,8 +356,8 @@ export function* setShipMethod(action) {
         data: { shipmethod }
     } = action;
     try {
-        yield put(orderActions.prepareOrder());
         yield put(responseSuccess({shipmethod}));
+        yield put(orderActions.prepareOrder());
     } catch (error) {
         yield put(responseFailure(error));
     }

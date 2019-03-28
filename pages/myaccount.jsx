@@ -105,7 +105,7 @@ class MyAccount extends Component {
         }
 
         return (
-            <Dialog open={this.state.subsidiaryDialog != null}>
+            <Dialog open={this.state.subsidiaryDialog}>
                 <DialogTitle id="alert-dialog-title">{question}</DialogTitle>
                 <DialogActions>
                     <Button onClick={this.handleNo} color="primary">
@@ -143,10 +143,16 @@ class MyAccount extends Component {
         this.setState({ manageCards: false });
     };
 
+    switchSubsidiary = e => {
+        this.setState({ orderFrom: e.target.value});
+        this.setState({ subsidiaryDialog: true });
+    }
+
     handleorderFrom = event => {
         this.setState({ orderFrom: event.target.value });
         if (event.target.value > 0) {
             this.setState({ confirmDialog: true });
+            this.setState({ subsidiaryDialog: true });
         }
     };
 
@@ -398,7 +404,7 @@ class MyAccount extends Component {
                                                                 variant="outlined"
                                                                 label="Order From"
                                                                 autoComplete="orderFrom"
-                                                                onChange={e => this.setState({ orderFrom: e.target.value})}
+                                                                onChange={this.switchSubsidiary}
                                                                 value={_get(value, "orderFrom") || ''}
                                                             >
                                                                 {subsidiaryOptions.map(option => {
@@ -542,7 +548,7 @@ class MyAccount extends Component {
                     </Dialog>
 
                     {this.getSubsidiaryDialog(orderFrom)}
-                    
+
                 </PageContainer>
             </NavBarUserSearchDrawerLayout>
         );
