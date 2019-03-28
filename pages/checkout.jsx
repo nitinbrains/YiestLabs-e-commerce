@@ -37,7 +37,7 @@ import { cartActions } from 'appRedux/actions/cartActions';
 // custom
 import Alert from "components/UI/Alert";
 
-const steps = ["Shipping", "Billing", "Items", "Review your order"];
+const steps = ["Shipping", "Billing", "Items/Ship Dates", "Review your order"];
 
 function getStepContent(step) {
     switch (step) {
@@ -209,7 +209,9 @@ class Checkout extends Component {
                 </div>
                 <Dialog open={this.state.terms}>
                     <DialogTitle id="alert-dialog-title">
-                        Do you accept the White Labs Terms &amp; Conditions?
+                        Do you accept the <a href='https://www.whitelabs.com/resources/ordering-information' target='_blank'>
+                          White Labs Terms &amp; Conditions
+                        </a>?
                     </DialogTitle>
                     <DialogContent />
                     <DialogActions>

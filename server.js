@@ -61,7 +61,7 @@ app.prepare()
   		return header;
     }
     */
-
+    
     function NSReceiveMessage(message)
     {
         return JSON.parse(CryptoJS.AES.decrypt(message.data, system.NSAuthentication.ReceiveAuth, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: system.NSAuthentication.Receiveiv }).toString(CryptoJS.enc.Utf8));

@@ -31,6 +31,8 @@ import LoadingIndicator from "components/UI/LoadingIndicator";
 import { cartActions } from "appRedux/actions/cartActions";
 import { IN_STOCK } from "lib/Constants";
 
+import { parseAvailabilityResults } from "lib/InventoryUtils";
+
 const customFormValidation = Yup.object().shape({
     quantity: Yup.string().required("Required")
 });
@@ -101,7 +103,8 @@ class EnzymesNutrientsDialog extends Component {
             .post("/get-item-availability", { itemID })
             .then(({ data: { availability, error } }) => {
                 if (error) throw error;
-                this.setState({ availability });
+                //this.setState({ availability });
+                this.setState({availability: parseAvailabilityResults(availability)});
             })
             .catch(error => {
                 // TO-DO: Display error if code == 0
@@ -157,7 +160,7 @@ class EnzymesNutrientsDialog extends Component {
                     <Grid item container style={{ marginTop: 5 }} direction={"row"}>
                         <Grid item xs container spacing={24} direction={"row"} justify="flex-start">
                             {availability ? (
-                                <Typography style={{color: availability == IN_STOCK ? "green" : "red"}}>{availability}</Typography>
+                                <Typography style={{color: availability == IN_STOCK ? "green" : "red"}}><p>{availability}</p></Typography>
                             ) : (
                                 <Grid item xs container spacing={24} direction={"row"} justify="flex-end">
                                     <Grid item>
@@ -173,9 +176,9 @@ class EnzymesNutrientsDialog extends Component {
                     </Grid>
 
                     <Grid item xs container spacing={24} style={{ marginTop: 5 }} direction={"row"}>
-                        <Formik 
-                            initialValues={this.state} 
-                            validationSchema={customFormValidation} 
+                        <Formik
+                            initialValues={this.state}
+                            validationSchema={customFormValidation}
                             onSubmit={values => this.addToCart(values)}
                         >
                             {({ values, handleChange }) => {

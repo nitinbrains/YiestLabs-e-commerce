@@ -626,7 +626,7 @@ class YeastDialog extends Component {
                             justify="flex-end"
                         >
                             {availability ?
-                                <Typography style={{color: availability == IN_STOCK ? "green" : "red"}}>{availability}</Typography>
+                                <Typography style={{color: availability == IN_STOCK ? "green" : "red"}}><p>{availability}</p></Typography>
                             :
                                 <Grid
                                     item
