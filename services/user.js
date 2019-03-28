@@ -28,4 +28,9 @@ export const createNetSuiteAccount = (params) => requestWrapper('/create-netsuit
 export const createYeastmanAccount = (params) => requestWrapper('/create-yeastman-account', {
     method: "POST",
     body: JSON.stringify(params)
+});
+
+export const addSubsidiary = (params) => requestWrapper('/add-subsidiary', {
+    method: "POST",
+    body: JSON.stringify(params)
 })

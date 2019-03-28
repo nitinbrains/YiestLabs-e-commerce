@@ -24,7 +24,6 @@ export function * prepareOrder(action) {
         const user = yield select(state => state.user);
 
         var { res: order, error } = yield call(api.prepareOrder, {
-            calcShip: true,
             user: user,
             items: cart.items
         });

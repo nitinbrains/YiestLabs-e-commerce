@@ -61,46 +61,62 @@ class MyAccount extends Component {
             manageShipping: false,
             manageBilling: false,
             manageCards: false,
-            confirmDialog: false,
+            subsidiaryDialog: false,
             focus: ""
         };
     }
 
-    createDialogContent = orderFrom => {
-        let newAccount;
-        switch (orderFrom) {
+    handleYes = (action) => {
+        action();
+        this.setState({ subsidiaryDialog: false });
+    }
+
+
+    handleNo = () => {
+        this.setState({ subsidiaryDialog: false });
+    };
+
+    getSubsidiaryDialog = subsidiary => {
+        let account, action, question;
+        switch (subsidiary) {
             case -2:
-                newAccount = "USA";
+            case 2:
+                account = "USA";
                 break;
             case -5:
-                newAccount = "Hong Kong";
+            case 5:
+                account = "Hong Kong";
                 break;
             case -7:
-                newAccout = "Copenhagen";
+            case 7:
+                account = "Copenhagen";
                 break;
             default:
                 return;
         }
 
+        if (subsidiary < 0) {
+            question = `Are you sure you want to create a new WL ${account} Acount?`;
+            action = () => this.props.addSubsidiary({subsidiary});
+
+        } else {
+            question = `Do you want switch to WL ${account}?`;
+            action = () => this.props.changeSubsidiary({subsidiary});
+        }
+
         return (
-            <Dialog open={this.state.confirmDialog}>
-                <DialogTitle id="alert-dialog-title">{`Do you wish to create a new WL ${newAccount} Account?`}</DialogTitle>
+            <Dialog open={this.state.subsidiaryDialog != null}>
+                <DialogTitle id="alert-dialog-title">{question}</DialogTitle>
                 <DialogActions>
-                    <Button onClick={this.closeConfirmDialog} color="primary">
+                    <Button onClick={this.handleNo} color="primary">
                         No
                     </Button>
-                    <Button onClick={this.closeConfirmDialog} color="primary" autoFocus>
+                    <Button onClick={() => this.handleYes(action)} color="primary" autoFocus>
                         Yes
                     </Button>
                 </DialogActions>
             </Dialog>
         );
-    };
-
-    selectAccount = e => {
-        this.setState({
-            subsidiary: e.target.value
-        });
     };
 
     manageShipping = () => {
@@ -132,10 +148,6 @@ class MyAccount extends Component {
         if (event.target.value > 0) {
             this.setState({ confirmDialog: true });
         }
-    };
-
-    closeConfirmDialog = () => {
-        this.setState({ confirmDialog: false });
     };
 
     handleSubmit = (values, { setErrors }) => {
@@ -214,6 +226,10 @@ class MyAccount extends Component {
             _set(errors, 'orderFrom', 'Enter a subsidiary to order from');
         }
 
+        if(!values.shipmethod) {
+            _set(errors, 'shipmethod', 'Ship method is required');
+        }
+
         if (!_get(values, 'shipping.attn')) {
             _set(errors, 'shipping.attn', 'Attention is required');
         }
@@ -269,18 +285,24 @@ class MyAccount extends Component {
         const {
             classes,
             user: {
-                id,
                 subsidiary,
+                shipmethod,
                 shipping,
                 billing,
                 email,
                 phone,
-                orderFrom,
                 isLoading,
                 subsidiaryOptions,
                 currencyOptions
             }
         } = this.props;
+
+        const {
+            manageShipping,
+            manageBilling,
+            manageCards,
+            orderFrom
+        } = this.state;
 
         return (
             <NavBarUserSearchDrawerLayout>
@@ -311,6 +333,7 @@ class MyAccount extends Component {
                             email: email,
                             phone: phone,
                             orderFrom: subsidiary,
+                            shipmethod: shipmethod
                         }}
                         enableReinitialize
                         onSubmit={(values, actions) => {
@@ -375,7 +398,7 @@ class MyAccount extends Component {
                                                                 variant="outlined"
                                                                 label="Order From"
                                                                 autoComplete="orderFrom"
-                                                                onChange={onChange}
+                                                                onChange={e => this.setState({ orderFrom: e.target.value})}
                                                                 value={_get(value, "orderFrom") || ''}
                                                             >
                                                                 {subsidiaryOptions.map(option => {
@@ -402,7 +425,7 @@ class MyAccount extends Component {
                                                                     onChange={onChange}
                                                                     value={_get(value, "currency") || ''}
                                                                 >
-                                                                    {currencyOptons.map(option => {
+                                                                    {currencyOptions.map(option => {
                                                                         <MenuItem value={option.id}>{option.name}</MenuItem>
                                                                     })}
                                                                 </TextField>
@@ -415,14 +438,12 @@ class MyAccount extends Component {
                                                 render={({ field: { value, onChange }}) => {
                                                     return (
                                                         <Grid item xs={3}>
-                                                            <FormikErrorMessage error={_get(errors, "vat")} touched={_get(touched, "vat")} />
+                                                            <FormikErrorMessage error={_get(errors, "vat")} />
                                                             <TextField
                                                                 placeholder="US-123456"
                                                                 value={_get(value, "vat")}
-                                                                InputLabelProps={{ shrink: _get(value, "vat") !== "" }}
                                                                 onChange={onChange}
                                                                 variant="outlined"
-
                                                                 name="vat"
                                                                 variant="outlined"
                                                                 label="Vat"
@@ -430,6 +451,34 @@ class MyAccount extends Component {
                                                                 onChange={onChange}
                                                                 value={_get(value, "vat") || ''}
                                                             />
+                                                        </Grid>
+                                                    );
+                                                }}
+                                            />
+                                            <Field
+                                                render={({ field: { value, onChange }}) => {
+                                                    return (
+                                                        <Grid item xs={3}>
+                                                            <FormikErrorMessage error={_get(errors, "shipmethod")} />
+                                                            <TextField
+                                                                select
+                                                                value={_get(value, "shipmethod")}
+                                                                InputLabelProps={{ shrink: _get(value, "shipmethod") !== "" }}
+                                                                onChange={onChange}
+                                                                variant="outlined"
+                                                                name="shipmethod"
+                                                                variant="outlined"
+                                                                label="shipmethod"
+                                                                autoComplete="shipmethod"
+                                                                onChange={onChange}
+                                                                value={_get(value, "shipmethod") || ''}
+                                                            >
+                                                                {this.props.user.shipMethods.map(method => (
+                                                                    <MenuItem key={method.NSID} value={method.NSID}>
+                                                                        {method.Name}
+                                                                    </MenuItem>
+                                                                ))}
+                                                            </TextField>
                                                         </Grid>
                                                     );
                                                 }}
@@ -480,18 +529,20 @@ class MyAccount extends Component {
                         }}
                     </Formik>
 
-                    <Dialog open={this.state.manageShipping} maxWidth={"md"} fullWidth>
+                    <Dialog open={manageShipping} maxWidth={"md"} fullWidth>
                         <ManageShipping closeDialog={this.closeShipping} />
                     </Dialog>
 
-                    <Dialog open={this.state.manageBilling} maxWidth={"md"} fullWidth>
+                    <Dialog open={manageBilling} maxWidth={"md"} fullWidth>
                         <ManageBilling closeDialog={this.closeBilling} />
                     </Dialog>
 
-                    <Dialog open={this.state.manageCards} maxWidth={"md"} fullWidth>
+                    <Dialog open={manageCards} maxWidth={"md"} fullWidth>
                         <ManageCards closeDialog={this.closeCards} />
                     </Dialog>
-                    {this.createDialogContent(this.state.orderFrom)}
+
+                    {this.getSubsidiaryDialog(orderFrom)}
+                    
                 </PageContainer>
             </NavBarUserSearchDrawerLayout>
         );

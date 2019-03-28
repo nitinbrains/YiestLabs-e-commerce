@@ -32,256 +32,242 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
             const userLocation = parseInt(userRecord.getValue({ fieldId: "subsidiary" }));
             const territory = userRecord.getValue({ fieldId: "territory" });
 
-            if (response.calcShip) {
-                const SDLocalTime = getLocalTime(2, false);
-                const shipCountry = userRecord.getValue({ fieldId: "shipcountry" });
-                const splitOrder = userLocation == 2 && shipCountry != "US" ? false : true; // no split orders for internationals
-                const hasPlates = orderContainsPlates(response.items);
+            const SDLocalTime = getLocalTime(2, false);
+            const shipCountry = userRecord.getValue({ fieldId: "shipcountry" });
+            const splitOrder = userLocation == 2 && shipCountry != "US" ? false : true; // no split orders for internationals
+            const hasPlates = orderContainsPlates(response.items);
 
-                //Ship Date for hb items
-                const hbDate = HomebrewShipDate();
+            //Ship Date for hb items
+            const hbDate = HomebrewShipDate();
 
-                //Populate Ship dates
-                for (var i = response.items.length - 1; i >= 0; i--) {
-                    try {
-                        var ASHAvailability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ["11"], true);
-                        var SDAvailability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ["9"], true);
+            //Populate Ship dates
+            for (var i = response.items.length - 1; i >= 0; i--) {
+                var ASHAvailability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ["11"], true);
+                var SDAvailability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ["9"], true);
 
-                        // Service items
-                        if (response.items[i].type == 4) {
-                            var ServiceRecord = loadItem(response.items[i].type, response.items[i].MerchandiseID);
+                // Service items
+                if (response.items[i].type == 4) {
+                    var ServiceRecord = loadItem(response.items[i].type, response.items[i].MerchandiseID);
 
-                            if (ServiceRecord.getValue({ fieldId: "class" }) == 28) {
-                                var seatsLeft = parseInt(ServiceRecord.getValue({ fieldId: "custitem_class_seats_remaining" }));
-                                if (!isNaN(seatsLeft)) {
-                                    if (seatsLeft <= response.items[i].OrderDetailQty) {
-                                        //no seats left
-                                        response.items.splice(i, 1);
-                                        continue;
-                                    }
-                                }
-                            }
-
-                            var warehouses = ServiceRecord.getValue({ fieldId: "custitemwarehouse" });
-                            if (warehouses.indexOf("9") >= 0) {
-                                //sd
-                                response.items[i].Warehouse = 9;
-                            } else if (warehouses.indexOf("30") >= 0) {
-                                //cph
-                                response.items[i].Warehouse = 30;
-                            } else {
+                    if (ServiceRecord.getValue({ fieldId: "class" }) == 28) {
+                        var seatsLeft = parseInt(ServiceRecord.getValue({ fieldId: "custitem_class_seats_remaining" }));
+                        if (!isNaN(seatsLeft)) {
+                            if (seatsLeft <= response.items[i].OrderDetailQty) {
+                                //no seats left
                                 response.items.splice(i, 1);
                                 continue;
                             }
-                            response.items[i].shipDate = new Date(hbDate);
                         }
+                    }
 
-                        // Homebrew
-                        else if (response.items[i].type == 2) {
-                            if (userLocation != 2) {
-                                response.items.splice(i, 1);
+                    var warehouses = ServiceRecord.getValue({ fieldId: "custitemwarehouse" });
+                    if (warehouses.indexOf("9") >= 0) {
+                        //sd
+                        response.items[i].Warehouse = 9;
+                    } else if (warehouses.indexOf("30") >= 0) {
+                        //cph
+                        response.items[i].Warehouse = 30;
+                    } else {
+                        response.items.splice(i, 1);
+                        continue;
+                    }
+                    response.items[i].shipDate = new Date(hbDate);
+                }
 
-                                continue;
-                            } else {
-                                response.items[i].shipDate = new Date(hbDate);
-                                response.items[i].Warehouse = 9;
-                            }
-                        }
+                // Homebrew
+                else if (response.items[i].type == 2) {
+                    if (userLocation != 2) {
+                        response.items.splice(i, 1);
 
-                        // Nonyeast
-                        else if (response.items[i].type == 3) {
-                            var itemRecord = loadItem(response.items[i].type, response.items[i].MerchandiseID);
-                            var warehouses = itemRecord.getValue({ fieldId: "custitemwarehouse" });
+                        continue;
+                    } else {
+                        response.items[i].shipDate = new Date(hbDate);
+                        response.items[i].Warehouse = 9;
+                    }
+                }
 
-                            if (warehouses.indexOf(warehouseMap(userLocation)) >= 0) {
-                                var shipDate = new Date(SDLocalTime);
-                                var leadTime = parseInt(itemRecord.getValue({ fieldId: "custitem_wl_order_lead_time" }));
+                // Nonyeast
+                else if (response.items[i].type == 3) {
+                    var itemRecord = loadItem(response.items[i].type, response.items[i].MerchandiseID);
+                    var warehouses = itemRecord.getValue({ fieldId: "custitemwarehouse" });
 
-                                var ASHAvail = searchAvailabilityResults(ASHAvailability, "11");
-                                var SDAvail = searchAvailabilityResults(SDAvailability, "9");
+                    if (warehouses.indexOf(warehouseMap(userLocation)) >= 0) {
+                        var shipDate = new Date(SDLocalTime);
+                        var leadTime = parseInt(itemRecord.getValue({ fieldId: "custitem_wl_order_lead_time" }));
 
-                                // Always check Asheville for plates orders
-                                if (hasPlates) {
+                        var ASHAvail = searchAvailabilityResults(ASHAvailability, "11");
+                        var SDAvail = searchAvailabilityResults(SDAvailability, "9");
+
+                        // Always check Asheville for plates orders
+                        if (hasPlates) {
+                            response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                            response.items[i].Warehouse = 11;
+                        } else {
+                            if (territory >= 3) {
+                                if (response.items[i].OrderDetailQty <= parseInt(ASHAvail.availQtyToShip)) {
                                     response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
                                     response.items[i].Warehouse = 11;
-                                } else {
-                                    if (territory >= 3) {
-                                        if (response.items[i].OrderDetailQty <= parseInt(ASHAvail.availQtyToShip)) {
-                                            response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
-                                            response.items[i].Warehouse = 11;
-                                        } else if (response.items[i].OrderDetailQty <= parseInt(SDAvail.availQtyToShip)) {
-                                            response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
-                                            response.items[i].Warehouse = 9;
-                                        } else if (leadTime) {
-                                            response.items[i].shipDate = getShipDate(
-                                                shipDate.setDate(SDLocalTime.getDate() + leadTime),
-                                                false,
-                                                userLocation,
-                                                userLocation != 2,
-                                                userLocation == 7,
-                                                false
-                                            );
-                                            response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
-                                        } else {
-                                            response.items.splice(i, 1);
-                                            continue;
-                                        }
-                                    } else {
-                                        if (response.items[i].OrderDetailQty <= parseInt(SDAvail.availQtyToShip)) {
-                                            response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
-                                            response.items[i].Warehouse = 9;
-                                        } else if (response.items[i].OrderDetailQty <= parseInt(ASHAvail.availQtyToShip)) {
-                                            response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
-                                            response.items[i].Warehouse = 11;
-                                        } else if (leadTime) {
-                                            response.items[i].shipDate = getShipDate(
-                                                shipDate.setDate(SDLocalTime.getDate() + leadTime),
-                                                false,
-                                                userLocation,
-                                                userLocation != 2,
-                                                userLocation == 7,
-                                                false
-                                            );
-                                            response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
-                                        } else {
-                                            response.items.splice(i, 1);
-                                            continue;
-                                        }
-                                    }
-                                }
-                            } else {
-                                response.items.splice(i, 1);
-                                continue;
-                            }
-                        }
-
-                        // Purepitch
-                        else {
-                            var itemRecord = loadItem(response.items[i].type, response.items[i].MerchandiseID);
-                            var warehouses = itemRecord.getValue({ fieldId: "custitemwarehouse" });
-
-                            if (warehouses.indexOf(warehouseMap(userLocation)) >= 0) {
-                                var leadTime = parseInt(itemRecord.getValue({ fieldId: "custitem_wl_order_lead_time" }));
-
-                                if (response.items[i].OrderDetailQty >= 10.0 && response.items[i].type == 5) {
-                                    //large bbl custom pour
-                                    var shipDate = new Date(SDLocalTime);
-                                    leadTime = leadTime ? leadTime : 21;
-                                    response.items[i].shipDate = getShipDate(shipDate.setDate(SDLocalTime.getDate() + leadTime), false, userLocation, userLocation != 2, userLocation == 7, false);
+                                } else if (response.items[i].OrderDetailQty <= parseInt(SDAvail.availQtyToShip)) {
+                                    response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                    response.items[i].Warehouse = 9;
+                                } else if (leadTime) {
+                                    response.items[i].shipDate = getShipDate(
+                                        shipDate.setDate(SDLocalTime.getDate() + leadTime),
+                                        false,
+                                        userLocation,
+                                        userLocation != 2,
+                                        userLocation == 7,
+                                        false
+                                    );
                                     response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
+                                } else {
+                                    response.items.splice(i, 1);
                                     continue;
                                 }
-
-                                var checkProduction = true, isPurepitch = true;
-                                var packMethods = itemRecord.getText({ fieldId: "custitem_wl_packaging_methods" });
-                                if (packMethods == "Custom Pour") {
-                                    isPurepitch = false;
-                                }
-
-                                if (userLocation == 7) {
-                                    var CPHAvailability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ["30"], true);
-                                    var CPHAvail = searchAvailabilityResults(CPHAvailability, "30");
-
-                                    if (parseInt(CPHAvail.availQtyToShip) >= response.items[i].OrderDetailQty) {
-                                        checkProduction = false;
-                                        response.items[i].shipDate = getShipDate(new Date(CPHAvail.dateValue), isPurepitch, userLocation, false, true, false);
-                                        response.items[i].Warehouse = 30;
-                                    }
-                                } else if (userLocation == 5) {
-                                    var HKAvailability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ["31"], true);
-                                    var HKAvail = searchAvailabilityResults(HKAvailability, "31");
-
-                                    if (parseInt(HKAvail.availQtyToShip) >= response.items[i].OrderDetailQty) {
-                                        checkProduction = false;
-                                        response.items[i].shipDate = getShipDate(new Date(HKAvail.dateValue), isPurepitch, userLocation, false, false, false);
-                                        response.items[i].Warehouse = 31;
-                                    }
-                                } else if (userLocation == 2) {
-                                    var SDAvail = searchAvailabilityResults(SDAvailability, "9");
-                                    var ASHAvail = searchAvailabilityResults(ASHAvailability, "11");
-
-                                    if (territory >= 3) {
-                                        if (parseInt(ASHAvail.availQtyToShip) >= response.items[i].OrderDetailQty && splitOrder) {
-                                            checkProduction = false;
-                                            response.items[i].shipDate = getShipDate(new Date(ASHAvail.dateValue), isPurepitch, userLocation, false, false, true);
-                                            response.items[i].Warehouse = 11;
-                                        } else if (parseInt(SDAvail.availQtyToShip) >= response.items[i].OrderDetailQty && (!hasPlates || (hasPlates && !splitOrder))) {
-                                            checkProduction = false;
-                                            response.items[i].shipDate = getShipDate(new Date(SDAvail.dateValue), isPurepitch, userLocation, false, false, false);
-                                            response.items[i].Warehouse = 9;
-                                        }
-                                    } else {
-                                        if (parseInt(SDAvail.availQtyToShip) >= response.items[i].OrderDetailQty && (!hasPlates || (hasPlates && !splitOrder))) {
-                                            checkProduction = false;
-                                            response.items[i].shipDate = getShipDate(new Date(SDAvail.dateValue), isPurepitch, userLocation, false, false, false);
-                                            response.items[i].Warehouse = 9;
-                                        } else if (parseInt(ASHAvail.availQtyToShip) >= response.items[i].OrderDetailQty && splitOrder) {
-                                            checkProduction = false;
-                                            response.items[i].shipDate = getShipDate(new Date(ASHAvail.dateValue), isPurepitch, userLocation, false, false, true);
-                                            response.items[i].Warehouse = 11;
-                                        }
-                                    }
-                                } else {
-                                    response.items = null;
-                                    throw { message: "Invalid User Location", code: -1 };
-                                }
-
-                                // Check San Diego / Asheville Production warehouses for Packaging WOs
-                                if (checkProduction) {
-                                    var packagingWOs = [];
-
-                                    // If on East coast, check Asheville first
-                                    if (territory > 3) {
-                                        putShipDatesIntoOrder(ASHAvailability, "10", packagingWOs); // Asheville Production warehouse
-                                        putShipDatesIntoOrder(SDAvailability, "8", packagingWOs); // San Diego Production warehouse
-                                    } else {
-                                        putShipDatesIntoOrder(SDAvailability, "8", packagingWOs); // San Diego Production warehouse
-                                        putShipDatesIntoOrder(ASHAvailability, "10", packagingWOs); // Asheville Production warehouse
-                                    }
-
-                                    for (var j = 0; j < packagingWOs.length; j++) {
-                                        if (response.items[i].OrderDetailQty <= parseInt(packagingWOs[j].availQtyToShip)) {
-                                            response.items[i].shipDate = getShipDate(new Date(packagingWOs[j].dateValue), isPurepitch, userLocation, userLocation != 2, userLocation == 7, false);
-                                            response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
-                                            j = packagingWOs.length;
-                                        }
-                                    }
-
-                                    if (!response.items[i].shipDate) {
-                                        if (leadTime) {
-                                            var shipDate = new Date(SDLocalTime);
-                                            response.items[i].shipDate = getShipDate(
-                                                shipDate.setDate(SDLocalTime.getDate() + leadTime),
-                                                isPurepitch,
-                                                userLocation,
-                                                userLocation != 2,
-                                                userLocation == 7,
-                                                false
-                                            );
-                                            response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
-                                        } else {
-                                            response.items.splice(i, 1);
-                                        }
-                                    }
-                                }
                             } else {
-                                //isn't available to ship from given location
-                                response.items.splice(i, 1);
-                                continue;
+                                if (response.items[i].OrderDetailQty <= parseInt(SDAvail.availQtyToShip)) {
+                                    response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                    response.items[i].Warehouse = 9;
+                                } else if (response.items[i].OrderDetailQty <= parseInt(ASHAvail.availQtyToShip)) {
+                                    response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                    response.items[i].Warehouse = 11;
+                                } else if (leadTime) {
+                                    response.items[i].shipDate = getShipDate(
+                                        shipDate.setDate(SDLocalTime.getDate() + leadTime),
+                                        false,
+                                        userLocation,
+                                        userLocation != 2,
+                                        userLocation == 7,
+                                        false
+                                    );
+                                    response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
+                                } else {
+                                    response.items.splice(i, 1);
+                                    continue;
+                                }
                             }
                         }
-                    } catch (error) {
-                        log.error({
-                            title: "Order Shipping - Error",
-                            details: error.toString() + JSON.stringify(response.items[i])
-                        });
+                    } else {
                         response.items.splice(i, 1);
                         continue;
                     }
                 }
 
-                //Transit Times
-                response.transitTimes = addTransitTimesAndRanges();
+                // Purepitch
+                else {
+                    var itemRecord = loadItem(response.items[i].type, response.items[i].MerchandiseID);
+                    var warehouses = itemRecord.getValue({ fieldId: "custitemwarehouse" });
+
+                    if (warehouses.indexOf(warehouseMap(userLocation)) >= 0) {
+                        var leadTime = parseInt(itemRecord.getValue({ fieldId: "custitem_wl_order_lead_time" }));
+
+                        if (response.items[i].OrderDetailQty >= 10.0 && response.items[i].type == 5) {
+                            //large bbl custom pour
+                            var shipDate = new Date(SDLocalTime);
+                            leadTime = leadTime ? leadTime : 21;
+                            response.items[i].shipDate = getShipDate(shipDate.setDate(SDLocalTime.getDate() + leadTime), false, userLocation, userLocation != 2, userLocation == 7, false);
+                            response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
+                            continue;
+                        }
+
+                        var checkProduction = true, isPurepitch = true;
+                        var packMethods = itemRecord.getText({ fieldId: "custitem_wl_packaging_methods" });
+                        if (packMethods == "Custom Pour") {
+                            isPurepitch = false;
+                        }
+
+                        if (userLocation == 7) {
+                            var CPHAvailability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ["30"], true);
+                            var CPHAvail = searchAvailabilityResults(CPHAvailability, "30");
+
+                            if (parseInt(CPHAvail.availQtyToShip) >= response.items[i].OrderDetailQty) {
+                                checkProduction = false;
+                                response.items[i].shipDate = getShipDate(new Date(CPHAvail.dateValue), isPurepitch, userLocation, false, true, false);
+                                response.items[i].Warehouse = 30;
+                            }
+                        } else if (userLocation == 5) {
+                            var HKAvailability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ["31"], true);
+                            var HKAvail = searchAvailabilityResults(HKAvailability, "31");
+
+                            if (parseInt(HKAvail.availQtyToShip) >= response.items[i].OrderDetailQty) {
+                                checkProduction = false;
+                                response.items[i].shipDate = getShipDate(new Date(HKAvail.dateValue), isPurepitch, userLocation, false, false, false);
+                                response.items[i].Warehouse = 31;
+                            }
+                        } else if (userLocation == 2) {
+                            var SDAvail = searchAvailabilityResults(SDAvailability, "9");
+                            var ASHAvail = searchAvailabilityResults(ASHAvailability, "11");
+
+                            if (territory >= 3) {
+                                if (parseInt(ASHAvail.availQtyToShip) >= response.items[i].OrderDetailQty && splitOrder) {
+                                    checkProduction = false;
+                                    response.items[i].shipDate = getShipDate(new Date(ASHAvail.dateValue), isPurepitch, userLocation, false, false, true);
+                                    response.items[i].Warehouse = 11;
+                                } else if (parseInt(SDAvail.availQtyToShip) >= response.items[i].OrderDetailQty && (!hasPlates || (hasPlates && !splitOrder))) {
+                                    checkProduction = false;
+                                    response.items[i].shipDate = getShipDate(new Date(SDAvail.dateValue), isPurepitch, userLocation, false, false, false);
+                                    response.items[i].Warehouse = 9;
+                                }
+                            } else {
+                                if (parseInt(SDAvail.availQtyToShip) >= response.items[i].OrderDetailQty && (!hasPlates || (hasPlates && !splitOrder))) {
+                                    checkProduction = false;
+                                    response.items[i].shipDate = getShipDate(new Date(SDAvail.dateValue), isPurepitch, userLocation, false, false, false);
+                                    response.items[i].Warehouse = 9;
+                                } else if (parseInt(ASHAvail.availQtyToShip) >= response.items[i].OrderDetailQty && splitOrder) {
+                                    checkProduction = false;
+                                    response.items[i].shipDate = getShipDate(new Date(ASHAvail.dateValue), isPurepitch, userLocation, false, false, true);
+                                    response.items[i].Warehouse = 11;
+                                }
+                            }
+                        } else {
+                            response.items = null;
+                            throw { message: "Invalid User Location", code: -1 };
+                        }
+
+                        // Check San Diego / Asheville Production warehouses for Packaging WOs
+                        if (checkProduction) {
+                            var packagingWOs = [];
+
+                            // If on East coast, check Asheville first
+                            if (territory > 3) {
+                                putShipDatesIntoOrder(ASHAvailability, "10", packagingWOs); // Asheville Production warehouse
+                                putShipDatesIntoOrder(SDAvailability, "8", packagingWOs); // San Diego Production warehouse
+                            } else {
+                                putShipDatesIntoOrder(SDAvailability, "8", packagingWOs); // San Diego Production warehouse
+                                putShipDatesIntoOrder(ASHAvailability, "10", packagingWOs); // Asheville Production warehouse
+                            }
+
+                            for (var j = 0; j < packagingWOs.length; j++) {
+                                if (response.items[i].OrderDetailQty <= parseInt(packagingWOs[j].availQtyToShip)) {
+                                    response.items[i].shipDate = getShipDate(new Date(packagingWOs[j].dateValue), isPurepitch, userLocation, userLocation != 2, userLocation == 7, false);
+                                    response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
+                                    j = packagingWOs.length;
+                                }
+                            }
+
+                            if (!response.items[i].shipDate) {
+                                if (leadTime) {
+                                    var shipDate = new Date(SDLocalTime);
+                                    response.items[i].shipDate = getShipDate(
+                                        shipDate.setDate(SDLocalTime.getDate() + leadTime),
+                                        isPurepitch,
+                                        userLocation,
+                                        userLocation != 2,
+                                        userLocation == 7,
+                                        false
+                                    );
+                                    response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
+                                } else {
+                                    response.items.splice(i, 1);
+                                }
+                            }
+                        }
+                    } else {
+                        //isn't available to ship from given location
+                        response.items.splice(i, 1);
+                        continue;
+                    }
+                }
             }
 
             //PRICING
@@ -289,6 +275,9 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
             response.shippingSubtotal = 0;
             response.orderSubtotal = 0;
             var done = [false];
+
+            //Transit Times
+            response.transitTimes = addTransitTimesAndRanges();
 
             var fakeOrder = record.create({ type: "salesorder", isDynamic: true });
             fakeOrder.setValue("entity", response.user.id);

@@ -4,22 +4,24 @@ import { userTypes } from 'appRedux/actions/userActions';
 
 /* ------------- Initial State ------------- */
 
-
-
-const userInfo = safeExecute(() => localStorage.getItem('userInfo') || {}, {});
-
 const initialState = {
     id: null,
+    subsidiary: "",
+    shipmethod: "",
+    shipMethods: [],
+    subsidiaryOptions: [],
     username: '',
     password: '',
     cardsToRemove: [],
     category: "",
     companyName: "",
     connectedaccounts: [],
-    currency: "",
-    currencyOptions: [],
     email: "",
     phone: "",
+    terms: "",
+    vat: "",
+    currency: "",
+    currencyOptions: [],
     shipping: {
         address1: "",
         address2: "",
@@ -41,11 +43,6 @@ const initialState = {
         zip: "",
     },
     otherAddresses: [],
-    shipmethod: "",
-    shipzip: "",
-    subsidiary: "",
-    terms: "",
-    vat: "",
     card: {
         id: '',
         ccnumber: '',
@@ -55,27 +52,20 @@ const initialState = {
         default: false
     },
     otherCards: [],
-    shipMethods: [],
     isLoading: false,
     isSuccess:false,
     orderHistory: [],
     isUnsaved: false,
-    subsidiaryOptions: [],
-
-    ...userInfo
+    
 }; // empty for now
 
 /* ------------- Hookup Reducers To Types ------------- */
 
 export default createReducer(initialState, {
-    [userTypes.USER_LOGIN_SUCCESS]: (state, { data }) => ({
-        ...data,
-    }),
     [userTypes.USER_LOGIN_FAILURE]: () => null, // this will return initial state
     [userTypes.SET_USER_INFO_SUCCESS]: (state, { data: userInfo }) => ({
         ...userInfo,
-        isLoggedin: true
-    }),
+   }),
     [userTypes.UPDATE_USER_INFO_ATTEMPT]: (state, { data }) => ({
         isLoading: true,
     }),
@@ -87,6 +77,15 @@ export default createReducer(initialState, {
     }),
     [userTypes.CREATE_USER_ATTEMPT]: (state) => ({
         isLoading: true,
+    }),
+    [userTypes.ADD_SUBSIDIARY_ATTEMPT]: (state) => ({
+        isLoading: true,
+    }),
+    [userTypes.ADD_SUBSIDIARY_SUCCESS]: (state) => ({
+        isLoading: false,
+    }),
+    [userTypes.ADD_SUBSIDIARY_FAILURE]: (state) => ({
+        isLoading: false,
     }),
     [userTypes.CREATE_USER_FAILURE]: (state) => ({
         isLoading: false,
@@ -113,11 +112,11 @@ export default createReducer(initialState, {
     [userTypes.SET_CREDIT_CARD_SUCCESS]: (state, { data: { creditCard} }) => ({
         card: creditCard
     }),
-    [userTypes.SET_SHIP_ADDRESS_SUCCESS]: (state, { data: { shipping}}) => ({
-        shipping
+    [userTypes.SET_SHIP_ADDRESS_SUCCESS]: (state, { data: { address }}) => ({
+        address
     }),
-    [userTypes.SET_BILL_ADDRESS_SUCCESS]: (state, { data: { billing }}) => ({
-        billing
+    [userTypes.SET_BILL_ADDRESS_SUCCESS]: (state, { data: { address }}) => ({
+        address
     }),
     [userTypes.SET_SHIP_METHOD_SUCCESS]: (state, { data: { shipmethod }}) => ({
         shipmethod

@@ -13,13 +13,7 @@ export default (Component) => {
             }
 
             render () {
-                {this.props.user.isLoading 
-                ?
-                    
-                :
-                    return <Component {...this.props}/>
-                }
-                
+                return this.props.user.isLoading ? <LoadingScreen /> : <Component {...this.props}/>;
             }
         }
     )

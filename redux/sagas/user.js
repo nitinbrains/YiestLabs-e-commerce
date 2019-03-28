@@ -1,14 +1,16 @@
-import { put, call, select } from "redux-saga/effects";
-import _isNumber from "lodash/isNumber";
-import _isEmpty from "lodash/isEmpty";
+import { put, call, select } from 'redux-saga/effects';
+import _isNumber from 'lodash/isNumber';
+import _isEmpty from 'lodash/isEmpty';
+import _find from 'lodash/find';
+import _get from 'lodash/get';
 
-import { userActions, userTypes } from "appRedux/actions/userActions";
-import { messageActions } from "appRedux/actions/messageActions";
-import * as api from "services/users.js";
-import { prepareUserInfo } from "lib/UserUtils.js";
-import { uuid } from "lib/Utils.js";
+import { userActions, userTypes } from 'appRedux/actions/userActions';
+import { messageActions } from 'appRedux/actions/messageActions';
+import * as api from 'services/user.js';
+import { prepareUserInfo } from 'lib/UserUtils.js';
+import { uuid } from 'lib/Utils.js';
 
-import WLHelper from "lib/WLHelper";
+import WLHelper from 'lib/WLHelper';
 
 export function* loginUser(action) {
     const {
@@ -17,9 +19,9 @@ export function* loginUser(action) {
         data: { username, password }
     } = action;
     try {
-        const { res, err } = yield call(api.login, username, password);
+        const { res, error } = yield call(api.login, username, password);
 
-        if (err) throw err;
+        if (error) throw error;
         let { userID } = res;
         if (res.error && res.error.code === 0) {
             yield put(
@@ -41,15 +43,15 @@ export function* loginUser(action) {
                 })
             );
         }
-    } catch (err) {
+    } catch (error) {
         if (error.status) {
             // show network error is any regaring with api status
             yield put(messageActions.showSnackbar({ title: "Error", message: error.message, variant: "error" }));
         } else {
-            if (err.code == 0) {
+            if (error.code == 0) {
                 // Yeastman error when we have error with code == 0
                 yield put(messageActions.showBanner({ title: "Yeastman", message: error.message, variant: "error" }));
-            } else if (err.code == -1) {
+            } else if (error.code == -1) {
                 // Other error when we have error with code == -1
                 yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
             }
@@ -69,7 +71,6 @@ export function* getUserInfo(action) {
 
         if (error) throw error;
         localStorage.setItem("userInfo", JSON.stringify(userInfo));
-        localStorage.setItem("isLoggedin", true);
         yield put(userActions.setUserInfo({ userInfo }));
         yield put(responseSuccess());
         if (isLogin) {
@@ -170,10 +171,10 @@ export function* updateUserInfo(action) {
             // show network error is any regaring with api status
             yield put(messageActions.showSnackbar({ title: "Error", message: error.message, variant: "error" }));
         } else {
-            if (err.code == 0) {
+            if (error.code == 0) {
                 // Yeastman error when we have error with code == 0
                 yield put(messageActions.showBanner({ title: "Yeastman", message: error.message, variant: "error" }));
-            } else if (err.code == -1) {
+            } else if (error.code == -1) {
                 // Other error when we have error with code == -1
                 yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
             }
@@ -213,11 +214,9 @@ export function* createUser(action) {
                     variant: "success"
                 })
             );
-            // TO-DO: Redirect user to store
         }
         yield put(userActions.setUserInfo({ userInfo }));
     } catch (error) {
-        // console.log('some error',error)
         yield put(
             messageActions.showBanner({
                 title: "Yeastman",
@@ -249,6 +248,71 @@ export function* createUser(action) {
     }
 }
 
+export function* changeSubsidiary(action) {
+    const { responseSuccess, responseFailure, data: { subsidiary }} = action;
+    try {
+        const user = yield select(state => state.user);
+
+        const account = _find(user.connectedaccounts, {subsidiaryid: subsidiary});
+        const internalid = _get(account, 'internalid');
+
+        yield put(userActions.getUserInfo({userID: internalid}));
+
+    } catch (error) {
+        if (error.status) {
+            // show network error is any regaring with api status
+            yield put(messageActions.showSnackbar({ title: "Error", message: error.message, variant: "error" }));
+        } else {
+            if (error.code == 0) {
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showBanner({ title: "Yeastman", message: error.message, variant: "error" }));
+            } else if (error.code == -1) {
+                // Other error when we have error with code == -1
+                yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
+            }
+        }
+        yield put(responseFailure(error));
+    }
+}
+
+export function* addSubsidiary(action) {
+    const { responseSuccess, responseFailure, data: { subsidiary }} = action;
+    try {
+        const user = yield select(state => state.user);
+        const account = _find(user.connectedaccounts, {subsidiaryid: 2});
+        const internalid = _get(account, 'internalid');
+        if (!internalid) throw { message: "User does not have a White Labs Inc account", code: 0}
+
+        let request = {};
+        request.addSubsidiary = true;
+        request.subsidiary = subsidiary;
+        request.id = internalid;
+        request.vat = user.vat;
+        request.category = user.category;
+        
+        var { res: { id }, error } = yield call(api.addSubsidiary, { request });
+
+        if (error) throw error;
+
+        yield put(userActions.getUserInfo({userID: id}));
+
+    } catch (error) {
+        if (error.status) {
+            // show network error is any regaring with api status
+            yield put(messageActions.showSnackbar({ title: "Error", message: error.message, variant: "error" }));
+        } else {
+            if (error.code == 0) {
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showBanner({ title: "Yeastman", message: error.message, variant: "error" }));
+            } else if (error.code == -1) {
+                // Other error when we have error with code == -1
+                yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
+            }
+        }
+        yield put(responseFailure(error));
+    }
+}
+
 export function* getOrderHistory(action) {
     const { responseSuccess, responseFailure } = action;
     try {
@@ -273,10 +337,10 @@ export function* getOrderHistory(action) {
             // show network error is any regaring with api status
             yield put(messageActions.showSnackbar({ title: "Error", message: error.message, variant: "error" }));
         } else {
-            if (err.code == 0) {
+            if (error.code == 0) {
                 // Yeastman error when we have error with code == 0
                 yield put(messageActions.showBanner({ title: "Yeastman", message: error.message, variant: "error" }));
-            } else if (err.code == -1) {
+            } else if (error.code == -1) {
                 // Other error when we have error with code == -1
                 yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
             }
@@ -292,6 +356,7 @@ export function* setShipMethod(action) {
         data: { shipmethod }
     } = action;
     try {
+        yield put(orderActions.prepareOrder());
         yield put(responseSuccess({shipmethod}));
     } catch (error) {
         yield put(responseFailure(error));
@@ -376,10 +441,10 @@ export function* setCreditCard(action) {
             // show network error is any regaring with api status
             yield put(messageActions.showSnackbar({ title: "Error", message: error.message, variant: "error" }));
         } else {
-            if (err.code == 0) {
+            if (error.code == 0) {
                 // Yeastman error when we have error with code == 0
                 yield put(messageActions.showBanner({ title: "Yeastman", message: error.message, variant: "error" }));
-            } else if (err.code == -1) {
+            } else if (error.code == -1) {
                 // Other error when we have error with code == -1
                 yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
             }
@@ -445,10 +510,10 @@ export function* addAddress(action) {
             // show network error is any regaring with api status
             yield put(messageActions.showSnackbar({ title: "Error", message: error.message, variant: "error" }));
         } else {
-            if (err.code == 0) {
+            if (error.code == 0) {
                 // Yeastman error when we have error with code == 0
                 yield put(messageActions.showBanner({ title: "Yeastman", message: error.message, variant: "error" }));
-            } else if (err.code == -1) {
+            } else if (error.code == -1) {
                 // Other error when we have error with code == -1
                 yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
             }

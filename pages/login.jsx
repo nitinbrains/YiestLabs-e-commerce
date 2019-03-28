@@ -54,7 +54,6 @@ class Login extends Component {
 
 
     componentWillMount(){
-        let isUserLoggedIn = sessionStorage.getItem('isLoggedin')
         const { user } = this.props;
         if (_get(user, 'id')){
             Router.push('/')

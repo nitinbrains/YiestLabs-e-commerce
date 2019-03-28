@@ -22,7 +22,7 @@ import { messageActions } from 'appRedux/actions/messageActions';
 import Utils from 'lib/Utils';
 import { user } from '../../mocks';
 
-const userId = 123;
+const userID = 123;
 const address = {
     addresee: "",
     address1: "test",

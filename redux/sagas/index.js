@@ -19,6 +19,8 @@ import {
     setUserInfo,
     updateUserInfo,
     createUser,
+    changeSubsidiary,
+    addSubsidiary,
     getOrderHistory,
     setShipMethod,
     addCreditCard,
@@ -50,10 +52,6 @@ import {
 import {
     getInventory,
     getItemAvailability,
-    searchItem,
-    changeCategory,
-    switchToHomebrew,
-    switchToProfessional
  } from './inventory';
 
 // Calculator Sags
@@ -82,6 +80,8 @@ function * rootSaga () {
         takeLatest(userTypes.SET_USER_INFO_ATTEMPT, setUserInfo),
         takeLatest(userTypes.UPDATE_USER_INFO_ATTEMPT, updateUserInfo),
         takeLatest(userTypes.CREATE_USER_ATTEMPT, createUser),
+        takeLatest(userTypes.CHANGE_SUBSIDIARY_ATTEMPT, changeSubsidiary),
+        takeLatest(userTypes.ADD_SUBSIDIARY_ATTEMPT, addSubsidiary),
         takeLatest(userTypes.GET_ORDER_HISTORY_ATTEMPT, getOrderHistory),
         takeLatest(userTypes.SET_SHIP_METHOD_ATTEMPT, setShipMethod),
         takeLatest(userTypes.ADD_CREDIT_CARD_ATTEMPT, addCreditCard),

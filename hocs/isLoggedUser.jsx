@@ -14,7 +14,7 @@ const routeIgnoreList = ['/cart']
 
 export default (Component) => {
     const checkLoginAndRedirect = (userInfo, router) => {
-        if( !userInfo.isLoggedin && !routeIgnoreList.includes(router.pathname) ){
+        if( !userInfo.id && !routeIgnoreList.includes(router.pathname) ){
             routeList.includes(router.pathname) ? Router.push('/') : Router.push('/login')
         }
     }
@@ -28,7 +28,7 @@ export default (Component) => {
             }
             render () {
                 let {user} = this.props;
-                if( !user.isLoggedin && !routeIgnoreList.includes(Router.pathname) ){
+                if( !user.id && !routeIgnoreList.includes(Router.pathname) ){
                     return <LoadingScreen />
                 }
 

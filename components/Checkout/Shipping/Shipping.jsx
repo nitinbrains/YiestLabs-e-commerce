@@ -106,9 +106,9 @@ class Shipping extends Component {
                         </Typography>
                         <div className={classes.sectionTitleDivider} />
                         <TextField
-                            id="select-shipping"
+                            id="shipmethod"
                             select
-                            label="Select"
+                            label="Ship Method"
                             helperText="Please select your shipping method"
                             margin="normal"
                             variant="outlined"

@@ -3,6 +3,8 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from "next/router";
+import _get from 'lodash/get';
+
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -67,12 +69,10 @@ class Store extends Component {
     }
 
     componentWillMount() {
-
         const  { inventory: { items }} = this.props;
 
-        let isUserLoggedIn = sessionStorage.getItem("isLoggedin");
-        let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-        if (isUserLoggedIn && userInfo) {
+        let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        if (_get(userInfo, 'id')) {
             this.props.setUserInfo({ userInfo });
         }
 
