@@ -27,27 +27,27 @@ export default createReducer(initialState, {
     //order
     [orderTypes.PREPARE_ORDER_ATTEMPT]: (state, { data }) => ({
         isLoading: true,
-        type: 'prepareOrder'        
+        type: 'prepareOrder'
     }),
     [orderTypes.PREPARE_ORDER_FAILURE]: (state, { data }) => ({
         isLoading: false,
-        type: ''        
+        type: ''
     }),
     [orderTypes.PREPARE_ORDER_SUCCESS]: (state, { data }) => ({
         isLoading: false,
-        type: ''        
+        type: ''
     }),
     [orderTypes.PLACE_ORDER_ATTEMPT]: (state, { data }) => ({
         isLoading: true,
-        type: ''        
+        type: 'placeOrder'
     }),
     [orderTypes.PLACE_ORDER_FAILURE]: (state, { data }) => ({
         isLoading: false,
-        type: ''        
+        type: ''
     }),
     [orderTypes.PLACE_ORDER_SUCCESS]: (state, { data }) => ({
         isLoading: false,
-        type: ''        
+        type: 'orderComplete'
     }),
 
     // user
@@ -100,5 +100,5 @@ export default createReducer(initialState, {
         isLoading: false,
         type: ''
     }),
-    
+
 });

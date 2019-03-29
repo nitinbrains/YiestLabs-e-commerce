@@ -280,7 +280,7 @@ class CalculatorForm extends Component {
                                                             (errors.startingGravity && touched.startingGravity) || (this.props.messages.length > 0 && startingGravity == "") ? true : false
                                                         }
                                                         error={(errors.startingGravity && touched.startingGravity) || (this.props.messages.length > 0 && startingGravity == "") ? true : false}
-                                                        label="Starting Gravity"
+                                                        label="Starting Gravity in Plato"
                                                         showLabel={true}
                                                         value={props.field.value}
                                                         onChange={e => {
@@ -303,7 +303,7 @@ class CalculatorForm extends Component {
                                                             (errors.targetPitchRate && touched.targetPitchRate) || (this.props.messages.length > 0 && targetPitchRate == "") ? true : false
                                                         }
                                                         error={(errors.targetPitchRate && touched.targetPitchRate) || (this.props.messages.length > 0 && targetPitchRate == "") ? true : false}
-                                                        label="Target Pitch Rate"
+                                                        label="Target Pitch Rate in Cells per mL"
                                                         showLabel={true}
                                                         value={props.field.value}
                                                         onChange={e => {
@@ -324,7 +324,7 @@ class CalculatorForm extends Component {
                                                     <FormTextbox
                                                         required={(errors.volume && touched.volume) || (this.props.messages.length > 0 && volume == "") ? true : false}
                                                         error={(errors.volume && touched.volume) || (this.props.messages.length > 0 && volume == "") ? true : false}
-                                                        label="Volume"
+                                                        label="Batch Size in mL"
                                                         showLabel={true}
                                                         value={props.field.value}
                                                         onChange={e => {
@@ -345,7 +345,7 @@ class CalculatorForm extends Component {
                                                     <FormTextbox
                                                         required={(errors.viability && touched.viability) || (this.props.messages.length > 0 && viability == "") ? true : false}
                                                         error={(errors.viability && touched.viability) || (this.props.messages.length > 0 && viability == "") ? true : false}
-                                                        label="Viability"
+                                                        label="Viability %"
                                                         showLabel={true}
                                                         value={props.field.value}
                                                         onChange={e => {
@@ -366,7 +366,7 @@ class CalculatorForm extends Component {
                                                     <FormTextbox
                                                         required={(errors.cellCount && touched.cellCount) || (this.props.messages.length > 0 && cellCount == "") ? true : false}
                                                         error={(errors.cellCount && touched.cellCount) || (this.props.messages.length > 0 && cellCount == "") ? true : false}
-                                                        label="Target Cell Count"
+                                                        label="Yeast Cell Count in Cells per mL"
                                                         showLabel={true}
                                                         value={props.field.value}
                                                         onChange={e => {
@@ -420,7 +420,7 @@ class CalculatorForm extends Component {
                     <Grid item xs={6} dir="ltr">
                         <FormButton
                             className={`form-button-small-size ${this.props.calculator.type == "Custom" ? "" : "form-button-active"}`}
-                            text="Custom"
+                            text="Re-Pitching"
                             onClick={() => this.props.changeType({ type: "Custom" })}
                         />
                     </Grid>

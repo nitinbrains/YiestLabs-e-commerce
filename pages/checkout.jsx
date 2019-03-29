@@ -82,7 +82,6 @@ class Checkout extends Component {
 
     placeOrder = () => {
         this.setState({terms: false});
-        //this.setState({isLoading: true});
         this.props.placeOrder();
     };
 
@@ -126,7 +125,7 @@ class Checkout extends Component {
         const { activeStep } = this.state;
         return (
             <NavBarLayout>
-            <LoadingIndicator visible={this.state.isLoading} label={"Placing Order"} />
+            <LoadingIndicator visible={this.props.loading.isLoading && loading.type == 'placeOrder'} label={"Placing Order"} />
                 <div className={classes.container}>
                     <div className={classes.title}>
                         <Typography variant="h4" color="secondary">
@@ -153,7 +152,7 @@ class Checkout extends Component {
                                     >
                                         <StepLabel>
                                             {label}
-                                            {label === "Items" &&
+                                            {label === "Items/Ship Dates" &&
                                                 loading.isLoading && loading.type == 'prepareOrder' && (
                                                     <CircularProgress
                                                         size={10}
@@ -203,9 +202,16 @@ class Checkout extends Component {
                                         }
                                         className={classes.button}
                                     >
+                                       {activeStep === 2 && loading.isLoading && loading.type == 'prepareOrder' && (
+                                            <CircularProgress
+                                                size={20}
+                                            />
+                                        )}
                                         {activeStep === steps.length - 1
                                             ? "Place order"
-                                            : "Next"}
+                                            : activeStep === 2 && loading.isLoading && loading.type == 'prepareOrder'
+                                              ? "Loading"
+                                              : "Next"}
                                     </Button>
                                 </div>
                             </React.Fragment>

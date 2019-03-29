@@ -14,10 +14,10 @@ const initialState = {
     tempUnit: "F",
     unitVal: "",
 
-    startingGravity: "", 
-    targetPitchRate: "", 
-    volume: "", 
-    viability: "", 
+    startingGravity: "",
+    targetPitchRate: "",
+    volume: "",
+    viability: "",
     cellCount: "",
 
     type: "Lab-grown",
@@ -80,7 +80,7 @@ const initialState = {
 			'100': { 'less than 12': 20, '12 - 15': 25, '15 - 18': 30, 'greater than 18': 40 }
 		},
     },
-    
+
     homebrewPackSizeChart: {
 		'less than 59': {
 			'20': { 'less than 12': 2, '12 - 16.5': 4, 'greater than 18': 6 },
@@ -107,7 +107,7 @@ const initialState = {
 			'120': { 'less than 12': 6, '12 - 16.5': 12, 'greater than 18': 'starter' }
 		}
     },
-    
+
     homebrewVolChoices: {
 		'L': ['20', '40', '60', '80', '100', '120', '140'],
 		'SGAL': ['5', '10', '15', '20', '25', '30'],
@@ -118,22 +118,22 @@ const initialState = {
 		'PLA': ['less than 12', '12 - 16.5', 'greater than 16.5'],
 		'SPE': ['less than 1.050', '1.050 - 1.068', 'greater than 1.068']
     },
-    
+
     volChoices: {
-		'BBL': ['1', '2 - 3', '4 - 5', '6 - 8', '9 - 11', '12 - 13', '14 - 16', '20', '25', '30', '40', '50', '60', '70', '80', '90', '100'],
+		'BBL': ['1', '2 - 3', '4 - 5', '6 - 8', '9 - 11', '12 - 13', '14 - 16', '20 - 24', '25 - 29', '30 - 39', '40 - 49', '50 - 59', '60 - 69', '70 - 79', '80 - 89', '90 - 99', '100 - 109'],
 		'L': ['119', '298', '537', '835', '1192', '1491', '1789', '2385', '2981', '3577', '4770', '5962', '7154', '8347', '9539', '10732', '11924'],
 		'HL': ['1', '3', '5', '8', '12', '15', '18', '24', '30', '36', '48', '60', '72', '83', '95', '107', '119'],
 		'SGAL': ['32', '79', '142', '221', '315', '394', '473', '630', '788', '945', '1260', '1575', '1890', '2205', '2520', '2835', '3150'],
 		'KGAL': ['38', '95', '170', '265', '378', '473', '567', '756', '945', '1134', '1512', '1890', '2268', '2646', '3024', '3402', '3780']
     },
-    
+
     tempChoices: {
-		'F': ['less than 59', '60 - 65', 'greater than 65'],
+		'F': ['less than 59', '60 - 66', '67 and over'],
 		'C': ['less than 15', '15 - 18', 'greater than 18']
     },
-    
+
     gravChoices: {
-		'PLA': ['less than 12', '12 - 15', '15 - 18', 'greater than 18'],
+		'PLA': ['less than 13.5', '13.5 - 15', '15 - 17.5', 'greater than 17.5'],
 		'SPE': ['less than 1.050', '1.050 - 1.061', '1.061 - 1.074', 'greater than 1.074']
 	},
     volUnits: [
@@ -153,7 +153,7 @@ const initialState = {
     ],
     typeChoices: [
         {label:'Lab-grown', value:'Lab-grown'},
-		{label:'Custom', value:'Custom'}
+		{label:'Re-pitching', value:'Custom'}
     ]
 };
 
@@ -164,22 +164,22 @@ export default createReducer(initialState, {
 		total
     }),
     [calculatorTypes.CHANGE_TEMP_UNIT_SUCCESS]: (state, { data: { tempUnit, tempVal } }) => ({
-        tempUnit, 
-        tempVal, 
+        tempUnit,
+        tempVal,
     }),
     [calculatorTypes.CHANGE_TEMP_VALUE_SUCCESS]: (state, { data: { tempVal } }) => ({
         tempVal
     }),
     [calculatorTypes.CHANGE_VOL_UNIT_SUCCESS]: (state, { data: { volUnit, volVal } }) => ({
-        volUnit, 
-        volVal, 
+        volUnit,
+        volVal,
     }),
     [calculatorTypes.CHANGE_VOL_VALUE_SUCCESS]: (state, { data: { volVal } }) => ({
         volVal
     }),
     [calculatorTypes.CHANGE_GRAV_UNIT_SUCCESS]: (state, { data: { gravUnit, gravVal } }) => ({
-        gravUnit, 
-        gravVal, 
+        gravUnit,
+        gravVal,
     }),
     [calculatorTypes.CHANGE_GRAV_VALUE_SUCCESS]: (state, { data: { gravVal } }) => ({
         gravVal

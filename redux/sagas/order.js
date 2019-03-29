@@ -59,11 +59,16 @@ export function * placeOrder(action) {
             request
         });
 
+        //const { loading } = yield select(state => state.loading);
+        //loading.isLoading = false;
+        //loading.type = '';
+        //this.setState({ loading: loading });
+        state.loading.isLoading = false;
+        state.loading.type = '';
+
         if (error) {
             throw error
         } else {
-            //yield put(responseSuccess(initOrder(order, user)));
-            //yield put(responseSuccess(order));
             yield put(messageActions.showSnackbar({ title: 'Success', message: 'Order submitted', variant:'success' }));
         }
     } catch (error) {

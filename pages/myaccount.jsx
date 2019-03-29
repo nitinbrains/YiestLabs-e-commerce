@@ -144,15 +144,13 @@ class MyAccount extends Component {
     };
 
     switchSubsidiary = e => {
-        this.setState({ orderFrom: e.target.value});
-        this.setState({ subsidiaryDialog: true });
+        this.setState({ orderFrom: e.target.value, subsidiaryDialog: true });
     }
 
     handleorderFrom = event => {
         this.setState({ orderFrom: event.target.value });
         if (event.target.value > 0) {
-            this.setState({ confirmDialog: true });
-            this.setState({ subsidiaryDialog: true });
+            this.setState({ confirmDialog: true, subsidiaryDialog: true });
         }
     };
 

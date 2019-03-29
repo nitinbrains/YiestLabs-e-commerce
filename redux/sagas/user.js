@@ -6,6 +6,8 @@ import _get from 'lodash/get';
 
 import { userActions, userTypes } from 'appRedux/actions/userActions';
 import { messageActions } from 'appRedux/actions/messageActions';
+import { orderActions } from "appRedux/actions/orderActions";
+
 import * as api from 'services/user.js';
 import { prepareUserInfo } from 'lib/UserUtils.js';
 import { uuid } from 'lib/Utils.js';

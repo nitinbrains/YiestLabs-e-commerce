@@ -46,7 +46,6 @@ class Shipping extends Component {
 
     changeShipMethod = e => {
         this.props.setShipMethod({shipmethod: e.target.value});
-        window.location.reload();
     }
 
     render() {

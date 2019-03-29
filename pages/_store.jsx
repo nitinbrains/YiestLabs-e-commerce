@@ -89,8 +89,9 @@ class Store extends Component {
 
     toggleHomebrew = (isHomebrew ) => {
         const { inventory: { items }, user } = this.props;
+        const categoryFilter = _get(this.state.selectedSubCategory, "value");
 
-        var itemsToShow = filterItems(items, null, null, user, isHomebrew);
+        var itemsToShow = filterItems(items, categoryFilter, null, user, isHomebrew);
         this.setState({ isHomebrew, itemsToShow });
     }
 
@@ -133,7 +134,7 @@ class Store extends Component {
 
 
     getCard = (item, i) => {
-        if (this.props.store.isHomebrew) {
+        if (this.state.isHomebrew) {
             return <HomebrewCard key={i} item={item} />;
         } else if (item) {
             // Yeast (core + vault)

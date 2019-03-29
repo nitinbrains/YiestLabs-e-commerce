@@ -102,7 +102,7 @@ app.prepare().then(() => {
 
         var time = new Date();
         var data =
-            '<CustomerInformationRequest Operation="Login">' + 
+            '<CustomerInformationRequest Operation="Login">' +
                 '<Token>' + system.YeastmanAuthentication.Token + "</Token>" +
                 "<UserName>" + username.toString() + "</UserName>" +
                 "<Password>" + password.toString() + "</Password>" +
@@ -151,7 +151,7 @@ app.prepare().then(() => {
 
         var time = new Date();
         var data =
-            '<CustomerInformationRequest Operation="Register">' + 
+            '<CustomerInformationRequest Operation="Register">' +
                 '<Token>' + system.YeastmanAuthentication.Token + "</Token>" +
                 "<Password>" + password.toString() + "</Password>" +
                 "<TimeStamp>" + time.getTime() + "</TimeStamp>" +
@@ -197,11 +197,11 @@ app.prepare().then(() => {
         }
 
         var data =
-            '<CustomerInformationRequest Operation="Reset Password">' + 
+            '<CustomerInformationRequest Operation="Reset Password">' +
                 '<Token>' + system.YeastmanAuthentication.Token + "</Token>" +
                 "<TimeStamp>" + time.getTime() + "</TimeStamp>" +
                 "<Nonce>" + Utils.uuid() + "</Nonce>" +
-                subjective + 
+                subjective +
             "</CustomerInformationRequest>";
         data =
             "Validate=" + CryptoJS.AES.encrypt(data, system.YeastmanAuthentication.Auth, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: system.YeastmanAuthentication.iv }).toString();
@@ -242,7 +242,7 @@ app.prepare().then(() => {
         }
 
         var data =
-            '<CustomerInformationRequest Operation="Lookup">' + 
+            '<CustomerInformationRequest Operation="Lookup">' +
                 '<Token>' + system.YeastmanAuthentication.Token +  "</Token>" +
                 "<TimeStamp>" + time.getTime() + "</TimeStamp>" +
                 "<Nonce>" + Utils.uuid() + "</Nonce>" +
@@ -413,7 +413,7 @@ app.prepare().then(() => {
     });
 
     /**
-     * Prepare order 
+     * Prepare order
      *
      * @param {Object} order - Object with item information
      *
