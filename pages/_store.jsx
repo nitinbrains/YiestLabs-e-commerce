@@ -89,7 +89,7 @@ class Store extends Component {
 
     toggleHomebrew = (isHomebrew ) => {
         const { inventory: { items }, user } = this.props;
-        const categoryFilter = _get(this.state.selectedSubCategory, "value");
+        const categoryFilter = (isHomebrew ? null : _get(this.state.selectedSubCategory, "value"));
 
         var itemsToShow = filterItems(items, categoryFilter, null, user, isHomebrew);
         this.setState({ isHomebrew, itemsToShow });

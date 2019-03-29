@@ -133,7 +133,7 @@ const initialState = {
     },
 
     gravChoices: {
-		'PLA': ['less than 13.5', '13.5 - 15', '15 - 17.5', 'greater than 17.5'],
+		'PLA': ['less than 13.5', '13.5 - 15', '15.1 - 17.5', 'greater than 17.5'],
 		'SPE': ['less than 1.050', '1.050 - 1.061', '1.061 - 1.074', 'greater than 1.074']
 	},
     volUnits: [
@@ -153,7 +153,7 @@ const initialState = {
     ],
     typeChoices: [
         {label:'Lab-grown', value:'Lab-grown'},
-		{label:'Re-pitching', value:'Custom'}
+		    {label:'Re-pitching', value:'Custom'}
     ]
 };
 
