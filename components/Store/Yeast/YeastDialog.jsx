@@ -90,7 +90,7 @@ const customFormValidation = Yup.object().shape({
     packaging: Yup.string()
       .required('Required'),
     pack: Yup.string()
-      .required('Required'),
+      .nullable(),
     quantity: Yup.string()
       .required('Required'),
   });
@@ -419,6 +419,16 @@ class YeastDialog extends Component {
                 // 1L Nalgene Bottle
                 case "6":
                     itemID = item.volID[6];
+                    break;
+
+                // Distilling
+                case "0":
+                    itemID = item.volID[0]
+                    break;
+
+                // Vault
+                case "3":
+                    itemID = item.volID[3]
                     break;
 
                 default:
