@@ -64,7 +64,7 @@ export function * placeOrder(action) {
         //loading.type = '';
         //this.setState({ loading: loading });
         state.loading.isLoading = false;
-        state.loading.type = '';
+        state.loading.type = 'orderComplete';
 
         if (error) {
             throw error

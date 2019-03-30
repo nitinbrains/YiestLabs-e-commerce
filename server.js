@@ -15,6 +15,23 @@ const SalesLib = require("./lib/SalesLib");
 
 var system = JSON.parse(fs.readFileSync("config.json", "utf8"));
 
+// Uncomment to use a proxy to test TBA or other troubleshooting
+// You will need to npm install https-proxy-agent if you haven't done so already.
+/*
+var HttpsProxyAgent = require('https-proxy-agent');
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+*/
+
+// Place the code below in a fetch block to make that block use a proxy.
+// You will probably need to change the port in the proxy agent.
+// Format may be different for GET or POST requests.
+/*,
+agent:new HttpsProxyAgent('http://127.0.0.1:5916'),
+rejectUnauthorized: false,
+strictSSL: false
+*/
+
+
 app.prepare().then(() => {
     const server = express();
     server.use(bodyParser.json()); // to support JSON-encoded bodies
@@ -25,15 +42,16 @@ app.prepare().then(() => {
         })
     );
 
-    function NSAuth(scriptID, type = "post") {
-        return "NLAuth nlauth_account=4099054_SB1, nlauth_email=mwhite@whitelabs.com, nlauth_signature=YeastBuddy08, nlauth_role=1067";
-    }
-
     /*
-    function NSAuth(scriptID, type = 'post') {
-            //Fall back authentication
-        // return "NLAuth nlauth_account=4099054_SB1, nlauth_email=mwhite@whitelabs.com, nlauth_signature=Yeastman001, nlauth_role=1067";
+    //User-based authentication
+    function NSAuth(scriptID, type = "post") {
+        return "NLAuth nlauth_account=4099054_SB1, nlauth_email=mwhite@whitelabs.com, nlauth_signature=<redacted>, nlauth_role=1067";
+    }
+    */
 
+    //Token-based authentication
+    function NSAuth(scriptID, type = 'post') {
+        //RESTlet deployments cannot be in TESTING mode with token-based authentication
         var time = Math.round(new Date().getTime()/1000);
         var nonce = Utils.uuid();
 
@@ -60,7 +78,6 @@ app.prepare().then(() => {
 
         return header;
     }
-    */
 
     function NSReceiveMessage(message) {
         return JSON.parse(

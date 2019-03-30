@@ -23,7 +23,7 @@ export function * calculatePacks(action) {
             }
             if( calculator.volume  == "" ){
                 doProcess = false;
-                yield put(messageActions.displayMessage({ title: 'Error', error: "Volume is empty!", variant:'error' }));   
+                yield put(messageActions.displayMessage({ title: 'Error', error: "Volume is empty!", variant:'error' }));
             }
             if( calculator.viability  == "" ){
                 doProcess = false;
@@ -46,8 +46,8 @@ export function * calculatePacks(action) {
         if(error.status){
             yield put(messageActions.showSnackbar({ title: 'Error', message: error.message }));
         } else {
-            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message }));        
-            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));        
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message }));
+            // yield put(messageActions.displayMessage({ title: 'Error', error: error.message }));
         }
         yield put(responseFailure(error));
     }
@@ -125,7 +125,7 @@ export function * changeGravUnit(action) {
 
 export function * toggleHomebrew(action) {
     const { responseSuccess, responseFailure, data: { isHomebrew }} = action;
-    try {   
+    try {
         yield put(responseSuccess({ isHomebrew }));
     } catch(error) {
         yield put(responseFailure(error));
@@ -190,7 +190,7 @@ function convertVol(calculator)
 {
     const { volVal, volUnit, volChoices } = calculator;
     var index = volChoices[volUnit].indexOf(volVal);
-    return volChoices['BBL'][index];
+    return volChoices['BBLConvert'][index];
 }
 
 // Convert temperature into F
@@ -312,16 +312,16 @@ function getPacks(totalVol)
 }
 
 function getTotalAmount(purchasePacks)
-{ 
+{
     return Object.keys(purchasePacks).reduce(function (previous, key) {
-        
+
         var float = parseFloat(key);
-        
+
         if(!isNaN(key)){
             return previous + (float * purchasePacks[float.toFixed(1)]);
         }
         return previous;
-        
+
     }, 0);
 }
 

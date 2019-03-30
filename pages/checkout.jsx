@@ -123,9 +123,14 @@ class Checkout extends Component {
     render() {
         const { classes, order, loading } = this.props;
         const { activeStep } = this.state;
+
+        if (loading.type === 'orderComplete') {
+          activeStep = steps.length;
+        }
+
         return (
             <NavBarLayout>
-            <LoadingIndicator visible={this.props.loading.isLoading && loading.type == 'placeOrder'} label={"Placing Order"} />
+            <LoadingIndicator visible={loading.isLoading && loading.type == 'placeOrder'} label={"Placing Order"} />
                 <div className={classes.container}>
                     <div className={classes.title}>
                         <Typography variant="h4" color="secondary">
