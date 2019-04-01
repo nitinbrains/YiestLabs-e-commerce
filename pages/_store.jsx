@@ -260,7 +260,7 @@ class Store extends Component {
             <NavBarUserSearchDrawerLayout inputVal={this.state.searchText} handleSearch={searchData => this.searchItem(searchData)}>
 
                 <Grid container spacing={8} id="professional-homebrew-switch">
-                    <Grid item xs={1} dir="ltr">
+                    <Grid item xs={1} dir="ltr" style={{ minWidth: "100px" }}>
                         <FormButton className={`form-button-small-size`} text="Back" onClick={() => this.categoryBack()} />
                     </Grid>
                     <Grid item xs={5} dir="rtl">

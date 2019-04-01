@@ -21,7 +21,7 @@ class MainMenu extends Component {
                     <Grid item xs={12}>
                         <Grid container justify="center" spacing={16}>
                             {SalesLib.filters.map(category => (
-                                <Grid key={category.value} item item xs={2} spacing={8}>
+                                <Grid key={category.value} item item xs={2} spacing={8} style={{ minWidth: "300px" }}>
                                     <div
                                         style={{
                                             textAlign: "center",
@@ -30,7 +30,7 @@ class MainMenu extends Component {
                                             backgroundSize: "cover",
                                             height: "490px",
                                             width: "100%",
-                                            cursor: "pointer"
+                                            cursor: "pointer",
                                         }}
                                         onClick={() => changeMainCategory(category)}
                                     >

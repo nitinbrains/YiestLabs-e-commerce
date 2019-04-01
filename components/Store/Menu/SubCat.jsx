@@ -25,7 +25,7 @@ class SubCat extends Component {
                     <Grid item xs={12}>
                         <Grid container className={classes.demo} justify="center" spacing={32}>
                             {mainCategory.subCategories.map(category => (
-                                <Grid key={category.value} item xs={3}>
+                                <Grid key={category.value} item xs={3} style={{ minWidth: "300px" }}>
                                     <div
                                         className={classes.imgBack}
                                         style={{

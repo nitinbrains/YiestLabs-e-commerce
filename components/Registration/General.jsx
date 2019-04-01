@@ -243,9 +243,9 @@ const General = ({
                             >
                                 <MenuItem value={1}>Retailer</MenuItem>
                                 <MenuItem value={2}>Individual</MenuItem>
-                                <MenuItem value={3}>Proffesional Brewery</MenuItem>
-                                <MenuItem value={4}>Proffesional Winery</MenuItem>
-                                <MenuItem value={5}>Proffesional Destillery</MenuItem>
+                                <MenuItem value={3}>Professional Brewery</MenuItem>
+                                <MenuItem value={4}>Professional Winery</MenuItem>
+                                <MenuItem value={5}>Professional Destillery</MenuItem>
                             </TextField>
                         </Grid>
                     )

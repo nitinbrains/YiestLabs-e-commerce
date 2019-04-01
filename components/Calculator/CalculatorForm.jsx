@@ -34,7 +34,7 @@ class CalculatorForm extends Component {
             calculator: { volVal, volChoices, volUnit, volUnits, tempVal, tempChoices, tempUnit, tempUnits, gravVal, gravChoices, gravUnit, gravUnits, isHomebrew, type, typeChoices }
         } = this.props;
         const labFormValidation = Yup.object().shape({
-            volVal: Yup.number().required("Required"),
+            volVal: Yup.string().required("Required"),
             volUnit: Yup.string().required("Required"),
             tempVal: Yup.string().required("Required"),
             tempUnit: Yup.string().required("Required"),
