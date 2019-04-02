@@ -12,6 +12,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { Formik, Form, Field } from "formik";
 import _get from 'lodash/get';
 import _set from 'lodash/set';
+import _isEmpty from "lodash/isEmpty";
 
 import SalesLib from "lib/SalesLib";
 
@@ -24,7 +25,7 @@ class AddAddress extends Component {
     }
 
     addAddress = (values, { setErrors }) => {
-        let errors = validate(values);
+        let errors = this.validate(values);
         if(_isEmpty(errors)) {
             this.props.addAddress({ address: values });
             this.props.close();
@@ -64,7 +65,7 @@ class AddAddress extends Component {
         return errors;
     }
 
-    render() {      
+    render() {
         return (
             <React.Fragment>
                 <Formik
@@ -190,7 +191,7 @@ class AddAddress extends Component {
                                                     <FormikErrorMessage error={_get(errors, 'zip')} />
                                                     <TextField
                                                         name="zip"
-                                                        label="Zip"
+                                                        label="Postal Code"
                                                         variant="outlined"
                                                         fullWidth
                                                         autoComplete="zip"
@@ -209,7 +210,7 @@ class AddAddress extends Component {
                                                     <TextField
                                                         select
                                                         name="countryid"
-                                                        label="Countryid"
+                                                        label="Country"
                                                         variant="outlined"
                                                         fullWidth
                                                         autoComplete="countryid"

@@ -102,10 +102,6 @@ class Billing extends Component {
         this.setState({ openDialogAddress: false, newAddress: false });
     };
 
-    closeAddresses = () => {
-        this.setState({ manageAddresses: false });
-    };
-
     manageCards = () => {
         this.setState({ manageCards: true });
     };

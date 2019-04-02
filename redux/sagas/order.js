@@ -63,13 +63,13 @@ export function * placeOrder(action) {
         //loading.isLoading = false;
         //loading.type = '';
         //this.setState({ loading: loading });
-        state.loading.isLoading = false;
-        state.loading.type = 'orderComplete';
 
         if (error) {
             throw error
         } else {
             yield put(messageActions.showSnackbar({ title: 'Success', message: 'Order submitted', variant:'success' }));
+            state.loading.isLoading = false;
+            state.loading.type = 'orderComplete';
         }
     } catch (error) {
         if(error.status){
@@ -85,6 +85,8 @@ export function * placeOrder(action) {
             }
         }
         yield put(responseFailure(error));
+        state.loading.isLoading = false;
+        state.loading.type = 'orderError';
     }
 }
 

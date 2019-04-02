@@ -596,6 +596,10 @@ export function* setShipAddress(action) {
     } = action;
     try {
         yield put(responseSuccess({ address }));
+
+        const user = yield select(state => state.user);
+        user.shipping = address;
+        yield put(orderActions.prepareOrder());
     } catch (error) {
         yield put(responseFailure(error));
     }
@@ -643,6 +647,10 @@ export function* setBillAddress(action) {
     } = action;
     try {
         yield put(responseSuccess({ address }));
+
+        const user = yield select(state => state.user);
+        user.billing = address;
+        yield put(orderActions.prepareOrder());
     } catch (error) {
         yield put(responseFailure(error));
     }

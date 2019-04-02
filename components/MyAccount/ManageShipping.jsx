@@ -21,6 +21,8 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { userActions } from "appRedux/actions/userActions";
 import AddAddress from "./AddAddress";
 
+import _get from "lodash/get";
+
 class ManageShipping extends Component {
     constructor(props) {
         super(props);
@@ -84,8 +86,19 @@ class ManageShipping extends Component {
 
     handleClickAway = (e) => {
         if (e.target.nodeName !== "LI") {
-            this.props.closeDialog();
+            // Hack to not close the form if the user scrolls up in
+            // the Country ID field until the mouse moves outside of
+            // it, and then they click.
+            var text = _get(e.target, "textContent");
+            if (!text || !text.startsWith("United States")) {
+              this.props.closeDialog();
+            }
         }
+    }
+
+    handleSelectAddress = (address) => {
+        this.props.setShipAddress({ address });
+        this.props.closeDialog();
     }
 
     render() {
@@ -117,7 +130,7 @@ class ManageShipping extends Component {
                             direction={"row"}
                             spacing={4}
                         >
-                           
+
                         </Grid>
                         <Grid style={{ padding: 20 }} container spacing={24}>
                             {user.otherAddresses.map((address, i) => (
@@ -193,28 +206,30 @@ class ManageShipping extends Component {
                                                     </div>
                                                 </Typography>
                                             </Grid>
-                                            {this.props.user.shipping.address1 != address.address1 && !this.props.checkout && (
-                                                <Grid item>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        style={{ bottom: 2 }}
-                                                        className={classNames(this.state.boxHover != i && classes.hide)}
-                                                        onClick={e => this.selectDefaultAddress(address)}
-                                                    >
-                                                        Set as Default
-                                                    </Button>
-                                                </Grid>
-                                            )}
-
-                                            {this.props.checkout && (
-                                                <Grid item>
-                                                    <Button variant="contained" color="primary" style={{ bottom: 2 }} onClick={() => this.props.setBillAddress(i)}>
-                                                        Select
-                                                    </Button>
-                                                </Grid>
-                                            )}
                                         </Grid>
+                                    </div>
+                                    <div style={{ textAlign: "center" }}>
+                                        {this.props.user.shipping.address1 != address.address1 && !this.props.checkout && (
+                                            <Grid item>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    style={{ bottom: 2 }}
+                                                    className={classNames(this.state.boxHover != i && classes.hide)}
+                                                    onClick={e => this.selectDefaultAddress(address)}
+                                                >
+                                                    Set as Default
+                                                </Button>
+                                            </Grid>
+                                        )}
+
+                                        {this.props.checkout && (
+                                            <Grid item>
+                                                <Button variant="contained" color="primary" style={{ bottom: 2 }} onClick={() => this.handleSelectAddress(address)}>
+                                                    Select
+                                                </Button>
+                                            </Grid>
+                                        )}
                                     </div>
                                 </Grid>
                             ))}
@@ -259,7 +274,9 @@ const styles = theme => ({
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 250
+        height: 300,
+        overflowY: "scroll",
+        overflowX: "hidden"
     },
     addressBoxSelected: {
         position: "relative",
@@ -267,10 +284,12 @@ const styles = theme => ({
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 250
+        height: 300,
+        overflowY: "scroll",
+        overflowX: "hidden"
     },
     close: { position: 'relative',display: 'flex',justifyContent: 'flex-end' },
-    deleteIcon: { position: "absolute", right: -25, top: -25 },
+    deleteIcon: { position: "absolute", right: -5, top: -5 },
     hide: {
         display: "none"
     },

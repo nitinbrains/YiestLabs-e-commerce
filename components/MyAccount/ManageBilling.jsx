@@ -21,6 +21,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { userActions } from "appRedux/actions/userActions";
 import AddAddress from "./AddAddress";
 
+import _get from "lodash/get";
 
 class ManageBilling extends Component {
     constructor(props) {
@@ -85,10 +86,20 @@ class ManageBilling extends Component {
 
     handleClickAway = (e) => {
         if (e.target.nodeName !== "LI") {
-            this.props.closeDialog();
+            // Hack to not close the form if the user scrolls up in
+            // the Country ID field until the mouse moves outside of
+            // it, and then they click.
+            var text = _get(e.target, "textContent");
+            if (!text || !text.startsWith("United States")) {
+              this.props.closeDialog();
+            }
         }
     }
 
+    handleSelectAddress = (address) => {
+        this.props.setBillAddress({ address });
+        this.props.closeDialog();
+    }
 
     render() {
         const { classes, user } = this.props;
@@ -153,7 +164,7 @@ class ManageBilling extends Component {
                                                 <Typography>
                                                     {address.address2 && (
                                                         <div className="block">
-                                                            
+
                                                             <span className="label">Address line 2: </span>
                                                             {address.address2}
                                                         </div>
@@ -194,29 +205,31 @@ class ManageBilling extends Component {
                                                     </div>
                                                 </Typography>
                                             </Grid>
-                                            {this.props.user.billing.address1 != address.address1 && !this.props.checkout && (
-                                                <Grid item>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        style={{ bottom: 2 }}
-                                                        onClick={e => {
-                                                            this.selectDefaultAddress(address);
-                                                        }}
-                                                        className={classNames(this.state.boxHover != i && classes.hide)}
-                                                    >
-                                                        Set as Default
-                                                    </Button>
-                                                </Grid>
-                                            )}
-                                            {this.props.checkout && (
-                                                <Grid item>
-                                                    <Button variant="contained" style={{ bottom: 2 }} color="primary" onClick={() => this.props.setBillAddress(i)}>
-                                                        Select
-                                                    </Button>
-                                                </Grid>
-                                            )}
                                         </Grid>
+                                    </div>
+                                    <div style={{ textAlign: "center"}}>
+                                        {this.props.user.billing.address1 != address.address1 && !this.props.checkout && (
+                                            <Grid item>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    style={{ bottom: 2 }}
+                                                    onClick={e => {
+                                                        this.selectDefaultAddress(address);
+                                                    }}
+                                                    className={classNames(this.state.boxHover != i && classes.hide)}
+                                                >
+                                                    Set as Default
+                                                </Button>
+                                            </Grid>
+                                        )}
+                                        {this.props.checkout && (
+                                            <Grid item>
+                                                <Button variant="contained" style={{ bottom: 2 }} color="primary" onClick={() => this.handleSelectAddress(address)}>
+                                                    Select
+                                                </Button>
+                                            </Grid>
+                                        )}
                                     </div>
                                 </Grid>
                             ))}
@@ -260,7 +273,9 @@ const styles = theme => ({
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 250
+        height: 300,
+        overflowY: "scroll",
+        overflowX: "hidden"
     },
     addressBoxSelected: {
         position: "relative",
@@ -268,10 +283,12 @@ const styles = theme => ({
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 250
+        height: 300,
+        overflowY: "scroll",
+        overflowX: "hidden"
     },
     close: { position: 'relative',display: 'flex',justifyContent: 'flex-end' },
-    deleteIcon: { position: "absolute", right: -25, top: -25 },
+    deleteIcon: { position: "absolute", right: -5, top: -5 },
     hide: {
         display: "none"
     },
