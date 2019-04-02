@@ -56,9 +56,12 @@ class Items extends Component {
                         spacing={24}
                         >
                             <Grid item xs={12} md={9}>
-                                <Typography variant="h6" color="textPrimary">
-                                    ITEMS/SHIP DATES
-                                </Typography>
+                                  <Typography variant="h6" color="textPrimary">
+                                      ITEMS/SHIP DATES
+                                  </Typography>
+                                  <Typography color="textPrimary" style={{ fontSize: "small" }}>
+                                      To change ship dates, please select shipping option Custom
+                                  </Typography>
                                 <div className={classes.sectionTitleDivider} />
                             </Grid>
 

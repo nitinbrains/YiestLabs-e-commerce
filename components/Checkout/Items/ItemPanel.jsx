@@ -44,7 +44,11 @@ class ItemPanel extends Component {
             >
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography color="primary" className={classes.heading}>
-                        {this.props.item.Name}
+                        {this.props.item.Name} {this.props.item.details}
+                        <br />
+                        <Typography style={{ fontSize: "smaller" }}>
+                            {this.props.item.OrderDetailQty} @ ${this.props.item.pricePerUnit}
+                        </Typography>
                     </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
@@ -124,7 +128,7 @@ class ItemPanel extends Component {
                             <Grid className="detail" item xs={12}>
                                 <br/>
                                 <br/>
-                                <span className="sooner" onClick={this.props.showWantSooner}>Want this Strain sooner?</span>
+                                <span style={{ visible: "false", display: "none" }} className="sooner" onClick={this.props.showWantSooner}>Want this Strain sooner?</span>
                             </Grid>
                             <Grid item xs={12}>
                                 {order.selectedShippingOption ==

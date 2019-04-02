@@ -197,7 +197,11 @@ class CalculatorForm extends Component {
                                 </fieldset>
 
                                 <Grid container spacing={24} className="button-grid">
-                                    <Grid item xs={6} />
+                                    <Grid item xs={6}>
+                                        * Advanced recommendations based on batch size, fermentation temperature and gravity.<br />
+                                        For brewers yeast only. If you are using White Labs yeast based on batch-size specific<br />
+                                        recommendations and are having success, please continue to do so.
+                                    </Grid>
                                     <Grid item xs={6}>
                                         <Button className="calculate-button form-button" variant="contained" type="submit">
                                             CALCULATE
