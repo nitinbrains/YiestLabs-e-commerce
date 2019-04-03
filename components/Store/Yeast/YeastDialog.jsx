@@ -573,15 +573,11 @@ class YeastDialog extends Component {
                         >
                             <Grid item xs={12} md={6}>
                                 <div style={{ display: "flex" }}>
-                                    <Typography className="dialogVariant">Attenuation:</Typography>
+                                    <Typography className="dialogVariant" >Attenuation:</Typography>
                                     &nbsp;
                                     <Typography
                                      className="dialogVariant"
-                                        style={{
-                                            color: getColor(
-                                                this.props.item.salesCategory
-                                            )
-                                        }}
+                                        style={{ color: getColor(this.item.salesCategory)}}
                                     >
                                         {this.item.attenuation}
                                     </Typography>
@@ -590,15 +586,11 @@ class YeastDialog extends Component {
 
                             <Grid item xs={12} md={6}>
                                 <div style={{ display: "flex" }}>
-                                    <Typography className="dialogVariant" >Flocculation: </Typography>
+                                    <Typography  className="dialogVariant">Flocculation: </Typography>
                                     &nbsp;
                                     <Typography
-                                       className="dialogVariant"
-                                        style={{
-                                            color: getColor(
-                                                this.props.item.salesCategory
-                                            )
-                                        }}
+                                     className="dialogVariant"
+                                        style={{ color: getColor(this.item.salesCategory)}}
                                     >
                                         {this.item.flocculation}
                                     </Typography>
@@ -606,15 +598,11 @@ class YeastDialog extends Component {
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <div style={{ display: "flex" }}>
-                                    <Typography className="dialogVariant">Alcohol Tol.: </Typography>
+                                    <Typography  className="dialogVariant">Alcohol Tol.: </Typography>
                                     &nbsp;
                                     <Typography
-                                       className="dialogVariant"
-                                        style={{
-                                            color: getColor(
-                                                this.props.item.salesCategory
-                                            )
-                                        }}
+                                     className="dialogVariant"
+                                        style={{ color: getColor(this.item.salesCategory)}}
                                     >
                                         {this.item.alcoholTol}
                                     </Typography>
@@ -622,15 +610,11 @@ class YeastDialog extends Component {
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <div style={{ display: "flex" }}>
-                                    <Typography className="dialogVariant">Fermentation Temp: </Typography>
+                                    <Typography  className="dialogVariant">Fermentation Temp: </Typography>
                                     &nbsp;
                                     <Typography
-                                       className="dialogVariant"
-                                        style={{
-                                            color: getColor(
-                                                this.props.item.salesCategory
-                                            )
-                                        }}
+                                     className="dialogVariant"
+                                        style={{ color: getColor(this.item.salesCategory)}}
                                     >
                                         {this.item.optFermentTempF |
                                             this.item.optFermentTempC}
@@ -678,7 +662,7 @@ class YeastDialog extends Component {
                             container
                             spacing={24}
                             direction={"row"}
-                            justify="flex-end"
+                            justify="flex-start"
                         >
                             {availability ?
                                 <Typography style={{color: availability == IN_STOCK ? "green" : "red"}}><p>{availability}</p></Typography>
@@ -801,7 +785,7 @@ class YeastDialog extends Component {
                                                 direction={"row"}
                                                 justify="flex-end"
                                             >
-                                                <Grid item >
+                                                <Grid item>
                                                     <div className={classes.buttons}>
                                                         <Button
                                                             type="submit"
@@ -853,11 +837,11 @@ const styles = theme => ({
     },
     buttons: {
         display: "flex",
-        justifyContent: "center"
+        justifyContent: "flex-end"
     },
     button: {
-         marginTop: theme.spacing.unit,
-         marginRight: theme.spacing.unit * -5
+        marginTop: theme.spacing.unit,
+        marginRight: theme.spacing.unit * -5
     },
     close: { position: "absolute", right: 0, top: 0 },
     form:{

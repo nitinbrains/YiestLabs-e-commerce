@@ -6,9 +6,9 @@ $Montserrat : 'Montserrat', sans-serif;
 
 @import "generic";
 @import "calculator";
-@import "cart";
+//@import "cart";
 @import "myorders";
-@import "store";
+//@import "store";
 @import "myaccount";
 
 //rework store
@@ -16,6 +16,9 @@ $Montserrat : 'Montserrat', sans-serif;
 @import "../components/NavBar/responsive.scss";
 @import "../components/NavBar/inline.scss";
 @import "../components/Store/Yeast/responsive.scss";
+
+//rework cart
+@import ".././components/Cart/cart.scss";
 
 body {
 	font-family: $Montserrat;
