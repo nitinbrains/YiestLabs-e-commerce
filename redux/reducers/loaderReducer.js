@@ -1,6 +1,5 @@
 import { createReducer } from 'helpers/reduxHelpers';
 import { inventoryTypes } from 'appRedux/actions/inventoryActions';
-import { calculatorTypes } from 'appRedux/actions/calculatorActions';
 import { orderTypes } from 'appRedux/actions/orderActions';
 import { cartTypes } from 'appRedux/actions/cartActions';
 import { userTypes } from 'appRedux/actions/userActions';

@@ -9,8 +9,6 @@ import { cartTypes } from 'appRedux/actions/cartActions';
 import { orderTypes } from 'appRedux/actions/orderActions';
 // Inventory actions
 import { inventoryTypes } from 'appRedux/actions/inventoryActions';
-// Calculator actions
-import { calculatorTypes } from 'appRedux/actions/calculatorActions';
 
 // User sagas
 import {
@@ -52,25 +50,9 @@ import {
 import {
     getInventory,
     getItemAvailability,
+    toggleHomebrew
  } from './inventory';
 
-// Calculator Sags
-import { 
-    calculatePacks,
-    toggleHomebrew,
-    changeType,
-    changeTempValue,
-    changeTempUnit,
-    changeVolValue,
-    changeVolUnit,
-    changeGravValue,
-    changeGravUnit,
-    changeStartingGravity,
-    changeTargetPitchRate,
-    changeVolume,
-    changeViability,
-    changeCellCount
- } from './calculator';
 
 function * rootSaga () {
     yield all([
@@ -98,6 +80,7 @@ function * rootSaga () {
         // INVENTORY
         takeEvery(inventoryTypes.GET_INVENTORY_ATTEMPT, getInventory),
         takeEvery(inventoryTypes.GET_ITEM_AVAILABILITY_ATTEMPT, getItemAvailability),
+        takeLatest(inventoryTypes.TOGGLE_HOMEBREW_ATTEMPT, toggleHomebrew ),
         // CART
         takeEvery(cartTypes.ADD_ITEM_ATTEMPT, addCartItem),
         takeEvery(cartTypes.REMOVE_ITEM_ATTEMPT, removeCartItem),
@@ -107,23 +90,7 @@ function * rootSaga () {
         takeLatest(orderTypes.PLACE_ORDER_ATTEMPT, placeOrder),
         takeLatest(orderTypes.SET_SHIPPING_OPTION_ATTEMPT, setShippingOption),
         takeLatest(orderTypes.INCREMENT_SHIP_DATE_ATTEMPT, incrementShipDate),
-        takeLatest(orderTypes.DECREMENT_SHIP_DATE_ATTEMPT, decrementShipDate),
-        // CALCULATOR
-        takeLatest(calculatorTypes.CALCULATE_PACKS_ATTEMPT, calculatePacks ),
-        takeLatest(calculatorTypes.TOGGLE_HOMEBREW_ATTEMPT, toggleHomebrew ),
-        takeLatest(calculatorTypes.CHANGE_TYPE_ATTEMPT, changeType),
-        takeLatest(calculatorTypes.CHANGE_TEMP_VALUE_ATTEMPT, changeTempValue),
-        takeLatest(calculatorTypes.CHANGE_TEMP_UNIT_ATTEMPT, changeTempUnit),
-        takeLatest(calculatorTypes.CHANGE_VOL_VALUE_ATTEMPT, changeVolValue),
-        takeLatest(calculatorTypes.CHANGE_VOL_UNIT_ATTEMPT, changeVolUnit),
-        takeLatest(calculatorTypes.CHANGE_GRAV_VALUE_ATTEMPT, changeGravValue),
-        takeLatest(calculatorTypes.CHANGE_GRAV_UNIT_ATTEMPT, changeGravUnit),
-        
-        takeLatest(calculatorTypes.CHANGE_STARTING_GRAVITY_ATTEMPT, changeStartingGravity),
-        takeLatest(calculatorTypes.CHANGE_TARGET_PITCH_RATE_ATTEMPT, changeTargetPitchRate),
-        takeLatest(calculatorTypes.CHANGE_VOLUME_ATTEMPT, changeVolume),
-        takeLatest(calculatorTypes.CHANGE_VIABILITY_ATTEMPT, changeViability),
-        takeLatest(calculatorTypes.CHANGE_CELL_COUNT_ATTEMPT, changeCellCount)
+        takeLatest(orderTypes.DECREMENT_SHIP_DATE_ATTEMPT, decrementShipDate)
     ]);
 };
 

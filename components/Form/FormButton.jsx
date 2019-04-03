@@ -5,9 +5,10 @@ import Button from "@material-ui/core/Button";
 
 class FormButton extends React.Component {
     render() {
+        const { className, onClick, text } = this.props;
         return (
-            <Button variant="contained" className={`form-button ${this.props.className || ""}`} onClick={this.props.onClick}>
-                {this.props.text}
+            <Button variant="contained" className={`form-button ${className || ""}`} onClick={onClick}>
+                {text}
             </Button>
         );
     }

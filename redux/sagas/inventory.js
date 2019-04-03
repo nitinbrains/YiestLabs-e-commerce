@@ -54,3 +54,12 @@ export function * getItemAvailability (action) {
         }
     }
 };
+
+export function * toggleHomebrew(action) {
+    const { responseSuccess, responseFailure, data: { isHomebrew }} = action;
+    try {
+        yield put(responseSuccess({ isHomebrew }));
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}

@@ -9,43 +9,55 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import ResultSummary from "./ResultSummary";
 import ResultItem from "./ResultItem";
 
-import { calculatorActions } from 'appRedux/actions/calculatorActions';
-
 class CalculatorResult extends Component {
+
     getResultItems = () => {
+        const { id, result } = this.props;
+        const yeastStrains = this.props.inventory.items.filter(item => {
+            
+            if (id) {
+                if (item.volID[0] == Number(id)) 
+                {
+                    return true;
+                } 
+                return false;
+            }
+            else {
+                if ([2, 3, 5, 6, 7, 8].indexOf(item.salesCategory) > -1 && !item.volID[6] && item.volID[2])
+                {
+                    return true;
+                }
+                return false;
+            }
+        })
 
-    const yeastStrains = this.props.inventory.items.filter(item => {
-      if([2, 3, 5, 6, 7, 8].indexOf(item.salesCategory) > -1 && !item.volID[6] && item.volID[2])
-      {
-        return true;
-      }
-      return false;
-    })
-
-        return yeastStrains.map((item, i) => {
-            return <ResultItem key={i} item={item} closeDialog={this.props.closeDialogMain} />;
-        });
+        return yeastStrains.map((item, i) => (
+            <ResultItem 
+                key={i} 
+                item={item} 
+                closeDialog={this.props.closeDialogMain} 
+                result={result}
+            />
+        ));
     };
 
     render() {
         return (
             <div id="calculator-result-box">
-                <ResultSummary />
+                <ResultSummary {...this.props} />
                 {this.getResultItems()}
             </div>
         );
     }
 }
 
-
-
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
-    calculator: state.calculator,
-    inventory: state.inventory
-    }
-}
+        messages: state.messages,
+        inventory: state.inventory
+    };
+};
 
-const mapDispatchToProps = dispatch => bindActionCreators(calculatorActions, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(CalculatorResult);
+export default connect(
+    mapStateToProps,
+)(CalculatorResult);

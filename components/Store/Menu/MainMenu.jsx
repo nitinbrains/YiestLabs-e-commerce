@@ -20,8 +20,8 @@ class MainMenu extends Component {
                 <Grid container spacing={24}>
                     <Grid item xs={12}>
                         <Grid container justify="center" spacing={16}>
-                            {SalesLib.filters.map(category => (
-                                <Grid key={category.value} item item xs={2} spacing={8} style={{ minWidth: "300px" }}>
+                            {SalesLib.CATEGORIES.map(category => (
+                                <Grid key={category.value} item item xs={2} spacing={8}>
                                     <div
                                         style={{
                                             textAlign: "center",
@@ -36,7 +36,7 @@ class MainMenu extends Component {
                                     >
                                         <div className={classes.divTitle}>
                                             <Typography variant="title" color="secondary" className={classes.info} className={classes.typoTitle}>
-                                                {category.title}
+                                                {category.label}
                                             </Typography>
                                         </div>
                                     </div>

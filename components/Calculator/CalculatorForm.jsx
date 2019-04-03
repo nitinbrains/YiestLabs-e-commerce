@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import _get from "lodash/get";
+import _isEmpty from "lodash/isEmpty";
+
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import NavBarLayout from "components/NavBar/NavBarLayout";
@@ -10,8 +13,9 @@ import CardHeader from "components/UI/Card/CardHeader.jsx";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import MenuItem from "@material-ui/core/MenuItem";
 import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
 
 // custom
 import Alert from "components/UI/Alert";
@@ -20,8 +24,11 @@ import FormSelectbox from "components/Form/FormSelectbox";
 import FormButton from "components/Form/FormButton";
 import FormCheckbox from "components/Form/FormCheckbox";
 
-import { calculatorActions } from 'appRedux/actions/calculatorActions';
+import SalesLib from "lib/SalesLib";
 
+const FormikErrorMessage = ({ error }) => {
+    return error ? <div className="error">{error}</div> : null;
+};
 class CalculatorForm extends Component {
     constructor(props) {
         super(props);
@@ -29,173 +36,214 @@ class CalculatorForm extends Component {
             showError: false
         };
     }
+
+    validate = values => {
+        var errors = {};
+
+        if (this.props.custom) {
+            if (!values.startingGravity) {
+                errors.startingGravity = "Required";
+            }
+
+            if (!values.targetPitchRate) {
+                errors.targetPitchRate = "Required";
+            }
+
+            if (!values.volume) {
+                errors.volume = "Required";
+            }
+
+            if (!values.viability) {
+                errors.viability = "Required";
+            }
+
+            if (!values.cellCount) {
+                errors.cellCount = "Required";
+            }
+        } else {
+            if (!values.volVal) {
+                errors.volVal = "Required";
+            }
+    
+            if (!values.volUnit) {
+                errors.volVal = "Required";
+            }
+    
+            if (!values.tempVal) {
+                errors.tempUnit = "Required";
+            }
+    
+            if (!values.gravVal) {
+                errors.gravUnit = "Required";
+            }
+        }
+
+        return errors;
+    };
+
+    calculate = (values, { setErrors }) => {
+        const errors = this.validate(values);
+        if (_isEmpty(errors)) {
+            this.props.onCalculate(values);
+        } else {
+            setErrors(errors);
+        }
+    };
+
+    changeUnit = (e, onChange, setFieldValue, type) => {
+        let unit = e.target.value;
+        const options = SalesLib[`${type}Choices`][unit];
+        setFieldValue(`${type}Val`, options[0]);
+        onChange(e)
+    }
+
     _renderLabGrownForm = () => {
-        const {
-            calculator: { volVal, volChoices, volUnit, volUnits, tempVal, tempChoices, tempUnit, tempUnits, gravVal, gravChoices, gravUnit, gravUnits, isHomebrew, type, typeChoices }
-        } = this.props;
-        const labFormValidation = Yup.object().shape({
-            volVal: Yup.string().required("Required"),
-            volUnit: Yup.string().required("Required"),
-            tempVal: Yup.string().required("Required"),
-            tempUnit: Yup.string().required("Required"),
-            gravVal: Yup.string().required("Required"),
-            gravUnit: Yup.string().required("Required")
-        });
+        const { isHomebrew } = this.props;
+
         return (
-            <div>
+            <React.Fragment>
                 <Formik
                     initialValues={{
-                        volVal,
-                        volUnit,
-                        tempVal,
-                        tempUnit,
-                        gravVal,
-                        gravUnit
+                        volVal: "119",
+                        volUnit: "L",
+                        gravVal: "less than 13.5",
+                        gravUnit: "PLA",
+                        tempVal: "less than 59",
+                        tempUnit: "F",
+                        unitVal: "",
+                        startingGravity: "",
+                        targetPitchRate: "",
+                        volume: "",
+                        viability: "",
+                        cellCount: "",
                     }}
-                    validationSchema={labFormValidation}
                     enableReinitialize
-                    validate={values => {
-                        let errors = {};
-                    }}
-                    onSubmit={values => {
-                        // same shape as initial values
-                        this.props.calculatePacks();
-                        this.props.openDialog();
-                    }}
+                    onSubmit={(values, actions) => this.calculate(values, actions)}
                 >
-                    {({ errors, touched, isValidating }) => {
+                    {({ values, errors }) => {
+
+                        const volUnit = _get(values, 'volUnit');
+                        const tempUnit = _get(values, 'tempUnit');
+                        const gravUnit = _get(values, 'gravUnit');
+                        
                         return (
                             <Form>
                                 <fieldset className="fieldset">
                                     <legend>Volume</legend>
                                     <Grid container spacing={24}>
-                                        <Grid item xs={6}>
-                                            <Field
-                                                name="volVal"
-                                                component={props => {
-                                                    return (
+                                        <Field
+                                            render={({ field: { value, onChange}}) => {
+                                                return (
+                                                    <Grid item xs={6}>
+                                                        <FormikErrorMessage error={_get(errors, 'volVal')} />
                                                         <FormSelectbox
-                                                            label="Volume"
-                                                            value={props.field.value}
-                                                            options={volChoices[volUnit].map(choice => ({ label: choice, value: choice }))}
-                                                            onChange={e => {
-                                                                props.form.setFieldValue("volVal", e.target.value);
-                                                                this.props.changeVolValue({ volVal: e.target.value });
-                                                            }}
+                                                            fullWidth
+                                                            name="volVal"
+                                                            value={_get(value, 'volVal')}
+                                                            options={SalesLib.volChoices[volUnit]}
+                                                            onChange={onChange}
                                                         />
-                                                    );
-                                                }}
-                                            />
-                                            {errors.volVal && touched.volVal && <div style={{ color: "red" }}>{errors.volVal}</div>}
-                                        </Grid>
-
-                                        <Grid item xs={6}>
-                                            <Field
-                                                name="volUnit"
-                                                component={props => {
-                                                    return (
+                                                    </Grid>
+                                                );
+                                            }}
+                                        />
+                                        <Field
+                                            render={({ field: { value, onChange }, form: { setFieldValue }}) => {
+                                                const volUnits = SalesLib.volUnits.filter(unit => !isHomebrew || unit.forHomebrew);
+                                                return (
+                                                    <Grid item xs={6}>
+                                                        <FormikErrorMessage error={_get(errors, 'volUnit')} />
                                                         <FormSelectbox
-                                                            value={props.field.value}
-                                                            options={volUnits.filter(unit => !isHomebrew || unit.forHomebrew)}
-                                                            onChange={e => {
-                                                                props.form.setFieldValue("volUnit", e.target.value);
-                                                                this.props.changeVolUnit({ volUnit: e.target.value });
-                                                            }}
+                                                            select
+                                                            fullWidth
+                                                            name="volUnit"
+                                                            label="Unit"
+                                                            value={_get(value, 'volUnit')}
+                                                            options={volUnits}
+                                                            onChange={(e) => this.changeUnit(e, onChange, setFieldValue, 'vol')}
                                                         />
-                                                    );
-                                                }}
-                                            />
-                                            {errors.volUnit && touched.volUnit && <div style={{ color: "red" }}>{errors.volUnit}</div>}
-                                        </Grid>
+                                                    </Grid>
+                                                );
+                                            }}
+                                        />
                                     </Grid>
                                 </fieldset>
-
                                 <fieldset className="fieldset">
                                     <legend>Temperature</legend>
                                     <Grid container spacing={24}>
-                                        <Grid item xs={6}>
-                                            <Field
-                                                name="tempVal"
-                                                component={props => {
-                                                    return (
+                                        <Field
+                                            render={({ field: { value, onChange }}) => {
+                                                return (
+                                                    <Grid item xs={6}>
+                                                        <FormikErrorMessage error={_get(errors, 'tempVal')} />
                                                         <FormSelectbox
-                                                            label="Temperature"
-                                                            value={props.field.value}
-                                                            options={tempChoices[tempUnit].map(choice => ({ label: choice, value: choice }))}
-                                                            onChange={e => {
-                                                                props.form.setFieldValue("tempVal", e.target.value);
-                                                                this.props.changeTempValue({ tempVal: e.target.value });
-                                                            }}
+                                                            fullWidth
+                                                            name="tempVal"
+                                                            value={_get(value, 'tempVal')}
+                                                            options={SalesLib.tempChoices[tempUnit]}
+                                                            onChange={onChange}
                                                         />
-                                                    );
-                                                }}
-                                            />
-                                            {errors.tempVal && touched.tempVal && <div style={{ color: "red" }}>{errors.tempVal}</div>}
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <Field
-                                                name="tempUnit"
-                                                component={props => {
-                                                    return (
+                                                    </Grid>
+                                                );
+                                            }}
+                                        />
+
+                                        <Field
+                                            render={({ field: { value, onChange }, form: { setFieldValue }}) => {
+                                                return (
+                                                    <Grid item xs={6}>
+                                                        <FormikErrorMessage error={_get(errors, 'tempUnit')} />
                                                         <FormSelectbox
-                                                            value={props.field.value}
-                                                            options={tempUnits}
-                                                            onChange={e => {
-                                                                props.form.setFieldValue("tempUnit", e.target.value);
-                                                                this.props.changeTempUnit({ tempUnit: e.target.value });
-                                                            }}
+                                                            fullWidth
+                                                            name="tempUnit"
+                                                            label="Unit"
+                                                            value={_get(value, 'tempUnit')}
+                                                            options={SalesLib.tempUnits}
+                                                            onChange={(e) => this.changeUnit(e, onChange, setFieldValue, 'temp')}
                                                         />
-                                                    );
-                                                }}
-                                            />
-                                            {errors.tempUnit && touched.tempUnit && <div style={{ color: "red" }}>{errors.tempUnit}</div>}
-                                        </Grid>
+                                                    </Grid>
+                                                );
+                                            }}
+                                        />
                                     </Grid>
                                 </fieldset>
-
                                 <fieldset className="fieldset">
                                     <legend>Gravity</legend>
                                     <Grid container spacing={24}>
-                                        <Grid item xs={6}>
-                                            <Field
-                                                name="gravVal"
-                                                component={props => {
-                                                    return (
+                                        <Field
+                                            render={({ field: { value, onChange }}) => {
+                                                return (
+                                                    <Grid item xs={6}>
+                                                        <FormikErrorMessage error={_get(errors, 'gravVal')} />
                                                         <FormSelectbox
-                                                            label="Gravity"
-                                                            value={props.field.value}
-                                                            options={gravChoices[gravUnit].map(choice => ({ label: choice, value: choice }))}
-                                                            onChange={e => {
-                                                                props.form.setFieldValue("gravVal", e.target.value);
-                                                                this.props.changeGravValue({ gravVal: e.target.value });
-                                                            }}
+                                                            fullWidth
+                                                            name="gravVal"
+                                                            value={_get(value, 'gravVal')}
+                                                            options={SalesLib.gravChoices[gravUnit]}
+                                                            onChange={onChange}
                                                         />
-                                                    );
-                                                }}
-                                            />
-                                            {errors.gravVal && touched.gravVal && <div style={{ color: "red" }}>{errors.gravVal}</div>}
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <Field
-                                                name="gravUnit"
-                                                component={props => {
-                                                    return (
+                                                    </Grid>
+                                                );
+                                            }}
+                                        />
+                                        <Field
+                                            render={({ field: { value, onChange }, form: { setFieldValue }}) => {
+                                                return (
+                                                    <Grid item xs={6}>
+                                                        <FormikErrorMessage error={_get(errors, 'gravUnit')} />
                                                         <FormSelectbox
-                                                            value={props.field.value}
-                                                            options={gravUnits}
-                                                            onChange={e => {
-                                                                props.form.setFieldValue("gravUnit", e.target.value);
-                                                                this.props.changeGravUnit({ gravUnit: e.target.value });
-                                                            }}
-                                                        />
-                                                    );
-                                                }}
-                                            />
-                                            {errors.gravUnit && touched.gravUnit && <div style={{ color: "red" }}>{errors.gravUnit}</div>}
-                                        </Grid>
+                                                            fullWidth
+                                                            label="Unit"
+                                                            name="gravUnit"
+                                                            value={_get(value, 'gravUnit')}
+                                                            options={SalesLib.gravUnits}
+                                                            onChange={(e) => this.changeUnit(e, onChange, setFieldValue, 'grav')}                                                        />
+                                                    </Grid>
+                                                );
+                                            }}
+                                        />
                                     </Grid>
                                 </fieldset>
-
                                 <Grid container spacing={24} className="button-grid">
                                     <Grid item xs={6}>
                                         * Advanced recommendations based on batch size, fermentation temperature and gravity.<br />
@@ -212,177 +260,102 @@ class CalculatorForm extends Component {
                         );
                     }}
                 </Formik>
-            </div>
+            </React.Fragment>
         );
     };
 
     _renderCustomForm = () => {
-        const {
-            calculator: {
-                volVal,
-                volChoices,
-                volUnit,
-                volUnits,
-                tempVal,
-                tempChoices,
-                tempUnit,
-                tempUnits,
-                gravVal,
-                gravChoices,
-                gravUnit,
-                gravUnits,
-                isHomebrew,
-                type,
-                typeChoices,
-
-                startingGravity,
-                targetPitchRate,
-                volume,
-                viability,
-                cellCount
-            }
-        } = this.props;
-        const customFormValidation = Yup.object().shape({
-            startingGravity: Yup.number().required("Required"),
-            targetPitchRate: Yup.number().required("Required"),
-            volume: Yup.number().required("Required"),
-            viability: Yup.number().required("Required"),
-            cellCount: Yup.number().required("Required")
-        });
         return (
-            <div>
+            <React.Fragment>
                 <Formik
-                    initialValues={{
-                        startingGravity,
-                        targetPitchRate,
-                        volume,
-                        viability,
-                        cellCount
-                    }}
                     enableReinitialize
-                    validationSchema={customFormValidation}
-                    validate={values => {
-                        let errors = {};
-                    }}
-                    onSubmit={values => {
-                        // same shape as initial values
-                        this.props.calculatePacks();
-                        this.props.openDialog();
-                    }}
+                    onSubmit={(values, actions) => this.calculate(values, actions)}
                 >
-                    {({ errors, touched, isValidating }) => {
+                    {({ errors }) => {
                         return (
                             <Form>
                                 <Grid container spacing={24}>
-                                    <Grid item xs={6}>
-                                        <Field
-                                            name="startingGravity"
-                                            component={props => {
-                                                return (
+                                    <Field
+                                        render={({ field: { value, onChange }}) => {
+                                            return (
+                                                <Grid item xs={6}>
+                                                    <FormikErrorMessage error={_get(errors, 'startingGravity')} />
                                                     <FormTextbox
-                                                        required={
-                                                            (errors.startingGravity && touched.startingGravity) || (this.props.messages.length > 0 && startingGravity == "") ? true : false
-                                                        }
-                                                        error={(errors.startingGravity && touched.startingGravity) || (this.props.messages.length > 0 && startingGravity == "") ? true : false}
+                                                        fullWidth
+                                                        name="startingGravity"
                                                         label="Starting Gravity in Plato"
-                                                        showLabel={true}
-                                                        value={props.field.value}
-                                                        onChange={e => {
-                                                            props.form.setFieldValue("startingGravity", e.target.value);
-                                                            this.props.changeStartingGravity({ startingGravity: e.target.value });
-                                                        }}
+                                                        value={_get(value, 'startingGravity') || ''}
+                                                        onChange={onChange}
                                                     />
-                                                );
-                                            }}
-                                        />
-                                        {errors.startingGravity && touched.startingGravity && <div style={{ color: "red" }}>{errors.startingGravity}</div>}
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Field
-                                            name="targetPitchRate"
-                                            component={props => {
-                                                return (
+                                                </Grid>
+                                            );
+                                        }}
+                                    />
+                                    <Field
+                                        render={({ field: { value, onChange }}) => {
+                                            return (
+                                                <Grid item xs={6}>
+                                                    <FormikErrorMessage error={_get(errors, 'targetPitchRate')} />
                                                     <FormTextbox
-                                                        required={
-                                                            (errors.targetPitchRate && touched.targetPitchRate) || (this.props.messages.length > 0 && targetPitchRate == "") ? true : false
-                                                        }
-                                                        error={(errors.targetPitchRate && touched.targetPitchRate) || (this.props.messages.length > 0 && targetPitchRate == "") ? true : false}
+                                                        fullWidth
+                                                        name="targetPitchRate"
                                                         label="Target Pitch Rate in Cells per mL"
-                                                        showLabel={true}
-                                                        value={props.field.value}
-                                                        onChange={e => {
-                                                            props.form.setFieldValue("targetPitchRate", e.target.value);
-                                                            this.props.changeTargetPitchRate({ targetPitchRate: e.target.value });
-                                                        }}
+                                                        value={_get(value, 'targetPitchRate') || ''}
+                                                        onChange={onChange}
                                                     />
-                                                );
-                                            }}
-                                        />
-                                        {errors.targetPitchRate && touched.targetPitchRate && <div style={{ color: "red" }}>{errors.targetPitchRate}</div>}
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Field
-                                            name="volume"
-                                            component={props => {
-                                                return (
+                                                </Grid>
+                                            );
+                                        }}
+                                    />
+                                    <Field
+                                        render={({ field: { value, onChange }}) => {
+                                            return (
+                                                <Grid item xs={6}>
+                                                    <FormikErrorMessage error={_get(errors, 'volume')} />
                                                     <FormTextbox
-                                                        required={(errors.volume && touched.volume) || (this.props.messages.length > 0 && volume == "") ? true : false}
-                                                        error={(errors.volume && touched.volume) || (this.props.messages.length > 0 && volume == "") ? true : false}
+                                                        fullWidth
+                                                        name="volume"
                                                         label="Batch Size in mL"
-                                                        showLabel={true}
-                                                        value={props.field.value}
-                                                        onChange={e => {
-                                                            props.form.setFieldValue("volume", e.target.value);
-                                                            this.props.changeVolume({ volume: e.target.value });
-                                                        }}
+                                                        value={_get(value, 'volume') || ''}
+                                                        onChange={onChange}
                                                     />
-                                                );
-                                            }}
-                                        />
-                                        {errors.volume && touched.volume && <div style={{ color: "red" }}>{errors.volume}</div>}
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Field
-                                            name="viability"
-                                            component={props => {
-                                                return (
+                                                </Grid>
+                                            );
+                                        }}
+                                    />  
+                                    <Field
+                                        render={({ field: { value, onChange }}) => {
+                                            return (
+                                                <Grid item xs={6}>
+                                                    <FormikErrorMessage error={_get(errors, 'viability')} />
                                                     <FormTextbox
-                                                        required={(errors.viability && touched.viability) || (this.props.messages.length > 0 && viability == "") ? true : false}
-                                                        error={(errors.viability && touched.viability) || (this.props.messages.length > 0 && viability == "") ? true : false}
+                                                        fullWidth
+                                                        name="viability"
                                                         label="Viability %"
-                                                        showLabel={true}
-                                                        value={props.field.value}
-                                                        onChange={e => {
-                                                            props.form.setFieldValue("viability", e.target.value);
-                                                            this.props.changeViability({ viability: e.target.value });
-                                                        }}
+                                                        value={_get(value, 'viability') || ''}
+                                                        onChange={onChange}
                                                     />
-                                                );
-                                            }}
-                                        />
-                                        {errors.viability && touched.viability && <div style={{ color: "red" }}>{errors.viability}</div>}
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Field
-                                            name="cellCount"
-                                            component={props => {
-                                                return (
+                                                </Grid>
+                                            );
+                                        }}
+                                    />
+                                    <Field
+                                        name="cellCount"
+                                        render={({ field: { value, onChange }}) => {
+                                            return (
+                                                <Grid item xs={6}>
+                                                    <FormikErrorMessage error={_get(errors, 'cellCount')} />
                                                     <FormTextbox
-                                                        required={(errors.cellCount && touched.cellCount) || (this.props.messages.length > 0 && cellCount == "") ? true : false}
-                                                        error={(errors.cellCount && touched.cellCount) || (this.props.messages.length > 0 && cellCount == "") ? true : false}
+                                                        fullWidth
+                                                        name="cellCount"
                                                         label="Yeast Cell Count in Cells per mL"
-                                                        showLabel={true}
-                                                        value={props.field.value}
-                                                        onChange={e => {
-                                                            props.form.setFieldValue("cellCount", e.target.value);
-                                                            this.props.changeCellCount({ cellCount: e.target.value });
-                                                        }}
+                                                        value={_get(value, 'cellCount') || ''}
+                                                        onChange={onChange}
                                                     />
-                                                );
-                                            }}
-                                        />
-                                        {errors.cellCount && touched.cellCount && <div style={{ color: "red" }}>{errors.cellCount}</div>}
-                                    </Grid>
+                                                </Grid>
+                                            );
+                                        }}
+                                    />
                                 </Grid>
                                 <Grid container spacing={24} className="button-grid">
                                     <Grid item xs={6} />
@@ -396,14 +369,12 @@ class CalculatorForm extends Component {
                         );
                     }}
                 </Formik>
-            </div>
+            </React.Fragment>
         );
     };
 
     render() {
-        const {
-            calculator: { volVal, volChoices, volUnit, volUnits, tempVal, tempChoices, tempUnit, tempUnits, gravVal, gravChoices, gravUnit, gravUnits, isHomebrew, type, typeChoices, messages }
-        } = this.props;
+        const { custom, toggleCustom, isHomebrewer, toggleIsHomebrewer } = this.props;
 
         return (
             <Card>
@@ -416,31 +387,31 @@ class CalculatorForm extends Component {
                 <Grid container id="professional-homebrew-switch">
                     <Grid item xs={6} dir="rtl">
                         <FormButton
-                            className={`form-button-small-size ${this.props.calculator.type == "Lab-grown" ? "" : "form-button-active"}`}
+                            className={`form-button-small-size ${custom ? "form-button-active" : ""}`}
                             text="Lab-Grown"
-                            onClick={() => this.props.changeType({ type: "Lab-grown" })}
+                            onClick={toggleCustom}
                         />
                     </Grid>
                     <Grid item xs={6} dir="ltr">
                         <FormButton
-                            className={`form-button-small-size ${this.props.calculator.type == "Custom" ? "" : "form-button-active"}`}
+                            className={`form-button-small-size ${custom ? "" : "form-button-active"}`}
                             text="Re-Pitching"
-                            onClick={() => this.props.changeType({ type: "Custom" })}
+                            onClick={toggleCustom}
                         />
                     </Grid>
                 </Grid>
-
                 <CardBody>
                     <Grid container spacing={24} className="button-grid">
                         <Grid item xs={12}>
                             <div className="homebrew-box">
-                                <FormCheckbox checked={isHomebrew} onChange={e => this.props.toggleHomebrew({ isHomebrew: e.target.checked })} />
+                                <FormCheckbox checked={isHomebrewer} onChange={toggleIsHomebrewer} />
                                 <span>HOMEBREWER</span>
                             </div>
                         </Grid>
                     </Grid>
 
-                    {type == "Lab-grown" ? this._renderLabGrownForm() : this._renderCustomForm()}
+                    {custom ? this._renderCustomForm() : this._renderLabGrownForm()}
+                
                 </CardBody>
             </Card>
         );
@@ -449,14 +420,10 @@ class CalculatorForm extends Component {
 
 const mapStateToProps = state => {
     return {
-        calculator: state.calculator,
         messages: state.messages
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators(calculatorActions, dispatch);
-
 export default connect(
     mapStateToProps,
-    mapDispatchToProps
 )(CalculatorForm);

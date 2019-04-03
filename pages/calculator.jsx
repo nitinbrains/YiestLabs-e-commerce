@@ -1,33 +1,31 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import _get from 'lodash/get';
+
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
 import Dialog from "@material-ui/core/Dialog";
 
-// custom
 import CalculatorForm from "components/Calculator/CalculatorForm";
 import CalculatorResult from "components/Calculator/CalculatorResult";
-
-import Alert from "components/UI/Alert";
-import FormTextbox from "components/Form/FormTextbox";
-import FormSelectbox from "components/Form/FormSelectbox";
-import FormButton from "components/Form/FormButton";
-import FormCheckbox from "components/Form/FormCheckbox";
-
-import { calculatorActions } from "appRedux/actions/calculatorActions";
-
-import PageContainer from 'components/UI/PageContainer';
 import NavBarUserSearchDrawerLayout from "components/NavBar/NavBarUserSearchDrawerLayout";
 
+import { calculate } from "lib/CalculatorUtils";
 class Calculator extends Component {
     constructor(props) {
         super(props);
         this.state = {
             showDialog: false,
-            result: {}
+            custom: false,
+            isHomebrewer: false,
+            result: {},
         };
+    }
+
+    static async getInitialProps({query}) {
+        return { query };
     }
 
     openDialog = () => {
@@ -38,11 +36,29 @@ class Calculator extends Component {
         this.setState({showDialog: false});
     }
 
+    toggleCustom = () => {
+        this.setState({ custom: !this.state.custom });
+    }
+
+    onCalculate = (values) => {
+        const { custom, isHomebrewer } = this.state;
+        const result = calculate({...values, custom, isHomebrewer});
+        this.setState({ result });
+        this.openDialog();
+    }
+
     render() {
+        const id = _get(this.props, 'query.id');
+        const { result, custom, isHomebrewer  } = this.state;
         return (
             <NavBarUserSearchDrawerLayout>
                 <div id="calculator-box">
-                    <CalculatorForm openDialog={this.openDialog} />
+                    <CalculatorForm 
+                        onCalculate={this.onCalculate}
+                        toggleCustom={this.toggleCustom}
+                        custom={custom}
+                        isHomebrewer={isHomebrewer}
+                    />
 
                     <Dialog
                         open={this.state.showDialog}
@@ -50,8 +66,9 @@ class Calculator extends Component {
                         aria-labelledby="form-dialog-title"
                     >
                         <CalculatorResult
-                            // closeDialog={this.closeDialog}
                             closeDialogMain={this.closeDialog}
+                            id={id}
+                            result={result}
                         />
                     </Dialog>
                 </div>
@@ -66,15 +83,11 @@ Calculator.propTypes = {};
 
 const mapStateToProps = state => {
     return {
-        calculator: state.calculator,
         messages: state.messages
     };
 };
 
-const mapDispatchToProps = dispatch =>
-    bindActionCreators(calculatorActions, dispatch);
-
 export default connect(
     mapStateToProps,
-    mapDispatchToProps
+    null
 )(withStyles(styles, { withTheme: true })(Calculator));

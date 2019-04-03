@@ -8,9 +8,7 @@ import Card from "@material-ui/core/Card";
 import CardBody from "components/UI/Card/CardBody.jsx";
 import Grid from "@material-ui/core/Grid";
 
-import { calculatorActions } from 'appRedux/actions/calculatorActions';
 import { cartActions } from "appRedux/actions/cartActions";
-
 
 // custom
 import FormButton from "components/Form/FormButton";
@@ -22,12 +20,8 @@ class ResultItem extends Component {
 		this.item = this.props.item;
 	}
 
-
-
 	addToCart = () => {
-
-
-		const { packs } = this.props.calculator;
+		const { result: { packs }} = this.props;
 
 		for(var key in packs) {
 
@@ -100,7 +94,7 @@ class ResultItem extends Component {
 
                     <Grid container spacing={24}>
                         <Grid item xs={12} className="item-button">
-                            <FormButton text="ADD TO CART" onClick={() => this.addToCart()} />
+                            <FormButton text="ADD TO CART" onClick={this.addToCart} />
                         </Grid>
                     </Grid>
                 </CardBody>
@@ -112,7 +106,6 @@ class ResultItem extends Component {
 
 const mapStateToProps = (state) => {
     return {
-		calculator: state.calculator,
 		inventory: state.inventory
     }
 }

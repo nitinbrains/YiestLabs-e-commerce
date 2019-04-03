@@ -22,6 +22,7 @@ function PhoneMaskedTextField(props) {
     options={phone: true, phoneRegionCode: 'US'};
     return <Cleave {...other} onChange={onChange} ref={inputRef} options={options} value={value}/>;
 }
+
 const FormikErrorMessage = ({ error }) => {
     return error ? <div className="error">{error}</div> : null;
 }

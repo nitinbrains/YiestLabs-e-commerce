@@ -25,4 +25,7 @@ export default createReducer(initialState, {
         isLoading: false,
         availability
     }),
+    [inventoryTypes.TOGGLE_HOMEBREW_SUCCESS]: (state, { data: { isHomebrew } }) => ({
+        isHomebrew,
+    }),
 });

@@ -8,8 +8,6 @@ import Card from "components/UI/Card/Card.jsx";
 import CardBody from "components/UI/Card/CardBody.jsx";
 import Grid from "@material-ui/core/Grid";
 
-import { calculatorActions } from 'appRedux/actions/calculatorActions';
-
 class ResultSummary extends Component {
     constructor(props) {
         super(props);
@@ -18,7 +16,7 @@ class ResultSummary extends Component {
 
     render() {
 
-		const { calculator: { total, packs }} = this.props;
+		const { result: { total, packs }} = this.props;
 
         return (
             <Card className="result-summary-card">
@@ -39,7 +37,7 @@ class ResultSummary extends Component {
                             0.5L (Nano):
                         </Grid>
                         <Grid item xs={6} dir="rtl">
-                            
+                           {packs["0.5"]}
                         </Grid>
                     </Grid>
                     <Grid container spacing={24} className="summary-others">
@@ -47,7 +45,7 @@ class ResultSummary extends Component {
                             1.5L:
                         </Grid>
                         <Grid item xs={6} dir="rtl">
-                            
+                            {packs["1.5"]}
                         </Grid>
                     </Grid>
                     <Grid container spacing={24} className="summary-others">
@@ -55,7 +53,7 @@ class ResultSummary extends Component {
                             2L:
                         </Grid>
                         <Grid item xs={6} dir="rtl">
-                            
+                            {packs["2.0"]}
                         </Grid>
                     </Grid>
                 </CardBody>
@@ -64,16 +62,4 @@ class ResultSummary extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        calculator: state.calculator
-    };
-};
-
-const mapDispatchToProps = dispatch =>
-    bindActionCreators(calculatorActions, dispatch);
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ResultSummary);
+export default ResultSummary;

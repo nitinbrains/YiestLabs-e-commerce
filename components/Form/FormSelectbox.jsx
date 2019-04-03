@@ -6,22 +6,32 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 
 class FormSelectbox extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            options: this.props.options || []
-        };
-    }
-
     render() {
-        let options = this.props.options || [];
+        const { options = [], ...rest } = this.props;
         return (
-            <TextField id="standard-select-currency" select label="" value={this.props.value} onChange={this.props.onChange} margin="normal" className="form-selectbox" variant="outlined">
-                {options.map(option => (
-                    <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                    </MenuItem>
-                ))}
+            <TextField 
+                select 
+                margin="normal" 
+                className="form-selectbox" 
+                variant="outlined"
+                {...rest}
+            >
+                {options.map(option => {
+                    if (typeof(option) == "object") {
+                        return (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        )
+                        
+                    } else {
+                        return (
+                            <MenuItem key={option} value={option}>
+                                {option}
+                            </MenuItem>
+                        )
+                    }
+                })}
             </TextField>
         );
     }

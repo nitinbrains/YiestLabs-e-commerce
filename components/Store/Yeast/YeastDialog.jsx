@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import Router from 'next/router';
 import axios from 'axios';
 
 import PropTypes from "prop-types";
@@ -25,6 +26,8 @@ import { cartActions } from "appRedux/actions/cartActions";
 import { inventoryActions } from "appRedux/actions/inventoryActions";
 import { parseAvailabilityResults } from "lib/InventoryUtils";
 import { IN_STOCK, OUT_OF_STOCK } from "lib/Constants";
+
+import WLHelper from "lib/WLHelper";
 
 const YeastElements = {
     "2": {
@@ -86,14 +89,17 @@ function getColor(salesCategory) {
         throw error;
     }
 }
+
+const FormikErrorMessage = ({ error }) => {
+    return error ? <div className="error">{error}</div> : null;
+};
+
 const customFormValidation = Yup.object().shape({
-    packaging: Yup.string()
-      .required('Required'),
-    pack: Yup.string()
-      .nullable(),
-    quantity: Yup.string()
-      .required('Required'),
-  });
+    packaging: Yup.string().required('Required'),
+    pack: Yup.string().nullable(),
+    quantity: Yup.string().required('Required'),
+});
+
 class YeastDialog extends Component {
     constructor(props) {
         super(props);
@@ -177,11 +183,13 @@ class YeastDialog extends Component {
             console.log("error in filterPackageTypes", error);
         }
     }
+
     handleErrors = (field, err) => {
         let {errors} = this.state;
         errors[field] = err
         this.setState({errors})
     }
+
     checkQuantity = item => {
         try {
             var quantity = parseFloat(item.OrderDetailQty);
@@ -276,12 +284,11 @@ class YeastDialog extends Component {
         const packaging = this.state.packaging;
         const pack = this.state.pack;
         const quantity = this.state.quantity;
-        var item = this.item;
 
         // Create cart item
         var cartItem = {};
-        cartItem.Name = String(item.Name);
-        cartItem.salesCategory = parseInt(item.salesCategory);
+        cartItem.Name = String(this.item.Name);
+        cartItem.salesCategory = parseInt(this.item.salesCategory);
         cartItem.dispQuantity = parseInt(quantity);
         cartItem.OrderDetailQty = parseFloat(quantity);
 
@@ -290,24 +297,24 @@ class YeastDialog extends Component {
             switch (pack) {
                 // Nano
                 case "0":
-                    cartItem.MerchandiseID = item.volID[0];
+                    cartItem.MerchandiseID = this.item.volID[0];
                     cartItem.details = "Nano";
                     break;
 
                 // 1.5L
                 case "1":
-                    cartItem.MerchandiseID = item.volID[1];
+                    cartItem.MerchandiseID = this.item.volID[1];
                     cartItem.details = "1.5L";
                     break;
 
                 // 2L
                 case "2":
-                    cartItem.MerchandiseID = item.volID[2];
+                    cartItem.MerchandiseID = this.item.volID[2];
                     cartItem.details = "2L";
                     break;
                 default:
                     this.handleErrors('pack', `cannot add to cart, ${item}, ${packaging}, ${pack}, ${quantity}`)
-                    console.log("cannot add to cart", item, packaging, pack, quantity);
+                    console.log("cannot add to cart", this.item, packaging, pack, quantity);
                     return;
             }
 
@@ -320,14 +327,14 @@ class YeastDialog extends Component {
             switch (packaging) {
                 // Yeast
                 case "0":
-                    cartItem.MerchandiseID = item.volID[0];
+                    cartItem.MerchandiseID = this.item.volID[0];
                     cartItem.type = 3;
                     cartItem.details = "Yeast";
                     break;
 
                 // Custom Pour
                 case "3":
-                    cartItem.MerchandiseID = item.volID[3];
+                    cartItem.MerchandiseID = this.item.volID[3];
                     cartItem.type = 5;
                     cartItem.dispQuantity = 1;
                     cartItem.size = parseFloat(quantity);
@@ -336,9 +343,9 @@ class YeastDialog extends Component {
                     var multipliers = [0.5, 1.5, 2];
 
                     for (var i = 0; i < 3; i++) {
-                        if (item.volID[i]) {
+                        if (this.item.volID[i]) {
                             var relative = {};
-                            relative.id = parseInt(item.volID[i]);
+                            relative.id = parseInt(this.item.volID[i]);
                             if (isNaN(relative.id)) {
                                 throw { message: "Invalid VolID Index! in Relatives", code: 0 };
                             }
@@ -350,21 +357,21 @@ class YeastDialog extends Component {
 
                 // Homebrew
                 case "4":
-                    cartItem.MerchandiseID = item.volID[4];
+                    cartItem.MerchandiseID = this.item.volID[4];
                     cartItem.type = 2;
                     cartItem.details = "Homebrew packs";
                     break;
 
                 // Slant
                 case "5":
-                    cartItem.MerchandiseID = item.volID[5];
+                    cartItem.MerchandiseID = this.item.volID[5];
                     cartItem.type = 3;
                     cartItem.details = "Slants";
                     break;
 
                 // 1L Nalgene Bottle
                 case "6":
-                    cartItem.MerchandiseID = item.volID[6];
+                    cartItem.MerchandiseID = this.item.volID[6];
                     cartItem.type = 1;
                     cartItem.details = "1L Nalgene Bottle";
                     break;
@@ -381,24 +388,23 @@ class YeastDialog extends Component {
 
         const packaging = this.state.packaging;
         const pack = this.state.pack;
-        const item = this.item;
         let itemID;
 
         if (packaging == "pp" || packaging == "nl") {
             switch (pack) {
                 // Nano
                 case "0":
-                    itemID = item.volID[0]
+                    itemID = this.item.volID[0]
                     break;
 
                 // 1.5L
                 case "1":
-                    itemID = item.volID[1];
+                    itemID = this.item.volID[1];
                     break;
 
                 // 2L
                 case "2":
-                    itemID = item.volID[2];
+                    itemID = this.item.volID[2];
                     break;
 
                 default:
@@ -408,27 +414,27 @@ class YeastDialog extends Component {
             switch (packaging) {
                 // Homebrew
                 case "4":
-                    itemID = item.volID[4];
+                    itemID = this.item.volID[4];
                     break;
 
                 // Slant
                 case "5":
-                    itemID = item.volID[5];
+                    itemID = this.item.volID[5];
                     break;
 
                 // 1L Nalgene Bottle
                 case "6":
-                    itemID = item.volID[6];
+                    itemID = this.item.volID[6];
                     break;
 
                 // Distilling
                 case "0":
-                    itemID = item.volID[0]
+                    itemID = this.item.volID[0]
                     break;
 
                 // Vault
                 case "3":
-                    itemID = item.volID[3]
+                    itemID = this.item.volID[3]
                     break;
 
                 default:
@@ -479,13 +485,18 @@ class YeastDialog extends Component {
         this.setState({ quantity: event.target.value });
     };
 
+    moveToCalculator = () => {
+        Router.push(`/calculator?id=${this.item.volID[0]}`);
+    }
+
     render()
     {
-        const { classes, item} = this.props;
+        const { classes } = this.props;
         const { errors, availability } = this.state;
-        const spaceIndex = item.Name.indexOf(" ");
-        const itemID = item.Name.substr(0, spaceIndex);
-        const itemName = item.Name.substr(spaceIndex + 1);
+        const spaceIndex = this.item.Name.indexOf(" ");
+        const itemID = this.item.Name.substr(0, spaceIndex);
+        const itemName = this.item.Name.substr(spaceIndex + 1);
+        const error = errors.packaging || errors.pack || errors.quantity;
 
         return (
             <React.Fragment>
@@ -524,14 +535,10 @@ class YeastDialog extends Component {
                         <Grid item xs={2} md={1}>
                             <div
                                 className={classes.circle}
-                                style={{
-                                    backgroundColor: getColor(
-                                        this.props.item.salesCategory
-                                    )
-                                }}
+                                style={{ backgroundColor: getColor(this.item.salesCategory)}}
                             >
                                 <img
-                                    src={getIcon(this.props.item.salesCategory)}
+                                    src={getIcon(this.item.salesCategory)}
                                     height="20"
                                 />
                             </div>
@@ -549,11 +556,7 @@ class YeastDialog extends Component {
                                     <Typography>Attenuation:</Typography>
                                     &nbsp;
                                     <Typography
-                                        style={{
-                                            color: getColor(
-                                                this.props.item.salesCategory
-                                            )
-                                        }}
+                                        style={{ color: getColor(this.item.salesCategory)}}
                                     >
                                         {this.item.attenuation}
                                     </Typography>
@@ -565,11 +568,7 @@ class YeastDialog extends Component {
                                     <Typography>Flocculation: </Typography>
                                     &nbsp;
                                     <Typography
-                                        style={{
-                                            color: getColor(
-                                                this.props.item.salesCategory
-                                            )
-                                        }}
+                                        style={{ color: getColor(this.item.salesCategory)}}
                                     >
                                         {this.item.flocculation}
                                     </Typography>
@@ -580,11 +579,7 @@ class YeastDialog extends Component {
                                     <Typography>Alcohol Tol.: </Typography>
                                     &nbsp;
                                     <Typography
-                                        style={{
-                                            color: getColor(
-                                                this.props.item.salesCategory
-                                            )
-                                        }}
+                                        style={{ color: getColor(this.item.salesCategory)}}
                                     >
                                         {this.item.alcoholTol}
                                     </Typography>
@@ -595,11 +590,7 @@ class YeastDialog extends Component {
                                     <Typography>Fermentation Temp: </Typography>
                                     &nbsp;
                                     <Typography
-                                        style={{
-                                            color: getColor(
-                                                this.props.item.salesCategory
-                                            )
-                                        }}
+                                        style={{ color: getColor(this.item.salesCategory)}}
                                     >
                                         {this.item.optFermentTempF |
                                             this.item.optFermentTempC}
@@ -619,6 +610,20 @@ class YeastDialog extends Component {
                         <Grid item>
                             <Typography>{this.item.Description}</Typography>
                         </Grid>
+                    </Grid>
+
+                    <Grid
+                        item
+                        container
+                        direction={"column"}
+                        spacing={8}
+                        style={{ marginTop: 20, color:  '#f68f32'}}
+                    >
+                        <Button onClick={this.moveToCalculator}>
+                            <Grid item>
+                                <Typography style={{ color: getColor(this.item.salesCategory) }}>How much do I need?</Typography>
+                            </Grid>
+                        </Button>
                     </Grid>
 
                     <Grid
@@ -663,7 +668,6 @@ class YeastDialog extends Component {
                         </Grid>
                     </Grid>
 
-
                     <Grid
                         item
                         xs
@@ -680,9 +684,7 @@ class YeastDialog extends Component {
                             {({ values, handleChange }) => {
                                 return(
                                     <Form className={classes.form}>
-                                        {errors.packaging && <div className="error"  >* {errors.packaging}</div>}
-                                        {errors.pack  && <div className="error" >* {errors.pack}</div>}
-                                        {errors.quantity  && <div className="error" >* {errors.quantity}</div>}
+                                        <FormikErrorMessage error={error} />
                                         <Grid
                                             item
                                             xs
