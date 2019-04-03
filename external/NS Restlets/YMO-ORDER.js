@@ -100,23 +100,23 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
 
                         // Always check Asheville for plates orders
                         if (hasPlates) {
-                            response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                            response.items[i].shipDate = getShipDate(shipDate, userLocation, userLocation != 2, userLocation == 7, false, false);
                             response.items[i].Warehouse = 11;
                         } else {
                             if (territory >= 3) {
                                 if (response.items[i].OrderDetailQty <= parseInt(ASHAvail.availQtyToShip)) {
-                                    response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                    response.items[i].shipDate = getShipDate(shipDate, userLocation, userLocation != 2, userLocation == 7, false, false);
                                     response.items[i].Warehouse = 11;
                                 } else if (response.items[i].OrderDetailQty <= parseInt(SDAvail.availQtyToShip)) {
-                                    response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                    response.items[i].shipDate = getShipDate(shipDate, userLocation, userLocation != 2, userLocation == 7, false, false);
                                     response.items[i].Warehouse = 9;
                                 } else if (leadTime) {
                                     response.items[i].shipDate = getShipDate(
                                         shipDate.setDate(SDLocalTime.getDate() + leadTime),
-                                        false,
                                         userLocation,
                                         userLocation != 2,
                                         userLocation == 7,
+                                        false,
                                         false
                                     );
                                     response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
@@ -126,18 +126,18 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                                 }
                             } else {
                                 if (response.items[i].OrderDetailQty <= parseInt(SDAvail.availQtyToShip)) {
-                                    response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                    response.items[i].shipDate = getShipDate(shipDate, userLocation, userLocation != 2, userLocation == 7, false, false);
                                     response.items[i].Warehouse = 9;
                                 } else if (response.items[i].OrderDetailQty <= parseInt(ASHAvail.availQtyToShip)) {
-                                    response.items[i].shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                    response.items[i].shipDate = getShipDate(shipDate, userLocation, userLocation != 2, userLocation == 7, false, false);
                                     response.items[i].Warehouse = 11;
                                 } else if (leadTime) {
                                     response.items[i].shipDate = getShipDate(
                                         shipDate.setDate(SDLocalTime.getDate() + leadTime),
-                                        false,
                                         userLocation,
                                         userLocation != 2,
                                         userLocation == 7,
+                                        false,
                                         false
                                     );
                                     response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
@@ -165,7 +165,7 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                             //large bbl custom pour
                             var shipDate = new Date(SDLocalTime);
                             leadTime = leadTime ? leadTime : 21;
-                            response.items[i].shipDate = getShipDate(shipDate.setDate(SDLocalTime.getDate() + leadTime), false, userLocation, userLocation != 2, userLocation == 7, false);
+                            response.items[i].shipDate = getShipDate(shipDate.setDate(SDLocalTime.getDate() + leadTime), userLocation, userLocation != 2, userLocation == 7, false, false);
                             response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
                             continue;
                         }
@@ -182,7 +182,7 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
 
                             if (parseInt(CPHAvail.availQtyToShip) >= response.items[i].OrderDetailQty) {
                                 checkProduction = false;
-                                response.items[i].shipDate = getShipDate(new Date(CPHAvail.dateValue), isPurepitch, userLocation, false, true, false);
+                                response.items[i].shipDate = getShipDate(new Date(CPHAvail.dateValue), userLocation, false, true, false, !isPurepitch);
                                 response.items[i].Warehouse = 30;
                             }
                         } else if (userLocation == 5) {
@@ -191,7 +191,7 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
 
                             if (parseInt(HKAvail.availQtyToShip) >= response.items[i].OrderDetailQty) {
                                 checkProduction = false;
-                                response.items[i].shipDate = getShipDate(new Date(HKAvail.dateValue), isPurepitch, userLocation, false, false, false);
+                                response.items[i].shipDate = getShipDate(new Date(HKAvail.dateValue), userLocation, false, false, false, !isPurepitch);
                                 response.items[i].Warehouse = 31;
                             }
                         } else if (userLocation == 2) {
@@ -201,21 +201,21 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                             if (territory >= 3) {
                                 if (parseInt(ASHAvail.availQtyToShip) >= response.items[i].OrderDetailQty && splitOrder) {
                                     checkProduction = false;
-                                    response.items[i].shipDate = getShipDate(new Date(ASHAvail.dateValue), isPurepitch, userLocation, false, false, true);
+                                    response.items[i].shipDate = getShipDate(new Date(ASHAvail.dateValue), userLocation, false, false, true, !isPurepitch);
                                     response.items[i].Warehouse = 11;
                                 } else if (parseInt(SDAvail.availQtyToShip) >= response.items[i].OrderDetailQty && (!hasPlates || (hasPlates && !splitOrder))) {
                                     checkProduction = false;
-                                    response.items[i].shipDate = getShipDate(new Date(SDAvail.dateValue), isPurepitch, userLocation, false, false, false);
+                                    response.items[i].shipDate = getShipDate(new Date(SDAvail.dateValue), userLocation, false, false, false, !isPurepitch);
                                     response.items[i].Warehouse = 9;
                                 }
                             } else {
                                 if (parseInt(SDAvail.availQtyToShip) >= response.items[i].OrderDetailQty && (!hasPlates || (hasPlates && !splitOrder))) {
                                     checkProduction = false;
-                                    response.items[i].shipDate = getShipDate(new Date(SDAvail.dateValue), isPurepitch, userLocation, false, false, false);
+                                    response.items[i].shipDate = getShipDate(new Date(SDAvail.dateValue), userLocation, false, false, false, !isPurepitch);
                                     response.items[i].Warehouse = 9;
                                 } else if (parseInt(ASHAvail.availQtyToShip) >= response.items[i].OrderDetailQty && splitOrder) {
                                     checkProduction = false;
-                                    response.items[i].shipDate = getShipDate(new Date(ASHAvail.dateValue), isPurepitch, userLocation, false, false, true);
+                                    response.items[i].shipDate = getShipDate(new Date(ASHAvail.dateValue), userLocation, false, false, true, !isPurepitch);
                                     response.items[i].Warehouse = 11;
                                 }
                             }
@@ -239,7 +239,7 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
 
                             for (var j = 0; j < packagingWOs.length; j++) {
                                 if (response.items[i].OrderDetailQty <= parseInt(packagingWOs[j].availQtyToShip)) {
-                                    response.items[i].shipDate = getShipDate(new Date(packagingWOs[j].dateValue), isPurepitch, userLocation, userLocation != 2, userLocation == 7, false);
+                                    response.items[i].shipDate = getShipDate(new Date(packagingWOs[j].dateValue), userLocation, userLocation != 2, userLocation == 7, false, !isPurepitch);
                                     response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
                                     j = packagingWOs.length;
                                 }
@@ -250,11 +250,11 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                                     var shipDate = new Date(SDLocalTime);
                                     response.items[i].shipDate = getShipDate(
                                         shipDate.setDate(SDLocalTime.getDate() + leadTime),
-                                        isPurepitch,
                                         userLocation,
                                         userLocation != 2,
                                         userLocation == 7,
-                                        false
+                                        false,
+                                        !isPurepitch
                                     );
                                     response.items[i].Warehouse = parseInt(warehouseMap(userLocation));
                                 } else {

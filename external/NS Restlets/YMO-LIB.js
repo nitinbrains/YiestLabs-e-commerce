@@ -278,7 +278,7 @@ function checkHoliday(date, subsidiary)
     return false;
 }
 
-function getShipDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, isAsheville)
+function getShipDate(date, subsidiary, addTravelTime, travelOnMonday, isAsheville, isCustomPour)
 {
     var finalDate = new Date(date);
     var today = getLocalTime(subsidiary, isAsheville);
@@ -345,8 +345,11 @@ function getShipDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonda
 		}
 	}
 
-	return valiDate(finalDate, subsidiary);
+	if (isCustomPour) {
+			finalDate.setDate(finalDate.getDate() + 1);
+	}
 
+	return valiDate(finalDate, subsidiary);
 }
 
 function valiDate(date, subsidiary)
