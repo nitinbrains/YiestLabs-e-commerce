@@ -32,7 +32,7 @@ const initializeStore = (initialState = initialState, isServer) => {
         persistedReducer,
         initialState,
         composeWithDevTools(
-            applyMiddleware(thunk, sagaMiddleware, logger)
+            applyMiddleware(thunk, sagaMiddleware)
         )
     );
     sagaMiddleware.run(rootSaga);

@@ -318,7 +318,7 @@ class YeastDialog extends Component {
                     return;
             }
 
-            if (item.purePitch) {
+            if (this.item.purePitch) {
                 cartItem.details = "PurePitch® " + cartItem.details;
             }
 
