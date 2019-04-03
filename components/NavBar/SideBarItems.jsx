@@ -36,12 +36,14 @@ class SideBarItems extends Component {
                     </ListItem>
                 </Link>
 
-                <ListItem button>
-                    <ListItemIcon>
-                        <FeedbackIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Give Feedback" />
-                </ListItem>
+                <a href="mailto:mwhite@whitelabs.com?subject=YMO%202.0%20Feedback" style={{ textDecoration: "none" }}>
+                  <ListItem button>
+                      <ListItemIcon>
+                          <FeedbackIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Give Feedback" />
+                  </ListItem>
+                </a>
 
                 <ListItem
                     button

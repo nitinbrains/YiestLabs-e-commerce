@@ -18,7 +18,7 @@ import Dialog from "@material-ui/core/Dialog";
 import PageContainer from 'components/UI/PageContainer';
 import OrderDetails from "components/MyOrders/OrderDetails";
 import { userActions } from 'appRedux/actions/userActions';
-
+import LoadingIndicator from "components/UI/LoadingIndicator";
 
 class MyOrders extends Component {
 
@@ -30,7 +30,7 @@ class MyOrders extends Component {
         super(props);
         this.state = {
             openDialog: false,
-            order:null,
+            order: null
         }
     }
 
@@ -43,13 +43,12 @@ class MyOrders extends Component {
     }
 
     render() {
-       
-        const { classes, theme } = this.props;
+
+        const { classes, theme, user } = this.props;
         return (
-
             <NavBarUserSearchDrawerLayout>
+                <LoadingIndicator visible={user.isLoading} label={"Getting Orders"} />
                 <PageContainer heading="MY ORDERS" id="cart-box">
-
                     <Grid container spacing={24}>
                     {this.props.user.orderHistory && this.props.user.orderHistory.map((order, i) => (
                         <Grid item xs={12}>
