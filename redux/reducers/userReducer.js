@@ -57,7 +57,7 @@ const initialState = {
     orderHistory: [],
     isUnsaved: false,
     
-}; // empty for now
+};
 
 /* ------------- Hookup Reducers To Types ------------- */
 

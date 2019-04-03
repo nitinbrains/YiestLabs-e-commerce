@@ -35,7 +35,12 @@ import {
 } from './user';
 
 // Cart sagas
-import { updateCartItem, addCartItem, removeCartItem } from './cart';
+import { 
+    updateCartItem, 
+    addCartItem, 
+    removeCartItem,
+    clearCart
+} from './cart';
 
 // Order sagas
 import {
@@ -85,6 +90,7 @@ function * rootSaga () {
         takeEvery(cartTypes.ADD_ITEM_ATTEMPT, addCartItem),
         takeEvery(cartTypes.REMOVE_ITEM_ATTEMPT, removeCartItem),
         takeEvery(cartTypes.UPDATE_ITEM_ATTEMPT, updateCartItem),
+        takeEvery(cartTypes.CLEAR_CART_ATTEMPT, clearCart),
         // ORDER
         takeLatest(orderTypes.PREPARE_ORDER_ATTEMPT, prepareOrder),
         takeLatest(orderTypes.PLACE_ORDER_ATTEMPT, placeOrder),

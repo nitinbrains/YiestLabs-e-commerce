@@ -15,7 +15,6 @@ class ResultSummary extends Component {
     }
 
     render() {
-
 		const { result: { total, packs }} = this.props;
 
         return (

@@ -2,6 +2,7 @@ import { take, call, put, cancelled, takeEvery, all, fork, select  } from 'redux
 import * as api from 'services/';
 import { orderActions } from 'appRedux/actions/orderActions';
 import { messageActions } from 'appRedux/actions/messageActions';
+import { cartActions } from 'appRedux/actions/cartActions';
 
 import {
     changeShippingOption,
@@ -59,14 +60,10 @@ export function * placeOrder(action) {
             request
         });
 
-        //const { loading } = yield select(state => state.loading);
-        //loading.isLoading = false;
-        //loading.type = '';
-        //this.setState({ loading: loading });
-
         if (error) {
             throw error
         } else {
+            yield put(cartActions.clearCart());
             yield put(messageActions.showSnackbar({ title: 'Success', message: 'Order submitted', variant:'success' }));
             state.loading.isLoading = false;
             state.loading.type = 'orderComplete';

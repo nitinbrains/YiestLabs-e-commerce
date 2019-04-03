@@ -24,18 +24,10 @@ import PageContainer from 'components/UI/PageContainer';
 import isLoggedUser from "hocs/isLoggedUser";
 import { cartActions } from 'appRedux/actions/cartActions';
 
-
 class Cart extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        }
-    }
-
     handleProceed = () => {
-        const {user} = this.props;
+        const { user } = this.props;
         if(!user.id){
             Router.push('/login')
         } else {
@@ -59,12 +51,11 @@ class Cart extends Component {
                     <Grid container spacing={24} dir="rtl" className="block-checkout-button">
                         <Grid item xs={12} >
                             { cart.items.length > 0 ?
-                                <div onClick={this.handleProceed}>
-                                    <FormButton
-                                        className="checkout-button"
-                                        text="PROCEED TO CHECKOUT"
-                                    />
-                                </div>
+                                <FormButton
+                                    text="PROCEED TO CHECKOUT"
+                                    onClick={this.handleProceed}
+                                    className="checkout-button"
+                                />
                                 :
                                 <Typography variant="h5" color="primary" align="center">
                                     Cart is Empty

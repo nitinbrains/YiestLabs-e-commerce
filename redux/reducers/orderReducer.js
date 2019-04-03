@@ -22,7 +22,7 @@ export default createReducer(initialState, {
     [orderTypes.PLACE_ORDER_SUCCESS]: (state, { data }) => ({
         ...data,
     }),
-    [orderTypes.SET_ITEMS_ATTEMPT]: (state, { data: { items } }) => ({
+    [orderTypes.SET_ITEMS_ATTEMPT]: (state, { data: { items }}) => ({
         ...state,
         items
     }),
