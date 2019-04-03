@@ -6,6 +6,9 @@ import { withRouter } from "next/router";
 import _get from 'lodash/get';
 
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
+import { find, filter } from "lodash";
+import SearchIcon from "@material-ui/icons/Search";
+import InputBase from "@material-ui/core/InputBase";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -19,7 +22,6 @@ import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import SearchIcon from "@material-ui/icons/Search";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -61,6 +63,7 @@ class Store extends Component {
         this.state = {
             openDialog: false,
             searchText: "",
+            searchTextmobile:"",
             selectedMainCategory: null,
             selectedSubCategory: null,
             itemsToShow: [],
@@ -104,6 +107,31 @@ class Store extends Component {
             this.setState({ searchText, itemsToShow });
         }
     };
+
+
+                       // To be refactored according to Dimitri's code for store
+
+    // onValuechange=(e)=>{
+    //     this.setState({
+    //         [e.target.name]:e.target.value
+    //     },()=>{
+    //         let searchmobile=this.state.searchTextmobile;
+    //         const {
+    //             router: { query }
+    //         } = this.props;
+    //         var { categoryId = 0, subCategoryId = 1, pageType } = query;
+    //         this.setState({ selectedCategory: categoryId });
+    //         this.setState({ selectedSubCategory: subCategoryId });
+    
+    //         if (searchmobile != "") {
+    //             this.props.searchInventory({ category: categoryId, search:searchmobile });
+    //         } else if (pageType === "cards" && searchmobile === "" && !subCategoryId) {
+    //             this.props.changeCategory({ category: categoryId });
+    //         } else {
+    //             this.props.changeCategory({ category: subCategoryId });
+    //         }
+    //     }) 
+    //   }
 
     changeMainCategory = selectedMainCategory => {
         const { inventory: { items }, user } = this.props;
@@ -259,17 +287,33 @@ class Store extends Component {
         return (
             <NavBarUserSearchDrawerLayout inputVal={this.state.searchText} handleSearch={searchData => this.searchItem(searchData)}>
 
-                <Grid container spacing={8} id="professional-homebrew-switch">
-                    <Grid item xs={1} dir="ltr" style={{ minWidth: "100px" }}>
-                        <FormButton className={`form-button-small-size`} text="Back" onClick={() => this.categoryBack()} />
+                  <Grid item xs={1} dir="ltr">
+                        <FormButton className='back-button' text="Back" onClick={() => this.categoryBack()} />
                     </Grid>
-                    <Grid item xs={5} dir="rtl">
+                <Grid container spacing={8} id="professional-homebrew-switch">
+                    <Grid item xs={6} dir="rtl">
                         <FormButton className={`form-button-small-size ${isHomebrew ? "form-button-active" : ""}`} text="Professional" onClick={() => this.toggleHomebrew(false)} />
                     </Grid>
-                    <Grid item xs={5} dir="ltr">
+                    <Grid item xs={6} dir="ltr">
                         <FormButton className={`form-button-small-size ${isHomebrew ? "" : "form-button-active"}`} text="Homebrew" onClick={() => this.toggleHomebrew(true)} />
                     </Grid>
                 </Grid>
+
+                <div className="searchmobile">
+                     <div className={classes.searchIconmobile}>
+                       <SearchIcon />
+                     </div>
+                <InputBase
+                     placeholder="Search…"
+                     name="searchTextmobile"
+                     classes={{
+                     root: classes.inputRootmobile,
+                     input: classes.inputInputmobile,
+                     }}
+                     value={this.state.searchTextmobile}
+                    //  onChange={e=>this.onValuechange(e)}
+                   />
+               </div>
 
                 {sectionTitle && (
                     <div className={classes.sectionTitleDiv}>
@@ -312,7 +356,11 @@ const styles = theme => ({
         width: "88%",
         margin: "auto",
         marginBottom: "60px",
-        marginTop: "70px"
+        marginTop: "70px",
+        marginTop: "70px",
+        [theme.breakpoints.down('sm')]: {
+            width: "100%"
+        }
     },
     sectionTitleSpan: {
         width: "42%",
@@ -323,7 +371,11 @@ const styles = theme => ({
     },
     titText: {
         width: "16%",
-        textAlign: "center"
+        textAlign: "center",
+        [theme.breakpoints.down('xs')]: {
+            fontSize:'12px',
+            width: "38%"
+        }
     },
     searchInput: {
         marginLeft: 10
@@ -334,7 +386,33 @@ const styles = theme => ({
     },
     divider: {
         margin: "10px auto"
-    }
+    },
+
+    searchIconmobile: {
+        width: theme.spacing.unit * 9,
+        height: '100%',
+        position: 'absolute',
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      inputRootmobile: {
+        color: 'inherit',
+        width: '100%',
+      },
+      inputInputmobile: {
+        paddingTop: theme.spacing.unit,
+        paddingRight: theme.spacing.unit,
+        paddingBottom: theme.spacing.unit,
+        paddingLeft: theme.spacing.unit * 10,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        // [theme.breakpoints.up('md')]: {
+        //   width: 200,
+        // },
+      }
+     
 });
 
 Store.propTypes = {

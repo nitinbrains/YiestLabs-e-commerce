@@ -12,47 +12,9 @@ import Router from "next/router";
 
 import SalesLib from "lib/SalesLib";
 
-class MainMenu extends Component {
-    render() {
-        const { classes, changeMainCategory } = this.props;
-        return (
-            <div style={{ marginTop: "5%" }}>
-                <Grid container spacing={24}>
-                    <Grid item xs={12}>
-                        <Grid container justify="center" spacing={16}>
-                            {SalesLib.CATEGORIES.map(category => (
-                                <Grid key={category.value} item item xs={2} spacing={8} style={{ minWidth: "300px" }}>
-                                    <div
-                                        style={{
-                                            textAlign: "center",
-                                            backgroundImage: `url(${category.img})`,
-                                            backgroundRepeat: "no-repeat",
-                                            backgroundSize: "cover",
-                                            height: "490px",
-                                            width: "100%",
-                                            cursor: "pointer",
-                                        }}
-                                        onClick={() => changeMainCategory(category)}
-                                    >
-                                        <div className={classes.divTitle}>
-                                            <Typography variant="title" color="secondary" className={classes.info} className={classes.typoTitle}>
-                                                {category.label}
-                                            </Typography>
-                                        </div>
-                                    </div>
-                                </Grid>
-                            ))}
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </div>
-        );
-    }
-}
-
 const styles = theme => ({
     root: {
-        flexGrow: 1
+        flexGrow: 1,
     },
     card: {
         border: "solid 1px",
@@ -71,25 +33,63 @@ const styles = theme => ({
     },
     paper: {
         height: 490,
-        width: 300
+        width: 300,
     },
     control: {
-        padding: theme.spacing.unit * 2
+        padding: theme.spacing.unit * 2,
     },
     typoTitle: {
-        fontWeight: "bolder",
-        textShadow: "0px 1px, 1px 0px, 1px 1px",
-        letterSpacing: "2px"
+        fontWeight: 'bolder', textShadow: '0px 1px, 1px 0px, 1px 1px', letterSpacing: '2px'
     },
     divTitle: {
-        margin: "auto",
-        width: "50%",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-        textAlign: "center"
+        margin: 'auto', width: 'auto', justifyContent:'center'
+        , height: '100%', display: 'flex', alignItems: 'center', textAlign: 'center'
     }
 });
+
+class MainMenu extends Component {
+    render() {
+        const { classes, changeMainCategory } = this.props;
+        return (
+            <div style={{ marginTop: "5%" }}>
+                <Grid container spacing={24}>
+                    <Grid item xs={12}>
+                        <Grid container justify="center" spacing={16}>
+                            {SalesLib.filters.map(category => (
+                                <Grid key={category.value} item item xs={12} sm={6} md={4} lg={2}  spacing={8}>
+                                    <div
+                                        style={{
+                                            textAlign: "center",
+                                            backgroundImage: `url(${category.img})`,
+                                            backgroundRepeat: "no-repeat",
+                                            backgroundSize: "cover",
+                                            height: "490px",
+                                            width: "100%",
+                                            cursor: "pointer",
+                                        }}
+                                        onClick={() => changeMainCategory(category)}
+                                    >
+                                        <div className={classes.divTitle}>
+                                            <Typography
+                                            variant="title"
+                                            color="secondary"
+                                            className={classes.info}
+                                            className={classes.typoTitle}
+                                            >
+                                             {category.title}
+                                            </Typography>
+                                        </div>
+                                    </div>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </div>
+        );
+    }
+}
+
 
 const mapStateToProps = state => {
     return {

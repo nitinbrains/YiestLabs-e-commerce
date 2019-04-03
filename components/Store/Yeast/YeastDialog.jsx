@@ -573,10 +573,15 @@ class YeastDialog extends Component {
                         >
                             <Grid item xs={12} md={6}>
                                 <div style={{ display: "flex" }}>
-                                    <Typography>Attenuation:</Typography>
+                                    <Typography className="dialogVariant">Attenuation:</Typography>
                                     &nbsp;
                                     <Typography
-                                        style={{ color: getColor(this.item.salesCategory)}}
+                                     className="dialogVariant"
+                                        style={{
+                                            color: getColor(
+                                                this.props.item.salesCategory
+                                            )
+                                        }}
                                     >
                                         {this.item.attenuation}
                                     </Typography>
@@ -585,10 +590,15 @@ class YeastDialog extends Component {
 
                             <Grid item xs={12} md={6}>
                                 <div style={{ display: "flex" }}>
-                                    <Typography>Flocculation: </Typography>
+                                    <Typography className="dialogVariant" >Flocculation: </Typography>
                                     &nbsp;
                                     <Typography
-                                        style={{ color: getColor(this.item.salesCategory)}}
+                                       className="dialogVariant"
+                                        style={{
+                                            color: getColor(
+                                                this.props.item.salesCategory
+                                            )
+                                        }}
                                     >
                                         {this.item.flocculation}
                                     </Typography>
@@ -596,10 +606,15 @@ class YeastDialog extends Component {
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <div style={{ display: "flex" }}>
-                                    <Typography>Alcohol Tol.: </Typography>
+                                    <Typography className="dialogVariant">Alcohol Tol.: </Typography>
                                     &nbsp;
                                     <Typography
-                                        style={{ color: getColor(this.item.salesCategory)}}
+                                       className="dialogVariant"
+                                        style={{
+                                            color: getColor(
+                                                this.props.item.salesCategory
+                                            )
+                                        }}
                                     >
                                         {this.item.alcoholTol}
                                     </Typography>
@@ -607,10 +622,15 @@ class YeastDialog extends Component {
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <div style={{ display: "flex" }}>
-                                    <Typography>Fermentation Temp: </Typography>
+                                    <Typography className="dialogVariant">Fermentation Temp: </Typography>
                                     &nbsp;
                                     <Typography
-                                        style={{ color: getColor(this.item.salesCategory)}}
+                                       className="dialogVariant"
+                                        style={{
+                                            color: getColor(
+                                                this.props.item.salesCategory
+                                            )
+                                        }}
                                     >
                                         {this.item.optFermentTempF |
                                             this.item.optFermentTempC}
@@ -693,7 +713,7 @@ class YeastDialog extends Component {
                         xs
                         container
                         spacing={24}
-                        style={{ marginTop: 5 }}
+                        style={{ marginTop: 5, marginBottom: 10 }}
                         direction={"row"}
                     >
                         <Formik
@@ -781,7 +801,7 @@ class YeastDialog extends Component {
                                                 direction={"row"}
                                                 justify="flex-end"
                                             >
-                                                <Grid item>
+                                                <Grid item >
                                                     <div className={classes.buttons}>
                                                         <Button
                                                             type="submit"
@@ -825,15 +845,19 @@ const styles = theme => ({
         borderRadius: "50%",
         padding: 5,
         width: 37,
-        height: 37
+        height: 37,
+        [theme.breakpoints.down("sm")]: {
+            width: 30,
+            height: 30,
+        }
     },
     buttons: {
         display: "flex",
-        justifyContent: "flex-end"
+        justifyContent: "center"
     },
     button: {
-        marginTop: theme.spacing.unit,
-        marginRight: theme.spacing.unit * -5
+         marginTop: theme.spacing.unit,
+         marginRight: theme.spacing.unit * -5
     },
     close: { position: "absolute", right: 0, top: 0 },
     form:{

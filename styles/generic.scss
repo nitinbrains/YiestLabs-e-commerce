@@ -54,6 +54,17 @@ $color-white: #fff;
 	font-size: 12px !important;
 }
 
+.back-button {
+	border-radius:10px !important;
+	min-height: 20px !important;
+	padding: 4px !important;
+	font-size: 12px !important;
+	border:2px solid #f28411;
+	background-color:#ffc266 !important;
+	color:#f28411 !important;
+	font-weight:bold !important;
+  }
+
 .alert-message{
 	display: flex;
 	align-items: center;

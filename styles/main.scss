@@ -11,6 +11,12 @@ $Montserrat : 'Montserrat', sans-serif;
 @import "store";
 @import "myaccount";
 
+//rework store
+@import "../components//Store/store.scss";
+@import "../components/NavBar/responsive.scss";
+@import "../components/NavBar/inline.scss";
+@import "../components/Store/Yeast/responsive.scss";
+
 body {
 	font-family: $Montserrat;
 }
