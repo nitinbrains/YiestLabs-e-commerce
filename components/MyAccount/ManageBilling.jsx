@@ -51,7 +51,7 @@ class ManageBilling extends Component {
     };
 
     handleCardHover = i => {
-        this.setState({ boxHover: i });
+        this.setState({ boxHover: i, lastBoxHover: i });
         this.setState({ lastBoxHover: i });
     };
 

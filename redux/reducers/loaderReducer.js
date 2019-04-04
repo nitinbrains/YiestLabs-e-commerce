@@ -3,6 +3,7 @@ import { inventoryTypes } from 'appRedux/actions/inventoryActions';
 import { orderTypes } from 'appRedux/actions/orderActions';
 import { cartTypes } from 'appRedux/actions/cartActions';
 import { userTypes } from 'appRedux/actions/userActions';
+import { loadingTypes } from 'appRedux/actions/loadingActions';
 
 const initialState = {
     isLoading: false,
@@ -10,6 +11,17 @@ const initialState = {
 };
 
 export default createReducer(initialState, {
+    // loading
+    [loadingTypes.START_LOADING_SUCCESS]: (state, { data }) => ({
+        isLoading: true,
+    }),
+    [loadingTypes.STOP_LOADING_SUCCESS]: (state, { data }) => ({
+        isLoading: false,
+    }),
+    [inventoryTypes.GET_INVENTORY_SUCCESS]: (state, { data }) => ({
+        isLoading: false,
+        type: ''
+    }),
     // inventory
     [inventoryTypes.GET_INVENTORY_ATTEMPT]: (state, { data }) => ({
         isLoading: true,
