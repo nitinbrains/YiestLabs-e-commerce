@@ -10,6 +10,14 @@ import { orderTypes } from 'appRedux/actions/orderActions';
 // Inventory actions
 import { inventoryTypes } from 'appRedux/actions/inventoryActions';
 
+import { loadingTypes } from 'appRedux/actions/loadingActions';
+
+// Loading sagas
+import { 
+    startLoading,
+    stopLoading
+} from './loading';
+
 // User sagas
 import {
     loginUser,
@@ -61,7 +69,10 @@ import {
 
 function * rootSaga () {
     yield all([
-        // USERS
+        // LOADING
+        takeEvery(loadingTypes.START_LOADING_ATTEMPT, startLoading),
+        takeEvery(loadingTypes.STOP_LOADING_ATTEMPT, stopLoading),
+            // USERS
         takeLatest(userTypes.USER_LOGIN_ATTEMPT, loginUser),
         takeLatest(userTypes.GET_USER_INFO_ATTEMPT, getUserInfo),
         takeLatest(userTypes.SET_USER_INFO_ATTEMPT, setUserInfo),

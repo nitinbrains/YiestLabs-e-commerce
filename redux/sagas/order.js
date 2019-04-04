@@ -82,8 +82,6 @@ export function * placeOrder(action) {
             }
         }
         yield put(responseFailure(error));
-        state.loading.isLoading = false;
-        state.loading.type = 'orderError';
     }
 }
 
