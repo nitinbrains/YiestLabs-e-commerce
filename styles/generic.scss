@@ -54,6 +54,16 @@ $color-white: #fff;
 	font-size: 12px !important;
 }
 
+
+@media only screen and (max-width: 600px) {
+	.form-button-small-size {
+		min-height: 25px !important;
+		padding: 5px !important;
+		font-size: 12px !important;
+		width: 100% !important;
+	}
+  } 
+
 .back-button {
 	border-radius:10px !important;
 	min-height: 20px !important;
