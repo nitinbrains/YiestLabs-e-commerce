@@ -655,6 +655,7 @@ class YeastDialog extends Component {
                         container
                         style={{ marginTop: 5 }}
                         direction={"row"}
+                        justify="center"
                     >
                         <Grid
                             item
