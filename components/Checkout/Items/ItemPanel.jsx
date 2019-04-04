@@ -114,7 +114,7 @@ class ItemPanel extends Component {
                                     variant="body1"
                                     style={{ display: "inline-block" }}
                                 >
-                                    Delivery Date:
+                                    Delivery/Pickup Date:
                                 </Typography>
                                 &nbsp;
                                 <Typography

@@ -29,6 +29,7 @@ class ManageShipping extends Component {
         this.state = {
             newAddress: false,
             boxHover: false,
+            lastBoxHover: false, //This is so the "set as default" box hangs around when the user moves off the box to click it
             confirmation: false
         };
     }
@@ -51,6 +52,7 @@ class ManageShipping extends Component {
 
     handleCardHover = i => {
         this.setState({ boxHover: i });
+        this.setState({ lastBoxHover: i });
     };
 
     handleCardLeaveHover = () => {
@@ -215,7 +217,7 @@ class ManageShipping extends Component {
                                                     variant="contained"
                                                     color="primary"
                                                     style={{ bottom: 2 }}
-                                                    className={classNames(this.state.boxHover != i && classes.hide)}
+                                                    className={classNames(this.state.lastBoxHover != i && classes.hide)}
                                                     onClick={e => this.selectDefaultAddress(address)}
                                                 >
                                                     Set as Default

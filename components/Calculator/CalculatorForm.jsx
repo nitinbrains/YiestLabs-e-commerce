@@ -64,15 +64,15 @@ class CalculatorForm extends Component {
             if (!values.volVal) {
                 errors.volVal = "Required";
             }
-    
+
             if (!values.volUnit) {
                 errors.volVal = "Required";
             }
-    
+
             if (!values.tempVal) {
                 errors.tempUnit = "Required";
             }
-    
+
             if (!values.gravVal) {
                 errors.gravUnit = "Required";
             }
@@ -125,7 +125,7 @@ class CalculatorForm extends Component {
                         const volUnit = _get(values, 'volUnit');
                         const tempUnit = _get(values, 'tempUnit');
                         const gravUnit = _get(values, 'gravUnit');
-                        
+
                         return (
                             <Form>
                                 <fieldset className="fieldset">
@@ -265,6 +265,7 @@ class CalculatorForm extends Component {
     };
 
     _renderCustomForm = () => {
+        const { onchange } = this.props;
         return (
             <React.Fragment>
                 <Formik
@@ -322,7 +323,7 @@ class CalculatorForm extends Component {
                                                 </Grid>
                                             );
                                         }}
-                                    />  
+                                    />
                                     <Field
                                         render={({ field: { value, onChange }}) => {
                                             return (
@@ -358,7 +359,11 @@ class CalculatorForm extends Component {
                                     />
                                 </Grid>
                                 <Grid container spacing={24} className="button-grid">
-                                    <Grid item xs={6} />
+                                    <Grid item xs={6}>
+                                        <h4>
+                                            * Re-pitching is at your own risk.
+                                        </h4>
+                                    </Grid>
                                     <Grid item xs={6}>
                                         <Button className="calculate-button form-button" variant="contained" type="submit">
                                             CALCULATE
@@ -411,7 +416,7 @@ class CalculatorForm extends Component {
                     </Grid>
 
                     {custom ? this._renderCustomForm() : this._renderLabGrownForm()}
-                
+
                 </CardBody>
             </Card>
         );

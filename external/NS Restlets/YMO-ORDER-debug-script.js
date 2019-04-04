@@ -78,23 +78,23 @@ require(["N/record", "N/log", "N/search", "N/format"], function( record, log, se
 
                         // Always check Asheville for plates orders
                         if (hasPlates) {
-                            item.shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                            item.shipDate = getShipDate(shipDate, userLocation, userLocation != 2, userLocation == 7, false, false);
                             item.Warehouse = 11;
                         } else {
                             if (territory >= 3) {
                                 if (item.OrderDetailQty <= parseInt(ASHAvail.availQtyToShip)) {
-                                    item.shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                    item.shipDate = getShipDate(shipDate, userLocation, userLocation != 2, userLocation == 7, false, false);
                                     item.Warehouse = 11;
                                 } else if (item.OrderDetailQty <= parseInt(SDAvail.availQtyToShip)) {
-                                    item.shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                    item.shipDate = getShipDate(shipDate, userLocation, userLocation != 2, userLocation == 7, false, false);
                                     item.Warehouse = 9;
                                 } else if (leadTime) {
                                     item.shipDate = getShipDate(
                                         shipDate.setDate(SDLocalTime.getDate() + leadTime),
-                                        false,
                                         userLocation,
                                         userLocation != 2,
                                         userLocation == 7,
+                                        false,
                                         false
                                     );
                                     item.Warehouse = parseInt(warehouseMap(userLocation));
@@ -104,18 +104,18 @@ require(["N/record", "N/log", "N/search", "N/format"], function( record, log, se
                                 }
                             } else {
                                 if (item.OrderDetailQty <= parseInt(SDAvail.availQtyToShip)) {
-                                    item.shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                    item.shipDate = getShipDate(shipDate, userLocation, userLocation != 2, userLocation == 7, false, false);
                                     item.Warehouse = 9;
                                 } else if (item.OrderDetailQty <= parseInt(ASHAvail.availQtyToShip)) {
-                                    item.shipDate = getShipDate(shipDate, false, userLocation, userLocation != 2, userLocation == 7, false);
+                                    item.shipDate = getShipDate(shipDate, userLocation, userLocation != 2, userLocation == 7, false, false);
                                     item.Warehouse = 11;
                                 } else if (leadTime) {
                                     item.shipDate = getShipDate(
                                         shipDate.setDate(SDLocalTime.getDate() + leadTime),
-                                        false,
                                         userLocation,
                                         userLocation != 2,
                                         userLocation == 7,
+                                        false,
                                         false
                                     );
                                     item.Warehouse = parseInt(warehouseMap(userLocation));
@@ -143,7 +143,7 @@ require(["N/record", "N/log", "N/search", "N/format"], function( record, log, se
                             //large bbl custom pour
                             var shipDate = new Date(SDLocalTime);
                             leadTime = leadTime ? leadTime : 21;
-                            item.shipDate = getShipDate(shipDate.setDate(SDLocalTime.getDate() + leadTime), false, userLocation, userLocation != 2, userLocation == 7, false);
+                            item.shipDate = getShipDate(shipDate.setDate(SDLocalTime.getDate() + leadTime), userLocation, userLocation != 2, userLocation == 7, false, false);
                             item.Warehouse = parseInt(warehouseMap(userLocation));
                             continue;
                         }
@@ -160,7 +160,7 @@ require(["N/record", "N/log", "N/search", "N/format"], function( record, log, se
 
                             if (parseInt(CPHAvail.availQtyToShip) >= item.OrderDetailQty) {
                                 checkProduction = false;
-                                item.shipDate = getShipDate(new Date(CPHAvail.dateValue), isPurepitch, userLocation, false, true, false);
+                                item.shipDate = getShipDate(new Date(CPHAvail.dateValue), userLocation, false, true, false, !isPurepitch);
                                 item.Warehouse = 30;
                             }
                         } else if (userLocation == 5) {
@@ -169,7 +169,7 @@ require(["N/record", "N/log", "N/search", "N/format"], function( record, log, se
 
                             if (parseInt(HKAvail.availQtyToShip) >= item.OrderDetailQty) {
                                 checkProduction = false;
-                                item.shipDate = getShipDate(new Date(HKAvail.dateValue), isPurepitch, userLocation, false, false, false);
+                                item.shipDate = getShipDate(new Date(HKAvail.dateValue), userLocation, false, false, false, !isPurepitch);
                                 item.Warehouse = 31;
                             }
                         } else if (userLocation == 2) {
@@ -179,21 +179,21 @@ require(["N/record", "N/log", "N/search", "N/format"], function( record, log, se
                             if (territory >= 3) {
                                 if (parseInt(ASHAvail.availQtyToShip) >= item.OrderDetailQty && splitOrder) {
                                     checkProduction = false;
-                                    item.shipDate = getShipDate(new Date(ASHAvail.dateValue), isPurepitch, userLocation, false, false, true);
+                                    item.shipDate = getShipDate(new Date(ASHAvail.dateValue), userLocation, false, false, true, !isPurepitch);
                                     item.Warehouse = 11;
                                 } else if (parseInt(SDAvail.availQtyToShip) >= item.OrderDetailQty && (!hasPlates || (hasPlates && !splitOrder))) {
                                     checkProduction = false;
-                                    item.shipDate = getShipDate(new Date(SDAvail.dateValue), isPurepitch, userLocation, false, false, false);
+                                    item.shipDate = getShipDate(new Date(SDAvail.dateValue), userLocation, false, false, false, !isPurepitch);
                                     item.Warehouse = 9;
                                 }
                             } else {
                                 if (parseInt(SDAvail.availQtyToShip) >= item.OrderDetailQty && (!hasPlates || (hasPlates && !splitOrder))) {
                                     checkProduction = false;
-                                    item.shipDate = getShipDate(new Date(SDAvail.dateValue), isPurepitch, userLocation, false, false, false);
+                                    item.shipDate = getShipDate(new Date(SDAvail.dateValue), userLocation, false, false, false, !isPurepitch);
                                     item.Warehouse = 9;
                                 } else if (parseInt(ASHAvail.availQtyToShip) >= item.OrderDetailQty && splitOrder) {
                                     checkProduction = false;
-                                    item.shipDate = getShipDate(new Date(ASHAvail.dateValue), isPurepitch, userLocation, false, false, true);
+                                    item.shipDate = getShipDate(new Date(ASHAvail.dateValue), userLocation, false, false, true, !isPurepitch);
                                     item.Warehouse = 11;
                                 }
                             }
@@ -217,7 +217,7 @@ require(["N/record", "N/log", "N/search", "N/format"], function( record, log, se
 
                             for (var j = 0; j < packagingWOs.length; j++) {
                                 if (item.OrderDetailQty <= parseInt(packagingWOs[j].availQtyToShip)) {
-                                    item.shipDate = getShipDate(new Date(packagingWOs[j].dateValue), isPurepitch, userLocation, userLocation != 2, userLocation == 7, false);
+                                    item.shipDate = getShipDate(new Date(packagingWOs[j].dateValue), userLocation, userLocation != 2, userLocation == 7, false, !isPurepitch);
                                     item.Warehouse = parseInt(warehouseMap(userLocation));
                                     j = packagingWOs.length;
                                 }
@@ -228,11 +228,11 @@ require(["N/record", "N/log", "N/search", "N/format"], function( record, log, se
                                     var shipDate = new Date(SDLocalTime);
                                     item.shipDate = getShipDate(
                                         shipDate.setDate(SDLocalTime.getDate() + leadTime),
-                                        isPurepitch,
                                         userLocation,
                                         userLocation != 2,
                                         userLocation == 7,
-                                        false
+                                        false,
+                                        !isPurepitch
                                     );
                                     item.Warehouse = parseInt(warehouseMap(userLocation));
                                 } else {
@@ -421,7 +421,11 @@ require(["N/record", "N/log", "N/search", "N/format"], function( record, log, se
             case 1:
             case 2:
             case 5:
-                return record.load({ type: record.Type.ASSEMBLY_ITEM, id: NSID });
+                try {
+                    return record.load({ type: record.Type.ASSEMBLY_ITEM, id: NSID });
+                } catch (error) {
+                    return record.load({type: record.Type.INVENTORY_ITEM, id: itemID});
+                }
             case 3:
                 try {
                     return record.load({ type: record.Type.INVENTORY_ITEM, id: NSID });
@@ -577,7 +581,7 @@ require(["N/record", "N/log", "N/search", "N/format"], function( record, log, se
         return false;
     }
 
-    function getShipDate(date, isPurepitch, subsidiary, addTravelTime, travelOnMonday, isAsheville)
+    function getShipDate(date, subsidiary, addTravelTime, travelOnMonday, isAsheville, isCustomPour)
     {
         var finalDate = new Date(date);
         var today = getLocalTime(subsidiary, isAsheville);
@@ -642,6 +646,10 @@ require(["N/record", "N/log", "N/search", "N/format"], function( record, log, se
             {
                 finalDate.setDate(finalDate.getDate() + 1);
             }
+        }
+
+        if (isCustomPour) {
+            finalDate.setDate(finalDate.getDate() + 1);
         }
 
         return valiDate(finalDate, subsidiary);
@@ -748,7 +756,8 @@ require(["N/record", "N/log", "N/search", "N/format"], function( record, log, se
         //     }
         // }
 
-        return {
+        // item not available
+        return [{
             "type": "Avail Qty",
             "action": "Add",
             "qty": "0",
@@ -758,7 +767,7 @@ require(["N/record", "N/log", "N/search", "N/format"], function( record, log, se
             "inventoryLocation": null,
             "volume": 1,
             "item": null
-        };
+        }]
 
     }
 

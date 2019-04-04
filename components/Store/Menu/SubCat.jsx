@@ -41,7 +41,8 @@ class SubCat extends Component {
                                     >
                                         <div className={classes.info} className={classes.divIcon} className={classes.divIcon}>
                                             <img className={classes.imgIcon} src={category.icon} />
-                                            <Typography variant="subheading" color="secondary" className={classes.info} className={classes.titleTypo}>
+                                            <Typography variant="subheading" color={category.label == "Vault Strains" ? "#000000" : "secondary"}
+                                            className={classes.info} className={classes.titleTypo}>
                                                 {category.label}
                                             </Typography>
                                         </div>

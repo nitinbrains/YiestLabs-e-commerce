@@ -31,6 +31,9 @@ class Cart extends Component {
         if(!user.id){
             Router.push('/login')
         } else {
+            // Can't check out with too large of an order history
+            // There's not any real reason to keep it during checkout anyway
+            if (user.orderHistory) user.orderHistory = [];
             Router.push('/checkout');
         }
     }

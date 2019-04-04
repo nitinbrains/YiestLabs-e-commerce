@@ -51,7 +51,7 @@ class SaleItem extends Component {
                             <Typography component="p">{item.shipDate.toDateString()}</Typography>
                         </ListItem>
                         <ListItem>
-                            <ListItemText primary="Delivery Date" />
+                            <ListItemText primary="Delivery/Pickup Date" />
                             <Typography component="p">{item.deliveryDate.toDateString()}</Typography>
                         </ListItem>
 

@@ -29,6 +29,7 @@ class ManageBilling extends Component {
         this.state = {
             newAddress: false,
             boxHover: false,
+            lastBoxHover: false, //This is so the "set as default" box hangs around when the user moves off the box to click it
             confirmation: false
         };
     }
@@ -51,6 +52,7 @@ class ManageBilling extends Component {
 
     handleCardHover = i => {
         this.setState({ boxHover: i });
+        this.setState({ lastBoxHover: i });
     };
 
     handleCardLeaveHover = () => {
@@ -217,7 +219,7 @@ class ManageBilling extends Component {
                                                     onClick={e => {
                                                         this.selectDefaultAddress(address);
                                                     }}
-                                                    className={classNames(this.state.boxHover != i && classes.hide)}
+                                                    className={classNames(this.state.lastBoxHover != i && classes.hide)}
                                                 >
                                                     Set as Default
                                                 </Button>

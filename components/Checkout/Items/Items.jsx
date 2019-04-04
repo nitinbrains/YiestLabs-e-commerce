@@ -26,7 +26,7 @@ class Items extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showWantSoonerDialog: false,
+            showWantSoonerDialog: false
         };
     }
     static getDerivedStateFromProps(nextProps, prevState){
@@ -103,7 +103,8 @@ class Items extends Component {
                                             color="primary"
                                             className={classes.total}
                                             >
-                                            ${this.props.order.itemSubtotal}
+                                            $
+                                            {this.props.order.itemSubtotal}
                                         </Typography>
                                     </ListItem>
                                     <ListItem className={classes.listItem}>

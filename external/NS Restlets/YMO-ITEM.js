@@ -178,12 +178,12 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
             var response = {version: versionUpToDate(), items: []};
             var Inventory = cache.getCache({name: 'Inventory', scope: cache.Scope.PUBLIC});
             var items = JSON.parse(Inventory.get({key: 'items'}));
-            
-            if (items) 
+
+            if (items)
             {
                 response.items = items;
             }
-            else 
+            else
             {
                 var inventory = searchForStrains();
 
@@ -196,7 +196,7 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
                     results = inventory.getRange({start: index, end: index + 1000});
                     index += 1000;
 
-                    for (var i = 0; i < results.length; i++) 
+                    for (var i = 0; i < results.length; i++)
                     {
                         var slantExceptionStr = results[i].getValue({name: 'itemid'}).toLowerCase();
                         var itemName = String(results[i].getValue({name: 'itemid'}));
@@ -298,7 +298,7 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
                                 {
                                     yeastMap[itemName] = response.items.length;
                                     addItem(response.items, results[i], null, 0);
-                                } 
+                                }
                             }
                             else //lab services & nutrients and enzymes
                             {
@@ -306,14 +306,14 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
                                 {
                                     yeastMap[itemName] = response.items.length;
                                     addItem(response.items, results[i], null, null);
-                                }   
-                            } 
+                                }
+                            }
                         }
                     }
                 }
                 while(results.length == 1000)
 
-                for (var i = 0; i < slantRetries.length; i++) 
+                for (var i = 0; i < slantRetries.length; i++)
                 {
                     var slantExceptionStr = slantRetries[i].getValue({name: 'itemid'}).toLowerCase();
 
@@ -333,14 +333,14 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
                     }
                     else
                     {
-                        //Item is thrown out if it doesn't pass, may lead to possible missing slants                
+                        //Item is thrown out if it doesn't pass, may lead to possible missing slants
                         //nlapiLogExecution('ERROR', 'Failed to add slant, first item', 'Item: '+ slantRetries[i].getId());
-                    }  
+                    }
                 }
 
                 if(parentIDs.length > 0)
                 {
-                    fixNames(response.items, yeastMap, parentIDs); 
+                    fixNames(response.items, yeastMap, parentIDs);
                 }
 
                 var Inventory = cache.getCache({name: 'Inventory', scope: cache.Scope.PUBLIC});
@@ -357,10 +357,10 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
             return {error: error};
         }
     }
-    
-    function post(input) 
+
+    function post(input)
     {
-        try 
+        try
         {
             var message = ReceiveMessage(input);
             var response = {};
@@ -626,6 +626,7 @@ function(record, log, search, cache, crypto, encode, itemAvailability)
             x.earliestShipDate = getShipDate(new Date(), true, 2, false, false, Warehouse == 11);
             x.chosenShipDate = new Date(x.earliestShipDate);
             x.Warehouse = Warehouse;
+            x.OriginalWarehouse = Warehouse;
         });
 
         return possibleConfigurations;

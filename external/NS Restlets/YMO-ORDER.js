@@ -728,7 +728,11 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
             case 1:
             case 2:
             case 5:
-                return record.load({ type: record.Type.ASSEMBLY_ITEM, id: NSID });
+                try {
+                    return record.load({ type: record.Type.ASSEMBLY_ITEM, id: NSID });
+                } catch (error) {
+                    return record.load({ type: record.Type.INVENTORY_ITEM, id: NSID });
+                }
             case 3:
                 try {
                     return record.load({ type: record.Type.INVENTORY_ITEM, id: NSID });
@@ -739,7 +743,11 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                 try {
                     return record.load({ type: record.Type.SERVICE_ITEM, id: NSID });
                 } catch (error) {
-                    return record.load({ type: record.Type.ASSEMBLY_ITEM, id: NSID });
+                    try {
+                        return record.load({ type: record.Type.ASSEMBLY_ITEM, id: NSID });
+                    } catch (error) {
+                        return record.load({ type: record.Type.INVENTORY_ITEM, id: NSID });
+                    }
                 }
         }
     }
