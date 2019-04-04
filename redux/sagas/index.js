@@ -13,7 +13,7 @@ import { inventoryTypes } from 'appRedux/actions/inventoryActions';
 import { loadingTypes } from 'appRedux/actions/loadingActions';
 
 // Loading sagas
-import { 
+import {
     startLoading,
     stopLoading
 } from './loading';
@@ -43,9 +43,9 @@ import {
 } from './user';
 
 // Cart sagas
-import { 
-    updateCartItem, 
-    addCartItem, 
+import {
+    updateCartItem,
+    addCartItem,
     removeCartItem,
     clearCart
 } from './cart';
@@ -70,8 +70,8 @@ import {
 function * rootSaga () {
     yield all([
         // LOADING
-        takeEvery(loadingtypes.START_LOADING_ATTEMPT, startLoading),
-        takeEvery(loadingtypes.STOP_LOADING_ATTEMPT, stopLoading),
+        takeEvery(loadingTypes.START_LOADING_ATTEMPT, startLoading),
+        takeEvery(loadingTypes.STOP_LOADING_ATTEMPT, stopLoading),
             // USERS
         takeLatest(userTypes.USER_LOGIN_ATTEMPT, loginUser),
         takeLatest(userTypes.GET_USER_INFO_ATTEMPT, getUserInfo),

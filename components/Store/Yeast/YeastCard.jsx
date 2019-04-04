@@ -152,12 +152,12 @@ class YeastCard extends Component {
                                     src={getIcon(this.props.item.salesCategory)}
                                     height="40"
                                 />
-                                <Typography variant="h5" color={this.props.item.salesCategory == 32 ? "#000000" : "secondary"}>
+                                <Typography variant="h5" color="secondary">
                                     {itemID}
                                 </Typography>
                                 <Typography
                                     variant="subheading"
-                                    color={this.props.item.salesCategory == 32 ? "#000000" : "secondary"}
+                                    color="secondary"
                                 >
                                     {itemName}
                                 </Typography>
