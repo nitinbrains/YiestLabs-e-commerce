@@ -94,7 +94,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                         this.state.openSearchBar && classes.appBarShiftSearch
                     )}
                 >
-                    <Toolbar>
+                    <Toolbar className={classes.toolbarCenter}>
                         <IconButton
                             onClick={this.handleUserBar}
                             className={classNames(
@@ -308,9 +308,16 @@ const styles = theme => ({
     toolbar: {
         display: "flex",
         alignItems: "center",
-        justifyContent: "flex-start",
         padding: "0 8px",
         ...theme.mixins.toolbar
+    },
+    toolbarCenter:{
+        display:'flex',
+        justifyContent:'flex-start',
+        [theme.breakpoints.down("xs")]: {
+            display: "flex",
+            justifyContent:'center',
+        }
     },
     // navbarformyorders:{
     //     [theme.breakpoints.down("sm")]: {
@@ -327,9 +334,14 @@ const styles = theme => ({
         left: 70,
         top: -60,
         padding: 10,
-        margin: 20,
+        marginTop:20,
+        marginBottom:20,
         width: 150,
-        height: 150
+        height: 150,
+        [theme.breakpoints.down("xs")]: {
+            left:'unset',
+        }
+
     },
     logoImg: {
         cursor: "pointer"

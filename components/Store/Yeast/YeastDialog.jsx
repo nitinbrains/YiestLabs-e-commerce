@@ -673,7 +673,7 @@ class YeastDialog extends Component {
                                     container
                                     spacing={24}
                                     direction={"row"}
-                                    justify="flex-end"
+                                    justify="center"
                                 >
                                     <Grid item>
                                         <div className={classes.buttons}>
@@ -715,9 +715,10 @@ class YeastDialog extends Component {
                                             container
                                             spacing={24}
                                             direction={"row"}
-                                            justify="flex-start"
+                                            justify="center"
+                                            className={classes.paddingFix}
                                         >
-                                            <Grid item>
+                                            <Grid item xs={12} sm={4} md={4} className={classes.formFields} >
                                                 <FormControl>
                                                     <InputLabel>Packaging</InputLabel>
                                                     <Select
@@ -738,7 +739,7 @@ class YeastDialog extends Component {
                                                 </FormControl>
                                             </Grid>
                                             {this.state.pack && (
-                                                <Grid item>
+                                                <Grid item xs={12} sm={4} md={4} className={classes.formFields}>
                                                     <FormControl>
                                                         <InputLabel>Pack</InputLabel>
                                                         <Select
@@ -761,6 +762,7 @@ class YeastDialog extends Component {
                                             )}
                                             <Grid item>
                                               <form>
+                                            <Grid item xs={12} sm={4} md={4} className={classes.formFields}>
                                                 <TextField
                                                     id="quantity"
                                                     label="Quantity"
@@ -775,6 +777,7 @@ class YeastDialog extends Component {
                                                       : (this.item.type == 5 ? "0.5L increments" : "")
                                                     }
                                                 />
+                                                </Grid>
                                               </form>
                                             </Grid>
                                             <Grid
@@ -783,10 +786,10 @@ class YeastDialog extends Component {
                                                 container
                                                 spacing={24}
                                                 direction={"row"}
-                                                justify="flex-end"
+                                                justify="center"
                                             >
                                                 <Grid item>
-                                                    <div className={classes.buttons}>
+                                                    {/* <div className={classes.buttons}>
                                                         <Button
                                                             type="submit"
                                                             variant="contained"
@@ -795,10 +798,22 @@ class YeastDialog extends Component {
                                                         >
                                                             Add to Cart
                                                         </Button>
-                                                    </div>
+                                                    </div> */}
                                                 </Grid>
+                                               
                                             </Grid>
+                                            
                                         </Grid>
+                                        <div className={classes.addButton}>
+                                                        <Button
+                                                            type="submit"
+                                                            variant="contained"
+                                                            color="primary"
+                                                            // className={classes.button}
+                                                        >
+                                                            Add to Cart
+                                                        </Button>
+                                                    </div>
                                     </Form>
                                 )
                             }
@@ -835,14 +850,48 @@ const styles = theme => ({
             height: 30,
         }
     },
+    formFields:{
+        display:'block',
+        // marginTop:'15px',
+        // marginLeft:'0px',
+        [theme.breakpoints.down("xs")]: {
+            display:'flex',
+            justifyContent:'center',
+            marginTop:'15px',
+            marginLeft:'40px',
+        }
+    },
     buttons: {
         display: "flex",
-        justifyContent: "flex-end"
+        justifyContent: "center"
+    },
+    addButton:{
+        display: "flex",
+        justifyContent: "center",
+        marginLeft:'10px',
+        [theme.breakpoints.down("xs")]: {
+            marginLeft:'16px',
+        }
+
+
     },
     button: {
         marginTop: theme.spacing.unit,
         marginRight: theme.spacing.unit * -5
     },
+    paddingFix:{
+         paddingLeft:'unset',
+         [theme.breakpoints.between("sm", "xl")]: {
+            paddingLeft:'100px',
+        },
+        // [theme.breakpoints.down("sm")]: {
+        //     paddingLeft:'100px',
+        // },
+        [theme.breakpoints.down("xs")]: {
+            paddingLeft:'0px',
+        },
+        
+},
     close: { position: "absolute", right: 0, top: 0 },
     form:{
         width:'100%',
