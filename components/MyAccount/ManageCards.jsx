@@ -76,9 +76,17 @@ class ManageCards extends Component {
         });
     };
 
-    setDefaultCreditCard = creditCard => {
-        if (!creditCard.default) {
-            this.props.setDefaultCreditCard({ creditCard });
+    selectCard = creditCard => {
+        const { 
+            checkout, 
+            setDefaultCreditCard, 
+            setCreditCard 
+        } = this.props;
+
+        if (checkout) {
+            setCreditCard({creditCard});
+        } else if (!creditCard.default) {
+            setDefaultCreditCard({creditCard});
         }
     };
 
@@ -138,24 +146,20 @@ class ManageCards extends Component {
                                                 </Typography>
                                             </Grid>
 
-                                            {this.props.user.card.ccnumber != card.ccnumber && !this.props.checkout && (
+                                            {this.props.user.card.ccnumber != card.ccnumber && (
                                                 <Grid item>
                                                     <Button
                                                         variant="contained"
                                                         color="primary"
                                                         style={{ bottom: 2 }}
                                                         className={classNames(this.state.cardHover != i && classes.hide)}
-                                                        onClick={() => this.setDefaultCreditCard(card)}
+                                                        onClick={() => this.selectCard(card)}
                                                     >
-                                                        Make Default
-                                                    </Button>
-                                                </Grid>
-                                            )}
-
-                                            {this.props.checkout && (
-                                                <Grid item>
-                                                    <Button variant="contained" color="primary" style={{ bottom: 2 }} onClick={() => this.props.setCreditCard(i)}>
-                                                        Select
+                                                        {this.props.checkout ?
+                                                            <React.Fragment>Select</React.Fragment>
+                                                        :
+                                                            <React.Fragment>Make Default</React.Fragment>
+                                                        }
                                                     </Button>
                                                 </Grid>
                                             )}

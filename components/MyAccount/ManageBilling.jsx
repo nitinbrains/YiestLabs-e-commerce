@@ -98,8 +98,14 @@ class ManageBilling extends Component {
         }
     }
 
-    handleSelectAddress = (address) => {
-        this.props.setBillAddress({ address });
+    selectAddress = (address) => {
+        const { checkout, setBillAddress, setDefaultBillAddress } = this.props;
+
+        if (checkout) {
+            setBillAddress({ address });
+        } else {
+            setDefaultBillAddress({ address })
+        }
         this.props.closeDialog();
     }
 
@@ -210,25 +216,16 @@ class ManageBilling extends Component {
                                         </Grid>
                                     </div>
                                     <div style={{ textAlign: "center"}}>
-                                        {this.props.user.billing.address1 != address.address1 && !this.props.checkout && (
+                                        {this.props.user.billing.address1 != address.address1 && (
                                             <Grid item>
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
                                                     style={{ bottom: 2 }}
-                                                    onClick={e => {
-                                                        this.selectDefaultAddress(address);
-                                                    }}
+                                                    onClick={e => this.selectAddress(address)}
                                                     className={classNames(this.state.lastBoxHover != i && classes.hide)}
                                                 >
                                                     Set as Default
-                                                </Button>
-                                            </Grid>
-                                        )}
-                                        {this.props.checkout && (
-                                            <Grid item>
-                                                <Button variant="contained" style={{ bottom: 2 }} color="primary" onClick={() => this.handleSelectAddress(address)}>
-                                                    Select
                                                 </Button>
                                             </Grid>
                                         )}

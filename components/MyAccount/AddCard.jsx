@@ -6,10 +6,13 @@ import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import Cleave from "cleave.js/react";
 
 import { Formik, Form, Field } from "formik";
 import _get from "lodash/get";
 import _set from "lodash/set";
+import _isEmpty from 'lodash/isEmpty';
+import moment from "moment";
 
 import { userActions } from "appRedux/actions/userActions";
 
@@ -18,6 +21,16 @@ function CreditCardMaskedTextField(props) {
     options={creditCard: true};
     return <Cleave {...other} onChange={onChange} ref={inputRef} options={options} />;
 }
+
+function DateMaskedTextField(props) {
+    let { options, onChange, inputRef, ...other } = props;
+    options={
+        date: true,
+        datePattern: ['m', 'Y']
+    };
+    return <Cleave {...other} onChange={onChange} ref={inputRef} options={options} />;
+}
+
 
 const FormikErrorMessage = ({ error }) => {
     return error ? <div className="error">{error}</div> : null;
@@ -28,7 +41,7 @@ class AddCard extends Component {
     }
 
     addCard = (values, { setErrors }) => {
-        let errors = validate(values);
+        let errors = this.validate(values);
         if (_isEmpty(errors)) {
             this.props.addCreditCard({ creditCard: values });
             this.props.closeNewCard();

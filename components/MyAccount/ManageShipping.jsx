@@ -98,8 +98,14 @@ class ManageShipping extends Component {
         }
     }
 
-    handleSelectAddress = (address) => {
-        this.props.setShipAddress({ address });
+    selectAddress = (address) => {
+        const { checkout, setShipAddress, setDefaultShipAddress } = this.props;
+
+        if (checkout) {
+            setShipAddress({ address });
+        } else {
+            setDefaultShipAddress({ address })
+        }
         this.props.closeDialog();
     }
 
@@ -211,27 +217,25 @@ class ManageShipping extends Component {
                                         </Grid>
                                     </div>
                                     <div style={{ textAlign: "center" }}>
-                                        {this.props.user.shipping.address1 != address.address1 && !this.props.checkout && (
+                                        {this.props.user.shipping.address1 != address.address1 && (
                                             <Grid item>
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
                                                     style={{ bottom: 2 }}
                                                     className={classNames(this.state.lastBoxHover != i && classes.hide)}
-                                                    onClick={e => this.selectDefaultAddress(address)}
+                                                    onClick={e => this.selectAddress(address)}
                                                 >
-                                                    Set as Default
+                                                    {this.props.checkout ? 
+                                                        <React.Fragment>Select</React.Fragment>
+                                                    :
+                                                        <React.Fragment>Make Default</React.Fragment>
+                                                    }
                                                 </Button>
                                             </Grid>
                                         )}
 
-                                        {this.props.checkout && (
-                                            <Grid item>
-                                                <Button variant="contained" color="primary" style={{ bottom: 2 }} onClick={() => this.handleSelectAddress(address)}>
-                                                    Select
-                                                </Button>
-                                            </Grid>
-                                        )}
+                                      
                                     </div>
                                 </Grid>
                             ))}
