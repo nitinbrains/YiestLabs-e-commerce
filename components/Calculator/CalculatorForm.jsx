@@ -52,8 +52,8 @@ class CalculatorForm extends Component {
             }
 
             if (!values.targetPitchRate) {
-                errors.targetPitchRate = "Target pitch rate is requied";
-            } 
+                errors.targetPitchRate = "Target pitch rate is required";
+            }
             else if(isNaN(values.targetPitchRate)) {
                 errors.targetPitchRate = "Invalid value";
             }
@@ -376,7 +376,7 @@ class CalculatorForm extends Component {
                     </Typography>
                 </CardHeader>
 
-                <Grid container id="professional-homebrew-switch">
+                <Grid container id="professional-homebrew-switch" style={{ visible: "false", display: "none" }}>
                     <Grid item xs={6} dir="rtl">
                         <FormButton
                             className={`form-button-small-size ${custom ? "form-button-active" : ""}`}

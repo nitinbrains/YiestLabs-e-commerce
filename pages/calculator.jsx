@@ -40,6 +40,10 @@ class Calculator extends Component {
         this.setState({ custom: !this.state.custom });
     }
 
+    toggleIsHomebrewer = () => {
+        this.setState({ isHomebrewer: !this.state.isHomebrewer });
+    }
+
     onCalculate = (values) => {
         const { custom, isHomebrewer } = this.state;
         const result = calculate({...values, custom, isHomebrewer});
@@ -53,7 +57,7 @@ class Calculator extends Component {
         return (
             <NavBarUserSearchDrawerLayout>
                 <div id="calculator-box">
-                    <CalculatorForm 
+                    <CalculatorForm
                         onCalculate={this.onCalculate}
                         toggleCustom={this.toggleCustom}
                         custom={custom}
