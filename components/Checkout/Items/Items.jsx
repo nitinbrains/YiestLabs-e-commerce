@@ -59,7 +59,7 @@ class Items extends Component {
                                   <Typography variant="h6" color="textPrimary">
                                       ITEMS/SHIP DATES
                                   </Typography>
-                                  <Typography color="textPrimary" style={{ fontSize: "small" }}>
+                                  <Typography color="textPrimary" style={{ fontSize: "small", display: "none", visible: false }}>
                                       To change ship dates, please select shipping option Custom
                                   </Typography>
                                 <div className={classes.sectionTitleDivider} />
