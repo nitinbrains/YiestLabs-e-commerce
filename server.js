@@ -13,7 +13,7 @@ const XMLParser = require("xml2js").parseString;
 const Utils = require("./lib/Utils");
 const SalesLib = require("./lib/SalesLib");
 
-var system = JSON.parse(fs.readFileSync("config.json", "utf8"));
+var system = dev ? JSON.parse(fs.readFileSync("config.json", "utf8")) : JSON.parse(fs.readFileSync("config.prod.json", "utf8"));
 
 // Uncomment to use a proxy to test TBA or other troubleshooting
 // You will need to npm install https-proxy-agent if you haven't done so already.
@@ -63,11 +63,12 @@ app.prepare().then(() => {
                 + "&oauth_version=1.0"
                 + "&script=" + scriptID.toString();
 
-        var encodedBase = type.toUpperCase() + "&" + encodeURIComponent('https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl') + "&" + encodeURIComponent(base);
+        var encodedBase = type.toUpperCase() + "&"
+          + encodeURIComponent(system.NSAuthentication.NSURIBase) + "&" + encodeURIComponent(base);
         var baseSignature = system.NSAuthentication.consumerSecret + "&" + system.NSAuthentication.consumerTokenSecret;
         var signature = encodeURIComponent(CryptoJS.HmacSHA1(encodedBase, baseSignature).toString(CryptoJS.enc.Base64));
 
-        var header = 'OAuth realm="4099054_SB1",'
+        var header = 'OAuth realm="' + system.NSAuthentication.NSAccountNo + '",'
                     + 'oauth_consumer_key="' + system.NSAuthentication.consumerKey + '",'
                     + 'oauth_token="' + system.NSAuthentication.consumerToken + '",'
                     + 'oauth_nonce="' + nonce + '",'

@@ -11,11 +11,11 @@
 		"url": "https://github.com/xdimitarx/yeastman2.0/issues"
 	},
 	"scripts": {
-		"test": "NODE_ENV=test jest",
-		"test-watch": "NODE_ENV=test jest --watch",
+		"test": "cross-env NODE_ENV=test jest",
+		"test-watch": "cross-env NODE_ENV=test jest --watch",
 		"dev": "node --inspect server.js",
 		"build": "next build",
-		"start": "NODE_ENV=production node server.js",
+		"start": "cross-env NODE_ENV=production node server.js",
 		"lint": "eslint src -c .eslintrc.json --ext js,jsx"
 	},
 	"homepage": "https://github.com/xdimitarx/yeastman2.0#readme",
@@ -27,6 +27,7 @@
 		"axios": "^0.18.0",
 		"body-parser": "^1.18.3",
 		"cleave.js": "^1.4.7",
+		"cross-env": "^5.2.0",
 		"event-stream": "^4.0.1",
 		"express": "^4.16.4",
 		"formik": "^1.5.1",

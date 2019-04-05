@@ -43,9 +43,9 @@ import {
 } from './user';
 
 // Cart sagas
-import { 
-    updateCartItem, 
-    addCartItem, 
+import {
+    updateCartItem,
+    addCartItem,
     removeCartItem,
     clearCart
 } from './cart';

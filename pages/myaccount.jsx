@@ -157,7 +157,7 @@ class MyAccount extends Component {
     handleSubmit = (values, { setErrors }) => {
         const errors = this.validate(values);
         if (_isEmpty(errors)) {
-            const request = buildRequest(this.props.user, values);
+            const request = this.buildRequest(this.props.user, values);
             this.props.updateUserInfo({ request });
         } else {
             setErrors(errors);

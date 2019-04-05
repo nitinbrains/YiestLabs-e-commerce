@@ -8,7 +8,9 @@
 		"consumerKey": "a1d64ebbbf32e9eb9f0438468351b87a7e16a1bba4f174b1cdbaf0038bf9c060",
 		"consumerSecret": "bd0845aeb7cbb3385b224359630b62ac1c6f5cc67665928147fbe8cd73f4eab1",
 		"consumerToken": "0e51a139c923258c75a42aa807d64e81d23de0d5d5569e593ddcd3b9a9697090",
-		"consumerTokenSecret": "433e7c0921dfaa68a840624815b999bcac636f248ef8e80eaedf60ea2f275741"
+		"consumerTokenSecret": "433e7c0921dfaa68a840624815b999bcac636f248ef8e80eaedf60ea2f275741",
+    "NSAccountNo": "4099054_SB1",
+    "NSURIBase": "https://4099054-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl"
     },
     "YeastmanAuthentication": {
         "Auth": "idPty6huNSNURJeXr1DF6s7ZVRFWFXh5rpgpD5GAmbXCJ3CUfaDO8sOhmMx5wc3",
