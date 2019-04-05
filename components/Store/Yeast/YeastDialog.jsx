@@ -225,7 +225,7 @@ class YeastDialog extends Component {
                 }
 
                 // Bacteria sold in 1L increments
-                if (item.salesCategory == 32) {
+                if (item.salesCategory == 4) {
                     if (parseFloat(quantity) / parseInt(quantity) != 1.0) {
                         quantity = Math.round(quantity);
 
