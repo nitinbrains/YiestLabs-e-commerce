@@ -34,6 +34,8 @@ class Cart extends Component {
             // Can't check out with too large of an order history
             // There's not any real reason to keep it during checkout anyway
             if (user.orderHistory) user.orderHistory = [];
+
+            sessionStorage.setItem('orderComplete', false);
             Router.push('/checkout');
         }
     }

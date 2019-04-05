@@ -32,6 +32,7 @@ import Review from "components/Checkout/Review/Review";
 import isLoggedUser from "hocs/isLoggedUser";
 import cartHasItems from "hocs/cartHasItems";
 import prepareOrder from "hocs/prepareOrder";
+import orderFinished from "hocs/orderFinished";
 import { cartActions } from 'appRedux/actions/cartActions';
 
 // custom
@@ -68,6 +69,7 @@ class Checkout extends Component {
         showWantSoonerDialog: false,
         couponCode: this.props.order.couponCode
     };
+
     static getDerivedStateFromProps(nextProps, prevState){
         return {
             showWantSoonerDialog: nextProps.cart.showWantSooner,
@@ -128,10 +130,10 @@ class Checkout extends Component {
 
     render() {
         const { classes, order, loading } = this.props;
-        const { activeStep } = this.state;
+        let { activeStep } = this.state;
 
         if (loading.type === 'orderComplete') {
-          activeStep = steps.length;
+            activeStep = steps.length;
         }
 
         return (
@@ -176,19 +178,7 @@ class Checkout extends Component {
                         })}
                     </Stepper>
                     <React.Fragment>
-                        {activeStep === steps.length ? (
-                            <React.Fragment>
-                                <Typography variant="headline" gutterBottom>
-                                    Thank you for your order.
-                                </Typography>
-                                <Typography variant="subheading">
-                                    Your order number is #2001539. We have
-                                    emailed your oder confirmation, and will
-                                    send you an update when your order has
-                                    shipped.
-                                </Typography>
-                            </React.Fragment>
-                        ) : (
+                        {activeStep != steps.length && (
                             <React.Fragment>
                                 {getStepContent(activeStep)}
                                 <div style={ activeStep === steps.length - 1 ? { visible: "true", display: "block", textAlign: "right", width: "100%" }
@@ -345,6 +335,12 @@ export default connect(
     mapDispatchToProps
 )(compose(
     withStyles(styles, { withTheme: true })(
-        isLoggedUser(cartHasItems(prepareOrder(Checkout)))
+        isLoggedUser(
+            cartHasItems(
+                prepareOrder(
+                    orderFinished(Checkout)
+                )
+            )
+        )
     )
 ))

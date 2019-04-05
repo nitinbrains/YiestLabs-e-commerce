@@ -1,4 +1,6 @@
 import { take, call, put, cancelled, takeEvery, all, fork, select  } from 'redux-saga/effects';
+import Router from 'next/router';
+
 import * as api from 'services/';
 import { orderActions } from 'appRedux/actions/orderActions';
 import { messageActions } from 'appRedux/actions/messageActions';
@@ -63,10 +65,11 @@ export function * placeOrder(action) {
         if (error) {
             throw error
         } else {
+            sessionStorage.setItem('orderComplete', 'yes');
+            yield put(responseSuccess());
             yield put(cartActions.clearCart());
+            Router.push('/');
             yield put(messageActions.showSnackbar({ title: 'Success', message: 'Order submitted', variant:'success' }));
-            state.loading.isLoading = false;
-            state.loading.type = 'orderComplete';
         }
     } catch (error) {
         if(error.status){
