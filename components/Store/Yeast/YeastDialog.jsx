@@ -203,10 +203,10 @@ class YeastDialog extends Component {
 
             // Wild Yeast must have mimimum 1L
             if (item.salesCategory == 4 && quantity < 1.0) {
-                this.handleErrors('quantity', "Notice: The minimum quantity sold for Wild Yeast strains is 1L. Please adjust your quantity")
+                this.handleErrors('quantity', "Notice: The minimum quantity sold for Wild Yeast strains is 1L. Please adjust your quantity.")
                 console.log(
                     "Notice",
-                    "The minimum quantity sold for Wild Yeast strains is 1L. Please adjust your quantity"
+                    "The minimum quantity sold for Wild Yeast strains is 1L. Please adjust your quantity."
                 );
                 return false;
             }
@@ -214,14 +214,23 @@ class YeastDialog extends Component {
             // Custom Pour Strains
             if (item.type == 5) {
                 // Vault strains must have minimum 1.5L Custom Pour
-                if (item.salesCategory == 32 && quantity < 1.5) {
-                    // TO-DO: Display message to user
-                    this.handleErrors('quantity', "Notice: The minimum quantity sold for Custom Pour Vault strains is 1.5L. Please adjust your quantity")
-                    console.log(
-                        "Notice",
-                        "The minimum quantity sold for Custom Pour Vault strains is 1.5L. Please adjust your quantity"
-                    );
-                    return false;
+                if (item.salesCategory == 32) {
+                    if (quantity < 1.5) {
+                        // TO-DO: Display message to user
+                        this.handleErrors('quantity', "Notice: The minimum quantity sold for Custom Pour Vault strains is 1.5L. Please adjust your quantity.")
+                        console.log(
+                            "Notice",
+                            "The minimum quantity sold for Custom Pour Vault strains is 1.5L. Please adjust your quantity."
+                        );
+                        return false;
+                    } else if ((parseFloat(quantity) / parseInt(quantity) != 1.0) && (parseFloat(quantity + 0.5) / parseInt(quantity + 0.5) != 1.0)) {
+                        this.handleErrors('quantity', "Notice: Custom Pour Vault strains are sold in 0.5L increments. Please adjust your quantity.")
+                        console.log(
+                            "Notice",
+                            "Custom Pour Vault strains are sold in 0.5L increments. Please adjust your quantity."
+                        );
+                        return false;
+                    }
                 }
 
                 // Bacteria sold in 1L increments
@@ -736,6 +745,7 @@ class YeastDialog extends Component {
                                                 </Grid>
                                             )}
                                             <Grid item>
+                                              <form>
                                                 <TextField
                                                     id="quantity"
                                                     label="Quantity"
@@ -743,7 +753,11 @@ class YeastDialog extends Component {
                                                     value={this.state.quantity}
                                                     onChange={this.changeQuantity}
                                                     type="number"
+                                                    step={this.item.salesCategory == 32 ? "0.5" : "1"}
+                                                    pattern={this.item.salesCategory == 32 ? "-?[0-9]*(\.[5]+)?" : ""}
+                                                    error={this.item.salesCategory == 32 ? ">= 1.5 in 0.5L increments" : ""}
                                                 />
+                                              </form>
                                             </Grid>
                                             <Grid
                                                 item

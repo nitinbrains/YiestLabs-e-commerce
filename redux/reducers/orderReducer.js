@@ -8,9 +8,7 @@ const initialState = {
     itemSub: 0,
     shippingSub: 0,
     orderSub: 0,
-		// Forcing "Ship All Together" until we are able to retain and revert to the original warehouse for an item
-		// Unhide the "select shipping option custom" text in checkout after uncommenting other options
-    shippingOptions: ["Ship All Together"], //, "Earliest For Each", "Custom"],
+    shippingOptions: ["Ship All Together", "Earliest For Each", "Custom"],
     selectedShippingOption: 'Ship All Together',
 };
 
