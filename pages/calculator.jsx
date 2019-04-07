@@ -18,8 +18,6 @@ class Calculator extends Component {
         super(props);
         this.state = {
             showDialog: false,
-            custom: false,
-            isHomebrewer: false,
             result: {},
         };
     }
@@ -34,14 +32,6 @@ class Calculator extends Component {
 
     closeDialog = () => {
         this.setState({showDialog: false});
-    }
-
-    toggleCustom = () => {
-        this.setState({ custom: !this.state.custom });
-    }
-
-    toggleIsHomebrewer = () => {
-        this.setState({ isHomebrewer: !this.state.isHomebrewer });
     }
 
     onCalculate = (values) => {
@@ -59,9 +49,6 @@ class Calculator extends Component {
                 <div id="calculator-box">
                     <CalculatorForm
                         onCalculate={this.onCalculate}
-                        toggleCustom={this.toggleCustom}
-                        custom={custom}
-                        isHomebrewer={isHomebrewer}
                     />
 
                     <Dialog

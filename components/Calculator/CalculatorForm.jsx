@@ -36,8 +36,52 @@ class CalculatorForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showError: false
+            showError: false,
+            custom: false,
+            isHomebrewer: false,
         };
+    }
+
+    toggleCustom = () => {
+        this.setState({ custom: !this.state.custom });
+    }
+
+    toggleIsHomebrewer = ({ setFieldValue }) => {
+        const isHomebrewer = !this.state.isHomebrewer;
+        let volChoices, gravChoices;
+
+        if (isHomebrewer) {
+            setFieldValue('volChoices', SalesLib.homebrewVolChoices);
+            setFieldValue('gravChoices', SalesLib.homebrewGravChoices);
+            setFieldValue('volUnit', 'L');
+            setFieldValue('volVal', '20');
+
+        } else {
+            setFieldValue('volChoices', SalesLib.volChoices);
+            setFieldValue('gravChoices', SalesLib.gravChoices);
+            setFieldValue('volUnit', 'BBL');
+            setFieldValue('volVal', '1');
+        }
+
+        setFieldValue('gravUnit', 'PLA');
+        setFieldValue('gravVal', 'less than 13.5');
+    }
+
+    calculate = (values, { setErrors }) => {
+        const errors = this.validate(values);
+        if (_isEmpty(errors)) {
+            this.props.onCalculate(values);
+        } else {
+            setErrors(errors);
+        }
+    };
+
+    changeUnit = (e, { setFieldValue, values}, type) => {
+        const choices = _get(values, `${type}Choices`)
+        let unit = e.target.value;
+        const options = choices[unit];
+        setFieldValue(`${type}Val`, options[0]);
+        setFieldValue(`${type}Unit`, unit);
     }
 
     validate = values => {
@@ -99,32 +143,28 @@ class CalculatorForm extends Component {
         return errors;
     };
 
-    calculate = (values, { setErrors }) => {
-        const errors = this.validate(values);
-        if (_isEmpty(errors)) {
-            this.props.onCalculate(values);
-        } else {
-            setErrors(errors);
-        }
-    };
-
-    changeUnit = (e, onChange, setFieldValue, type) => {
-        let unit = e.target.value;
-        const options = SalesLib[`${type}Choices`][unit];
-        setFieldValue(`${type}Val`, options[0]);
-        onChange(e)
-    }
 
     _renderLabGrownForm = (formikProps) => {
-        const { isHomebrew } = this.props;
+        const { isHomebrewer } = this.state;
+
         const { values, errors } = formikProps;
 
         const volUnit = _get(values, 'volUnit');
         const tempUnit = _get(values, 'tempUnit');
         const gravUnit = _get(values, 'gravUnit');
+        const volChoices = _get(values, 'volChoices');
+        const gravChoices = _get(values, 'gravChoices');
 
-       return (
+        return (
             <Form>
+                <Grid container spacing={24} className="button-grid">
+                    <Grid item xs={12}>
+                        <div className="homebrew-box">
+                            <FormCheckbox checked={isHomebrewer} onChange={() => this.toggleIsHomebrewer(formikProps)} />
+                            <span>HOMEBREWER</span>
+                        </div>
+                    </Grid>
+                </Grid>
                 <fieldset className="fieldset">
                     <legend>Volume</legend>
                     <Grid container spacing={24}>
@@ -137,7 +177,7 @@ class CalculatorForm extends Component {
                                             fullWidth
                                             name="volVal"
                                             value={_get(value, 'volVal')}
-                                            options={SalesLib.volChoices[volUnit]}
+                                            options={volChoices[volUnit]}
                                             onChange={onChange}
                                         />
                                     </Grid>
@@ -146,7 +186,7 @@ class CalculatorForm extends Component {
                         />
                         <Field
                             render={({ field: { value, onChange }, form: { setFieldValue }}) => {
-                                const volUnits = SalesLib.volUnits.filter(unit => !isHomebrew || unit.forHomebrew);
+                                const volUnits = SalesLib.volUnits.filter(unit => !isHomebrewer || unit.forHomebrew);
                                 return (
                                     <Grid item xs={6}>
                                         <FormikErrorMessage error={_get(errors, 'volUnit')} />
@@ -157,7 +197,7 @@ class CalculatorForm extends Component {
                                             label="Unit"
                                             value={_get(value, 'volUnit')}
                                             options={volUnits}
-                                            onChange={(e) => this.changeUnit(e, onChange, setFieldValue, 'vol')}
+                                            onChange={(e) => this.changeUnit(e, formikProps, 'vol')}
                                         />
                                     </Grid>
                                 );
@@ -196,7 +236,7 @@ class CalculatorForm extends Component {
                                             label="Unit"
                                             value={_get(value, 'tempUnit')}
                                             options={SalesLib.tempUnits}
-                                            onChange={(e) => this.changeUnit(e, onChange, setFieldValue, 'temp')}
+                                            onChange={(e) => this.changeUnit(e, fomirkProps, 'temp')}
                                         />
                                     </Grid>
                                 );
@@ -216,7 +256,7 @@ class CalculatorForm extends Component {
                                             fullWidth
                                             name="gravVal"
                                             value={_get(value, 'gravVal')}
-                                            options={SalesLib.gravChoices[gravUnit]}
+                                            options={gravChoices[gravUnit]}
                                             onChange={onChange}
                                         />
                                     </Grid>
@@ -234,7 +274,7 @@ class CalculatorForm extends Component {
                                             name="gravUnit"
                                             value={_get(value, 'gravUnit')}
                                             options={SalesLib.gravUnits}
-                                            onChange={(e) => this.changeUnit(e, onChange, setFieldValue, 'grav')}                                                        />
+                                            onChange={(e) => this.changeUnit(e, formikProps, 'grav')}                                                        />
                                     </Grid>
                                 );
                             }}
@@ -366,7 +406,7 @@ class CalculatorForm extends Component {
     }
 
     render() {
-        const { custom, toggleCustom, isHomebrewer, toggleIsHomebrewer } = this.props;
+        const { custom, isHomebrewer } = this.state;
 
         return (
             <Card>
@@ -376,32 +416,23 @@ class CalculatorForm extends Component {
                     </Typography>
                 </CardHeader>
 
-                <Grid container id="professional-homebrew-switch" style={process.env.NODE_ENV == "production" ? { visible: "false", display: "none" } : { }}>
+                <Grid container id="professional-homebrew-switch">
                     <Grid item xs={6} dir="rtl">
                         <FormButton
                             className={`form-button-small-size ${custom ? "form-button-active" : ""}`}
                             text="Lab-Grown"
-                            onClick={toggleCustom}
+                            onClick={this.toggleCustom}
                         />
                     </Grid>
                     <Grid item xs={6} dir="ltr">
                         <FormButton
                             className={`form-button-small-size ${custom ? "" : "form-button-active"}`}
                             text="Re-Pitching"
-                            onClick={toggleCustom}
+                            onClick={this.toggleCustom}
                         />
                     </Grid>
                 </Grid>
                 <CardBody>
-                    <Grid container spacing={24} className="button-grid">
-                        <Grid item xs={12}>
-                            <div className="homebrew-box">
-                                <FormCheckbox checked={isHomebrewer} onChange={toggleIsHomebrewer} />
-                                <span>HOMEBREWER</span>
-                            </div>
-                        </Grid>
-                    </Grid>
-
                     <Formik
                         initialValues={{
                             volVal: "119",
@@ -416,6 +447,8 @@ class CalculatorForm extends Component {
                             volume: "",
                             viability: "",
                             cellCount: "",
+                            volChoices: SalesLib.volChoices,
+                            gravChoices: SalesLib.gravChoices
                         }}
                         enableReinitialize
                         onSubmit={(values, actions) => this.calculate(values, actions)}
