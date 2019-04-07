@@ -287,7 +287,10 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
             }
 
             if (response.couponCode) {
-                fakeOrder.setText({ fieldId: "couponcode", text: response.couponCode.toUpperCase() });
+              	var couponId = getCouponId(response.couponCode.toUpperCase());
+              	if (couponId != 0) {
+                	fakeOrder.setValue({ fieldId: "promocode", text: couponId });
+                }
             }
 
             // Add items to fake order
@@ -566,6 +569,13 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                             salesOrderRecord.setValue({ fieldId: "shipaddresslist", value: shipaddressindex });
                         }
 
+                        if (message.order.couponCode) {
+                            var couponId = getCouponId(message.couponCode.toUpperCase());
+                            if (couponId != 0) {
+                                salesOrderRecord.setValue({ fieldId: "promocode", value: couponId });
+                            }
+                        }
+
                         salesOrderRecord.selectNewLine({ sublistId: "item" });
                         salesOrderRecord.setCurrentSublistValue({ sublistId: "item", fieldId: "item", value: message.order.items[i].MerchandiseID });
                         salesOrderRecord.setCurrentSublistValue({ sublistId: "item", fieldId: "quantity", value: message.order.items[i].OrderDetailQty });
@@ -749,6 +759,30 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                         return record.load({ type: record.Type.INVENTORY_ITEM, id: NSID });
                     }
                 }
+        }
+    }
+
+    function getCouponId(couponCode) {
+      	var filters = [];
+      	filters.push(search.createFilter({name: 'code', operator: search.Operator.STARTSWITH, values: couponCode}));
+
+      	var columns = [];
+      	columns.push(search.createColumn({name: 'code'}));
+
+      	var couponIds = [];
+
+      	try {
+          search.create({type: 'couponCode', filters: filters, columns: columns}).run().each(function(result) {
+              couponIds.unshift(parseInt(result.id));
+          });
+        } catch (err) {
+          logError('getCouponId', err);
+        }
+
+	      if (couponIds.length > 0) {
+          	return couponIds[0];
+        } else {
+          	return 0;
         }
     }
 

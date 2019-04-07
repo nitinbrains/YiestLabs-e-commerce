@@ -66,6 +66,7 @@ class Checkout extends Component {
         confirmation: false,
         completed: {},
         showWantSoonerDialog: false,
+        couponCode: this.props.order.couponCode
     };
     static getDerivedStateFromProps(nextProps, prevState){
         return {
@@ -119,6 +120,11 @@ class Checkout extends Component {
         completed[this.state.activeStep] = true;
         this.setState({completed, activeStep: step });
     };
+
+    handleChangeCouponCode = event => {
+      this.setState( {couponCode: event.target.value} );
+      this.props.order.couponCode = event.target.value;
+    }
 
     render() {
         const { classes, order, loading } = this.props;
@@ -185,6 +191,14 @@ class Checkout extends Component {
                         ) : (
                             <React.Fragment>
                                 {getStepContent(activeStep)}
+                                <div style={ activeStep === steps.length - 1 ? { visible: "true", display: "block", textAlign: "right", width: "100%" }
+                                : { visible: "false", display: "none" } }>
+                                    Coupon Code:
+                                    &nbsp;
+                                    <input type="text" name="couponCode" value={this.state.couponCode}
+                                    onChange={this.handleChangeCouponCode.bind(this)}
+                                    />
+                                </div>
                                 <div className={classes.buttons}>
                                     {activeStep !== 0 && (
                                         <Button
@@ -212,6 +226,7 @@ class Checkout extends Component {
                                                 size={20}
                                             />
                                         )}
+
                                         {activeStep === steps.length - 1
                                             ? "Place order"
                                             : activeStep === 2 && loading.isLoading && loading.type == 'prepareOrder'
