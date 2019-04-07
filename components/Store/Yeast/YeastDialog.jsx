@@ -249,6 +249,16 @@ class YeastDialog extends Component {
 
                 // All other custom pour strains sold in 0.5L increments
                 else {
+                  if ((parseFloat(quantity) / parseInt(quantity) != 1.0) && (parseFloat(quantity + 0.5) / parseInt(quantity + 0.5) != 1.0)) {
+                      this.handleErrors('quantity', "Notice: Custom Pours are sold in 0.5L increments. Please adjust your quantity.")
+                      console.log(
+                          "Notice",
+                          "Custom Pour Vault strains are sold in 0.5L increments. Please adjust your quantity."
+                      );
+                      return false;
+                  }
+                  /*
+                    // This message isn't seen because the screen closes immediately. Just displaying a notice for now like for other errors.
                     if (parseFloat(quantity) / parseInt(quantity) != 1.0) {
                         if (quantity % 0.5 != 0) {
                             var decimal =
@@ -269,6 +279,7 @@ class YeastDialog extends Component {
                             );
                         }
                     }
+                    */
                 }
 
                 item.size = quantity;
@@ -753,9 +764,12 @@ class YeastDialog extends Component {
                                                     value={this.state.quantity}
                                                     onChange={this.changeQuantity}
                                                     type="number"
-                                                    step={this.item.salesCategory == 32 ? "0.5" : "1"}
-                                                    pattern={this.item.salesCategory == 32 ? "-?[0-9]*(\.[5]+)?" : ""}
-                                                    error={this.item.salesCategory == 32 ? ">= 1.5 in 0.5L increments" : ""}
+                                                    step={this.item.salesCategory == 32 || this.item.type == 5 ? "0.5" : "1"}
+                                                    pattern={this.item.salesCategory == 32 || this.item.type == 5 ? "-?[0-9]*(\.[5]+)?" : ""}
+                                                    error={
+                                                      this.item.salesCategory == 32 ? ">= 1.5 in 0.5L increments"
+                                                      : (this.item.type == 5 ? "0.5L increments" : "")
+                                                    }
                                                 />
                                               </form>
                                             </Grid>
