@@ -416,7 +416,7 @@ class CalculatorForm extends Component {
                     </Typography>
                 </CardHeader>
 
-                <Grid container id="professional-homebrew-switch">
+                <Grid container id="professional-homebrew-switch" style={process.env.NODE_ENV == "production" ? { visible: "false", display: "none" } : { }}>
                     <Grid item xs={6} dir="rtl">
                         <FormButton
                             className={`form-button-small-size ${custom ? "form-button-active" : ""}`}
