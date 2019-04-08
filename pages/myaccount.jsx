@@ -34,6 +34,7 @@ import { Formik, Form, Field } from "formik";
 import ManageShipping from "components/MyAccount/ManageShipping";
 import ManageBilling from "components/MyAccount/ManageBilling";
 import ManageCards from "components/MyAccount/ManageCards";
+import ChangePassword from "components/MyAccount/ChangePassword";
 import LoadingIndicator from "components/UI/LoadingIndicator";
 import Shipping from "components/MyAccount/Shipping";
 import Billing from "components/MyAccount/Billing";
@@ -62,7 +63,8 @@ class MyAccount extends Component {
             manageBilling: false,
             manageCards: false,
             subsidiaryDialog: false,
-            focus: ""
+            focus: "",
+            changePass: false,
         };
     }
 
@@ -121,6 +123,14 @@ class MyAccount extends Component {
 
     manageShipping = () => {
         this.setState({ manageShipping: true });
+    };
+
+    changePass = () => {
+        this.setState({ changePass: true });
+    };
+
+    closeChangePass = () => {
+        this.setState({ changePass: false });
     };
 
     closeShipping = () => {
@@ -519,6 +529,15 @@ class MyAccount extends Component {
                                                         Manage Cards
                                                     </Button>
                                                 </Grid>
+                                                <Grid item xs={12} md={4} container justify="center" alignItems="center">
+                                                    <Button
+                                                        variant="outlined" color="primary"
+                                                        className={classes.modalbtn}
+                                                        onClick={this.changePass}
+                                                    >
+                                                        Change Password
+                                                    </Button>
+                                                </Grid>
                                             </Grid>
                                         </Grid>
                                     </Grid>
@@ -542,6 +561,10 @@ class MyAccount extends Component {
 
                     <Dialog open={manageCards} maxWidth={"md"} fullWidth>
                         <ManageCards closeDialog={this.closeCards} />
+                    </Dialog>
+
+                    <Dialog open={this.state.changePass}>
+                        <ChangePassword closeDialog={this.closeChangePass}/>
                     </Dialog>
 
                     {this.getSubsidiaryDialog(orderFrom)}
