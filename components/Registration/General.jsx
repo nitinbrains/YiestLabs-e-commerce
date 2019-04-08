@@ -210,7 +210,7 @@ const General = ({
             <Field
                 render={({field: {value, onChange }}) => {
                     return (
-                        <Grid item xs={12}>
+                        <Grid item xs={12} className={values.orderFrom == 1 && classes.hide}>
                             <FormikErrorMessage error={_get(errors, 'category')} />
                             <TextField
                                 name="vat"
@@ -336,7 +336,10 @@ const styles = theme => ({
     button: {
         marginTop: theme.spacing.unit * 3,
         marginLeft: theme.spacing.unit
-    }
+    },
+    hide: {
+        display: "none"
+    },
 });
 
 General.propTypes = {

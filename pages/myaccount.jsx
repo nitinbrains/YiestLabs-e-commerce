@@ -440,7 +440,7 @@ class MyAccount extends Component {
                                             <Field
                                                 render={({ field: { value, onChange }}) => {
                                                     return (
-                                                        <Grid item xs={3}>
+                                                        <Grid item xs={3} className={subsidiary == 2 && classes.hide}>
                                                             <FormikErrorMessage error={_get(errors, "vat")} />
                                                             <TextField
                                                                 placeholder="US-123456"
@@ -592,7 +592,10 @@ const styles = theme => ({
         borderTop: "solid 1.5px",
         borderColor: "#CCCCCC",
         marginBottom: 10
-    }
+    },
+    hide: {
+        display: "none"
+    },
 });
 
 MyAccount.propTypes = {
