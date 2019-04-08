@@ -58,10 +58,16 @@ const General = ({
             errors.email = "Enter a valid email";
         }
 
-        if(!values.vat) {
-            errors.vat = "Vat is required";
-        } else if (!Utils.isValidVat(values.vat)) {
-           errors.vat = "Enter a valid vat";
+        if(!values.orderFrom) {
+            errors.orderFrom = "Order from is required";
+        } else {
+            if (values.orderFrom !== 1) {
+                if(!values.vat) {
+                    errors.vat = "Vat is required";
+                } else if (!Utils.isValidVat(values.vat)) {
+                   errors.vat = "Enter a valid vat";
+                }
+            }
         }
 
         if (!values.phone) {
@@ -83,10 +89,6 @@ const General = ({
 
         if(!values.category) {
             errors.category = "Category is required";
-        }
-
-        if(!values.orderFrom) {
-            errors.orderFrom = "Order from is required";
         }
 
         if(!values.contactName) {
@@ -210,8 +212,40 @@ const General = ({
             <Field
                 render={({field: {value, onChange }}) => {
                     return (
+                        <Grid item xs={12}>
+                            <FormikErrorMessage error={_get(errors, 'orderFrom')} />
+                            <TextField
+                                name="orderFrom"
+                                label="Order From"
+                                variant="outlined"
+                                select
+                                fullWidth
+                                autoComplete="orderFrom"
+                                onChange={onChange}
+                                value={_get(value, 'orderFrom') || ''}
+                            >
+                                <MenuItem value={1}>
+                                    White Labs USA
+                                </MenuItem>
+                                <MenuItem value={2}>
+                                    USA &amp; Copenhagen (For Europe, No Homebrew)
+                                </MenuItem>
+                                <MenuItem value={3}>
+                                    USA &amp; Hong Kong (For Asia, No Homebrew)
+                                </MenuItem>
+                                <MenuItem value={4}>
+                                    USA, Copenhagen, and Hong Kong
+                                </MenuItem>
+                            </TextField>
+                        </Grid>
+                    )
+                }}
+            />
+            <Field
+                render={({field: {value, onChange }}) => {
+                    return (
                         <Grid item xs={12} className={values.orderFrom == 1 && classes.hide}>
-                            <FormikErrorMessage error={_get(errors, 'category')} />
+                            <FormikErrorMessage error={_get(errors, 'vat')} />
                             <TextField
                                 name="vat"
                                 label="Vat"
@@ -247,38 +281,6 @@ const General = ({
                                 <MenuItem value={3}>Professional Brewery</MenuItem>
                                 <MenuItem value={4}>Professional Winery</MenuItem>
                                 <MenuItem value={5}>Professional Destillery</MenuItem>
-                            </TextField>
-                        </Grid>
-                    )
-                }}
-            />
-            <Field
-                render={({field: {value, onChange }}) => {
-                    return (
-                        <Grid item xs={12}>
-                            <FormikErrorMessage error={_get(errors, 'orderFrom')} />
-                            <TextField
-                                name="orderFrom"
-                                label="Order From"
-                                variant="outlined"
-                                select
-                                fullWidth
-                                autoComplete="orderFrom"
-                                onChange={onChange}
-                                value={_get(value, 'orderFrom') || ''}
-                            >
-                                <MenuItem value={1}>
-                                    White Labs USA
-                                </MenuItem>
-                                <MenuItem value={2}>
-                                    USA &amp; Copenhagen (For Europe, No Homebrew)
-                                </MenuItem>
-                                <MenuItem value={3}>
-                                    USA &amp; Hong Kong (For Asia, No Homebrew)
-                                </MenuItem>
-                                <MenuItem value={4}>
-                                    USA, Copenhagen, and Hong Kong
-                                </MenuItem>
                             </TextField>
                         </Grid>
                     )
