@@ -75,14 +75,25 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                 }
 
                 // Homebrew
-                else if (response.items[i].type == 2) {
-                    if (userLocation != 2) {
+                else if(response.items[i].type == 2)
+                {
+                    if(userLocation != 2)
+                    {
                         response.items.splice(i, 1);
-
                         continue;
-                    } else {
+                    }
+
+                    var SDAvailability = itemAvailability.GetItemAvailability([String(response.items[i].MerchandiseID)], ['9'], true)
+                    var SDAvail = searchAvailabilityResults(SDAvailability, "9");
+
+                    if(SDAvail.availQtyToShip > 0)
+                    {
                         response.items[i].shipDate = new Date(hbDate);
                         response.items[i].Warehouse = 9;
+                    }
+                    else 
+                    {
+                        response.items.splice(i, 1);
                     }
                 }
 

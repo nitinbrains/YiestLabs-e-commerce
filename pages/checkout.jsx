@@ -24,11 +24,13 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-// import WantSooner from "components/WantSooner/WantSooner";
+
 import Shipping from "components/Checkout/Shipping/Shipping";
 import Billing from "components/Checkout/Billing/Billing";
 import Items from "components/Checkout/Items/Items";
 import Review from "components/Checkout/Review/Review";
+import RemovedItems from "components/Checkout/RemovedItems";
+
 import isLoggedUser from "hocs/isLoggedUser";
 import cartHasItems from "hocs/cartHasItems";
 import prepareOrder from "hocs/prepareOrder";
@@ -145,6 +147,9 @@ class Checkout extends Component {
                             CHECKOUT
                         </Typography>
                     </div>
+                    
+                    <RemovedItems />
+                    
                     <Stepper
                         nonLinear
                         activeStep={activeStep}

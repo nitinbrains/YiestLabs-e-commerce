@@ -35,130 +35,68 @@ class ItemPanel extends Component {
     };
 
     render() {
-        const { classes, order } = this.props;
+        const { classes, order, item } = this.props;
 
         return (
-            <ExpansionPanel
-                expanded={this.state.expanded}
-                onChange={this.handleExpand}
-            >
+            <ExpansionPanel expanded={this.state.expanded} onChange={this.handleExpand}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography color="primary" className={classes.heading}>
-                        {this.props.item.Name} {this.props.item.details}
+                        {item.Name} {item.details}
                         <br />
                         <Typography style={{ fontSize: "smaller" }}>
-                            {this.props.item.OrderDetailQty} @ ${this.props.item.pricePerUnit}
+                            {item.OrderDetailQty} @ ${item.pricePerUnit}
                         </Typography>
                     </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Grid container spacing={24}>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={3}
-                            style={{ textAlign: "center" }}
-                        >
-                            <img
-                                className={classes.image}
-                                src="/static/images/yeast.png"
-                            />
+                        <Grid item xs={12} sm={3} style={{ textAlign: "center" }}>
+                            <img className={classes.image} src="/static/images/yeast.png" />
                         </Grid>
-                        <Grid
-                            item
-                            xs={12}
-                            sm={9}
-                            container
-                            style={{ textAlign: "center" }}
-                            alignItems="center"
-                        >
+                        <Grid item xs={12} sm={9} container style={{ textAlign: "center" }} alignItems="center">
                             <Grid item xs={12} sm={4}>
-                                <Typography
-                                    color="textPrimary"
-                                    variant="body1"
-                                    style={{ display: "inline-block" }}
-                                >
+                                <Typography color="textPrimary" variant="body1" style={{ display: "inline-block" }}>
                                     Location:
                                 </Typography>
                                 &nbsp;
-                                <Typography
-                                    color="primary"
-                                    variant="body1"
-                                    style={{ display: "inline-block" }}
-                                >
-                                    {WLHelper.getWarehouse(
-                                        this.props.item.Warehouse
-                                    )}
+                                <Typography color="primary" variant="body1" style={{ display: "inline-block" }}>
+                                    {WLHelper.getWarehouse(item.Warehouse)}
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} sm={4}>
-                                <Typography
-                                    color="textPrimary"
-                                    variant="body1"
-                                    style={{ display: "inline-block" }}
-                                >
+                                <Typography color="textPrimary" variant="body1" style={{ display: "inline-block" }}>
                                     Ship Date:
                                 </Typography>
                                 &nbsp;
-                                <Typography
-                                    color="primary"
-                                    variant="body1"
-                                    style={{ display: "inline-block" }}
-                                >
-                                    {this.props.item.shipDate.toDateString()}
+                                <Typography color="primary" variant="body1" style={{ display: "inline-block" }}>
+                                    {item.shipDate.toDateString()}
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} sm={4}>
-                                <Typography
-                                    color="textPrimary"
-                                    variant="body1"
-                                    style={{ display: "inline-block" }}
-                                >
+                                <Typography color="textPrimary" variant="body1" style={{ display: "inline-block" }}>
                                     Delivery/Pickup Date:
                                 </Typography>
                                 &nbsp;
-                                <Typography
-                                    color="primary"
-                                    variant="body1"
-                                    style={{ display: "inline-block" }}
-                                >
-                                    {this.props.item.deliveryDate.toDateString()}
+                                <Typography color="primary" variant="body1" style={{ display: "inline-block" }}>
+                                    {item.deliveryDate.toDateString()}
                                 </Typography>
                             </Grid>
                             <Grid className="detail" item xs={12}>
-                                <br/>
-                                <br/>
-                                <span style={{ visible: "false", display: "none" }} className="sooner" onClick={this.props.showWantSooner}>Want this Strain sooner?</span>
+                                <br />
+                                <br />
+                                <span style={{ visible: "false", display: "none" }} className="sooner" onClick={this.props.showWantSooner}>
+                                    Want this Strain sooner?
+                                </span>
                             </Grid>
                             <Grid item xs={12}>
-                                {order.selectedShippingOption ==
-                                    "Custom" && (
-                                    <Button
-                                        variant="outlined"
-                                        color="primary"
-                                        onClick={() =>
-                                            this.props.decrementShipDate(
-                                                this.props.item
-                                            )
-                                        }
-                                        style={{marginRight:5, marginLeft:5}}
-                                    >
+                                {order.selectedShippingOption == "Custom" && (
+                                    <Button variant="outlined" color="primary" onClick={() => this.props.decrementShipDate(item)} style={{ marginRight: 5, marginLeft: 5 }}>
                                         Sooner
                                     </Button>
                                 )}
 
-                                {order.selectedShippingOption ==
-                                    "Custom" && (
-                                    <Button
-                                        variant="outlined"
-                                        color="primary"
-                                        onClick={() =>
-                                            this.props.incrementShipDate(
-                                                this.props.item
-                                            )
-                                        }
-                                        style={{marginRight:5, marginLeft:5}}
-                                    >
+                                {order.selectedShippingOption == "Custom" && (
+                                    <Button variant="outlined" color="primary" onClick={() => this.props.incrementShipDate(item)} style={{ marginRight: 5, marginLeft: 5 }}>
                                         Later
                                     </Button>
                                 )}
@@ -173,7 +111,7 @@ class ItemPanel extends Component {
 
 const styles = theme => ({
     heading: {
-        fontSize: theme.typography.pxToRem(17),
+        fontSize: theme.typography.pxToRem(17)
     },
     secondaryHeading: {
         fontSize: theme.typography.pxToRem(15),
@@ -195,8 +133,7 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch =>
-    bindActionCreators(orderActions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(orderActions, dispatch);
 
 export default connect(
     mapStateToProps,

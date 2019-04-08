@@ -33,7 +33,7 @@ export function * prepareOrder(action) {
         if (error) {
             throw error
         } else {
-            yield put(responseSuccess(initOrder(order, user)));
+            yield put(responseSuccess(initOrder(order, user, cart)));
         }
     } catch (error) {
         if(error.status){
