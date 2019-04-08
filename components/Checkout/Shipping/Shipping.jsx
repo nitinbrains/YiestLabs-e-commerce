@@ -105,6 +105,11 @@ class Shipping extends Component {
                         </Typography>
                         <div className={classes.sectionTitleDivider} />
                         <TextField
+                          InputProps={{
+                            classes: {
+                                input: classes.whiteSpace
+                            }
+                        }}
                             id="shipmethod"
                             select
                             label="Ship Method"
@@ -146,6 +151,9 @@ const styles = theme => ({
     selected: {
         border: "solid 2px",
         borderColor: "#f28411"
+    },
+    whiteSpace:{
+        whiteSpace:'normal'
     },
     sectionTitleDivider: {
         borderTop: "solid 1.5px",

@@ -67,6 +67,11 @@ class Items extends Component {
 
                             <Grid item xs={12} md={3} style={{textAlign: "center"}}>
                                 <TextField
+                                  InputProps={{
+                                    classes: {
+                                        input: classes.whiteSpace
+                                    }
+                                }}
                                     select
                                     required
                                     id="shippingOption"
@@ -160,6 +165,9 @@ const styles = theme => ({
     },
     title: {
         marginTop: theme.spacing.unit * 2
+    },
+    whiteSpace:{
+        whiteSpace:'normal'
     },
     dialogPaper: {
         minWidth: '70%',

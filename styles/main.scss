@@ -13,10 +13,10 @@ $Montserrat : 'Montserrat', sans-serif;
 //rework myaccount
 @import "../components//MyAccount/myaccount.scss";
 @import "../components/MyAccount/responsive.scss";
-
 @import "../components/Calculator/responsive.scss";
 @import "../components/Calculator/calculator.scss";
 @import "../components/Registration/responsive.scss";
+@import "../components/Checkout/checkout.scss";
 
 body {
 	font-family: $Montserrat;
