@@ -114,15 +114,15 @@ class ManageShipping extends Component {
         return (
             <React.Fragment>
                 <ClickAwayListener onClickAway={this.handleClickAway}>
-                    <DialogContent id="my-order-details">
+                    <DialogContent id="my-order-details" className={classes.responsiveMargin}>
                         <div className={classes.close}>
                             <IconButton style={{ padding: "4.5px" }} color="inherit" size="small" aria-label="Menu" onClick={() => this.handleDialogClose()}>
                                 <CloseIcon />
                             </IconButton>
                         </div>
-                        <div className="main-block">
+                        <div className={classes.mainBlock}>
                             <div className="order-number">
-                                <Typography variant="h6" color="textPrimary">
+                                <Typography variant="h6" className="xsmall-typovariant" color="textPrimary">
                                     MANAGE SHIPPING ADDRESSES
                                 </Typography>
                             </div>
@@ -164,7 +164,7 @@ class ManageShipping extends Component {
                                                     <Typography>
                                                         <div className="block">
                                                             <span className="label">Address line 1: </span>
-                                                            {address.address1}
+                                                            <span className={classes.displayBlock}>{address.address1}</span>
                                                         </div>
                                                     </Typography>
                                                 </Grid>
@@ -173,7 +173,7 @@ class ManageShipping extends Component {
                                                         {address.address2 && (
                                                             <div className="block">
                                                                 <span className="label">Address line 2: </span>
-                                                                {address.address2}
+                                                                <span className={classes.displayBlock}>{address.address2}</span>
                                                             </div>
                                                         )}
                                                     </Typography>
@@ -183,7 +183,7 @@ class ManageShipping extends Component {
                                                         {address.address3 && (
                                                             <div className="block">
                                                                 <span className="label">Address line 3: </span>
-                                                                {address.address3}
+                                                                <span className={classes.displayBlock}>{address.address3}</span>
                                                             </div>
                                                         )}
                                                     </Typography>
@@ -192,7 +192,7 @@ class ManageShipping extends Component {
                                                     <Typography>
                                                         <div className="block">
                                                             <span className="label">City: </span>
-                                                            {address.city}
+                                                            <span className={classes.displayBlock}>{address.city}</span>
                                                         </div>
                                                     </Typography>
                                                 </Grid>
@@ -200,7 +200,7 @@ class ManageShipping extends Component {
                                                     <Typography>
                                                         <div className="block">
                                                             <span className="label">Zip-Code: </span>
-                                                            {address.zip}
+                                                            <span className={classes.displayBlock}>{address.zip}</span>
                                                         </div>
                                                     </Typography>
                                                 </Grid>
@@ -208,7 +208,7 @@ class ManageShipping extends Component {
                                                     <Typography>
                                                         <div className="block">
                                                             <span className="label">Country: </span>
-                                                            {address.countryid}
+                                                            <span className={classes.displayBlock}>{address.countryid}</span>
                                                         </div>
                                                     </Typography>
                                                 </Grid>
@@ -220,7 +220,7 @@ class ManageShipping extends Component {
                                                     <Button
                                                         variant="contained"
                                                         color="primary"
-                                                        style={{ bottom: 2 }}
+                                                        style={{ marginTop: 5 }}
                                                         className={classNames(this.state.lastBoxHover != i && classes.hide)}
                                                         onClick={e => this.selectAddress(address)}
                                                     >
@@ -272,9 +272,7 @@ const styles = theme => ({
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 300,
-        overflowY: "scroll",
-        overflowX: "hidden"
+        height: "auto"
     },
     addressBoxSelected: {
         position: "relative",
@@ -282,9 +280,13 @@ const styles = theme => ({
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 300,
-        overflowY: "scroll",
-        overflowX: "hidden"
+        height: "auto"
+    },
+    responsiveMargin: {
+        margin: "48px",
+        [theme.breakpoints.down("sm")]: {
+            margin: "0px"
+        }
     },
     close: { position: "relative", display: "flex", justifyContent: "flex-end" },
     deleteIcon: { position: "absolute", right: -5, top: -5 },
@@ -295,6 +297,22 @@ const styles = theme => ({
         borderTop: "solid 1.5px",
         borderColor: "#CCCCCC",
         marginBottom: 10
+    },
+    mainBlock: {
+        position: "relative",
+        border: "1px solid #CCCCCC",
+        margin: "10",
+        padding: "20px",
+        marginTop: "14px",
+        [theme.breakpoints.down("sm")]: {
+            padding: "0px"
+        }
+    },
+    displayBlock: {
+        display: "inline",
+        [theme.breakpoints.down("sm")]: {
+            display: "block"
+        }
     }
 });
 

@@ -74,6 +74,7 @@ class AddCard extends Component {
     };
 
     render() {
+        const {classes}=this.props;
         return (
             <React.Fragment>
                 <Formik onSubmit={(values, actions) => this.addCard(values, actions)} enableReinitialize>
@@ -92,9 +93,15 @@ class AddCard extends Component {
                                                         variant="outlined"
                                                         fullWidth
                                                         autoComplete="ccnumber"
-                                                        InputProps={{ inputComponent: CreditCardMaskedTextField }}
+                                                        InputProps={{ inputComponent: CreditCardMaskedTextField,
+                                                            classes: { root: classes.inputRoot } }}
                                                         onChange={onChange}
                                                         value={_get(value, "ccnumber") || ''}
+                                                        InputLabelProps={{
+                                                            FormLabelClasses: {
+                                                              root: classes.labelRoot
+                                                            }
+                                                          }}
                                                     />
                                                 </Grid>
                                             );
@@ -103,7 +110,7 @@ class AddCard extends Component {
                                     <Field
                                         render={({ field: { value, onChange } }) => {
                                             return (
-                                                <Grid item xs={12}>
+                                                <Grid item xs={12} sm={6}>
                                                     <FormikErrorMessage error={_get(errors, "ccname")} />
                                                     <TextField
                                                         name="ccname"
@@ -113,6 +120,12 @@ class AddCard extends Component {
                                                         autoComplete="ccname"
                                                         onChange={onChange}
                                                         value={_get(value, "ccname") || ''}   
+                                                        InputProps={{ classes: { root: classes.inputRoot } }}
+                                                        InputLabelProps={{
+                                                          FormLabelClasses: {
+                                                            root: classes.labelRoot
+                                                          }
+                                                        }}
                                                     />
                                                 </Grid>
                                             );
@@ -129,17 +142,23 @@ class AddCard extends Component {
                                                         variant="outlined"
                                                         placeholder="MM/YY"
                                                         fullWidth
-                                                        InputProps={{ inputComponent: DateMaskedTextField }}
+                                                        InputProps={{ inputComponent: DateMaskedTextField,
+                                                            classes: { root: classes.inputRoot } }}
                                                         onChange={onChange}
                                                         value={_get(value, "ccexpire") || ''}
+                                                        InputLabelProps={{
+                                                            FormLabelClasses: {
+                                                              root: classes.labelRoot
+                                                            }
+                                                          }}
                                                     />
                                                 </Grid>
                                             );
                                         }}
                                     />
-                                    <Grid style={{ marginTop: 10 }} container justify="flex-end">
+                                    <Grid style={{ marginTop: 10 }} container className={classes.justifyBtn}>
                                         <Grid item>
-                                            <Button variant="contained" color="primary" type="submit">
+                                            <Button className={classes.smallBtn} variant="contained" color="primary" type="submit">
                                                 Add Card
                                             </Button>
                                         </Grid>
@@ -159,7 +178,34 @@ const styles = theme => ({
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2
-    }
+    },
+    justifyBtn:{
+        display:'flex',
+        justifyContent:'flex-end',
+        [theme.breakpoints.down('xs')]: {
+            display:'flex',
+            justifyContent:'center',
+          }
+    },
+    smallBtn:{
+        fontSize:'0.875rem',
+        padding:'4px',
+        [theme.breakpoints.down('xs')]: {
+            fontSize:'10px',
+          }
+    },
+    inputRoot: {
+        fontSize: '1rem',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: 13
+          }
+      },
+      labelRoot: {
+        fontSize: '1rem',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: 13
+          }
+      }
 });
 
 const mapStateToProps = state => {

@@ -25,9 +25,9 @@ const Billing = ({
     classes,
 }) => {
     return (
-        <Grid item xs={12} md={5} container spacing={16} style={{ marginRight: 30, textAlign: "center" }}>
+        <Grid item xs={12} md={5} container spacing={16} className={classes.outerContainer}>
             <Grid item xs={12}>
-                <Typography style={{ textAlign: "left" }} variant="h6" color="textPrimary">
+                <Typography style={{ textAlign: "left" }} variant="h6" className="small-typovariant" color="textPrimary">
                     BILLING INFORMATION
                 </Typography>
                 <div className={classes.sectionTitleDivider} />
@@ -231,6 +231,17 @@ const styles = theme => ({
         borderTop: "solid 1.5px",
         borderColor: "#CCCCCC",
         marginBottom: 10
+    },
+    outerContainer:{
+        // marginRight: 30, 
+        padding:'12px 0px',
+        textAlign: "center",
+        display:'flex',
+        justifyContent:'center',
+        // [theme.breakpoints.down('sm')]: {
+        //     marginRight: 0, 
+        //     textAlign: "center",
+        //   }
     }
 });
 

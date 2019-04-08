@@ -8,7 +8,11 @@ $Montserrat : 'Montserrat', sans-serif;
 @import "cart";
 @import "myorders";
 @import "store";
-@import "myaccount";
+//@import "myaccount";
+
+//rework myaccount
+@import "../components//MyAccount/myaccount.scss";
+@import "../components/MyAccount/responsive.scss";
 
 @import "../components/Calculator/responsive.scss";
 @import "../components/Calculator/calculator.scss";

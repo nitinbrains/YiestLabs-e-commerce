@@ -66,6 +66,7 @@ class AddAddress extends Component {
     }
 
     render() {
+        const {classes}=this.props;    
         return (
             <React.Fragment>
                 <Formik
@@ -191,7 +192,7 @@ class AddAddress extends Component {
                                                     <FormikErrorMessage error={_get(errors, 'zip')} />
                                                     <TextField
                                                         name="zip"
-                                                        label="Postal Code"
+                                                        label="Zip code"
                                                         variant="outlined"
                                                         fullWidth
                                                         autoComplete="zip"
@@ -225,12 +226,12 @@ class AddAddress extends Component {
                                             )
                                         }}
                                     />
-                                    <Grid style={{ marginTop: 10 }} container justify="flex-end">
+                                    <Grid style={{ marginTop: 10 }} container className={classes.justifyBtn}>
                                         <Grid item>
-                                            <Button style={{marginRight:'10px'}}variant="contained" color="primary" type="submit">
+                                            <Button className={classes.smallBtn} style={{marginRight:'8px'}}variant="contained" color="primary" type="submit">
                                                 Add Address
                                             </Button>
-                                            <Button variant="contained" color="primary" onClick={()=>this.props.handleCancelAdd(false)} >
+                                            <Button className={classes.smallBtn} variant="contained" color="primary" onClick={()=>this.props.handleCancelAdd(false)} >
                                                 Cancel
                                             </Button>
                                         </Grid>
@@ -250,6 +251,21 @@ const styles = theme => ({
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2
+    },
+    justifyBtn:{
+        display:'flex',
+        justifyContent:'flex-end',
+        [theme.breakpoints.down('xs')]: {
+            display:'flex',
+            justifyContent:'center',
+          }
+    },
+    smallBtn:{
+        fontSize:'0.875rem',
+        padding:'4px',
+        [theme.breakpoints.down('xs')]: {
+            fontSize:'10px',
+          }
     }
 });
 

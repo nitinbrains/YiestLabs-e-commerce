@@ -114,15 +114,15 @@ class ManageBilling extends Component {
         return (
             <React.Fragment>
                   <ClickAwayListener onClickAway={this.handleClickAway}>
-                <DialogContent id="my-order-details">
+                <DialogContent id="my-order-details" className={classes.responsiveMargin}>
                 <div className={classes.close}>
                             <IconButton style={{padding:'4.5px'}} color="inherit" size="small" aria-label="Menu" onClick={() => this.handleDialogClose()}>
                                 <CloseIcon />
                             </IconButton>
                         </div>
-                    <div className="main-block">
+                    <div className={classes.mainBlock}>
                         <div className="order-number">
-                            <Typography variant="h6" color="textPrimary">
+                            <Typography variant="h6" color="textPrimary" className="xsmall-typovariant">
                                 MANAGE BILLING ADDRESSES
                             </Typography>
                         </div>
@@ -221,7 +221,7 @@ class ManageBilling extends Component {
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
-                                                    style={{ bottom: 2 }}
+                                                    style={{ marginTop:5 }}
                                                     onClick={e => this.selectAddress(address)}
                                                     className={classNames(this.state.lastBoxHover != i && classes.hide)}
                                                 >
@@ -238,7 +238,7 @@ class ManageBilling extends Component {
                             ))}
 
                             {!this.state.newAddress ? (
-                                <Grid item xs={12}>
+                                <Grid item xs={12} className="flex-center">
                                     <Button onClick={this.newAddress} color="primary" variant="outlined">
                                         Add New Address
                                     </Button>
@@ -276,9 +276,7 @@ const styles = theme => ({
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 300,
-        overflowY: "scroll",
-        overflowX: "hidden"
+        height: 'auto'
     },
     addressBoxSelected: {
         position: "relative",
@@ -286,12 +284,32 @@ const styles = theme => ({
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 300,
-        overflowY: "scroll",
-        overflowX: "hidden"
+        height: 'auto'
+    },
+    responsiveMargin:{
+        margin:'48px',
+        [theme.breakpoints.down('sm')]: {
+            margin:'0px',
+          }
+    },
+    mainBlock:{
+        position: 'relative',
+        border: '1px solid #CCCCCC',
+        margin: '10',
+        padding: '20px',
+        marginTop: '14px',
+        [theme.breakpoints.down('sm')]: {
+            padding: '0px',
+          }
+    },
+    displayBlock:{
+        display:'inline',
+        [theme.breakpoints.down('sm')]: {
+            display:'block'
+          }
     },
     close: { position: 'relative',display: 'flex',justifyContent: 'flex-end' },
-    deleteIcon: { position: "absolute", right: -5, top: -5 },
+    deleteIcon: { position: "absolute", right: -25, top: -25 },
     hide: {
         display: "none"
     },

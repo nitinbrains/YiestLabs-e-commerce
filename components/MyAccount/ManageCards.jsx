@@ -95,17 +95,17 @@ class ManageCards extends Component {
         return (
             <React.Fragment>
                  <ClickAwayListener onClickAway={this.handleClickAway}>
-                <DialogContent id="my-order-details">
-                    <div className="main-block">
-                        <div className="order-number">
-                            <Typography variant="h6" color="textPrimary">
-                                MANAGE CREDIT CARDS
-                            </Typography>
-                        </div>
-                        <div className={classes.close}>
+                <DialogContent id="my-order-details" className={classes.responsiveMargin}>
+                <div className={classes.close}>
                             <IconButton color="inherit" size="small" aria-label="Menu" onClick={() => this.handleDialogClose()}>
                                 <CloseIcon />
                             </IconButton>
+                        </div>
+                    <div  className={classes.mainBlock}>
+                        <div className="order-number">
+                            <Typography variant="h6" color="textPrimary" className="xsmall-typovariant">
+                                MANAGE CREDIT CARDS
+                            </Typography>
                         </div>
                         <Grid style={{ padding: 20 }} container spacing={24}>
                             {user.otherCards.map((card, i) => (
@@ -125,7 +125,8 @@ class ManageCards extends Component {
                                                 <Typography>
                                                     <div className="block">
                                                         
-                                                        <span className="label">Name: </span> {card.ccname}
+                                                        <span className="label">Name: </span> 
+                                                        <span className={classes.displayBlock}>{card.ccname}</span>
                                                     </div>
                                                 </Typography>
                                             </Grid>
@@ -133,7 +134,8 @@ class ManageCards extends Component {
                                                 <Typography>
                                                     <div className="block">
                                                         
-                                                        <span className="label">CC Number: </span> {card.ccnumber}
+                                                        <span className="label">CC Number: </span> 
+                                                        <span className={classes.displayBlock}>{card.ccnumber}</span>
                                                     </div>
                                                 </Typography>
                                             </Grid>
@@ -141,7 +143,8 @@ class ManageCards extends Component {
                                                 <Typography>
                                                     <div className="block">
                                                     
-                                                        <span className="label">CC Expiry: </span> {moment(card.ccexpire).format("MM-YYYY")}
+                                                        <span className="label">CC Expiry: </span> 
+                                                        <span className={classes.displayBlock}>{moment(card.ccexpire).format("MM-YYYY")}</span>
                                                     </div>
                                                 </Typography>
                                             </Grid>
@@ -151,7 +154,7 @@ class ManageCards extends Component {
                                                     <Button
                                                         variant="contained"
                                                         color="primary"
-                                                        style={{ bottom: 2 }}
+                                                        style={{ marginTop:5 }}
                                                         className={classNames(this.state.cardHover != i && classes.hide)}
                                                         onClick={() => this.selectCard(card)}
                                                     >
@@ -169,7 +172,7 @@ class ManageCards extends Component {
                             ))}
 
                             {!this.state.newCard ? (
-                                <Grid item xs={12}>
+                                <Grid item xs={12} className="flex-center">
                                     <Button onClick={this.newCard} color="primary">
                                         Add New Card
                                     </Button>
@@ -207,7 +210,7 @@ const styles = theme => ({
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 200
+        height: 'auto'
     },
     cardBoxSelected: {
         position: "relative",
@@ -215,7 +218,29 @@ const styles = theme => ({
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 200
+        height: 'auto'
+    },
+    responsiveMargin:{
+        margin:'48px',
+        [theme.breakpoints.down('sm')]: {
+            margin:'0px',
+          }
+    },
+    mainBlock:{
+        position: 'relative',
+        border: '1px solid #CCCCCC',
+        margin: '10',
+        padding: '20px',
+        marginTop: '14px',
+        [theme.breakpoints.down('sm')]: {
+            padding: '0px',
+          }
+    },
+    displayBlock:{
+        display:'inline',
+        [theme.breakpoints.down('sm')]: {
+            display:'block'
+          }
     },
     close: { position: "absolute", right: 0, top: 0 },
     deleteIcon: { position: "absolute", right: -25, top: -25 },

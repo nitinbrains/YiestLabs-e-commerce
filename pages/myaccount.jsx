@@ -168,7 +168,7 @@ class MyAccount extends Component {
     handleSubmit = (values, { setErrors }) => {
         const errors = this.validate(values);
         if (_isEmpty(errors)) {
-            const request = this.buildRequest(this.props.user, values);
+            const request = buildRequest(this.props.user, values);
             this.props.updateUserInfo({ request });
         } else {
             setErrors(errors);
@@ -361,9 +361,9 @@ class MyAccount extends Component {
 
                             return (
                                 <Form>
-                                    <Grid container spacing={24}>
-                                        <Grid item xs={12} container justify="center" alignItems="center" spacing={24} style={{ marginBottom: 20 }}>
-                                            <Grid item xs={3}>
+                                    <Grid container spacing={24} className={classes.containerMargin}>
+                                        <Grid item xs={12} container justify="center" alignItems="center" spacing={24} className={classes.specifyContainer}>
+                                            <Grid item xs={12} sm={3}>
                                                 <Typography style={{ textAlign: "center" }} variant="title" gutterBottom>
                                                     Account # {this.props.user.id}
                                                 </Typography>
@@ -371,7 +371,7 @@ class MyAccount extends Component {
                                             <Field
                                                 render={({ field: { value, onChange }}) => {
                                                     return (
-                                                        <Grid item xs={3}>
+                                                        <Grid item xs={12} sm={3}>
                                                             <FormikErrorMessage error={_get(errors, "email")} />
                                                             <TextField
                                                                 name="email"
@@ -388,7 +388,7 @@ class MyAccount extends Component {
                                             <Field
                                                 render={({ field: { value, onChange }}) => {
                                                     return (
-                                                        <Grid item xs={3}>
+                                                        <Grid item xs={12} sm={3}>
                                                             <FormikErrorMessage error={_get(errors, "phone")} />
                                                             <TextField
                                                                 name="phone"
@@ -406,7 +406,7 @@ class MyAccount extends Component {
                                             <Field
                                                 render={({ field: { value, onChange }}) => {
                                                     return (
-                                                        <Grid item xs={3}>
+                                                        <Grid item xs={3} item xs={12} sm={3}>
                                                             <FormikErrorMessage error={_get(errors, "orderFrom")} />
                                                             <TextField
                                                                 select
@@ -430,7 +430,7 @@ class MyAccount extends Component {
                                                 <Field
                                                     render={({ field: { value, onChange }}) => {
                                                         return (
-                                                            <Grid item xs={3}>
+                                                            <Grid item xs={12} sm={3} >
                                                                 <FormikErrorMessage error={_get(errors, "currency")} />
                                                                 <TextField
                                                                     select
@@ -453,7 +453,8 @@ class MyAccount extends Component {
                                             <Field
                                                 render={({ field: { value, onChange }}) => {
                                                     return (
-                                                        <Grid item xs={3} className={subsidiary == 2 && classes.hide}>
+                                                        // <Grid item xs={3} className={subsidiary == 2 && classes.hide}>
+                                                        <Grid item xs={12} sm={3} className={subsidiary == 2 && classes.hide}>
                                                             <FormikErrorMessage error={_get(errors, "vat")} />
                                                             <TextField
                                                                 placeholder="US-123456"
@@ -474,14 +475,13 @@ class MyAccount extends Component {
                                             <Field
                                                 render={({ field: { value, onChange }}) => {
                                                     return (
-                                                        <Grid item xs={3}>
+                                                        <Grid item xs={12} sm={3}>
                                                             <FormikErrorMessage error={_get(errors, "shipmethod")} />
                                                             <TextField
+                                                           
                                                                 select
-                                                                value={_get(value, "shipmethod")}
                                                                 InputLabelProps={{ shrink: _get(value, "shipmethod") !== "" }}
                                                                 onChange={onChange}
-                                                                variant="outlined"
                                                                 name="shipmethod"
                                                                 variant="outlined"
                                                                 label="shipmethod"
@@ -505,7 +505,11 @@ class MyAccount extends Component {
                                                 <Shipping {...props} />
                                                 <Billing {...props} />
 
-                                                <Grid item xs={12} md={4} container justify="center" alignItems="center">
+                                                <Grid item xs={12}>
+
+                                                <div className={classes.alignBtns}>
+
+
                                                     <Button
                                                         onClick={this.manageShipping}
                                                         variant="outlined" color="primary"
@@ -513,17 +517,18 @@ class MyAccount extends Component {
                                                     >
                                                         Manage Shipping Addresses
                                                     </Button>
-                                                </Grid>
-                                                <Grid item xs={12} md={4} container justify="center" alignItems="center">
+
+
                                                     <Button
-                                                        style={{ marginTop: 10 }}
+                                                
                                                         variant="outlined" color="primary"
                                                         onClick={this.manageBilling}
+                                                        className={classes.modalbtn}
                                                     >
                                                         Manage Billing Addresses
                                                     </Button>
-                                                </Grid>
-                                                <Grid item xs={12} md={4} container justify="center" alignItems="center">
+
+
                                                     <Button
                                                         variant="outlined" color="primary"
                                                         className={classes.modalbtn}
@@ -531,6 +536,8 @@ class MyAccount extends Component {
                                                     >
                                                         Manage Cards
                                                     </Button>
+
+                                                </div>
                                                 </Grid>
                                                 <Grid item xs={12} md={4} container justify="center" alignItems="center">
                                                     <Button
@@ -544,11 +551,13 @@ class MyAccount extends Component {
                                             </Grid>
                                         </Grid>
                                     </Grid>
-                                    <div className={classes.buttonContainer} style={{ visible: "false", display: "none" }}>
+                                    <Grid item xs={12}>
+                                    <div className={classes.buttonContainer}>
                                         <Button variant="contained" color="primary" type="submit" className={classes.button}>
                                             Confirm Account Changes
                                         </Button>
                                     </div>
+                                    </Grid>
                                 </Form>
                             );
                         }}
@@ -596,8 +605,23 @@ const styles = theme => ({
             marginRight: 250
         }
     },
+    containerMargin:{
+        marginLeft:'15px',
+        maxWidth:'100%'
+    },
+    specifyContainer:{
+        marginBottom:'20px',
+        padding:'12px 0px !important',
+        textAlign:'center'
+        
+    },
     modalbtn:{
-        marginTop: 10, marginLeft: 16
+        marginRight: 10 ,
+        marginBottom: 0,
+        [theme.breakpoints.down("sm")]: {
+            marginRight: 0,
+            marginBottom: 10
+        }
     },
     title: {
         backgroundColor: "#FF9933",
@@ -607,12 +631,16 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit * -4,
         marginRight: theme.spacing.unit * -4
     },
+    
     buttonContainer: {
-        display: "flex"
+        display: "flex",
+        justifyContent:'center',
+        marginBottom: '64px',
+        marginTop: '-42px'
     },
     button: {
-        marginTop: theme.spacing.unit * 3,
-        marginLeft: theme.spacing.unit
+        // marginTop: theme.spacing.unit * 3,
+        // marginLeft: theme.spacing.unit
     },
     sectionTitleDivider: {
         borderTop: "solid 1.5px",
@@ -622,6 +650,16 @@ const styles = theme => ({
     hide: {
         display: "none"
     },
+    alignBtns:{
+        display:'flex',
+        flexDirection:'row',
+        justifyContent:'center',
+        alignItems:'center',
+        [theme.breakpoints.down("sm")]: {
+            flexDirection:'column',
+        }
+        
+    }
 });
 
 MyAccount.propTypes = {
