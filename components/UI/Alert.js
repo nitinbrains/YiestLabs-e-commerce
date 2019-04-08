@@ -71,6 +71,9 @@ class Alert extends React.Component {
         }else if(message.variant === 'info'){
             _classname = classes.info;
             _icon = <ErrorIcon />
+        } else if(message.variant === 'permanentSuccess'){
+              _classname = classes.success;
+              _icon = <DoneIcon />
         }
         return (
             <React.Fragment>

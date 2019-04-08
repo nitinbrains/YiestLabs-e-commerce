@@ -68,8 +68,15 @@ export function * placeOrder(action) {
             sessionStorage.setItem('orderComplete', 'yes');
             yield put(responseSuccess());
             yield put(cartActions.clearCart());
+            yield put(
+                messageActions.showBanner({
+                    title: "Success",
+                    message: "Your order has been placed.",
+                    variant: "permanentSuccess"
+                })
+            );
             Router.push('/');
-            yield put(messageActions.showSnackbar({ title: 'Success', message: 'Order submitted', variant:'success' }));
+            //yield put(messageActions.showSnackbar({ title: 'Success', message: 'Order submitted', variant:'success' }));
         }
     } catch (error) {
         if(error.status){
