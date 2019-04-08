@@ -374,6 +374,7 @@ class MyAccount extends Component {
                                                         <Grid item xs={12} sm={3}>
                                                             <FormikErrorMessage error={_get(errors, "email")} />
                                                             <TextField
+                                                                fullWidth
                                                                 name="email"
                                                                 variant="outlined"
                                                                 label="Email"
@@ -391,6 +392,7 @@ class MyAccount extends Component {
                                                         <Grid item xs={12} sm={3}>
                                                             <FormikErrorMessage error={_get(errors, "phone")} />
                                                             <TextField
+                                                                fullWidth
                                                                 name="phone"
                                                                 InputProps={{ inputComponent: PhoneMaskedTextField }}
                                                                 variant="outlined"
@@ -409,6 +411,8 @@ class MyAccount extends Component {
                                                         <Grid item xs={3} item xs={12} sm={3}>
                                                             <FormikErrorMessage error={_get(errors, "orderFrom")} />
                                                             <TextField
+                                                              // style={{ minWidth:'100%'}}
+                                                                fullWidth
                                                                 select
                                                                 name="orderFrom"
                                                                 variant="outlined"
@@ -433,6 +437,7 @@ class MyAccount extends Component {
                                                             <Grid item xs={12} sm={3} >
                                                                 <FormikErrorMessage error={_get(errors, "currency")} />
                                                                 <TextField
+                                                                    fullWidth
                                                                     select
                                                                     name="currency"
                                                                     variant="outlined"
@@ -453,10 +458,11 @@ class MyAccount extends Component {
                                             <Field
                                                 render={({ field: { value, onChange }}) => {
                                                     return (
-                                                        // <Grid item xs={3} className={subsidiary == 2 && classes.hide}>
-                                                        <Grid item xs={12} sm={3} className={subsidiary == 2 && classes.hide}>
+                                                
+                                                        <Grid item xs={12} sm={3} >
                                                             <FormikErrorMessage error={_get(errors, "vat")} />
                                                             <TextField
+                                                                fullWidth
                                                                 placeholder="US-123456"
                                                                 value={_get(value, "vat")}
                                                                 onChange={onChange}
@@ -475,10 +481,10 @@ class MyAccount extends Component {
                                             <Field
                                                 render={({ field: { value, onChange }}) => {
                                                     return (
-                                                        <Grid item xs={12} sm={3}>
+                                                        <Grid item xs={12} sm={3}  >
                                                             <FormikErrorMessage error={_get(errors, "shipmethod")} />
                                                             <TextField
-                                                           
+                                                               fullWidth
                                                                 select
                                                                 InputLabelProps={{ shrink: _get(value, "shipmethod") !== "" }}
                                                                 onChange={onChange}
@@ -614,6 +620,9 @@ const styles = theme => ({
         padding:'12px 0px !important',
         textAlign:'center'
         
+    },
+    whiteSpace:{
+        whiteSpace:'normal'
     },
     modalbtn:{
         marginRight: 10 ,
