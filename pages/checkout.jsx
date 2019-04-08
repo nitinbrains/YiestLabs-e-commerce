@@ -29,7 +29,7 @@ import Shipping from "components/Checkout/Shipping/Shipping";
 import Billing from "components/Checkout/Billing/Billing";
 import Items from "components/Checkout/Items/Items";
 import Review from "components/Checkout/Review/Review";
-import RemovedItems from "components/Checkout/RemovedItems";
+import RemovedItems from "components/Checkout/RemovedItems/RemovedItems";
 
 import isLoggedUser from "hocs/isLoggedUser";
 import cartHasItems from "hocs/cartHasItems";
@@ -147,9 +147,9 @@ class Checkout extends Component {
                             CHECKOUT
                         </Typography>
                     </div>
-                    
+
                     <RemovedItems />
-                    
+
                     <Stepper
                         nonLinear
                         activeStep={activeStep}

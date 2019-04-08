@@ -5,9 +5,19 @@ import Router from 'next/router';
 import _size from "lodash/size";
 
 import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import classNames from "classnames";
 import Button from "@material-ui/core/Button";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-
+import withStyles from "@material-ui/core/styles/withStyles";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
 
 class RemovedItems extends Component {
 
@@ -37,12 +47,12 @@ class RemovedItems extends Component {
 
     render() {
         const { order: { removedItems }, cart: { items }} = this.props;
-
+        const { classes } = this.props
         const allItemsRemoved = _size(removedItems) == _size(items);
 
         return (
-            <Dialog 
-                open={showDialog}
+            <Dialog
+                open={this.showDialog}
                 maxWidth="md"
                 fullWidth
             >
@@ -67,7 +77,7 @@ class RemovedItems extends Component {
                             </div>
                             <div style={{textAlign: "center"}}>
                                 <Grid item>
-                                    <Button 
+                                    <Button
                                         variant="contained"
                                         color="primary"
                                         onClick={e => this.backToStore()}
@@ -102,7 +112,7 @@ class RemovedItems extends Component {
                             </div>
                             <div style={{textAlign: "center"}}>
                                 <Grid item>
-                                    <Button 
+                                    <Button
                                         variant="contained"
                                         color="primary"
                                         onClick={e => this.closeDialog()}
@@ -113,7 +123,7 @@ class RemovedItems extends Component {
                             </div>
                         </React.Fragment>
                     }
-                    
+
                 </DialogContent>
             </Dialog>
         )
@@ -141,4 +151,3 @@ export default connect(
     mapStateToProps,
     null
 )(compose(withStyles(styles, { withTheme: true })(RemovedItems)));
-
