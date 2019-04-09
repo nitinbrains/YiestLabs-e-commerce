@@ -10,9 +10,9 @@ $Montserrat : 'Montserrat', sans-serif;
 @import "store";
 @import "myaccount";
 
-//rework calculator
 @import "../components/Calculator/responsive.scss";
-@import "../components//Calculator/calculator.scss";
+@import "../components/Calculator/calculator.scss";
+@import "../components/Registration/responsive.scss";
 
 body {
 	font-family: $Montserrat;

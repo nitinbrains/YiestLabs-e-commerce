@@ -5,6 +5,14 @@ $color-third-accent: #66CCCC;
 $color-font: #666666;
 $color-white: #fff;
 
+
+
+
+.flex-center{
+	display: flex !important;
+	justify-content: center !important;
+}
+
 .card-header-down{
 	margin-top: 50px !important;
 	width: 100% !important;

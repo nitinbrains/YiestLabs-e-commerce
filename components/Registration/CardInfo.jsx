@@ -78,8 +78,8 @@ const CardInfo = ({
 
     return (
         <Grid container spacing={24}>
-            <Grid item xs={12}>
-                <Typography variant="h6" color="textPrimary">
+            <Grid item xs={12} className="flex-center">
+                <Typography variant="h6" className="reg-typovariant" className={classes.bolder} color="textPrimary">
                     Credit Card Information
                 </Typography>
                 <div
@@ -101,7 +101,8 @@ const CardInfo = ({
                                 variant="outlined"
                                 fullWidth
                                 autoComplete="ccnumber"
-                                InputProps={{ inputComponent: CreditCardMaskedTextField }}
+                                InputProps={{ inputComponent: CreditCardMaskedTextField,
+                                input: classes.whiteSpace }}
                                 onChange={onChange}
                                 value={_get(value, 'card.ccnumber') || ''}
                             />
@@ -122,6 +123,7 @@ const CardInfo = ({
                                 autoComplete="card.ccname" 
                                 onChange={onChange} 
                                 value={_get(value, "card.ccname") || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             />
 
                         </Grid>
@@ -139,7 +141,8 @@ const CardInfo = ({
                                 variant="outlined"
                                 placeholder="MM/YY"
                                 fullWidth
-                                InputProps={{ inputComponent: DateMaskedTextField }}
+                                InputProps={{ inputComponent: DateMaskedTextField,
+                                    input: classes.whiteSpace }}
                                 onChange={onChange}
                                 value={_get(value, "card.ccexpire") || ''} 
                             />
@@ -165,6 +168,12 @@ const styles = theme => ({
     button: {
         marginTop: theme.spacing.unit * 3,
         marginLeft: theme.spacing.unit
+    },
+    whiteSpace:{
+        whiteSpace:'normal'
+    },
+    bolder:{
+        fontWeight:'bolder'
     }
 });
 

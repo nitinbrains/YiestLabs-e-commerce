@@ -69,8 +69,8 @@ const Shipping = ({
 
     return (
         <Grid container spacing={24}>
-            <Grid item xs={12}>
-                <Typography variant="h6" color="textPrimary">
+            <Grid item xs={12} className="flex-center">
+                <Typography variant="h6" className="reg-typovariant" className={classes.bolder} color="textPrimary">
                     Shipping
                 </Typography>
                 <div
@@ -94,6 +94,7 @@ const Shipping = ({
                                 autoComplete="attention"
                                 onChange={onChange}
                                 value={_get(value, 'shipping.attn') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             />
                         </Grid>
                     )
@@ -112,6 +113,7 @@ const Shipping = ({
                                 autoComplete="addressee"
                                 onChange={onChange}
                                 value={_get(value, 'shipping.addressee') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             />
                         </Grid>
                     )
@@ -130,6 +132,7 @@ const Shipping = ({
                                 autoComplete="address1"
                                 onChange={onChange}
                                 value={_get(value, 'shipping.address1') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             />
                         </Grid>
                     )
@@ -148,6 +151,7 @@ const Shipping = ({
                                 autoComplete="address2"
                                 onChange={onChange}
                                 value={_get(value, 'shipping.address2') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             />
                         </Grid>
                     )
@@ -166,6 +170,7 @@ const Shipping = ({
                                 autoComplete="address3"
                                 onChange={onChange}
                                 value={_get(value, 'shipping.address3') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             />
                         </Grid>
                     )
@@ -185,6 +190,7 @@ const Shipping = ({
                                 autoComplete="city"
                                 onChange={onChange}
                                 value={_get(value, 'shipping.city') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             />
                         </Grid>
                     )
@@ -204,6 +210,7 @@ const Shipping = ({
                                 autoComplete="zip"
                                 onChange={onChange}
                                 value={_get(value, 'shipping.zip') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             />
                         </Grid>
                     )
@@ -223,6 +230,7 @@ const Shipping = ({
                                 autoComplete="zip"
                                 onChange={onChange}
                                 value={_get(value, 'shipping.countryid') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             >
                                 {SalesLib.COUNTRY_MAP.map((country) => (
                                     <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
@@ -252,6 +260,12 @@ const styles = theme => ({
         marginTop: theme.spacing.unit * 3,
         marginLeft: theme.spacing.unit
     },
+    whiteSpace:{
+        whiteSpace:'normal'
+    },
+    bolder:{
+        fontWeight:'bolder'
+    }
 });
 
 Shipping.propTypes = {

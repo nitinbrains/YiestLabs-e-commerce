@@ -77,8 +77,8 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
 
     return (
         <Grid container spacing={24}>
-            <Grid item xs={12}>
-                <Typography variant="h6" color="textPrimary">
+            <Grid item xs={12} className="flex-center">
+                <Typography variant="h6" className="reg-typovariant" className={classes.bolder} color="textPrimary">
                     Billing
                 </Typography>
                 <div
@@ -103,6 +103,11 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.attn")} touched={_get(touched, "billing.attn")} />
                                     <TextField
+                                         InputProps={{
+                                            classes: {
+                                                input: classes.whiteSpace
+                                            }
+                                        }}
                                         name="billing.attn"
                                         label="Attention"
                                         variant="outlined"
@@ -121,6 +126,11 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.addressee")} />
                                     <TextField
+                                         InputProps={{
+                                            classes: {
+                                                input: classes.whiteSpace
+                                            }
+                                        }}
                                         name="billing.addressee"
                                         label="Addressee"
                                         variant="outlined"
@@ -139,6 +149,11 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.address1")} />
                                     <TextField
+                                      InputProps={{
+                                        classes: {
+                                            input: classes.whiteSpace
+                                        }
+                                    }}
                                         name="billing.address1"
                                         label="Address 1"
                                         variant="outlined"
@@ -157,6 +172,11 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.address2")} />
                                     <TextField
+                                      InputProps={{
+                                        classes: {
+                                            input: classes.whiteSpace
+                                        }
+                                    }}
                                         name="billing.address2"
                                         label="Address 2"
                                         variant="outlined"
@@ -175,6 +195,11 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.address3")} />
                                     <TextField
+                                      InputProps={{
+                                        classes: {
+                                            input: classes.whiteSpace
+                                        }
+                                    }}
                                         name="billing.address3"
                                         label="Address3"
                                         variant="outlined"
@@ -193,6 +218,11 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.city")} />
                                     <TextField
+                                      InputProps={{
+                                        classes: {
+                                            input: classes.whiteSpace
+                                        }
+                                    }}
                                         name="billing.city"
                                         label="City"
                                         variant="outlined"
@@ -211,6 +241,11 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.zip")} />
                                     <TextField
+                                      InputProps={{
+                                        classes: {
+                                            input: classes.whiteSpace
+                                        }
+                                    }}
                                         name="billing.zip"
                                         label="Postal Code"
                                         variant="outlined"
@@ -229,6 +264,11 @@ const Billing = ({ values, touched, errors, classes, onNext, onBack, setErrors, 
                                 <Grid item xs={12}>
                                     <FormikErrorMessage error={_get(errors, "billing.countryid")} touched={_get(touched, "billing.countryid")} />
                                     <TextField
+                                      InputProps={{
+                                        classes: {
+                                            input: classes.whiteSpace
+                                        }
+                                    }}
                                         select
                                         name="billing.countryid"
                                         label="Country"
@@ -270,6 +310,12 @@ const styles = theme => ({
     button: {
         marginTop: theme.spacing.unit * 3,
         marginLeft: theme.spacing.unit
+    },
+    bolder:{
+        fontWeight:'bolder'
+    },
+    whiteSpace:{
+        whiteSpace:'normal'
     }
 });
 

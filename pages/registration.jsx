@@ -20,7 +20,7 @@ import Billing from "components/Registration/Billing";
 import CardInfo from "components/Registration/CardInfo";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
-
+import MobileStepper from '@material-ui/core/MobileStepper';
 import { userActions } from 'appRedux/actions/userActions';
 
 const steps = ["General Information", "Shipping Address", "Billing Address", "Credit Card Information"];
@@ -113,10 +113,17 @@ class Registration extends React.Component {
                 <LoadingIndicator visible={isLoading && type === 'createUser' } />
                 <div className={classes.container}>
                     <div className={classes.title}>
-                        <Typography variant="h4" color="secondary">
+                        <Typography variant="h4" className="reg-typovariant" color="secondary">
                             REGISTRATION
                         </Typography>
                     </div>
+                    <MobileStepper
+                       variant="dots"
+                        steps={4}
+                         position="static"
+                        activeStep={this.state.activeStep}
+                       className={classes.root}
+                     />
                     <Stepper nonLinear activeStep={activeStep} className={classes.stepper}>
                         {steps.map((label, index) => {
                             const props = {};
@@ -180,6 +187,14 @@ const styles = theme => ({
             padding: theme.spacing.unit * 3
         }
     },
+    root: {
+        display:'flex',
+        justifyContent:'center',
+        display:'flex',
+        [theme.breakpoints.up('md')]: {
+            display:'none'
+          }
+      },
     buttons: {
         display: "flex",
         justifyContent: "flex-end"
@@ -191,7 +206,11 @@ const styles = theme => ({
     stepper: {
         padding: `${theme.spacing.unit * 3}px 0 ${theme.spacing.unit * 5}px`,
         backgroundColor: "#fafafa",
-        width: "100%"
+        width: "100%",
+        display:'flex',
+        [theme.breakpoints.down('sm')]: {
+            display:'none'
+          }
     },
     step: {
         width: "98px"
@@ -201,9 +220,13 @@ const styles = theme => ({
         border: "solid 1px",
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 4,
+        [theme.breakpoints.down('sm')]: {
+            marginTop:68, 
+            marginLeft:-54
+          },
         [theme.breakpoints.up("md")]: {
             marginLeft: 50,
-            marginRight: 50
+            marginRight: 50,
         },
         [theme.breakpoints.up("lg")]: {
             marginLeft: 150,
@@ -220,13 +243,9 @@ const styles = theme => ({
         marginBottom: theme.spacing.unit * 4,
         textAlign: "center",
         marginLeft: theme.spacing.unit * -4,
-        marginRight: theme.spacing.unit * -4
+        marginRight: theme.spacing.unit * -4,
     }
 });
-
-Registration.propTypes = {
-    classes: PropTypes.object.isRequired
-};
 
 
 const mapStateToProps = state => {

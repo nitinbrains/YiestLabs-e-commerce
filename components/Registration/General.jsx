@@ -104,8 +104,8 @@ const General = ({
 
     return (
         <Grid container spacing={24}>
-            <Grid item xs={12}>
-                <Typography variant="h6" color="textPrimary">
+            <Grid item xs={12} className="flex-center">
+                <Typography variant="h6" className="reg-typovariant" className={classes.bolder} color="textPrimary">
                     General Information
                 </Typography>
                 <div
@@ -129,6 +129,8 @@ const General = ({
                                 autoComplete="companyName"
                                 onChange={onChange}
                                 value={_get(value, 'companyName') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
+                               
                             />
                         </Grid>
                     )
@@ -147,6 +149,7 @@ const General = ({
                                 autoComplete="email"
                                 onChange={onChange}
                                 value={_get(value, 'email') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             />
                         </Grid>
                     )
@@ -163,7 +166,9 @@ const General = ({
                                 variant="outlined"
                                 fullWidth
                                 autoComplete="phone"
-                                InputProps={{ inputComponent: PhoneMaskedTextField }}
+                                InputProps={{ inputComponent: PhoneMaskedTextField,
+                                    classes: { input: classes.whiteSpace }  }}
+                            
                                 onChange={onChange}
                                 value={_get(value, 'phone') || ''}
                             />
@@ -185,6 +190,8 @@ const General = ({
                                 autoComplete="password"
                                 onChange={onChange}
                                 value={_get(value, 'password') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
+                                
                             />
                         </Grid>
                     )
@@ -204,6 +211,7 @@ const General = ({
                                 autoComplete="confirmPassword"
                                 onChange={onChange}
                                 value={_get(value, 'confirmPassword') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             />
                         </Grid>
                     )
@@ -223,6 +231,7 @@ const General = ({
                                 autoComplete="orderFrom"
                                 onChange={onChange}
                                 value={_get(value, 'orderFrom') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             >
                                 <MenuItem value={1}>
                                     White Labs USA
@@ -255,6 +264,7 @@ const General = ({
                                 placeholder="US-123456"
                                 onChange={onChange}
                                 value={_get(value, 'vat') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             >
                             </TextField>
                         </Grid>
@@ -275,6 +285,7 @@ const General = ({
                                 autoComplete="category"
                                 onChange={onChange}
                                 value={_get(value, 'category') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             >
                                 <MenuItem value={1}>Retailer</MenuItem>
                                 <MenuItem value={2}>Individual</MenuItem>
@@ -299,6 +310,7 @@ const General = ({
                                 autoComplete="contactName"
                                 onChange={onChange}
                                 value={_get(value, 'contactName') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             />
                         </Grid>
                     )
@@ -318,6 +330,7 @@ const General = ({
                                 InputProps={{ inputComponent: PhoneMaskedTextField }}
                                 onChange={onChange}
                                 value={_get(value, 'contactPhone') || ''}
+                                InputProps={{ classes: { input: classes.whiteSpace } }}
                             />
                         </Grid>
                     )
@@ -342,6 +355,12 @@ const styles = theme => ({
     hide: {
         display: "none"
     },
+    bolder:{
+        fontWeight:'bolder'
+    },
+    whiteSpace:{
+        whiteSpace:'normal'
+    }
 });
 
 General.propTypes = {
