@@ -13,6 +13,7 @@ import CalculatorResult from "components/Calculator/CalculatorResult";
 import NavBarUserSearchDrawerLayout from "components/NavBar/NavBarUserSearchDrawerLayout";
 
 import { calculate } from "lib/CalculatorUtils";
+
 class Calculator extends Component {
     constructor(props) {
         super(props);

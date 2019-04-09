@@ -1,0 +1,19 @@
+//calculator
+@media only screen and (max-width: 600px) {
+    .calculate-button {
+      font-size: 14px !important;
+      padding: 6px !important;
+    }
+  } 
+  @media only screen and (max-width: 360px){
+    #calculator-box{
+      margin: 1.5px;
+    }
+    .calc-small-variant{
+      font-size: 25px !important;
+    }
+    .smallbtn{
+      font-size: 10px !important;
+      font-weight: bold !important;
+    }
+  }

@@ -169,11 +169,11 @@ class CalculatorForm extends Component {
                 </Grid>
                 <fieldset className="fieldset">
                     <legend>Volume</legend>
-                    <Grid container spacing={24}>
+                    <Grid container spacing={24} className="field-margin">
                         <Field
                             render={({ field: { value, onChange}}) => {
                                 return (
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} md={6}>
                                         <FormikErrorMessage error={_get(errors, 'volVal')} />
                                         <FormSelectbox
                                             fullWidth
@@ -190,7 +190,7 @@ class CalculatorForm extends Component {
                             render={({ field: { value, onChange }, form: { setFieldValue }}) => {
                                 const volUnits = SalesLib.volUnits.filter(unit => (!isHomebrewer && !unit.forHomebrew) || (isHomebrewer && unit.forHomebrew));
                                 return (
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} md={6}>
                                         <FormikErrorMessage error={_get(errors, 'volUnit')} />
                                         <FormSelectbox
                                             select
@@ -209,11 +209,11 @@ class CalculatorForm extends Component {
                 </fieldset>
                 <fieldset className="fieldset">
                     <legend>Temperature</legend>
-                    <Grid container spacing={24}>
+                    <Grid container spacing={24} className="field-margin">
                         <Field
                             render={({ field: { value, onChange }}) => {
                                 return (
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} md={6}>
                                         <FormikErrorMessage error={_get(errors, 'tempVal')} />
                                         <FormSelectbox
                                             fullWidth
@@ -230,7 +230,7 @@ class CalculatorForm extends Component {
                         <Field
                             render={({ field: { value, onChange }, form: { setFieldValue }}) => {
                                 return (
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} md={6}>
                                         <FormikErrorMessage error={_get(errors, 'tempUnit')} />
                                         <FormSelectbox
                                             fullWidth
@@ -248,11 +248,11 @@ class CalculatorForm extends Component {
                 </fieldset>
                 <fieldset className="fieldset">
                     <legend>Gravity</legend>
-                    <Grid container spacing={24}>
+                    <Grid container spacing={24} className="field-margin">
                         <Field
                             render={({ field: { value, onChange }}) => {
                                 return (
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} md={6}>
                                         <FormikErrorMessage error={_get(errors, 'gravVal')} />
                                         <FormSelectbox
                                             fullWidth
@@ -268,7 +268,7 @@ class CalculatorForm extends Component {
                         <Field
                             render={({ field: { value, onChange }, form: { setFieldValue }}) => {
                                 return (
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} md={6}>
                                         <FormikErrorMessage error={_get(errors, 'gravUnit')} />
                                         <FormSelectbox
                                             fullWidth
@@ -284,12 +284,12 @@ class CalculatorForm extends Component {
                     </Grid>
                 </fieldset>
                 <Grid container spacing={24} className="button-grid">
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         * Advanced recommendations based on batch size, fermentation temperature and gravity.<br />
                         For brewers yeast only. If you are using White Labs yeast based on batch-size specific<br />
                         recommendations and are having success, please continue to do so.
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         <Button className="calculate-button form-button" variant="contained" type="submit">
                             CALCULATE
                         </Button>
@@ -301,14 +301,14 @@ class CalculatorForm extends Component {
 
     _renderCustomForm = (formikProps) => {
         const { errors } = formikProps;
-
+        const {classes}=this.props;
         return (
             <Form>
                 <Grid container spacing={24}>
                     <Field
                         render={({ field: { value, onChange }}) => {
                             return (
-                                <Grid item xs={6}>
+                                <Grid item xs={12} md={6}>
                                     <FormikErrorMessage error={_get(errors, 'startingGravity')} />
                                     <TextField
                                         fullWidth
@@ -317,6 +317,9 @@ class CalculatorForm extends Component {
                                         label="Starting Gravity in Plato"
                                         value={_get(value, 'startingGravity') || ''}
                                         onChange={onChange}
+                                        InputProps={{
+                                            className: classes.whiteSpace
+                                        }}
                                     />
                                 </Grid>
                             );
@@ -325,7 +328,7 @@ class CalculatorForm extends Component {
                     <Field
                         render={({ field: { value, onChange }}) => {
                             return (
-                                <Grid item xs={6}>
+                                <Grid item xs={12} md={6}>
                                     <FormikErrorMessage error={_get(errors, 'targetPitchRate')} />
                                     <TextField
                                         fullWidth
@@ -334,6 +337,9 @@ class CalculatorForm extends Component {
                                         label="Target Pitch Rate in Cells per mL"
                                         value={_get(value, 'targetPitchRate') || ''}
                                         onChange={onChange}
+                                        InputProps={{
+                                            className: classes.whiteSpace
+                                        }}
                                     />
                                 </Grid>
                             );
@@ -342,7 +348,7 @@ class CalculatorForm extends Component {
                     <Field
                         render={({ field: { value, onChange }}) => {
                             return (
-                                <Grid item xs={6}>
+                                <Grid item xs={12} md={6}>
                                     <FormikErrorMessage error={_get(errors, 'volume')} />
                                     <TextField
                                         fullWidth
@@ -351,6 +357,9 @@ class CalculatorForm extends Component {
                                         label="Batch Size in mL"
                                         value={_get(value, 'volume') || ''}
                                         onChange={onChange}
+                                        InputProps={{
+                                            className: classes.whiteSpace
+                                        }}
                                     />
                                 </Grid>
                             );
@@ -359,7 +368,7 @@ class CalculatorForm extends Component {
                     <Field
                         render={({ field: { value, onChange }}) => {
                             return (
-                                <Grid item xs={6}>
+                                <Grid item xs={12} md={6}>
                                     <FormikErrorMessage error={_get(errors, 'viability')} />
                                     <TextField
                                         fullWidth
@@ -368,6 +377,9 @@ class CalculatorForm extends Component {
                                         label="Viability %"
                                         value={_get(value, 'viability') || ''}
                                         onChange={onChange}
+                                        InputProps={{
+                                            className: classes.whiteSpace
+                                        }}
                                     />
                                 </Grid>
                             );
@@ -376,28 +388,31 @@ class CalculatorForm extends Component {
                     <Field
                         render={({ field: { value, onChange }}) => {
                             return (
-                                <Grid item xs={6}>
-                                    <FormikErrorMessage error={_get(errors, 'cellCount')} />
-                                    <TextField
-                                        fullWidth
-                                        variant="outlined"
-                                        name="cellCount"
-                                        label="Yeast Cell Count in Cells per mL"
-                                        value={_get(value, 'cellCount') || ''}
-                                        onChange={onChange}
-                                    />
-                                </Grid>
+                                  <Grid item xs={12} md={6}>
+                                  <FormikErrorMessage error={_get(errors, 'cellCount')} />
+                                  <TextField
+                                      fullWidth
+                                      variant="outlined"
+                                      name="cellCount"
+                                      label="Yiest Cell Count in Cells per mL"
+                                      value={_get(value, 'cellCount') || ''}
+                                      onChange={onChange}
+                                      InputProps={{
+                                        className: classes.whiteSpace
+                                    }}
+                                  />
+                              </Grid>
                             );
                         }}
                     />
                 </Grid>
                 <Grid container spacing={24} className="button-grid">
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         <h4>
                             * Re-pitching is at your own risk.
                         </h4>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} md={6}>
                         <Button className="calculate-button form-button" variant="contained" type="submit">
                             CALCULATE
                         </Button>
@@ -409,11 +424,12 @@ class CalculatorForm extends Component {
 
     render() {
         const { custom, isHomebrewer } = this.state;
+        const {classes}=this.props;
 
         return (
             <Card>
                 <CardHeader color="primary" className="card-header-down">
-                    <Typography color="secondary" variant="display1" align="center">
+                    <Typography color="secondary" variant="display1" className="calc-small-variant" align="center">
                         CALCULATOR
                     </Typography>
                 </CardHeader>
@@ -421,14 +437,14 @@ class CalculatorForm extends Component {
                 <Grid container id="professional-homebrew-switch">
                     <Grid item xs={6} dir="rtl">
                         <FormButton
-                            className={`form-button-small-size ${custom ? "form-button-active" : ""}`}
+                            className={`smallbtn form-button-small-size ${custom ? "form-button-active" : ""}`}
                             text="Lab-Grown"
                             onClick={this.toggleCustom}
                         />
                     </Grid>
                     <Grid item xs={6} dir="ltr">
                         <FormButton
-                            className={`form-button-small-size ${custom ? "" : "form-button-active"}`}
+                            className={`smallbtn form-button-small-size ${custom ? "" : "form-button-active"}`}
                             text="Re-Pitching"
                             onClick={this.toggleCustom}
                         />
@@ -468,12 +484,19 @@ class CalculatorForm extends Component {
     }
 }
 
+const styles = theme => ({
+    whiteSpace: {
+        whiteSpace:'normal'
+    },
+});
+
 const mapStateToProps = state => {
     return {
         messages: state.messages
     };
 };
 
+
 export default connect(
-    mapStateToProps,
-)(CalculatorForm);
+    mapStateToProps
+)(withStyles(styles, { withTheme: true })(CalculatorForm));

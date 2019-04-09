@@ -1,0 +1,82 @@
+@import "../../lib/variable.scss";
+
+#calculator-box{
+	width: 100%;
+	margin-bottom: 24px;
+
+	.calculate-button {
+		width: 100%;
+	}
+
+	.field-margin{
+		margin-bottom: 24px;
+	}
+	.fieldset {
+		margin-top: 20px;
+		
+		width: 100%;
+		border: 1px solid $color-second-accent;
+	}
+
+	.button-grid{
+		margin-top: 20px;
+	}
+
+	.homebrew-box{
+		border-top: 1px solid $color-second-accent;
+		border-bottom: 1px solid $color-second-accent;
+		width: 100%;
+		padding: 2px;
+		text-align: center;
+	}
+
+	.submit-button{
+		width: 100%;
+	}
+}
+
+#calculator-result-box {
+	padding: 20px;
+
+	.result-summary-card {
+		border-radius: 0px;
+		border: 2px solid $color-main-accent;
+		padding-bottom: 20px;
+		.summary-heading {
+			text-align: center;
+			font-weight: bold;
+		}
+		.summary-total {
+			font-weight: bold;
+		}
+		.summary-others {
+			padding-bottom: 0px;
+			border-bottom: 1px solid $color-second-accent;
+		}
+	}
+
+	.result-item-card {
+		border-radius: 0px;
+		margin-top: 20px;
+		border-bottom: 10px solid $color-main-accent;
+		
+		.item-heading {
+			font-weight: bold;
+			border-bottom: 5px solid gray;
+			font-size:18px;
+		}
+		.item-description{
+			margin-top: 20px;
+			font-size: 12px;
+		}
+		.item-button {
+			margin-top: 10px;
+			button{
+				background-color: $color-font !important;
+			}
+		}
+	}
+	
+}
+
+

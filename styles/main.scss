@@ -5,11 +5,14 @@
 $Montserrat : 'Montserrat', sans-serif;
 
 @import "generic";
-@import "calculator";
 @import "cart";
 @import "myorders";
 @import "store";
 @import "myaccount";
+
+//rework calculator
+@import "../components/Calculator/responsive.scss";
+@import "../components//Calculator/calculator.scss";
 
 body {
 	font-family: $Montserrat;
