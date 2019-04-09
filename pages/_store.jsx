@@ -79,6 +79,13 @@ class Store extends Component {
         this.setState({itemsToShow: items});
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.router && nextProps.router.route === '/') {
+          this.toggleHomebrew(false);
+          this.changeMainCategory(null);
+        }
+    }
+
     handleClickItem = item => {
         this.setState({ openDialog: true, item: item });
     };

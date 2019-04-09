@@ -100,7 +100,7 @@ class NavBarUserSearchDrawerLayout extends Component {
 
                             </IconButton>
                         </Link>
-                        <Link prefetch href="/">
+                        <Link prefetch href="/" state="fromLink">
                             <div className={classes.circle}>
                                 <img src="static/images/logo_circle.png" height="130" className={classes.logoImg} />
                             </div>
