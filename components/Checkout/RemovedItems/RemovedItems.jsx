@@ -24,35 +24,29 @@ class RemovedItems extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showDialog: false
-        }
-    }
-
-    componentWillMount() {
-        this.props.order.removedItems;
-
-        if (_size(this.props.order.removedItems)) {
-            this.setState({showDialog: true});
+            acknowledged: false
         }
     }
 
     closeDialog = () => {
-        this.setState({showDialog: false});
+        this.setState({acknowledged: true});
     }
 
     backToStore = () => {
+        this.setState({acknowledged: true})
         this.closeDialog();
         Router.push('/');
     }
 
     render() {
-        const { order: { removedItems }, cart: { items }} = this.props;
-        const { classes } = this.props
+        const { acknowledged } = this.state;
+        const { order: { removedItems }, cart: { items }, classes} = this.props;
         const allItemsRemoved = _size(removedItems) == _size(items);
+
 
         return (
             <Dialog
-                open={this.showDialog}
+                open={_size(removedItems) && !acknowledged}
                 maxWidth="md"
                 fullWidth
             >
