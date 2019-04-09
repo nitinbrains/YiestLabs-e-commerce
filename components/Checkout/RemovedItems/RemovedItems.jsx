@@ -40,9 +40,11 @@ class RemovedItems extends Component {
 
     render() {
         const { acknowledged } = this.state;
-        const { order: { removedItems }, cart: { items }, classes} = this.props;
+        const { cart: { items }, classes} = this.props;
         const allItemsRemoved = _size(removedItems) == _size(items);
 
+        var{ order: { removedItems } } = this.props;
+        if (!removedItems) removedItems = [];
 
         return (
             <Dialog

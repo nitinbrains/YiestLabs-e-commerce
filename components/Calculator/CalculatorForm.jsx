@@ -159,7 +159,7 @@ class CalculatorForm extends Component {
 
         return (
             <Form>
-                <Grid container spacing={24} className="button-grid">
+                <Grid container spacing={24} className="button-grid" style={{ visible:"false", display:"none" }} >
                     <Grid item xs={12}>
                         <div className="homebrew-box">
                             <FormCheckbox checked={isHomebrewer} onChange={() => this.toggleIsHomebrewer(formikProps)} />
@@ -188,7 +188,7 @@ class CalculatorForm extends Component {
                         />
                         <Field
                             render={({ field: { value, onChange }, form: { setFieldValue }}) => {
-                                const volUnits = SalesLib.volUnits.filter(unit => !isHomebrewer || unit.forHomebrew);
+                                const volUnits = SalesLib.volUnits.filter(unit => (!isHomebrewer && !unit.forHomebrew) || (isHomebrewer && unit.forHomebrew));
                                 return (
                                     <Grid item xs={6}>
                                         <FormikErrorMessage error={_get(errors, 'volUnit')} />
@@ -418,7 +418,7 @@ class CalculatorForm extends Component {
                     </Typography>
                 </CardHeader>
 
-                <Grid container id="professional-homebrew-switch">
+                <Grid container id="professional-homebrew-switch" style={process.env.NODE_ENV == "production" ? { visible: "false", display: "none" } : { }}>
                     <Grid item xs={6} dir="rtl">
                         <FormButton
                             className={`form-button-small-size ${custom ? "form-button-active" : ""}`}
