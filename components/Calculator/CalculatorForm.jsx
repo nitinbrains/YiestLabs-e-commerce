@@ -157,7 +157,7 @@ class CalculatorForm extends Component {
 
         return (
             <Form>
-                <Grid container spacing={24} className="button-grid">
+                <Grid container spacing={24} className="button-grid" style={{ visible: "false", display: "none" }}>
                     <Grid item xs={12}>
                         <div className="homebrew-box">
                             <FormCheckbox checked={isHomebrewer} onChange={() => this.toggleIsHomebrewer(formikProps)} />
@@ -416,7 +416,7 @@ class CalculatorForm extends Component {
                     </Typography>
                 </CardHeader>
 
-                <Grid container id="professional-homebrew-switch" style={process.env.NODE_ENV == "production" ? { visible: "false", display: "none" } : { }}>
+                <Grid container id="professional-homebrew-switch" style={{ visible: "false", display: "none" }}>
                     <Grid item xs={6} dir="rtl">
                         <FormButton
                             className={`form-button-small-size ${custom ? "form-button-active" : ""}`}
@@ -435,8 +435,8 @@ class CalculatorForm extends Component {
                 <CardBody>
                     <Formik
                         initialValues={{
-                            volVal: "119",
-                            volUnit: "L",
+                            volVal: "1",
+                            volUnit: "BBL",
                             gravVal: "less than 13.5",
                             gravUnit: "PLA",
                             tempVal: "less than 59",

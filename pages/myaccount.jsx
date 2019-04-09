@@ -544,7 +544,7 @@ class MyAccount extends Component {
                                             </Grid>
                                         </Grid>
                                     </Grid>
-                                    <div className={classes.buttonContainer} style={process.env.NODE_ENV == "production" ? { visible: "false", display: "none" } : { }}>
+                                    <div className={classes.buttonContainer} style={{ visible: "false", display: "none" }}>
                                         <Button variant="contained" color="primary" type="submit" className={classes.button}>
                                             Confirm Account Changes
                                         </Button>
