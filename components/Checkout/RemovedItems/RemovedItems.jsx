@@ -41,10 +41,10 @@ class RemovedItems extends Component {
     render() {
         const { acknowledged } = this.state;
         const { cart: { items }, classes} = this.props;
-        const allItemsRemoved = _size(removedItems) == _size(items);
 
         var{ order: { removedItems } } = this.props;
         if (!removedItems) removedItems = [];
+        const allItemsRemoved = _size(removedItems) == _size(items);
 
         return (
             <Dialog
@@ -88,9 +88,10 @@ class RemovedItems extends Component {
                             <div className="main-block">
                                 <div className="order-number">
                                     <Typography variant="h6" color="textPrimary">
-                                        Removed Items
+                                        The following items are unavailable and have been removed:
                                     </Typography>
                                 </div>
+                                <br />
                                 <Grid container xs spacing={8} justify="center" alignItems="center">
                                         <React.Fragment>
                                             {removedItems.map((item) => {
@@ -103,10 +104,10 @@ class RemovedItems extends Component {
                                                 )
                                             })}
                                         </React.Fragment>
-                                    }
                                 </Grid>
                             </div>
                             <div style={{textAlign: "center"}}>
+                                <br />
                                 <Grid item>
                                     <Button
                                         variant="contained"
