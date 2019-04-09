@@ -36,7 +36,6 @@ class CalculatorForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showError: false,
             custom: false,
             isHomebrewer: false,
         };
@@ -65,12 +64,14 @@ class CalculatorForm extends Component {
 
         setFieldValue('gravUnit', 'PLA');
         setFieldValue('gravVal', 'less than 13.5');
+
+        this.setState({ isHomebrewer });
     }
 
     calculate = (values, { setErrors }) => {
         const errors = this.validate(values);
         if (_isEmpty(errors)) {
-            this.props.onCalculate(values);
+            this.props.onCalculate({...values, ...this.state});
         } else {
             setErrors(errors);
         }
@@ -87,39 +88,39 @@ class CalculatorForm extends Component {
     validate = values => {
         var errors = {};
 
-        if (this.props.custom) {
+        if (this.state.custom) {
             if (!values.startingGravity) {
                 errors.startingGravity = "Starting gravity is required";
             }
-            else if(isNaN(values.startingGravity)) {
+            else if(isNaN(values.startingGravity) && values.startingGravity <= 0) {
                 errors.startingGravity = "Invalid value";
             }
 
             if (!values.targetPitchRate) {
                 errors.targetPitchRate = "Target pitch rate is required";
             }
-            else if(isNaN(values.targetPitchRate)) {
+            else if(isNaN(values.targetPitchRate) && values.targetPitchRate <= 0) {
                 errors.targetPitchRate = "Invalid value";
             }
 
             if (!values.volume) {
-                errors.volume = "Required";
+                errors.volume = "Volume is required";
             }
-            else if(isNaN(values.volume)) {
+            else if(isNaN(values.volume) && values.volume <= 0) {
                 errors.targetPitchRate = "Invalid value";
             }
 
             if (!values.viability) {
-                errors.viability = "Required";
+                errors.viability = "Viability is required";
             }
-            else if(isNaN(values.viability)) {
+            else if(isNaN(values.viability) && values.viability <= 0) {
                 errors.viability = "Invalid value";
             }
 
             if (!values.cellCount) {
-                errors.cellCount = "Required";
+                errors.cellCount = "Cell count is required";
             }
-            else if(isNaN(values.cellCount)) {
+            else if(isNaN(values.cellCount) && values.cellCount <= 0) {
                 errors.cellCount = "Invalid value";
             }
         } else {
@@ -153,11 +154,12 @@ class CalculatorForm extends Component {
         const tempUnit = _get(values, 'tempUnit');
         const gravUnit = _get(values, 'gravUnit');
         const volChoices = _get(values, 'volChoices');
+        const tempChoices = _get(values, 'tempChoices');
         const gravChoices = _get(values, 'gravChoices');
 
         return (
             <Form>
-                <Grid container spacing={24} className="button-grid" style={{ visible: "false", display: "none" }}>
+                <Grid container spacing={24} className="button-grid">
                     <Grid item xs={12}>
                         <div className="homebrew-box">
                             <FormCheckbox checked={isHomebrewer} onChange={() => this.toggleIsHomebrewer(formikProps)} />
@@ -196,7 +198,7 @@ class CalculatorForm extends Component {
                                             name="volUnit"
                                             label="Unit"
                                             value={_get(value, 'volUnit')}
-                                            options={volUnits}
+                                            options={Object.keys(volChoices)}
                                             onChange={(e) => this.changeUnit(e, formikProps, 'vol')}
                                         />
                                     </Grid>
@@ -217,7 +219,7 @@ class CalculatorForm extends Component {
                                             fullWidth
                                             name="tempVal"
                                             value={_get(value, 'tempVal')}
-                                            options={SalesLib.tempChoices[tempUnit]}
+                                            options={tempChoices[tempUnit]}
                                             onChange={onChange}
                                         />
                                     </Grid>
@@ -235,8 +237,8 @@ class CalculatorForm extends Component {
                                             name="tempUnit"
                                             label="Unit"
                                             value={_get(value, 'tempUnit')}
-                                            options={SalesLib.tempUnits}
-                                            onChange={(e) => this.changeUnit(e, fomirkProps, 'temp')}
+                                            options={Object.keys(tempChoices)}
+                                            onChange={(e) => this.changeUnit(e, formikProps, 'temp')}
                                         />
                                     </Grid>
                                 );
@@ -273,7 +275,7 @@ class CalculatorForm extends Component {
                                             label="Unit"
                                             name="gravUnit"
                                             value={_get(value, 'gravUnit')}
-                                            options={SalesLib.gravUnits}
+                                            options={Object.keys(gravChoices)}
                                             onChange={(e) => this.changeUnit(e, formikProps, 'grav')}                                                        />
                                     </Grid>
                                 );
@@ -416,7 +418,7 @@ class CalculatorForm extends Component {
                     </Typography>
                 </CardHeader>
 
-                <Grid container id="professional-homebrew-switch" style={{ visible: "false", display: "none" }}>
+                <Grid container id="professional-homebrew-switch">
                     <Grid item xs={6} dir="rtl">
                         <FormButton
                             className={`form-button-small-size ${custom ? "form-button-active" : ""}`}
@@ -441,13 +443,13 @@ class CalculatorForm extends Component {
                             gravUnit: "PLA",
                             tempVal: "less than 59",
                             tempUnit: "F",
-                            unitVal: "",
                             startingGravity: "",
                             targetPitchRate: "",
                             volume: "",
                             viability: "",
                             cellCount: "",
                             volChoices: SalesLib.volChoices,
+                            tempChoices: SalesLib.tempChoices,
                             gravChoices: SalesLib.gravChoices
                         }}
                         enableReinitialize
