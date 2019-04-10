@@ -157,7 +157,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                             About Us
                         </Button>
 
-                        <Link prefetch href="/cart">
+                        <Link prefetch href="/cart" state="fromStore">
                             <IconButton color="inherit" aria-label="Menu">
                                 <Badge
                                     color="secondary"

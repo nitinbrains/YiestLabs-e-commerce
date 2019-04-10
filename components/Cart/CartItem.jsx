@@ -83,7 +83,7 @@ class CartItem extends Component {
               backgroundSize:'cover'
             }}>
                         <img className="icon" src="static/images/icons/Ale-icon.svg"/>
-                        <div className="code">{this.props.item.details}</div>
+                        <div className="code"></div>
                         <div className="name">{this.props.item.Name}</div>
                     </Grid>
                     <Grid className="detail" item container xs={7} sm={10}>
