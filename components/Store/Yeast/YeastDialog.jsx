@@ -870,6 +870,7 @@ const styles = theme => ({
         display: "flex",
         justifyContent: "center",
         marginLeft:'10px',
+        marginTop:'15px',
         [theme.breakpoints.down("xs")]: {
             marginLeft:'16px',
         }

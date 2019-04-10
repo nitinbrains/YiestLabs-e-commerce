@@ -55,7 +55,7 @@ class MainMenu extends Component {
                 <Grid container spacing={24}>
                     <Grid item xs={12}>
                         <Grid container justify="center" spacing={16}>
-                            {SalesLib.filters.map(category => (
+                        {SalesLib.CATEGORIES.map(category => (
                                 <Grid key={category.value} item item xs={12} sm={6} md={4} lg={2}  spacing={8}>
                                     <div
                                         style={{
@@ -76,7 +76,7 @@ class MainMenu extends Component {
                                             className={classes.info}
                                             className={classes.typoTitle}
                                             >
-                                             {category.title}
+                                             {category.label}
                                             </Typography>
                                         </div>
                                     </div>
