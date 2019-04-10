@@ -248,7 +248,6 @@ function(record, log, search, email)
                     card.ccexpire = customerRecord.getSublistValue({sublistId: 'creditcards', fieldId: 'ccexpiredate', line: j});
 
                     card.type = customerRecord.getSublistValue({sublistId: 'creditcards', fieldId: 'paymentmethod', line: j});
-
                     var today = new Date();
                     if(compareDates(card.ccexpire, today) == 1)
                     {
@@ -512,9 +511,9 @@ function(record, log, search, email)
                         var expireDate = new Date(), dateShortHand = card.expire.split('/');
                         expireDate.setDate(1);
                         expireDate.setMonth(dateShortHand[0]);
-                        expireDate.setFullYear(dateShortHand[1]);
+                        expireDate.setFullYear((dateShortHand[1].length == 2 ? '20' : '') + dateShortHand[1]);
                         customerRecord.setCurrentSublistValue({sublistId:'creditcards', fieldId:'ccexpiredate', value: expireDate});
-                        customerRecord.setCurrentSublistValue({sublistId:'creditcards', fieldId:'ccnumber', value: card.ccnumber});
+                        customerRecord.setCurrentSublistValue({sublistId:'creditcards', fieldId:'ccnumber', value: card.ccnumber.replace(/\D/g,'')});
                         customerRecord.setCurrentSublistValue({sublistId:'creditcards', fieldId:'ccname', value: card.name});
                         customerRecord.setCurrentSublistValue({sublistId:'creditcards', fieldId:'paymentmethod', value: card.type});
                         customerRecord.commitLine({sublistId: 'creditcards'});
@@ -781,8 +780,8 @@ function(record, log, search, email)
                     try
                     {
                         // find index of existing address, and edit address at that location
-                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: String(message.shipping.id)});
-                        if(line >= 0) 
+                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: String(message.address.id)});
+                        if(line >= 0)
                         {
                             customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'attention', value: message.address.attn, line: line});
                             customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'addressee', value: message.address.addresee, line: line});
@@ -793,12 +792,12 @@ function(record, log, search, email)
                             customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'zip', value: message.address.zip, line: line});
                             customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'country', value: message.address.countryid, line: line});
                         }
-                        else 
+                        else
                         {
                             log.error('error', error);
                             throw { message: 'Could not find index of shipping address', code: 0};
                         }
-                        
+
                     }
                     catch(error)
                     {
@@ -809,58 +808,58 @@ function(record, log, search, email)
 
                 if(message.deleteAddress)
                 {
-                    try 
+                    try
                     {
                         // find index of existing address, and remove address at that location
                         var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId: 'id', value: String(message.address.id)});
                         customerRecord.removeLine({sublistId: 'addressbook', line: line});
                     }
-                    catch(error) 
+                    catch(error)
                     {
                         log.error('error', error);
                         throw { message: 'Could not delete your address', code: 0 };
                     }
                 }
-                
+
 
                 if(message.defaultShipAddress)
                 {
-                    try 
+                    try
                     {
                         // remove old default
                         var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'defaultshipping', value: true});
                         customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'defaultshipping', value: false, line: line});
 
                         // set new default
-                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'id', value: String(message.address.id)});
+                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'id', value: String((message.address ? message.address.id : message.shipping.id))});
                         customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'defaultshipping', value: true, line: line});
                     }
-                    catch(error) 
+                    catch(error)
                     {
                         log.error('error', error);
                         throw { message: 'Could not set default shipping address', code: 0 };
                     }
                 }
-                
+
                 if(message.defaultBillAddress)
                 {
-                    try 
+                    try
                     {
-                            // remove old default
+                        // remove old default
                         var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'defaultbilling', value: true});
                         customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'defaultbilling', value: false, line: line});
 
                         // set new default
-                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'id', value: String(message.address.id)});
+                        var line = customerRecord.findSublistLineWithValue({sublistId: 'addressbook', fieldId:'id', value: String((message.address ? message.address.id : message.billing.id))});
                         customerRecord.setSublistValue({sublistId:'addressbook', fieldId:'defaultbilling', value: true, line: line});
                     }
-                    catch(error) 
+                    catch(error)
                     {
                         log.error('error', error);
                         throw { message: 'Could not set default billing address', code: 0 };
                     }
                 }
-                
+
                 // default credit card
                 if(message.defaultCreditCard)
                 {
@@ -877,7 +876,7 @@ function(record, log, search, email)
                         log.error('error', error);
                         throw { message: 'Could not set default credit card', code: 0 };
                     }
-                    
+
                 }
 
                 // Add new credit card
@@ -887,11 +886,11 @@ function(record, log, search, email)
                         var card = decryptCard(message.token);
                         var expireDate = new Date(), dateShortHand = card.ccexpire.split('/');
                         expireDate.setMonth(dateShortHand[0]);
-                        expireDate.setFullYear(dateShortHand[1]);
+                        expireDate.setFullYear((dateShortHand[1].length == 2 ? '20' : '') + dateShortHand[1]);
 
                         var line = customerRecord.getLineCount({sublistId: 'creditcards'});
                         customerRecord.insertLine({sublistId: 'creditcards', line: line});
-                        customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccnumber', value: card.ccnumber, line: line});
+                        customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccnumber', value: card.ccnumber.replace(/\D/g,''), line: line});
                         customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccname', value: card.ccname, line: line});
                         customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccexpiredate', value: expireDate, line: line});
                         customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'paymentmethod', value: card.type, line: line});
@@ -900,7 +899,7 @@ function(record, log, search, email)
                         log.error('error', error);
                         throw { message: 'Could not add new credit card', code: 0 };
                     }
-                    
+
                 }
 
                 // Edit existing credit card information (except ccnumber)
@@ -909,7 +908,7 @@ function(record, log, search, email)
                     try {
                         var expireDate = new Date(), dateShortHand = message.card.ccexpire.split('/');
                         expireDate.setMonth(dateShortHand[0]);
-                        expireDate.setFullYear(dateShortHand[1]);
+                        expireDate.setFullYear((dateShortHand[1].length == 2 ? '20' : '') + dateShortHand[1]);
 
                         var line = customerRecord.findSublistLineWithValue({sublistId: 'creditcards', fieldId: 'ccnumber', value: message.card.ccnumber});
                         customerRecord.setSublistValue({sublistId:'creditcards', fieldId:'ccexpiredate', value: expireDate, line: line});
@@ -920,7 +919,7 @@ function(record, log, search, email)
                         log.error('error', error);
                         throw { message: 'Could not update credit card', code: 0 };
                     }
-                    
+
                 }
 
                 // Delete credit card
@@ -934,7 +933,7 @@ function(record, log, search, email)
                         log.error('error', error);
                         throw { message: 'Could not delete credit card', code: 0 };
                     }
-                    
+
                 }
 
                 else if(message.deleteExpired)
