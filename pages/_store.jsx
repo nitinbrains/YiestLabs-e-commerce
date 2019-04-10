@@ -79,6 +79,9 @@ class Store extends Component {
         this.setState({itemsToShow: items});
     }
 
+    // To force the store to reload when user clicks link in header while in the store
+    // See also NavBarUserSearchDrawerLayout file
+    // TODO: Find a better way
     componentWillReceiveProps(nextProps) {
         if (nextProps.router && nextProps.router.route === '/') {
           this.toggleHomebrew(false);

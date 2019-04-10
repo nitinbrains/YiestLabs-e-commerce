@@ -123,7 +123,7 @@ class YeastDialog extends Component {
 
     componentWillMount() {
         if (this.item.volID[6]) {
-            this.setState({ packaging: "6", pack: "6" });
+            this.setState({ packaging: "6", pack: null });
         } else if (this.item.volID[0] && this.item.volID[2]) {
             if (this.item.purePitch) {
                 this.setState({ packaging: "pp", pack: "0" });
