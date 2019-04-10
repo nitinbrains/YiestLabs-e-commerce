@@ -6,7 +6,7 @@ import inventory from './inventoryReducer';
 import cart from './cartReducer';
 import order from './orderReducer';
 import messages from './messageReducer';
-import loading from './loaderReducer';
+import loading from './loadingReducer';
 
 
 export const rootReducer = combineReducers({

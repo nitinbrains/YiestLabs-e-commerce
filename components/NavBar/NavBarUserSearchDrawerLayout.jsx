@@ -119,7 +119,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                                 <AccountCircleIcon />
                             </IconButton>
                         </Link>
-                        <Link prefetch href="/">
+                        <Link prefetch href="/" state="fromLink">
                             <div className={classes.circle}>
                                 <img
                                     src="static/images/logo_circle.png"

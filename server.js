@@ -466,7 +466,9 @@ app.prepare().then(() => {
                     if (message.items && message.items.length > 0 && message.transitTimes) {
                         return res.send(message);
                     } else {
-                        res.send({ error: { message: "Items have been removed due to unavailability", code: 0 } });
+                        console.log("Items have been removed due to unavailability");
+                        //return res.send({ error: { message: "Items have been removed due to unavailability", code: 0 } });
+                        return res.send(message);
                     }
                 }
             })

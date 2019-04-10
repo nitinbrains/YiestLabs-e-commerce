@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { bindActionCreators } from "redux";
 import _isEmpty from "lodash/isEmpty";
+import _isEqual from "lodash/isEqual";
 import _set from "lodash/set"
 import _get from "lodash/get";
 
@@ -204,13 +205,13 @@ class MyAccount extends Component {
         if(!_isEqual(newState.shipping, oldState.shipping)) {
             request.shipping = {};
             request.defaultShipAddress = true;
-            request.address = Object.assign({}, newState.shipping);
+            request.shipping = Object.assign({}, newState.shipping);
         }
 
         if(!_isEqual(newState.billing, oldState.billing)) {
             request.billing = {};
             request.defaultBillAddress = true;
-            request.address = Object.assign({}, newState.billing);
+            request.billing = Object.assign({}, newState.billing);
         }
 
         return request;
@@ -225,18 +226,20 @@ class MyAccount extends Component {
             _set(errors, 'email', 'Enter a valid email');
         }
 
-        if(!values.vat) {
-            _set(errors, 'vat', 'Vat is required');
-        } else if (!Utils.isValidVat(values.vat)) {
-            _set(errors, 'vat', 'Enter a valid vat');
-        }
-
         if (!values.phone) {
             _set(errors, 'phone', 'Phone is required');
         }
 
         if (!values.orderFrom) {
             _set(errors, 'orderFrom', 'Enter a subsidiary to order from');
+        } else {
+            if (values.orderFrom !== 2) { // Here, WL USA is 2. On registration, it's 1.
+                if(!values.vat) {
+                    _set(errors, 'vat', 'Vat is required');
+                } else if (!Utils.isValidVat(values.vat)) {
+                    _set(errors, 'vat', 'Enter a valid vat');
+                }
+            }
         }
 
         if(!values.shipmethod) {
@@ -541,7 +544,7 @@ class MyAccount extends Component {
                                             </Grid>
                                         </Grid>
                                     </Grid>
-                                    <div className={classes.buttonContainer}>
+                                    <div className={classes.buttonContainer} style={{ visible: "false", display: "none" }}>
                                         <Button variant="contained" color="primary" type="submit" className={classes.button}>
                                             Confirm Account Changes
                                         </Button>

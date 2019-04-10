@@ -35,8 +35,7 @@ class Calculator extends Component {
     }
 
     onCalculate = (values) => {
-        const { custom, isHomebrewer } = this.state;
-        const result = calculate({...values, custom, isHomebrewer});
+        const result = calculate(values);
         this.setState({ result });
         this.openDialog();
     }

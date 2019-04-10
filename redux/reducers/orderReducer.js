@@ -10,6 +10,7 @@ const initialState = {
     orderSub: 0,
     shippingOptions: ["Ship All Together", "Earliest For Each", "Custom"],
     selectedShippingOption: 'Ship All Together',
+    removedItems: []
 };
 
 /* ------------- Hookup Reducers To Types ------------- */

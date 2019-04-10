@@ -16,7 +16,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 
 import { userActions } from "appRedux/actions/userActions";
 import AddAddress from "./AddAddress";
@@ -80,193 +80,185 @@ class ManageShipping extends Component {
         });
     };
 
-    handleCancelAddress=(data)=>{
+    handleCancelAddress = data => {
         this.setState({
-            newAddress:data
-        })
-    }
+            newAddress: data
+        });
+    };
 
-    handleClickAway = (e) => {
+    handleClickAway = e => {
         if (e.target.nodeName !== "LI") {
             // Hack to not close the form if the user scrolls up in
             // the Country ID field until the mouse moves outside of
             // it, and then they click.
             var text = _get(e.target, "textContent");
             if (!text || !text.startsWith("United States")) {
-              this.props.closeDialog();
+                this.props.closeDialog();
             }
         }
-    }
+    };
 
-    selectAddress = (address) => {
+    selectAddress = address => {
         const { checkout, setShipAddress, setDefaultShipAddress } = this.props;
 
         if (checkout) {
             setShipAddress({ address });
         } else {
-            setDefaultShipAddress({ address })
+            setDefaultShipAddress({ address });
         }
         this.props.closeDialog();
-    }
+    };
 
     render() {
         const { classes, user } = this.props;
         return (
             <React.Fragment>
-                  <ClickAwayListener onClickAway={this.handleClickAway}>
-                <DialogContent id="my-order-details">
-                <div className={classes.close}>
-                            <IconButton style={{padding:'4.5px'}}  color="inherit" size="small" aria-label="Menu" onClick={() => this.handleDialogClose()}>
+                <ClickAwayListener onClickAway={this.handleClickAway}>
+                    <DialogContent id="my-order-details">
+                        <div className={classes.close}>
+                            <IconButton style={{ padding: "4.5px" }} color="inherit" size="small" aria-label="Menu" onClick={() => this.handleDialogClose()}>
                                 <CloseIcon />
                             </IconButton>
                         </div>
-                    <div className="main-block">
-                        <div className="order-number">
-                            <Typography variant="h6" color="textPrimary">
-                                MANAGE SHIPPING ADDRESSES
-                            </Typography>
-                        </div>
-                        <Grid
-                            item
-                            container
-                            xs
-                            style={{
-                                display: "flex",
-                                marginTop: -10,
-                                marginBottom: 10
-                            }}
-                            direction={"row"}
-                            spacing={4}
-                        >
-
-                        </Grid>
-                        <Grid style={{ padding: 20 }} container spacing={24}>
-                            {user.otherAddresses.map((address, i) => (
-                                <Grid item key={address.id} sm={4} xs={12}>
-                                    <div
-                                        className={this.props.user.shipping.address1 == address.address1 ? classes.addressBoxSelected : classes.addressBox}
-                                        onMouseEnter={() => this.handleCardHover(i)}
-                                        onMouseLeave={this.handleCardLeaveHover}
-                                    >
-                                        <div className={classNames(classes.deleteIcon, this.state.boxHover != i && classes.hide)}>
-                                            <IconButton
-                                                color="inherit"
-                                                size="small"
-                                                aria-label="Menu"
-                                                onClick={e => {
-                                                    this.handleConfirmation(address);
-                                                }}
-                                            >
-                                                <CancelIcon />
-                                            </IconButton>
-                                        </div>
-
-                                        <Grid item container xs spacing={8} justify="center" alignItems="center">
-                                            <Grid item>
-                                                <Typography>
-                                                    <div className="block">
-                                                        <span className="label">Address line 1: </span>
-                                                        {address.address1}
-                                                    </div>
-                                                </Typography>
-                                            </Grid>
-                                            <Grid item>
-                                                <Typography>
-                                                    {address.address2 && (
-                                                        <div className="block">
-                                                            <span className="label">Address line 2: </span>
-                                                            {address.address2}
-                                                        </div>
-                                                    )}
-                                                </Typography>
-                                            </Grid>
-                                            <Grid item>
-                                                <Typography>
-                                                    {address.address3 && (
-                                                        <div className="block">
-                                                            <span className="label">Address line 3: </span>
-                                                            {address.address3}
-                                                        </div>
-                                                    )}
-                                                </Typography>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <Typography>
-                                                    <div className="block">
-                                                        <span className="label">City: </span>
-                                                        {address.city}
-                                                    </div>
-                                                </Typography>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <Typography>
-                                                    <div className="block">
-                                                        <span className="label">Zip-Code: </span>
-                                                        {address.zip}
-                                                    </div>
-                                                </Typography>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <Typography>
-                                                    <div className="block">
-                                                        <span className="label">Country: </span>
-                                                        {address.countryid}
-                                                    </div>
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </div>
-                                    <div style={{ textAlign: "center" }}>
-                                        {this.props.user.shipping.address1 != address.address1 && (
-                                            <Grid item>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    style={{ bottom: 2 }}
-                                                    className={classNames(this.state.lastBoxHover != i && classes.hide)}
-                                                    onClick={e => this.selectAddress(address)}
+                        <div className="main-block">
+                            <div className="order-number">
+                                <Typography variant="h6" color="textPrimary">
+                                    MANAGE SHIPPING ADDRESSES
+                                </Typography>
+                            </div>
+                            <Grid
+                                item
+                                container
+                                xs
+                                style={{
+                                    display: "flex",
+                                    marginTop: -10,
+                                    marginBottom: 10
+                                }}
+                                direction={"row"}
+                                spacing={4}
+                            />
+                            <Grid style={{ padding: 20 }} container spacing={24}>
+                                {user.otherAddresses.map((address, i) => (
+                                    <Grid item key={address.id} sm={4} xs={12}>
+                                        <div
+                                            className={this.props.user.shipping.address1 == address.address1 ? classes.addressBoxSelected : classes.addressBox}
+                                            onMouseEnter={() => this.handleCardHover(i)}
+                                            onMouseLeave={this.handleCardLeaveHover}
+                                        >
+                                            <div className={classNames(classes.deleteIcon, this.state.boxHover != i && classes.hide)}>
+                                                <IconButton
+                                                    color="inherit"
+                                                    size="small"
+                                                    aria-label="Menu"
+                                                    onClick={e => {
+                                                        this.handleConfirmation(address);
+                                                    }}
                                                 >
-                                                    {this.props.checkout ? 
-                                                        <React.Fragment>Select</React.Fragment>
-                                                    :
-                                                        <React.Fragment>Make Default</React.Fragment>
-                                                    }
-                                                </Button>
+                                                    <CancelIcon />
+                                                </IconButton>
+                                            </div>
+
+                                            <Grid item container xs spacing={8} justify="center" alignItems="center">
+                                                <Grid item>
+                                                    <Typography>
+                                                        <div className="block">
+                                                            <span className="label">Address line 1: </span>
+                                                            {address.address1}
+                                                        </div>
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography>
+                                                        {address.address2 && (
+                                                            <div className="block">
+                                                                <span className="label">Address line 2: </span>
+                                                                {address.address2}
+                                                            </div>
+                                                        )}
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography>
+                                                        {address.address3 && (
+                                                            <div className="block">
+                                                                <span className="label">Address line 3: </span>
+                                                                {address.address3}
+                                                            </div>
+                                                        )}
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Typography>
+                                                        <div className="block">
+                                                            <span className="label">City: </span>
+                                                            {address.city}
+                                                        </div>
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Typography>
+                                                        <div className="block">
+                                                            <span className="label">Zip-Code: </span>
+                                                            {address.zip}
+                                                        </div>
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Typography>
+                                                        <div className="block">
+                                                            <span className="label">Country: </span>
+                                                            {address.countryid}
+                                                        </div>
+                                                    </Typography>
+                                                </Grid>
                                             </Grid>
-                                        )}
+                                        </div>
+                                        <div style={{ textAlign: "center" }}>
+                                            {this.props.user.shipping.address1 != address.address1 && (
+                                                <Grid item>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        style={{ bottom: 2 }}
+                                                        className={classNames(this.state.lastBoxHover != i && classes.hide)}
+                                                        onClick={e => this.selectAddress(address)}
+                                                    >
+                                                        {this.props.checkout ? <React.Fragment>Select</React.Fragment> : <React.Fragment>Make Default</React.Fragment>}
+                                                    </Button>
+                                                </Grid>
+                                            )}
+                                        </div>
+                                    </Grid>
+                                ))}
 
-                                      
-                                    </div>
-                                </Grid>
-                            ))}
+                                {!this.state.newAddress ? (
+                                    <Grid item xs={12}>
+                                        <Button onClick={this.newAddress} color="primary" variant="outlined">
+                                            Add New Address
+                                        </Button>
+                                    </Grid>
+                                ) : (
+                                    <Grid item xs={12}>
+                                        <AddAddress {...this.props} close={this.closeForm} handleCancelAdd={this.handleCancelAddress} />
+                                    </Grid>
+                                )}
+                            </Grid>
 
-                            {!this.state.newAddress ? (
-                                <Grid item xs={12}>
-                                    <Button onClick={this.newAddress} color="primary" variant="outlined">
-                                        Add New Address
+                            <Dialog open={this.state.confirmation}>
+                                <DialogTitle id="alert-dialog-title">Are you sure you want to delete this address?</DialogTitle>
+                                <DialogContent />
+                                <DialogActions>
+                                    <Button color="primary" onClick={this.handleNo}>
+                                        No
                                     </Button>
-                                </Grid>
-                            ) : (
-                                <Grid item xs={12}>
-                                    <AddAddress {...this.props} close={this.closeForm} handleCancelAdd={this.handleCancelAddress} />
-                                </Grid>
-                            )}
-                        </Grid>
-
-                        <Dialog open={this.state.confirmation}>
-                            <DialogTitle id="alert-dialog-title">Are you sure you want to delete this address?</DialogTitle>
-                            <DialogContent />
-                            <DialogActions>
-                                <Button color="primary" onClick={this.handleNo}>
-                                    No
-                                </Button>
-                                <Button color="primary" autoFocus onClick={this.handleYes}>
-                                    Yes
-                                </Button>
-                            </DialogActions>
-                        </Dialog>
-                    </div>
-                </DialogContent>
+                                    <Button color="primary" autoFocus onClick={this.handleYes}>
+                                        Yes
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+                        </div>
+                    </DialogContent>
                 </ClickAwayListener>
             </React.Fragment>
         );
@@ -294,7 +286,7 @@ const styles = theme => ({
         overflowY: "scroll",
         overflowX: "hidden"
     },
-    close: { position: 'relative',display: 'flex',justifyContent: 'flex-end' },
+    close: { position: "relative", display: "flex", justifyContent: "flex-end" },
     deleteIcon: { position: "absolute", right: -5, top: -5 },
     hide: {
         display: "none"

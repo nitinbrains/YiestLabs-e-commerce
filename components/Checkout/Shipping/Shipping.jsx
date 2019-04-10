@@ -49,7 +49,7 @@ class Shipping extends Component {
     }
 
     render() {
-        var { classes } = this.props;
+        var { classes, user: { shipping }} = this.props;
 
         return (
             <React.Fragment>
@@ -60,31 +60,31 @@ class Shipping extends Component {
                         </Typography>
                         <div className={classes.sectionTitleDivider} />
 
-                        {this.props.user.shipping.id ? (
+                        {shipping.id ? (
                             <div>
                                 <Typography>
-                                    {this.props.user.shipping.attn}
+                                    {shipping.attn}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.shipping.addressee}
+                                    {shipping.addressee}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.shipping.address1}
+                                    {shipping.address1}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.shipping.address2}
+                                    {shipping.address2}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.shipping.address3}
+                                    {shipping.address3}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.shipping.city}
+                                    {shipping.city}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.shipping.countryid}
+                                    {shipping.countryid}
                                 </Typography>
                                 <Typography>
-                                    {this.props.user.shipping.zip}
+                                    {shipping.zip}
                                 </Typography>
 
                                 <Button

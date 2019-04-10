@@ -225,7 +225,11 @@ class ManageBilling extends Component {
                                                     onClick={e => this.selectAddress(address)}
                                                     className={classNames(this.state.lastBoxHover != i && classes.hide)}
                                                 >
-                                                    Set as Default
+                                                {this.props.checkout ?
+                                                    <React.Fragment>Select</React.Fragment>
+                                                :
+                                                    <React.Fragment>Set as Default</React.Fragment>
+                                                }
                                                 </Button>
                                             </Grid>
                                         )}
