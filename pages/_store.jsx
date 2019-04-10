@@ -116,8 +116,6 @@ class Store extends Component {
     };
 
 
-                       // To be refactored according to Dimitri's code for store
-
     onValuechange=(e)=>{
         this.setState({
             [e.target.name]:e.target.value
@@ -131,23 +129,6 @@ class Store extends Component {
                 this.setState({ itemsToShow });
             }
         }
-        // {
-        //     let searchmobile=this.state.searchTextmobile;
-        //     const {
-        //         router: { query }
-        //     } = this.props;
-            // var { categoryId = 0, subCategoryId = 1, pageType } = query;
-            // this.setState({ selectedCategory: categoryId });
-            // this.setState({ selectedSubCategory: subCategoryId });
-    
-            // if (searchmobile != "") {
-            //     this.props.searchInventory({ category: categoryId, search:searchmobile });
-            // } else if (pageType === "cards" && searchmobile === "" && !subCategoryId) {
-            //     this.props.changeCategory({ category: categoryId });
-            // } else {
-            //     this.props.changeCategory({ category: subCategoryId });
-            // }
-        //}) 
         )}
 
     changeMainCategory = selectedMainCategory => {
@@ -260,7 +241,6 @@ class Store extends Component {
     }
 
     render() {
-        console.log(this.state.searchTextmobile,'jjjjjjjj')
         let { classes } = this.props;
         let {searchTextmobile}=this.state;
         const {
