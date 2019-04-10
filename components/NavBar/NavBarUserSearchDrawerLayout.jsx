@@ -119,7 +119,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                         </Link>
                         <Button style={{display: 'none'}} color="secondary">About Us</Button>
 
-                        <Link prefetch href="/cart">
+                        <Link prefetch href="/cart" state="fromStore">
                             <IconButton color="inherit" aria-label="Menu">
                                 <Badge color="secondary" badgeContent={this.props.cart.items.length} className={classes.margin} classes={{ badge: classes.badge }}>
                                     <ShoppingCartIcon />

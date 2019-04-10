@@ -41,7 +41,7 @@ class ItemPanel extends Component {
             <ExpansionPanel expanded={this.state.expanded} onChange={this.handleExpand}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography color="primary" className={classes.heading}>
-                        {item.Name} {item.details}
+                        {item.Name} {item.details} {item.details_link}
                         <br />
                         <Typography style={{ fontSize: "smaller" }}>
                             {item.OrderDetailQty} @ ${item.pricePerUnit}

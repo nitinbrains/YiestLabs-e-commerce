@@ -76,13 +76,13 @@ class CartItem extends Component {
                         backgroundImage: `url('static/images/categories/Category-ale.jpg')`
                     }}>
                         <img className="icon" src="static/images/icons/Ale-icon.svg"/>
-                        <div className="code">{this.props.item.details}</div>
+                        <div className="code"></div>
                         <div className="name">{this.props.item.Name}</div>
                     </Grid>
                     <Grid className="detail" item xs={8}>
                         {this.props.item.Name}
                         <br/>
-                        {this.props.item.details}
+                        {this.props.item.details} {this.props.item.details_link}
                         <br/>
                         {/* <span className="sooner" onClick={this.props.openWantSoonerDialog}>Want this Strain sooner?</span> */}
                     </Grid>
