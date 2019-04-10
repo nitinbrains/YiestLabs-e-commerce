@@ -118,27 +118,37 @@ class Store extends Component {
 
                        // To be refactored according to Dimitri's code for store
 
-    // onValuechange=(e)=>{
-    //     this.setState({
-    //         [e.target.name]:e.target.value
-    //     },()=>{
-    //         let searchmobile=this.state.searchTextmobile;
-    //         const {
-    //             router: { query }
-    //         } = this.props;
-    //         var { categoryId = 0, subCategoryId = 1, pageType } = query;
-    //         this.setState({ selectedCategory: categoryId });
-    //         this.setState({ selectedSubCategory: subCategoryId });
+    onValuechange=(e)=>{
+        this.setState({
+            [e.target.name]:e.target.value
+        },()=>{
+            const { inventory: { items }, user } = this.props;
+            const { isHomebrew } = this.state;
+            const {searchTextmobile}=this.state;
     
-    //         if (searchmobile != "") {
-    //             this.props.searchInventory({ category: categoryId, search:searchmobile });
-    //         } else if (pageType === "cards" && searchmobile === "" && !subCategoryId) {
-    //             this.props.changeCategory({ category: categoryId });
-    //         } else {
-    //             this.props.changeCategory({ category: subCategoryId });
-    //         }
-    //     }) 
-    //   }
+            if (searchTextmobile) {
+                const itemsToShow = filterItems(items, null, searchTextmobile, user, isHomebrew);
+                this.setState({ itemsToShow });
+            }
+        }
+        // {
+        //     let searchmobile=this.state.searchTextmobile;
+        //     const {
+        //         router: { query }
+        //     } = this.props;
+            // var { categoryId = 0, subCategoryId = 1, pageType } = query;
+            // this.setState({ selectedCategory: categoryId });
+            // this.setState({ selectedSubCategory: subCategoryId });
+    
+            // if (searchmobile != "") {
+            //     this.props.searchInventory({ category: categoryId, search:searchmobile });
+            // } else if (pageType === "cards" && searchmobile === "" && !subCategoryId) {
+            //     this.props.changeCategory({ category: categoryId });
+            // } else {
+            //     this.props.changeCategory({ category: subCategoryId });
+            // }
+        //}) 
+        )}
 
     changeMainCategory = selectedMainCategory => {
         const { inventory: { items }, user } = this.props;
@@ -250,8 +260,9 @@ class Store extends Component {
     }
 
     render() {
-
+        console.log(this.state.searchTextmobile,'jjjjjjjj')
         let { classes } = this.props;
+        let {searchTextmobile}=this.state;
         const {
             selectedMainCategory,
             selectedSubCategory,
@@ -262,6 +273,22 @@ class Store extends Component {
 
         var sectionTitle, sectionColor, pageContent;
         if ( selectedSubCategory || searchText || isHomebrew ) {
+
+            let cardsNode = [];
+            itemsToShow.map((item, i)=>{
+                cardsNode.push(this.getCard(item, i))
+            })
+
+            pageContent = (
+                <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
+            );
+
+            if (selectedSubCategory) {
+                sectionTitle = selectedSubCategory.label;
+                sectionColor = selectedSubCategory.color;
+            }
+        }
+        else if  ( selectedSubCategory || searchTextmobile || isHomebrew ) {
 
             let cardsNode = [];
             itemsToShow.map((item, i)=>{
@@ -318,7 +345,7 @@ class Store extends Component {
                      input: classes.inputInputmobile,
                      }}
                      value={this.state.searchTextmobile}
-                    //  onChange={e=>this.onValuechange(e)}
+                     onChange={e=>this.onValuechange(e)}
                    />
                </div>
 
