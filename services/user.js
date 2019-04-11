@@ -33,4 +33,14 @@ export const createYeastmanAccount = (params) => requestWrapper('/create-yeastma
 export const addSubsidiary = (params) => requestWrapper('/add-subsidiary', {
     method: "POST",
     body: JSON.stringify(params)
-})
+});
+
+export const forgotPassword = (params) => requestWrapper('/forgot-password', {
+    method: "POST",
+    body: JSON.stringify(params)
+});
+
+export const changePassword = (params) => requestWrapper('/change-password', {
+    method: "POST",
+    body: JSON.stringify(params)
+});

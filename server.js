@@ -204,14 +204,15 @@ app.prepare().then(() => {
         });
     });
 
-    server.post("/new-password", function(req, res, next) {
-        var request = req.body.request;
+    server.post("/forgot-password", function(req, res, next) {
+        var user = req.body.request.user;
         var time = new Date();
+
         var subjective;
-        if (request.email) {
-            subjective = "<Email>" + request.email + "</Email>";
+        if (user.email) {
+            subjective = "<Email>" + user.email + "</Email>";
         } else {
-            subjective = "<UserName>" + request.username + "</UserName>";
+            subjective = "<UserName>" + user.username + "</UserName>";
         }
 
         var data =
@@ -242,6 +243,52 @@ app.prepare().then(() => {
                     res.sendStatus(200);
                 } else {
                     res.send({ error: { message: "No account was found", code: 0 } });
+                }
+            });
+        });
+    });
+
+    server.post("/change-password", function(req, res, next) {
+        const request = req.body.request;
+        const user = request.user;
+        const newPassword = request.newPassword;
+        var time = new Date();
+
+        var subjective;
+        if (user.email) {
+            subjective = "<Email>" + user.email + "</Email>";
+        } else {
+            subjective = "<UserName>" + user.username + "</UserName>";
+        }
+
+        var data = '<CustomerInformationRequest Operation="Change Password"><Token>' + system.YeastmanAuthentication.Token + '</Token>'
+            + '<NetSuiteID>' + user.id + '</NetSuiteID>'
+            + '<Email>' + user.email + '</Email>'
+            + '<NewPassword>' + newPassword + '</NewPassword>'
+            + '<TimeStamp>' + time.getTime() + '</TimeStamp>'
+            + '<Nonce>' + Utils.uuid() + '</Nonce>'
+        + '</CustomerInformationRequest>';
+        
+        data = 'Validate=' + system.CryptoJS.AES.encrypt(data, system.YeastmanAuthentication.Auth, { mode: system.CryptoJS.mode.CBC, padding: system.CryptoJS.pad.Pkcs7, iv: system.YeastmanAuthentication.iv }).toString();
+        fetch('https://www.yeastman.com/Login/Validator.aspx', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: data
+        })
+        .then(response => response.text())
+        .then(function(response) {
+            var data = CryptoJS.AES.decrypt(response, system.YeastmanAuthentication.Auth, {
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7,
+                iv: system.YeastmanAuthentication.iv
+            }).toString(CryptoJS.enc.Utf8);
+            XMLtoJSON(data, result => {
+                if (result.CustomerInformation.Result[0].$.Status == "OK") {
+                    res.sendStatus(200);
+                } else {
+                    res.send({ error: { message: "Could not process your request please contact White Labs for support", code: 0 } });
                 }
             });
         });

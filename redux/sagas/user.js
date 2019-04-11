@@ -351,6 +351,79 @@ export function* getOrderHistory(action) {
     }
 }
 
+export function* forgotPassword(action) {
+    const { 
+        responseSuccess, 
+        responseFailure,
+    } = action;
+    try {
+        const user = yield select(state => state.user);
+
+        let request = {};
+        request.user = user;
+
+        var {
+            res,
+            error
+        } = yield call(api.changePassword, { request });
+        if (error) throw error;
+    } catch (error) {
+        if (error.status) {
+            // show network error is any regaring with api status
+            yield put(messageActions.showSnackbar({ title: "Error", message: error.message, variant: "error" }));
+        } else {
+            if (error.code == 0) {
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showBanner({ title: "Yeastman", message: error.message, variant: "error" }));
+            } else if (error.code == -1) {
+                // Other error when we have error with code == -1
+                yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
+            }
+        }
+        yield put(responseFailure(error));
+    }
+}
+
+
+export function* changePassword(action) {
+    const { 
+        responseSuccess, 
+        responseFailure,
+        data: { newPassword }
+    } = action;
+    try {
+        const user = yield select(state => state.user);
+
+        let request = {};
+        request.newPassword = newPassword;
+        request.user = user;
+
+        var {
+            res,
+            error
+        } = yield call(api.changePassword, { request });
+
+        if (error) throw error;
+
+        yield put(responseSuccess());
+
+    } catch (error) {
+        if (error.status) {
+            // show network error is any regaring with api status
+            yield put(messageActions.showSnackbar({ title: "Error", message: error.message, variant: "error" }));
+        } else {
+            if (error.code == 0) {
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showBanner({ title: "Yeastman", message: error.message, variant: "error" }));
+            } else if (error.code == -1) {
+                // Other error when we have error with code == -1
+                yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
+            }
+        }
+        yield put(responseFailure(error));
+    }
+}
+
 export function* setShipMethod(action) {
     const {
         responseSuccess,
@@ -361,6 +434,18 @@ export function* setShipMethod(action) {
         yield put(responseSuccess({shipmethod}));
         yield put(orderActions.prepareOrder());
     } catch (error) {
+        if (error.status) {
+            // show network error is any regaring with api status
+            yield put(messageActions.showSnackbar({ title: "Error", message: error.message, variant: "error" }));
+        } else {
+            if (error.code == 0) {
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showBanner({ title: "Yeastman", message: error.message, variant: "error" }));
+            } else if (error.code == -1) {
+                // Other error when we have error with code == -1
+                yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
+            }
+        }
         yield put(responseFailure(error));
     }
 }

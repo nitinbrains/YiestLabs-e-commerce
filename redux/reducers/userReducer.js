@@ -131,6 +131,24 @@ export default createReducer(initialState, {
         isLoading: false,
         orderHistory
     }),
+    [userTypes.FORGOT_PASSWORD_ATTEMPT]: (state, { data }) => ({
+        isLoading: true,
+    }),
+    [userTypes.FORGOT_PASSWORD_FAILURE]: (state, { data }) => ({
+        isLoading: false,
+    }),
+    [userTypes.FORGOT_PASSWORD_SUCCESS]: (state) => ({
+        isLoading: false,
+    }),
+    [userTypes.CHANGE_PASSWORD_ATTEMPT]: (state, { data }) => ({
+        isLoading: true,
+    }),
+    [userTypes.CHANGE_PASSWORD_FAILURE]: (state, { data }) => ({
+        isLoading: false,
+    }),
+    [userTypes.CHANGE_PASSWORD_SUCCESS]: (state) => ({
+        isLoading: false,
+    }),
     [userTypes.CREATE_USER_ATTEMPT]: (state, { data }) =>({
         registrationAttempt: true,
     }),

@@ -23,7 +23,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-import _ from 'lodash';
 
 import FormButton from "components/Form/FormButton";
 
@@ -34,7 +33,6 @@ class OrderDetails extends Component {
     }
 
     _renderSumamry() {
-        console.log(this.props.order)
         const { classes, order } = this.props;
         return (
             <Grid container>
