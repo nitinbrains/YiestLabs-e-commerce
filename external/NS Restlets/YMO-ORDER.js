@@ -91,7 +91,7 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                         response.items[i].shipDate = new Date(hbDate);
                         response.items[i].Warehouse = 9;
                     }
-                    else 
+                    else
                     {
                         response.items.splice(i, 1);
                     }
@@ -298,9 +298,14 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
             }
 
             if (response.couponCode) {
-              	var couponId = getCouponId(response.couponCode.toUpperCase());
-              	if (couponId != 0) {
-                	fakeOrder.setValue({ fieldId: "promocode", text: couponId });
+                // At some point we want to throw an error here so it can be picked up by YMO 2.0
+                try {
+                  	var couponId = getCouponId(response.couponCode.toUpperCase());
+                  	if (couponId != 0) {
+                    	fakeOrder.setValue({ fieldId: "promocode", text: couponId });
+                    }
+                } catch (err) {
+                    logError('prepare-order', err);
                 }
             }
 
@@ -581,9 +586,18 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                         }
 
                         if (message.order.couponCode) {
-                            var couponId = getCouponId(message.couponCode.toUpperCase());
-                            if (couponId != 0) {
-                                salesOrderRecord.setValue({ fieldId: "promocode", value: couponId });
+                            try {
+                                var couponId = getCouponId(message.couponCode.toUpperCase());
+                                if (couponId != 0) {
+                                    salesOrderRecord.setValue({ fieldId: "promocode", value: couponId });
+                                }
+                            } catch (err) {
+                              	logError('place-order', err);
+                              	if (!message.comment) {
+                                	message.comment = "Coupon " + message.order.couponCode + " used but could not be applied";
+                                } else {
+                                  	message.comment += "|Coupon " + message.order.couponCode + " used but could not be applied";
+                                }
                             }
                         }
 

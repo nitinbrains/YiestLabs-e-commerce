@@ -37,6 +37,12 @@ class Calculator extends Component {
 
     onCalculate = (values) => {
         const result = calculate(values);
+
+        if (result.isHomebrewer) {
+           var packs = { "0.04": result.total };
+           result.packs = packs;
+        }
+
         this.setState({ result });
         this.openDialog();
     }

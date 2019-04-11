@@ -50,6 +50,10 @@ class ResultItem extends Component {
 						packageSize = "2L";
 						cartItem.MerchandiseID = parseInt(this.item.volID[2]);
 						break;
+          case '0.04':
+            packageSize = "HB";
+            cartItem.MerchandiseID = parseInt(this.item.volID[4]);
+            break;
 					default:
 						break;
 				}
@@ -76,7 +80,7 @@ class ResultItem extends Component {
 		const spaceIndex = this.item.Name.indexOf(" ");
         const itemID = this.item.Name.substr(0, spaceIndex);
 		const itemName = this.item.Name.substr(spaceIndex + 1);
-		
+
         return (
             <Card className="result-item-card">
                 <CardBody>
