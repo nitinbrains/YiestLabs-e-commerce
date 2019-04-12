@@ -174,6 +174,9 @@ class Checkout extends Component {
                                 <div style={activeStep === steps.length - 1 ? { visible: "true", display: "block", textAlign: "right", width: "100%" } : { visible: "false", display: "none" }}>
                                     Coupon Code: &nbsp;
                                     <input type="text" name="couponCode" value={this.state.couponCode} onChange={this.handleChangeCouponCode.bind(this)} />
+                                    <p style={{ fontSize: "small" }}>
+                                      Coupons will be reflected in "My Orders" and<br />email confirmation following your order.
+                                    </p>
                                 </div>
                                 <div className={classes.buttons}>
                                     {activeStep !== 0 && (

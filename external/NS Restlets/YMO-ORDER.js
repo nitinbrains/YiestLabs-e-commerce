@@ -300,7 +300,13 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
             if (response.couponCode) {
               	var couponId = getCouponId(response.couponCode.toUpperCase());
               	if (couponId != 0) {
-                	fakeOrder.setValue({ fieldId: "promocode", text: couponId });
+                  //line below is for non-SuitePromotions environment
+                  //fakeOrder.setValue({ fieldId: "promocode", value: couponId });
+
+                  //These lines are for SuitePromotions environment
+                  fakeOrder.selectNewLine({ sublistId: "promotions" });
+                  fakeOrder.setCurrentSublistValue({ sublistId: "promotions", fieldId: "promocode", value: couponId });
+                  fakeOrder.commitLine({ sublistId: "promotions" });
                 }
             }
 
@@ -585,13 +591,13 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                           	try {
                             	couponId = getCouponId(message.order.couponCode.toUpperCase());
                             	if (couponId != 0) {
-                                  	//line below is for non-SuitePromotions environment
+                                  //line below is for non-SuitePromotions environment
                                 	//salesOrderRecord.setValue({ fieldId: "promocode", value: couponId });
 
-                                  	//These lines are for SuitePromotions environment
+                                  //These lines are for SuitePromotions environment
                                 	salesOrderRecord.selectNewLine({ sublistId: "promotions" });
-                                   	salesOrderRecord.setCurrentSublistValue({ sublistId: "promotions", fieldId: "promocode", value: couponId });
-                                  	salesOrderRecord.commitLine({ sublistId: "promotions" });
+                                  salesOrderRecord.setCurrentSublistValue({ sublistId: "promotions", fieldId: "promocode", value: couponId });
+                                  salesOrderRecord.commitLine({ sublistId: "promotions" });
                             	}
                             } catch (err) {
                               	logError('place-order', err);
