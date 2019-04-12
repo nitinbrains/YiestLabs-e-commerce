@@ -331,6 +331,10 @@ const styles = theme => ({
     },
     inputInput: {
         width: "50%"
+    },
+    badge: {
+        background: "red",
+        color: 'white'
     }
 });
 
