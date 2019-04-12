@@ -152,11 +152,11 @@ class YeastCard extends Component {
                                     src={getIcon(this.props.item.salesCategory)}
                                     height="40"
                                 />
-                                <Typography variant="h5" color="secondary">
+                                <Typography variant="title" color="secondary" className={classes.info} className={classes.typoTitle}>
                                     {itemID}
                                 </Typography>
                                 <Typography
-                                    variant="subheading"
+                                    variant="h5"
                                     color="secondary"
                                 >
                                     {itemName}
@@ -266,7 +266,13 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit * -2,
         marginRight: theme.spacing.unit * -2,
         textAlign: "center"
-    }
+    },
+    typoTitle: {
+        fontWeight: "bolder",
+        textShadow: "0px 1px, 1px 0px, 1px 1px",
+        letterSpacing: "2px"
+    },
+    
 });
 
 YeastCard.propTypes = {
