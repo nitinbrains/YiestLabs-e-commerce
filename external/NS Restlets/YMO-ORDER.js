@@ -298,14 +298,9 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
             }
 
             if (response.couponCode) {
-                // At some point we want to throw an error here so it can be picked up by YMO 2.0
-                try {
-                  	var couponId = getCouponId(response.couponCode.toUpperCase());
-                  	if (couponId != 0) {
-                    	fakeOrder.setValue({ fieldId: "promocode", text: couponId });
-                    }
-                } catch (err) {
-                    logError('prepare-order', err);
+              	var couponId = getCouponId(response.couponCode.toUpperCase());
+              	if (couponId != 0) {
+                	fakeOrder.setValue({ fieldId: "promocode", text: couponId });
                 }
             }
 
@@ -585,12 +580,19 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                             salesOrderRecord.setValue({ fieldId: "shipaddresslist", value: shipaddressindex });
                         }
 
+                      	var couponId = 0;
                         if (message.order.couponCode) {
-                            try {
-                                var couponId = getCouponId(message.couponCode.toUpperCase());
-                                if (couponId != 0) {
-                                    salesOrderRecord.setValue({ fieldId: "promocode", value: couponId });
-                                }
+                          	try {
+                            	couponId = getCouponId(message.order.couponCode.toUpperCase());
+                            	if (couponId != 0) {
+                                  	//line below is for non-SuitePromotions environment
+                                	//salesOrderRecord.setValue({ fieldId: "promocode", value: couponId });
+
+                                  	//These lines are for SuitePromotions environment
+                                	salesOrderRecord.selectNewLine({ sublistId: "promotions" });
+                                   	salesOrderRecord.setCurrentSublistValue({ sublistId: "promotions", fieldId: "promocode", value: couponId });
+                                  	salesOrderRecord.commitLine({ sublistId: "promotions" });
+                            	}
                             } catch (err) {
                               	logError('place-order', err);
                               	if (!message.comment) {
@@ -789,16 +791,17 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
 
     function getCouponId(couponCode) {
       	var filters = [];
-      	filters.push(search.createFilter({name: 'code', operator: search.Operator.STARTSWITH, values: couponCode}));
+      	filters.push(search.createFilter({name: 'code', operator: search.Operator.IS, values: couponCode}));
 
       	var columns = [];
-      	columns.push(search.createColumn({name: 'code'}));
+      	columns.push(search.createColumn({name: 'internalid'}));
 
       	var couponIds = [];
 
       	try {
-          search.create({type: 'couponCode', filters: filters, columns: columns}).run().each(function(result) {
-              couponIds.unshift(parseInt(result.id));
+          search.create({type: 'promotionCode', filters: filters, columns: columns}).run().each(function(result) {
+              var couponId = parseInt(result.getValue({ name: "internalid" }));
+              couponIds.unshift(couponId);
           });
         } catch (err) {
           logError('getCouponId', err);
