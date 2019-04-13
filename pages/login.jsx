@@ -59,15 +59,18 @@ class Login extends Component {
             Router.push('/')
         }
     }
-   
+
     componentWillReceiveProps({user}){
         if (_get(user, 'id')){
             Router.push('/')
+        } else if (user && !user.isSuccess) {
+            this.props.loading.isLoading = false;
+            this.props.loading.type = "";
         }
     }
     login(values) {
         if (values.username && values.password) {
-            this.props.userLogin(values);            
+            this.props.userLogin(values);
         }
     }
     render() {
@@ -107,7 +110,7 @@ class Login extends Component {
                         {({ values, errors, touched, handleChange }) => {
                         return(
                             <div className={classes.form}>
-                                <Form> 
+                                <Form>
                                     <FormControl margin="normal" required fullWidth>
                                         <TextField
                                             name="username"
@@ -143,7 +146,7 @@ class Login extends Component {
                                         }
                                         label="Remember me"
                                     />
-                                 
+
                                     {errors.password && touched.password && <div style={{color:'red'}} >{errors.password}</div>}
                                     <Button
                                         type="submit"
@@ -151,16 +154,16 @@ class Login extends Component {
                                         variant="raised"
                                         color="primary"
                                         className={classes.submit}
-                                        
+
                                     >
                                         Sign in
                                     </Button>
                                 </Form>
-                            </div>  
-                        )   
+                            </div>
+                        )
                         }}
                     </Formik>
-                       
+
                         <Grid container spacing={24}>
                             <Grid item xs={12} md={6}>
                                 <Link prefetch href="/registration">
@@ -243,5 +246,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(withStyles(styles)(Login));
-
-

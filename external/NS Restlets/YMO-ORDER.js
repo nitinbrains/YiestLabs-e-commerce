@@ -298,16 +298,20 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
             }
 
             if (response.couponCode) {
-              	var couponId = getCouponId(response.couponCode.toUpperCase());
-              	if (couponId != 0) {
-                  //line below is for non-SuitePromotions environment
-                  //fakeOrder.setValue({ fieldId: "promocode", value: couponId });
+              	try {
+                  var couponId = getCouponId(response.couponCode.toUpperCase());
+                  if (couponId != 0) {
+                    //line below is for non-SuitePromotions environment
+                    //fakeOrder.setValue({ fieldId: "promocode", value: couponId });
 
-                  //These lines are for SuitePromotions environment
-                  fakeOrder.selectNewLine({ sublistId: "promotions" });
-                  fakeOrder.setCurrentSublistValue({ sublistId: "promotions", fieldId: "promocode", value: couponId });
-                  fakeOrder.commitLine({ sublistId: "promotions" });
-                }
+                    //These lines are for SuitePromotions environment
+                    fakeOrder.selectNewLine({ sublistId: "promotions" });
+                    fakeOrder.setCurrentSublistValue({ sublistId: "promotions", fieldId: "promocode", value: couponId });
+                    fakeOrder.commitLine({ sublistId: "promotions" });
+                  }
+                } catch (err) {
+                  logError('prepare-order', err);
+               }
             }
 
             // Add items to fake order
@@ -586,10 +590,9 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
                             salesOrderRecord.setValue({ fieldId: "shipaddresslist", value: shipaddressindex });
                         }
 
-                      	var couponId = 0;
                         if (message.order.couponCode) {
                           	try {
-                            	couponId = getCouponId(message.order.couponCode.toUpperCase());
+                            	var couponId = getCouponId(message.order.couponCode.toUpperCase());
                             	if (couponId != 0) {
                                   //line below is for non-SuitePromotions environment
                                 	//salesOrderRecord.setValue({ fieldId: "promocode", value: couponId });
