@@ -25,6 +25,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Divider from "@material-ui/core/Divider";
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 import NavBarUserSearchDrawerLayout from "components/NavBar/NavBarUserSearchDrawerLayout";
 import LoadingIndicator from "components/UI/LoadingIndicator";
@@ -64,7 +66,8 @@ class Store extends Component {
             selectedMainCategory: null,
             selectedSubCategory: null,
             itemsToShow: [],
-            isHomebrew: false
+            isHomebrew: false,
+            tab: 1
         };
     }
 
@@ -88,6 +91,15 @@ class Store extends Component {
           this.changeMainCategory(null);
         }
     }
+
+    handleTab = (event, value) => {
+        this.setState({ tab: value });
+        if(value == 0){
+            this.toggleHomebrew(true)
+        }else{
+            this.toggleHomebrew(false)
+        }
+    };
 
     handleClickItem = item => {
         this.setState({ openDialog: true, item: item });
@@ -273,11 +285,21 @@ class Store extends Component {
                     <Grid item xs={1} dir="ltr" style={{ minWidth: "100px" }}>
                         <FormButton className={`form-button-small-size`} text="Back" onClick={() => this.categoryBack()} />
                     </Grid>
-                    <Grid item xs={5} dir="rtl">
-                        <FormButton className={`form-button-small-size ${isHomebrew ? "form-button-active" : ""}`} text="Professional" onClick={() => this.toggleHomebrew(false)} />
+                    <Grid container spacing={8} item xs={10} justify="center">
+                    <Grid item xs={3} dir="rtl">
+                        <Paper square>
+                            <Tabs
+                            value={this.state.tab}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            onChange={this.handleTab}
+                            centered
+                            >
+                                <Tab label="Homebrew" />
+                                <Tab label="Professional" />
+                            </Tabs>
+                        </Paper>
                     </Grid>
-                    <Grid item xs={5} dir="ltr">
-                        <FormButton className={`form-button-small-size ${isHomebrew ? "" : "form-button-active"}`} text="Homebrew" onClick={() => this.toggleHomebrew(true)} />
                     </Grid>
                 </Grid>
 
