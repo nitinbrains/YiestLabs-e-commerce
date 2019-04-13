@@ -5,10 +5,11 @@
 $Montserrat : 'Montserrat', sans-serif;
 
 @import "generic";
+@import "myorders";
+@import "myaccount";
 @import "cart";
 @import "myorders";
 @import "store";
-//@import "myaccount";
 
 //rework myaccount
 @import "../components//MyAccount/myaccount.scss";
@@ -17,6 +18,11 @@ $Montserrat : 'Montserrat', sans-serif;
 @import "../components/Calculator/calculator.scss";
 @import "../components/Registration/responsive.scss";
 @import "../components/Checkout/checkout.scss";
+@import "../components//Store/store.scss";
+@import "../components/NavBar/responsive.scss";
+@import "../components/NavBar/inline.scss";
+@import "../components/Store/Yeast/responsive.scss";
+@import ".././components/Cart/cart.scss";
 
 body {
 	font-family: $Montserrat;

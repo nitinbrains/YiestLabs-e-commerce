@@ -3,9 +3,12 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from "next/router";
-import _get from 'lodash/get';
+import _get from "lodash/get";
 
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
+import { find, filter } from "lodash";
+import SearchIcon from "@material-ui/icons/Search";
+import InputBase from "@material-ui/core/InputBase";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -19,14 +22,13 @@ import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import SearchIcon from "@material-ui/icons/Search";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Divider from "@material-ui/core/Divider";
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
 import NavBarUserSearchDrawerLayout from "components/NavBar/NavBarUserSearchDrawerLayout";
 import LoadingIndicator from "components/UI/LoadingIndicator";
@@ -63,6 +65,7 @@ class Store extends Component {
         this.state = {
             openDialog: false,
             searchText: "",
+            searchTextmobile: "",
             selectedMainCategory: null,
             selectedSubCategory: null,
             itemsToShow: [],
@@ -72,32 +75,34 @@ class Store extends Component {
     }
 
     componentWillMount() {
-        const  { inventory: { items }} = this.props;
+        const {
+            inventory: { items }
+        } = this.props;
 
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
-        if (_get(userInfo, 'id')) {
+        if (_get(userInfo, "id")) {
             this.props.setUserInfo({ userInfo });
         }
 
-        this.setState({itemsToShow: items});
+        this.setState({ itemsToShow: items });
     }
 
     // To force the store to reload when user clicks link in header while in the store
     // See also NavBarUserSearchDrawerLayout file
     // TODO: Find a better way
     componentWillReceiveProps(nextProps) {
-        if (nextProps.router && nextProps.router.route === '/') {
-          this.toggleHomebrew(false);
-          this.changeMainCategory(null);
+        if (nextProps.router && nextProps.router.route === "/") {
+            this.toggleHomebrew(false);
+            this.changeMainCategory(null);
         }
     }
 
     handleTab = (event, value) => {
         this.setState({ tab: value });
-        if(value == 0){
-            this.toggleHomebrew(true)
-        }else{
-            this.toggleHomebrew(false)
+        if (value == 0) {
+            this.toggleHomebrew(true);
+        } else {
+            this.toggleHomebrew(false);
         }
     };
 
@@ -109,16 +114,22 @@ class Store extends Component {
         this.setState({ openDialog: false, item: null });
     };
 
-    toggleHomebrew = (isHomebrew ) => {
-        const { inventory: { items }, user } = this.props;
-        const categoryFilter = (isHomebrew ? null : _get(this.state.selectedSubCategory, "value"));
+    toggleHomebrew = isHomebrew => {
+        const {
+            inventory: { items },
+            user
+        } = this.props;
+        const categoryFilter = isHomebrew ? null : _get(this.state.selectedSubCategory, "value");
 
         var itemsToShow = filterItems(items, categoryFilter, null, user, isHomebrew);
         this.setState({ isHomebrew, itemsToShow });
-    }
+    };
 
     searchItem = searchText => {
-        const { inventory: { items }, user } = this.props;
+        const {
+            inventory: { items },
+            user
+        } = this.props;
         const { isHomebrew } = this.state;
 
         if (searchText) {
@@ -127,8 +138,32 @@ class Store extends Component {
         }
     };
 
+    onValuechange = e => {
+        this.setState(
+            {
+                [e.target.name]: e.target.value
+            },
+            () => {
+                const {
+                    inventory: { items },
+                    user
+                } = this.props;
+                const { isHomebrew } = this.state;
+                const { searchTextmobile } = this.state;
+
+                if (searchTextmobile) {
+                    const itemsToShow = filterItems(items, null, searchTextmobile, user, isHomebrew);
+                    this.setState({ itemsToShow });
+                }
+            }
+        );
+    };
+
     changeMainCategory = selectedMainCategory => {
-        const { inventory: { items }, user } = this.props;
+        const {
+            inventory: { items },
+            user
+        } = this.props;
         const { isHomebrew } = this.state;
 
         const value = _.get(selectedMainCategory, "value");
@@ -136,24 +171,26 @@ class Store extends Component {
 
         var selectedSubCategory = null;
 
-        if ( !subCategories ){
+        if (!subCategories) {
             selectedSubCategory = selectedMainCategory;
         }
 
         var itemsToShow = filterItems(items, value, null, user, isHomebrew);
         this.setState({ selectedMainCategory, selectedSubCategory, itemsToShow });
-    }
+    };
 
     changeSubCategory = selectedSubCategory => {
-        const { inventory: { items }, user } = this.props;
+        const {
+            inventory: { items },
+            user
+        } = this.props;
         const { isHomebrew } = this.state;
 
         const value = _.get(selectedSubCategory, "value");
 
         var itemsToShow = filterItems(items, value, null, user, isHomebrew);
         this.setState({ selectedSubCategory, itemsToShow });
-    }
-
+    };
 
     getCard = (item, i) => {
         if (this.state.isHomebrew) {
@@ -228,80 +265,92 @@ class Store extends Component {
     };
 
     categoryBack() {
-      this.setState({searchText: null});
-      if (!this.state.selectedSubCategory || this.state.selectedSubCategory == this.state.selectedMainCategory) {
-          this.changeMainCategory(null);
-      } else {
-          this.changeSubCategory(null);
-      }
+        this.setState({ searchText: null });
+        if (!this.state.selectedSubCategory || this.state.selectedSubCategory == this.state.selectedMainCategory) {
+            this.changeMainCategory(null);
+        } else {
+            this.changeSubCategory(null);
+        }
     }
 
     render() {
-
         let { classes } = this.props;
-        const {
-            selectedMainCategory,
-            selectedSubCategory,
-            searchText,
-            isHomebrew,
-            itemsToShow
-        } = this.state;
+        let { searchTextmobile } = this.state;
+        const { selectedMainCategory, selectedSubCategory, searchText, isHomebrew, itemsToShow } = this.state;
 
         var sectionTitle, sectionColor, pageContent;
-        if ( selectedSubCategory || searchText || isHomebrew ) {
-
+        if (selectedSubCategory || searchText || isHomebrew) {
             let cardsNode = [];
-            itemsToShow.map((item, i)=>{
-                cardsNode.push(this.getCard(item, i))
-            })
+            itemsToShow.map((item, i) => {
+                cardsNode.push(this.getCard(item, i));
+            });
 
             pageContent = (
-                <Grid className={classes.store} container spacing={24}>{cardsNode}</Grid>
+                <Grid className={classes.store} container spacing={24}>
+                    {cardsNode}
+                </Grid>
             );
 
             if (selectedSubCategory) {
                 sectionTitle = selectedSubCategory.label;
                 sectionColor = selectedSubCategory.color;
             }
-        }
-        else if ( selectedMainCategory ) {
+        } else if (selectedSubCategory || searchTextmobile || isHomebrew) {
+            let cardsNode = [];
+            itemsToShow.map((item, i) => {
+                cardsNode.push(this.getCard(item, i));
+            });
+
             pageContent = (
-                <SubCat mainCategory={selectedMainCategory} changeSubCategory={this.changeSubCategory} />
+                <Grid className={classes.store} container spacing={24}>
+                    {cardsNode}
+                </Grid>
             );
+
+            if (selectedSubCategory) {
+                sectionTitle = selectedSubCategory.label;
+                sectionColor = selectedSubCategory.color;
+            }
+        } else if (selectedMainCategory) {
+            pageContent = <SubCat mainCategory={selectedMainCategory} changeSubCategory={this.changeSubCategory} />;
 
             sectionTitle = selectedMainCategory.label;
             sectionColor = selectedMainCategory.color;
-        }
-        else {
-            pageContent = (
-                <MainMenu changeMainCategory={this.changeMainCategory} />
-            )
+        } else {
+            pageContent = <MainMenu changeMainCategory={this.changeMainCategory} />;
         }
 
         return (
             <NavBarUserSearchDrawerLayout inputVal={this.state.searchText} handleSearch={searchData => this.searchItem(searchData)}>
-
-                <Grid container spacing={8} id="professional-homebrew-switch">
-                    <Grid item xs={1} dir="ltr" style={{ minWidth: "100px" }}>
-                        <FormButton className={`form-button-small-size`} text="Back" onClick={() => this.categoryBack()} />
-                    </Grid>
-                    <Grid container spacing={8} item xs={10} justify="center">
+                <Grid item xs={1} dir="ltr">
+                    <FormButton className="back-button" text="Back" onClick={() => this.categoryBack()} />
+                </Grid>
+                <Grid container spacing={8} item xs={10} justify="center">
                     <Grid item xs={3} dir="rtl">
                         <Paper square>
-                            <Tabs
-                            value={this.state.tab}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            onChange={this.handleTab}
-                            centered
-                            >
+                            <Tabs value={this.state.tab} indicatorColor="primary" textColor="primary" onChange={this.handleTab} centered>
                                 <Tab label="Homebrew" />
                                 <Tab label="Professional" />
                             </Tabs>
                         </Paper>
                     </Grid>
-                    </Grid>
                 </Grid>
+
+                <div className="searchmobile">
+                    <div className={classes.searchIconmobile}>
+                        <SearchIcon />
+                    </div>
+                    <InputBase
+                        placeholder="Search…"
+                        name="searchTextmobile"
+                        classes={{
+                            root: classes.inputRootmobile,
+                            input: classes.inputInputmobile
+                        }}
+                        value={this.state.searchTextmobile}
+                        onChange={e => this.onValuechange(e)}
+                    />
+                </div>
 
                 {sectionTitle && (
                     <div className={classes.sectionTitleDiv}>
@@ -344,7 +393,11 @@ const styles = theme => ({
         width: "88%",
         margin: "auto",
         marginBottom: "60px",
-        marginTop: "70px"
+        marginTop: "70px",
+        marginTop: "70px",
+        [theme.breakpoints.down("sm")]: {
+            width: "100%"
+        }
     },
     sectionTitleSpan: {
         width: "42%",
@@ -355,7 +408,11 @@ const styles = theme => ({
     },
     titText: {
         width: "16%",
-        textAlign: "center"
+        textAlign: "center",
+        [theme.breakpoints.down("xs")]: {
+            fontSize: "12px",
+            width: "38%"
+        }
     },
     searchInput: {
         marginLeft: 10
@@ -366,6 +423,31 @@ const styles = theme => ({
     },
     divider: {
         margin: "10px auto"
+    },
+
+    searchIconmobile: {
+        width: theme.spacing.unit * 9,
+        height: "100%",
+        position: "absolute",
+        pointerEvents: "none",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    inputRootmobile: {
+        color: "inherit",
+        width: "100%"
+    },
+    inputInputmobile: {
+        paddingTop: theme.spacing.unit,
+        paddingRight: theme.spacing.unit,
+        paddingBottom: theme.spacing.unit,
+        paddingLeft: theme.spacing.unit * 10,
+        transition: theme.transitions.create("width"),
+        width: "100%"
+        // [theme.breakpoints.up('md')]: {
+        //   width: 200,
+        // },
     }
 });
 

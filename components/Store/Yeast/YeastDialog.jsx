@@ -573,9 +573,10 @@ class YeastDialog extends Component {
                         >
                             <Grid item xs={12} md={6}>
                                 <div style={{ display: "flex" }}>
-                                    <Typography>Attenuation:</Typography>
+                                    <Typography className="dialogVariant" >Attenuation:</Typography>
                                     &nbsp;
                                     <Typography
+                                     className="dialogVariant"
                                         style={{ color: getColor(this.item.salesCategory)}}
                                     >
                                         {this.item.attenuation}
@@ -585,9 +586,10 @@ class YeastDialog extends Component {
 
                             <Grid item xs={12} md={6}>
                                 <div style={{ display: "flex" }}>
-                                    <Typography>Flocculation: </Typography>
+                                    <Typography  className="dialogVariant">Flocculation: </Typography>
                                     &nbsp;
                                     <Typography
+                                     className="dialogVariant"
                                         style={{ color: getColor(this.item.salesCategory)}}
                                     >
                                         {this.item.flocculation}
@@ -596,9 +598,10 @@ class YeastDialog extends Component {
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <div style={{ display: "flex" }}>
-                                    <Typography>Alcohol Tol.: </Typography>
+                                    <Typography  className="dialogVariant">Alcohol Tol.: </Typography>
                                     &nbsp;
                                     <Typography
+                                     className="dialogVariant"
                                         style={{ color: getColor(this.item.salesCategory)}}
                                     >
                                         {this.item.alcoholTol}
@@ -607,9 +610,10 @@ class YeastDialog extends Component {
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <div style={{ display: "flex" }}>
-                                    <Typography>Fermentation Temp: </Typography>
+                                    <Typography  className="dialogVariant">Fermentation Temp: </Typography>
                                     &nbsp;
                                     <Typography
+                                     className="dialogVariant"
                                         style={{ color: getColor(this.item.salesCategory)}}
                                     >
                                         {this.item.optFermentTempF |
@@ -625,7 +629,7 @@ class YeastDialog extends Component {
                         container
                         direction={"column"}
                         spacing={8}
-                        style={{ marginTop: 20 }}
+                        className={classes.description}
                     >
                         <Grid item>
                             <Typography>{this.item.Description}</Typography>
@@ -651,6 +655,7 @@ class YeastDialog extends Component {
                         container
                         style={{ marginTop: 5 }}
                         direction={"row"}
+                        justify="center"
                     >
                         <Grid
                             item
@@ -658,10 +663,10 @@ class YeastDialog extends Component {
                             container
                             spacing={24}
                             direction={"row"}
-                            justify="flex-end"
+                            justify="center"
                         >
                             {availability ?
-                                <Typography style={{color: availability == IN_STOCK ? "green" : "red"}}><p>{availability}</p></Typography>
+                                <Typography className="flex-center" style={{color: availability == IN_STOCK ? "green" : "red"}}><p style={{textAlign:'center'}}>{availability}</p></Typography>
                             :
                                 <Grid
                                     item
@@ -669,9 +674,9 @@ class YeastDialog extends Component {
                                     container
                                     spacing={24}
                                     direction={"row"}
-                                    justify="flex-end"
+                                    justify="center"
                                 >
-                                    <Grid item>
+                                    {/* <Grid item> */}
                                         <div className={classes.buttons}>
                                             <Button
                                                 variant="contained"
@@ -682,7 +687,7 @@ class YeastDialog extends Component {
                                                 Get Availability
                                             </Button>
                                         </div>
-                                    </Grid>
+                                    {/* </Grid> */}
                                 </Grid>
                             }
                         </Grid>
@@ -693,7 +698,7 @@ class YeastDialog extends Component {
                         xs
                         container
                         spacing={24}
-                        style={{ marginTop: 5 }}
+                        style={{ marginTop: 5, marginBottom: 10 }}
                         direction={"row"}
                     >
                         <Formik
@@ -711,11 +716,12 @@ class YeastDialog extends Component {
                                             container
                                             spacing={24}
                                             direction={"row"}
-                                            justify="flex-start"
+                                            justify="center"
+                                            className={classes.paddingFix}
                                         >
-                                            <Grid item>
+                                            <Grid item xs={12} sm={4} md={4} className={classes.formFields} >
                                                 <FormControl>
-                                                    <InputLabel>Packaging</InputLabel>
+                                                    <InputLabel >Packaging</InputLabel>
                                                     <Select
                                                         value={this.state.packaging}
                                                         onChange={this.setPackaging}
@@ -734,7 +740,7 @@ class YeastDialog extends Component {
                                                 </FormControl>
                                             </Grid>
                                             {this.state.pack && (
-                                                <Grid item>
+                                                <Grid item xs={12} sm={4} md={4} className={classes.formFields}>
                                                     <FormControl>
                                                         <InputLabel>Pack</InputLabel>
                                                         <Select
@@ -755,8 +761,9 @@ class YeastDialog extends Component {
                                                     </FormControl>
                                                 </Grid>
                                             )}
-                                            <Grid item>
-                                              <form>
+                                            {/* <Grid item>
+                                              <form> */}
+                                            <Grid item xs={12} sm={4} md={4} className={classes.formFields}>
                                                 <TextField
                                                     id="quantity"
                                                     label="Quantity"
@@ -771,17 +778,18 @@ class YeastDialog extends Component {
                                                       : (this.item.type == 5 ? "0.5L increments" : "")
                                                     }
                                                 />
-                                              </form>
-                                            </Grid>
-                                            <Grid
+                                                </Grid>
+                                              {/* </form>
+                                            </Grid> */}
+                                            {/* <Grid
                                                 item
                                                 xs
                                                 container
                                                 spacing={24}
                                                 direction={"row"}
-                                                justify="flex-end"
-                                            >
-                                                <Grid item>
+                                                justify="center"
+                                            > */}
+                                                {/* <Grid item>
                                                     <div className={classes.buttons}>
                                                         <Button
                                                             type="submit"
@@ -792,9 +800,31 @@ class YeastDialog extends Component {
                                                             Add to Cart
                                                         </Button>
                                                     </div>
-                                                </Grid>
-                                            </Grid>
+                                                </Grid> */}
+                                               
+                                            {/* </Grid> */}
+                                            
                                         </Grid>
+                                        <Grid
+                                            item
+                                            xs
+                                            container
+                                            spacing={24}
+                                            direction={"row"}
+                                            justify="center"
+                                        >
+                                        <div className={classes.addButton}>
+                                            <Button
+                                                //className={classes.button}
+                                                type="submit"
+                                                variant="contained"
+                                                color="primary"
+                                                // className={classes.button}
+                                            >
+                                                Add to Cart
+                                            </Button>
+                                        </div>
+                                      </Grid>
                                     </Form>
                                 )
                             }
@@ -825,16 +855,56 @@ const styles = theme => ({
         borderRadius: "50%",
         padding: 5,
         width: 37,
-        height: 37
+        height: 37,
+        [theme.breakpoints.down("sm")]: {
+            width: 30,
+            height: 30,
+        }
+    },
+    formFields:{
+        display:'block',
+         marginTop:'15px',
+        // marginLeft:'0px',
+        [theme.breakpoints.down("xs")]: {
+            display:'flex',
+            justifyContent:'center',
+            marginTop:'15px',
+            marginLeft:'42px',
+        }
     },
     buttons: {
         display: "flex",
-        justifyContent: "flex-end"
+        justifyContent: "center"
+    },
+    addButton:{
+        display: "flex",
+        justifyContent: "center",
+        marginLeft:'42px',
+        marginTop:'14px',
+        // [theme.breakpoints.down("xs")]: {
+        //     marginLeft:'16px',
+        // }
+
+
     },
     button: {
         marginTop: theme.spacing.unit,
-        marginRight: theme.spacing.unit * -5
     },
+    description:{
+        textAlign:'center',
+        marginTop:20
+    },
+    paddingFix:{
+         paddingLeft:'unset',
+         marginTop:'5px',
+         [theme.breakpoints.between("sm", "xl")]: {
+            paddingLeft:'100px',
+        },
+        [theme.breakpoints.down("xs")]: {
+            paddingLeft:'0px',
+        },
+        
+},
     close: { position: "absolute", right: 0, top: 0 },
     form:{
         width:'100%',

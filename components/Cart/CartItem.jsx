@@ -72,44 +72,30 @@ class CartItem extends Component {
         return (
             <Grid item className="cart-item">
                 <Grid container spacing={24}>
-                    <Grid item xs={2} className="first-block" style={{
-                        backgroundImage: `url('static/images/categories/Category-ale.jpg')`
-                    }}>
+                <Grid
+            item
+            xs={5}
+            sm={2}
+            className="first-block"
+            style={{
+              backgroundImage: `url('static/images/categories/Category-ale.jpg')`,
+              backgroundRepeat:'no-repeat',
+              backgroundSize:'cover'
+            }}>
                         <img className="icon" src="static/images/icons/Ale-icon.svg"/>
                         <div className="code"></div>
                         <div className="name">{this.props.item.Name}</div>
                     </Grid>
-                    <Grid className="detail" item xs={8}>
-                        {this.props.item.Name}
-                        <br/>
-                        {this.props.item.details} {this.props.item.details_link}
-                        <br/>
-                        {/* <span className="sooner" onClick={this.props.openWantSoonerDialog}>Want this Strain sooner?</span> */}
-                    </Grid>
-                    {/*
-                    <Grid className="detail" item xs={2}>
-                        <span className="heading">Packing</span>
-                        <FormSelectbox
-                            value={this.state.defaulPacking}
-                            options={this.state.options_packing}
-                            onChange={() => {}}
-                        />
-                    </Grid>
-                    <Grid className="detail" item xs={2}>
-                        <span className="heading">Pack</span>
-                        <FormSelectbox
-                            value={this.state.defaulPack}
-                            options={this.state.options_pack}
-                            onChange={() => {}}
-                        />
-                    </Grid>
-                    */}
-                    <Grid className="detail" item xs={1}>
-                        <span className="heading">Quantity</span>
-                        <FormTextbox
-                            label="Quantity"
-                            value={this.props.item.OrderDetailQty}
-                            onChange={() => {}}
+                    <Grid className="detail" item container xs={7} sm={10}>
+            <Grid className="item-name" item xs={12} sm={8} lg={10}>
+              {this.props.item.Name}
+            </Grid>
+            <Grid item xs={12} sm={2} lg={1}>
+              <span className="heading">Quantity</span>
+              <FormTextbox
+                label="Quantity"
+                value={this.props.item.OrderDetailQty}
+                onChange={() => {}}
                         />
 
                         {/*
@@ -122,21 +108,18 @@ class CartItem extends Component {
                             type="number"
                         />
                     */}
-                    </Grid>
-                    <Grid className="detail" item xs={1}>
-                        {/*
-                        <br/>
-                        $255
-                        */}
-                        <br/>
-                        <FormButton
-                            className="delete-button"
-                            text="DELETE"
-                            onClick={() => this.props.removeItem(this.props.index)}
-                            angleBlockRight={true}
-                        />
-                    </Grid>
+                   </Grid>
+            <Grid className="delete-button-items" item xs={12} sm={2} lg={1}>
+              {/* <br /> */}
+              <FormButton
+                className="delete-button"
+                text="DELETE"
+                onClick={() => this.props.removeItem(this.props.index)}
+                angleBlockRight={true}
+              />
+            </Grid>
                 </Grid>
+            </Grid>
             </Grid>
         )
     }

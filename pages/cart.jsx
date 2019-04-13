@@ -55,7 +55,7 @@ class Cart extends Component {
         return (
             <NavBarUserSearchDrawerLayout>
                 <PageContainer heading="SHOPPING CART" id="cart-box">
-                    <Grid container spacing={24}>
+                    <Grid container spacing={24} className={classes.contentBox}>
                         {this.props.cart.items && this.props.cart.items.map((item, i) => {
                             return (
                                 <CartItem key={i} item={item} index={i} />
@@ -101,6 +101,11 @@ const styles = theme => ({
         display: "flex",
         flexDirection: "column"
     },
+    contentBox:{
+        // width: '97%',
+        // margin: '8px'
+    
+    }
 });
 
 Cart.propTypes = {

@@ -9,13 +9,17 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import FeedbackIcon from "@material-ui/icons/Feedback";
 import PowerSettingsNew from "@material-ui/icons/PowerSettingsNew";
+import Dialpad from "@material-ui/icons/Dialpad";
+import Group from "@material-ui/icons/Group";
+import Home from "@material-ui/icons/Home";
 import { withStyles } from "@material-ui/core/styles";
 
 import { userActions } from "appRedux/actions/userActions";
 
 class SideBarItems extends Component {
     render() {
-        return (
+        const { classes, theme } = this.props
+        return(
             <div>
                 <Link prefetch href="/myaccount">
                     <ListItem button>
@@ -45,23 +49,51 @@ class SideBarItems extends Component {
                   </ListItem>
                 </a>
 
-                <ListItem
-                    button
-                    onClick={() => {
-                        this.props.userLogout();
-                    }}
-                >
-                    <ListItemIcon>
-                        <PowerSettingsNew />
-                    </ListItemIcon>
-                    <ListItemText primary="Log Out" />
-                </ListItem>
-            </div>
-        );
+         <Link prefetch href="/">
+        <ListItem className={classes.applinks}>
+            <ListItemIcon>
+                <Home />
+            </ListItemIcon>
+            <ListItemText primary="Store" />
+        </ListItem>
+        </Link>
+
+         <Link prefetch href="/calculator">
+        <ListItem className={classes.applinks}>
+            <ListItemIcon>
+                <Dialpad />
+            </ListItemIcon>
+            <ListItemText primary="Calculator" />
+        </ListItem>
+        </Link>
+        <Link prefetch href="/">
+        <ListItem className={classes.applinks}>
+            <ListItemIcon>
+                <Group />
+            </ListItemIcon>
+            <ListItemText primary="About Us" />
+        </ListItem>
+        </Link>
+
+        <ListItem button onClick={() => {this.props.userLogout()}}>
+            <ListItemIcon>
+                <PowerSettingsNew />
+            </ListItemIcon>
+            <ListItemText primary="Log Out" />
+        </ListItem>
+    </div>
+        )
     }
 }
 
-const styles = theme => ({});
+const styles = theme => ({
+    applinks:{
+        display: "none",
+        [theme.breakpoints.down("sm")]: {
+            display: "flex"
+        }
+    }
+})
 
 const mapStateToProps = state => {
     return {
