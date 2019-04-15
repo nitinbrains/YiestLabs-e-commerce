@@ -36,10 +36,6 @@
 		}
 	}
 
-	.MuiTabs-flexContainer-692 {
-		display: flex !important;
-		flex-wrap: wrap !important  ;
-	}
 
 	.btn {
 		padding: 12px !important;
@@ -155,7 +151,17 @@
 
 	}
 
-
-
-
 }
+
+.switch-margin{
+    margin-top:0px !important;
+    margin-bottom: 0px !important;
+  }
+
+  @media only screen and (max-width: 960px) {
+
+  .switch-margin{
+    margin-top:15px !important;
+    margin-bottom: 15px !important;
+  }
+} 

@@ -325,9 +325,9 @@ class Store extends Component {
                 <Grid item xs={1} dir="ltr">
                     <FormButton className="back-button" text="Back" onClick={() => this.categoryBack()} />
                 </Grid>
-                <Grid container spacing={8} item xs={12} justify="center">
-                    <Grid item xs={3} dir="rtl">
-                        <Paper square>
+                <Grid container className="switch-margin" item xs={12} justify="center">
+                    <Grid item xs={3} dir="rtl" style={{maxWidth:'unset'}}>
+                        <Paper>
                             <Tabs value={this.state.tab} indicatorColor="primary"
                               textColor="primary" variant="fullWidth"
                               onChange={this.handleTab} 
