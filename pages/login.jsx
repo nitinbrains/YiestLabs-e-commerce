@@ -92,10 +92,12 @@ class Login extends Component {
                                 top: -60
                             }}
                         >
-                            <img
-                                src="static/images/logo_circle.png"
-                                height="130"
-                            />
+                            <a href="/">
+                              <img
+                                  src="static/images/logo_circle.png"
+                                  height="130"
+                              />
+                            </a>
                         </div>
 
                         <Typography variant="headline" align="center">

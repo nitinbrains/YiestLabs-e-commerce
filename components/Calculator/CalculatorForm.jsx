@@ -198,7 +198,7 @@ class CalculatorForm extends Component {
                                             name="volUnit"
                                             label="Unit"
                                             value={_get(value, 'volUnit')}
-                                            options={Object.keys(volChoices)}
+                                            options={volUnits}
                                             onChange={(e) => this.changeUnit(e, formikProps, 'vol')}
                                         />
                                     </Grid>
@@ -237,7 +237,7 @@ class CalculatorForm extends Component {
                                             name="tempUnit"
                                             label="Unit"
                                             value={_get(value, 'tempUnit')}
-                                            options={Object.keys(tempChoices)}
+                                            options={SalesLib.tempUnits}
                                             onChange={(e) => this.changeUnit(e, formikProps, 'temp')}
                                         />
                                     </Grid>
@@ -275,7 +275,7 @@ class CalculatorForm extends Component {
                                             label="Unit"
                                             name="gravUnit"
                                             value={_get(value, 'gravUnit')}
-                                            options={Object.keys(gravChoices)}
+                                            options={SalesLib.gravUnits}
                                             onChange={(e) => this.changeUnit(e, formikProps, 'grav')}                                                        />
                                     </Grid>
                                 );
@@ -286,7 +286,7 @@ class CalculatorForm extends Component {
                 <Grid container spacing={24} className="button-grid">
                     <Grid item xs={12} md={6}>
                         * Advanced recommendations based on batch size, fermentation temperature and gravity.
-                        For brewers yeast only. If you are using White Labs yeast based on batch-size specific 
+                        For brewers yeast only. If you are using White Labs yeast based on batch-size specific
                         recommendations and are having success, please continue to do so.
                     </Grid>
                     <Grid item xs={12} md={6}>

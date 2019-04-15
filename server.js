@@ -19,14 +19,14 @@ var system = dev ? JSON.parse(fs.readFileSync("config.json", "utf8")) : JSON.par
 // You will need to npm install https-proxy-agent if you haven't done so already.
 /*
 var HttpsProxyAgent = require('https-proxy-agent');
+var HttpProxyAgent = require('http-proxy-agent');
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 */
-
 // Place the code below in a fetch block to make that block use a proxy.
 // You will probably need to change the port in the proxy agent.
 // Format may be different for GET or POST requests.
 /*,
-agent:new HttpsProxyAgent('http://127.0.0.1:5916'),
+agent:new HttpsProxyAgent('http://127.0.0.1:23772'),
 rejectUnauthorized: false,
 strictSSL: false
 */
