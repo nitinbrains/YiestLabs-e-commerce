@@ -89,6 +89,8 @@ class CartItem extends Component {
                     <Grid className="detail" item container xs={7} sm={10}>
             <Grid className="item-name" item xs={12} sm={8} lg={10}>
               {this.props.item.Name}
+              <br />
+              {this.props.item.details} {this.props.item.details_link}
             </Grid>
             <Grid item xs={12} sm={2} lg={1}>
               <span className="heading">Quantity</span>

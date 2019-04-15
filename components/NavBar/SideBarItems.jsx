@@ -40,7 +40,7 @@ class SideBarItems extends Component {
                     </ListItem>
                 </Link>
 
-                <a href="mailto:mwhite@whitelabs.com?subject=YMO%202.0%20Feedback" style={{ textDecoration: "none" }}>
+                <a href="mailto:yeastman2.0@gmail.com?subject=YMO%202.0%20Feedback" style={{ textDecoration: "none" }}>
                   <ListItem button>
                       <ListItemIcon>
                           <FeedbackIcon />
