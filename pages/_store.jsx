@@ -325,11 +325,14 @@ class Store extends Component {
                 <Grid item xs={1} dir="ltr">
                     <FormButton className="back-button" text="Back" onClick={() => this.categoryBack()} />
                 </Grid>
-                <Grid container spacing={8} item xs={10} justify="center">
+                <Grid container spacing={8} item xs={12} justify="center">
                     <Grid item xs={3} dir="rtl">
                         <Paper square>
-                            <Tabs value={this.state.tab} indicatorColor="primary" textColor="primary" onChange={this.handleTab} centered>
-                                <Tab label="Retail" />
+                            <Tabs value={this.state.tab} indicatorColor="primary"
+                              textColor="primary" variant="fullWidth"
+                              onChange={this.handleTab} 
+                            >
+                                <Tab label="Homebrew" />
                                 <Tab label="Professional" />
                             </Tabs>
                         </Paper>
@@ -337,9 +340,6 @@ class Store extends Component {
                 </Grid>
 
                 <div className="searchmobile">
-                    <div className={classes.searchIconmobile}>
-                        <SearchIcon />
-                    </div>
                     <InputBase
                         placeholder="Search…"
                         name="searchTextmobile"
@@ -350,6 +350,9 @@ class Store extends Component {
                         value={this.state.searchTextmobile}
                         onChange={e => this.onValuechange(e)}
                     />
+                      <div className={classes.searchIconmobile}>
+                        <SearchIcon />
+                    </div>
                 </div>
 
                 {sectionTitle && (
@@ -426,13 +429,16 @@ const styles = theme => ({
     },
 
     searchIconmobile: {
-        width: theme.spacing.unit * 9,
-        height: "100%",
-        position: "absolute",
+        width: "34px",
+        color:'white',
+        position: "relative",
+        background:'#f28531',
         pointerEvents: "none",
         display: "flex",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        margin:'3px',
+        borderRadius:'5px'
     },
     inputRootmobile: {
         color: "inherit",
