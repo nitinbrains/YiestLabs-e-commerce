@@ -254,13 +254,6 @@ app.prepare().then(() => {
         const newPassword = request.newPassword;
         var time = new Date();
 
-        var subjective;
-        if (user.email) {
-            subjective = "<Email>" + user.email + "</Email>";
-        } else {
-            subjective = "<UserName>" + user.username + "</UserName>";
-        }
-
         var data = '<CustomerInformationRequest Operation="Change Password"><Token>' + system.YeastmanAuthentication.Token + '</Token>'
             + '<NetSuiteID>' + user.id + '</NetSuiteID>'
             + '<Email>' + user.email + '</Email>'
@@ -269,7 +262,7 @@ app.prepare().then(() => {
             + '<Nonce>' + Utils.uuid() + '</Nonce>'
         + '</CustomerInformationRequest>';
         
-        data = 'Validate=' + system.CryptoJS.AES.encrypt(data, system.YeastmanAuthentication.Auth, { mode: system.CryptoJS.mode.CBC, padding: system.CryptoJS.pad.Pkcs7, iv: system.YeastmanAuthentication.iv }).toString();
+        data = 'Validate=' + CryptoJS.AES.encrypt(data, system.YeastmanAuthentication.Auth, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: system.YeastmanAuthentication.iv }).toString();
         fetch('https://www.yeastman.com/Login/Validator.aspx', {
             method: 'POST',
             headers: {

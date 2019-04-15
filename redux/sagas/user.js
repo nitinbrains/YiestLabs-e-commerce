@@ -365,7 +365,7 @@ export function* forgotPassword(action) {
         var {
             res,
             error
-        } = yield call(api.changePassword, { request });
+        } = yield call(api.forgotPassword, { request });
         if (error) throw error;
     } catch (error) {
         if (error.status) {
