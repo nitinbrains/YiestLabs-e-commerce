@@ -30,10 +30,12 @@ function ForgotPassword(props) {
                 <Card>
                     <CardHeader color="primary">
                         <div className={classes.logo}>
-                            <img
-                                src="static/images/logoHeader.png"
-                                width="100%"
-                            />
+                            <a href="/">
+                                <img
+                                    src="static/images/logoHeader.png"
+                                    width="100%"
+                                />
+                            </a>
                         </div>
                     </CardHeader>
 

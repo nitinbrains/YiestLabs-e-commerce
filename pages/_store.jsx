@@ -329,7 +329,7 @@ class Store extends Component {
                     <Grid item xs={3} dir="rtl">
                         <Paper square>
                             <Tabs value={this.state.tab} indicatorColor="primary" textColor="primary" onChange={this.handleTab} centered>
-                                <Tab label="Homebrew" />
+                                <Tab label="Retail" />
                                 <Tab label="Professional" />
                             </Tabs>
                         </Paper>

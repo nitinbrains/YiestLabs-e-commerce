@@ -81,7 +81,7 @@ class ServicesDialog extends Component {
                 "Save BIG on our most popular analytical tests! Participate in Big QC Day by purchasing your kit by August 6th, sending your samples in by August 20th and we’ll get you results by September 10th.";
         } else {
             cartItem.details =
-                "Please send your samples to:\nWhite Labs\nAttn: Analytical Lab\n9450 Candida Street\nSan Diego, CA 92126\nFor information on how much to send please visit:";
+                "Please send your samples to:\nWhite Labs\nAttn: Analytical Lab\n9557 Candida Street\nSan Diego, CA 92126\nFor information on how much to send please visit:";
             cartItem.details_link =
                 "https://www.whitelabs.com/other-products/analytical-lab-services";
         }
