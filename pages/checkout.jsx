@@ -127,6 +127,7 @@ class Checkout extends Component {
         this.setState({ completed, activeStep: step });
     };
 
+    //TODO: CHange method of setting state
     handleChangeCouponCode = event => {
         this.setState({ couponCode: event.target.value });
         this.props.order.couponCode = event.target.value;

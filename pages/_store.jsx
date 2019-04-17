@@ -332,7 +332,7 @@ class Store extends Component {
                               textColor="primary" variant="fullWidth"
                               onChange={this.handleTab} 
                             >
-                                <Tab label="Homebrew" />
+                                <Tab label="Retail" />
                                 <Tab label="Professional" />
                             </Tabs>
                         </Paper>
