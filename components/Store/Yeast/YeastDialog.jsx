@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import Router from 'next/router';
+import Link from "next/link";
 import axios from 'axios';
 
 import PropTypes from "prop-types";
@@ -509,8 +510,14 @@ class YeastDialog extends Component {
         Router.push(`/calculator?id=${this.item.volID[0]}`);
     }
 
+    handleClick=(partNum)=>{
+        Router.push(`/yiestparam?item=${partNum}`)
+    }
+
     render()
     {
+        console.log(this.props,'jjjjjjjjjjjj')
+        const{partNum}=this.props.item;
         const { classes } = this.props;
         const { errors, availability } = this.state;
         const spaceIndex = this.item.Name.indexOf(" ");
@@ -545,7 +552,7 @@ class YeastDialog extends Component {
                         spacing={4}
                     >
                         <Grid item>
-                            <Typography variant="h5">
+                            <Typography variant="h5" onClick={()=>this.handleClick(partNum)}>
                                 {itemID} | {itemName}
                             </Typography>
                         </Grid>
