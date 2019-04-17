@@ -64,13 +64,12 @@ class Cart extends Component {
                     </Grid>
                     <Grid container spacing={24} dir="rtl" className="block-checkout-button">
                         <Grid item xs={12} >
-                            { cart.items.length > 0 ?
-                                <FormButton
-                                    text="PROCEED TO CHECKOUT"
-                                    onClick={this.handleProceed}
-                                    className="checkout-button"
-                                />
-                                :
+                            { cart.items.length > 0 
+                            ?
+                                <Button variant="contained" color="primary" className={classes.button} onClick={this.handleProceed}>
+                                    Proceed to Checkout
+                                </Button>
+                            :
                                 <Typography variant="h5" color="primary" align="center">
                                     Cart is Empty
                                 </Typography>
@@ -84,6 +83,10 @@ class Cart extends Component {
 }
 
 const styles = theme => ({
+    button: {
+        marginTop: theme.spacing.unit * 3,
+        marginLeft: theme.spacing.unit
+    },
     hide: {
         display: "none"
     },

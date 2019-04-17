@@ -10,7 +10,8 @@ const initialState = {
     orderSub: 0,
     shippingOptions: ["Ship All Together", "Earliest For Each", "Custom"],
     selectedShippingOption: 'Ship All Together',
-    removedItems: []
+    removedItems: [],
+    orderPlaced: false
 };
 
 /* ------------- Hookup Reducers To Types ------------- */
@@ -19,9 +20,11 @@ export default createReducer(initialState, {
 
     [orderTypes.PREPARE_ORDER_SUCCESS]: (state, { data }) => ({
         ...data,
+        orderPlaced: false
     }),
     [orderTypes.PLACE_ORDER_SUCCESS]: (state, { data }) => ({
         ...initialState,
+        orderPlaced: true
     }),
     [orderTypes.SET_ITEMS_ATTEMPT]: (state, { data: { items }}) => ({
         ...state,

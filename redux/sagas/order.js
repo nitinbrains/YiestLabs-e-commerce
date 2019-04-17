@@ -1,10 +1,8 @@
 import { take, call, put, cancelled, takeEvery, all, fork, select  } from 'redux-saga/effects';
-import Router from 'next/router';
 
 import * as api from 'services/';
 import { orderActions } from 'appRedux/actions/orderActions';
 import { messageActions } from 'appRedux/actions/messageActions';
-import { cartActions } from 'appRedux/actions/cartActions';
 
 import {
     changeShippingOption,
@@ -19,7 +17,6 @@ const replace = (arr, newItem) => arr.map(
 );
 
 /****** Sagas logic ********/
-
 export function * prepareOrder(action) {
     const { responseSuccess, responseFailure } = action;
     try {
@@ -65,19 +62,29 @@ export function * placeOrder(action) {
         if (error) {
             throw error
         } else {
-            sessionStorage.setItem('orderComplete', 'yes');
             yield put(responseSuccess());
-            yield put(cartActions.clearCart());
-            yield put(
-                messageActions.showBanner({
-                    title: "Success",
-                    message: "Your order has been placed.",
-                    variant: "permanentSuccess"
-                })
-            );
-            Router.push('/');
-            //yield put(messageActions.showSnackbar({ title: 'Success', message: 'Order submitted', variant:'success' }));
         }
+    } catch (error) {
+        if(error.status){
+            // show network error is any regaring with api status
+            yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
+        } else {
+            if(error.code == 0 ){
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showSnackbar({ title: 'Yeastman', message: error.message, variant:'error' }));
+            } else if(error.code == -1){
+                // Other error when we have error with code == -1
+                yield put(messageActions.showSnackbar({ title: 'Error', message: error.message, variant:'error' }));
+            }
+        }
+        yield put(responseFailure(error));
+    }
+}
+
+export function * resetOrder(action) {
+    const { responseSuccess, responseFailure } = action;
+    try {
+        yield put(responseSuccess());
     } catch (error) {
         if(error.status){
             // show network error is any regaring with api status

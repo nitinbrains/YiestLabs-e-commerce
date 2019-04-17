@@ -197,7 +197,7 @@ export function* createUser(action) {
         if (res.error) throw error;
         request = {};
         request.id = res.id;
-        const { res: result, error } = yield call(api.createYeastmanAccount, { request });
+        const { res: { result }, error } = yield call(api.createYeastmanAccount, { request });
         yield put(responseSuccess());
         if (res.error) {
             yield put(

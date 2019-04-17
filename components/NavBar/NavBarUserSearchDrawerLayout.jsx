@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import Link from "next/link";
 import _size from "lodash/size";
 
-import InputBase from "@material-ui/core/InputBase";
 import PropTypes from "prop-types";
 import classNames from "classnames";
+import InputBase from "@material-ui/core/InputBase";
 import { withStyles } from "@material-ui/core/styles";
-import Link from "next/link";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";

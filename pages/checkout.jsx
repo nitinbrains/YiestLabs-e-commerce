@@ -31,6 +31,7 @@ import Billing from "components/Checkout/Billing/Billing";
 import Items from "components/Checkout/Items/Items";
 import Review from "components/Checkout/Review/Review";
 import RemovedItems from "components/Checkout/RemovedItems/RemovedItems";
+import OrderPlaced from "components/Checkout/OrderPlaced/OrderPlaced";
 
 import isLoggedUser from "hocs/isLoggedUser";
 import cartHasItems from "hocs/cartHasItems";
@@ -132,7 +133,7 @@ class Checkout extends Component {
     };
 
     render() {
-        const { classes, order, loading } = this.props;
+        const { classes, order: { orderPlaced}, loading } = this.props;
         let { activeStep } = this.state;
 
         if (loading.type === "orderComplete") {
@@ -154,7 +155,6 @@ class Checkout extends Component {
                     <MobileStepper variant="dots" steps={4} position="static" activeStep={this.state.activeStep} className={classes.root} />
                     <Stepper nonLinear activeStep={activeStep} className={classes.stepper}>
                         {steps.map((label, index) => {
-                            const props = {};
                             return (
                                 <Step key={label} className={label === "Items" && classes.step}>
                                     <StepButton onClick={this.handleStep(index)} completed={this.state.completed[index]}>
@@ -168,14 +168,16 @@ class Checkout extends Component {
                         })}
                     </Stepper>
                     <React.Fragment>
-                        {activeStep != steps.length && (
+                        {orderPlaced ?
+                            <OrderPlaced />
+                        :
                             <React.Fragment>
                                 {getStepContent(activeStep)}
                                 <div style={activeStep === steps.length - 1 ? { visible: "true", display: "block", textAlign: "right", width: "100%" } : { visible: "false", display: "none" }}>
                                     Coupon Code: &nbsp;
                                     <input type="text" name="couponCode" value={this.state.couponCode} onChange={this.handleChangeCouponCode.bind(this)} />
                                     <p style={{ fontSize: "small" }}>
-                                      Coupons will be reflected in "My Orders" and<br />email confirmation following your order.
+                                    Coupons will be reflected in "My Orders" and<br />email confirmation following your order.
                                     </p>
                                 </div>
                                 <div className={classes.buttons}>
@@ -197,7 +199,8 @@ class Checkout extends Component {
                                     </Button>
                                 </div>
                             </React.Fragment>
-                        )}
+                        }
+                        
                     </React.Fragment>
                 </div>
                 <Dialog open={this.state.terms}>
