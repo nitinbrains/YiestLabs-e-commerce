@@ -554,29 +554,27 @@ class Yeastparam extends Component {
                     item
                     container
                     xs
-                    style={{
-                        display: "flex",
-                        justifyContent:'center',
-                        marginTop: 10,
-                        marginBottom: 20
-                    }}
+                    className={classes.displayMargin}
                     direction={"row"}
                     // spacing={4}
                 >
                     <Grid item style={{display:'flex'}}>
-                        <Typography variant="h4" className={classes.titleMargin}>
+                        <Typography variant="h5" className={classes.titleMargin}>
                             {this.filteredItem && this.filteredItem.Name}
+                            <Divider variant="middle" />
                         </Typography>
+                        
                         <div
                             className={classes.circle}
                             style={{ backgroundColor: this.filteredItem ? getColor(this.filteredItem.salesCategory) : "" }}
                         >
                             <img 
                                 src={this.filteredItem ? getIcon(this.filteredItem.salesCategory):""}
-                                height="30"
+                    
+                                className={classes.imgHieght}
                             />
                         </div>
-                        <Divider variant="middle" />
+                        {/* <Divider variant="middle" /> */}
                     </Grid>
         
                     <Grid container spacing={24}>
@@ -589,6 +587,7 @@ class Yeastparam extends Component {
                         justify='center'
                         // xs={10}
                         // md={11}
+                        style={{marginTop:'15px'}}
                         direction={"row"}
                         spacing={4}
                     >
@@ -673,7 +672,7 @@ class Yeastparam extends Component {
               <Grid
                     item
                     container
-                    style={{ marginTop: 5 }}
+                    // style={{ marginTop: 5 }}
                     direction={"row"}
                     justify="center"
                 >
@@ -867,36 +866,37 @@ const styles = theme => ({
         textAlign: "center"
     },
     container: {
-        marginTop: 70,
-        width:'80%',
+        marginTop: 40,
+        width:'60%',
         border: "solid 1px",
         borderColor: "#CCCCCC",
         textAlign:'justify',
         display:'flex',
         justifyContent:'center',
-        margin:'0 auto'
+        margin:'0 auto',
 
     
-        // padding: theme.spacing.unit * 4,
-        // [theme.breakpoints.down("sm")]: {
-        //     width:'100%',
-        // },
-        // [theme.breakpoints.up("md")]: {
-        //     marginLeft:"auto",
-        //     marginRight: "auto"
-        // },
-        // [theme.breakpoints.up("lg")]: {
-        //     marginLeft: "auto",
-        //     marginRight: "auto"
-        // },
-        // [theme.breakpoints.up("xl")]: {
-        //     marginLeft: "auto",
-        //     marginRight: "auto"
-        // }
+        padding: theme.spacing.unit * 4,
+        [theme.breakpoints.down("sm")]: {
+            width:'100%',
+        },
+        [theme.breakpoints.up("md")]: {
+            marginLeft:"auto",
+            marginRight: "auto"
+        },
+        [theme.breakpoints.up("lg")]: {
+            marginLeft: "auto",
+            marginRight: "auto"
+        },
+        [theme.breakpoints.up("xl")]: {
+            marginLeft: "auto",
+            marginRight: "auto"
+        }
     },
     titleMargin:{
         marginTop:'30px',
-        marginBottom:'5px'
+        marginBottom:'5px',
+        textAlign:'center'
     },
     quantity: {
         width: 50
@@ -913,8 +913,8 @@ const styles = theme => ({
             backgroundColor:'#f28411 !important',
             // color:'#f28411 !important',
             fontWeight:'bold !important',
-            marginLeft: '25px !important',
-            marginTop:'100px !important'
+            marginLeft: '16px !important',
+            marginTop:'65px !important'
         
     },
     circle: {
@@ -924,23 +924,30 @@ const styles = theme => ({
         alignItems: "center",
         borderRadius: "50%",
         padding: 5,
-        width: 57,
-        height: 57,
+        width: 47,
+        height: 47,
         marginTop:'20px',
         marginLeft:'5px',
         [theme.breakpoints.down("sm")]: {
-            width: 30,
+            width: 40,
             height: 30,
+            marginTop: '32px'
+        }
+    },
+    imgHieght:{
+        height:20,
+        [theme.breakpoints.down("sm")]: {
+            height: 20,
         }
     },
     formFields: {
         display: 'block',
-        marginTop: '15px',
+        marginTop: '10px',
         // marginLeft:'0px',
         [theme.breakpoints.down("xs")]: {
             display: 'flex',
             justifyContent: 'center',
-            marginTop: '15px',
+            marginTop: '10px',
             marginLeft: '42px',
         }
     },
@@ -951,8 +958,9 @@ const styles = theme => ({
     addButton: {
         display: "flex",
         justifyContent: "center",
-        marginLeft: '27px',
-        marginTop: '14px',
+        marginLeft: '21px',
+        marginTop: '20px',
+        marginBottom:'20px'
         // [theme.breakpoints.down("xs")]: {
         //     marginLeft:'16px',
         // }
@@ -963,15 +971,25 @@ const styles = theme => ({
         marginTop: theme.spacing.unit*3,
     },
     description: {
-        textAlign: 'center',
-        margin: 20 
+        textAlign: 'justify',
+        marginTop:10
         
+    },
+    displayMargin:{
+        display: "flex",
+        justifyContent:'center',
+        marginTop: 10,
+        marginBottom: 20,
+        maxWidth:'70%',
+        [theme.breakpoints.down("sm")]: {
+            maxWidth:'100%',
+        },
     },
     paddingFix: {
         paddingLeft: 'unset',
         marginTop: '5px',
         [theme.breakpoints.between("sm", "xl")]: {
-            paddingLeft: '215px',
+            paddingLeft: '94px',
         },
         [theme.breakpoints.down("xs")]: {
             paddingLeft: '0px',

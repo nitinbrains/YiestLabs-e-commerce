@@ -106,7 +106,7 @@ const styles = theme => ({
     },
     content: {
         flexGrow: 1,
-        marginLeft: 56,
+        // marginLeft: 56,
         [theme.breakpoints.up("sm")]: {
             marginLeft: 72
         },
