@@ -39,7 +39,7 @@ class Billing extends Component {
         this.currentMonth = new Date().getMonth().toString();
         this.currentYear = new Date().getFullYear().toString();
         this.state = {
-            terms: "",
+            terms: props.user.terms,
             openDialogCard: false,
             openDialogAddress: false,
             addCard: false,
@@ -176,7 +176,7 @@ class Billing extends Component {
                             ) : (
                                 <div>
                                     <Typography variant="body2">
-                                        NET10
+                                        { WLHelper.getPaymentTerm(this.state.terms) }
                                     </Typography>
                                     <Typography>Your Payment</Typography>
                                     <Typography>Information</Typography>
