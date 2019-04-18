@@ -380,10 +380,10 @@ export function* forgotPassword(action) {
         } else {
             if (error.code == 0) {
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showBanner({ title: "Yeastman", message: error.message, variant: "error" }));
+                yield put(messageActions.showSnackbar({ title: "Yeastman", message: error.message, variant: "error" }));
             } else if (error.code == -1) {
                 // Other error when we have error with code == -1
-                yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
+                yield put(messageActions.showSnackbar({ title: "Error", message: error.message, variant: "error" }));
             }
         }
         yield put(responseFailure(error));

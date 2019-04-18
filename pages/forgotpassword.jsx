@@ -52,7 +52,7 @@ function ForgotPassword(props) {
             <main className={classes.layout}>
                 <SimpleSnackbar
                     messageList={messages.snackbar || []}
-                    handleClose={() => this.props.hideSnackbar()}
+                    handleClose={() => props.hideSnackbar()}
                 />
                 <Card>
                     <CardHeader color="primary">
