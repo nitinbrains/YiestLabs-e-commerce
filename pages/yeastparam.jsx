@@ -11,6 +11,7 @@ import axios from 'axios';
 
 
 import PropTypes from "prop-types";
+import Divider from "@material-ui/core/Divider";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -545,10 +546,10 @@ class Yeastparam extends Component {
         const error = errors.packaging || errors.pack || errors.quantity;
         return (
             <NavBarLayout>
-                <div className={classes.container}>
-                <Grid item xs={1} dir="ltr">
+                 <Grid item xs={1} dir="ltr">
                     <FormButton className={classes.backbtn} text="Back" onClick={this.handleBack} />
                 </Grid>
+                <div className={classes.container}>
                 <Grid
                     item
                     container
@@ -560,25 +561,26 @@ class Yeastparam extends Component {
                         marginBottom: 20
                     }}
                     direction={"row"}
-                    spacing={4}
+                    // spacing={4}
                 >
-                    <Grid item>
-                        <Typography variant="h4">
+                    <Grid item style={{display:'flex'}}>
+                        <Typography variant="h4" className={classes.titleMargin}>
                             {this.filteredItem && this.filteredItem.Name}
                         </Typography>
-                    </Grid>
-                    <Grid container spacing={24}>
-                    <Grid item container justify="center">
                         <div
                             className={classes.circle}
                             style={{ backgroundColor: this.filteredItem ? getColor(this.filteredItem.salesCategory) : "" }}
                         >
-                            <img
+                            <img 
                                 src={this.filteredItem ? getIcon(this.filteredItem.salesCategory):""}
                                 height="30"
                             />
                         </div>
+                        <Divider variant="middle" />
                     </Grid>
+        
+                    <Grid container spacing={24}>
+    
                     </Grid>
 
                       <Grid
@@ -604,7 +606,7 @@ class Yeastparam extends Component {
                         </Grid>
 
                         <Grid item xs={12} md={6}>
-                            <div className='flex-center'>
+                            <div className='flex-center' >
                                 <Typography className="dialogVariant">Flocculation: </Typography>
                                 &nbsp;
                                     <Typography
@@ -668,7 +670,7 @@ class Yeastparam extends Component {
                     </Button>
                 </Grid>
 
-<Grid
+              <Grid
                     item
                     container
                     style={{ marginTop: 5 }}
@@ -892,6 +894,10 @@ const styles = theme => ({
         //     marginRight: "auto"
         // }
     },
+    titleMargin:{
+        marginTop:'30px',
+        marginBottom:'5px'
+    },
     quantity: {
         width: 50
     },
@@ -907,7 +913,8 @@ const styles = theme => ({
             backgroundColor:'#f28411 !important',
             // color:'#f28411 !important',
             fontWeight:'bold !important',
-            margin: '50px !important'
+            marginLeft: '25px !important',
+            marginTop:'100px !important'
         
     },
     circle: {
@@ -919,6 +926,8 @@ const styles = theme => ({
         padding: 5,
         width: 57,
         height: 57,
+        marginTop:'20px',
+        marginLeft:'5px',
         [theme.breakpoints.down("sm")]: {
             width: 30,
             height: 30,
