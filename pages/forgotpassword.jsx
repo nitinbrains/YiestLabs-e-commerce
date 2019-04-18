@@ -15,6 +15,7 @@ import CardHeader from "components/UI/Card/CardHeader.jsx";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 
+import Banner from "components/UI/Banner";
 import SimpleSnackbar from "components/Form/SimpleSnackbar";
 import { Formik, Form, Field } from "formik";
 
@@ -50,6 +51,7 @@ function ForgotPassword(props) {
     return (
         <React.Fragment>
             <main className={classes.layout}>
+                <Banner />
                 <SimpleSnackbar
                     messageList={messages.snackbar || []}
                     handleClose={() => props.hideSnackbar()}

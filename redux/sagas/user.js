@@ -371,19 +371,19 @@ export function* forgotPassword(action) {
         } else if (res.error) {
             throw res.error;
         } else {
-            yield put(messageActions.showSnackbar({ title: "Success", message: "Your password has been reset. Please watch your email for your new password.", variant: "success" }));
+            yield put(messageActions.showBanner({ title: "Success", message: "Your password has been reset. Please watch your email for your new password.", variant: "success" }));
         }
     } catch (error) {
         if (error.status) {
             // show network error is any regaring with api status
-            yield put(messageActions.showSnackbar({ title: "Error", message: error.message, variant: "error" }));
+            yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
         } else {
             if (error.code == 0) {
                 // Yeastman error when we have error with code == 0
-                yield put(messageActions.showSnackbar({ title: "Yeastman", message: error.message, variant: "error" }));
+                yield put(messageActions.showBanner({ title: "Yeastman", message: error.message, variant: "error" }));
             } else if (error.code == -1) {
                 // Other error when we have error with code == -1
-                yield put(messageActions.showSnackbar({ title: "Error", message: error.message, variant: "error" }));
+                yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
             }
         }
         yield put(responseFailure(error));
