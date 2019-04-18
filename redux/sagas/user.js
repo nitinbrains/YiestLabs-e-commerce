@@ -4,7 +4,7 @@ import _isEmpty from 'lodash/isEmpty';
 import _find from 'lodash/find';
 import _get from 'lodash/get';
 
-import { userActions, userTypes } from 'appRedux/actions/userActions';
+import { userActions } from 'appRedux/actions/userActions';
 import { messageActions } from 'appRedux/actions/messageActions';
 import { orderActions } from "appRedux/actions/orderActions";
 
@@ -355,13 +355,11 @@ export function* forgotPassword(action) {
     const { 
         responseSuccess, 
         responseFailure,
+        data: { email }
     } = action;
     try {
-        const user = yield select(state => state.user);
-
         let request = {};
-        request.user = user;
-        request.user.email = action.data.email;
+        request.email = email;
 
         const {
             res,

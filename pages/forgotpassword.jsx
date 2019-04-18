@@ -1,37 +1,59 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Link from "next/link";
-import Avatar from "@material-ui/core/Avatar";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import _get from "lodash/get";
+import _set from "lodash/set";
+import _isEmpty from "lodash/isEmpty";
+
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import Grid from "@material-ui/core/Grid";
-import InputLabel from "@material-ui/core/InputLabel";
 import TextField from "@material-ui/core/TextField";
-import LockIcon from "@material-ui/icons/LockOutlined";
 import Card from "components/UI/Card/Card.jsx";
 import CardBody from "components/UI/Card/CardBody.jsx";
 import CardHeader from "components/UI/Card/CardHeader.jsx";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Formik, Form, Field } from 'formik';
-import _get from "lodash/get";
-import { userActions } from "appRedux/actions/userActions";
-import * as Yup from 'yup';
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { messageActions } from 'appRedux/actions/messageActions';
+
+import SimpleSnackbar from "components/Form/SimpleSnackbar";
+import { Formik, Form, Field } from "formik";
+
+import { messageActions } from "appRedux/actions/messageActions";
+import { userActions } from 'appRedux/actions/userActions';
+
+const FormikErrorMessage = ({ error }) => {
+    return error ? <div className="error">{error}</div> : null;
+};
 
 function ForgotPassword(props) {
     const { classes, messages } = props;
-    const customFormValidation = Yup.object().shape({
-        resetPassword: Yup.string()
-            .email('Enter Valid Email')
-            .required('Required'),
-      });
+
+    const validate = (values) => {
+        let errors = {};
+
+        if(!_get(values, 'email')) {
+            _set(errors, 'email', 'Email is required');
+        }
+
+        return errors;
+    }
+
+    const forgotPassword = (values, { setErrors }) => {
+        let errors = validate(values);
+        if(_isEmpty(errors)) {
+            props.forgotPassword({email: values.email});
+        } else {
+            setErrors(errors);
+        }
+    }
+
     return (
         <React.Fragment>
             <main className={classes.layout}>
+                <SimpleSnackbar
+                    messageList={messages.snackbar || []}
+                    handleClose={() => this.props.hideSnackbar()}
+                />
                 <Card>
                     <CardHeader color="primary">
                         <div className={classes.logo}>
@@ -48,81 +70,37 @@ function ForgotPassword(props) {
                         <Typography variant="headline" align="center">
                             Forgot Password
                         </Typography>
-
-
-                        <form className={classes.form}>
                         <Formik
-                        initialValues={{
-                            resetPassword:'',
-                        }}
-                        validationSchema={customFormValidation}
-                        
-                        onSubmit={values => {
-                            values.email = values.resetPassword;
-                            props.forgotPassword(values);
-                        }}
+                            onSubmit={(values, actions) => forgotPassword(values, actions)}
                         >
-                        {({ errors, touched, isValidating }) => {
-                            return(
-                                <Form>
-                                    <Field 
-                                    name="resetPassword" 
-                                    component={(props)=>{
-                                    return(
-                                        <FormControl margin="normal" required fullWidth>
-                                            <TextField
-                                            label="Email Address"
-                                            margin='normal'
-                                            fullWidth
-                                            id="email"
-                                            name="email"
-                                            autoFocus
-                                            value={props.field.value}
-                                            onChange={event =>
-                                                {
-                                                props.form.setFieldValue('resetPassword',event.target.value);
-                                            }
-                                            }
-                                        />  
-                                        </FormControl>
-                                        )
-                                        }}
-                                    />
-                                    {errors.resetPassword && touched.resetPassword && <div style={{color:'red'}} >{errors.resetPassword}</div>}
-                                    <Button
-                                        type="submit"
-                                        fullWidth
-                                        variant="raised"
-                                        color="primary"
-                                        className={classes.submit}
-                                    >
-                                        Reset Password
-                                    </Button>
-                                </Form>
-                            )
-                        }}
+                            {({ errors }) => {
+                                return (
+                                    <Form>
+                                        <Field
+                                            render={({ field: { value, onChange }}) => {
+                                                return (
+                                                    <FormControl margin="normal" required fullWidth>
+                                                        <TextField
+                                                            label="Email Address"
+                                                            margin="normal"
+                                                            fullWidth
+                                                            name="email"
+                                                            autoFocus
+                                                            value={_get(value, 'email') || ''}
+                                                            onChange={onChange}
+                                                        />
+                                                    </FormControl>
+                                                );
+                                            }}
+                                        />
+                                        <FormikErrorMessage error={_get(errors, 'email')} />
+                                        <Button type="submit" fullWidth variant="raised" color="primary" className={classes.submit}>
+                                            Reset Password
+                                        </Button>
+                                    </Form>
+                                );
+                            }}
                         </Formik>
-                            {/* <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="email">
-                                    Email Address
-                                </InputLabel>
-                                <Input
-                                    id="email"
-                                    name="email"
-                                    autoComplete="email"
-                                    autoFocus
-                                />
-                            </FormControl>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="raised"
-                                color="primary"
-                                className={classes.submit}
-                            >
-                                Reset Password
-                            </Button> */}
-                        </form>
                     </CardBody>
                 </Card>
             </main>
@@ -164,10 +142,15 @@ ForgotPassword.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-const mapDispatchToProps = dispatch =>
-    bindActionCreators({ ...userActions, ...messageActions }, dispatch);
+const mapStateToProps = state => {
+    return {
+        messages: state.messages,
+    };
+};
+
+const mapDispatchToProps = dispatch => bindActionCreators({ ...userActions, ...messageActions }, dispatch);
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(withStyles(styles)(ForgotPassword));

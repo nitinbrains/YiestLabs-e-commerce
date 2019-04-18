@@ -205,22 +205,15 @@ app.prepare().then(() => {
     });
 
     server.post("/forgot-password", function(req, res, next) {
-        var user = req.body.request.user;
+        var request = req.body.request;
         var time = new Date();
-
-        var subjective;
-        if (user.email) {
-            subjective = "<Email>" + user.email + "</Email>";
-        } else {
-            subjective = "<UserName>" + user.username + "</UserName>";
-        }
 
         var data =
             '<CustomerInformationRequest Operation="Reset Password">' +
                 '<Token>' + system.YeastmanAuthentication.Token + "</Token>" +
                 "<TimeStamp>" + time.getTime() + "</TimeStamp>" +
                 "<Nonce>" + Utils.uuid() + "</Nonce>" +
-                subjective +
+                "<Email>" + request.email + "</Email>" +
             "</CustomerInformationRequest>";
         data =
             "Validate=" + CryptoJS.AES.encrypt(data, system.YeastmanAuthentication.Auth, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: system.YeastmanAuthentication.iv }).toString();
