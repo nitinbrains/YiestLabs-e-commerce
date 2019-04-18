@@ -145,7 +145,7 @@ class YeastDialog extends Component {
                 { label: "1L Nalgene Bottle", value: "6" },
                 { label: "PurePitch", value: "pp" },
                 { label: "Nalgene Bottle", value: "nl" },
-                { label: "Custom Pour", value: "3" },
+                { label: ((this.item.strainCategory == 32 || this.item.strainCategory == 33) ? "1L Nalgene Bottle" : "Custom Pour"), value: "3" },
                 { label: "Homebrew", value: "4" },
                 { label: "Slant", value: "5" },
                 { label: "Yeast", value: "0" }
@@ -214,7 +214,7 @@ class YeastDialog extends Component {
             // Custom Pour Strains
             if (item.type == 5) {
                 // Vault strains must have minimum 1.5L Custom Pour
-                if (item.salesCategory == 32) {
+                if (item.salesCategory == 32 && !(this.item.strainCategory == 32 || this.item.strainCategory == 33)) {
                     if (quantity < 1.5) {
                         // TO-DO: Display message to user
                         this.handleErrors('quantity', "Notice: The minimum quantity sold for Custom Pour Vault strains is 1.5L. Please adjust your quantity.")
@@ -234,7 +234,7 @@ class YeastDialog extends Component {
                 }
 
                 // Bacteria sold in 1L increments
-                if (item.salesCategory == 4) {
+                if (item.salesCategory == 4 || this.item.strainCategory == 32 || this.item.strainCategory == 33) {
                     if (parseFloat(quantity) / parseInt(quantity) != 1.0) {
                         quantity = Math.round(quantity);
 
@@ -283,7 +283,7 @@ class YeastDialog extends Component {
                 }
 
                 item.size = quantity;
-                item.details = quantity + "L Custom Pour";
+                item.details = quantity + ((this.item.strainCategory == 32 || this.item.strainCategory == 33) ? " 1L Nalgene Bottle(s)" : "L Custom Pour");
                 item.OrderDetailQty = parseFloat(quantity);
             }
 
@@ -358,7 +358,7 @@ class YeastDialog extends Component {
                     cartItem.type = 5;
                     cartItem.dispQuantity = 1;
                     cartItem.size = parseFloat(quantity);
-                    cartItem.details = quantity + "L Custom Pour";
+                    cartItem.details = quantity + ((this.item.strainCategory == 32 || this.item.strainCategory == 33) ? " 1L Nalgene Bottle(s)" : "L Custom Pour");
                     cartItem.relatives = [];
                     var multipliers = [0.5, 1.5, 2];
 
@@ -762,22 +762,28 @@ class YeastDialog extends Component {
                                                 </Grid>
                                             )}
                                             {/* <Grid item>
-                                              <form> */}
+                                              <form> 
+                                              //This particular text field must be enclosed in a <form> tag
+                                              //or else the user is not allowed to order Vault items in 0.5 increments
+                                              //due to the handling of the HTML5 "number" input type
+                                              */}
                                             <Grid item xs={12} sm={4} md={4} className={classes.formFields}>
-                                                <TextField
-                                                    id="quantity"
-                                                    label="Quantity"
-                                                    className={classes.quantity}
-                                                    value={this.state.quantity}
-                                                    onChange={this.changeQuantity}
-                                                    type="number"
-                                                    step={this.item.salesCategory == 32 || this.item.type == 5 ? "0.5" : "1"}
-                                                    pattern={this.item.salesCategory == 32 || this.item.type == 5 ? "-?[0-9]*(\.[5]+)?" : ""}
-                                                    error={
-                                                      this.item.salesCategory == 32 ? ">= 1.5 in 0.5L increments"
-                                                      : (this.item.type == 5 ? "0.5L increments" : "")
-                                                    }
-                                                />
+                                                <form>
+                                                    <TextField
+                                                        id="quantity"
+                                                        label="Quantity"
+                                                        className={classes.quantity}
+                                                        value={this.state.quantity}
+                                                        onChange={this.changeQuantity}
+                                                        type="number"
+                                                        step={this.item.salesCategory == 32 || this.item.type == 5 ? "0.5" : "1"}
+                                                        pattern={this.item.salesCategory == 32 || this.item.type == 5 ? "-?[0-9]*(\.[5]+)?" : ""}
+                                                        error={
+                                                          this.item.salesCategory == 32 ? ">= 1.5 in 0.5L increments"
+                                                          : (this.item.type == 5 ? "0.5L increments" : "")
+                                                        }
+                                                    />
+                                                </form>
                                                 </Grid>
                                               {/* </form>
                                             </Grid> */}
