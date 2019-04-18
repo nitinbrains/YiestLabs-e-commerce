@@ -15,10 +15,15 @@ import CardHeader from "components/UI/Card/CardHeader.jsx";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Formik, Form, Field } from 'formik';
+import _get from "lodash/get";
+import { userActions } from "appRedux/actions/userActions";
 import * as Yup from 'yup';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { messageActions } from 'appRedux/actions/messageActions';
 
 function ForgotPassword(props) {
-    const { classes } = props;
+    const { classes, messages } = props;
     const customFormValidation = Yup.object().shape({
         resetPassword: Yup.string()
             .email('Enter Valid Email')
@@ -53,8 +58,8 @@ function ForgotPassword(props) {
                         validationSchema={customFormValidation}
                         
                         onSubmit={values => {
-                            // same shape as initial values
-                            
+                            values.email = values.resetPassword;
+                            props.forgotPassword(values);
                         }}
                         >
                         {({ errors, touched, isValidating }) => {
@@ -159,4 +164,10 @@ ForgotPassword.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(ForgotPassword);
+const mapDispatchToProps = dispatch =>
+    bindActionCreators({ ...userActions, ...messageActions }, dispatch);
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(withStyles(styles)(ForgotPassword));

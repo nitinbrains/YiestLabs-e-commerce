@@ -361,12 +361,20 @@ export function* forgotPassword(action) {
 
         let request = {};
         request.user = user;
+        request.user.email = action.data.email;
 
-        var {
+        const {
             res,
             error
         } = yield call(api.forgotPassword, { request });
-        if (error) throw error;
+
+        if (error) {
+            throw error;
+        } else if (res.error) {
+            throw res.error;
+        } else {
+            yield put(messageActions.showSnackbar({ title: "Success", message: "Your password has been reset. Please watch your email for your new password.", variant: "success" }));
+        }
     } catch (error) {
         if (error.status) {
             // show network error is any regaring with api status
