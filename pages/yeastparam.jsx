@@ -26,6 +26,8 @@ import CloseIcon from "@material-ui/icons/Close";
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
+import NavBarLayout from "components/NavBar/NavBarLayout";
+import FormButton from "components/Form/FormButton";
 import LoadingIndicator from '../components/UI/LoadingIndicator';
 import { cartActions } from "appRedux/actions/cartActions";
 import { inventoryActions } from "appRedux/actions/inventoryActions";
@@ -110,7 +112,7 @@ const customFormValidation = Yup.object().shape({
 
 
 
-class Yiestparam extends Component {
+class Yeastparam extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -529,6 +531,10 @@ class Yiestparam extends Component {
         Router.push(`/calculator?id=${this.filteredItem.volID[0]}`);
     }
 
+    handleBack =()=>{
+        Router.push(`/`);
+    }
+
 
     render() {
         const { classes } = this.props;
@@ -536,52 +542,56 @@ class Yiestparam extends Component {
         const spaceIndex = this.filteredItem && this.filteredItem.Name.indexOf(" ");
         const itemID = this.filteredItem && this.filteredItem.Name.substr(0, spaceIndex);
         const itemName = this.filteredItem && this.filteredItem.Name.substr(spaceIndex + 1);
-        console.log(itemName, 'nnnnnnnnnnnnnnnnnnnnnn')
         const error = errors.packaging || errors.pack || errors.quantity;
-        console.log(this.filteredItem, 'filtereditem')
         return (
-            <React.Fragment>
+            <NavBarLayout>
+                <div className={classes.container}>
+                <Grid item xs={1} dir="ltr">
+                    <FormButton className={classes.backbtn} text="Back" onClick={this.handleBack} />
+                </Grid>
                 <Grid
                     item
                     container
                     xs
                     style={{
                         display: "flex",
-                        marginTop: -10,
+                        justifyContent:'center',
+                        marginTop: 10,
                         marginBottom: 20
                     }}
                     direction={"row"}
                     spacing={4}
                 >
                     <Grid item>
-                        <Typography variant="h5">
+                        <Typography variant="h4">
                             {this.filteredItem && this.filteredItem.Name}
                         </Typography>
                     </Grid>
-                </Grid>
-
-                <Grid container spacing={24}>
-                    <Grid item xs={2} md={1}>
+                    <Grid container spacing={24}>
+                    <Grid item container justify="center">
                         <div
                             className={classes.circle}
                             style={{ backgroundColor: this.filteredItem ? getColor(this.filteredItem.salesCategory) : "" }}
                         >
                             <img
-                                src={getIcon(this.filteredItem && this.filteredItem.salesCategory)}
-                                height="20"
+                                src={this.filteredItem ? getIcon(this.filteredItem.salesCategory):""}
+                                height="30"
                             />
                         </div>
                     </Grid>
-                    <Grid
+                    </Grid>
+
+                      <Grid
                         item
                         container
-                        xs={10}
-                        md={11}
+                        justify='center'
+                        // xs={10}
+                        // md={11}
                         direction={"row"}
                         spacing={4}
                     >
-                        <Grid item xs={12} md={6}>
-                            <div style={{ display: "flex" }}>
+                        <Grid item xs={12} md={6} justify='center'>
+                            <div className='flex-center'>
                                 <Typography className="dialogVariant" >Attenuation:</Typography>
                                 &nbsp;
                                     <Typography
@@ -594,7 +604,7 @@ class Yiestparam extends Component {
                         </Grid>
 
                         <Grid item xs={12} md={6}>
-                            <div style={{ display: "flex" }}>
+                            <div className='flex-center'>
                                 <Typography className="dialogVariant">Flocculation: </Typography>
                                 &nbsp;
                                     <Typography
@@ -606,7 +616,7 @@ class Yiestparam extends Component {
                             </div>
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <div style={{ display: "flex" }}>
+                            <div className='flex-center'>
                                 <Typography className="dialogVariant">Alcohol Tol.: </Typography>
                                 &nbsp;
                                     <Typography
@@ -618,7 +628,7 @@ class Yiestparam extends Component {
                             </div>
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <div style={{ display: "flex" }}>
+                            <div className='flex-center'>
                                 <Typography className="dialogVariant">Fermentation Temp: </Typography>
                                 &nbsp;
                                     <Typography
@@ -631,26 +641,25 @@ class Yiestparam extends Component {
                             </div>
                         </Grid>
                     </Grid>
-                </Grid>
-
-                <Grid
+                
+                    <Grid
                     item
                     container
                     direction={"column"}
-                    spacing={8}
+                    spacing={24}
                     className={classes.description}
-                >
-                    <Grid item>
-                        <Typography>{this.filteredItem && this.filteredItem.Description}</Typography>
-                    </Grid>
-                </Grid>
+                        >
+                       <Grid item>
+                           <Typography>{this.filteredItem && this.filteredItem.Description}</Typography>
+                       </Grid>
+                   </Grid>
 
-                <Grid
+                      <Grid
                     item
                     container
                     direction={"column"}
                     spacing={8}
-                    style={{ marginTop: 20, color: '#f68f32' }}
+                    style={{ marginTop: 10, color: '#f68f32' }}
                 >
                     <Button onClick={this.moveToCalculator}>
                         <Grid item>
@@ -659,7 +668,7 @@ class Yiestparam extends Component {
                     </Button>
                 </Grid>
 
-                <Grid
+<Grid
                     item
                     container
                     style={{ marginTop: 5 }}
@@ -702,14 +711,15 @@ class Yiestparam extends Component {
                     </Grid>
                 </Grid>
 
-                <Grid
+
+                 <Grid
                     item
                     xs
                     container
                     spacing={24}
                     style={{ marginTop: 5, marginBottom: 10 }}
                     direction={"row"}
-                >
+                  >
                     <Formik
                         initialValues={this.state}
                         validationSchema={customFormValidation}
@@ -841,7 +851,10 @@ class Yiestparam extends Component {
                     </Formik>
                 </Grid>
 
-            </React.Fragment>
+                    
+                </Grid>
+                </div>
+           </NavBarLayout>
         );
     }
 }
@@ -851,11 +864,51 @@ const styles = theme => ({
     info: {
         textAlign: "center"
     },
+    container: {
+        marginTop: 70,
+        width:'80%',
+        border: "solid 1px",
+        borderColor: "#CCCCCC",
+        textAlign:'justify',
+        display:'flex',
+        justifyContent:'center',
+        margin:'0 auto'
+
+    
+        // padding: theme.spacing.unit * 4,
+        // [theme.breakpoints.down("sm")]: {
+        //     width:'100%',
+        // },
+        // [theme.breakpoints.up("md")]: {
+        //     marginLeft:"auto",
+        //     marginRight: "auto"
+        // },
+        // [theme.breakpoints.up("lg")]: {
+        //     marginLeft: "auto",
+        //     marginRight: "auto"
+        // },
+        // [theme.breakpoints.up("xl")]: {
+        //     marginLeft: "auto",
+        //     marginRight: "auto"
+        // }
+    },
     quantity: {
         width: 50
     },
     hide: {
         display: "none"
+    },
+    backbtn:{
+            // border-radius:10px !important;
+            minHeight: '20px !important',
+            padding: '4px !important',
+            fontSize: '12px !important',
+            // border:2px solid #f28411;
+            backgroundColor:'#f28411 !important',
+            // color:'#f28411 !important',
+            fontWeight:'bold !important',
+            margin: '50px !important'
+        
     },
     circle: {
         textAlign: "center",
@@ -864,8 +917,8 @@ const styles = theme => ({
         alignItems: "center",
         borderRadius: "50%",
         padding: 5,
-        width: 37,
-        height: 37,
+        width: 57,
+        height: 57,
         [theme.breakpoints.down("sm")]: {
             width: 30,
             height: 30,
@@ -889,7 +942,7 @@ const styles = theme => ({
     addButton: {
         display: "flex",
         justifyContent: "center",
-        marginLeft: '42px',
+        marginLeft: '27px',
         marginTop: '14px',
         // [theme.breakpoints.down("xs")]: {
         //     marginLeft:'16px',
@@ -898,17 +951,18 @@ const styles = theme => ({
 
     },
     button: {
-        marginTop: theme.spacing.unit,
+        marginTop: theme.spacing.unit*3,
     },
     description: {
         textAlign: 'center',
-        marginTop: 20
+        margin: 20 
+        
     },
     paddingFix: {
         paddingLeft: 'unset',
         marginTop: '5px',
         [theme.breakpoints.between("sm", "xl")]: {
-            paddingLeft: '100px',
+            paddingLeft: '215px',
         },
         [theme.breakpoints.down("xs")]: {
             paddingLeft: '0px',
@@ -934,7 +988,7 @@ export default withRouter(
     connect(
         mapStateToProps,
         mapDispatchToProps
-    )(compose(withStyles(styles, { withTheme: true })(withInventory(Yiestparam))))
+    )(compose(withStyles(styles, { withTheme: true })(withInventory(Yeastparam))))
 );
 
 
