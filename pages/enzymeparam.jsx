@@ -5,13 +5,19 @@ import { bindActionCreators } from "redux";
 import axios from "axios";
 import isEmpty from "lodash/isEmpty";
 import Router from 'next/router';
+import { withRouter } from "next/router";
+import withInventory from "hocs/inventory";
+import { compose } from "redux";
 
+import NavBarLayout from "components/NavBar/NavBarLayout";
+import FormButton from "components/Form/FormButton";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -30,6 +36,7 @@ import * as Yup from "yup";
 
 import LoadingIndicator from "components/UI/LoadingIndicator";
 import { cartActions } from "appRedux/actions/cartActions";
+import { inventoryActions } from "appRedux/actions/inventoryActions";
 import { IN_STOCK } from "lib/Constants";
 
 import { parseAvailabilityResults } from "lib/InventoryUtils";
@@ -38,7 +45,7 @@ const customFormValidation = Yup.object().shape({
     quantity: Yup.string().required("Required")
 });
 
-class EnzymesNutrientsDialog extends Component {
+class Enzymeparam extends Component {
 
     constructor(props) {
         super(props);
@@ -48,8 +55,11 @@ class EnzymesNutrientsDialog extends Component {
             isLoading: false,
             errors: {}
         };
-
-        this.item = this.props.item;
+        const {
+            router: { query }
+        } = this.props;
+        let { item } = query;
+        this.filteredItem = this.props.inventory.items.find(v => v.partNum === item)
     }
     handleErrors = (field, err) => {
         let { errors } = this.state;
@@ -72,14 +82,10 @@ class EnzymesNutrientsDialog extends Component {
         return true;
     };
 
-    handleDialogClose() {
-        this.props.closeDialog();
-    }
 
     addToCart = values => {
         var quantity = this.state.quantity;
-        var item = this.item;
-
+        var item = this.filteredItem;
         // Create cart item
         var cartItem = {};
         cartItem.Name = String(item.Name);
@@ -92,12 +98,12 @@ class EnzymesNutrientsDialog extends Component {
 
         if (this.checkQuantity(cartItem)) {
             this.props.addItem({ cartItem });
-            this.props.closeDialog();
+          
         }
     };
 
     checkAvailability = () => {
-        const itemID = this.item.volID[0];
+        const itemID = this.filteredItem.volID[0];
 
         this.setState({ isLoading: true });
         axios
@@ -117,60 +123,59 @@ class EnzymesNutrientsDialog extends Component {
         this.setState({ quantity: event.target.value });
     };
 
-    handleClick=(partNum)=>{
-        Router.push(`/enzymeparam?item=${partNum}`)
+    handleBack =()=>{
+        Router.push(`/`);
     }
 
+  
+
     render() {
-        console.log(this.props,'propssssss')
-        const{partNum}=this.props.item;
-        const { classes, item } = this.props;
+        const {classes}=this.props;
         const { errors, availability } = this.state;
-        const spaceIndex = item.Name.indexOf(" ");
-        const itemID = item.Name.substr(0, spaceIndex);
-        const itemName = item.Name.substr(spaceIndex + 1);
+        const spaceIndex = this.filteredItem && this.filteredItem.Name.indexOf(" ");
+        const itemID = this.filteredItem && this.filteredItem.Name.substr(0, spaceIndex);
+        const itemName = this.filteredItem && this.filteredItem.Name.substr(spaceIndex + 1);
 
         return (
-            <React.Fragment>
-                <LoadingIndicator visible={this.state.isLoading} label={"Getting Availability"} />
-                <DialogContent>
-                    <div className={classes.close}>
-                        <IconButton color="inherit" size="small" aria-label="Menu" onClick={() => this.handleDialogClose()}>
-                            <CloseIcon />
-                        </IconButton>
-                    </div>
-                    <Grid
+            <NavBarLayout>
+                <Grid item xs={1} dir="ltr">
+                    <FormButton className={classes.backbtn} text="Back" onClick={this.handleBack} />
+                </Grid>
+                 <div className={classes.container}>
+                <div className={classes.dispInline}>
+                     <Grid
                         item
                         container
                         xs
-                        style={{
-                            display: "flex",
-                            marginTop: -10,
-                            marginBottom: 20
-                        }}
+                        className={classes.displayMargin}
                         direction={"row"}
-                        spacing={4}
                     >
-                        <Grid item>
-                        <Typography variant="h5" onClick={()=>this.handleClick(partNum)}>
-                                {itemID} | {itemName}
+                        <Grid item style={{display:'flex'}}>
+                        <Typography variant="h5" className={classes.titleMargin}>
+                        {this.filteredItem && this.filteredItem.Name}
+                            <Divider variant="middle" />
                             </Typography>
                         </Grid>
                     </Grid>
+                    <Grid
+                    item
+                    container
+                    direction={"column"}
+                    spacing={24}
+                    className={classes.description}
+                        >
+                       <Grid item>
+                           <Typography>{this.filteredItem && this.filteredItem.Description}</Typography>
+                       </Grid>
+                   </Grid>
 
-                    <Grid item container direction={"column"} spacing={8} style={{ marginTop: 5 }}>
-                        <Grid item>
-                            <Typography>{this.item.Description}</Typography>
-                        </Grid>
-                    </Grid>
-
-                    <Grid item container style={{ marginTop: 5 }} direction={"row"}>
-                        <Grid item xs container spacing={24} direction={"row"} justify="flex-start">
+                      <Grid item container style={{ marginTop: 5 }} direction={"row"} className="flex-center">
+                        <Grid item xs container spacing={24} direction={"row"} justify="center">
                             {availability ? (
                                 <Typography style={{color: availability == IN_STOCK ? "green" : "red"}}><p>{availability}</p></Typography>
                             ) : (
-                                <Grid item xs container spacing={24} direction={"row"} justify="flex-end">
-                                    <Grid item>
+                                <Grid item xs container spacing={24} direction={"row"} justify="center">
+                                    <Grid item className="flex-center">
                                         <div className={classes.buttons}>
                                             <Button variant="contained" color="primary" onClick={this.checkAvailability} className={classes.button}>
                                                 Get Availability
@@ -192,13 +197,13 @@ class EnzymesNutrientsDialog extends Component {
                                 return (
                                     <Form className={classes.form}>
                                         {errors.quantity && <div className="error">{errors.quantity}</div>}
-                                        <Grid item xs container spacing={24} direction={"row"} justify="flex-start">
-                                            <Grid item>
-                                                <TextField id="quantity" label="Quantity" className={classes.quantity} value={this.state.quantity} onChange={this.changeQuantity} type="number" />
+                                        <Grid item xs container spacing={24} direction={"column"} justify="center">
+                                            <Grid item className="flex-center">
+                                                <TextField id="quantity" label="Quantity" className="flex-center" className={classes.quantity} value={this.state.quantity} onChange={this.changeQuantity} type="number" />
                                             </Grid>
-                                            <Grid item xs container spacing={24} direction={"row"} justify="flex-end">
+                                            <Grid item xs container spacing={24} className="flex-center">
                                                 <Grid item>
-                                                    <div className={classes.buttons}>
+                                                    <div className={classes.addButton}>
                                                         <Button
                                                             type="submit"
                                                             variant="contained"
@@ -215,60 +220,99 @@ class EnzymesNutrientsDialog extends Component {
                                 );
                             }}
                         </Formik>
-                    </Grid>
-                </DialogContent>
-            </React.Fragment>
+                    </Grid>   
+                    </div>
+                    </div>
+           </NavBarLayout>
         );
     }
 }
 
 const styles = theme => ({
-    card: {
-        ...theme.mixins.gutters(),
-        paddingTop: theme.spacing.unit * 2,
-        paddingBottom: theme.spacing.unit * 2,
-        height: "100%",
-        transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
-        })
+    displayMargin:{
+        display: "flex",
+        justifyContent:'center',
+        marginTop: 10,
+        marginBottom: 20,
+        maxWidth:'100%',
+        [theme.breakpoints.down("sm")]: {
+            maxWidth:'100%',
+        },
     },
-    cardHover: {
-        transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen
-        })
+    backbtn:{
+        minHeight: '20px !important',
+        padding: '4px !important',
+        fontSize: '12px !important',
+        backgroundColor:'#f28411 !important',
+        fontWeight:'bold !important',
+        marginLeft: '37px !important',
+        marginTop:'65px !important'
+    
+},
+dispInline:{
+    display:'inline'
+},
+container: {
+    marginTop: 40,
+    width:'60%',
+    border: "solid 1px",
+    borderColor: "#CCCCCC",
+    textAlign:'center',
+    display:'flex',
+    justifyContent:'center',
+    margin:'0 auto',
+
+
+    padding: theme.spacing.unit * 4,
+    [theme.breakpoints.down("sm")]: {
+        width:'100%',
     },
-    info: {
-        alignItems: "center",
-        padding: 5,
-        backgroundColor: "#e4e4e4",
-        textAlign: "center"
+    [theme.breakpoints.up("md")]: {
+        marginLeft:"auto",
+        marginRight: "auto"
     },
-    quantity: {
-        width: 50
+    [theme.breakpoints.up("lg")]: {
+        marginLeft: "auto",
+        marginRight: "auto"
     },
-    hide: {
-        display: "none"
-    },
+    [theme.breakpoints.up("xl")]: {
+        marginLeft: "auto",
+        marginRight: "auto"
+    }
+},
+description: {
+    textAlign: 'justify',
+    marginTop:10
+    
+},
+     quantity: {
+         width: 50
+     },
+   
     buttons: {
         display: "flex",
-        justifyContent: "flex-end"
+        justifyContent: "flex-end",
+        marginTop:'15px',
+        marginBottom:'15px'
     },
     button: {
-        marginTop: theme.spacing.unit,
-        marginRight: theme.spacing.unit * -5
+        // marginTop: theme.spacing.unit,
+      
     },
-    close: { position: "absolute", right: 0, top: 0 },
+    addButton: {
+        display: "flex",
+        justifyContent: "center",
+        marginLeft: '40px',
+        marginBottom:'20px'
+    },
     form: {
-        width: "100%"
+        width: "100%",
+        display:'flex',
+        justifyContent:'center'
     }
 });
 
-EnzymesNutrientsDialog.propTypes = {
-    classes: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired
-};
+
 
 const mapStateToProps = state => {
     return {
@@ -277,9 +321,13 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ ...inventoryActions, ...cartActions }, dispatch);
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles, { withTheme: true })(EnzymesNutrientsDialog));
+
+export default withRouter(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )(compose(withStyles(styles, { withTheme: true })(withInventory(Enzymeparam))))
+);
+

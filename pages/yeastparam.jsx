@@ -23,7 +23,6 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-// import DialogContent from "@material-ui/core/DialogContent";
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
@@ -111,8 +110,6 @@ const customFormValidation = Yup.object().shape({
 });
 
 
-
-
 class Yeastparam extends Component {
     constructor(props) {
         super(props);
@@ -154,7 +151,6 @@ class Yeastparam extends Component {
 
         this.filterPackageTypes();
 
-        console.log(this.filteredItem, 'kkkkkkkkkkkkkkkkk')
     }
 
     filterPackageTypes() {
@@ -494,9 +490,6 @@ class Yeastparam extends Component {
             .finally(() => this.setState({ isLoading: false }));
     }
 
-    // handleDialogClose() {
-    //     this.props.closeDialog();
-    // };
 
     setPack = event => {
         this.setState({
@@ -523,10 +516,6 @@ class Yeastparam extends Component {
     changeQuantity = event => {
         this.setState({ quantity: event.target.value });
     };
-
-
-
-
 
     moveToCalculator = () => {
         Router.push(`/calculator?id=${this.filteredItem.volID[0]}`);
@@ -559,13 +548,15 @@ class Yeastparam extends Component {
                     // spacing={4}
                 >
                     <Grid item style={{display:'flex'}}>
-                        <Typography variant="h5" className={classes.titleMargin}>
+                        <Typography variant="h5"
+                         className={classes.titleMargin}
+                         >
                             {this.filteredItem && this.filteredItem.Name}
                             <Divider variant="middle" />
                         </Typography>
                         
-                        <div
-                            className={classes.circle}
+                        <div 
+                            className={classes.circleLg}
                             style={{ backgroundColor: this.filteredItem ? getColor(this.filteredItem.salesCategory) : "" }}
                         >
                             <img 
@@ -574,8 +565,17 @@ class Yeastparam extends Component {
                                 className={classes.imgHieght}
                             />
                         </div>
-                        {/* <Divider variant="middle" /> */}
                     </Grid>
+                        <div   
+                            className={classes.circleSm}
+                            style={{ backgroundColor: this.filteredItem ? getColor(this.filteredItem.salesCategory) : "" }}
+                        >
+                            <img 
+                                src={this.filteredItem ? getIcon(this.filteredItem.salesCategory):""}
+                    
+                                className={classes.imgHieght}
+                            />
+                        </div>
         
                     <Grid container spacing={24}>
     
@@ -585,8 +585,6 @@ class Yeastparam extends Component {
                         item
                         container
                         justify='center'
-                        // xs={10}
-                        // md={11}
                         style={{marginTop:'15px'}}
                         direction={"row"}
                         spacing={4}
@@ -718,7 +716,7 @@ class Yeastparam extends Component {
                     xs
                     container
                     spacing={24}
-                    style={{ marginTop: 5, marginBottom: 10 }}
+                    className={classes.formWrapMargin}
                     direction={"row"}
                   >
                     <Formik
@@ -728,7 +726,7 @@ class Yeastparam extends Component {
                     >
                         {({ values, handleChange }) => {
                             return (
-                                <Form className={classes.form}>
+                                <Form className={classes.form} >
                                     <FormikErrorMessage error={error} />
                                     <Grid
                                         item
@@ -799,30 +797,6 @@ class Yeastparam extends Component {
                                             // }
                                             />
                                         </Grid>
-                                        {/* </form>
-                                            </Grid> */}
-                                        {/* <Grid
-                                                item
-                                                xs
-                                                container
-                                                spacing={24}
-                                                direction={"row"}
-                                                justify="center"
-                                            > */}
-                                        {/* <Grid item>
-                                                    <div className={classes.buttons}>
-                                                        <Button
-                                                            type="submit"
-                                                            variant="contained"
-                                                            color="primary"
-                                                            className={classes.button}
-                                                        >
-                                                            Add to Cart
-                                                        </Button>
-                                                    </div>
-                                                </Grid> */}
-
-                                        {/* </Grid> */}
 
                                     </Grid>
                                     <Grid
@@ -877,7 +851,7 @@ const styles = theme => ({
 
     
         padding: theme.spacing.unit * 4,
-        [theme.breakpoints.down("sm")]: {
+        [theme.breakpoints.down("md")]: {
             width:'100%',
         },
         [theme.breakpoints.up("md")]: {
@@ -905,19 +879,16 @@ const styles = theme => ({
         display: "none"
     },
     backbtn:{
-            // border-radius:10px !important;
             minHeight: '20px !important',
             padding: '4px !important',
             fontSize: '12px !important',
-            // border:2px solid #f28411;
             backgroundColor:'#f28411 !important',
-            // color:'#f28411 !important',
             fontWeight:'bold !important',
-            marginLeft: '16px !important',
+            marginLeft: '37px !important',
             marginTop:'65px !important'
         
     },
-    circle: {
+    circleLg: {
         textAlign: "center",
         display: "flex",
         justifyContent: "center",
@@ -928,10 +899,28 @@ const styles = theme => ({
         height: 47,
         marginTop:'20px',
         marginLeft:'5px',
-        [theme.breakpoints.down("sm")]: {
+        [theme.breakpoints.down("xs")]: {
             width: 40,
             height: 30,
-            marginTop: '32px'
+            marginTop: '32px',
+            display:'none',
+        }
+    },
+
+    
+    circleSm:{
+        textAlign: "center",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: "50%",
+        padding: 5,
+        width: 47,
+        height: 47,
+        marginTop:'12px',
+        marginLeft:'5px',
+        [theme.breakpoints.up("sm")]: {
+            display:'none',
         }
     },
     imgHieght:{
@@ -943,13 +932,16 @@ const styles = theme => ({
     formFields: {
         display: 'block',
         marginTop: '10px',
-        // marginLeft:'0px',
         [theme.breakpoints.down("xs")]: {
             display: 'flex',
             justifyContent: 'center',
             marginTop: '10px',
             marginLeft: '42px',
         }
+    },
+    formWrapMargin:{
+        marginTop: 5,
+        marginBottom: 10
     },
     buttons: {
         display: "flex",
@@ -961,11 +953,6 @@ const styles = theme => ({
         marginLeft: '21px',
         marginTop: '20px',
         marginBottom:'20px'
-        // [theme.breakpoints.down("xs")]: {
-        //     marginLeft:'16px',
-        // }
-
-
     },
     button: {
         marginTop: theme.spacing.unit*3,
@@ -993,6 +980,7 @@ const styles = theme => ({
         },
         [theme.breakpoints.down("xs")]: {
             paddingLeft: '0px',
+            paddingRight:'20px'
         },
 
     },
