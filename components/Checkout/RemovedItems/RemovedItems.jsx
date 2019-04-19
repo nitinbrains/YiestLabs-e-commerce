@@ -68,7 +68,7 @@ class RemovedItems extends Component {
                                     </Typography>
                                 </div>
                                 <Grid item>
-                                    <Typography>All items have been removed</Typography>
+                                    <Typography>All items have been removed due to unavailability</Typography>
                                 </Grid>
                             </div>
                             <div style={{textAlign: "center"}}>
