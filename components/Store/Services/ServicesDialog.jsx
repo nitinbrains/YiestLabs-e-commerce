@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 
 import axios from 'axios';
 import isEmpty from 'lodash/isEmpty';
+import Router from 'next/router';
 
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -29,7 +30,6 @@ import * as Yup from 'yup';
 
 import LoadingIndicator from 'components/UI/LoadingIndicator';
 import { cartActions } from "appRedux/actions/cartActions";
-import SalesLib from "lib/SalesLib";
 
 const customFormValidation = Yup.object().shape({
     quantity: Yup.string()
@@ -80,7 +80,7 @@ class ServicesDialog extends Component {
         if (cartItem.Name.includes("LSQC")) {
             cartItem.details =
                 "Save BIG on our most popular analytical tests! Participate in Big QC Day by purchasing your kit by August 6th, sending your samples in by August 20th and we’ll get you results by September 10th.";
-        } else if (SalesLib.SALESCATEGORY[12].includes(parseInt(item.salesCategory))) {
+        } else {
             cartItem.details =
                 "Please send your samples to:\nWhite Labs\nAttn: Analytical Lab\n9557 Candida Street\nSan Diego, CA 92126\nFor information on how much to send please visit:";
             cartItem.details_link =
@@ -103,7 +103,13 @@ class ServicesDialog extends Component {
         this.props.closeDialog();
     }
 
+    handleClick=(partNum)=>{
+        Router.push(`/servicesparam?item=${partNum}`)
+    }
+
     render() {
+        console.log(this.props.item,'item')
+        const{partNum}=this.props.item;
         const { classes, theme, item } = this.props;
         const { errors } = this.state;
         const spaceIndex = item.Name.indexOf(" ");
@@ -136,7 +142,7 @@ class ServicesDialog extends Component {
                         spacing={4}
                     >
                         <Grid item>
-                            <Typography variant="h5">
+                        <Typography variant="h5" onClick={()=>this.handleClick(partNum)}>
                                 {itemID} | {itemName}
                             </Typography>
                         </Grid>

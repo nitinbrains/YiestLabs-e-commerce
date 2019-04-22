@@ -3,6 +3,7 @@ import { connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import PropTypes from "prop-types";
+import Router from 'next/router';
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -90,13 +91,18 @@ class LabSuppliesDialog extends Component {
         this.setState({quantity: event.target.value})
     }
 
+    handleClick=(partNum)=>{
+        Router.push(`/labparam?item=${partNum}`)
+    }
+
     render() {
+        const{partNum}=this.props.item;
         const { classes, theme } = this.props;
         const { errors } = this.state;
         
         return (
             <React.Fragment>
-                <DialogTitle id="form-dialog-title">
+                <DialogTitle id="form-dialog-title" onClick={()=>this.handleClick(partNum)}>
                     {this.item.Name}
                 </DialogTitle>
                 <Formik

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import PropTypes from "prop-types";
+import Router from 'next/router';
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -158,7 +159,13 @@ class GiftShopDialog extends Component {
         this.props.closeDialog();
     }
 
+    handleClick=(partNum)=>{
+        Router.push(`/giftparam?item=${partNum}`)
+    }
+
     render() {
+        console.log(this.props.item,'item')
+        const{partNum}=this.props.item;
         const { classes, theme } = this.props;
         const { errors } = this.state;
         return (
@@ -188,7 +195,7 @@ class GiftShopDialog extends Component {
                         spacing={4}
                     >
                         <Grid item>
-                            <Typography variant="h5">
+                            <Typography variant="h5" onClick={()=>this.handleClick(partNum)}>
                                 {this.item.Name}
                             </Typography>
                         </Grid>
