@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-
+import Router from 'next/router';
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -146,7 +146,12 @@ class EducationDialog extends Component {
         this.props.closeDialog();
     }
 
+    handleClick=(partNum)=>{
+        Router.push(`/educationparam?item=${partNum}`)
+    }
+
     render() {
+        const{partNum}=this.props.item;
         const { classes, theme, item } = this.props;
         const { errors }  = this.state;
         return (
@@ -175,7 +180,7 @@ class EducationDialog extends Component {
                         spacing={4}
                     >
                         <Grid item>
-                            <Typography variant="h5">
+                        <Typography variant="h5" onClick={()=>this.handleClick(partNum)}>
                                 {item.Name}
                             </Typography>
                         </Grid>

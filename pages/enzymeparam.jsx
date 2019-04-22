@@ -187,7 +187,7 @@ class Enzymeparam extends Component {
                         </Grid>
                     </Grid>
 
-                    <Grid item xs container spacing={24} style={{ marginTop: 5 }} direction={"row"}>
+                    <Grid item container spacing={24} style={{ marginTop: 5 }} direction={"row"}>
                         <Formik
                             initialValues={this.state}
                             validationSchema={customFormValidation}
@@ -201,7 +201,7 @@ class Enzymeparam extends Component {
                                             <Grid item className="flex-center">
                                                 <TextField id="quantity" label="Quantity" className="flex-center" className={classes.quantity} value={this.state.quantity} onChange={this.changeQuantity} type="number" />
                                             </Grid>
-                                            <Grid item xs container spacing={24} className="flex-center">
+                                            <Grid item  container spacing={24} className="flex-center">
                                                 <Grid item>
                                                     <div className={classes.addButton}>
                                                         <Button
@@ -302,7 +302,6 @@ description: {
     addButton: {
         display: "flex",
         justifyContent: "center",
-        marginLeft: '40px',
         marginBottom:'20px'
     },
     form: {

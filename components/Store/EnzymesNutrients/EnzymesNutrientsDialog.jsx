@@ -122,7 +122,6 @@ class EnzymesNutrientsDialog extends Component {
     }
 
     render() {
-        console.log(this.props,'propssssss')
         const{partNum}=this.props.item;
         const { classes, item } = this.props;
         const { errors, availability } = this.state;
