@@ -536,7 +536,7 @@ class Yeastparam extends Component {
         return (
             <NavBarLayout>
                  <Grid item xs={1} dir="ltr">
-                    <FormButton className={classes.backbtn} text="Back" onClick={this.handleBack} />
+                    <FormButton className="back-param" text="Back" onClick={this.handleBack} />
                 </Grid>
                 <div className={classes.container}>
                 <Grid
