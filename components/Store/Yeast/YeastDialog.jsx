@@ -551,7 +551,7 @@ class YeastDialog extends Component {
                         spacing={4}
                     >
                         <Grid item>
-                            <Typography variant="h5" onClick={()=>this.handleClick(partNum)}>
+                            <Typography variant="h5" className={classes.hoverBold} onClick={()=>this.handleClick(partNum)}>
                                 {itemID} | {itemName}
                             </Typography>
                         </Grid>
@@ -858,6 +858,13 @@ const styles = theme => ({
     },
     hide: {
         display: "none"
+    },
+    hoverBold:{
+        '&:hover': {
+            fontWeight:'bolder',
+            color:'#ff9933',
+            cursor:'pointer'
+         }  
     },
     circle: {
         textAlign: "center",

@@ -180,7 +180,7 @@ class EducationDialog extends Component {
                         spacing={4}
                     >
                         <Grid item>
-                        <Typography variant="h5" onClick={()=>this.handleClick(partNum)}>
+                        <Typography variant="h5" className={classes.hoverBold} onClick={()=>this.handleClick(partNum)}>
                                 {item.Name}
                             </Typography>
                         </Grid>
@@ -320,6 +320,13 @@ const styles = theme => ({
     buttons: {
         display: "flex",
         justifyContent: "flex-end"
+    },
+    hoverBold:{
+        '&:hover': {
+            fontWeight:'bolder',
+            color:'#ff9933',
+            cursor:'pointer'
+         }  
     },
     button: {
         marginTop: theme.spacing.unit,

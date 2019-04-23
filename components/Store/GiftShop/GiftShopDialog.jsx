@@ -195,7 +195,7 @@ class GiftShopDialog extends Component {
                         spacing={4}
                     >
                         <Grid item>
-                            <Typography variant="h5" onClick={()=>this.handleClick(partNum)}>
+                            <Typography variant="h5" className={classes.hoverBold} onClick={()=>this.handleClick(partNum)}>
                                 {this.item.Name}
                             </Typography>
                         </Grid>
@@ -313,6 +313,13 @@ const styles = theme => ({
         padding: 5,
         width: 37,
         height: 37
+    },
+    hoverBold:{
+        '&:hover': {
+            fontWeight:'bolder',
+            color:'#ff9933',
+            cursor:'pointer'
+         }  
     },
     buttons: {
         display: "flex",

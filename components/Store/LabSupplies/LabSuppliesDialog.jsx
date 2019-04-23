@@ -102,7 +102,7 @@ class LabSuppliesDialog extends Component {
         
         return (
             <React.Fragment>
-                <DialogTitle id="form-dialog-title" onClick={()=>this.handleClick(partNum)}>
+                <DialogTitle id="form-dialog-title" onClick={()=>this.handleClick(partNum)} className={classes.hoverBold}>
                     {this.item.Name}
                 </DialogTitle>
                 <Formik
@@ -191,6 +191,13 @@ const styles = theme => ({
     },
     hide: {
         display: "none"
+    },
+    hoverBold:{
+        '&:hover': {
+            fontWeight:'bolder',
+            color:'#ff9933',
+            cursor:'pointer'
+         }  
     },
     form:{
         width:'100%',
