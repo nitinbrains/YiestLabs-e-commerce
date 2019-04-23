@@ -118,6 +118,7 @@ class labparam extends Component {
 
         return (
             <NavBarLayout>
+                 <LoadingIndicator visible={this.state.isLoading} label={"Getting Availability"} />
                 <Grid item xs={1} dir="ltr">
                     <FormButton className="back-param" text="Back" onClick={this.handleBack} />
                 </Grid>

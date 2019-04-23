@@ -274,7 +274,8 @@ class Store extends Component {
     }
 
     render() {
-        console.log(this.state.selectedMainCategory,'mainCat',this.state.selectedSubCategory,'subcat')
+        console.log(this.state.selectedMainCategory,'mainCat')
+        console.log(this.state.selectedSubCategory,'subcat')
         let { classes } = this.props;
         let { searchTextmobile } = this.state;
         const { selectedMainCategory, selectedSubCategory, searchText, isHomebrew, itemsToShow } = this.state;
