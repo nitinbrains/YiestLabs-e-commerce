@@ -7,7 +7,8 @@ const initialState = {
     category: 1,
     error: null,
     isHomebrew: false,
-    availability: {}
+    availability: {},
+    pageData: null
 };
 
 
@@ -27,5 +28,8 @@ export default createReducer(initialState, {
     }),
     [inventoryTypes.TOGGLE_HOMEBREW_SUCCESS]: (state, { data: { isHomebrew } }) => ({
         isHomebrew,
+    }),
+    [inventoryTypes.SET_PAGE_DATA_ATTEMPT]: (state, pageData) => ({
+        pageData
     }),
 });

@@ -6,4 +6,5 @@ export const { inventoryTypes, inventoryActions } = createActionsStructure('inve
     { name: 'GET_INVENTORY', async: true },
     { name: 'GET_ITEM_AVAILABILITY', async: true},
     { name: "TOGGLE_HOMEBREW", async: true },
+    { name: "SET_PAGE_DATA", async: false }
 ]);

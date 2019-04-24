@@ -54,6 +54,7 @@ import AddHomebrewContainer from "components/Store/Homebrew/AddHomebrewContainer
 import SearchBarItems from "components/NavBar/SearchBarItems";
 import { userActions } from "appRedux/actions/userActions";
 import { messageActions } from "appRedux/actions/messageActions";
+import { inventoryActions } from "appRedux/actions/inventoryActions";
 
 import withInventory from "hocs/inventory";
 import isLoggedUser from "hocs/isLoggedUser";
@@ -76,15 +77,17 @@ class Store extends Component {
 
     componentWillMount() {
         const {
-            inventory: { items }
+            inventory: { items, pageData }
         } = this.props;
-
+        console.log(this.props);
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
         if (_get(userInfo, "id")) {
             this.props.setUserInfo({ userInfo });
         }
+        const data = _.get(pageData, "data");
 
-        this.setState({ itemsToShow: items });
+        // this.setState({ itemsToShow: items });
+        this.setState({ ...data });
     }
 
     // To force the store to reload when user clicks link in header while in the store
@@ -93,7 +96,7 @@ class Store extends Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.router && nextProps.router.route === "/") {
             this.toggleHomebrew(false);
-            this.changeMainCategory(null);
+            // this.changeMainCategory(null);
         }
     }
 
@@ -107,11 +110,14 @@ class Store extends Component {
     };
 
     handleClickItem = item => {
-        this.setState({ openDialog: true, item: item });
+        this.setState({ openDialog: true, item: item }, () => {
+            this.props.setPageData(this.state);
+        });
     };
 
     handleLeaveItem = () => {
         this.setState({ openDialog: false, item: null });
+        this.props.setPageData();
     };
 
     toggleHomebrew = isHomebrew => {
@@ -331,8 +337,8 @@ class Store extends Component {
                     <Grid item xs={3} dir="rtl" style={{maxWidth:'unset'}}>
                         <Paper>
                             <Tabs value={this.state.tab} indicatorColor="primary"
-                              textColor="primary" variant="fullWidth"
-                              onChange={this.handleTab} 
+                                textColor="primary" variant="fullWidth"
+                                onChange={this.handleTab}
                             >
                                 <Tab label="Retail" />
                                 <Tab label="Professional" />
@@ -352,7 +358,7 @@ class Store extends Component {
                         value={this.state.searchTextmobile}
                         onChange={e => this.onValuechange(e)}
                     />
-                      <div className={classes.searchIconmobile}>
+                    <div className={classes.searchIconmobile}>
                         <SearchIcon />
                     </div>
                 </div>
@@ -473,7 +479,7 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({ ...userActions, ...messageActions }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ ...userActions, ...messageActions, ...inventoryActions }, dispatch);
 
 export default withRouter(
     connect(
