@@ -79,7 +79,6 @@ class Store extends Component {
         const {
             inventory: { items, pageData }
         } = this.props;
-        console.log(this.props);
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
         if (_get(userInfo, "id")) {
             this.props.setUserInfo({ userInfo });
@@ -280,8 +279,6 @@ class Store extends Component {
     }
 
     render() {
-        console.log(this.state.selectedMainCategory,'mainCat')
-        console.log(this.state.selectedSubCategory,'subcat')
         let { classes } = this.props;
         let { searchTextmobile } = this.state;
         const { selectedMainCategory, selectedSubCategory, searchText, isHomebrew, itemsToShow } = this.state;
