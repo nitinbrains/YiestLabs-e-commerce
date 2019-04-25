@@ -40,14 +40,14 @@ class SideBarItems extends Component {
                     </ListItem>
                 </Link>
 
-                <a href="mailto:yeastman2.0@gmail.com?subject=YMO%202.0%20Feedback" style={{ textDecoration: "none" }}>
+                         <Link prefetch href="/feedback">
                   <ListItem button>
                       <ListItemIcon>
                           <FeedbackIcon />
                       </ListItemIcon>
                       <ListItemText primary="Give Feedback" />
                   </ListItem>
-                </a>
+                </Link>
 
          <Link prefetch href="/">
         <ListItem className={classes.applinks}>
