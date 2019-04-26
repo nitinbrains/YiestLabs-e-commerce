@@ -47,7 +47,7 @@ function Review(props) {
                     >
                         User Detail
                     </Typography>
-                    <Typography gutterBottom>{ props.user.username? props.user.username :  'Tom Brady'}</Typography>
+                    <Typography gutterBottom>{ props.user.username? props.user.username :  ''}</Typography>
                     <Typography gutterBottom>{ props.user.email && props.user.email }</Typography>
                     <Typography gutterBottom>{ props.user.phone && props.user.phone }</Typography>
                     <Typography gutterBottom>{ props.user.subsidiary && props.user.subsidiaryOptions.map(data => {
@@ -147,7 +147,7 @@ function Review(props) {
                     >
                         Shipping Address
                     </Typography>
-                    <Typography gutterBottom>{ props.user.username? props.user.username :  'Tom Brady'}</Typography>
+                    <Typography gutterBottom>{ props.user.username? props.user.username : ''}</Typography>
 
                     {props.user.shipping  && (
                             <div>
@@ -181,7 +181,7 @@ function Review(props) {
                         >
                             BILLING ADDRESS
                         </Typography>
-                        <Typography >{ props.user.username? props.user.username :  'Tom Brady'}</Typography>
+                        <Typography >{ props.user.username? props.user.username :  ''}</Typography>
                         {props.user.billing  && (
                             <div>
                                 <Typography>
