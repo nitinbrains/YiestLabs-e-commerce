@@ -28,7 +28,7 @@ define(["N/record", "N/log", "N/search", "N/format", "./item-availability.js", "
         try {
             var response = ReceiveMessage(input);
 
-            const userRecord = record.load({ type: record.Type.CUSTOMER, id: response.user.id });
+            const userRecord = record.load({ type: record.Type.CUSTOMER, id: response.userID });
             const userLocation = parseInt(userRecord.getValue({ fieldId: "subsidiary" }));
             const territory = userRecord.getValue({ fieldId: "territory" });
 

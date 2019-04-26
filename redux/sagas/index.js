@@ -65,7 +65,9 @@ import {
 import {
     getInventory,
     getItemAvailability,
-    toggleHomebrew
+    toggleHomebrew,
+    getSimilarStrains,
+    getAlternateSizes
  } from './inventory';
 
 
@@ -100,7 +102,9 @@ function * rootSaga () {
         // INVENTORY
         takeEvery(inventoryTypes.GET_INVENTORY_ATTEMPT, getInventory),
         takeEvery(inventoryTypes.GET_ITEM_AVAILABILITY_ATTEMPT, getItemAvailability),
-        takeLatest(inventoryTypes.TOGGLE_HOMEBREW_ATTEMPT, toggleHomebrew ),
+        takeEvery(inventoryTypes.TOGGLE_HOMEBREW_ATTEMPT, toggleHomebrew ),
+        takeEvery(inventoryTypes.GET_SIMILAR_STRAINS_ATTEMPT, getSimilarStrains ),
+        takeEvery(inventoryTypes.GET_ALTERNATE_SIZES_ATTEMPT, getAlternateSizes ),
         // CART
         takeEvery(cartTypes.ADD_ITEM_ATTEMPT, addCartItem),
         takeEvery(cartTypes.REMOVE_ITEM_ATTEMPT, removeCartItem),

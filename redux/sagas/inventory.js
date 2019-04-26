@@ -63,3 +63,53 @@ export function * toggleHomebrew(action) {
         yield put(responseFailure(error));
     }
 }
+
+export function * getAlternateSizes(actions) {
+    const { responseSuccess, responseFailure, data: { item }} = action;
+    
+    try {
+        const user = yield select(state => state.user);
+        const inventory = yield select(state => state.inventory);
+        const itemRef = inventory.items.find(x => x.volID.includes(item.MerchandiseID));
+
+        const request = {};
+        request.id = user.id;
+        request.subsidiary = user.subsidiary;
+        request.alternateSizes = true;
+        request.SaleItem = item;
+        request.ItemGroup = itemRef.volID.slice(0,3);
+
+        const { res: { alternateSizes, error }} = yield call(api.getAlternateSizes, {
+            request
+        });    
+
+        yield put(responseSuccess({ alternateSizes }));
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}
+
+export function * getSimilarStrains(actions) {
+    const { responseSuccess, responseFailure, data: { item, selectedStyles }} = action;
+    
+    try {
+        const user = yield select(state => state.user);
+        const inventory = yield select(state => state.inventory);
+        const itemRef = inventory.items.find(x => x.volID.includes(item.MerchandiseID));
+        
+        const request = {};
+        request.id = user.id;
+        request.alternateSizes = true;
+        request.SaleItem = item;
+        request.ItemGroup = itemRef.volID.slice(0,3);
+        request.selectedStyles = selectedStyles;
+
+        const { res: { alternateStrains, error }} = yield call(api.getSimilarStrains, {
+            request
+        });    
+        
+        yield put(responseSuccess({ alternateStrains }));
+    } catch(error) {
+        yield put(responseFailure(error));
+    }
+}

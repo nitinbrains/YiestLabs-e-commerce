@@ -334,7 +334,7 @@ app.prepare().then(() => {
      *
      * @return [Items] - Returns array of items
      */
-    server.get("/get-inventory", (req, res, next) => {
+    server.get("/inventory", (req, res, next) => {
         fetch(system.ITEM.url, {
             method: "GET",
             headers: {
@@ -349,7 +349,7 @@ app.prepare().then(() => {
                 res.send({ error: { message: response.message, code: -1 } });
             } else if (response.error) {
                 if (!(response.error.code == "WS_CONCUR_SESSION_DISALLWD" || response.error.code == "WS_REQUEST_BLOCKED" || response.error.code == -1)) {
-                    console.log("server", "get-inventory", response, true);
+                    console.log("server", "inventory", response, true);
                 }
 
                 res.send({ error: { message: response.error.message, code: response.error.code } });
@@ -375,7 +375,7 @@ app.prepare().then(() => {
      *
      * @return {Map} - Returns map of ship locations and quantity available
      */
-    server.post("/get-item-availability", function(req, res, next) {
+    server.post("/item-availability", function(req, res, next) {
         var itemID = req.body.itemID;
 
         if (itemID) {
@@ -396,7 +396,7 @@ app.prepare().then(() => {
                     res.send({ error: { message: response.message, code: -1 } });
                 } else if (response.error) {
                     if (!(response.error.code == "WS_CONCUR_SESSION_DISALLWD" || response.error.code == "WS_REQUEST_BLOCKED" || response.error.code == -1)) {
-                        console.log("server", "get-item-availability", response, true);
+                        console.log("server", "item-availability", response, true);
                     }
 
                     res.send({ error: { message: response.error.message, code: response.error.code } });
@@ -834,9 +834,9 @@ app.prepare().then(() => {
                             y.purepitch = true;
                         });
 
-                        res.send(message.alternateStrains);
+                        res.send(message);
                     } else {
-                        res.send({ error: { message: "No alternate strains were found", code: 0 } });
+                        res.send({ error: { message: "No similar strains were found", code: 0 } });
                     }
                 }
             })
@@ -902,7 +902,7 @@ app.prepare().then(() => {
                             });
                         });
 
-                        res.send(message.alternateSizes);
+                        res.send(message);
                     } else {
                         reject({ message: "No alternative size combinations were found", code: 0 });
                     }

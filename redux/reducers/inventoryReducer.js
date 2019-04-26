@@ -8,9 +8,9 @@ const initialState = {
     error: null,
     isHomebrew: false,
     availability: {},
-    pageData: null
+    pageData: null,
+    isLoading: true
 };
-
 
 export default createReducer(initialState, {
     [inventoryTypes.GET_INVENTORY_SUCCESS]: (state, { data: { items }}) => ({
@@ -32,4 +32,23 @@ export default createReducer(initialState, {
     [inventoryTypes.SET_PAGE_DATA_ATTEMPT]: (state, pageData) => ({
         pageData
     }),
+    [inventoryTypes.GET_ALTERNATE_SIZES_ATTEMPT]: (state, pageData) => ({
+        isLoading: true
+    }),
+    [inventoryTypes.GET_ALTERNATE_SIZES_SUCCESS]: (state, pageData) => ({
+        isLoading: false
+    }),
+    [inventoryTypes.GET_ALTERNATE_SIZES_FAILURE]: (state, pageData) => ({
+        isLoading: false
+    }),
+    [inventoryTypes.GET_SIMILAR_STRAINS_ATTEMPT]: (state, pageData) => ({
+        isLoading: true
+    }),
+    [inventoryTypes.GET_SIMILAR_STRAINS_SUCCESS]: (state, pageData) => ({
+        isLoading: false
+    }),
+    [inventoryTypes.GET_SIMILAR_STRAINS_FAILURE]: (state, pageData) => ({
+        isLoading: false
+    }),
+
 });
