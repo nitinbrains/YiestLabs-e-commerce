@@ -1,4 +1,9 @@
 import React, { Component } from 'react'
+
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { userActions } from 'appRedux/actions/userActions';
+
 import NavBarLayout from "components/NavBar/NavBarLayout";
 import PageContainer from 'components/UI/PageContainer';
 import Typography from '@material-ui/core/Typography';
@@ -13,23 +18,15 @@ import * as Yup from "yup";
 
 class Feedback extends Component {
 
-  // changeRating( newRating, name ) {
-  //   this.setState({
-  //     rating: newRating
-  //   });
-  // }
-  state={
-    rating:4
-  }
-
-  submitScreen = (values) => {
-    console.log(values,'existing screen')
-    
-};
-
+  submitScreen = (values,{resetForm}) => {
+    console.log(values,'feedback values')
+    // this.props.addFeedback(values)
+    resetForm()
+  };
 
   render() {
-    const customFormValidation = Yup.object().shape({
+    console.log(this.props)
+        const customFormValidation = Yup.object().shape({
       comment: Yup.string()
         .required('Required'),
     });
@@ -39,9 +36,7 @@ class Feedback extends Component {
         <NavBarLayout>
           <div  className={classes.container}>
           <PageContainer heading="FEEDBACK">
-         
-      
-      <Grid container style={{width:'100%'}} className="flex-center">
+        <Grid container className="flex-center">
          <Formik
             initialValues={{
                 comment: '',
@@ -50,37 +45,32 @@ class Feedback extends Component {
             }}
              validationSchema={customFormValidation}
             enableReinitialize
-            onSubmit={(values, actions) => {
-                this.submitScreen(values);
+            onSubmit={(values,{resetForm}) => {
+                this.submitScreen(values,{resetForm});
             }}
            >
 
-
             {({ errors, touched, isValidating,handleChange,values, setFieldValue }) => {
-                   console.log(errors,'errr')
-                        return (
-                            <Form>
-                                 <Grid item xs={12}>
-                                 <Typography className="flex-center" style={{textAlign:'center'}} component="h2" variant="Title" gutterBottom>
-          How was your experience with the app?
-        </Typography>
-        <div className="flex-center">
-                                 <StarRatings
-                          
-          rating={values.appRating}
-          starRatedColor="#FF9933"
-          changeRating={value =>
-            setFieldValue("appRating", value)
-          }
-          numberOfStars={5}
-          name='rating'
-          // style={{display:'flex',justifyContent:'center'}}
-        />
-        </div>
-
-           <Typography className="flex-center"  style={{textAlign:'center'}} component="h2" variant="Title" gutterBottom>
-          How was the overall ordering process?
-        </Typography>
+                return (
+              <Form>
+                    <Grid item xs={12}>
+                    <Typography className={classes.typoText} component="h2" variant="Title" gutterBottom>
+                How was your experience with the app?
+                    </Typography>
+              <div className="flex-center">
+                    <StarRatings
+                rating={values.appRating}
+                starRatedColor="#FF9933"
+                changeRating={value =>
+                setFieldValue("appRating", value)
+                  }
+                    numberOfStars={5}
+                name='rating'
+                />
+            </div>
+           <Typography className={classes.typoText} component="h2" variant="Title" gutterBottom>
+               How was the overall ordering process?
+            </Typography>
         <div className="flex-center">
                                  <StarRatings 
           rating={values.orderProcessRating}
@@ -92,33 +82,32 @@ class Feedback extends Component {
           name='rating'
         />
         </div>
-                                 <FormControl margin="normal" required fullWidth>
-                                        <textarea
-                                            className={classes.textarea}
-                                            placeholder="Your feedback is valuable to us :)"
-                                            name="comment"
-                                            label="Your Feedback is Valuable to us"
-                                            variant="outlined"
-                                            margin='normal'
-                                            fullWidth
-                                            onChange={handleChange}
-                                            value={values.comment}
-                                        />
-                                    </FormControl>
-                                    </Grid>
-                                    {errors.comment && touched.comment && <div style={{color:'red'}} >{errors.comment}</div>}
-                                   
-                                    <Grid style={{ marginTop: 10 }} container justify="center">
-                                        <Grid item>
-                                            <Button variant="contained" color="primary" type="submit">
-                                                Send Feedback
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                    </Form>
- );
-}}
-
+            <FormControl margin="normal" required fullWidth>
+                    <textarea
+                        className={classes.textarea}
+                        placeholder="Your feedback is valuable to us :)"
+                        name="comment"
+                        label="Your Feedback is Valuable to us"
+                        variant="outlined"
+                        margin='normal'
+                        fullWidth
+                        onChange={handleChange}
+                        value={values.comment}
+                    />
+                </FormControl>
+                </Grid>
+                {errors.comment && touched.comment && <div style={{color:'red'}} >{errors.comment}</div>}
+              
+                <Grid style={{ marginTop: 10 }} container justify="center">
+                    <Grid item>
+                        <Button variant="contained" color="primary" type="submit">
+                            Send Feedback
+                        </Button>
+                    </Grid>
+                </Grid>
+                </Form>
+                 );
+                 }}
            </Formik>
            </Grid>
         </PageContainer>
@@ -139,6 +128,17 @@ const styles = theme => ({
       marginLeft:'11%',
   },
 },
+typoText:{
+  display:'flex',
+  justifyContent:'center',
+  textAlign:'center',
+  fontSize:'1.5em',
+  marginTop:'20px',
+  marginBottom:'20px',
+  [theme.breakpoints.down("xs")]: {
+    fontSize:'14px'
+},
+},
 textarea : {
   width: '100%',
   height: '150px',
@@ -151,5 +151,19 @@ textarea : {
 }
 })
 
+const mapStateToProps = state => {
+  return {
+      user: state.user
+  };
+};
 
-export default withStyles(styles, { withTheme: true })(Feedback)
+const mapDispatchToProps = dispatch => bindActionCreators({ ...userActions }, dispatch);
+
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(Feedback));
+
+
+

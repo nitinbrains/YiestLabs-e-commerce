@@ -41,7 +41,8 @@ import {
     setShipAddress,
     setDefaultShipAddress,
     setBillAddress,
-    setDefaultBillAddress
+    setDefaultBillAddress,
+    addFeedback
 } from './user';
 
 // Cart sagas
@@ -99,6 +100,7 @@ function * rootSaga () {
         takeLatest(userTypes.SET_DEFAULT_SHIP_ADDRESS_ATTEMPT, setDefaultShipAddress),
         takeLatest(userTypes.SET_BILL_ADDRESS_ATTEMPT, setBillAddress),
         takeLatest(userTypes.SET_DEFAULT_BILL_ADDRESS_ATTEMPT, setDefaultBillAddress),
+        takeLatest(userTypes.ADD_FEEDBACK_ATTEMPT, addFeedback),
         // INVENTORY
         takeEvery(inventoryTypes.GET_INVENTORY_ATTEMPT, getInventory),
         takeEvery(inventoryTypes.GET_ITEM_AVAILABILITY_ATTEMPT, getItemAvailability),

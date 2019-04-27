@@ -777,3 +777,38 @@ export function* setDefaultBillAddress(action) {
         yield put(responseFailure(error));
     }
 }
+
+//Feedback saga function
+export function* addFeedback(action) {
+    const {
+        responseSuccess,
+        responseFailure,
+        data
+    } = action;
+    try {
+        const { res, error } = yield call(api.feedback, data); //api not available 
+        yield put(responseSuccess());
+
+        if (error) {
+            throw error;
+        } else if (res.error) {
+            throw res.error;
+        } else {
+            yield put(messageActions.showBanner({ title: "Success", message: "Your Feedback has been successfully submitted", variant: "success" }));
+        }
+    } catch (error) {
+        if (error.status) {
+            // show network error is any regaring with api status
+            yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
+        } else {
+            if (error.code == 0) {
+                // Yeastman error when we have error with code == 0
+                yield put(messageActions.showBanner({ title: "Yeastman", message: error.message, variant: "error" }));
+            } else if (error.code == -1) {
+                // Other error when we have error with code == -1
+                yield put(messageActions.showBanner({ title: "Error", message: error.message, variant: "error" }));
+            }
+        }
+        yield put(responseFailure(error));
+    }
+}

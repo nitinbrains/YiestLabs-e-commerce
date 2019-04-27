@@ -17,7 +17,6 @@ import storage from 'redux-persist/lib/storage';
 import { rootReducer } from './reducers';
 import rootSaga from './sagas';
 
-
 const middleware = [];
 const sagaMiddleware = createSagaMiddleware();
 
@@ -30,7 +29,6 @@ if (process.env.NODE_ENV !== "production") {
       })
     );
    }
-
 
 const initializeStore = (initialState = initialState, isServer) => {
 
@@ -47,6 +45,7 @@ const initializeStore = (initialState = initialState, isServer) => {
             applyMiddleware(thunk, ...middleware)
         )
     );
+    
     sagaMiddleware.run(rootSaga);
     return {
         store,

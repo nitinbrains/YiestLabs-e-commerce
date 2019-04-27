@@ -116,14 +116,12 @@ $color-white: #fff;
     color: blue;
     font-size: 13px;
 }
-.zzzzzz1{
-    width: 50%;
-}
- .zzzzzz2 {
-    width: 50%;
-} 
 
-    // .TabIndicator-root-698{
-    //     left: 0px !important;
-    //     width: 174px;
-    // }
+.widget-svg{
+    height: 3.5rem !important;
+    width: 3.5rem !important;
+    @media all and (max-width: 500px){
+        width:1.5rem !important;
+        height: 1.5rem !important;
+    }
+}

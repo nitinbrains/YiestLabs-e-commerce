@@ -28,7 +28,8 @@ export const { userTypes, userActions } = createActionsStructure('user', [
   { name: 'USER_LOGOUT' },
   { name: 'UNSAVED_USER_INFO', async: true },
   { name: 'UNSAVED_USER_CLOSE', async: true },
-  { name: 'USER_LOGOUT' }
+  { name: 'USER_LOGOUT' },
+  { name: 'ADD_FEEDBACK', async:true}
 ]);
 
 

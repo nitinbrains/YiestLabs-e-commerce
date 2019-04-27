@@ -162,4 +162,13 @@ export default createReducer(initialState, {
         localStorage.clear();
         return null
     },    // this will return initial state
+    [userTypes.ADD_FEEDBACK_ATTEMPT]: (state) => ({
+        isSuccess: false,
+    }),
+    [userTypes.ADD_FEEDBACK_SUCCESS]: (state) => ({
+        isSuccess: true,
+    }),
+    [userTypes.ADD_FEEDBACK_FAILURE]: (state) => ({
+        isSuccess: false,
+    }),
 });
