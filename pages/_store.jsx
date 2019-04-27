@@ -322,6 +322,7 @@ class Store extends Component {
             sectionTitle = selectedMainCategory.label;
             sectionColor = selectedMainCategory.color;
         } else {
+            sectionTitle = "Yeastman 2.0 Store";
             pageContent = <MainMenu changeMainCategory={this.changeMainCategory} />;
         }
 
