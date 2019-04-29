@@ -34,6 +34,7 @@ class OrderDetails extends Component {
 
     _renderSumamry() {
         const { classes, order } = this.props;
+        
         return (
             <Grid container>
                 <Grid container spacing={24}>
@@ -53,7 +54,7 @@ class OrderDetails extends Component {
                                 <div className="block"> <span className="label">Order Date: </span>{order.orderDate}</div>
                             </Grid>
                             <Grid item sm={6}>
-                                <div className="block"> <span className="label">Order Total: </span> ${order.totalPrice}</div>
+                                <div className="block"> <span className="label">Order Total: </span> {order.currency}{order.totalPrice}</div>
                                 <div className="block"> <span className="label">Order Status: </span> {order.status}</div>
                                 <div className="block"> <span className="label">Tracking: </span> {order.trackingNumber}</div>
                             </Grid>

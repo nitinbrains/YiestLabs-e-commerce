@@ -45,6 +45,7 @@ class MyOrders extends Component {
     render() {
 
         const { classes, theme, user } = this.props;
+
         return (
             <NavBarUserSearchDrawerLayout>
                 <LoadingIndicator visible={user.isLoading} label={"Getting Orders"} />
@@ -81,7 +82,7 @@ class MyOrders extends Component {
                                                 variant="overline"
                                                 color="textPrimary"
                                             >
-                                                Shiip date is {order.shipdate}
+                                                Ship date is {order.shipdate}
                                             </Typography>
                                         </Grid>
                                         <Grid
