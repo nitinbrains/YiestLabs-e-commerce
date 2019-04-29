@@ -337,6 +337,7 @@ class Store extends Component {
                             <Tabs value={this.state.tab} indicatorColor="primary"
                                 textColor="primary" variant="fullWidth"
                                 onChange={this.handleTab}
+                                centered
                             >
                                 <Tab label="Retail" />
                                 <Tab label="Professional" />
