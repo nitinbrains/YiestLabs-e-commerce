@@ -163,11 +163,19 @@ class NavBarUserSearchDrawerLayout extends Component {
                                 <Badge
                                     color="secondary"
                                     badgeContent={this.props.cart.items.length}
-                                    className={classes.margin}
+                                    className={classNames(
+                                        classes.margin,
+                                        this.props.cart.items.length == 0 && classes.hide
+                                    )}
                                     classes={{ badge: classes.badge }}
                                 >
-                                    <ShoppingCartIcon />
+                                        <ShoppingCartIcon />
                                 </Badge>
+                                <ShoppingCartIcon 
+                                        className={classNames(
+                                            this.props.cart.items.length != 0 && classes.hide
+                                        )}
+                                    />
                             </IconButton>
                         </Link>
 
