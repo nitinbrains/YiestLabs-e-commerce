@@ -394,7 +394,8 @@ const styles = theme => ({
         [theme.breakpoints.up("xl")]: {
             paddingLeft: 150,
             paddingRight: 150
-        }
+        },
+        marginTop:20
     },
     sectionTitleDiv: {
         display: "flex",
