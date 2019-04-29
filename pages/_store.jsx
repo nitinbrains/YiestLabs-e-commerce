@@ -322,8 +322,8 @@ class Store extends Component {
             sectionTitle = selectedMainCategory.label;
             sectionColor = selectedMainCategory.color;
         } else {
-            sectionTitle = "Yeastman 2.0 Store";
-            pageContent = <MainMenu changeMainCategory={this.changeMainCategory} />;
+            // sectionTitle = "Yeastman 2.0 Store";
+             pageContent = <MainMenu changeMainCategory={this.changeMainCategory} />;
         }
 
         if (sectionTitle === "Vault Strains")
@@ -331,9 +331,9 @@ class Store extends Component {
 
         return (
             <NavBarUserSearchDrawerLayout inputVal={this.state.searchText} handleSearch={searchData => this.searchItem(searchData)}>
-                <Grid item xs={1} dir="ltr">
+               {selectedMainCategory===null ? null : <Grid item xs={1} dir="ltr">
                     <FormButton className="back-button" text="Back" onClick={() => this.categoryBack()} />
-                </Grid>
+        </Grid> }
                 <Grid container className="switch-margin" item xs={12} justify="center">
                     <Grid item xs={3} dir="rtl" style={{maxWidth:'unset'}}>
                         <Paper>
