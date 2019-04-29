@@ -147,9 +147,7 @@ class ManageCards extends Component {
                                                         <span className={classes.displayBlock}>{moment(card.ccexpire).format("MM-YYYY")}</span>
                                                     </div>
                                                 </Typography>
-                                            </Grid>
-
-                                            {this.props.user.card.ccnumber != card.ccnumber && (
+                                                {this.props.user.card.ccnumber != card.ccnumber && (
                                                 <Grid item>
                                                     <Button
                                                         variant="contained"
@@ -166,6 +164,9 @@ class ManageCards extends Component {
                                                     </Button>
                                                 </Grid>
                                             )}
+                                            </Grid>
+
+                                            
                                         </Grid>
                                     </div>
                                 </Grid>
@@ -210,7 +211,8 @@ const styles = theme => ({
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 'auto'
+        height: 'auto',
+        height: 260,
     },
     cardBoxSelected: {
         position: "relative",
@@ -218,7 +220,8 @@ const styles = theme => ({
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 'auto'
+        height: 'auto',
+        height: 260,
     },
     responsiveMargin:{
         margin:'48px',

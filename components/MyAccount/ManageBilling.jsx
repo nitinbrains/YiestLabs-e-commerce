@@ -214,8 +214,7 @@ class ManageBilling extends Component {
                                                 </Typography>
                                             </Grid>
                                         </Grid>
-                                    </div>
-                                    <div style={{ textAlign: "center"}}>
+                                        <div style={{ textAlign: "center"}}>
                                         {this.props.user.billing.address1 != address.address1 && (
                                             <Grid item>
                                                 <Button
@@ -233,6 +232,7 @@ class ManageBilling extends Component {
                                                 </Button>
                                             </Grid>
                                         )}
+                                    </div>
                                     </div>
                                 </Grid>
                             ))}
@@ -276,7 +276,8 @@ const styles = theme => ({
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 'auto'
+        height: 'auto',
+        height: 260,
     },
     addressBoxSelected: {
         position: "relative",
@@ -284,7 +285,8 @@ const styles = theme => ({
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: 'auto'
+        height: 'auto',
+        height: 260,
     },
     responsiveMargin:{
         margin:'48px',

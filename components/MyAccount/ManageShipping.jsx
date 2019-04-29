@@ -213,8 +213,7 @@ class ManageShipping extends Component {
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
-                                        </div>
-                                        <div style={{ textAlign: "center" }}>
+                                            <div style={{ textAlign: "center" }}>
                                             {this.props.user.shipping.address1 != address.address1 && (
                                                 <Grid item>
                                                     <Button
@@ -229,6 +228,8 @@ class ManageShipping extends Component {
                                                 </Grid>
                                             )}
                                         </div>
+                                        </div>
+                                        
                                     </Grid>
                                 ))}
 
@@ -272,7 +273,8 @@ const styles = theme => ({
         borderColor: "#CCCCCC",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: "auto"
+        height: "auto",
+        height: 260,
     },
     addressBoxSelected: {
         position: "relative",
@@ -280,7 +282,8 @@ const styles = theme => ({
         borderColor: "#f28411",
         padding: theme.spacing.unit * 2,
         textAlign: "center",
-        height: "auto"
+        height: "auto",
+        height: 260,
     },
     responsiveMargin: {
         margin: "48px",
