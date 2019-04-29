@@ -21,6 +21,8 @@ import ItemPanel from "./ItemPanel";
 import WantSooner from "components/WantSooner/WantSooner";
 import { orderActions } from "appRedux/actions/orderActions";
 import { cartActions } from 'appRedux/actions/cartActions';
+import { userActions } from "appRedux/actions/userActions";
+import SalesLib from "lib/SalesLib";
 
 class Items extends Component {
     constructor(props) {
@@ -108,7 +110,7 @@ class Items extends Component {
                                             color="primary"
                                             className={classes.total}
                                             >
-                                            $
+                                            {SalesLib.CURRENCY_MAP[this.props.user.currency - 1].symbol}
                                             {this.props.order.itemSubtotal}
                                         </Typography>
                                     </ListItem>
@@ -119,7 +121,8 @@ class Items extends Component {
                                             color="primary"
                                             className={classes.total}
                                             >
-                                            ${this.props.order.shippingSubtotal}
+                                            {SalesLib.CURRENCY_MAP[this.props.user.currency - 1].symbol}
+                                            {this.props.order.shippingSubtotal}
                                         </Typography>
                                     </ListItem>
                                     <ListItem className={classes.listItem}>
@@ -129,7 +132,8 @@ class Items extends Component {
                                             color="primary"
                                             className={classes.total}
                                             >
-                                            ${this.props.order.orderSubtotal}
+                                            {SalesLib.CURRENCY_MAP[this.props.user.currency - 1].symbol}
+                                            {this.props.order.orderSubtotal}
                                         </Typography>
                                     </ListItem>
                                 </List>
@@ -182,11 +186,12 @@ const mapStateToProps = state => {
     return {
         order: state.order,
         cart: state.cart,
+        user: state.user
     };
 };
 
 const mapDispatchToProps = dispatch =>
-    bindActionCreators({...orderActions, ...cartActions}, dispatch);
+    bindActionCreators({...orderActions, ...cartActions, ...userActions}, dispatch);
 
 export default connect(
     mapStateToProps,

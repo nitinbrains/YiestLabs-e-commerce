@@ -337,6 +337,7 @@ class Store extends Component {
                             <Tabs value={this.state.tab} indicatorColor="primary"
                                 textColor="primary" variant="fullWidth"
                                 onChange={this.handleTab}
+                                centered
                             >
                                 <Tab label="Retail" />
                                 <Tab label="Professional" />
@@ -393,7 +394,8 @@ const styles = theme => ({
         [theme.breakpoints.up("xl")]: {
             paddingLeft: 150,
             paddingRight: 150
-        }
+        },
+        marginTop:20
     },
     sectionTitleDiv: {
         display: "flex",

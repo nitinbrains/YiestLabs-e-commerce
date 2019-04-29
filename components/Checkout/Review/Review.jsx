@@ -12,6 +12,8 @@ import Grid from "@material-ui/core/Grid";
 import moment from 'moment';
 import ItemPanel from "components/Checkout/Items/ItemPanel";
 import { orderActions } from 'appRedux/actions/orderActions';
+import { userActions } from "appRedux/actions/userActions";
+import SalesLib from "lib/SalesLib";
 
 const styles = theme => ({
     listItem: {
@@ -230,7 +232,8 @@ function Review(props) {
                                     color="primary"
                                     className={classes.total}
                                     >
-                                    ${props.order.itemSubtotal}
+                                    {SalesLib.CURRENCY_MAP[props.user.currency - 1].symbol}
+                                    {props.order.itemSubtotal}
                                 </Typography>
                             </ListItem>
                             <ListItem className={classes.listItem}>
@@ -240,7 +243,8 @@ function Review(props) {
                                     color="primary"
                                     className={classes.total}
                                     >
-                                    ${props.order.shippingSubtotal}
+                                    {SalesLib.CURRENCY_MAP[props.user.currency - 1].symbol}
+                                    {props.order.shippingSubtotal}
                                 </Typography>
                             </ListItem>
                             <ListItem className={classes.listItem}>
@@ -250,7 +254,8 @@ function Review(props) {
                                     color="primary"
                                     className={classes.total}
                                     >
-                                    ${props.order.orderSubtotal}
+                                    {SalesLib.CURRENCY_MAP[props.user.currency - 1].symbol}
+                                    {props.order.orderSubtotal}
                                 </Typography>
                             </ListItem>
                         </List>
@@ -276,7 +281,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch =>
-    bindActionCreators(orderActions, dispatch);
+    bindActionCreators({...orderActions, ...userActions}, dispatch);
 
 export default connect(
     mapStateToProps,
