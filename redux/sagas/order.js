@@ -24,7 +24,7 @@ export function * prepareOrder(action) {
         const user = yield select(state => state.user);
 
         var { res: order, error } = yield call(api.prepareOrder, {
-            userID: user.id,
+            user: { id: user.id },
             items: cart.items
         });
         if (error) {
