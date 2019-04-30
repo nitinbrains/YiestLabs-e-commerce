@@ -35,7 +35,7 @@ class NavBarLayout extends Component {
                 >
                     <Toolbar>
 
-                        <Link prefetch href="/">
+                        <Link prefetch href="/" state="fromLink">
                             <div className={classes.circle}>
                                 <img
                                     src="static/images/logo_circle.png"

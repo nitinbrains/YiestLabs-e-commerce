@@ -47,7 +47,6 @@ class Cart extends Component {
 
     render() {
         const { classes, cart } = this.props;
-
         return (
             <NavBarUserSearchDrawerLayout>
                 <PageContainer heading="SHOPPING CART" id="cart-box">

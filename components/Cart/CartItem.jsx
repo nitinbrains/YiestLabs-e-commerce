@@ -66,9 +66,7 @@ class CartItem extends Component {
     }
 
     render(){
-
         const { classes, theme } = this.props;
-
         return (
             <Grid item className="cart-item">
                 <Grid container spacing={24}>

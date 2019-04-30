@@ -9,7 +9,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import createSagaMiddleware from "redux-saga";
 import { all } from 'redux-saga/effects';
 import thunk from 'redux-thunk';
-import logger from 'redux-logger'
+import { createLogger } from 'redux-logger'
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; 
 
@@ -18,7 +18,19 @@ import { rootReducer } from './reducers';
 import rootSaga from './sagas';
 
 
+const middleware = [];
 const sagaMiddleware = createSagaMiddleware();
+
+middleware.push(sagaMiddleware);
+
+if (process.env.NODE_ENV !== "production") {
+    middleware.push(
+      createLogger({
+        collapsed: true
+      })
+    );
+   }
+
 
 const initializeStore = (initialState = initialState, isServer) => {
 
@@ -32,7 +44,7 @@ const initializeStore = (initialState = initialState, isServer) => {
         persistedReducer,
         initialState,
         composeWithDevTools(
-            applyMiddleware(thunk, sagaMiddleware)
+            applyMiddleware(thunk, ...middleware)
         )
     );
     sagaMiddleware.run(rootSaga);

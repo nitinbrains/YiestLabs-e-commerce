@@ -2,6 +2,7 @@ import { take, call, put, cancelled, takeEvery, all, fork, select  } from 'redux
 
 import * as api from 'services/';
 import { orderActions } from 'appRedux/actions/orderActions';
+import { cartActions } from 'appRedux/actions/cartActions';
 import { messageActions } from 'appRedux/actions/messageActions';
 
 import {
@@ -63,6 +64,7 @@ export function * placeOrder(action) {
             throw error
         } else {
             yield put(responseSuccess());
+            yield put(cartActions.clearCart());
         }
     } catch (error) {
         if(error.status){
