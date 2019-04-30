@@ -110,7 +110,7 @@ class Store extends Component {
 
     handleClickItem = item => {
         this.setState({ openDialog: true, item: item }, () => {
-            this.props.setPageData(this.state);
+            // this.props.setPageData(this.state);
         });
     };
 
@@ -237,7 +237,7 @@ class Store extends Component {
         if (item) {
             // Yeast
             if (SalesLib.SALESCATEGORY[0].includes(parseInt(item.salesCategory))) {
-                return <YeastDialog item={item} closeDialog={this.handleLeaveItem} />;
+                return <YeastDialog stateData={this.state} item={item} closeDialog={this.handleLeaveItem} />;
             }
 
             // Enzymes & Nutrients
@@ -279,6 +279,9 @@ class Store extends Component {
     }
 
     render() {
+        // console.log(this.state.itemsToShow,'itemtoshow',this.state.searchText)
+        // console.log('searchtext')
+        // console.log('hell whitelabs')
         let { classes } = this.props;
         let { searchTextmobile } = this.state;
         const { selectedMainCategory, selectedSubCategory, searchText, isHomebrew, itemsToShow } = this.state;
