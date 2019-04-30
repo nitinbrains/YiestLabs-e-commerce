@@ -80,9 +80,10 @@ class CartItem extends Component {
             style={{
               backgroundImage: `url('static/images/categories/Category-ale.jpg')`,
               backgroundRepeat:'no-repeat',
-              backgroundSize:'cover'
+              backgroundSize:'cover',
+              backgroundPosition:'center'
             }}>
-                        <img className="icon" src="static/images/icons/Ale-icon.svg"/>
+                        <img className={classes.icon} src="static/images/icons/Ale-icon.svg"/>
                         <div className="code"></div>
                         <div className="name">{this.props.item.Name}</div>
                     </Grid>
@@ -140,6 +141,13 @@ const styles = theme => ({
     quantity: {
         width: 50,
         marginRight: 20
+    },
+    icon:{
+        marginTop: 10,
+        height: 20,
+        [theme.breakpoints.down("xs")]: {
+            marginTop: 42,
+        }
     },
     details: {
         display: "flex",

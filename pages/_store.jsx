@@ -342,8 +342,8 @@ class Store extends Component {
                                 onChange={this.handleTab}
                                 centered
                             >
-                                <Tab label="Retail" />
-                                <Tab label="Professional" />
+                                <Tab className={classes.tabLabel1} label="Retail" />
+                                <Tab className={classes.tabLabel2} label="Professional"  />
                             </Tabs>
                         </Paper>
                     </Grid>
@@ -443,6 +443,25 @@ const styles = theme => ({
     },
     divider: {
         margin: "10px auto"
+    },
+    tabLabel2:{
+        width:'50%',
+        maxWidth:'unset',
+          [theme.breakpoints.down("sm")]: {
+            width:'unset',
+            maxWidth:'264px',
+        },
+    },
+    tabLabel1:{
+        padding:'0',
+        width:'50%',
+        maxWidth:'unset',
+          [theme.breakpoints.down("sm")]: {
+            width:'unset',
+            maxWidth:'264px',
+            padding:'6px 40px',
+        },
+
     },
 
     searchIconmobile: {
