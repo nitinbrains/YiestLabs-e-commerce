@@ -24,7 +24,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-
+import { inventoryActions } from "appRedux/actions/inventoryActions";
 import { cartActions } from "appRedux/actions/cartActions";
 
 const customFormValidation = Yup.object().shape({
@@ -161,6 +161,7 @@ class GiftShopDialog extends Component {
 
     handleClick=(partNum)=>{
         Router.push(`/giftparam?item=${partNum}`)
+        this.props.setPageData(this.props.stateData);
     }
 
     render() {
@@ -348,7 +349,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch =>
-    bindActionCreators(cartActions, dispatch);
+    bindActionCreators({...cartActions, ...inventoryActions}, dispatch);
 
 export default connect(
     mapStateToProps,

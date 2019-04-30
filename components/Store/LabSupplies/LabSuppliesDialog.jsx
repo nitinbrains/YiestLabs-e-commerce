@@ -22,6 +22,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import { inventoryActions } from "appRedux/actions/inventoryActions";
 
 import { cartActions } from 'appRedux/actions/cartActions';
 
@@ -93,6 +94,7 @@ class LabSuppliesDialog extends Component {
 
     handleClick=(partNum)=>{
         Router.push(`/labparam?item=${partNum}`)
+        this.props.setPageData(this.props.stateData);
     }
 
     render() {
@@ -216,6 +218,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({...cartActions, ...inventoryActions}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(LabSuppliesDialog));
