@@ -931,7 +931,9 @@ const styles = theme => ({
         }
     },
     formFields: {
-        display: 'block',
+        // display: 'block',
+        display: 'flex',
+        justifyContent:'center',
         marginTop: '10px',
         [theme.breakpoints.down("xs")]: {
             display: 'flex',
@@ -977,7 +979,7 @@ const styles = theme => ({
         paddingLeft: 'unset',
         marginTop: '5px',
         [theme.breakpoints.between("sm", "xl")]: {
-            paddingLeft: '94px',
+            paddingLeft: '50px',
         },
         [theme.breakpoints.down("xs")]: {
             paddingLeft: '0px',
