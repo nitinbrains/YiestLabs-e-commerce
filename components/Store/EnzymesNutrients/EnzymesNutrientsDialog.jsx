@@ -30,6 +30,7 @@ import * as Yup from "yup";
 
 import LoadingIndicator from "components/UI/LoadingIndicator";
 import { cartActions } from "appRedux/actions/cartActions";
+import { inventoryActions } from "appRedux/actions/inventoryActions";
 import { IN_STOCK } from "lib/Constants";
 
 import { parseAvailabilityResults } from "lib/InventoryUtils";
@@ -119,6 +120,7 @@ class EnzymesNutrientsDialog extends Component {
 
     handleClick=(partNum)=>{
         Router.push(`/enzymeparam?item=${partNum}`)
+        this.props.setPageData(this.props.stateData);
     }
 
     render() {
@@ -283,7 +285,7 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators(cartActions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({...cartActions, ...inventoryActions}, dispatch);
 
 export default connect(
     mapStateToProps,

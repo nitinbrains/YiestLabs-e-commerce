@@ -30,6 +30,7 @@ import * as Yup from 'yup';
 
 import LoadingIndicator from 'components/UI/LoadingIndicator';
 import { cartActions } from "appRedux/actions/cartActions";
+import { inventoryActions } from "appRedux/actions/inventoryActions";
 
 const customFormValidation = Yup.object().shape({
     quantity: Yup.string()
@@ -105,6 +106,8 @@ class ServicesDialog extends Component {
 
     handleClick=(partNum)=>{
         Router.push(`/servicesparam?item=${partNum}`)
+        this.props.setPageData(this.props.stateData);
+
     }
 
     render() {
@@ -292,7 +295,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch =>
-    bindActionCreators(cartActions, dispatch);
+    bindActionCreators({...cartActions, ...inventoryActions}, dispatch);
 
 export default connect(
     mapStateToProps,

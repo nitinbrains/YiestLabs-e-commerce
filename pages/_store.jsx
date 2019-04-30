@@ -110,7 +110,6 @@ class Store extends Component {
 
     handleClickItem = item => {
         this.setState({ openDialog: true, item: item }, () => {
-            // this.props.setPageData(this.state);
         });
     };
 
@@ -242,27 +241,27 @@ class Store extends Component {
 
             // Enzymes & Nutrients
             else if (SalesLib.SALESCATEGORY[8].includes(parseInt(item.salesCategory))) {
-                return <EnzymesNutrientsDialog item={item} closeDialog={this.handleLeaveItem} />;
+                return <EnzymesNutrientsDialog stateData={this.state} item={item} closeDialog={this.handleLeaveItem} />;
             }
 
             // Services
             else if (SalesLib.SALESCATEGORY[11].includes(parseInt(item.salesCategory))) {
-                return <ServicesDialog item={item} closeDialog={this.handleLeaveItem} />;
+                return <ServicesDialog stateData={this.state} item={item} closeDialog={this.handleLeaveItem} />;
             }
 
             // Lab Supplies
             else if (SalesLib.SALESCATEGORY[13].includes(parseInt(item.salesCategory))) {
-                return <LabSuppliesDialog item={item} closeDialog={this.handleLeaveItem} />;
+                return <LabSuppliesDialog stateData={this.state} item={item} closeDialog={this.handleLeaveItem} />;
             }
 
             // Education
             else if (SalesLib.SALESCATEGORY[14].includes(parseInt(item.salesCategory))) {
-                return <EducationDialog item={item} closeDialog={this.handleLeaveItem} />;
+                return <EducationDialog stateData={this.state} item={item} closeDialog={this.handleLeaveItem} />;
             }
 
             // Gift Shop
             else if (SalesLib.SALESCATEGORY[15].includes(parseInt(item.salesCategory))) {
-                return <GiftShopDialog item={item} closeDialog={this.handleLeaveItem} />;
+                return <GiftShopDialog stateData={this.state} item={item} closeDialog={this.handleLeaveItem} />;
             }
         }
 
@@ -279,9 +278,6 @@ class Store extends Component {
     }
 
     render() {
-        // console.log(this.state.itemsToShow,'itemtoshow',this.state.searchText)
-        // console.log('searchtext')
-        // console.log('hell whitelabs')
         let { classes } = this.props;
         let { searchTextmobile } = this.state;
         const { selectedMainCategory, selectedSubCategory, searchText, isHomebrew, itemsToShow } = this.state;
