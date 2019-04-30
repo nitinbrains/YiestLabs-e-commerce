@@ -512,10 +512,14 @@ class YeastDialog extends Component {
 
     handleClick=(partNum)=>{
         Router.push(`/yeastparam?item=${partNum}`)
+          console.log(this.props.stateData,'propstate')
+        this.props.setPageData(this.props.stateData);
+
     }
 
     render()
     {
+    
         const{partNum}=this.props.item;
         const { classes } = this.props;
         const { errors, availability } = this.state;
