@@ -129,7 +129,7 @@ class Billing extends Component {
 
                         {WLHelper.getPaymentTerm(this.state.terms) ==
                             "Credit Card" ||
-                            (WLHelper.getPaymentTerm(this.state.terms) ==
+                            WLHelper.getPaymentTerm(this.state.terms) ==
                             "None" ? (
                                 this.props.user.card.id ? (
                                     <div>
@@ -241,7 +241,7 @@ class Billing extends Component {
                                         </Grid>
                                     )}
                                 </div>
-                            ))}
+                            )}
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <Typography variant="h6" color="textPrimary">

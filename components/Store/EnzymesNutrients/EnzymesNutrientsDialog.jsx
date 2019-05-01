@@ -101,7 +101,7 @@ class EnzymesNutrientsDialog extends Component {
 
         this.setState({ isLoading: true });
         axios
-            .post("/get-item-availability", { itemID })
+            .post("/item-availability", { itemID })
             .then(({ data: { availability, error } }) => {
                 if (error) throw error;
                 //this.setState({ availability });

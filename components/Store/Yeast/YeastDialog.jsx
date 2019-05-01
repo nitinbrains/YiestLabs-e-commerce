@@ -465,7 +465,7 @@ class YeastDialog extends Component {
         }
 
         this.setState({isLoading: true});
-        axios.post('/get-item-availability', {itemID})
+        axios.post('/item-availability', {itemID})
         .then(({ data: { availability, error}}) => {
             if(error) throw error;
             this.setState({availability: parseAvailabilityResults(availability)});
