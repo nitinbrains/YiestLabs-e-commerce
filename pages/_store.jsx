@@ -335,7 +335,7 @@ class Store extends Component {
         </Grid> }
                 <Grid container className="switch-margin" item xs={12} justify="center">
                     <Grid item xs={3} dir="rtl" style={{maxWidth:'unset'}}>
-                        <Paper>
+                        <Paper className={classes.paperMargin}>
                             <Tabs value={this.state.tab} indicatorColor="primary"
                                 textColor="primary" variant="fullWidth"
                                 onChange={this.handleTab}
@@ -348,7 +348,7 @@ class Store extends Component {
                     </Grid>
                 </Grid>
 
-                <div className="searchmobile">
+                {/* <div className="searchmobile">
                     <InputBase
                         placeholder="Search…"
                         name="searchTextmobile"
@@ -362,7 +362,7 @@ class Store extends Component {
                     <div className={classes.searchIconmobile}>
                         <SearchIcon />
                     </div>
-                </div>
+                </div> */}
 
                 {sectionTitle && (
                     <div className={classes.sectionTitleDiv}>
@@ -489,6 +489,13 @@ const styles = theme => ({
         // [theme.breakpoints.up('md')]: {
         //   width: 200,
         // },
+    },
+    paperMargin:{
+        marginBottom:'0px',
+        [theme.breakpoints.down("sm")]: {
+            marginBottom:'60px',
+        },
+
     }
 });
 

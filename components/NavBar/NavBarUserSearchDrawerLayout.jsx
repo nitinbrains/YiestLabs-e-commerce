@@ -51,7 +51,7 @@ class NavBarUserSearchDrawerLayout extends Component {
         openSearchBar: false,
         isLoggedIn: true,
         drawer: null,
-        openSupportDialog: false
+        hide:null,
     };
 
     handleUserBar = () => {
@@ -72,6 +72,22 @@ class NavBarUserSearchDrawerLayout extends Component {
     handleClose = () => {
         this.props.unsavedUserClose();
     };
+
+    componentDidMount(){
+    
+        window.addEventListener('scroll', () => {
+        
+            if(window.pageYOffset >  0)  {
+              this.setState({
+                  hide:true
+              })
+           } else if (window.pageYOffset == 0) {
+            this.setState({
+                hide:false
+            })
+           }
+        });
+    }
 
     componentWillUnmount() {
         if (this.props.messages.snackbar != false) {
@@ -106,7 +122,7 @@ class NavBarUserSearchDrawerLayout extends Component {
 
         }
         return (
-            <div className={classes.root}>
+            <div className={classes.root} >
                 <div
                     className={classes.appbarOuter}
                 />
@@ -218,23 +234,25 @@ class NavBarUserSearchDrawerLayout extends Component {
                                 root: classes.inputRoot
                             }}
                         /> */}
-                          <div /*className="searchmobile"*/  >
+                       
+                            <div  className={this.state.hide ?  ' searchmobileHide ' : ' searchmobile'}>
                     <InputBase
                         placeholder="Search…"
-                        name="searchText"
-                        // classes={{
-                        //     root: classes.inputRootmobile,
-                        //     input: classes.inputInputmobile
-                        // }}
+                        name="searchTextmobile"
+                        classes={{
+                            root: classes.inputRootmobile,
+                            input: classes.inputInputmobile
+                        }}
                         value={this.props.searchText}
                         onChange={e =>
                             this.props.handleSearch(e.target.value)
                         }
                     />
-                    <div /*className={classes.searchIconmobile}*/>
+                    <div className={classes.searchIconmobile}>
                         <SearchIcon />
                     </div>
                 </div>
+
                     </Toolbar>
                 </AppBar>
 
@@ -493,7 +511,39 @@ const styles = theme => ({
             display: "flex"
         },
         fontWeight: 'bold'
-    }
+    },
+
+    searchIconmobile: {
+        width: "34px",
+        color:'white',
+        position: "relative",
+        background:'#f28531',
+        pointerEvents: "none",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        margin:'3px',
+        borderRadius:'5px',
+        // [theme.breakpoints.up("md")]: {
+           
+        // },
+    },
+    inputRootmobile: {
+        color: "inherit",
+        width: "100%"
+    },
+    inputInputmobile: {
+        paddingTop: theme.spacing.unit,
+        paddingRight: theme.spacing.unit,
+        paddingBottom: theme.spacing.unit,
+        paddingLeft: theme.spacing.unit * 10,
+        transition: theme.transitions.create("width"),
+        width: "100%",
+         [theme.breakpoints.between('md','xl')]: {
+            paddingLeft: theme.spacing.unit * 3,
+         },
+    },
+
 });
 
 NavBarUserSearchDrawerLayout.propTypes = {
