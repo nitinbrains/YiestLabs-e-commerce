@@ -206,8 +206,9 @@ class YeastCard extends Component {
                                             Fermentation Temp
                                         </Typography>
                                         <Typography style={{color:getColor(this.props.item.salesCategory)}}>
-                                            {item.optFermentTempF |
-                                                item.optFermentTempF}
+                                            {item.optFermentTempF}
+                                            {item.optFermentTempF && item.optFermentTempC ? "/" : ""}
+                                            {item.optFermentTempC}
                                         </Typography>
                                     </div>
                                 </Grid>

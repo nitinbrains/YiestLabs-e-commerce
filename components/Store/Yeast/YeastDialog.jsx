@@ -622,8 +622,9 @@ class YeastDialog extends Component {
                                      className="dialogVariant"
                                         style={{ color: getColor(this.item.salesCategory)}}
                                     >
-                                        {this.item.optFermentTempF |
-                                            this.item.optFermentTempC}
+                                        {this.item.optFermentTempF}
+                                        {this.item.optFermentTempF && this.item.optFermentTempC ? "/" : ""}
+                                        {this.item.optFermentTempC}
                                     </Typography>
                                 </div>
                             </Grid>
