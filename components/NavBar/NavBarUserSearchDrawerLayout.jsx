@@ -179,7 +179,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                             </IconButton>
                         </Link>
 
-                        <IconButton className={classes.appBarLink} color="inherit" aria-label="Menu">
+                        {/* <IconButton className={classes.appBarLink} color="inherit" aria-label="Menu">
                             <SearchIcon />
                         </IconButton>
                         <InputBase
@@ -195,7 +195,24 @@ class NavBarUserSearchDrawerLayout extends Component {
                             classes={{
                                 root: classes.inputRoot
                             }}
-                        />
+                        /> */}
+                          <div /*className="searchmobile"*/  >
+                    <InputBase
+                        placeholder="Search…"
+                        name="searchText"
+                        // classes={{
+                        //     root: classes.inputRootmobile,
+                        //     input: classes.inputInputmobile
+                        // }}
+                        value={this.props.searchText}
+                        onChange={e =>
+                            this.props.handleSearch(e.target.value)
+                        }
+                    />
+                    <div /*className={classes.searchIconmobile}*/>
+                        <SearchIcon />
+                    </div>
+                </div>
                     </Toolbar>
                 </AppBar>
 
