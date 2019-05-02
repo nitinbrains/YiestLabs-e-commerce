@@ -165,7 +165,6 @@ class GiftShopDialog extends Component {
     }
 
     render() {
-        console.log(this.props.item,'item')
         const{partNum}=this.props.item;
         const { classes, theme } = this.props;
         const { errors } = this.state;
