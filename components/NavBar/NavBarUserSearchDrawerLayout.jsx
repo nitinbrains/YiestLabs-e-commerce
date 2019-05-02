@@ -71,7 +71,7 @@ class NavBarUserSearchDrawerLayout extends Component {
     
         window.addEventListener('scroll', () => {
         
-            if(window.pageYOffset >  0)  {
+            if(window.pageYOffset >  40)  {
               this.setState({
                   hide:true
               })
@@ -81,6 +81,7 @@ class NavBarUserSearchDrawerLayout extends Component {
             })
            }
         });
+       
     }
 
     componentWillUnmount() {
@@ -90,6 +91,7 @@ class NavBarUserSearchDrawerLayout extends Component {
     }
 
     render() {
+       
         const { children, classes, theme, messages } = this.props;
         if (isWidthUp("sm", this.props.width)) {
             this.setState({ drawer: "persistent" });
@@ -195,26 +197,8 @@ class NavBarUserSearchDrawerLayout extends Component {
                                     />
                             </IconButton>
                         </Link>
-
-                        {/* <IconButton className={classes.appBarLink} color="inherit" aria-label="Menu">
-                            <SearchIcon />
-                        </IconButton>
-                        <InputBase
-                            id="search"
-                            placeholder="Search"
-                            type="search"
-                            name="searchText"
-                            value={this.props.searchText}
-                            className={classes.appBarLink}
-                            onChange={e =>
-                                this.props.handleSearch(e.target.value)
-                            }
-                            classes={{
-                                root: classes.inputRoot
-                            }}
-                        /> */}
-                       
-                            <div  className={this.state.hide ?  ' searchmobileHide ' : ' searchmobile'}>
+  
+                            <div  className='searchNav' >
                     <InputBase
                         placeholder="Search…"
                         name="searchTextmobile"

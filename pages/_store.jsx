@@ -345,7 +345,7 @@ class Store extends Component {
                     </Grid>
                 </Grid>
 
-                {/* <div className="searchmobile">
+                <div className="searchmobile">
                     <InputBase
                         placeholder="Search…"
                         name="searchTextmobile"
@@ -359,7 +359,7 @@ class Store extends Component {
                     <div className={classes.searchIconmobile}>
                         <SearchIcon />
                     </div>
-                </div> */}
+                </div>
 
                 {sectionTitle && (
                     <div className={classes.sectionTitleDiv}>
@@ -481,13 +481,6 @@ const styles = theme => ({
         //   width: 200,
         // },
     },
-    paperMargin:{
-        marginBottom:'0px',
-        [theme.breakpoints.down("sm")]: {
-            marginBottom:'60px',
-        },
-
-    }
 });
 
 Store.propTypes = {
