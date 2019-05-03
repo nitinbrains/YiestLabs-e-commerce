@@ -31,6 +31,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
 import NavBarUserSearchDrawerLayout from "components/NavBar/NavBarUserSearchDrawerLayout";
+import SearchBar from 'components/NavBar/SearchBar'
 import LoadingIndicator from "components/UI/LoadingIndicator";
 import YeastCard from "components/Store/Yeast/YeastCard";
 import MainMenu from "components/Store/Menu/MainMenu";
@@ -66,7 +67,6 @@ class Store extends Component {
         this.state = {
             openDialog: false,
             searchText: "",
-            searchTextmobile: "",
             selectedMainCategory: null,
             selectedSubCategory: null,
             itemsToShow: [],
@@ -129,38 +129,18 @@ class Store extends Component {
         this.setState({ isHomebrew, itemsToShow });
     };
 
-    searchItem = searchText => {
+    searchItem =  searchText => {
+        // debugger;
         const {
             inventory: { items },
             user
         } = this.props;
         const { isHomebrew } = this.state;
 
-        if (searchText) {
+        // if (searchText) {
             const itemsToShow = filterItems(items, null, searchText, user, isHomebrew);
-            this.setState({ searchText, itemsToShow });
-        }
-    };
-
-    onValuechange = e => {
-        this.setState(
-            {
-                [e.target.name]: e.target.value
-            },
-            () => {
-                const {
-                    inventory: { items },
-                    user
-                } = this.props;
-                const { isHomebrew } = this.state;
-                const { searchTextmobile } = this.state;
-
-                if (searchTextmobile) {
-                    const itemsToShow = filterItems(items, null, searchTextmobile, user, isHomebrew);
-                    this.setState({ itemsToShow });
-                }
-            }
-        );
+            this.setState({ searchText, itemsToShow })
+        //}
     };
 
     changeMainCategory = selectedMainCategory => {
@@ -347,23 +327,7 @@ class Store extends Component {
                         </Paper>
                     </Grid>
                 </Grid>
-
-                <div className="searchmobile">
-                    <InputBase
-                        placeholder="Search…"
-                        name="searchTextmobile"
-                        classes={{
-                            root: classes.inputRootmobile,
-                            input: classes.inputInputmobile
-                        }}
-                        value={this.state.searchTextmobile}
-                        onChange={e => this.onValuechange(e)}
-                    />
-                    <div className={classes.searchIconmobile}>
-                        <SearchIcon />
-                    </div>
-                </div>
-
+                <SearchBar class={"searchmobile"} searchText={this.state.searchText} handleSearch={searchData => this.searchItem(searchData)}/>
                 {sectionTitle && (
                     <div className={classes.sectionTitleDiv}>
                         <span className={classes.sectionTitleSpan} style={{ color: sectionColor }} />

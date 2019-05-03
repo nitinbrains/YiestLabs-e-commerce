@@ -37,6 +37,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import SupportDialog from "components/Store/Menu/SupportDialog";
 
+import SearchBar from './SearchBar';
 import { userActions } from "appRedux/actions/userActions";
 import { messageActions } from "appRedux/actions/messageActions";
 import SimpleSnackbar from "components/Form/SimpleSnackbar";
@@ -218,25 +219,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                                     />
                             </IconButton>
                         </Link>
-  
-                            <div  className='searchNav' >
-                    <InputBase
-                        placeholder="Search…"
-                        name="searchTextmobile"
-                        classes={{
-                            root: classes.inputRootmobile,
-                            input: classes.inputInputmobile
-                        }}
-                        value={this.props.searchText}
-                        onChange={e =>
-                            this.props.handleSearch(e.target.value)
-                        }
-                    />
-                    <div className={classes.searchIconmobile}>
-                        <SearchIcon />
-                    </div>
-                </div>
-
+                        <SearchBar class={'searchNav'} searchText={this.props.inputVal} handleSearch={this.props.handleSearch}/>
                     </Toolbar>
                 </AppBar>
 
