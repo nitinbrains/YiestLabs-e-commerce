@@ -283,7 +283,7 @@ class Store extends Component {
         let { searchTextmobile } = this.state;
         const { selectedMainCategory, selectedSubCategory, searchText, isHomebrew, itemsToShow } = this.state;
 
-        var sectionTitle, sectionColor, pageContent;
+        var sectionTitle, sectionColor, pageContent, sectionSubTitle;
         if (selectedSubCategory || searchText || isHomebrew) {
             let cardsNode = [];
             itemsToShow.map((item, i) => {
@@ -326,6 +326,9 @@ class Store extends Component {
             pageContent = <MainMenu changeMainCategory={this.changeMainCategory} />;
         }
 
+        if (sectionTitle === "Vault Strains")
+            sectionSubTitle = "A collection of specialty strains curated since White Labs was founded in 1995. All strains from The Vault are available to professionals year-round via Custom Pour packaging with a minimum order of 1.5L for most strains (1L for wild yeast and bacteria) and a 17-30 day production lead time.";
+
         return (
             <NavBarUserSearchDrawerLayout inputVal={this.state.searchText} handleSearch={searchData => this.searchItem(searchData)}>
                 <Grid item xs={1} dir="ltr">
@@ -367,6 +370,12 @@ class Store extends Component {
                         <span className={classes.sectionTitleSpan} style={{ color: sectionColor }} />
                         <span className={classes.titText}>{sectionTitle}</span>
                         <span className={classes.sectionTitleSpan} style={{ color: sectionColor }} />
+                    </div>
+                )}
+
+                {sectionSubTitle && (
+                    <div style={{ fontSize: "smaller", textAlign: "center", whiteSpace: "pre-wrap" }}>
+                        {sectionSubTitle}
                     </div>
                 )}
 

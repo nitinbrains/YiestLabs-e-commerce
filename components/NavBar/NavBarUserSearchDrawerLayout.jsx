@@ -30,6 +30,12 @@ import CloseIcon from "@material-ui/icons/Close";
 import Badge from "@material-ui/core/Badge";
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import SupportDialog from "components/Store/Menu/SupportDialog";
 
 import { userActions } from "appRedux/actions/userActions";
 import { messageActions } from "appRedux/actions/messageActions";
@@ -44,7 +50,8 @@ class NavBarUserSearchDrawerLayout extends Component {
         openUserBarHover: false,
         openSearchBar: false,
         isLoggedIn: true,
-        drawer: null
+        drawer: null,
+        openSupportDialog: false
     };
 
     handleUserBar = () => {
@@ -70,6 +77,20 @@ class NavBarUserSearchDrawerLayout extends Component {
         if (this.props.messages.snackbar != false) {
             this.props.hideSnackbar();
         }
+    }
+
+    handleClickSupport = () => {
+        this.setState({ openSupportDialog: true }, () => {
+            
+        });
+    };
+
+    handleLeaveItem = () => {
+        this.setState({ openSupportDialog: false });
+    };
+
+    getSupportDialogContent = () => {
+        return <SupportDialog closeDialog={this.handleLeaveItem} />;
     }
 
     render() {
@@ -154,8 +175,9 @@ class NavBarUserSearchDrawerLayout extends Component {
                         <Button
                             color="secondary"
                             className={classes.appBarLink}
+                            onClick={this.handleClickSupport}
                         >
-                            About Us
+                            Support
                         </Button>
 
                         <Link prefetch href="/cart" state="fromStore">
@@ -283,6 +305,10 @@ class NavBarUserSearchDrawerLayout extends Component {
                     messageList={messages.snackbar || []}
                     handleClose={() => this.props.hideSnackbar()}
                 />
+
+                <Dialog open={this.state.openSupportDialog} onClose={this.handleLeaveItem} aria-labelledby="form-dialog-title">
+                    {this.getSupportDialogContent(this.state.item)}
+                </Dialog>
             </div>
         );
     }
