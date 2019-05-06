@@ -144,7 +144,7 @@ const styles = theme => ({
         marginTop: 10,
         height: 20,
         [theme.breakpoints.down("xs")]: {
-            marginTop: 42,
+            marginTop: 52,
         }
     },
     details: {

@@ -137,12 +137,13 @@ class Store extends Component {
         } = this.props;
         const { isHomebrew } = this.state;
 
-        // if (searchText) {
+       
             const itemsToShow = filterItems(items, null, searchText, user, isHomebrew);
-            this.setState({ searchText, itemsToShow })
-        //}
+            this.setState({ searchText, itemsToShow });
+        
     };
 
+ 
     changeMainCategory = selectedMainCategory => {
         const {
             inventory: { items },
@@ -327,7 +328,9 @@ class Store extends Component {
                         </Paper>
                     </Grid>
                 </Grid>
-                <SearchBar class={"searchmobile"} searchText={this.state.searchText} handleSearch={searchData => this.searchItem(searchData)}/>
+
+              <SearchBar class={"searchmobile"} searchText={this.state.searchText} handleSearch={searchData => this.searchItem(searchData)}/>
+
                 {sectionTitle && (
                     <div className={classes.sectionTitleDiv}>
                         <span className={classes.sectionTitleSpan} style={{ color: sectionColor }} />
