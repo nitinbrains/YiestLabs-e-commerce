@@ -22,8 +22,12 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import TextField from "@material-ui/core/TextField";
 
+import Banner from "../UI/Banner";
+import SimpleSnackbar from "../Form/SimpleSnackbar";
+
 import AddCard from "./AddCard";
 import { userActions } from "appRedux/actions/userActions";
+import { messageActions } from "appRedux/actions/messageActions";
 import { Formik, Form, Field } from "formik";
 
 const FormikErrorMessage = ({ error }) => {
@@ -67,9 +71,14 @@ class ChangePassword extends Component {
     };
 
     render() {
-        const { classes, user } = this.props;
+        const { classes, user, messages } = this.props;
         return (
             <React.Fragment>
+                 <Banner />
+                <SimpleSnackbar
+                    messageList={messages.snackbar || []}
+                    handleClose={() => props.hideSnackbar()}
+                />
                 <ClickAwayListener onClickAway={this.handleClickAway}>
                     <DialogContent id="change-password">
                         <div className="main-block">
@@ -171,11 +180,12 @@ ChangePassword.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        user: state.user
+        user: state.user,
+        messages: state.messages
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators(userActions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({...userActions, ...messageActions }, dispatch);
 
 export default connect(
     mapStateToProps,

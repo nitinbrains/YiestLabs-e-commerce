@@ -410,7 +410,7 @@ export function* changePassword(action) {
         } = yield call(api.changePassword, { request });
 
         if (error) throw error;
-
+        yield put(messageActions.showBanner({ title: "Success", message: "Your password has been reset. Please watch your email for your new password.", variant: "success" }));
         yield put(responseSuccess());
 
     } catch (error) {
