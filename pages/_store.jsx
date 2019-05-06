@@ -448,13 +448,6 @@ const styles = theme => ({
         //   width: 200,
         // },
     },
-    paperMargin:{
-        marginBottom:'0px',
-        [theme.breakpoints.down("sm")]: {
-            marginBottom:'60px',
-        },
-
-    }
 });
 
 Store.propTypes = {
