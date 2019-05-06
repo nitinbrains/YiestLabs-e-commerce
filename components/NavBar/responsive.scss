@@ -1,56 +1,42 @@
 
-// Search bar for small screen devices
- .searchmobile {
-    display: flex;
-    background-color: white;
-    border-radius: 6px;
-    width:14%;
-    color: #737373;
+
+ .searchNav {
+  display: flex;
+  background-color: white;
+  border-radius: 6px;
+  width:14%;
+  color: #737373;
+}
+
+@media  all and (max-width: 960px) {
+  
+ .searchNav {
+  display: none;
+    }
+}
+
+  .searchmobile {
+    display: none;
   }
   .switch-margin{
     margin-top:0px;
     margin-bottom: 0px;
   }
 
-
-  @media  all and (max-width: 960px) {
- .searchmobile {
+  @media only screen and (max-width: 960px) {
+.searchmobile {
     display: flex;
-    position: absolute;
+    position: relative;
     border-radius: 10px;
     border-style:solid;
     border-color:#f28531;
+    // background-color:#ffc266;
     margin-left: 0;
     margin-bottom: 5px;
-    width: calc(100vw - 120px);
-    top:171px;
-    left:95px;
+    width: 100%;
   }
   .switch-margin{
     margin-top:15px;
     margin-bottom: 15px;
   }
 } 
-
-
-@media all and (max-width: 600px) {
-   .searchmobile {
-    width: calc(100vw - 100px);
-    left: 79px;
-   }
-    }
-
-// @media only screen and (max-width: 600px) {
-//   .circle {
-//     left: 24.67% !important;
-//    }
-//   } 
-
-// header.hide .searchmobile {
-//   display: none;
-// }
-
-
-  .searchmobileHide {
-    display: none !important;
-  }

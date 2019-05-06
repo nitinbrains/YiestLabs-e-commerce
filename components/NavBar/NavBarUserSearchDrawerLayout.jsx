@@ -30,7 +30,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import Badge from "@material-ui/core/Badge";
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 
-
+import SearchBar from './SearchBar';
 import { userActions } from "appRedux/actions/userActions";
 import { messageActions } from "appRedux/actions/messageActions";
 import SimpleSnackbar from "components/Form/SimpleSnackbar";
@@ -71,7 +71,7 @@ class NavBarUserSearchDrawerLayout extends Component {
     
         window.addEventListener('scroll', () => {
         
-            if(window.pageYOffset >  0)  {
+            if(window.pageYOffset >  40)  {
               this.setState({
                   hide:true
               })
@@ -81,6 +81,7 @@ class NavBarUserSearchDrawerLayout extends Component {
             })
            }
         });
+       
     }
 
     componentWillUnmount() {
@@ -90,6 +91,7 @@ class NavBarUserSearchDrawerLayout extends Component {
     }
 
     render() {
+       
         const { children, classes, theme, messages } = this.props;
         if (isWidthUp("sm", this.props.width)) {
             this.setState({ drawer: "persistent" });
@@ -195,43 +197,7 @@ class NavBarUserSearchDrawerLayout extends Component {
                                     />
                             </IconButton>
                         </Link>
-
-                        {/* <IconButton className={classes.appBarLink} color="inherit" aria-label="Menu">
-                            <SearchIcon />
-                        </IconButton>
-                        <InputBase
-                            id="search"
-                            placeholder="Search"
-                            type="search"
-                            name="searchText"
-                            value={this.props.searchText}
-                            className={classes.appBarLink}
-                            onChange={e =>
-                                this.props.handleSearch(e.target.value)
-                            }
-                            classes={{
-                                root: classes.inputRoot
-                            }}
-                        /> */}
-                       
-                            <div  className={this.state.hide ?  ' searchmobileHide ' : ' searchmobile'}>
-                    <InputBase
-                        placeholder="Search…"
-                        name="searchTextmobile"
-                        classes={{
-                            root: classes.inputRootmobile,
-                            input: classes.inputInputmobile
-                        }}
-                        value={this.props.searchText}
-                        onChange={e =>
-                            this.props.handleSearch(e.target.value)
-                        }
-                    />
-                    <div className={classes.searchIconmobile}>
-                        <SearchIcon />
-                    </div>
-                </div>
-
+                        <SearchBar class={'searchNav'} searchText={this.props.inputVal} handleSearch={this.props.handleSearch}/>
                     </Toolbar>
                 </AppBar>
 
