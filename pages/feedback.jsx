@@ -61,6 +61,7 @@ class Feedback extends Component {
                     <StarRatings
                 rating={values.appRating}
                 starRatedColor="#FF9933"
+                starHoverColor='#f28531'
                 changeRating={value =>
                 setFieldValue("appRating", value)
                   }
@@ -72,9 +73,10 @@ class Feedback extends Component {
                How was the overall ordering process?
             </Typography>
         <div className="flex-center">
-                                 <StarRatings 
+            <StarRatings 
           rating={values.orderProcessRating}
           starRatedColor="#FF9933"
+          starHoverColor='#f28531'
           changeRating={value =>
             setFieldValue("orderProcessRating", value)
           }
