@@ -44,3 +44,8 @@ export const changePassword = (params) => requestWrapper('/change-password', {
     method: "POST",
     body: JSON.stringify(params)
 });
+
+export const feedback = (params) => requestWrapper('/add-feedback', {
+    method: "POST",
+    body: JSON.stringify(params)
+});
