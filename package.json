@@ -37,7 +37,7 @@
 		"isomorphic-unfetch": "^3.0.0",
 		"jss": "latest",
 		"lodash": "^4.17.11",
-		"moment": "^2.23.0",
+		"moment": "^2.29.4",
 		"next": "7.0.1",
 		"node-sass": "^4.10.0",
 		"notistack": "^0.4.1",
