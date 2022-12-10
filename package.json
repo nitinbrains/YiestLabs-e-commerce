@@ -29,7 +29,7 @@
 		"cleave.js": "^1.4.7",
 		"cross-env": "^5.2.0",
 		"event-stream": "^4.0.1",
-		"express": "^4.16.4",
+		"express": "^4.17.3",
 		"formik": "^1.5.1",
 		"http-proxy-agent": "^2.1.0",
 		"https-proxy-agent": "^2.2.1",
